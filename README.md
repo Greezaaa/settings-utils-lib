@@ -1,59 +1,43 @@
-# UtilsLib
+# SettingsUtilsLib
+## Angular Utility Libraries Workspace
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.3.
+This workspace centralizes reusable Angular services and utilities that can be shared across multiple projects.
 
-## Development server
+## Purpose
 
-To start a local development server, run:
+Many Angular projects need small utilities like font management, theming, or other global logic. This workspace allows:
 
-```bash
-ng serve
+- Centralized, reusable services
+- Modular architecture with independent versioning
+- Easy installation via npm
+- Consistent utilities across projects
+
+## Current Libraries
+
+- settings-utils — Provides shared services for font sizing, theming, and other global utilities.
+
+Install the package in your project with:
+
+```
+  npm install settings-utils
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Why This Workspace
 
-## Code scaffolding
+Having a dedicated workspace for utilities helps:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Avoid duplicating code across projects
+2. Easily update and propagate changes via npm
+3. Maintain clear versioning
+4. Encourage modular and maintainable architecture
 
-```bash
-ng generate component component-name
-```
+## Contributing
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Keep libraries modular
+- Document services clearly
+- Version packages with `npm version`
+- Write unit tests where applicable
 
-```bash
-ng generate --help
-```
+## License
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT License © 2025 Yevheniy Alekseyev
