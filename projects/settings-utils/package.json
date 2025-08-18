@@ -12,12 +12,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/settings-utils.git"
+    "url": "https://github.com/Greezaaa/settings-utils-lib.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/settings-utils/issues"
+    "url": "https://github.com/Greezaaa/settings-utils-lib/issues"
   },
-  "homepage": "https://github.com/yourusername/settings-utils#readme",
+  "homepage": "https://github.com/Greezaaa/settings-utils-lib#readme",
   "peerDependencies": {
     "@angular/common": "^20.1.0",
     "@angular/core": "^20.1.0"
