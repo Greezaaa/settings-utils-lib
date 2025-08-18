@@ -1,6 +1,18 @@
 {
   "name": "settings-utils",
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "description": "A small Angular utility library for font-size management",
+  "keywords": ["angular", "font-size", "utility", "settings"],
+  "author": "Yevheniy Alekseyev <yev.alekseyev@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/settings-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/settings-utils/issues"
+  },
+  "homepage": "https://github.com/yourusername/settings-utils#readme",
   "peerDependencies": {
     "@angular/common": "^20.1.0",
     "@angular/core": "^20.1.0"
@@ -8,5 +20,16 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "module": "fesm2022/settings-utils.mjs",
+  "typings": "index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/settings-utils.mjs"
+    }
+  }
 }
