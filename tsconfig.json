@@ -2,7 +2,7 @@
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
-  "compilerOptions": {
+	"compilerOptions": {
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -11,14 +11,17 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "importHelpers": true,
+    "types": [
+      "vitest/globals"
+    ],
     "paths": {
       "settings-utils": [
         "./dist/settings-utils"
       ]
-    },
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "preserve"
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -32,8 +35,5 @@
     {
       "path": "./projects/settings-utils/tsconfig.lib.json"
     },
-    {
-      "path": "./projects/settings-utils/tsconfig.spec.json"
-    }
   ]
 }
