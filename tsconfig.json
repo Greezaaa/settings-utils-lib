@@ -11,6 +11,11 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "paths": {
+      "settings-utils": [
+        "./dist/settings-utils"
+      ]
+    },
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve"
@@ -22,5 +27,13 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
-  "files": []
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/settings-utils/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/settings-utils/tsconfig.spec.json"
+    }
+  ]
 }
