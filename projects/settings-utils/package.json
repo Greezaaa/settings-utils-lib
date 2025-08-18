@@ -1,8 +1,13 @@
 {
   "name": "settings-utils",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A small Angular utility library for font-size management",
-  "keywords": ["angular", "font-size", "utility", "settings"],
+  "keywords": [
+    "angular",
+    "font-size",
+    "utility",
+    "settings"
+  ],
   "author": "Yevheniy Alekseyev <yev.alekseyev@gmail.com>",
   "license": "MIT",
   "repository": {
