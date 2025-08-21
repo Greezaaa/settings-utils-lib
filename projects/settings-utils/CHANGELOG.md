@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.4] - 2025-08-21
+## [1.1.0] - 2025-08-21
 ### Added
 - `ScrollSpyService` to track currently visible sections on the page.
 - `ScrollSpyDirective` to automatically update active section when elements intersect the viewport.
