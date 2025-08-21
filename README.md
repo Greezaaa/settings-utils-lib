@@ -1,5 +1,5 @@
 # SettingsUtilsLib
-## Angular Utility Libraries Workspace
+### Angular Utility Libraries Workspace
 
 This workspace centralizes reusable Angular services and utilities that can be shared across multiple projects.
 
@@ -14,10 +14,11 @@ Many Angular projects need small utilities like font management, theming, or oth
 
 ## Current Libraries
 
-- settings-utils — Provides shared services for font sizing, theming, and other global utilities.
+- [settings-utils](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/README.md) — Provides shared services for font sizing, theming, and other global utilities.
+
+## Installation
 
 Install the package in your project with:
-
 ```
   npm install settings-utils
 ```
@@ -40,4 +41,16 @@ Having a dedicated workspace for utilities helps:
 
 ## License
 
-MIT License © 2025 Yevheniy Alekseyev
+MIT [License](https://github.com/Greezaaa/settings-utils-lib/blob/main/LICENSE) © 2025 Yevheniy Alekseyev
+
+
+
+## About the Author
+
+Yevheniy Alekseyev | [yev.alekseyev@gmail.com](mailto:yev.alekseyev@gmail.com)
+
+Feedback, contributions, and suggestions to improve these utilities are always welcome.  
+Issues, pull requests, or emails are all open for collaboration.
+
+Happy coding! 😉
+
