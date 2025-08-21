@@ -1,13 +1,13 @@
 {
   "name": "utils-lib",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-		"test": "vitest",
-		"test:coverage": "vitest run --coverage"
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "prettier": {
     "overrides": [
