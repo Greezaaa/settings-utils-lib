@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.2] - 2025-08-21
+### Added
+- `ScrollSpyService` to track currently visible sections on the page.
+- `ScrollSpyDirective` to automatically update active section when elements intersect the viewport.
+- Reactive `Signal` for the active section to integrate with Angular components.
+- Examples for using ScrollSpy with multiple sections and custom section IDs.
+- Full documentation in `README.md` for ScrollSpy usage and configuration.
+
+### Notes
+- ScrollSpy can be used standalone via service or combined with the directive for automatic detection.
+- Supports multiple sections and modern browser IntersectionObserver.
+
 ## [1.0.1] - 2025-08-18
 ### Added
 - Full reactive `FontSizeService` with `signal` and `computed` for `fontSize`, `isDefault`, `isMax`, `isMin`.

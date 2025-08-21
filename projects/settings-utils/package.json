@@ -6,8 +6,11 @@
     "angular",
     "font-size",
     "utility",
-    "settings"
+    "settings",
+		"scroll-spy",
+		"dynamic menu"
   ],
+  "tag": "latest",
   "author": "Yevheniy Alekseyev <yev.alekseyev@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -17,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/Greezaaa/settings-utils-lib/issues"
   },
-  "homepage": "https://github.com/Greezaaa/settings-utils-lib#readme",
+  "homepage": "https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/README.md",
   "peerDependencies": {
     "@angular/common": "^20.1.0",
     "@angular/core": "^20.1.0"
