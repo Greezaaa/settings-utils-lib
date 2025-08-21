@@ -1,89 +1,44 @@
-# FontSizeService
 
-A lightweight Angular service for dynamic font size management. Easily increase, decrease, or reset font sizes in your Angular applications, with persistent settings in `localStorage`. Designed as a reusable library for multiple projects.
+# Settings Utils
+A collection of lightweight, reusable Angular utilities for building modern, reactive web applications. Each utility is fully modular and can be used independently or together.
 
-## Features
+### Angular Utility Libraries Workspace
+This workspace centralizes reusable Angular services and utilities that can be shared across multiple projects.
 
-- Set a default font size and apply it globally.
-- Increase or decrease font size with configurable step.
-- Reset to default font size.
-- Automatically persist user preferences in `localStorage`.
-- Provides reactive `Signal`s to integrate with Angular's reactive system.
-- Limits font size to configurable minimum and maximum values.
+### Purpose
+- Many Angular projects need small utilities like font management, theming, or other global logic. This workspace allows:
+- Centralized, reusable services
+- Modular architecture with independent versioning
+- Easy installation via `npm install settings-utils`
+- Consistent utilities across projects
 
-## Usage
-### Provide the service in your application
+## Utilities
+### FontSizeService
 
-You can provide the service in your main.ts (or wherever your ApplicationConfig is defined) and initialize it automatically:
+Dynamic font size management for Angular applications.
 
-```typescript
-export const appConfig: ApplicationConfig = {
-providers: [
-	FontSizeService,
-	provideAppInitializer(() => {
-	
-	const fontService = inject(FontSizeService);
-	fontService.init(); // initializes font size from localStorage and applies CSS variable
-	}),
-	],
-};
-```
-Using the service in components
+- Easily increase, decrease, or reset font sizes.
+- Persistent user preferences via localStorage.
+- Fully reactive with Angular Signals.
+- Configurable minimum, maximum, default sizes, step, and CSS variable.
 
-Inject the service into any component and access reactive signals:
+[FontSize README](./src/lib/font-size/README.md)
 
-```typescript
-import { Component, effect } from '@angular/core';
-import { FontSizeService } from 'settings-utils';
+### ScrollSpyService & Directive
 
-@Component({
-selector: 'app-example',
-template: `
-	<div> 
-		<p>Current font size: {{ fontSize() }}</p> 
-		<button (click)="increase()">A+</button> 
-		<button (click)="decrease()">A-</button> 
-		<button (click)="reset()">Reset</button> 
-	</div>` ,
-})
+Track which section of a page is currently visible and react to scroll events.
 
-export class ExampleComponent {
-	private fontService = inject(FontSizeService);
-	fontSize = computed(() => this.fontService.fontSize());
+- Service provides reactive access to the active section.
+- Directive automatically updates the active section when elements enter the viewport.
+- Ideal for navigation menus, table of contents, or one-page scroll apps.
+- Fully modular: use the service alone or combine with the directive for automatic detection.
 
-	increase(step?: number) {
-		this.fontService.increase(step);
-	}
+[ScrollSpy README](./src/lib/scroll-spy/README.md)
+<hr>
 
-	decrease(step?: number) {
-		this.fontService.decrease(step);
-	}
 
-	reset() {
-		this.fontService.reset();
-	}
-}
-```
+### License
+MIT [License](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/LICENSE)
 
-Optional configuration
 
-You can customize min/max/default font size, step, storage key, and CSS variable:
-
-```typescript
-this.fontService.configure({
-	minSize: 12,
-	maxSize: 24,
-	defaultSize: 16,
-	step: 2,
-	storageKey: 'my-app-font-size',
-	cssVarName: '--app-font-size'
-});
-```
-
-`minSize` / `maxSize` / `defaultSize` / `step` – control font scaling.
-
-`storageKey` – key used in localStorage to persist font size.
-
-`cssVarName` – CSS custom property applied globally, e.g., `document.documentElement.style.setProperty(cssVarName, ...)`.
-
-This setup ensures that your font size is reactive, persistent, and easily configurable across your Angular app.
+© 2025 Yevheniy Alekseyev - yev.alekseyev@gmail.com
