@@ -1,7 +1,13 @@
 
-# Settings Utils
-A collection of lightweight, reusable Angular utilities for building modern, reactive web applications. Each utility is fully modular and can be used independently or together.
+<div align="center">
+  <img width="200" height="200" alt="settings-utils-logo" src="https://github.com/user-attachments/assets/e9da63c8-960d-4e06-a0ce-2cf84fff1311" />
 
+# Settings Utils
+</div>
+
+A collection of lightweight, reusable Angular utilities for building modern, reactive web applications. <br />
+Each utility is fully modular and can be used independently or together.
+<br /><br />
 ### Angular Utility Libraries Workspace
 This workspace centralizes reusable Angular services and utilities that can be shared across multiple projects.
 
