@@ -1,14 +1,14 @@
 {
   "name": "settings-utils",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "A small Angular utility library for font-size management",
   "keywords": [
     "angular",
     "font-size",
     "utility",
     "settings",
-		"scroll-spy",
-		"dynamic menu"
+    "scroll-spy",
+    "dynamic menu"
   ],
   "tag": "latest",
   "author": "Yevheniy Alekseyev <yev.alekseyev@gmail.com>",
