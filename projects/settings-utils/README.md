@@ -54,6 +54,7 @@ Track which section of a page is currently visible and react to scroll events.
 - Handles multiple notifications simultaneously.
 
 [Notifications README](./src/lib/notification/README.md)
+
 ---
 
 ### License
