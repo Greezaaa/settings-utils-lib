@@ -128,7 +128,7 @@ Example: Customizing a notification's color
 .notification {
   --su-notification-text-color`: #fff3e0;
   --su-notification-warning-border-color: #e65100;
-  ... other properties
+  /* ... other properties */
 }
 ```
 
