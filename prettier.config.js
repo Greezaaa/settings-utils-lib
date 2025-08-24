@@ -1,0 +1,20 @@
+// prettier.config.js
+module.exports = {
+  tabWidth: 2,
+  useTabs: false,
+  singleQuote: true,
+  semi: true,
+  bracketSpacing: true,
+  arrowParens: 'avoid',
+  trailingComma: 'es5',
+  bracketSameLine: true,
+  printWidth: 80,
+  overrides: [
+    {
+      files: '*.html',
+      options: {
+        parser: 'none',
+      },
+    },
+  ],
+};
