@@ -97,17 +97,17 @@ export class NotificationExampleComponent {
 ### SuNotificationOptions
 The `show()` method accepts an object with the following properties:
 
-`type`: `SuNotificationType` (`'info', 'success', 'warning', 'error', 'custom'`). Required.
+- `type`: `SuNotificationType` (`'info', 'success', 'warning', 'error', 'custom'`). Required.
 
-`message`: `string`. The main text message. Required.
+- `message`: `string`. The main text message. Required.
 
-`duration?`: `number`. Milliseconds before the notification auto-closes. Default is `3000`.
+- `duration?`: `number`. Milliseconds before the notification auto-closes. Default is `3000`.
 
-`autoClose?`: `boolean`. If false, the notification will not auto-close. Default is `true`.
+- `autoClose?`: `boolean`. If false, the notification will not auto-close. Default is `true`.
 
-`cssClass?`: `string`. A custom CSS class for additional styling.
+- `cssClass?`: `string`. A custom CSS class for additional styling.
 
-`icon?`: `boolean` | `string`.
+- `icon?`: `boolean` | `string`.
 
 	- true: Uses the default SVG icon for the type.
 	- false: No icon is displayed.
