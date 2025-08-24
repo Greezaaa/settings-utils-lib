@@ -144,6 +144,7 @@ Container Variables:
 
 `--su-notification-position`: Distance from viewport edges.
 
+
 ---
 
 Notification Variables:
@@ -159,6 +160,8 @@ Notification Variables:
 `--su--padding-inline`: Horizontal padding.
 
 `--su-border-radius`: Border radius.
+
+
 ---
 
 
@@ -173,6 +176,8 @@ Type Colors:
 `--su-error`: Border color for error notifications.
 
 `--su-custom`: Border color for custom notifications.
+
+
 ---
 
 
@@ -183,6 +188,8 @@ Icon Variables:
 `--su-icon-height`: Icon container height.
 
 `--su-icon-color`: Color for inline SVGs.
+
+
 ---
 
 
@@ -197,4 +204,6 @@ Close Button Variables:
 `--su-hover-background`: Close button hover background.
 
 `--su-hover-color`: Close button hover color.
+
+
 ---
