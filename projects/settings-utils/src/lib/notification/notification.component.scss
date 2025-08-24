@@ -1,0 +1,218 @@
+// /* -----------------------------
+//    Notification Container Variables
+// ----------------------------- */
+
+// /** Gap between notifications */
+// --su-gap: 1.2rem;
+
+// /** Default width for a notification */
+// --su-notification-width: max-content;
+
+// /** Maximum width of a notification */
+// --su-notification-max-width: min(100% - 2rem, 300px);
+
+// /** Position offset from viewport edges */
+// --su-notification-position: 1rem;
+
+// /* -----------------------------
+//    Notification Variables
+// ----------------------------- */
+
+// /** Notification background color */
+// --su-background: #fff;
+
+// /** Notification text color */
+// --su-color: #333;
+
+// /** Notification shadow */
+// --su-shadow: rgba(0, 0, 0, 0.15);
+
+// /** Padding for notification block (top/bottom) */
+// --su--padding-block: 1rem;
+
+// /** Padding for notification inline (left/right) */
+// --su--padding-inline: 1.25rem;
+
+// /** Border radius for notifications */
+// --su-border-radius: 0.25rem; // optional, matches typical Material style
+
+// /* -----------------------------
+//    Notification Type Colors
+// ----------------------------- */
+
+// /** Success border color */
+// --su-success: #4caf50;
+
+// /** Info border color */
+// --su-info: #2196f3;
+
+// /** Warning border color */
+// --su-warning: #ff9800;
+
+// /** Error border color */
+// --su-error: #f44336;
+
+// /** Custom notification border color */
+// --su-custom: #9c27b0;
+
+// /* -----------------------------
+//    Notification Icon Variables
+// ----------------------------- */
+
+// /** Width of the notification icon container */
+// --su-icon-width: 24px;
+
+// /** Height of the notification icon container. Falls back to --su-icon-width if not set */
+// --su-icon-height: var(--su-icon-width, 24px);
+
+// /** Color of the icon (applies to inline SVGs and icon fonts) */
+// --su-icon-color: currentColor;
+
+// /* -----------------------------
+//    Close Button Variables
+// ----------------------------- */
+
+// /** Close button size (width & height) */
+// --su-btn-size: 20px;
+
+// /** Close button font size */
+// --close-btn-font-size: 1rem;
+
+// /** Close button border color */
+// --su-border-color: rgba(0, 0, 0, 0);
+
+// /** Close button hover background color */
+// --su-hover-background: rgba(51, 51, 51, 0.5);
+
+// /** Close button hover text color */
+// --su-hover-color: #fff;
+
+.notification-container {
+	position: fixed;
+	pointer-events: none;
+	display: flex;
+	gap: var(--su-gap, 1.2rem);
+	width: var(--su-notification-width, max-content);
+	max-width: var(--su-notification-max-width, min(100% - 2rem, 300px));
+	z-index: 999999;
+
+	&.top-right {
+		align-items: flex-end;
+		flex-direction: column;
+		top: var(--su-notification-position, 1rem);
+		right: var(--su-notification-position, 1rem);
+	}
+
+	&.top-left {
+		align-items: flex-start;
+		flex-direction: column;
+		top: var(--su-notification-position, 1rem);
+		left: var(--su-notification-position, 1rem);
+	}
+
+	&.bottom-right {
+		align-items: flex-end;
+		flex-direction: column-reverse;
+		bottom: var(--su-notification-position, 1rem);
+		right: var(--su-notification-position, 1rem);
+	}
+
+	&.bottom-left {
+		align-items: flex-start;
+		flex-direction: column-reverse;
+		bottom: var(--su-notification-position, 1rem);
+		left: var(--su-notification-position, 1rem);
+	}
+
+	&.top-center {
+		align-items: center;
+		flex-direction: column;
+		top: var(--su-notification-position, 1rem);
+		left: 50%;
+		translate: -50% 0;
+	}
+
+	&.bottom-center {
+		align-items: center;
+		flex-direction: column-reverse;
+		bottom: var(--su-notification-position, 1rem);
+		left: 50%;
+		translate: -50% 0;
+	}
+}
+
+.notification {
+	position: relative;
+	pointer-events: auto;
+	background-color: var(--su-background, #fff);
+	color: var(--su-color, #333);
+	padding-block: var(--su--padding-block, 1rem);
+	padding-inline: var(--su--padding-inline, 1.25rem);
+	box-shadow: 0 4px 8px var(--su-shadow, rgba(0, 0, 0, 0.15));
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+
+	&.success {
+		border-left: 4px solid var(--su-success, #4caf50);
+	}
+
+	&.info {
+		border-left: 4px solid var(--su-info, #2196f3);
+	}
+
+	&.warning {
+		border-left: 4px solid var(--su-warning, #ff9800);
+	}
+
+	&.error {
+		border-left: 4px solid var(--su-error, #f44336);
+	}
+
+	&.custom {
+		border-left: 4px solid var(--su-custom, #9c27b0);
+	}
+
+	.icon-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--su-icon-width, 24px);
+		height: var(--su-icon-height, var(--su-icon-width, 24px));
+		color: var(--su-icon-color, currentColor);
+
+		.icon {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.message {
+		flex: 1;
+	}
+
+	.close {
+		position: absolute;
+		width: var(--su-btn-size, 20px);
+		height: var(--su-btn-size, 20px);
+		top: calc(var(--su-btn-size, 20px) * -0.5);
+		right: calc(var(--su-btn-size, 20px) * -0.5);
+		background: var(--su-background, #fff);
+		color: var(--su-color, #333);
+		border: 1px solid var(--su-border-color, rgba(0, 0, 0, 0));
+		border-radius: var(--su-border-radius, 50%);
+		box-shadow: 0 4px 8px var(--su-shadow, rgba(0, 0, 0, 0.15));
+		font-size: var(--close-btn-font-size, 1rem);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		line-height: 1;
+		cursor: pointer;
+
+		&:hover {
+			background: var(--su-hover-background, rgba(#333, .5));
+			color: var(--su-hover-color, #fff);
+		}
+	}
+}
