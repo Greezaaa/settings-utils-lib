@@ -5,6 +5,13 @@
 # Settings Utils
 </div>
 
+## Table of Contents
+- [Angular Utility Libraries Workspace](#angular-utility-libraries-workspace)
+- [Purpose](#purpose)
+- [ChangeLog](#changelog)
+- [Utilities](#utilities)
+- [License](#license)
+
 A collection of lightweight, reusable Angular utilities for building modern, reactive web applications. <br />
 Each utility is fully modular and can be used independently or together.
 <br /><br />
@@ -18,6 +25,24 @@ This workspace centralizes reusable Angular services and utilities that can be s
 - Easy installation via `npm install settings-utils`
 - Consistent utilities across projects
 
+
+[Back to Top](#table-of-contents)
+
+
+## ChangeLog  
+Stay up to date with all changes, fixes, and improvements in **Settings Utils**.  
+
+The full changelog is available here:
+
+[View Full Changelog](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/CHANGELOG.md)  
+
+### Latest Release: [1.3.0] - 2025-08-25  
+- Refactored and standardized **CSS variable names** in the Notification component.  
+- Added new optional variables for better **close button customization**.  
+- ⚠️ This update may require updating your stylesheets (see changelog for details). 
+
+[Back to Top](#table-of-contents)
+
 ## Utilities
 ### FontSizeService
 
@@ -28,18 +53,7 @@ Dynamic font size management for Angular applications.
 - Fully reactive with Angular Signals.
 - Configurable minimum, maximum, default sizes, step, and CSS variable.
 
-[FontSize README](./src/lib/font-size/README.md)
-
-### ScrollSpyService & Directive
-
-Track which section of a page is currently visible and react to scroll events.
-
-- Service provides reactive access to the active section.
-- Directive automatically updates the active section when elements enter the viewport.
-- Ideal for navigation menus, table of contents, or one-page scroll apps.
-- Fully modular: use the service alone or combine with the directive for automatic detection.
-
-[ScrollSpy README](./src/lib/scroll-spy/README.md)
+[FontSize README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/font-size/README.md)
 
 ### SuNotificationService & Component
  Easily display and manage notifications in your Angular applications.
@@ -53,7 +67,20 @@ Track which section of a page is currently visible and react to scroll events.
 - Fully reactive with Angular Signals, making it easy to integrate with components.
 - Handles multiple notifications simultaneously.
 
-[Notifications README](./src/lib/notification/README.md)
+[Notifications README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/notification/README.md)
+
+### ScrollSpyService & Directive
+
+Track which section of a page is currently visible and react to scroll events.
+
+- Service provides reactive access to the active section.
+- Directive automatically updates the active section when elements enter the viewport.
+- Ideal for navigation menus, table of contents, or one-page scroll apps.
+- Fully modular: use the service alone or combine with the directive for automatic detection.
+
+[ScrollSpy README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/scroll-spy/README.MD)
+
+[Back to Top](#table-of-contents)
 
 ---
 

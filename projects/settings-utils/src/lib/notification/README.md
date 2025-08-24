@@ -134,67 +134,39 @@ Example: Customizing a notification's color
 
 ###	 Available CSS Variables:
 
-Container Variables:
+Container Variables
 
-`--su-gap`: Gap between notifications.
+- `--su-notification-container-gap`: Gap between notifications.
+- `--su-notification-container-position`: Distance from viewport edges
+- `--su-notification-width`: Width of a notification. 
+- `--su-notification-max-width`: Maximum width of a notification.
 
-`--su-notification-width`: Width of a notification.
+Notification Variables
+- `--su-notification-background-color`: Notification background color.
+- `--su-notification-text-color`: Notification text color.
+- `--su-notification-box-shadow`: Box shadow.
+- `--su-notification-padding-block`: Vertical padding.
+- `--su-notification-padding-inline`: Horizontal padding.
+- `--su-notification-border-radius`: Border radius.
 
-`--su-notification-max-width`: Maximum width of a notification.
+Type Colors
+- `--su-notification-success-border-color`: Border color for success notifications.
+- `--su-notification-info-border-color`: Border color for info notifications.
+- `--su-notification-warning-border-color`: Border color for warning notifications.
+- `--su-notification-error-border-color`: Border color for error notifications.
+- `--su-notification-custom-border-color`: Border color for custom notifications.
 
-`--su-notification-position`: Distance from viewport edges.
+Icon Variables
+- `--su-notification-icon-width`: Icon container width.
+- `--su-notification-icon-height`: Icon container height.
+- `--su-notification-icon-color`: Color for inline SVGs or icons.
 
----
-
-Notification Variables:
-
-`--su-background`: Notification background color.
-
-`--su-color`: Notification text color.
-
-`--su-shadow`: Box shadow color.
-
-`--su--padding-block`: Vertical padding.
-
-`--su--padding-inline`: Horizontal padding.
-
-`--su-border-radius`: Border radius.
----
-
-
-Type Colors:
-
-`--su-success`: Border color for success notifications.
-
-`--su-info`: Border color for info notifications.
-
-`--su-warning`: Border color for warning notifications.
-
-`--su-error`: Border color for error notifications.
-
-`--su-custom`: Border color for custom notifications.
----
-
-
-Icon Variables:
-
-`--su-icon-width`: Icon container width.
-
-`--su-icon-height`: Icon container height.
-
-`--su-icon-color`: Color for inline SVGs.
----
-
-
-Close Button Variables:
-
-`--su-btn-size`: Close button size.
-
-`--close-btn-font-size`: Close button font size.
-
-`--su-border-color`: Close button border color.
-
-`--su-hover-background`: Close button hover background.
-
-`--su-hover-color`: Close button hover color.
----
+Close Button Variables
+- `--su-notification-close-btn-size`: Close button size.
+- `--su-notification-close-btn-font-size`: Close button font size.
+- `--su-notification-close-btn-background-color`: Close button background color.
+- `--su-notification-close-btn-text-color`: Close button text color.
+- `--su-notification-close-btn-border-color`: Close button border color.
+- `--su-notification-close-btn-border-radius`: Close button border radius.
+- `--su-notification-close-btn-hover-background`: Close button hover background.
+- `--su-notification-close-btn-hover-color`: Close button hover color.
