@@ -126,9 +126,9 @@ Example: Customizing a notification's color
 
 /* In your global styles.scss */
 .notification {
-  --su-background: #fff3e0;
-  --su-color: #e65100;
-  border-left-color: #ff9800;
+  --su-notification-text-color`: #fff3e0;
+  --su-notification-warning-border-color: #e65100;
+  ... other properties
 }
 ```
 
