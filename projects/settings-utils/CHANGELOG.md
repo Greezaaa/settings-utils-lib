@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.0] - 2025-08-24
+### Added
+
+- `SuNotificationService` to dynamically show, dismiss, and configure notifications.
+- `SuNotificationComponent` to render notifications in the UI, automatically reacting to the service.
+- Support for icons:
+	 - Boolean: show default icon or hide icon.
+	 - Inline SVG string or image path for custom icons.
+- Auto-dismiss notifications after configurable duration.
+- Manual dismissal via close button.
+- Configurable position (`top-left`, `top-right`, `top-center`, `bottom-left`, `bottom-right`, `bottom-center`).
+- Reactive notifications stream for Angular components.
+- `configure()` method for default duration, position, and icon display settings.
+- Full documentation in README.md for usage, options, and integration.
+
+### Notes
+
+- Notifications can be shown from any component or service by injecting `SuNotificationService`.
+- Supports multiple notifications at once.
+- Fully standalone component compatible with Angular reactive system.
+
 ## [1.1.0] - 2025-08-21
 ### Added
 - `ScrollSpyService` to track currently visible sections on the page.

@@ -40,8 +40,21 @@ Track which section of a page is currently visible and react to scroll events.
 - Fully modular: use the service alone or combine with the directive for automatic detection.
 
 [ScrollSpy README](./src/lib/scroll-spy/README.md)
-<hr>
 
+### SuNotificationService & Component
+ Easily display and manage notifications in your Angular applications.
+- SuNotificationService allows you to show, dismiss, and configure notifications programmatically.
+- SuNotificationComponent renders notifications in the UI and automatically reacts to the service.
+- Supports:
+	- Icons: default, boolean toggle, inline SVG, or image path.
+	- Configurable position: top-left, top-right, bottom-left, bottom-right etc.
+	- Auto-dismiss after a configurable duration.
+	- Manual dismissal via close button.
+- Fully reactive with Angular Signals, making it easy to integrate with components.
+- Handles multiple notifications simultaneously.
+
+[Notifications README](./src/lib/notification/README.md)
+---
 
 ### License
 MIT [License](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/LICENSE)
