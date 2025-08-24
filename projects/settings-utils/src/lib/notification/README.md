@@ -125,7 +125,7 @@ Example: Customizing a notification's color
 ```CSS
 
 /* In your global styles.scss */
-.notification.my-custom-class {
+.notification {
   --su-background: #fff3e0;
   --su-color: #e65100;
   border-left-color: #ff9800;
