@@ -1,5 +1,5 @@
-import { Injectable, signal, computed } from "@angular/core";
-import { FontSizeConfig } from "./font-size-config.interface";
+import { Injectable, signal, computed } from '@angular/core';
+import { FontSizeConfig } from './font-size-config.interface';
 
 @Injectable({ providedIn: 'root' })
 export class FontSizeService {
@@ -31,13 +31,13 @@ export class FontSizeService {
    * Key used for persisting the font size in localStorage.
    * Defaults to `"app:font-size"`.
    */
-  private storageKey = "app:font-size";
+  private storageKey = 'app:font-size';
 
   /**
    * CSS custom property name where the font size is applied.
    * Defaults to `"--base-font-size"`.
    */
-  private cssVarName = "--base-font-size";
+  private cssVarName = '--base-font-size';
 
   /**
    * Current font size state (reactive).
@@ -75,12 +75,14 @@ export class FontSizeService {
 
     // Ensure logical invariants
     if (this.minSize() > this.maxSize()) this.maxSize.set(this.minSize());
-    if (this.defaultSize() < this.minSize()) this.defaultSize.set(this.minSize());
-    if (this.defaultSize() > this.maxSize()) this.defaultSize.set(this.maxSize());
+    if (this.defaultSize() < this.minSize())
+      this.defaultSize.set(this.minSize());
+    if (this.defaultSize() > this.maxSize())
+      this.defaultSize.set(this.maxSize());
     if (this.step() <= 0 || !Number.isFinite(this.step())) this.step.set(1);
 
     // Clamp current size after configuration changes
-    this.fontSize.update(s => this.clamp(s));
+    this.fontSize.update((s) => this.clamp(s));
   }
 
   /**

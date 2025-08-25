@@ -21,7 +21,7 @@ export class ScrollSpyDirective implements OnInit {
 
   ngOnInit() {
     const observer = new IntersectionObserver(
-      entries => {
+      (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             this.scrollSpy.activeSection.set(this.sectionId);
@@ -29,10 +29,10 @@ export class ScrollSpyDirective implements OnInit {
         }
       },
       {
-        // The viewport used to check visibility. 
+        // The viewport used to check visibility.
         // `null` means the browser viewport is used.
         root: null,
-        // How much of the element needs to be visible to trigger the observer. 
+        // How much of the element needs to be visible to trigger the observer.
         // `0` means it triggers as soon as even one pixel is visible within the root + rootMargin.
         threshold: 0,
         // rootMargin defines an offset around the viewport that affects when the observer triggers.
@@ -48,7 +48,7 @@ export class ScrollSpyDirective implements OnInit {
         // It's perfect for scroll-spy behavior, because it triggers when the section
         // is the main focus on the screen, rather than just appearing at the top.
         rootMargin: '-50% 0px -50% 0px',
-      }
+      },
     );
     observer.observe(this.el.nativeElement);
   }

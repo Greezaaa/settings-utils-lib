@@ -1,9 +1,13 @@
 import { Injectable, signal } from '@angular/core';
-import { SuNotification, SuNotificationOptions, SuNotificationPosition } from './notification.model';
+import {
+  SuNotification,
+  SuNotificationOptions,
+  SuNotificationPosition,
+} from './notification.model';
 
 /**
  * Service for managing notifications.
- * 
+ *
  * Provides methods to show, dismiss, and clear notifications.
  * Notifications are reactive signals, making them easy to bind in templates.
  */
@@ -50,10 +54,10 @@ export class SuNotificationService {
       duration: options.duration ?? 3000,
       autoClose: options.autoClose ?? true,
       cssClass: options.cssClass,
-      icon: options.icon ?? true
+      icon: options.icon ?? true,
     };
 
-    this._notifications.update(list => [...list, notification]);
+    this._notifications.update((list) => [...list, notification]);
 
     if (notification.autoClose) {
       setTimeout(() => this.dismiss(id), notification.duration);
@@ -67,7 +71,7 @@ export class SuNotificationService {
    * @param id ID of the notification to remove.
    */
   dismiss(id: string): void {
-    this._notifications.update(list => list.filter(n => n.id !== id));
+    this._notifications.update((list) => list.filter((n) => n.id !== id));
   }
 
   /**

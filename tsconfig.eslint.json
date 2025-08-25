@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "projects/settings-utils/src/**/*.ts",
+    "projects/settings-utils/src/**/*.spec.ts"
+  ]
+}

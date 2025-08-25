@@ -27,7 +27,7 @@ describe('SuNotificationService', () => {
 
     const notifications = service.notifications();
     expect(notifications.length).toBe(2);
-    expect(notifications.map(n => n.message)).toEqual(['First', 'Second']);
+    expect(notifications.map((n) => n.message)).toEqual(['First', 'Second']);
   });
 
   it('should dismiss a notification by id', () => {
@@ -37,7 +37,7 @@ describe('SuNotificationService', () => {
     service.dismiss(id);
 
     const notifications = service.notifications();
-    expect(notifications.find(n => n.id === id)).toBeUndefined();
+    expect(notifications.find((n) => n.id === id)).toBeUndefined();
   });
 
   it('should clear all notifications', () => {
@@ -53,16 +53,20 @@ describe('SuNotificationService', () => {
   it('should auto dismiss notification after duration', async () => {
     vi.useFakeTimers();
     const service = new SuNotificationService();
-    const id = service.show({ message: 'Auto close', type: 'info', duration: 1000 });
+    const id = service.show({
+      message: 'Auto close',
+      type: 'info',
+      duration: 1000,
+    });
 
     // Initially present
-    expect(service.notifications().find(n => n.id === id)).toBeDefined();
+    expect(service.notifications().find((n) => n.id === id)).toBeDefined();
 
     // Fast forward time
     vi.advanceTimersByTime(1000);
 
     // Should be removed
-    expect(service.notifications().find(n => n.id === id)).toBeUndefined();
+    expect(service.notifications().find((n) => n.id === id)).toBeUndefined();
     vi.useRealTimers();
   });
 });

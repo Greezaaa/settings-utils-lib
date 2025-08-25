@@ -1,8 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { SuNotificationService } from './notification.service';
 import { CommonModule } from '@angular/common';
-import { SuNotification } from './notification.model';
-import { BrowserModule, DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  DomSanitizer,
+  SafeHtml,
+} from '@angular/platform-browser';
 
 /**
  * Component to display notifications on the screen.
@@ -14,7 +17,7 @@ import { BrowserModule, DomSanitizer, SafeHtml } from '@angular/platform-browser
   standalone: true,
   imports: [CommonModule, BrowserModule],
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  styleUrls: ['./notification.component.scss'],
 })
 export class SuNotificationComponent {
   /** Injected notification service */
@@ -50,18 +53,19 @@ export class SuNotificationComponent {
    * @returns `true` if the icon is an image path or URL, `false` for inline SVGs or `false`
    */
   isImage(icon: string | boolean): boolean {
-    return typeof icon === 'string' && (
-      icon.endsWith('.png') ||
-      icon.endsWith('.jpg') ||
-      icon.endsWith('.svg') ||
-      icon.startsWith('http') ||
-      icon.startsWith('/')
+    return (
+      typeof icon === 'string' &&
+      (icon.endsWith('.png') ||
+        icon.endsWith('.jpg') ||
+        icon.endsWith('.svg') ||
+        icon.startsWith('http') ||
+        icon.startsWith('/'))
     );
   }
 
   /**
    * Sanitizes an inline SVG string so it can be safely rendered with [innerHTML].
-   * 
+   *
    * @param icon Inline SVG string
    * @returns SafeHtml object that can be bound to [innerHTML]
    */

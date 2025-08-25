@@ -12,9 +12,18 @@ const importPlugin = require('eslint-plugin-import');
 const angularTemplatePlugin = require('@angular-eslint/eslint-plugin-template');
 
 module.exports = tseslint.config(
+
+  {
+    files: ['dist/**/*.ts', 'vitest*.ts'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: { project: undefined },
+    },
+    rules: {},
+  },
   // ✅ TypeScript + Prettier
   {
-    files: ['**/*.ts'],
+    files: ['projects/settings-utils/src/**/*.ts'],
     plugins: {
       'unused-imports': unusedImports,
       prettier: prettierPlugin,
@@ -25,14 +34,18 @@ module.exports = tseslint.config(
       parser: tseslint.parser,
       ecmaVersion: 'latest',
       sourceType: 'module',
+      parserOptions: {
+        project: ['./tsconfig.eslint.json'],
+      },
     },
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
-      eslintPluginPrettierRecommended, // ✅ Prettier only for TS
+      eslintPluginPrettierRecommended,
     ],
+
     processor: angular.processInlineTemplates,
     rules: {
       'no-unused-vars': 'off',
@@ -140,5 +153,5 @@ module.exports = tseslint.config(
       // prettier disabled here 👇
       // 'prettier/prettier': 'error',
     },
-  }
+  },
 );

@@ -1,7 +1,12 @@
 /**
  * Represents the type of a notification.
  */
-export type SuNotificationType = 'info' | 'success' | 'warning' | 'error' | 'custom';
+export type SuNotificationType =
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'custom';
 
 /**
  * Options for configuring a notification.
