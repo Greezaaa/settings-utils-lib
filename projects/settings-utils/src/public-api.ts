@@ -4,6 +4,8 @@
 // Font size
 // Notifications
 // Scroll spy
+// Theme
+// Visit Tracker
 
 // Font size
 export * from './lib/font-size/font-size.service';
@@ -20,3 +22,7 @@ export * from './lib/scroll-spy/scroll-spy.directive';
 // Theme
 export * from './lib/theme/theme.service';
 export * from './lib/theme/theme.types';
+
+// Visit Tracker
+export * from './lib/visit-tracker/visit-tracker.service';
+export * from './lib/visit-tracker/visit-tracker.types';
