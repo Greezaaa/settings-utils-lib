@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.3.1] - 2025-08-25
+## [1.4.0] - 2025-08-25
 ### Added
 - `SuThemeService` for robust, reactive, and configurable theme management.
 

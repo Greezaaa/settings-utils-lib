@@ -36,10 +36,9 @@ The full changelog is available here:
 
 [View Full Changelog](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/CHANGELOG.md)  
 
-### Latest Release: [1.3.0] - 2025-08-25  
-- Refactored and standardized **CSS variable names** in the Notification component.  
-- Added new optional variables for better **close button customization**.  
-- ⚠️ This update may require updating your stylesheets (see changelog for details). 
+### Latest Release: [1.4.0] - 2025-08-25
+- Added a new `SuThemeService` for reactive and configurable theme management.
+- The service supports dynamic switching, user preference persistence, and automatic system theme detection.
 
 [Back to Top](#table-of-contents)
 
