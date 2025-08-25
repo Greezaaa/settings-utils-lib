@@ -78,7 +78,18 @@ Track which section of a page is currently visible and react to scroll events.
 - Ideal for navigation menus, table of contents, or one-page scroll apps.
 - Fully modular: use the service alone or combine with the directive for automatic detection.
 
-[ScrollSpy README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/scroll-spy/README.MD)
+[ScrollSpy README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/scroll-spy/README.md)
+
+### SuThemeService
+A robust and reactive Angular service for managing application themes. It provides a full-featured solution that supports dynamic switching, user preference persistence, and automatic system theme detection.
+- Reactive state with Angular Signals.
+- Automatic system theme detection.
+- Preference persistence via `localStorage`.
+- Configurable via the `init()` method.
+- Programmatic control to set and get themes.
+
+[SuThemeService README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/theme/README.md)
+
 
 [Back to Top](#table-of-contents)
 

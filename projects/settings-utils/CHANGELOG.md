@@ -1,6 +1,23 @@
 # Changelog
 
-[1.3.0] - 2025-08-25
+## [1.3.1] - 2025-08-25
+### Added
+- `SuThemeService` for robust, reactive, and configurable theme management.
+
+- Support for multiple themes: `light`, `dark`, `contrast`, `custom`, and `system`.
+
+- Reactive state management using Angular signals (`theme` signal).
+
+- Automatic detection and switching based on user's system theme preference (`prefers-color-scheme`).
+
+- Theme preference persistence using `localStorage`.
+
+- Configuration via `SuThemeConfig` interface and the `init()` method, designed for use with `APP_INITIALIZER`.
+
+### Notes
+- This service handles all theme logic internally, including loading, persistence, and CSS variable application, providing a clean public API.
+
+## [1.3.0] - 2025-08-25
 ### Changed
 
 - Refactored CSS variable names for improved clarity, consistency, and to prevent naming collisions.
@@ -61,7 +78,7 @@
 
 	- `--su-notification-close-btn-border-radius`
 
-Notes
+### Notes
 
 ⚠️ This is a breaking change for anyone who customized the component’s appearance. You must update your stylesheets to use the new variable names.
 
