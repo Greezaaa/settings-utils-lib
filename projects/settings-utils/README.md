@@ -35,7 +35,7 @@ Stay up to date with all changes, fixes, and improvements in **Settings Utils**.
 The full changelog is available here: 
 [View Full Changelog](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/CHANGELOG.md)  
 
-## Latest Release: ## [1.5.0] - 2025-08-25
+## Latest Release: [1.5.0] - 2025-08-25
 ### Added
 
 - `SuVisitTrackerService` to track user visits with reactive signals.
