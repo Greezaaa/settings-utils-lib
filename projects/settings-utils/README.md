@@ -19,7 +19,9 @@ Each utility is fully modular and can be used independently or together.
 This workspace centralizes reusable Angular services and utilities that can be shared across multiple projects.
 
 ### Purpose
-- Many Angular projects need small utilities like font management, theming, or other global logic. This workspace allows:
+ Many Angular projects need small utilities like font management, theming, or other global logic. 
+ 
+ This workspace allows:
 - Centralized, reusable services
 - Modular architecture with independent versioning
 - Easy installation via `npm install settings-utils`
