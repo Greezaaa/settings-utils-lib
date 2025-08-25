@@ -58,14 +58,14 @@ describe('FontSizeService', () => {
 
   // --- Persistence ---
   it('should read from localStorage on init', () => {
-    localStorage.setItem('app:font-size', '18');
+    localStorage.setItem('su:font-size', '18');
     service.init();
     expect(service.fontSize()).toBe(18);
   });
 
   it('should write to localStorage on font size change', () => {
     service.increase();
-    expect(localStorage.getItem('app:font-size')).toBe('16');
+    expect(localStorage.getItem('su:font-size')).toBe('16');
   });
 
   // --- Reset ---

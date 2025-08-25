@@ -31,7 +31,7 @@ export class FontSizeService {
    * Key used for persisting the font size in localStorage.
    * Defaults to `"app:font-size"`.
    */
-  private storageKey = 'app:font-size';
+  private storageKey = 'su:font-size';
 
   /**
    * CSS custom property name where the font size is applied.

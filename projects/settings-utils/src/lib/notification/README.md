@@ -20,24 +20,21 @@ To make the notification system available throughout your app, add the `SuNotifi
 <su-lib-notifications></su-lib-notifications>
 ```
 
-### 2. Provide and Configure the Service
-The `SuNotificationService` is provided at the root level (`@Injectable({ providedIn: 'root' })`), so it is ready to be injected. You can optionally configure its global position using an `APP_INITIALIZER`.
+###	2. Global Initialization and Configuration
+
+The `SuNotificationService` is provided at the root level (`@Injectable({ providedIn: 'root' })`), so it is ready to be injected. You can optionally configure its default behavior (e.g., position) at app startup using `provideAppInitializer`.
 
 ```TypeScript
-
 // app.config.ts or main.ts
-import { ApplicationConfig, provideAppInitializer } from '@angular/core';
+import { provideAppInitializer, inject } from '@angular/core';
 import { SuNotificationService } from './notification.service';
-import { inject } from '@angular/core';
 
-export const appConfig: ApplicationConfig = {
+export const appConfig = {
   providers: [
     provideAppInitializer(() => {
       const notificationService = inject(SuNotificationService);
-      return () => {
-        // Optional: configure the default position
-        notificationService.configure({ position: 'bottom-left' }); 
-      };
+      // Optional: configure the default position
+      notificationService.configure({ position: 'bottom-left' });
     }),
   ],
 };

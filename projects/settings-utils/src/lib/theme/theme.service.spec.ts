@@ -53,7 +53,7 @@ describe('SuThemeService', () => {
   it('should save user preference to localStorage', () => {
     service.init();
     service.setTheme('dark');
-    expect(localStorage.getItem('su-theme')).toBe('dark');
+    expect(localStorage.getItem('su:theme')).toBe('dark');
   });
 
   it('should resolve system theme when preference is "system"', () => {

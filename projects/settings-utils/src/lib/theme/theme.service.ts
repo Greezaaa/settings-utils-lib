@@ -18,7 +18,7 @@ export class SuThemeService implements OnDestroy {
   private cssVarPrefix = '--su-theme-';
 
   /** localStorage key for storing user preference */
-  private storageKey = 'su-theme';
+  private storageKey = 'su:theme';
 
   /** User selected theme (can be 'system') */
   private userPreference: SuThemeName = 'light';

@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.5.0] - 2025-08-25
+### Added
+
+- `SuVisitTrackerService` to track user visits with reactive signals.
+
+	- Signals for visit count (`count`), last visit date (`lastVisit`), and milestones (`isTenthVisit`, `isHundredthVisit`).
+
+	- Milestones are configurable via `milestoneVisits`.
+
+	- `LocalStorage` persistence for visit count and last visit timestamp.
+
+	- Standalone and reactive-friendly design for Angular components.
+
+### Changed
+
+- SuThemeService: removed `APP_INITIALIZER` example from README and replaced with `provideAppInitializer()` modern usage.
+
+- `FontSizeService`: storageKey renamed from `'app:font-size'` → `'su:font-size'` for consistency with other services.
+
+- `SuVisitTrackerService`: storageKey renamed from `'su-visits'` to `'su:visits'` to follow new storage key naming convention.
+
+###	Notes
+
+- `SuVisitTrackerService` automatically initializes itself when injected; no manual initialization required unless custom configuration is needed.
+
+- Changelog reflects modern Angular best practices using provideAppInitializer instead of deprecated `APP_INITIALIZER` syntax.
+
 ## [1.4.0] - 2025-08-25
 ### Added
 - `SuThemeService` for robust, reactive, and configurable theme management.

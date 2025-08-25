@@ -32,13 +32,35 @@ This workspace centralizes reusable Angular services and utilities that can be s
 ## ChangeLog  
 Stay up to date with all changes, fixes, and improvements in **Settings Utils**.  
 
-The full changelog is available here:
-
+The full changelog is available here: 
 [View Full Changelog](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/CHANGELOG.md)  
 
-### Latest Release: [1.4.0] - 2025-08-25
-- Added a new `SuThemeService` for reactive and configurable theme management.
-- The service supports dynamic switching, user preference persistence, and automatic system theme detection.
+## Latest Release: ## [1.5.0] - 2025-08-25
+### Added
+
+- `SuVisitTrackerService` to track user visits with reactive signals.
+
+	- Signals for visit count (`count`), last visit date (`lastVisit`), and milestones (`isTenthVisit`, `isHundredthVisit`).
+
+	- Milestones are configurable via `milestoneVisits`.
+
+	- `LocalStorage` persistence for visit count and last visit timestamp.
+
+	- Standalone and reactive-friendly design for Angular components.
+
+### Changed
+
+- SuThemeService: removed `APP_INITIALIZER` example from README and replaced with `provideAppInitializer()` modern usage.
+
+- `FontSizeService`: storageKey renamed from `'app:font-size'` → `'su:font-size'` for consistency with other services.
+
+- `SuThemeService`: storageKey renamed from `'su-theme'` to `'su:theme'` to follow new storage key naming convention.
+
+###	Notes
+
+- `SuVisitTrackerService` automatically initializes itself when injected; no manual initialization required unless custom configuration is needed.
+
+- Changelog reflects modern Angular best practices using provideAppInitializer instead of deprecated `APP_INITIALIZER` syntax.
 
 [Back to Top](#table-of-contents)
 
@@ -89,6 +111,27 @@ A robust and reactive Angular service for managing application themes. It provid
 
 [SuThemeService README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/theme/README.md)
 
+### SuVisitTrackerService
+
+- Track user visits with reactive signals for Angular applications.
+
+- Provides signals for:
+
+	- `count` — total visit count
+
+	- `lastVisit` — timestamp of the last visit
+
+	- `isTenthVisit,` `isHundredthVisit` — milestone visit indicators
+
+- Milestones are configurable via milestoneVisits.
+
+- Persists visit data automatically in localStorage.
+
+- Fully reactive and standalone, works seamlessly with Angular components.
+
+- Automatically initializes on injection; optional custom configuration is available.
+
+[SuVisitTrackerService README](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/src/lib/visit-tracker/README.md)
 
 [Back to Top](#table-of-contents)
 

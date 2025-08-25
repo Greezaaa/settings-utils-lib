@@ -30,36 +30,35 @@ Custom themes can be added via the `variables` property in `SuThemeConfig`.
 
 ## Usage
 
-The `SuThemeService` must be initialized at application startup to load its configuration and initial theme. This is best done with an `APP_INITIALIZER`.
+The `SuThemeService` must be initialized at application startup to load its configuration and initial theme.
 
-### Example 1: Global Initialization with `APP_INITIALIZER`
+### Example 1: Global Initialization with provideAppInitializer
 
 ```typescript 
 // main.ts or app.config.ts
-import { ApplicationConfig, provideAppInitializer, inject } from '@angular/core';
+import { provideAppInitializer, inject } from '@angular/core';
 import { SuThemeService, SuThemeConfig } from './path/to/su-theme.service';
 
 const myThemeConfig: SuThemeConfig = {
   // Optional: Set a default theme if none is saved
-  defaultTheme: 'dark', 
+  defaultTheme: 'dark',
   // Optional: Provide custom CSS variables for any theme
   variables: {
     color: '#333',
     background: '#eee',
-    'main-accent': '#007bff'
-  }
+    'main-accent': '#007bff',
+  },
 };
 
-export const appConfig: ApplicationConfig = {
+export const appConfig = {
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (themeService: SuThemeService) => () => themeService.init(myThemeConfig),
-      deps: [SuThemeService],
-      multi: true
-    }
+    provideAppInitializer(() => {
+      const themeService = inject(SuThemeService);
+      themeService.init(myThemeConfig);
+    }),
   ],
 };
+
 ```
 
 ✅ This ensures the theme is loaded and applied before the application renders. The `SuThemeService` handles all the logic internally, including loading from `localStorage` and applying the initial theme.
