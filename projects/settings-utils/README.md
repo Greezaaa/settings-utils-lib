@@ -34,37 +34,18 @@ This workspace centralizes reusable Angular services and utilities that can be s
 ## ChangeLog  
 Stay up to date with all changes, fixes, and improvements in **Settings Utils**.  
 
+
+### Latest Release: 1.5.1] - 2025-08-25
+####	Added
+
+- Exported `SuVisitTrackerService` in the public API so it’s available for external projects.
+
+####	Notes
+
+- This fixes an oversight where the service was implemented but not publicly accessible via the package entry points.
+
 The full changelog is available here: 
 [View Full Changelog](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/CHANGELOG.md)  
-
-## Latest Release: [1.5.0] - 2025-08-25
-### Added
-
-- `SuVisitTrackerService` to track user visits with reactive signals.
-
-	- Signals for visit count (`count`), last visit date (`lastVisit`), and milestones (`isTenthVisit`, `isHundredthVisit`).
-
-	- Milestones are configurable via `milestoneVisits`.
-
-	- `LocalStorage` persistence for visit count and last visit timestamp.
-
-	- Standalone and reactive-friendly design for Angular components.
-
-### Changed
-
-- SuThemeService: removed `APP_INITIALIZER` example from README and replaced with `provideAppInitializer()` modern usage.
-
-- `FontSizeService`: storageKey renamed from `'app:font-size'` → `'su:font-size'` for consistency with other services.
-
-- `SuThemeService`: storageKey renamed from `'su-theme'` to `'su:theme'` to follow new storage key naming convention.
-
-###	Notes
-
-- `SuVisitTrackerService` automatically initializes itself when injected; no manual initialization required unless custom configuration is needed.
-
-- Changelog reflects modern Angular best practices using provideAppInitializer instead of deprecated `APP_INITIALIZER` syntax.
-
-[Back to Top](#table-of-contents)
 
 ## Utilities
 ### FontSizeService

@@ -1,5 +1,14 @@
 # Changelog
 
+##	[1.5.1] - 2025-08-25
+###	Added
+
+- Exported `SuVisitTrackerService` in the public API so it’s available for external projects.
+
+###	Notes
+
+- This fixes an oversight where the service was implemented but not publicly accessible via the package entry points.
+
 ## [1.5.0] - 2025-08-25
 ### Added
 
