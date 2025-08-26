@@ -14,14 +14,7 @@ Many Angular projects need small utilities like font management, theming, or oth
 
 ## Current Libraries
 
-- [settings-utils](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/README.md) — Provides shared services for font sizing, theming, and other global utilities.
-
-## Installation
-
-Install the package in your project with:
-```
-  npm install settings-utils
-```
+- [@su-labs/font-size](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/font-size/README.md) — A lightweight Angular service for dynamic font size management.
 
 ## Why This Workspace
 
