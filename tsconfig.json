@@ -21,6 +21,9 @@
       "@su-labs/font-size": [
         "./dist/su-labs/font-size"
       ],
+      "@su-labs/scroll-spy": [
+        "./dist/su-labs/scroll-spy"
+      ],
       "settings-utils": [
         "./dist/settings-utils"
       ]
@@ -41,5 +44,11 @@
     {
       "path": "./projects/su-labs/font-size/tsconfig.lib.json"
     },
+    {
+      "path": "./projects/su-labs/scroll-spy/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/scroll-spy/tsconfig.spec.json"
+    }
   ]
 }

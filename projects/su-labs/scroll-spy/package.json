@@ -1,0 +1,40 @@
+{
+	"name": "@su-labs/scroll-spy",
+	"version": "1.0.0",
+	"description": "An Angular scroll spy utility based on IntersectionObserver for tracking active sections or menu items.",
+	"keywords": [
+		"angular",
+		"scroll-spy",
+		"intersection-observer",
+		"section-spy",
+		"menu-spy",
+		"active-section",
+		"scroll",
+		"directive",
+		"utility",
+		"ui"
+	],
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/scroll-spy"
+	},
+	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/scroll-spy#readme",
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"peerDependencies": {
+		"@angular/common": "^20.1.0",
+		"@angular/core": "^20.1.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false
+}

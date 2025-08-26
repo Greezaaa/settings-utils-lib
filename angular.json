@@ -48,6 +48,32 @@
 					"defaultConfiguration": "production"
 				}
 			}
-		}
+    },
+    "@su-labs/scroll-spy": {
+      "projectType": "library",
+      "root": "projects/su-labs/scroll-spy",
+      "sourceRoot": "projects/su-labs/scroll-spy/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/scroll-spy/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/scroll-spy/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/su-labs/scroll-spy/tsconfig.spec.json"
+          }
+        }
+      }
+    }
 	}
 }
