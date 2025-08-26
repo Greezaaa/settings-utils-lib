@@ -1,12 +1,44 @@
 {
-  "name": "@su-labs/font-size",
-  "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/common": "^20.1.0",
-    "@angular/core": "^20.1.0"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "sideEffects": false
+	"name": "@su-labs/font-size",
+	"version": "1.0.0",
+	"description": "A lightweight Angular service for dynamic font size management.",
+	"keywords": [
+		"angular",
+		"angular-library",
+		"typescript",
+		"font",
+		"font-size",
+		"dynamic-font-size",
+		"font-scaling",
+		"font-size-management",
+		"accessibility",
+		"ui",
+		"utility",
+		"service",
+		"signals",
+		"localstorage"
+	],
+	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/font-size#readme",
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"peerDependencies": {
+		"@angular/common": "^20.1.0",
+		"@angular/core": "^20.1.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/font-size"
+	},
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"sideEffects": false,
+	"license": "MIT"
 }
