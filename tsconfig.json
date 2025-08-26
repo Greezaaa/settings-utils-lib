@@ -27,6 +27,9 @@
       "@su-labs/scroll-spy": [
         "./dist/su-labs/scroll-spy"
       ],
+      "@su-labs/visit-tracker": [
+        "./dist/su-labs/visit-tracker"
+      ],
       "settings-utils": [
         "./dist/settings-utils"
       ]
@@ -52,6 +55,9 @@
     },
     {
       "path": "./projects/su-labs/notifications/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/visit-tracker/tsconfig.lib.json"
     },
   ]
 }

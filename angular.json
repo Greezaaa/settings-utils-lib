@@ -100,6 +100,32 @@
           }
         }
       }
+    },
+    "@su-labs/visit-tracker": {
+      "projectType": "library",
+      "root": "projects/su-labs/visit-tracker",
+      "sourceRoot": "projects/su-labs/visit-tracker/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/visit-tracker/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/visit-tracker/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/su-labs/visit-tracker/tsconfig.spec.json"
+          }
+        }
+      }
     }
 	}
 }

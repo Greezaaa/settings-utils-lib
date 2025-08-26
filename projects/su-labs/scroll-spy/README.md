@@ -94,4 +94,4 @@ To contribute code, please ensure your changes include unit tests to maintain co
 
 ## License
 
-This project is licensed under the MIT License. See the [**LICENSE**](https://github.com/Greezaaa/settings-utils-lib/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License. See the [**LICENSE**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/scroll-spy/LICENSE) file for details.
