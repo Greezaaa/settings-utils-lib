@@ -18,6 +18,9 @@
       "vitest/globals"
     ],
     "paths": {
+      "@su-labs/font-size": [
+        "./dist/su-labs/font-size"
+      ],
       "settings-utils": [
         "./dist/settings-utils"
       ]
@@ -34,6 +37,9 @@
   "references": [
     {
       "path": "./projects/settings-utils/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/font-size/tsconfig.lib.json"
     },
   ]
 }

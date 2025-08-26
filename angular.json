@@ -1,33 +1,53 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "settings-utils": {
-      "projectType": "library",
-      "root": "projects/settings-utils",
-      "sourceRoot": "projects/settings-utils/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/settings-utils/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/settings-utils/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/settings-utils/tsconfig.spec.json"
-          }
-        }
-      }
-    }
-  }
+	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+	"version": 1,
+	"newProjectRoot": "projects",
+	"projects": {
+		"settings-utils": {
+			"projectType": "library",
+			"root": "projects/settings-utils",
+			"sourceRoot": "projects/settings-utils/src",
+			"prefix": "lib",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:ng-packagr",
+					"configurations": {
+						"production": {
+							"tsConfig": "projects/settings-utils/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "projects/settings-utils/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"test": {
+					"builder": "@angular/build:karma",
+					"options": {
+						"tsConfig": "projects/settings-utils/tsconfig.spec.json"
+					}
+				}
+			}
+		},
+		"@su-labs/font-size": {
+			"projectType": "library",
+			"root": "projects/su-labs/font-size",
+			"sourceRoot": "projects/su-labs/font-size/src",
+			"prefix": "lib",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:ng-packagr",
+					"configurations": {
+						"production": {
+							"tsConfig": "projects/su-labs/font-size/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "projects/su-labs/font-size/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				}
+			}
+		}
+	}
 }
