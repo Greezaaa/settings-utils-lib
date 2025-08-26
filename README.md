@@ -14,9 +14,9 @@ Many Angular projects need small utilities like font management, theming, or oth
 
 ## Current Libraries
 
-- [@su-labs/font-size](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/font-size/README.md) — A lightweight Angular service for dynamic font size management.
-- [@su-labs/scroll-spy](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/scroll-spy/README.md) — A lightweight Angular service and directive for creating scroll-based navigation and highlighting active sections.
-
+* [**@su-labs/font-size**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/font-size/README.md) — A lightweight Angular service for dynamic font size management.
+* [**@su-labs/scroll-spy**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/scroll-spy/README.md) — A lightweight Angular service and directive for creating scroll-based navigation and highlighting active sections.
+* [**@su-labs/notifications**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/notifications/README.md) — A highly customizable Angular notification library built with modern practices, including reactive Signals.
 ## Why This Workspace
 
 Having a dedicated workspace for utilities helps:

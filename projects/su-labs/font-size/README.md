@@ -23,8 +23,9 @@ npm install @su-labs/font-size
 
 This library requires the following peer dependencies:
 
--   `@angular/common`: `>=20.1.0`
--   `@angular/core`: `>=20.1.0`
+```sh
+npm install @angular/common@^20.1.0 @angular/core@^20.1.0
+```
 
 ## Usage
 ### Provide the service in your application

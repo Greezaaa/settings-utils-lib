@@ -74,6 +74,32 @@
           }
         }
       }
+    },
+    "@su-labs/notifications": {
+      "projectType": "library",
+      "root": "projects/su-labs/notifications",
+      "sourceRoot": "projects/su-labs/notifications/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/notifications/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/notifications/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/su-labs/notifications/tsconfig.spec.json"
+          }
+        }
+      }
     }
 	}
 }

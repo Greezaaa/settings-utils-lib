@@ -22,9 +22,8 @@ npm install @su-labs/scroll-spy
 
 This library requires the following peer dependencies:
 
-```txt
-@angular/common: >=20.1.0
-@angular/core: >=20.1.0
+```sh
+npm install @angular/common@^20.1.0 @angular/core@^20.1.0
 ```
 
 ## Usage

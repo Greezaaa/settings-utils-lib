@@ -1,0 +1,23 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+##	[1.0.0] - 2024-08-26
+
+###	Added
+- Initial public release of the `@su-labs/notifications` library.
+
+- Introduction of `SuNotificationService` for managing notifications with reactive `Signals`.
+
+- Introduction of `SuNotificationComponent`, a standalone component for rendering notifications.
+
+- Support for multiple notification types: `info`, `success`, `warning`, `error`, and `custom`.
+
+- Highly configurable options for message, duration, auto-close, custom CSS classes, and icons.
+
+- Support for default SVG icons, inline SVG strings, or image URLs.
+
+- Multiple screen positions supported: `top-right`, `top-left`, `bottom-right`, `bottom-left`, `top-center`, and `bottom-center`.
