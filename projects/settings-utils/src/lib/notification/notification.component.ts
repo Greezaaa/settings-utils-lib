@@ -1,11 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { SuNotificationService } from './notification.service';
 import { CommonModule } from '@angular/common';
-import {
-  BrowserModule,
-  DomSanitizer,
-  SafeHtml,
-} from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 /**
  * Component to display notifications on the screen.
@@ -15,7 +11,7 @@ import {
 @Component({
   selector: 'su-lib-notifications',
   standalone: true,
-  imports: [CommonModule, BrowserModule],
+  imports: [CommonModule],
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })

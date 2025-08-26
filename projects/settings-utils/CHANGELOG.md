@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.2] - 2025-08-26
+### Fixed
+
+- Removed accidental `BrowserModule` import from `SuNotificationComponent`.  
+  - This caused Angular to throw `NG05100: Providers from the BrowserModule have already been loaded`.  
+  - `CommonModule` is now used instead to provide common directives without re-registering browser providers.
+
 ##	[1.5.1] - 2025-08-25
 ###	Added
 

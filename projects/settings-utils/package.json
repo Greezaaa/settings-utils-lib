@@ -1,44 +1,49 @@
 {
-  "name": "settings-utils",
-  "version": "1.5.1",
-  "description": "A small Angular utility library for font-size management",
-  "keywords": [
-    "angular",
-    "font-size",
-    "utility",
-    "settings",
-    "scroll-spy",
-    "notifications",
-    "dynamic menu"
-  ],
-  "tag": "latest",
-  "author": "Yevheniy Alekseyev <yev.alekseyev@gmail.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Greezaaa/settings-utils-lib.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Greezaaa/settings-utils-lib/issues"
-  },
-  "homepage": "https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/README.md",
-  "peerDependencies": {
-    "@angular/common": "^20.1.0",
-    "@angular/core": "^20.1.0"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "sideEffects": false,
-  "module": "fesm2022/settings-utils.mjs",
-  "typings": "index.d.ts",
-  "exports": {
-    "./package.json": {
-      "default": "./package.json"
-    },
-    ".": {
-      "types": "./index.d.ts",
-      "default": "./fesm2022/settings-utils.mjs"
-    }
-  }
+	"name": "settings-utils",
+	"version": "1.5.1",
+	"description": "A small Angular utility library for font-size management",
+	"keywords": [
+		"angular",
+		"angular-utils",
+		"signals",
+		"theme",
+		"dark-mode",
+		"notification",
+		"toast",
+		"scrollspy",
+		"font-size",
+		"visit-tracker",
+		"localstorage",
+		"modular"
+	],
+	"tag": "latest",
+	"author": "Yevheniy Alekseyev <yev.alekseyev@gmail.com>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Greezaaa/settings-utils-lib.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"homepage": "https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/README.md",
+	"peerDependencies": {
+		"@angular/common": "^20.1.0",
+		"@angular/core": "^20.1.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"module": "fesm2022/settings-utils.mjs",
+	"typings": "index.d.ts",
+	"exports": {
+		"./package.json": {
+			"default": "./package.json"
+		},
+		".": {
+			"types": "./index.d.ts",
+			"default": "./fesm2022/settings-utils.mjs"
+		}
+	}
 }

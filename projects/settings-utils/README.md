@@ -35,14 +35,12 @@ This workspace centralizes reusable Angular services and utilities that can be s
 Stay up to date with all changes, fixes, and improvements in **Settings Utils**.  
 
 
-### Latest Release: 1.5.1] - 2025-08-25
-####	Added
+### Latest Release: [1.5.2] - 2025-08-26
+### Fixed
 
-- Exported `SuVisitTrackerService` in the public API so it’s available for external projects.
-
-####	Notes
-
-- This fixes an oversight where the service was implemented but not publicly accessible via the package entry points.
+- Removed accidental `BrowserModule` import from `SuNotificationComponent`.  
+  - This caused Angular to throw `NG05100: Providers from the BrowserModule have already been loaded`.  
+  - `CommonModule` is now used instead to provide common directives without re-registering browser providers.
 
 The full changelog is available here: 
 [View Full Changelog](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/settings-utils/CHANGELOG.md)  
