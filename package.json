@@ -1,56 +1,62 @@
 {
-  "name": "utils-lib",
-  "version": "0.0.4",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "lint": "eslint . --ext .ts,.html --fix"
-  },
-  "prettier": {
-    "overrides": [
-      {
-        "files": "*.html",
-        "options": {
-          "parser": "angular"
-        }
-      }
-    ]
-  },
-  "private": false,
-  "dependencies": {
-    "@angular/common": "^20.1.0",
-    "@angular/compiler": "^20.1.0",
-    "@angular/core": "^20.1.0",
-    "@angular/forms": "^20.1.0",
-    "@angular/platform-browser": "^20.1.0",
-    "@angular/router": "^20.1.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@angular/build": "^20.1.6",
-    "@angular/cli": "^20.1.3",
-    "@angular/compiler-cli": "^20.1.0",
+	"name": "utils-lib",
+	"version": "0.0.4",
+	"scripts": {
+		"ng": "ng",
+		"start": "ng serve",
+		"build": "ng build",
+		"watch": "ng build --watch --configuration development",
+		"test": "vitest",
+		"test:coverage": "vitest run --coverage",
+		"lint": "eslint . --ext .ts,.html --fix",
+		"build:theme": "ng build @su-labs/theme --configuration production",
+		"build:notifications": "ng build @su-labs/notifications --configuration production",
+		"build:font-size": "ng build @su-labs/font-size --configuration production",
+		"build:scroll-spy": "ng build @su-labs/scroll-spy --configuration production",
+		"build:visit-tracker": "ng build @su-labs/visit-tracker --configuration production",
+		"build:all": "npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker"
+	},
+	"prettier": {
+		"overrides": [
+			{
+				"files": "*.html",
+				"options": {
+					"parser": "angular"
+				}
+			}
+		]
+	},
+	"private": false,
+	"dependencies": {
+		"@angular/common": "^20.1.0",
+		"@angular/compiler": "^20.1.0",
+		"@angular/core": "^20.1.0",
+		"@angular/forms": "^20.1.0",
+		"@angular/platform-browser": "^20.1.0",
+		"@angular/router": "^20.1.0",
+		"rxjs": "~7.8.0",
+		"tslib": "^2.3.0"
+	},
+	"devDependencies": {
+		"@angular/build": "^20.1.6",
+		"@angular/cli": "^20.1.3",
+		"@angular/compiler-cli": "^20.1.0",
 		"@typescript-eslint/eslint-plugin": "^8.35.0",
-    "angular-eslint": "20.1.1",
-    "eslint": "^9.28.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^5.4.1",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-unused-imports": "^4.1.4",
-    "@testing-library/angular": "^18.0.0",
-    "@testing-library/jest-dom": "^6.7.0",
-    "@vitest/coverage-v8": "^3.2.4",
-    "jsdom": "^26.1.0",
-    "ng-packagr": "^20.1.0",
-    "typescript": "~5.8.2",
-    "vitest": "^3.2.4",
+		"angular-eslint": "20.1.1",
+		"eslint": "^9.28.0",
+		"eslint-config-prettier": "^10.1.5",
+		"eslint-plugin-import": "^2.32.0",
+		"eslint-plugin-prettier": "^5.4.1",
+		"eslint-plugin-simple-import-sort": "^12.1.1",
+		"eslint-plugin-unused-imports": "^4.1.4",
+		"@testing-library/angular": "^18.0.0",
+		"@testing-library/jest-dom": "^6.7.0",
+		"@vitest/coverage-v8": "^3.2.4",
+		"jsdom": "^26.1.0",
+		"ng-packagr": "^20.1.0",
+		"typescript": "~5.8.2",
+		"vitest": "^3.2.4",
 		"prettier": "^3.5.3",
-    "prettier-eslint": "^16.4.2"
-  }
+		"prettier-eslint": "^16.4.2"
+	}
 }
