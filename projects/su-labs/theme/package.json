@@ -1,12 +1,44 @@
 {
-  "name": "@su-labs/theme",
-  "version": "1.0.0",
-  "peerDependencies": {
-    "@angular/common": "^20.1.0",
-    "@angular/core": "^20.1.0"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "sideEffects": false
+	"name": "@su-labs/theme",
+	"version": "1.0.1",
+	"keywords": [
+		"angular",
+		"theme",
+		"dark-mode",
+		"light-mode",
+		"css-variables",
+		"signals",
+		"reactive",
+		"theming",
+		"utility",
+		"service",
+		"ui",
+		"customizable",
+		"localStorage",
+		"system-theme",
+		"prefers-color-scheme"
+	],
+	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/font-size#readme",
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/font-size"
+	},
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"license": "MIT",
+	"peerDependencies": {
+		"@angular/common": "^20.1.0",
+		"@angular/core": "^20.1.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false
 }
