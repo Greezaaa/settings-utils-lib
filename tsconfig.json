@@ -33,9 +33,6 @@
       "@su-labs/visit-tracker": [
         "./dist/su-labs/visit-tracker"
       ],
-      "settings-utils": [
-        "./dist/settings-utils"
-      ]
     }
   },
   "angularCompilerOptions": {
