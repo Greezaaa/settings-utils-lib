@@ -50,7 +50,7 @@ Inject the service into any component and access reactive signals:
 
 ```typescript
 import { Component, effect } from '@angular/core';
-import { FontSizeService } from 'settings-utils';
+import { FontSizeService } from '@su-labs/font-size';
 
 @Component({
 selector: 'app-example',
