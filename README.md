@@ -18,6 +18,7 @@ Many Angular projects need small utilities like font management, theming, or oth
 * [**@su-labs/notifications**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/notifications/README.md) — A highly customizable Angular notification library built with modern practices, including reactive Signals.
 * [**@su-labs/scroll-spy**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/scroll-spy/README.md) — A lightweight Angular service and directive for creating scroll-based navigation and highlighting active sections.
 * [**@su-labs/visit-tracker**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/visit-tracker/README.md) — A lightweight Angular service to track user visits and milestones.
+* [**@su-labs/theme**](https://www.npmjs.com/package/@su-labs/theme) — A robust and reactive Angular service for managing application themes. It provides a full-featured solution that supports dynamic switching, user preference persistence, and automatic system theme detection.
 
 ## Why This Workspace
 
