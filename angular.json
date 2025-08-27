@@ -126,6 +126,32 @@
           }
         }
       }
+    },
+    "@su-labs/theme": {
+      "projectType": "library",
+      "root": "projects/su-labs/theme",
+      "sourceRoot": "projects/su-labs/theme/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/theme/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/theme/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/su-labs/theme/tsconfig.spec.json"
+          }
+        }
+      }
     }
 	}
 }
