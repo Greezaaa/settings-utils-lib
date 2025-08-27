@@ -34,8 +34,8 @@ The service should be provided at the root level. To use it in a component, simp
 ```TypeScript
 
 import { Component, inject } from '@angular/core';
-import { SuVisitTrackerService } from './su-visit-tracker.service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 
 @Component({
   selector: 'app-root',
@@ -78,7 +78,7 @@ For standalone apps, use provideAppInitializer to initialize the tracker with a 
 ```TypeScript
 
 import { provideAppInitializer, inject } from '@angular/core';
-import { SuVisitTrackerService, SuVisitTrackerConfig } from './su-visit-tracker.service';
+import { SuVisitTrackerService, SuVisitTrackerConfig } from '@su-labs/visit-tracker';
 
 const visitConfig: SuVisitTrackerConfig = {
   storageKey: 'myApp:visits',

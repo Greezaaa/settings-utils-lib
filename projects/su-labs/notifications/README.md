@@ -48,8 +48,8 @@ Inject the `SuNotificationService` into any component or service and call its `s
 ```ts
 // src/app/my-example.component.ts
 import { Component, inject } from '@angular/core';
-import { SuNotificationService } from '@su-labs/notifications';
 import { CommonModule } from '@angular/common';
+import { SuNotificationService } from '@su-labs/notifications';
 
 @Component({
   selector: 'app-my-example',

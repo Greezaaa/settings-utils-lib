@@ -31,7 +31,7 @@ The `SuThemeService` must be initialized at application startup to load its conf
 ```typescript
 // main.ts or app.config.ts
 import { provideAppInitializer, inject } from '@angular/core';
-import { SuThemeService, SuThemeConfig } from './path/to/su-theme.service';
+import { SuThemeService, SuThemeConfig } from '@su-labs/theme';
 
 const myThemeConfig: SuThemeConfig = {
   // Optional: Set a default theme if none is saved
@@ -83,7 +83,7 @@ Use the setTheme() method to switch themes and the theme signal to read the curr
 ```TypeScript
 
 import { Component, inject } from '@angular/core';
-import { SuThemeService, SuThemeName } from './path/to/su-theme.service';
+import { SuThemeService, SuThemeName } from '@su-labs/theme';
 
 @Component({
   selector: 'app-theme-switcher',
