@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/scroll-spy",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "An Angular scroll spy utility based on IntersectionObserver for tracking active sections or menu items.",
 	"keywords": [
 		"angular",
@@ -19,7 +19,6 @@
 		"email": "yev.alekseyev@gmail.com",
 		"url": "https://github.com/Greezaaa"
 	},
-	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
@@ -36,5 +35,6 @@
 	"dependencies": {
 		"tslib": "^2.3.0"
 	},
-	"sideEffects": false
+	"sideEffects": false,
+	"license": "MIT"
 }

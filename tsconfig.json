@@ -45,9 +45,6 @@
   "files": [],
   "references": [
     {
-      "path": "./projects/settings-utils/tsconfig.lib.json"
-    },
-    {
       "path": "./projects/su-labs/font-size/tsconfig.lib.json"
     },
     {

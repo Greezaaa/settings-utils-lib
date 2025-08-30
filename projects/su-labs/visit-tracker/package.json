@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/visit-tracker",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"keywords": [
 		"angular",
 		"user-tracking",
@@ -34,6 +34,6 @@
 	"bugs": {
 		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
 	},
-	"license": "MIT",
-	"sideEffects": false
+	"sideEffects": false,
+	"license": "MIT"
 }

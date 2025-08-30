@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/notifications",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"keywords": [
 		"angular",
 		"notifications",
@@ -31,7 +31,6 @@
 	"bugs": {
 		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
 	},
-	"license": "MIT",
 	"peerDependencies": {
 		"@angular/common": "^20.1.0",
 		"@angular/core": "^20.1.0"
@@ -39,5 +38,6 @@
 	"dependencies": {
 		"tslib": "^2.3.0"
 	},
-	"sideEffects": false
+	"sideEffects": false,
+	"license": "MIT"
 }
