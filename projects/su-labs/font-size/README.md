@@ -19,16 +19,7 @@ You can install this library via npm:
 npm install @su-labs/font-size
 ```
 
-## Peer Dependencies
-
-This library requires the following peer dependencies:
-
-```sh
-npm install @angular/common@^20.1.0 @angular/core@^20.1.0
-```
-
-## Usage
-### Provide the service in your application
+npm install @angular/common@^21.0.0 @angular/core@^21.0.0
 
 You can provide the service in your main.ts (or wherever your ApplicationConfig is defined) and initialize it automatically:
 
