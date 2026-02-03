@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.0.4] - 2026-02-03
+
+### Changed
+- **BREAKING:** Updated to Angular 21 support. This version requires Angular 21.0.0 or higher.
+- Updated peer dependencies to `@angular/common: ^21.0.0` and `@angular/core: ^21.0.0`.
+- Aligned package version with Angular major version for clearer compatibility (v21.x.x = Angular 21 support).
+
+### Notes
+- Projects using Angular 20 or below should continue using version 1.0.3.
+- This release maintains full backward compatibility with the 1.x API - only the Angular version requirement has changed.
+
+
 ## [1.0.3] - 2025-08-30
 
 ### Fixed
