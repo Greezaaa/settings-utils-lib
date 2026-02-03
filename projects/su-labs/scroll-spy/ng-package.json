@@ -3,5 +3,10 @@
   "dest": "../../../dist/su-labs/scroll-spy",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": [
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ]
 }
