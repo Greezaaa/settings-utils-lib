@@ -26,7 +26,7 @@ npm install @su-labs/notifications
 This library requires the following peer dependencies:
 
 ```sh
-npm install @angular/common@">=20.1.0" @angular/core@">=20.1.0" @angular/platform-browser@">=20.1.0"
+npm install @angular/common@">=21.0.0" @angular/core@">=21.0.0" @angular/platform-browser@">=21.0.0"
 ```
 
 ## Usage
