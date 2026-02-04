@@ -1,26 +1,114 @@
 # SuThemeService
 
+`@su-labs/theme`
+
+![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Angular Version](https://img.shields.io/badge/Angular-v21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
+![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+![Size](https://img.shields.io/badge/Size-Small-green.svg?style=for-the-badge)
+![Downloads](https://img.shields.io/npm/dt/@su-labs/theme?style=for-the-badge)
+![Version](https://img.shields.io/npm/v/@su-labs/theme?style=for-the-badge)
+
 A robust and reactive Angular service for managing application themes. It provides a full-featured solution that supports dynamic switching, user preference persistence, and automatic system theme detection.
+
+## 📚 Table of Contents
+
+- [Why Use This Library?](#-why-use-this-library)
+- [Features](#features)
+- [Available Themes](#available-themes)
+- [Installation](#installation)
+- [Quick Start](#-quick-start)
+- [Usage](#usage)
+- [API Reference](#-api-reference)
+- [Configuration Options](#configuration-options)
+- [Browser Compatibility](#-browser-compatibility)
+- [Related Libraries](#-related-libraries)
+- [Troubleshooting](#-troubleshooting)
+- [Support](#-support)
+- [Contributing](#contributing)
+- [License](#license)
+
+## 💡 Why Use This Library?
+
+- 🎯 **Lightweight** - Minimal bundle size
+- ⚡ **Reactive** - Built with Angular Signals
+- 🎨 **CSS Variables** - Modern CSS custom properties
+- 🌓 **System Theme** - Auto-detects OS preference
+- 💾 **Persistent** - Remembers user choice
+- 🔒 **Type-Safe** - Full TypeScript support
+- 📦 **Zero Dependencies** - No bloat
+- 🧪 **Well Tested** - Comprehensive test coverage
 
 ## Features
 
-* Reactive State: Uses Angular signals for efficient, reactive theme management.
-* System Theme Integration: Automatically follows the user's system theme preference (`prefers-color-scheme`).
-* Persistence: Remembers the user's last-selected theme using `localStorage`.
-* Configurable: Customizable with a configuration object for storage keys, CSS variable prefixes, and default themes.
-* Programmatic Control: Simple public API to set, get, and track the active theme.
+* **Reactive State**: Uses Angular signals for efficient, reactive theme management.
+* **System Theme Integration**: Automatically follows the user's system theme preference (`prefers-color-scheme`).
+* **Persistence**: Remembers the user's last-selected theme using `localStorage`.
+* **Configurable**: Customizable with a configuration object for storage keys, CSS variable prefixes, and default themes.
+* **Programmatic Control**: Simple public API to set, get, and track the active theme.
 
 ## Available Themes
 
 The service currently supports the following theme names by default:
 
-* `light`
-* `dark`
-* `contrast`
-* `custom`
-* `system` (follows OS preference)
+* `light` - Light theme
+* `dark` - Dark theme
+* `contrast` - High contrast theme
+* `custom` - Custom theme with your own variables
+* `system` - Automatically follows OS preference
 
 You can provide custom variables for any of these themes via the `themes` property in `SuThemeConfig`.
+
+## Installation
+
+You can install this library via npm:
+
+```sh
+npm install @su-labs/theme
+```
+
+## Peer Dependencies
+
+This library requires the following peer dependencies:
+
+```sh
+npm install @angular/common@^21 @angular/core@^21
+```
+
+## 🚀 Quick Start
+
+```typescript
+// 1. Install
+npm install @su-labs/theme
+
+// 2. Initialize in app.config.ts
+import { provideAppInitializer, inject } from '@angular/core';
+import { SuThemeService } from '@su-labs/theme';
+
+export const appConfig = {
+  providers: [
+    provideAppInitializer(() => {
+      inject(SuThemeService).init();
+    }),
+  ],
+};
+
+// 3. Use in component
+import { Component, inject } from '@angular/core';
+import { SuThemeService } from '@su-labs/theme';
+
+@Component({
+  template: `
+    <button (click)="themeService.setTheme('dark')">Dark Mode</button>
+    <p>Current: {{ themeService.theme() }}</p>
+  `
+})
+export class AppComponent {
+  themeService = inject(SuThemeService);
+}
+```
 
 ## Usage
 
@@ -58,11 +146,11 @@ export const appConfig = {
 
 ✅ This ensures the theme is loaded and applied before the application renders. The `SuThemeService` handles all the logic internally, including loading from `localStorage` and applying the initial theme.
 
-###	Example 2: Using the Theme in a Component
+### Example 2: Using the Theme in Your Styles
+
 Your service automatically applies CSS variables to the `:root` element. Your application stylesheets can use these variables, and the service will handle updating their values when the theme changes.
 
 ```CSS
-
 /* styles.css */
 /* Use the CSS variables in your stylesheet */
 body {
@@ -77,11 +165,11 @@ h1 {
 
 The service dynamically updates these variables based on the active theme, applying a combination of its internal defaults and any custom overrides you provide in the configuration.
 
-###	Example 3: Dynamic Theme Switching
+### Example 3: Dynamic Theme Switching
+
 Use the setTheme() method to switch themes and the theme signal to read the current state.
 
 ```TypeScript
-
 import { Component, inject } from '@angular/core';
 import { SuThemeService, SuThemeName } from '@su-labs/theme';
 
@@ -98,7 +186,6 @@ import { SuThemeService, SuThemeName } from '@su-labs/theme';
   `,
 })
 export class ThemeSwitcherComponent {
-  // Use the service directly in the template
   public readonly themeService = inject(SuThemeService);
 
   setTheme(themeName: SuThemeName) {
@@ -106,8 +193,39 @@ export class ThemeSwitcherComponent {
   }
 }
 ```
- 
+
 ✅ This correctly shows how to use your service's public API to switch between themes. The service handles the underlying logic, including persistence and CSS variable application.
+
+## 📖 API Reference
+
+### Signals
+
+| Signal | Type | Description |
+|--------|------|-------------|
+| `theme()` | `SuThemeName` | Current active theme name |
+
+### Methods
+
+| Method | Parameters | Description |
+|--------|------------|-------------|
+| `init(config?)` | `SuThemeConfig` | Initialize with custom configuration |
+| `setTheme(theme, persist?)` | `SuThemeName, boolean` | Change theme (persist defaults to true) |
+| `getTheme()` | - | Returns current theme name |
+
+### Types
+
+```typescript
+type SuThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
+
+interface SuThemeConfig {
+  storageKey?: string;      // Default: 'su:theme'
+  cssVarPrefix?: string;    // Default: '--su-theme-'
+  defaultTheme?: SuThemeName; // Default: 'system'
+  themes?: {
+    [key in SuThemeName]?: Record<string, string>;
+  };
+}
+```
 
 ## Configuration Options
 
@@ -120,12 +238,60 @@ The service can be configured to fit your application's needs.
 | `defaultTheme`     | The theme to use if no preference is saved in `localStorage`. | `'system'`       |
 | `themes`           | An object with custom CSS variable overrides for each theme.  | `undefined`      |
 
-##	Notes
+## 🌐 Browser Compatibility
+
+Works in all modern browsers that support:
+- ✅ CSS Custom Properties
+- ✅ localStorage API
+- ✅ matchMedia (for system theme)
+- ✅ Angular 21+
+- ✅ ES2022+
+
+| Browser | Version |
+|---------|---------|
+| Chrome | ≥ 90 |
+| Firefox | ≥ 88 |
+| Safari | ≥ 14 |
+| Edge | ≥ 90 |
+
+## 🔗 Related Libraries
+
+Part of the **@su-labs** suite:
+
+- 👀 [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
+- 🔔 [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
+- 🔍 [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
+- 📏 [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
+
+## 🔧 Troubleshooting
+
+### Theme not persisting?
+
+Make sure localStorage is enabled in your browser and not blocked by privacy settings.
+
+### CSS variables not updating?
+
+Ensure you're using the correct prefix in your CSS (`--su-theme-` by default) and that you've initialized the service.
+
+### System theme not working?
+
+Check that your OS has a theme preference set and your browser supports `prefers-color-scheme` media query.
+
+### TypeScript errors?
+
+Ensure you have Angular 21+ and TypeScript 5.7+ installed.
+
+## 💬 Support
+
+- 🐛 Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
+- 💡 Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
+- ⭐ Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
+
+## Notes
+
 - The service safely handles properties and ignores null or undefined values, preventing issues like prototype pollution.
-
--	Works seamlessly with standalone components and reactive setups thanks to its signal-based API.
-
--	Persistence is handled automatically: The service saves the user's preference to `localStorage` when you call `setTheme(..., true)`. On initialization, it automatically restores this saved preference. You do not need to add this logic in your components.
+- Works seamlessly with standalone components and reactive setups thanks to its signal-based API.
+- Persistence is handled automatically: The service saves the user's preference to `localStorage` when you call `setTheme(..., true)`. On initialization, it automatically restores this saved preference. You do not need to add this logic in your components.
 
 ## Contributing
 
@@ -136,4 +302,3 @@ To contribute code, please ensure your changes include unit tests to maintain co
 ## License
 
 This project is licensed under the MIT License. See the [**LICENSE**](https://github.com/Greezaaa/settings-utils-lib/blob/main/projects/su-labs/theme/LICENSE) file for details.
-

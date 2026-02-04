@@ -1,6 +1,44 @@
 # ScrollSpy
 
+`@su-labs/scroll-spy`
+
+![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Angular Version](https://img.shields.io/badge/Angular-v21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
+![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+![Size](https://img.shields.io/badge/Size-Small-green.svg?style=for-the-badge)
+![Downloads](https://img.shields.io/npm/dt/@su-labs/scroll-spy?style=for-the-badge)
+![Version](https://img.shields.io/npm/v/@su-labs/scroll-spy?style=for-the-badge)
+
 A lightweight Angular service and directive for managing active sections based on scroll position. Easily track which section of a page is currently visible and update your UI accordingly. Perfect for navigation menus, table of contents, or one-page scroll applications.
+
+## 📚 Table of Contents
+
+- [Why Use This Library?](#-why-use-this-library)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#-quick-start)
+- [Usage](#usage)
+- [API Reference](#-api-reference)
+- [How It Works](#how-it-works)
+- [Browser Compatibility](#-browser-compatibility)
+- [Related Libraries](#-related-libraries)
+- [Troubleshooting](#-troubleshooting)
+- [Support](#-support)
+- [Contributing](#contributing)
+- [License](#license)
+
+## 💡 Why Use This Library?
+
+- 🎯 **Lightweight** - Minimal bundle size
+- ⚡ **Reactive** - Built with Angular Signals
+- 🚀 **Performant** - Uses IntersectionObserver API
+- 🎨 **Flexible** - Works with any layout
+- 🔒 **Type-Safe** - Full TypeScript support
+- 📦 **Zero Dependencies** - No bloat
+- 🧪 **Well Tested** - Comprehensive test coverage
+- 📝 **Well Documented** - Clear examples and API docs
 
 ## Features
 
@@ -9,6 +47,7 @@ A lightweight Angular service and directive for managing active sections based o
 - Works with multiple sections
 - Optional directive to automatically update the active section using IntersectionObserver
 - Fully modular: use the service alone, or combine with the directive for automatic detection
+- Configurable intersection thresholds
 
 ## Installation
 
@@ -24,6 +63,39 @@ This library requires the following peer dependencies:
 
 ```sh
 npm install @angular/common@^21 @angular/core@^21
+```
+
+## 🚀 Quick Start
+
+```typescript
+// 1. Install
+npm install @su-labs/scroll-spy
+
+// 2. Add directive to your sections
+@for (section of sections; track section.id) {
+  <section [id]="section.id" [appScrollSpy]="section.id">
+    <h2>{{ section.name }}</h2>
+  </section>
+}
+
+// 3. Track active section in navigation
+@for (section of sections; track section.id) {
+  <a
+    [href]="'#' + section.id"
+    [class.active]="activeSection() === section.id"
+  >
+    {{ section.name }}
+  </a>
+}
+
+// 4. Inject service in component
+import { Component, inject } from '@angular/core';
+import { ScrollSpyService } from '@su-labs/scroll-spy';
+
+export class AppComponent {
+  scrollSpyService = inject(ScrollSpyService);
+  activeSection = this.scrollSpyService.activeSection;
+}
 ```
 
 ## Usage
@@ -82,9 +154,94 @@ export class ScrollExampleComponent {
 }
 ```
 
+## 📖 API Reference
+
+### Service (ScrollSpyService)
+
+#### Signals
+
+| Signal | Type | Description |
+|--------|------|-------------|
+| `activeSection()` | `string \| null` | ID of currently active section |
+
+#### Methods
+
+| Method | Parameters | Description |
+|--------|------------|-------------|
+| `setActiveSection(id)` | `string` | Manually set active section |
+
+### Directive (ScrollSpyDirective)
+
+#### Inputs
+
+| Input | Type | Description |
+|-------|------|-------------|
+| `appScrollSpy` | `string` | Section ID to track |
+
+#### How to Use
+
+```html
+<section [appScrollSpy]="'section-id'">
+  <!-- Your content -->
+</section>
+```
+
 ## How It Works
 
 The `ScrollSpyDirective` uses the browser's native [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to efficiently monitor when elements enter or exit the viewport. It's configured to trigger when a tracked section is roughly in the vertical center of the screen, providing a smooth and accurate "spy" effect.
+
+**Key Benefits:**
+- 🚀 **Performance**: No scroll event listeners needed
+- 🎯 **Accuracy**: Precise intersection detection
+- ⚡ **Efficiency**: Browser-native implementation
+- 🔋 **Battery Friendly**: Optimized for mobile devices
+
+## 🌐 Browser Compatibility
+
+Works in all modern browsers that support:
+- ✅ IntersectionObserver API
+- ✅ Angular 21+
+- ✅ ES2022+
+
+| Browser | Version |
+|---------|---------|
+| Chrome | ≥ 58 |
+| Firefox | ≥ 55 |
+| Safari | ≥ 12.1 |
+| Edge | ≥ 16 |
+
+## 🔗 Related Libraries
+
+Part of the **@su-labs** suite:
+
+- 👀 [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
+- 🎨 [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) - Theme management with dark mode support
+- 🔔 [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
+- 📏 [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
+
+## 🔧 Troubleshooting
+
+### Active section not updating?
+
+Make sure you've added the `appScrollSpy` directive to all sections you want to track.
+
+### Multiple sections active at once?
+
+This shouldn't happen with the default configuration. Check that section IDs are unique.
+
+### Directive not found?
+
+Make sure you've imported `ScrollSpyDirective` in your component's imports array (for standalone components).
+
+### TypeScript errors?
+
+Ensure you have Angular 21+ and TypeScript 5.7+ installed.
+
+## 💬 Support
+
+- 🐛 Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
+- 💡 Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
+- ⭐ Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
 
 ## Contributing
 
