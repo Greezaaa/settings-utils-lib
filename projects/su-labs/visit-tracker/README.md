@@ -15,17 +15,17 @@ A lightweight Angular service to track user visits. Provides reactive signals fo
 
 ## Table of Contents
 
-- [Why Use This Library?](#-why-use-this-library)
+- [Why Use This Library?](#why-use-this-library)
 - [Features](#features)
 - [Installation](#installation)
-- [Quick Start](#-quick-start)
+- [Quick Start](#quick-start)
 - [Usage](#usage)
-- [API Reference](#-api-reference)
+- [API Reference](#api-reference)
 - [Configuration Options](#configuration-options)
-- [Browser Compatibility](#-browser-compatibility)
-- [Related Libraries](#-related-libraries)
-- [Troubleshooting](#-troubleshooting)
-- [Support](#-support)
+- [Browser Compatibility](#browser-compatibility)
+- [Related Libraries](#related-libraries)
+- [Troubleshooting](#troubleshooting)
+- [Support](#support)
 - [Contributing](#contributing)
 - [License](#license)
 

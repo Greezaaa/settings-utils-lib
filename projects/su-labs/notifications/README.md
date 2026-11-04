@@ -15,18 +15,18 @@ A highly customizable Angular notification library built with modern practices, 
 
 ## Table of Contents
 
-- [Why Use This Library?](#-why-use-this-library)
+- [Why Use This Library?](#why-use-this-library)
 - [Features](#features)
 - [Installation](#installation)
-- [Quick Start](#-quick-start)
+- [Quick Start](#quick-start)
 - [Usage](#usage)
-- [API Reference](#-api-reference)
+- [API Reference](#api-reference)
 - [Configuration Options](#configuration-options)
 - [How It Works](#how-it-works)
-- [Browser Compatibility](#-browser-compatibility)
-- [Related Libraries](#-related-libraries)
-- [Troubleshooting](#-troubleshooting)
-- [Support](#-support)
+- [Browser Compatibility](#browser-compatibility)
+- [Related Libraries](#related-libraries)
+- [Troubleshooting](#troubleshooting)
+- [Support](#support)
 - [Contributing](#contributing)
 - [License](#license)
 

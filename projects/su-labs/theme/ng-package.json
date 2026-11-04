@@ -8,5 +8,6 @@
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
-  ]
+  ],
+  "allowedNonPeerDependencies": ["@su-labs/core"]
 }

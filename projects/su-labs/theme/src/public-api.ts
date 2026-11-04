@@ -3,5 +3,4 @@
  */
 
 export * from './lib/theme.service';
-export * from './lib/theme.types';
-
+export type { SuThemeConfig, SuThemeName, ThemeCssVariables } from '@su-labs/core/theme';

@@ -1,0 +1,37 @@
+{
+	"name": "@su-labs/core",
+	"version": "1.0.0",
+	"description": "Framework-agnostic browser utilities (theme, and more to come) with a tiny reactive store. Works with vanilla JS, React, Svelte, Angular or any other framework.",
+	"keywords": [
+		"framework-agnostic",
+		"vanilla-js",
+		"react",
+		"svelte",
+		"angular",
+		"theme",
+		"dark-mode",
+		"css-variables",
+		"store",
+		"reactive",
+		"prefers-color-scheme"
+	],
+	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/core#readme",
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/core"
+	},
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

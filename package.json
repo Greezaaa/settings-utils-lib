@@ -9,12 +9,13 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts,.html --fix",
+    "build:core": "ng build @su-labs/core --configuration production",
     "build:theme": "ng build @su-labs/theme --configuration production",
     "build:notifications": "ng build @su-labs/notifications --configuration production",
     "build:font-size": "ng build @su-labs/font-size --configuration production",
     "build:scroll-spy": "ng build @su-labs/scroll-spy --configuration production",
     "build:visit-tracker": "ng build @su-labs/visit-tracker --configuration production",
-    "build:all": "npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker"
+    "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker"
   },
   "prettier": {
     "overrides": [

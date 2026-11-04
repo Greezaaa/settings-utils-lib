@@ -13,20 +13,22 @@
 
 A robust and reactive Angular service for managing application themes. It provides a full-featured solution that supports dynamic switching, user preference persistence, and automatic system theme detection.
 
+> **Not using Angular?** The same theme logic is available for React, Svelte, vanilla JavaScript and Node in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
+
 ## Table of Contents
 
-- [Why Use This Library?](#-why-use-this-library)
+- [Why Use This Library?](#why-use-this-library)
 - [Features](#features)
 - [Available Themes](#available-themes)
 - [Installation](#installation)
-- [Quick Start](#-quick-start)
+- [Quick Start](#quick-start)
 - [Usage](#usage)
-- [API Reference](#-api-reference)
+- [API Reference](#api-reference)
 - [Configuration Options](#configuration-options)
-- [Browser Compatibility](#-browser-compatibility)
-- [Related Libraries](#-related-libraries)
-- [Troubleshooting](#-troubleshooting)
-- [Support](#-support)
+- [Browser Compatibility](#browser-compatibility)
+- [Related Libraries](#related-libraries)
+- [Troubleshooting](#troubleshooting)
+- [Support](#support)
 - [Contributing](#contributing)
 - [License](#license)
 

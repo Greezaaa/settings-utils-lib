@@ -8,9 +8,50 @@
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 ![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
-A collection of lightweight, reactive Angular utilities built with modern practices. Each library is independently versioned and published to npm for easy integration into your Angular projects.
+A collection of lightweight, reactive browser utilities built with modern practices. Each library is independently versioned and published to npm.
 
-## Available Libraries
+- **Angular:** dedicated packages with injectable services and signals.
+- **React, Svelte, vanilla JavaScript and Node:** the framework-agnostic [`@su-labs/core`](projects/su-labs/core/README.md) package.
+
+## Choose Your Environment
+
+| Environment | Package | Guide |
+|-------------|---------|-------|
+| Vanilla JavaScript (bundler or CDN, no build step) | `@su-labs/core` | [Vanilla JS guide](docs/guides/vanilla.md) |
+| React (Vite, Next.js, Remix, …) | `@su-labs/core` | [React guide](docs/guides/react.md) |
+| Svelte and SvelteKit | `@su-labs/core` | [Svelte guide](docs/guides/svelte.md) |
+| Angular | `@su-labs/theme`, `@su-labs/font-size`, … | [Angular guide](docs/guides/angular.md) |
+| Node.js and server-side rendering | `@su-labs/core` | [Node guide](docs/guides/node.md) |
+
+Utilities are being moved into `@su-labs/core` one at a time; theme is available now. See [which utilities are available where](docs/README.md#utility-availability).
+
+---
+
+## Framework-Agnostic Core
+
+### [@su-labs/core](https://www.npmjs.com/package/@su-labs/core)
+Browser utilities with no framework dependencies, exposed as small reactive stores that work with React's `useSyncExternalStore` and Svelte's `$store` syntax.
+
+[![npm](https://img.shields.io/npm/v/@su-labs/core?style=flat-square)](https://www.npmjs.com/package/@su-labs/core)
+[![downloads](https://img.shields.io/npm/dt/@su-labs/core?style=flat-square)](https://www.npmjs.com/package/@su-labs/core)
+
+```bash
+npm install @su-labs/core
+```
+
+**Features:**
+- Theme management (`@su-labs/core/theme`)
+- Works in any framework or none
+- Safe to import in Node and during server-side rendering
+- Zero runtime dependencies
+
+[Documentation](https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/core#readme)
+
+---
+
+## Angular Libraries
+
+These packages are built for Angular 22+ and expose injectable services with signals.
 
 ### [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker)
 Track user visits with reactive signals, milestone detection, and localStorage persistence.
@@ -176,7 +217,7 @@ export class AppComponent {
 
 ## Documentation
 
-Each library has comprehensive documentation including:
+Start with the [guide for your environment](docs/README.md). Each library also has comprehensive documentation including:
 
 - **Quick Start** - Get up and running in minutes
 - **API Reference** - Complete method and type documentation

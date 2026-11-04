@@ -3,6 +3,26 @@
 	"version": 1,
 	"newProjectRoot": "projects",
 	"projects": {
+		"@su-labs/core": {
+			"projectType": "library",
+			"root": "projects/su-labs/core",
+			"sourceRoot": "projects/su-labs/core/src",
+			"prefix": "lib",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:ng-packagr",
+					"configurations": {
+						"production": {
+							"tsConfig": "projects/su-labs/core/tsconfig.lib.prod.json"
+						},
+						"development": {
+							"tsConfig": "projects/su-labs/core/tsconfig.lib.json"
+						}
+					},
+					"defaultConfiguration": "production"
+				}
+			}
+		},
 		"settings-utils": {
 			"projectType": "library",
 			"root": "projects/settings-utils",

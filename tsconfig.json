@@ -18,6 +18,12 @@
       "vitest/globals"
     ],
     "paths": {
+      "@su-labs/core": [
+        "./dist/su-labs/core"
+      ],
+      "@su-labs/core/theme": [
+        "./dist/su-labs/core/theme"
+      ],
       "@su-labs/font-size": [
         "./dist/su-labs/font-size"
       ],
@@ -44,6 +50,9 @@
   },
   "files": [],
   "references": [
+    {
+      "path": "./projects/su-labs/core/tsconfig.lib.json"
+    },
     {
       "path": "./projects/su-labs/font-size/tsconfig.lib.json"
     },
