@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) wraps these utilities in Angular services with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) and [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) wrap these utilities in Angular services with signals.
 
 ## Table of Contents
 
@@ -14,6 +14,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Entry Points](#entry-points)
 - [Reactive Stores](#reactive-stores)
 - [Theme](#theme)
+- [Notifications](#notifications)
 - [License](#license)
 
 ## Installation
@@ -42,6 +43,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 |--------|----------|
 | `@su-labs/core` | `createSuStore`, `isBrowser` |
 | `@su-labs/core/theme` | `SuThemeController` and theme types |
+| `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
 
 ## Reactive Stores
 
@@ -111,6 +113,47 @@ a {
   color: var(--su-theme-main-accent);
 }
 ```
+
+## Notifications
+
+Manages a list of toast notifications: adding, dismissing, closing them automatically after a delay, and the screen position they appear in. It holds the state only; your app renders the list with its own markup and styles (see the [guides](#getting-started) for examples).
+
+```ts
+import { SuNotificationController } from '@su-labs/core/notifications';
+
+const notifications = new SuNotificationController();
+
+notifications.notifications.subscribe((list) => console.log(list.length, 'open'));
+const id = notifications.show({ type: 'success', message: 'Saved!' });
+notifications.dismiss(id);
+```
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `show(options)` | Adds a notification and returns its ID |
+| `dismiss(id)` | Removes one notification |
+| `clearAll()` | Removes all notifications |
+| `configure({ position })` | Sets where notifications appear |
+| `notifications` | Read-only store of the active notifications, oldest first |
+| `position` | Read-only store of the position (default `'top-right'`) |
+| `destroy()` | Removes all notifications and cancels pending timers |
+
+`isSuNotificationImageIcon(icon)` tells you whether a string icon is an image path or URL (render with `<img>`) or inline SVG markup (render as HTML).
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `type` | — | `'info'`, `'success'`, `'warning'`, `'error'` or `'custom'` |
+| `message` | — | Text to display |
+| `duration` | `3000` | Milliseconds before closing automatically |
+| `autoClose` | `true` | Whether to close automatically after `duration` |
+| `cssClass` | — | Extra CSS class(es) for custom styling |
+| `icon` | `true` | `true` for the type's default icon, `false` for none, or an image URL or inline SVG string |
+
+Positions: `'top-right'`, `'top-left'`, `'top-center'`, `'bottom-right'`, `'bottom-left'`, `'bottom-center'`.
 
 ## License
 

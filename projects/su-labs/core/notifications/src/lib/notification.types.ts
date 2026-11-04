@@ -68,3 +68,14 @@ export type SuNotificationPosition =
   | 'bottom-left'
   | 'top-center'
   | 'bottom-center';
+
+/**
+ * Configuration for the notification controller.
+ */
+export interface SuNotificationConfig {
+  /**
+   * Where notifications appear on the screen.
+   * @default 'top-right'
+   */
+  position?: SuNotificationPosition;
+}

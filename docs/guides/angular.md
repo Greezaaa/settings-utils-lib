@@ -65,7 +65,7 @@ export class ThemeSwitcherComponent {
 }
 ```
 
-`@su-labs/theme` uses `@su-labs/core/theme` internally and installs it automatically.
+`@su-labs/theme` and `@su-labs/notifications` use `@su-labs/core` internally and install it automatically.
 
 ## Next steps
 

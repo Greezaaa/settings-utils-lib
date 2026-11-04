@@ -21,8 +21,8 @@
       "@su-labs/core": [
         "./dist/su-labs/core"
       ],
-      "@su-labs/core/theme": [
-        "./dist/su-labs/core/theme"
+      "@su-labs/core/*": [
+        "./dist/su-labs/core/*"
       ],
       "@su-labs/font-size": [
         "./dist/su-labs/font-size"

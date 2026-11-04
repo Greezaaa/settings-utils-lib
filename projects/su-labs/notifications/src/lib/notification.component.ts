@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SuNotificationService } from './notification.service';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { isSuNotificationImageIcon } from '@su-labs/core/notifications';
 
 /**
  * Component to display notifications on the screen.
@@ -37,27 +38,14 @@ export class SuNotificationComponent {
 
   /**
    * Checks if the provided `icon` value should be rendered as an image (`<img>`).
-   *
-   * Determines whether the `icon` is a string pointing to an image file:
-   * - Local or relative paths (starting with `/`)
-   * - URLs (starting with `http`)
-   * - File paths ending with `.png`, `.jpg`, or `.svg`
-   *
-   * Inline SVG strings (e.g., `<svg>...</svg>`) are **not** treated as images and
-   * should be rendered with `[innerHTML]`.
+   * Inline SVG strings are rendered with `[innerHTML]` instead.
+   * See `isSuNotificationImageIcon` in `@su-labs/core/notifications` for the rules.
    *
    * @param icon The icon value from the notification (boolean or string)
-   * @returns `true` if the icon is an image path or URL, `false` for inline SVGs or `false`
+   * @returns `true` if the icon is an image path or URL
    */
   isImage(icon: string | boolean): boolean {
-    return (
-      typeof icon === 'string' &&
-      (icon.endsWith('.png') ||
-        icon.endsWith('.jpg') ||
-        icon.endsWith('.svg') ||
-        icon.startsWith('http') ||
-        icon.startsWith('/'))
-    );
+    return isSuNotificationImageIcon(icon);
   }
 
   /**

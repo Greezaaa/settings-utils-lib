@@ -98,7 +98,48 @@ a {
 
 Single-page apps that remove the controller should call `theme.destroy()` to stop listening to system theme changes.
 
+## Notifications
+
+The controller keeps the list of notifications and closes them on time; you render the list.
+
+```html
+<div id="notifications"></div>
+<button type="button" id="save">Save</button>
+
+<script type="module">
+  import { SuNotificationController } from 'https://esm.sh/@su-labs/core@1.0.0/notifications';
+
+  const notifications = new SuNotificationController();
+  const container = document.querySelector('#notifications');
+
+  notifications.notifications.subscribe((list) => {
+    container.replaceChildren(
+      ...list.map((notification) => {
+        const item = document.createElement('div');
+        item.className = `notification ${notification.type}`;
+        item.textContent = notification.message;
+
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.textContent = '×';
+        close.addEventListener('click', () => notifications.dismiss(notification.id));
+
+        item.append(close);
+        return item;
+      }),
+    );
+  });
+
+  document.querySelector('#save').addEventListener('click', () => {
+    notifications.show({ type: 'success', message: 'Saved!' });
+  });
+</script>
+```
+
+Use `textContent` (not `innerHTML`) for messages so user-provided text can't inject HTML. Use `notifications.position` to place the container, for example as a class name.
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
+- [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Node and server-side rendering](node.md)

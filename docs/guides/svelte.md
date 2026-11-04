@@ -87,7 +87,51 @@ The controller sets CSS variables and a `data-theme` attribute on `<html>`:
 
 The server has no saved preference or system setting, so pages render with the `'light'` theme and switch once `init()` runs in `onMount`. Styling with the CSS variables keeps that switch smooth.
 
+## Notifications
+
+The controller keeps the list of notifications and closes them on time; you render the list with your own markup.
+
+### Setup
+
+```ts
+// src/lib/notifications.ts
+import { SuNotificationController } from '@su-labs/core/notifications';
+
+export const notificationController = new SuNotificationController();
+export const notifications = notificationController.notifications;
+export const position = notificationController.position;
+```
+
+### Rendering the list
+
+```svelte
+<!-- src/lib/Notifications.svelte -->
+<script lang="ts">
+  import { notificationController, notifications, position } from '$lib/notifications';
+</script>
+
+<div class="notifications {$position}">
+  {#each $notifications as notification (notification.id)}
+    <div class="notification {notification.type}">
+      {notification.message}
+      <button type="button" onclick={() => notificationController.dismiss(notification.id)}>×</button>
+    </div>
+  {/each}
+</div>
+```
+
+Render `<Notifications />` once, for example in the root layout.
+
+### Showing a notification
+
+```ts
+import { notificationController } from '$lib/notifications';
+
+notificationController.show({ type: 'success', message: 'Saved!' });
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
+- [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Node and server-side rendering](node.md)

@@ -1,7 +1,7 @@
 {
 	"name": "@su-labs/core",
 	"version": "1.0.0",
-	"description": "Framework-agnostic browser utilities (theme, and more to come) with a tiny reactive store. Works with vanilla JS, React, Svelte, Angular or any other framework.",
+	"description": "Framework-agnostic browser utilities (theme, notifications and more) with a tiny reactive store. Works with vanilla JS, React, Svelte, Angular or any other framework.",
 	"keywords": [
 		"framework-agnostic",
 		"vanilla-js",
@@ -13,7 +13,9 @@
 		"css-variables",
 		"store",
 		"reactive",
-		"prefers-color-scheme"
+		"prefers-color-scheme",
+		"notifications",
+		"toast"
 	],
 	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/core#readme",
 	"author": {

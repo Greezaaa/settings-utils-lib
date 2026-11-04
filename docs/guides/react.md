@@ -92,7 +92,60 @@ body {
 - Put components that call `useTheme()` in a file marked `'use client'`.
 - On the server there is no saved preference or system setting, so the theme renders as `'light'` and switches after hydration. Avoid rendering text that depends on the theme during the first render, or style with the CSS variables, which update without re-rendering.
 
+## Notifications
+
+The controller keeps the list of notifications and closes them on time; you render the list with your own components.
+
+### Setup
+
+```ts
+// src/notifications.ts
+import { SuNotificationController } from '@su-labs/core/notifications';
+
+export const notificationController = new SuNotificationController();
+notificationController.configure({ position: 'top-right' });
+```
+
+### Rendering the list
+
+```tsx
+import { useSyncExternalStore } from 'react';
+import { notificationController } from './notifications';
+
+export function Notifications() {
+  const { notifications, position } = notificationController;
+  const list = useSyncExternalStore(notifications.subscribe, notifications.get, notifications.get);
+  const currentPosition = useSyncExternalStore(position.subscribe, position.get, position.get);
+
+  return (
+    <div className={`notifications ${currentPosition}`}>
+      {list.map((notification) => (
+        <div key={notification.id} className={`notification ${notification.type}`}>
+          {notification.message}
+          <button type="button" onClick={() => notificationController.dismiss(notification.id)}>
+            ×
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+Render `<Notifications />` once, near the root of the app.
+
+### Showing a notification
+
+Call `show()` from anywhere, including outside components:
+
+```ts
+import { notificationController } from './notifications';
+
+notificationController.show({ type: 'success', message: 'Saved!' });
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
+- [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Node and server-side rendering](node.md)

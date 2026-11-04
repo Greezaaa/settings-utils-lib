@@ -4,4 +4,10 @@
 
 export * from './lib/notification.component';
 export * from './lib/notification.service';
-export * from './lib/notification.model';
+export type {
+  SuNotification,
+  SuNotificationConfig,
+  SuNotificationOptions,
+  SuNotificationPosition,
+  SuNotificationType,
+} from '@su-labs/core/notifications';

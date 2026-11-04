@@ -13,6 +13,8 @@
 
 A highly customizable Angular notification library built with modern practices, including reactive Signals. Easily display different types of notifications with various positions, custom icons, and optional auto-closing behavior.
 
+> **Not using Angular?** The same notification logic is available for React, Svelte, vanilla JavaScript and Node in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
+
 ## Table of Contents
 
 - [Why Use This Library?](#why-use-this-library)

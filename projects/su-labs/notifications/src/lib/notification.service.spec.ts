@@ -1,43 +1,17 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { SuNotificationService } from './notification.service';
-import { SuNotificationOptions } from './notification.model';
 
+// Notification logic is covered by the SuNotificationController tests in @su-labs/core/notifications;
+// these tests cover the Angular wrapper only.
 describe('SuNotificationService', () => {
-  it('should add a notification when show() is called', () => {
+  it('should expose the notifications as a signal', () => {
     const service = new SuNotificationService();
-    const options: SuNotificationOptions = {
-      message: 'Hello World',
-      type: 'success',
-      duration: 2000,
-    };
+    const id = service.show({ message: 'Hello', type: 'success' });
 
-    const id = service.show(options);
-    const notifications = service.notifications();
-
-    expect(notifications.length).toBe(1);
-    expect(notifications[0].id).toBe(id);
-    expect(notifications[0].message).toBe('Hello World');
-    expect(notifications[0].type).toBe('success');
-  });
-
-  it('should allow multiple notifications', () => {
-    const service = new SuNotificationService();
-    service.show({ message: 'First', type: 'info' });
-    service.show({ message: 'Second', type: 'error' });
-
-    const notifications = service.notifications();
-    expect(notifications.length).toBe(2);
-    expect(notifications.map((n) => n.message)).toEqual(['First', 'Second']);
-  });
-
-  it('should dismiss a notification by id', () => {
-    const service = new SuNotificationService();
-    const id = service.show({ message: 'To be removed', type: 'warning' });
+    expect(service.notifications().map((n) => n.id)).toEqual([id]);
 
     service.dismiss(id);
-
-    const notifications = service.notifications();
-    expect(notifications.find((n) => n.id === id)).toBeUndefined();
+    expect(service.notifications()).toEqual([]);
   });
 
   it('should clear all notifications', () => {
@@ -47,26 +21,28 @@ describe('SuNotificationService', () => {
 
     service.clearAll();
 
-    expect(service.notifications().length).toBe(0);
+    expect(service.notifications()).toEqual([]);
   });
 
-  it('should auto dismiss notification after duration', async () => {
+  it('should read and write the position through configure and the property', () => {
+    const service = new SuNotificationService();
+    expect(service.position).toBe('top-right');
+
+    service.configure({ position: 'bottom-left' });
+    expect(service.position).toBe('bottom-left');
+
+    service.position = 'top-center';
+    expect(service.position).toBe('top-center');
+  });
+
+  it('should stop syncing and cancel timers on destroy', () => {
     vi.useFakeTimers();
     const service = new SuNotificationService();
-    const id = service.show({
-      message: 'Auto close',
-      type: 'info',
-      duration: 1000,
-    });
+    service.show({ message: 'Pending', type: 'info' });
 
-    // Initially present
-    expect(service.notifications().find((n) => n.id === id)).toBeDefined();
+    service.ngOnDestroy();
 
-    // Fast forward time
-    vi.advanceTimersByTime(1000);
-
-    // Should be removed
-    expect(service.notifications().find((n) => n.id === id)).toBeUndefined();
+    expect(vi.getTimerCount()).toBe(0);
     vi.useRealTimers();
   });
 });

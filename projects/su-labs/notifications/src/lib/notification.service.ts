@@ -1,43 +1,55 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, OnDestroy, signal } from '@angular/core';
 import {
   SuNotification,
+  SuNotificationConfig,
+  SuNotificationController,
   SuNotificationOptions,
   SuNotificationPosition,
-} from './notification.model';
+} from '@su-labs/core/notifications';
 
 /**
- * Service for managing notifications.
+ * Angular service for managing notifications.
  *
- * Provides methods to show, dismiss, and clear notifications.
- * Notifications are reactive signals, making them easy to bind in templates.
+ * Thin wrapper around the framework-agnostic `SuNotificationController` from
+ * `@su-labs/core/notifications` that exposes the notifications as an Angular signal.
  */
 @Injectable({ providedIn: 'root' })
-export class SuNotificationService {
-  /**
-   * Internal signal holding the list of notifications.
-   */
-  private _notifications = signal<SuNotification[]>([]);
+export class SuNotificationService implements OnDestroy {
+  /** Framework-agnostic notification logic */
+  private readonly controller = new SuNotificationController();
+
+  /** Internal signal holding the list of notifications, kept in sync with the controller */
+  private readonly _notifications = signal<SuNotification[]>(this.controller.notifications.get());
 
   /**
    * Read-only access to the notifications list.
    * Can be used in templates for reactive updates.
    */
-  notifications = this._notifications.asReadonly();
+  readonly notifications = this._notifications.asReadonly();
+
+  /** Stops syncing the controller's notifications into the signal */
+  private readonly unsubscribe = this.controller.notifications.subscribe((list) => this._notifications.set(list));
 
   /**
-   * Default position where notifications will appear on the screen.
-   * Can be configured via `configure` method.
+   * Position where notifications appear on the screen.
+   * Can also be set via the `configure` method.
    * @default 'top-right'
    */
-  position: SuNotificationPosition = 'top-right';
+  get position(): SuNotificationPosition {
+    return this.controller.position.get();
+  }
+
+  set position(position: SuNotificationPosition) {
+    this.controller.configure({ position });
+  }
 
   /**
    * Configure the notification service.
    * @param cfg Configuration object
    * @param cfg.position Optional position to display notifications.
    */
-  configure(cfg: { position?: SuNotificationPosition }): void {
-    if (cfg.position) this.position = cfg.position;
+  configure(cfg: SuNotificationConfig): void {
+    this.controller.configure(cfg);
   }
 
   /**
@@ -46,24 +58,7 @@ export class SuNotificationService {
    * @returns The unique ID of the notification.
    */
   show(options: SuNotificationOptions): string {
-    const id = crypto.randomUUID();
-    const notification: SuNotification = {
-      id,
-      type: options.type,
-      message: options.message,
-      duration: options.duration ?? 3000,
-      autoClose: options.autoClose ?? true,
-      cssClass: options.cssClass,
-      icon: options.icon ?? true,
-    };
-
-    this._notifications.update((list) => [...list, notification]);
-
-    if (notification.autoClose) {
-      setTimeout(() => this.dismiss(id), notification.duration);
-    }
-
-    return id;
+    return this.controller.show(options);
   }
 
   /**
@@ -71,13 +66,19 @@ export class SuNotificationService {
    * @param id ID of the notification to remove.
    */
   dismiss(id: string): void {
-    this._notifications.update((list) => list.filter((n) => n.id !== id));
+    this.controller.dismiss(id);
   }
 
   /**
    * Clear all notifications immediately.
    */
   clearAll(): void {
-    this._notifications.set([]);
+    this.controller.clearAll();
+  }
+
+  /** Angular lifecycle hook for service destruction */
+  ngOnDestroy(): void {
+    this.unsubscribe();
+    this.controller.destroy();
   }
 }

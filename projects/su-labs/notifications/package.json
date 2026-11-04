@@ -36,6 +36,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
+		"@su-labs/core": "^1.0.0",
 		"tslib": "^2.3.0"
 	},
 	"sideEffects": false,
