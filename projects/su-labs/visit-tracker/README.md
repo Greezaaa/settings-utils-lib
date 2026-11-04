@@ -3,7 +3,7 @@
 `@su-labs/visit-tracker`
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Angular Version](https://img.shields.io/badge/Angular-v21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Angular Version](https://img.shields.io/badge/Angular-v22-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 ![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
@@ -13,7 +13,7 @@
 
 A lightweight Angular service to track user visits. Provides reactive signals for visit count, last visit date, and milestone visits.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Why Use This Library?](#-why-use-this-library)
 - [Features](#features)
@@ -29,14 +29,14 @@ A lightweight Angular service to track user visits. Provides reactive signals fo
 - [Contributing](#contributing)
 - [License](#license)
 
-## 💡 Why Use This Library?
+## Why Use This Library?
 
-- 🎯 **Lightweight** - Only ~5KB minified
-- ⚡ **Reactive** - Built with Angular Signals
-- 🔒 **Type-Safe** - Full TypeScript support
-- 📦 **Zero Dependencies** - No bloat
-- 🧪 **Well Tested** - Comprehensive test coverage
-- 📝 **Well Documented** - Clear examples and API docs
+- **Lightweight** - Only ~5KB minified
+- **Reactive** - Built with Angular Signals
+- **Type-Safe** - Full TypeScript support
+- **Zero Dependencies** - No bloat
+- **Well Tested** - Comprehensive test coverage
+- **Well Documented** - Clear examples and API docs
 
 ## Features
 
@@ -60,10 +60,10 @@ npm install @su-labs/visit-tracker
 This library requires the following peer dependencies:
 
 ```sh
-npm install @angular/common@^21 @angular/core@^21
+npm install @angular/common@^22 @angular/core@^22
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```typescript
 // 1. Install
@@ -109,18 +109,18 @@ export class AppComponent {
 }
 ```
 
-✅ Automatically increments the visit count and updates the last visit timestamp.
+Automatically increments the visit count and updates the last visit timestamp.
 
 ### Example 2: Checking milestone visits
 You can reactively check if a milestone visit has been reached:
 
 ```HTML
 @if(visitService.isTenthVisit()){
-  <p>🎉 Congratulations on your 10th visit!</p>
+  <p>Congratulations on your 10th visit!</p>
 }
 
 @if(visitService.isHundredthVisit()){
-  <p>🏆 100 visits! You're a power user!</p>
+  <p>100 visits! You're a power user!</p>
 }
 ```
 
@@ -148,7 +148,7 @@ export const appConfig = {
 };
 ```
 
-✅ Allows overriding the localStorage key and defining custom milestone visits.
+Allows overriding the localStorage key and defining custom milestone visits.
 
 ### Example 4: Using last visit date
 
@@ -162,7 +162,7 @@ export const appConfig = {
 
 The service stores last visit as an ISO string (e.g., "2025-08-25T12:34:56.789Z"), so it can easily be used in Angular date pipes.
 
-## 📖 API Reference
+## API Reference
 
 ### Signals
 
@@ -197,12 +197,12 @@ The service can be configured to fit your application's needs. You can customize
 | `storageKey`      | The key used to persist the visit data in `localStorage`.     | `'su:visits'`    |
 | `milestoneVisits` | An array of numbers representing visits to track as milestones. | `[10, 100]`      |
 
-## 🌐 Browser Compatibility
+## Browser Compatibility
 
 Works in all modern browsers that support:
-- ✅ localStorage API
-- ✅ Angular 21+
-- ✅ ES2022+
+- localStorage API
+- Angular 22+
+- ES2022+
 
 | Browser | Version |
 |---------|---------|
@@ -211,16 +211,16 @@ Works in all modern browsers that support:
 | Safari | ≥ 14 |
 | Edge | ≥ 90 |
 
-## 🔗 Related Libraries
+## Related Libraries
 
 Part of the **@su-labs** suite:
 
-- 🎨 [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) - Theme management with dark mode support
-- 🔔 [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
-- 🔍 [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
-- 📏 [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
+- [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) - Theme management with dark mode support
+- [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
+- [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
+- [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Visit count not persisting?
 
@@ -232,13 +232,13 @@ Milestones are only checked during service initialization. Call `init()` to reca
 
 ### TypeScript errors?
 
-Ensure you have Angular 21+ and TypeScript 5.7+ installed.
+Ensure you have Angular 22+ and TypeScript 6.0+ installed.
 
-## 💬 Support
+## Support
 
-- 🐛 Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
-- 💡 Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
-- ⭐ Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
+- Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
+- Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
+- Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
 
 ## Notes
 

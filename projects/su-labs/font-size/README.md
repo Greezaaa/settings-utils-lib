@@ -3,7 +3,7 @@
 `@su-labs/font-size`
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Angular Version](https://img.shields.io/badge/Angular-v21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Angular Version](https://img.shields.io/badge/Angular-v22-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 ![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
@@ -13,7 +13,7 @@
 
 An accessible Angular service for managing font size preferences. Provides reactive controls for text scaling, user preference persistence, and WCAG-compliant font size management.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Why Use This Library?](#-why-use-this-library)
 - [Features](#features)
@@ -30,17 +30,17 @@ An accessible Angular service for managing font size preferences. Provides react
 - [Contributing](#contributing)
 - [License](#license)
 
-## 💡 Why Use This Library?
+## Why Use This Library?
 
-- 🎯 **Lightweight** - Minimal bundle size
-- ⚡ **Reactive** - Built with Angular Signals
-- ♿ **Accessible** - WCAG 2.1 AA compliant
-- 💾 **Persistent** - Remembers user preference
-- 🎨 **CSS Variables** - Modern implementation
-- 🔒 **Type-Safe** - Full TypeScript support
-- 📦 **Zero Dependencies** - No bloat
-- 🧪 **Well Tested** - Comprehensive test coverage
-- 📝 **Well Documented** - Clear examples and API docs
+- **Lightweight** - Minimal bundle size
+- **Reactive** - Built with Angular Signals
+- **Accessible** - WCAG 2.1 AA compliant
+- **Persistent** - Remembers user preference
+- **CSS Variables** - Modern implementation
+- **Type-Safe** - Full TypeScript support
+- **Zero Dependencies** - No bloat
+- **Well Tested** - Comprehensive test coverage
+- **Well Documented** - Clear examples and API docs
 
 ## Features
 
@@ -64,10 +64,10 @@ npm install @su-labs/font-size
 This library requires the following peer dependencies:
 
 ```sh
-npm install @angular/common@^21 @angular/core@^21
+npm install @angular/common@^22 @angular/core@^22
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```typescript
 // 1. Install
@@ -209,7 +209,7 @@ h2 {
 }
 ```
 
-## 📖 API Reference
+## API Reference
 
 ### Service (SuFontSizeService)
 
@@ -257,9 +257,9 @@ interface SuFontSizeConfig {
 
 This library helps meet WCAG 2.1 guidelines:
 
-- ✅ **Success Criterion 1.4.4** - Text can be resized up to 200% without loss of content or functionality
-- ✅ **Success Criterion 1.4.8** - User can select foreground and background colors (when combined with theme management)
-- ✅ **Success Criterion 1.4.12** - Text spacing is adjustable
+- **Success Criterion 1.4.4** - Text can be resized up to 200% without loss of content or functionality
+- **Success Criterion 1.4.8** - User can select foreground and background colors (when combined with theme management)
+- **Success Criterion 1.4.12** - Text spacing is adjustable
 
 ### Best Practices
 
@@ -269,13 +269,13 @@ This library helps meet WCAG 2.1 guidelines:
 4. **Persist preference** - Always save user preference (enabled by default)
 5. **Respect system settings** - Consider reading system font size preferences
 
-## 🌐 Browser Compatibility
+## Browser Compatibility
 
 Works in all modern browsers that support:
-- ✅ CSS Custom Properties
-- ✅ localStorage API
-- ✅ Angular 21+
-- ✅ ES2022+
+- CSS Custom Properties
+- localStorage API
+- Angular 22+
+- ES2022+
 
 | Browser | Version |
 |---------|---------|
@@ -284,16 +284,16 @@ Works in all modern browsers that support:
 | Safari | ≥ 14 |
 | Edge | ≥ 90 |
 
-## 🔗 Related Libraries
+## Related Libraries
 
 Part of the **@su-labs** suite:
 
-- 👀 [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
-- 🎨 [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) - Theme management with dark mode support
-- 🔔 [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
-- 🔍 [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
+- [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
+- [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) - Theme management with dark mode support
+- [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
+- [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Font size not persisting?
 
@@ -309,13 +309,13 @@ Test your responsive design at all font sizes. Use relative units and flexible l
 
 ### TypeScript errors?
 
-Ensure you have Angular 21+ and TypeScript 5.7+ installed.
+Ensure you have Angular 22+ and TypeScript 6.0+ installed.
 
-## 💬 Support
+## Support
 
-- 🐛 Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
-- 💡 Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
-- ⭐ Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
+- Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
+- Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
+- Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
 
 ## Contributing
 

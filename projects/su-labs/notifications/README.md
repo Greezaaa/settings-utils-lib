@@ -3,7 +3,7 @@
 `@su-labs/notifications`
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Angular Version](https://img.shields.io/badge/Angular-v21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Angular Version](https://img.shields.io/badge/Angular-v22-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 ![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
@@ -13,7 +13,7 @@
 
 A highly customizable Angular notification library built with modern practices, including reactive Signals. Easily display different types of notifications with various positions, custom icons, and optional auto-closing behavior.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Why Use This Library?](#-why-use-this-library)
 - [Features](#features)
@@ -30,17 +30,17 @@ A highly customizable Angular notification library built with modern practices, 
 - [Contributing](#contributing)
 - [License](#license)
 
-## 💡 Why Use This Library?
+## Why Use This Library?
 
-- 🎯 **Lightweight** - Minimal bundle size
-- ⚡ **Reactive** - Built with Angular Signals
-- 🎨 **Customizable** - Multiple themes and positions
-- 🖼️ **Icon Support** - Default SVG or custom icons
-- ⏱️ **Auto-dismiss** - Configurable duration
-- 🔒 **Type-Safe** - Full TypeScript support
-- 📦 **Zero Dependencies** - No bloat
-- 🧪 **Well Tested** - Comprehensive test coverage
-- 📝 **Well Documented** - Clear examples and API docs
+- **Lightweight** - Minimal bundle size
+- **Reactive** - Built with Angular Signals
+- **Customizable** - Multiple themes and positions
+- **Icon Support** - Default SVG or custom icons
+- **Auto-dismiss** - Configurable duration
+- **Type-Safe** - Full TypeScript support
+- **Zero Dependencies** - No bloat
+- **Well Tested** - Comprehensive test coverage
+- **Well Documented** - Clear examples and API docs
 
 ## Features
 
@@ -66,10 +66,10 @@ npm install @su-labs/notifications
 This library requires the following peer dependencies:
 
 ```sh
-npm install @angular/common@^21 @angular/core@^21
+npm install @angular/common@^22 @angular/core@^22
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```typescript
 // 1. Install
@@ -180,7 +180,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## 📖 API Reference
+## API Reference
 
 ### Service (SuNotificationService)
 
@@ -188,7 +188,7 @@ export const appConfig: ApplicationConfig = {
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `position` | `NotificationPosition` | Global notification position |
+| `position` | `NotificationPosition` |
 
 #### Methods
 
@@ -224,13 +224,13 @@ interface NotificationConfig {
 
 ### Notification Types
 
-| Type | Description | Default Icon |
-|------|-------------|--------------|
-| `info` | Informational message | ℹ️ |
-| `success` | Success message | ✅ |
-| `warning` | Warning message | ⚠️ |
-| `error` | Error message | ❌ |
-| `custom` | Custom styled message | 🔔 |
+| Type | Description |
+|------|-------------|
+| `info` | Informational message |
+| `success` | Success message |
+| `warning` | Warning message |
+| `error` | Error message |
+| `custom` | Custom styled message |
 
 ### Positions
 
@@ -251,13 +251,13 @@ The service manages a list of notifications using a private Signal. When you cal
 
 The component's icons are rendered using `[innerHTML]` to safely inject SVG markup into the template. Angular's `DomSanitizer` is used to prevent security risks like Cross-Site Scripting (XSS) attacks.
 
-## 🌐 Browser Compatibility
+## Browser Compatibility
 
 Works in all modern browsers that support:
-- ✅ CSS Flexbox
-- ✅ CSS Animations
-- ✅ Angular 21+
-- ✅ ES2022+
+- CSS Flexbox
+- CSS Animations
+- Angular 22+
+- ES2022+
 
 | Browser | Version |
 |---------|---------|
@@ -266,16 +266,16 @@ Works in all modern browsers that support:
 | Safari | ≥ 14 |
 | Edge | ≥ 90 |
 
-## 🔗 Related Libraries
+## Related Libraries
 
 Part of the **@su-labs** suite:
 
-- 👀 [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
-- 🎨 [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) - Theme management with dark mode support
-- 🔍 [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
-- 📏 [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
+- [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
+- [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) - Theme management with dark mode support
+- [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
+- [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Notifications not showing?
 
@@ -291,13 +291,13 @@ Set the position property during app initialization using `provideAppInitializer
 
 ### TypeScript errors?
 
-Ensure you have Angular 21+ and TypeScript 5.7+ installed.
+Ensure you have Angular 22+ and TypeScript 6.0+ installed.
 
-## 💬 Support
+## Support
 
-- 🐛 Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
-- 💡 Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
-- ⭐ Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
+- Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
+- Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
+- Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
 
 ## Contributing
 

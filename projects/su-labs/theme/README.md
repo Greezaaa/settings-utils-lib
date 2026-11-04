@@ -3,7 +3,7 @@
 `@su-labs/theme`
 
 ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Angular Version](https://img.shields.io/badge/Angular-v21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Angular Version](https://img.shields.io/badge/Angular-v22-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 ![NPM](https://img.shields.io/badge/NPM-CB3837?style=for-the-badge&logo=npm&logoColor=white)
@@ -13,7 +13,7 @@
 
 A robust and reactive Angular service for managing application themes. It provides a full-featured solution that supports dynamic switching, user preference persistence, and automatic system theme detection.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Why Use This Library?](#-why-use-this-library)
 - [Features](#features)
@@ -30,16 +30,16 @@ A robust and reactive Angular service for managing application themes. It provid
 - [Contributing](#contributing)
 - [License](#license)
 
-## 💡 Why Use This Library?
+## Why Use This Library?
 
-- 🎯 **Lightweight** - Minimal bundle size
-- ⚡ **Reactive** - Built with Angular Signals
-- 🎨 **CSS Variables** - Modern CSS custom properties
-- 🌓 **System Theme** - Auto-detects OS preference
-- 💾 **Persistent** - Remembers user choice
-- 🔒 **Type-Safe** - Full TypeScript support
-- 📦 **Zero Dependencies** - No bloat
-- 🧪 **Well Tested** - Comprehensive test coverage
+- **Lightweight** - Minimal bundle size
+- **Reactive** - Built with Angular Signals
+- **CSS Variables** - Modern CSS custom properties
+- **System Theme** - Auto-detects OS preference
+- **Persistent** - Remembers user choice
+- **Type-Safe** - Full TypeScript support
+- **Zero Dependencies** - No bloat
+- **Well Tested** - Comprehensive test coverage
 
 ## Features
 
@@ -74,10 +74,10 @@ npm install @su-labs/theme
 This library requires the following peer dependencies:
 
 ```sh
-npm install @angular/common@^21 @angular/core@^21
+npm install @angular/common@^22 @angular/core@^22
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```typescript
 // 1. Install
@@ -144,7 +144,7 @@ export const appConfig = {
 };
 ```
 
-✅ This ensures the theme is loaded and applied before the application renders. The `SuThemeService` handles all the logic internally, including loading from `localStorage` and applying the initial theme.
+This ensures the theme is loaded and applied before the application renders. The `SuThemeService` handles all the logic internally, including loading from `localStorage` and applying the initial theme.
 
 ### Example 2: Using the Theme in Your Styles
 
@@ -194,9 +194,9 @@ export class ThemeSwitcherComponent {
 }
 ```
 
-✅ This correctly shows how to use your service's public API to switch between themes. The service handles the underlying logic, including persistence and CSS variable application.
+This correctly shows how to use your service's public API to switch between themes. The service handles the underlying logic, including persistence and CSS variable application.
 
-## 📖 API Reference
+## API Reference
 
 ### Signals
 
@@ -238,14 +238,14 @@ The service can be configured to fit your application's needs.
 | `defaultTheme`     | The theme to use if no preference is saved in `localStorage`. | `'system'`       |
 | `themes`           | An object with custom CSS variable overrides for each theme.  | `undefined`      |
 
-## 🌐 Browser Compatibility
+## Browser Compatibility
 
 Works in all modern browsers that support:
-- ✅ CSS Custom Properties
-- ✅ localStorage API
-- ✅ matchMedia (for system theme)
-- ✅ Angular 21+
-- ✅ ES2022+
+- CSS Custom Properties
+- localStorage API
+- matchMedia (for system theme)
+- Angular 22+
+- ES2022+
 
 | Browser | Version |
 |---------|---------|
@@ -254,16 +254,16 @@ Works in all modern browsers that support:
 | Safari | ≥ 14 |
 | Edge | ≥ 90 |
 
-## 🔗 Related Libraries
+## Related Libraries
 
 Part of the **@su-labs** suite:
 
-- 👀 [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
-- 🔔 [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
-- 🔍 [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
-- 📏 [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
+- [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) - User visit tracking
+- [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) - Toast notification system
+- [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) - Scroll position tracking
+- [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size) - Accessible font size controls
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Theme not persisting?
 
@@ -279,13 +279,13 @@ Check that your OS has a theme preference set and your browser supports `prefers
 
 ### TypeScript errors?
 
-Ensure you have Angular 21+ and TypeScript 5.7+ installed.
+Ensure you have Angular 22+ and TypeScript 6.0+ installed.
 
-## 💬 Support
+## Support
 
-- 🐛 Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
-- 💡 Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
-- ⭐ Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
+- Found a bug? [Open an issue](https://github.com/Greezaaa/settings-utils-lib/issues)
+- Have a feature request? [Start a discussion](https://github.com/Greezaaa/settings-utils-lib/discussions)
+- Like this library? [Give it a star!](https://github.com/Greezaaa/settings-utils-lib)
 
 ## Notes
 

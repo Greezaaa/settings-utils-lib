@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/notifications",
-	"version": "21.0.5",
+	"version": "22.0.0",
 	"keywords": [
 		"angular",
 		"notifications",
@@ -17,7 +17,7 @@
 		"snack-bar",
 		"library"
 	],
-	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/font-size#readme",
+	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/notifications#readme",
 	"author": {
 		"name": "Yevheniy Alekseyev",
 		"email": "yev.alekseyev@gmail.com",
@@ -26,14 +26,14 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Greezaaa/settings-utils-lib.git",
-		"directory": "projects/su-labs/font-size"
+		"directory": "projects/su-labs/notifications"
 	},
 	"bugs": {
 		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
 	},
 	"peerDependencies": {
-		"@angular/common": "^21.0.0",
-		"@angular/core": "^21.0.0"
+		"@angular/common": "^22.0.0",
+		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"
