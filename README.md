@@ -243,6 +243,7 @@ This is a monorepo workspace managed with Angular CLI.
 settings-utils-lib/
 ├── projects/
 │   └── su-labs/
+│       ├── core/           # Framework-agnostic utilities
 │       ├── visit-tracker/
 │       ├── theme/
 │       ├── notifications/
@@ -262,6 +263,7 @@ npm run build:all
 ### Build Individual Library
 
 ```bash
+npm run build:core
 npm run build:visit-tracker
 npm run build:theme
 npm run build:notifications

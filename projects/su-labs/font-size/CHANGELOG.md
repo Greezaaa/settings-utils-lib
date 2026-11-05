@@ -5,21 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [22.1.0] - 2026-11-05
 
 ### Changed
 - Font size logic moved to the framework-agnostic `@su-labs/core/font-size`; `FontSizeService` is now a thin wrapper with the same API
 - `FontSizeConfig` is now a type alias built from the core types (same fields)
 - Change limits and step with `configure()`. Writing to the `minSize`, `maxSize`, `defaultSize` or `step` signals directly no longer affects clamping or `reset()`
 - Added `@su-labs/core` as a dependency
+- README links to the `@su-labs/core` installation guides for non-Angular projects
 
 ### Fixed
 - Safe to import during server-side rendering (no `localStorage` access without a browser)
 - README now documents the actual API
-
-## [22.0.1] - 2026-11-05
-
-### Fixed
 - Repair table of contents links in README.md
 
 ## [22.0.0] - 2026-11-04

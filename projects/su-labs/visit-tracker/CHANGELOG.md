@@ -5,22 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [22.1.0] - 2026-11-05
 
 ### Changed
 - Visit tracking moved to the framework-agnostic `@su-labs/core/visit-tracker`; `SuVisitTrackerService` is now a thin wrapper with the same API
 - `SuVisitTrackerConfig` and `SuVisitData` are now re-exported from `@su-labs/core/visit-tracker`
 - Added `@su-labs/core` as a dependency
+- README links to the `@su-labs/core` installation guides for non-Angular projects
 
 ### Fixed
 - Corrupted or invalid saved data no longer throws; counting starts over
 - `init()` no longer sorts the `milestoneVisits` array passed in the config
 - Safe to call during server-side rendering (no `localStorage` access without a browser)
 - README now documents the actual API (`milestone()` signal, `init()` required)
-
-## [22.0.1] - 2026-11-05
-
-### Fixed
 - Repair table of contents links in README.md
 
 ## [22.0.0] - 2026-11-04
