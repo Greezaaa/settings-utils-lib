@@ -44,3 +44,5 @@ Thumbs.db
 # Vitest cache/results
 .vite/
 **/.vite/
+# Claude Code session worktrees
+/.claude/worktrees/

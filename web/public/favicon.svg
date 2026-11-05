@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .tile { fill: #111111; }
+    .ring { fill: none; stroke: #fbfbfa; }
+    .half { fill: #fbfbfa; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #f5f5f4; }
+      .ring { stroke: #191919; }
+      .half { fill: #191919; }
+    }
+  </style>
+  <rect class="tile" width="32" height="32" rx="7" />
+  <circle class="ring" cx="16" cy="16" r="8.5" stroke-width="2" />
+  <path class="half" d="M16 7.5a8.5 8.5 0 0 1 0 17z" />
+</svg>

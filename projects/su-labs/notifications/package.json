@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/notifications",
-	"version": "22.1.0",
+	"version": "22.1.1",
 	"keywords": [
 		"angular",
 		"notifications",
@@ -17,7 +17,7 @@
 		"snack-bar",
 		"library"
 	],
-	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/notifications#readme",
+	"homepage": "https://greezaaa.github.io/settings-utils-lib/notifications/",
 	"author": {
 		"name": "Yevheniy Alekseyev",
 		"email": "yev.alekseyev@gmail.com",

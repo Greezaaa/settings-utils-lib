@@ -36,12 +36,9 @@ jobs:
 
       - run: npm ci
 
+      # Prerenders every page, then adds sitemap.xml and the 404.html app shell (web/scripts/postbuild.mjs)
       - name: Build
-        run: npx ng build web --base-href /settings-utils-lib/
-
-      # GitHub Pages has no SPA fallback: serve the app for unknown paths such as /theme
-      - name: Add SPA fallback
-        run: cp dist/web/browser/index.html dist/web/browser/404.html
+        run: npm run build:web
 
       - uses: actions/upload-pages-artifact@v3
         with:

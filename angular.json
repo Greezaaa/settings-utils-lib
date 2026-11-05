@@ -13,6 +13,8 @@
 					"builder": "@angular/build:application",
 					"options": {
 						"browser": "web/src/main.ts",
+						"server": "web/src/main.server.ts",
+						"outputMode": "static",
 						"tsConfig": "web/tsconfig.app.json",
 						"inlineStyleLanguage": "scss",
 						"assets": [

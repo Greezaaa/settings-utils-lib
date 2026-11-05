@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://greezaaa.github.io/settings-utils-lib/sitemap.xml

@@ -17,7 +17,7 @@
     "build:visit-tracker": "ng build @su-labs/visit-tracker --configuration production",
     "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker",
     "start:web": "ng serve web",
-    "build:web": "ng build web"
+    "build:web": "ng build web --base-href /settings-utils-lib/ && node web/scripts/postbuild.mjs"
   },
   "prettier": {
     "overrides": [
@@ -36,7 +36,9 @@
     "@angular/core": "^22.2.4",
     "@angular/forms": "^22.2.4",
     "@angular/platform-browser": "^22.2.4",
+    "@angular/platform-server": "^22.2.4",
     "@angular/router": "^22.2.4",
+    "@angular/ssr": "^22.2.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

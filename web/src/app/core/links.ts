@@ -1,3 +1,9 @@
+/** Public address of this website, without a trailing slash (also used in index.html and robots.txt) */
+export const SITE_URL = 'https://greezaaa.github.io/settings-utils-lib';
+
+/** Image shown when a page is shared (1200x630, in web/public) */
+export const SITE_PREVIEW_IMAGE_URL = `${SITE_URL}/og-image.png`;
+
 /** How to reach the author */
 export const AUTHOR_EMAIL_URL = 'mailto:yev.alekseyev@gmail.com';
 

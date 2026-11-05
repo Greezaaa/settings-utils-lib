@@ -6,7 +6,37 @@
   <meta name="description" content="Theme, font size, notifications, scroll spy and visit tracking utilities for Angular, React, Svelte, vanilla JavaScript and Node.">
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)">
+  <meta name="author" content="Yevheniy Alekseyev">
+  <!-- Structured data for search engines. URLs must match SITE_URL in app/core/links.ts -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "su-labs",
+          "url": "https://greezaaa.github.io/settings-utils-lib/",
+          "description": "Theme, font size, notifications, scroll spy and visit tracking utilities for Angular, React, Svelte, vanilla JavaScript and Node."
+        },
+        {
+          "@type": "SoftwareSourceCode",
+          "name": "su-labs",
+          "description": "Framework-agnostic browser utilities with Angular wrappers: theme, font size, notifications, scroll spy and visit tracking.",
+          "codeRepository": "https://github.com/Greezaaa/settings-utils-lib",
+          "programmingLanguage": "TypeScript",
+          "runtimePlatform": ["Browser", "Node.js"],
+          "license": "https://opensource.org/licenses/MIT",
+          "author": { "@type": "Person", "name": "Yevheniy Alekseyev", "url": "https://github.com/Greezaaa" }
+        }
+      ]
+    }
+  </script>
   <!--
     Apply the saved theme and text size before the first paint, so the page doesn't flash
     from the default to the visitor's choice while the app loads. The app then takes over.
