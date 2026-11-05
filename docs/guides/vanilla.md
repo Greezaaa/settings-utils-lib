@@ -138,8 +138,36 @@ The controller keeps the list of notifications and closes them on time; you rend
 
 Use `textContent` (not `innerHTML`) for messages so user-provided text can't inject HTML. Use `notifications.position` to place the container, for example as a class name.
 
+## Scroll Spy
+
+Highlight the navigation link of the section in the middle of the screen:
+
+```html
+<nav>
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+</nav>
+
+<section id="home">...</section>
+<section id="about">...</section>
+
+<script type="module">
+  import { SuScrollSpyController } from 'https://esm.sh/@su-labs/core@1.0.0/scroll-spy';
+
+  const scrollSpy = new SuScrollSpyController();
+  document.querySelectorAll('section[id]').forEach((section) => scrollSpy.observe(section, section.id));
+
+  scrollSpy.activeSection.subscribe((activeId) => {
+    document.querySelectorAll('nav a').forEach((link) => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${activeId}`);
+    });
+  });
+</script>
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
+- [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Node and server-side rendering](node.md)

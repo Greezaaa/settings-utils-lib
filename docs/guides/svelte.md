@@ -130,8 +130,52 @@ import { notificationController } from '$lib/notifications';
 notificationController.show({ type: 'success', message: 'Saved!' });
 ```
 
+## Scroll Spy
+
+### Setup
+
+```ts
+// src/lib/scroll-spy.ts
+import { SuScrollSpyController } from '@su-labs/core/scroll-spy';
+
+export const scrollSpy = new SuScrollSpyController();
+export const activeSection = scrollSpy.activeSection;
+
+/** Svelte action: `use:spy={'section-id'}` tracks the element until it is removed */
+export function spy(element: Element, sectionId: string) {
+  const stop = scrollSpy.observe(element, sectionId);
+  return { destroy: stop };
+}
+```
+
+### Tracking sections and highlighting the active link
+
+```svelte
+<script lang="ts">
+  import { activeSection, spy } from '$lib/scroll-spy';
+
+  const sections = [
+    { id: 'home', name: 'Home' },
+    { id: 'about', name: 'About' },
+  ];
+</script>
+
+<nav>
+  {#each sections as section (section.id)}
+    <a href="#{section.id}" class:active={$activeSection === section.id}>{section.name}</a>
+  {/each}
+</nav>
+
+{#each sections as section (section.id)}
+  <section id={section.id} use:spy={section.id}>
+    <h2>{section.name}</h2>
+  </section>
+{/each}
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
+- [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Node and server-side rendering](node.md)

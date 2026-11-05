@@ -144,8 +144,60 @@ import { notificationController } from './notifications';
 notificationController.show({ type: 'success', message: 'Saved!' });
 ```
 
+## Scroll Spy
+
+### Setup
+
+```ts
+// src/scroll-spy.ts
+import { SuScrollSpyController } from '@su-labs/core/scroll-spy';
+
+export const scrollSpy = new SuScrollSpyController();
+```
+
+### Tracking sections
+
+Register each section with a ref callback. React 19 runs the returned function when the element is removed, which stops tracking it:
+
+```tsx
+import { scrollSpy } from './scroll-spy';
+
+export function Section({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <section id={id} ref={(element) => (element ? scrollSpy.observe(element, id) : undefined)}>
+      {children}
+    </section>
+  );
+}
+```
+
+On React 18, register the section in a `useEffect` with a `useRef` instead, and return the stop function from the effect.
+
+### Highlighting the active link
+
+```tsx
+import { useSyncExternalStore } from 'react';
+import { scrollSpy } from './scroll-spy';
+
+export function Nav({ sections }: { sections: { id: string; name: string }[] }) {
+  const { activeSection } = scrollSpy;
+  const activeId = useSyncExternalStore(activeSection.subscribe, activeSection.get, activeSection.get);
+
+  return (
+    <nav>
+      {sections.map((section) => (
+        <a key={section.id} href={`#${section.id}`} className={section.id === activeId ? 'active' : undefined}>
+          {section.name}
+        </a>
+      ))}
+    </nav>
+  );
+}
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
+- [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Node and server-side rendering](node.md)

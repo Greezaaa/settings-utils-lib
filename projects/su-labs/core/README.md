@@ -15,6 +15,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Reactive Stores](#reactive-stores)
 - [Theme](#theme)
 - [Notifications](#notifications)
+- [Scroll Spy](#scroll-spy)
 - [License](#license)
 
 ## Installation
@@ -44,6 +45,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core` | `createSuStore`, `isBrowser` |
 | `@su-labs/core/theme` | `SuThemeController` and theme types |
 | `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
+| `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 
 ## Reactive Stores
 
@@ -154,6 +156,32 @@ notifications.dismiss(id);
 | `icon` | `true` | `true` for the type's default icon, `false` for none, or an image URL or inline SVG string |
 
 Positions: `'top-right'`, `'top-left'`, `'top-center'`, `'bottom-right'`, `'bottom-left'`, `'bottom-center'`.
+
+## Scroll Spy
+
+Tracks which page section is in the middle of the viewport, for example to highlight the matching navigation link. It uses `IntersectionObserver`, so there are no scroll event listeners.
+
+```ts
+import { SuScrollSpyController } from '@su-labs/core/scroll-spy';
+
+const scrollSpy = new SuScrollSpyController();
+
+document.querySelectorAll('section[id]').forEach((section) => scrollSpy.observe(section, section.id));
+scrollSpy.activeSection.subscribe((id) => console.log('Active section:', id));
+```
+
+A section becomes active when it crosses the vertical center of the viewport.
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `observe(element, sectionId)` | Starts tracking a section; returns a function that stops tracking it |
+| `setActiveSection(sectionId)` | Sets the active section manually, e.g. when a link is clicked |
+| `activeSection` | Read-only store of the active section ID (`''` until one becomes active) |
+| `destroy()` | Stops tracking all sections |
+
+`observeSuScrollSpySection(element, onActive)` is the lower-level helper behind `observe()`: it calls `onActive` each time the element reaches the viewport center and returns a stop function. Use it to keep the active section in your own state.
 
 ## License
 

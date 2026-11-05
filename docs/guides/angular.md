@@ -65,7 +65,7 @@ export class ThemeSwitcherComponent {
 }
 ```
 
-`@su-labs/theme` and `@su-labs/notifications` use `@su-labs/core` internally and install it automatically.
+`@su-labs/theme`, `@su-labs/notifications` and `@su-labs/scroll-spy` use `@su-labs/core` internally and install it automatically.
 
 ## Next steps
 

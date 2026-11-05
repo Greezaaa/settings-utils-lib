@@ -16,4 +16,9 @@ describe('ScrollSpyService', () => {
     service.activeSection.set('main');
     expect(service.activeSection()).toBe('main');
   });
+
+  it('should update activeSection when setActiveSection is called', () => {
+    service.setActiveSection('contact');
+    expect(service.activeSection()).toBe('contact');
+  });
 });
