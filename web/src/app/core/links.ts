@@ -1,5 +1,5 @@
 /** Public address of this website, without a trailing slash (also used in index.html and robots.txt) */
-export const SITE_URL = 'https://greezaaa.github.io/settings-utils-lib';
+export const SITE_URL = 'https://su-labs.dev';
 
 /** Image shown when a page is shared (1200x630, in web/public) */
 export const SITE_PREVIEW_IMAGE_URL = `${SITE_URL}/og-image.png`;

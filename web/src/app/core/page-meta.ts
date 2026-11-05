@@ -83,7 +83,7 @@ function deepestMeta(route: ActivatedRouteSnapshot): PageMeta {
   return meta;
 }
 
-/** Public URL of a router path, with the trailing slash GitHub Pages serves folders with */
+/** Public URL of a router path, with the trailing slash the server uses for folders */
 function canonicalUrl(routerUrl: string): string {
   const path = routerUrl.split(/[?#]/)[0].replace(/\/$/, '');
   return `${SITE_URL}${path}/`;

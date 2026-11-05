@@ -17,7 +17,8 @@
     "build:visit-tracker": "ng build @su-labs/visit-tracker --configuration production",
     "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker",
     "start:web": "ng serve web",
-    "build:web": "ng build web --base-href /settings-utils-lib/ && node web/scripts/postbuild.mjs"
+    "build:web": "ng build web && node web/scripts/postbuild.mjs",
+    "deploy:web": "npm run build:web && rsync -a --delete dist/web/browser/ su-labs-server:/home/ubuntu/su-labs-site/ && echo \"Deployed to https://su-labs.dev/\""
   },
   "prettier": {
     "overrides": [

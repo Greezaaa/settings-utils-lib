@@ -13,7 +13,7 @@ A collection of lightweight, reactive browser utilities built with modern practi
 - **Angular:** dedicated packages with injectable services and signals.
 - **React, Svelte, vanilla JavaScript and Node:** the framework-agnostic [`@su-labs/core`](projects/su-labs/core/README.md) package.
 
-**Website:** live demos of every utility and all changelogs at [greezaaa.github.io/settings-utils-lib](https://greezaaa.github.io/settings-utils-lib/).
+**Website:** live demos of every utility and all changelogs at [su-labs.dev](https://su-labs.dev/).
 
 ## Choose Your Environment
 
@@ -251,7 +251,7 @@ settings-utils-lib/
 │       ├── notifications/
 │       ├── scroll-spy/
 │       └── font-size/
-├── web/                # Website with live demos (GitHub Pages)
+├── web/                # Website with live demos (su-labs.dev)
 ├── dist/               # Build output
 ├── package.json        # Root dependencies
 └── angular.json        # Workspace configuration
@@ -280,7 +280,13 @@ npm run build:font-size
 npm run start:web
 ```
 
-The site in `web/` compiles the libraries from source, so it always shows the current code. It is deployed to GitHub Pages on every push to `main` (`.github/workflows/deploy-web.yml`). Changelogs are read live from GitHub, so a release only needs its `CHANGELOG.md` pushed.
+The site in `web/` compiles the libraries from source, so it always shows the current code. It is hosted at [su-labs.dev](https://su-labs.dev/). To publish changes:
+
+```bash
+npm run deploy:web
+```
+
+This builds the site and uploads `dist/web/browser` with `rsync` to the server's `su-labs-site` nginx folder. It needs an SSH host named `su-labs-server` in `~/.ssh/config` (server address, user and key); the address and key are kept out of the repository. Changelogs are read live from GitHub, so a release only needs its `CHANGELOG.md` pushed.
 
 ### Run Tests
 

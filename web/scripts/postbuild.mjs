@@ -1,4 +1,4 @@
-// Runs after `ng build web`. Prepares the static output for GitHub Pages:
+// Runs after `ng build web`. Prepares the static output for hosting as plain files:
 // - sitemap.xml, built from the pages that were actually prerendered
 // - 404.html, the client-only app shell, so unknown paths still load the app
 import { copyFile, readdir, readFile, writeFile } from 'node:fs/promises';
