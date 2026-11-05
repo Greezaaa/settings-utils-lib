@@ -1,0 +1,34 @@
+<header class="container page-head">
+  <p class="eyebrow">Changelog</p>
+  <h1>What changed, and when.</h1>
+  <p class="lead">Read live from each package's CHANGELOG.md on GitHub, so it is always current.</p>
+</header>
+
+<div class="container changelog-layout">
+  <nav class="package-nav" aria-label="Packages">
+    @for (item of packages; track item.slug) {
+      <a [routerLink]="['/changelog', item.slug]" routerLinkActive="active">{{ item.name }}</a>
+    }
+  </nav>
+
+  <section class="releases" aria-live="polite">
+    <div class="releases-head">
+      <h2 class="mono">{{ selected().packageName }}</h2>
+      <p class="links">
+        <a [href]="links().github" target="_blank" rel="noopener">View on GitHub</a>
+        <a [href]="links().npm" target="_blank" rel="noopener">npm</a>
+      </p>
+    </div>
+
+    @if (changelog.isLoading()) {
+      <p class="muted">Loading the changelog from GitHub…</p>
+    } @else if (changelog.failed()) {
+      <p class="muted">
+        The changelog could not be loaded.
+        <a [href]="links().github" target="_blank" rel="noopener">Read it on GitHub</a>.
+      </p>
+    } @else {
+      <app-release-list [releases]="changelog.releases()" />
+    }
+  </section>
+</div>

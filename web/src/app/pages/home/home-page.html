@@ -1,0 +1,72 @@
+<section class="hero">
+  <div class="container hero-inner">
+    <p class="eyebrow">Angular 22 · React · Svelte · Vanilla JS · Node</p>
+    <h1>The settings every app needs, built once.</h1>
+    <p class="lead">
+      Five small, tested utilities for theme, text size, notifications, scroll position and visits. Use them as
+      Angular services with signals, or from <code>&#64;su-labs/core</code> in any framework.
+    </p>
+    <div class="button-row">
+      <a class="button" [routerLink]="[]" fragment="utilities">Explore the utilities</a>
+      <a class="button button-secondary" [href]="guidesUrl" target="_blank" rel="noopener">Installation guides</a>
+    </div>
+    <app-code-block class="hero-install" code="npm install @su-labs/core" />
+  </div>
+</section>
+
+<section id="utilities" class="container section">
+  <div class="section-head" appReveal>
+    <p class="eyebrow">Utilities</p>
+    <h2>Each one does one job.</h2>
+    <p class="muted">Open a utility to try it live. This site runs on all of them.</p>
+  </div>
+
+  <div class="bento">
+    @for (utility of utilities; track utility.slug; let index = $index) {
+      <a class="card utility-card" [routerLink]="['/', utility.slug]" appReveal [style.--index]="index">
+        <h3>{{ utility.name }}</h3>
+        <p class="muted">{{ utility.summary }}</p>
+        <p class="utility-packages mono">{{ utility.packageName }}<br />{{ utility.coreEntry }}</p>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head" appReveal>
+    <p class="eyebrow">Two ways in</p>
+    <h2>Angular packages or a framework-agnostic core.</h2>
+    <p class="muted">
+      The Angular packages are thin wrappers around <code>&#64;su-labs/core</code>, so both behave the same.
+    </p>
+  </div>
+  <div class="ways">
+    <div class="way" appReveal>
+      <h3>Angular</h3>
+      <p class="muted">Injectable services that expose signals.</p>
+      <app-code-block [code]="angularExample" />
+    </div>
+    <div class="way" appReveal [style.--index]="1">
+      <h3>Any framework</h3>
+      <p class="muted">Controllers with small stores you can subscribe to.</p>
+      <app-code-block [code]="coreExample" />
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head" appReveal>
+    <p class="eyebrow">Guides</p>
+    <h2>Pick your environment.</h2>
+  </div>
+  <ul class="environments">
+    @for (environment of environments; track environment.guide; let index = $index) {
+      <li appReveal [style.--index]="index">
+        <a [href]="environment.url" target="_blank" rel="noopener">
+          <span class="environment-name">{{ environment.name }}</span>
+          <span class="muted">{{ environment.detail }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</section>

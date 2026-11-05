@@ -1,0 +1,30 @@
+<app-utility-page [utility]="utility" [usage]="usage">
+  <p class="muted">Scroll through the steps. The link of the step crossing the middle of the screen is highlighted.</p>
+  <div class="spy-demo">
+    <nav class="spy-nav" aria-label="Demo sections">
+      <p class="eyebrow">On this page</p>
+      @for (section of sections; track section.id) {
+        <button
+          type="button"
+          class="spy-link"
+          [class.active]="scrollSpy.activeSection() === section.id"
+          [attr.aria-current]="scrollSpy.activeSection() === section.id ? 'true' : null"
+          (click)="goTo(section.id)"
+        >
+          {{ section.title }}
+        </button>
+      }
+      <p class="spy-state mono">activeSection(): '{{ scrollSpy.activeSection() }}'</p>
+    </nav>
+
+    <div class="spy-sections">
+      @for (section of sections; track section.id; let index = $index) {
+        <section class="card spy-section" [id]="section.id" [appScrollSpy]="section.id">
+          <p class="eyebrow">Step {{ index + 1 }}</p>
+          <h3>{{ section.title }}</h3>
+          <p class="muted">{{ section.text }}</p>
+        </section>
+      }
+    </div>
+  </div>
+</app-utility-page>

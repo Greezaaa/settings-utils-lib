@@ -1,0 +1,57 @@
+<app-utility-page [utility]="utility" [usage]="usage">
+  <div class="card demo-grid">
+    <div class="demo-controls">
+      <div class="button-row">
+        <button type="button" class="button button-secondary" (click)="fontSize.decrease()" [disabled]="fontSize.isMin()">
+          Smaller
+        </button>
+        <button type="button" class="button button-secondary" (click)="fontSize.reset()" [disabled]="fontSize.isDefault()">
+          Reset
+        </button>
+        <button type="button" class="button button-secondary" (click)="fontSize.increase()" [disabled]="fontSize.isMax()">
+          Larger
+        </button>
+      </div>
+
+      <label class="field">
+        <span>Size: {{ fontSize.fontSize() }}px</span>
+        <input
+          type="range"
+          [min]="fontSize.minSize()"
+          [max]="fontSize.maxSize()"
+          [step]="fontSize.step()"
+          [value]="fontSize.fontSize()"
+          (input)="onSlide($event)"
+        />
+      </label>
+
+      <p>
+        Everything on this site is sized in <code>rem</code>, so the whole page follows the variable. Readers who need
+        bigger text get it everywhere, and it is still there when they come back.
+      </p>
+    </div>
+
+    <dl class="state-list">
+      <div>
+        <dt>fontSize()</dt>
+        <dd>{{ fontSize.fontSize() }}px</dd>
+      </div>
+      <div>
+        <dt>Range</dt>
+        <dd>{{ fontSize.minSize() }}–{{ fontSize.maxSize() }}px, step {{ fontSize.step() }}</dd>
+      </div>
+      <div>
+        <dt>isDefault()</dt>
+        <dd>{{ fontSize.isDefault() }}</dd>
+      </div>
+      <div>
+        <dt>isMin()</dt>
+        <dd>{{ fontSize.isMin() }}</dd>
+      </div>
+      <div>
+        <dt>isMax()</dt>
+        <dd>{{ fontSize.isMax() }}</dd>
+      </div>
+    </dl>
+  </div>
+</app-utility-page>

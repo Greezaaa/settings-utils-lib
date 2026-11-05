@@ -15,7 +15,9 @@
     "build:font-size": "ng build @su-labs/font-size --configuration production",
     "build:scroll-spy": "ng build @su-labs/scroll-spy --configuration production",
     "build:visit-tracker": "ng build @su-labs/visit-tracker --configuration production",
-    "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker"
+    "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker",
+    "start:web": "ng serve web",
+    "build:web": "ng build web"
   },
   "prettier": {
     "overrides": [

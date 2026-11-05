@@ -1,0 +1,59 @@
+<app-utility-page [utility]="utility" [usage]="usage">
+  <div class="card demo-grid">
+    <div class="demo-controls">
+      <div class="field">
+        <span id="types-label">Show a notification</span>
+        <div class="button-row" role="group" aria-labelledby="types-label">
+          @for (example of examples; track example.type) {
+            <button type="button" class="button button-secondary button-small" (click)="show(example.type, example.message)">
+              {{ example.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Position</span>
+        <select [value]="position()" (change)="setPosition($event)">
+          @for (item of positions; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Duration</span>
+        <select [value]="duration()" (change)="setDuration($event)" [disabled]="!autoClose()">
+          @for (item of durations; track item) {
+            <option [value]="item">{{ item / 1000 }} seconds</option>
+          }
+        </select>
+      </label>
+
+      <label class="checkbox">
+        <input type="checkbox" [checked]="autoClose()" (change)="setAutoClose($event)" />
+        Close automatically
+      </label>
+
+      <div>
+        <button type="button" class="button button-small" (click)="notifications.clearAll()">Clear all</button>
+      </div>
+    </div>
+
+    <dl class="state-list">
+      <div>
+        <dt>Visible</dt>
+        <dd>{{ notifications.notifications().length }}</dd>
+      </div>
+      <div>
+        <dt>Position</dt>
+        <dd>{{ position() }}</dd>
+      </div>
+      <div>
+        <dt>Auto close</dt>
+        <dd>{{ autoClose() ? duration() + ' ms' : 'off' }}</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="muted">The position applies to the whole site, including the copy confirmations.</p>
+</app-utility-page>

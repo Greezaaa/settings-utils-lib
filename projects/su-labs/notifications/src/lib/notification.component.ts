@@ -1,6 +1,5 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SuNotificationService } from './notification.service';
-import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { isSuNotificationImageIcon } from '@su-labs/core/notifications';
 
@@ -12,7 +11,6 @@ import { isSuNotificationImageIcon } from '@su-labs/core/notifications';
 @Component({
   selector: 'su-lib-notifications',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './notification.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./notification.component.scss'],

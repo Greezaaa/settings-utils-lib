@@ -1,0 +1,45 @@
+.page-head {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 4rem 2rem;
+
+  @media (min-width: 48rem) {
+    padding-block: 6rem 3rem;
+  }
+}
+
+.page-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.page-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.page-section {
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 3rem;
+
+  @media (min-width: 48rem) {
+    padding-block: 4rem;
+  }
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.section-intro {
+  margin-top: -0.5rem;
+}
+
+.all-releases {
+  font-size: 0.9375rem;
+}

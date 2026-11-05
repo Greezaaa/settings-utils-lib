@@ -1,0 +1,44 @@
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { changelogResource } from '../changelog/changelog.resource';
+import { ReleaseList } from '../changelog/release-list';
+import { changelogUrl, npmUrl, readmeUrl } from '../core/links';
+import { SuUtility } from '../core/packages';
+import { CodeTab, CodeTabs } from './code-tabs';
+import { Reveal } from './reveal';
+
+/**
+ * Shared layout of every utility page: header, live demo (projected content),
+ * usage examples and the latest release, loaded live from GitHub.
+ */
+@Component({
+  selector: 'app-utility-page',
+  imports: [CodeTabs, ReleaseList, RouterLink, Reveal],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './utility-page.html',
+  styleUrl: './utility-page.scss',
+})
+export class UtilityPage {
+  readonly utility = input.required<SuUtility>();
+  readonly usage = input.required<readonly CodeTab[]>();
+
+  protected readonly changelog = changelogResource(() => this.utility().slug);
+  protected readonly latest = computed(() => {
+    const release = this.changelog.latest();
+    return release ? [release] : [];
+  });
+
+  protected readonly links = computed(() => {
+    const { packageName, slug } = this.utility();
+    return {
+      npm: npmUrl(packageName),
+      readme: readmeUrl(slug),
+      changelog: changelogUrl(slug),
+    };
+  });
+
+  protected readonly install = computed<CodeTab[]>(() => [
+    { label: 'Angular', code: `npm install ${this.utility().packageName}` },
+    { label: 'Any framework', code: 'npm install @su-labs/core' },
+  ]);
+}

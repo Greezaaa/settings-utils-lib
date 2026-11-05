@@ -1,0 +1,7 @@
+{
+  "background": "oklch(20% 0.03 260)",
+  "color": "oklch(94% 0.01 90)",
+  "main-accent": "hsl(35 90% 65%)",
+  "second-accent": "#8a93a6",
+  "third-accent": "#7fc8a9"
+}

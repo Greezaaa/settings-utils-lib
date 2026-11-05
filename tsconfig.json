@@ -67,6 +67,9 @@
     },
     {
       "path": "./projects/su-labs/theme/tsconfig.lib.json"
+    },
+    {
+      "path": "./web/tsconfig.app.json"
     }
   ]
 }

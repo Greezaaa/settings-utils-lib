@@ -3,6 +3,66 @@
 	"version": 1,
 	"newProjectRoot": "projects",
 	"projects": {
+		"web": {
+			"projectType": "application",
+			"root": "web",
+			"sourceRoot": "web/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:application",
+					"options": {
+						"browser": "web/src/main.ts",
+						"tsConfig": "web/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "web/public"
+							}
+						],
+						"styles": [
+							"web/src/styles.scss"
+						]
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "4kB",
+									"maximumError": "8kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular/build:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "web:build:production"
+						},
+						"development": {
+							"buildTarget": "web:build:development"
+						}
+					},
+					"defaultConfiguration": "development"
+				}
+			}
+		},
 		"@su-labs/core": {
 			"projectType": "library",
 			"root": "projects/su-labs/core",

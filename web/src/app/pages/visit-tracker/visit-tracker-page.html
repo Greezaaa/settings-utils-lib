@@ -1,0 +1,33 @@
+<app-utility-page [utility]="utility" [usage]="usage">
+  <div class="card demo-grid">
+    <div class="demo-controls">
+      <p>
+        This site counted your visit when the page loaded. Reload to record another one. Milestone visits
+        ({{ milestones }}) show a notification.
+      </p>
+      <div class="button-row">
+        <button type="button" class="button" (click)="reload()">Reload the page</button>
+        <button type="button" class="button button-secondary" (click)="forget()">Forget my visits</button>
+      </div>
+    </div>
+
+    <dl class="state-list">
+      <div>
+        <dt>count()</dt>
+        <dd>{{ visits.count() }}</dd>
+      </div>
+      <div>
+        <dt>lastVisit()</dt>
+        <dd>{{ visits.lastVisit() ? (visits.lastVisit() | date: 'medium') : 'first visit' }}</dd>
+      </div>
+      <div>
+        <dt>milestone()</dt>
+        <dd>{{ visits.milestone() ?? 'none' }}</dd>
+      </div>
+      <div>
+        <dt>Saved in localStorage</dt>
+        <dd>{{ storageKey }}</dd>
+      </div>
+    </dl>
+  </div>
+</app-utility-page>

@@ -1,0 +1,58 @@
+# Builds the website in web/ and publishes it to GitHub Pages.
+# Changelogs are loaded live from GitHub by the site, so releases don't need a redeploy.
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'projects/su-labs/**/src/**'
+      - 'angular.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/deploy-web.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npx ng build web --base-href /settings-utils-lib/
+
+      # GitHub Pages has no SPA fallback: serve the app for unknown paths such as /theme
+      - name: Add SPA fallback
+        run: cp dist/web/browser/index.html dist/web/browser/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/web/browser
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

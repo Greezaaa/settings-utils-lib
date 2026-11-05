@@ -1,0 +1,96 @@
+.page-head {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 4rem 2rem;
+
+  @media (min-width: 48rem) {
+    padding-block: 6rem 3rem;
+  }
+}
+
+.changelog-layout {
+  display: grid;
+  gap: 2rem;
+  padding-bottom: 6rem;
+
+  @media (min-width: 48rem) {
+    align-items: start;
+    gap: 4rem;
+    grid-template-columns: 12rem 1fr;
+  }
+}
+
+.package-nav {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+
+  @media (min-width: 48rem) {
+    border-bottom: 0;
+    display: grid;
+    gap: 0.5rem;
+    position: sticky;
+    top: 7.5rem;
+  }
+
+  /* Hover only underlines; the selected package alone gets the bright color and the marker */
+  a {
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    padding-bottom: 0.25rem;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 0.3em;
+    }
+
+    &.active {
+      border-bottom-color: var(--heading);
+      color: var(--heading);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    @media (min-width: 48rem) {
+      border-bottom: 0;
+      border-left: 2px solid transparent;
+      padding: 0.125rem 0 0.125rem 0.75rem;
+
+      &.active {
+        border-left-color: var(--heading);
+      }
+    }
+  }
+}
+
+.releases {
+  display: grid;
+  gap: 2rem;
+  min-width: 0;
+}
+
+.releases-head {
+  align-items: baseline;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+
+  h2 {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    letter-spacing: 0;
+  }
+}
+
+.links {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.875rem;
+}

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -12,6 +12,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    // .claude/ holds local tooling, including git worktrees of other sessions
+    exclude: [...configDefaults.exclude, '.claude/**'],
     setupFiles: resolve(__dirname, 'vitest.setup.ts'),
     coverage: {
       reporter: ['text', 'html'],

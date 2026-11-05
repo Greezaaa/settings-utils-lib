@@ -1,0 +1,49 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">{{ utility().packageName }}</span>
+    <span class="tag">{{ utility().coreEntry }}</span>
+    @if (changelog.latest(); as release) {
+      <span class="tag tag-green">v{{ release.version }}</span>
+    }
+  </div>
+  <h1>{{ utility().name }}</h1>
+  <p class="lead">{{ utility().summary }}</p>
+  <nav class="page-links" aria-label="Package links">
+    <a [href]="links().readme" target="_blank" rel="noopener">Documentation</a>
+    <a [href]="links().npm" target="_blank" rel="noopener">npm</a>
+    <a [routerLink]="['/changelog', utility().slug]">Changelog</a>
+  </nav>
+</header>
+
+<section class="container page-section" appReveal aria-labelledby="demo-title">
+  <h2 id="demo-title" class="section-title">Live demo</h2>
+  <p class="muted section-intro">This demo runs on the library itself, like the rest of this site.</p>
+  <ng-content />
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="install-title">
+  <h2 id="install-title" class="section-title">Install</h2>
+  <app-code-tabs [tabs]="install()" />
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="usage-title">
+  <h2 id="usage-title" class="section-title">Usage</h2>
+  <app-code-tabs [tabs]="usage()" />
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="release-title">
+  <h2 id="release-title" class="section-title">Latest release</h2>
+  @if (changelog.isLoading()) {
+    <p class="muted">Loading the changelog from GitHub…</p>
+  } @else if (changelog.failed()) {
+    <p class="muted">
+      The changelog could not be loaded.
+      <a [href]="links().changelog" target="_blank" rel="noopener">Read it on GitHub</a>.
+    </p>
+  } @else {
+    <app-release-list [releases]="latest()" />
+    <p class="all-releases">
+      <a [routerLink]="['/changelog', utility().slug]">All releases</a>
+    </p>
+  }
+</section>

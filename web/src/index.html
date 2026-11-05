@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>su-labs: settings utilities for Angular and any framework</title>
+  <meta name="description" content="Theme, font size, notifications, scroll spy and visit tracking utilities for Angular, React, Svelte, vanilla JavaScript and Node.">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!--
+    Apply the saved theme and text size before the first paint, so the page doesn't flash
+    from the default to the visitor's choice while the app loads. The app then takes over.
+    Keys must match SiteTheme.storageKey and the font size storageKey in core/site-setup.ts.
+  -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      try {
+        var theme = localStorage.getItem('su-labs-site:theme');
+        if (!theme || theme === 'system') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.setAttribute('data-theme', theme);
+
+        var fontSize = Number(localStorage.getItem('su-labs-site:font-size'));
+        if (fontSize >= 12 && fontSize <= 22) {
+          root.style.setProperty('--base-font-size', fontSize + 'px');
+        }
+      } catch (error) {
+        // Storage blocked: the app applies the defaults once it starts
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300..600&display=swap">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

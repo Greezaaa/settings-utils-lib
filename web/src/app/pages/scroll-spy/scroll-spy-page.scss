@@ -1,0 +1,76 @@
+.spy-demo {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: 48rem) {
+    align-items: start;
+    gap: 3rem;
+    grid-template-columns: 14rem 1fr;
+  }
+}
+
+.spy-nav {
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  padding-block: 0.75rem;
+  position: sticky;
+  top: 6.5rem;
+  z-index: 1;
+
+  @media (min-width: 48rem) {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .eyebrow,
+  .spy-state {
+    flex-basis: 100%;
+  }
+}
+
+.spy-link {
+  background: none;
+  border: 0;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9375rem;
+  padding: 0.25rem 0.75rem;
+  text-align: left;
+
+  &:hover {
+    color: var(--heading);
+  }
+
+  &.active {
+    border-left-color: var(--heading);
+    color: var(--heading);
+  }
+}
+
+.spy-state {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.spy-sections {
+  display: grid;
+  gap: 1rem;
+}
+
+.spy-section {
+  display: grid;
+  align-content: center;
+  gap: 0.5rem;
+  min-height: 55vh;
+
+  h3 {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 400;
+  }
+}

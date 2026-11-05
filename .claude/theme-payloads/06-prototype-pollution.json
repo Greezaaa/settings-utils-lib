@@ -1,0 +1,7 @@
+{
+  "background": "#111111",
+  "color": "#eeeeee",
+  "__proto__": {
+    "isAdmin": true
+  }
+}

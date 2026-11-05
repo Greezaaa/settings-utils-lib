@@ -1,0 +1,5 @@
+{
+  "background": "#111111",
+  "color": "#eeeeee",
+  "<script>alert(1)</script>": "#ffffff"
+}

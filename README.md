@@ -13,6 +13,8 @@ A collection of lightweight, reactive browser utilities built with modern practi
 - **Angular:** dedicated packages with injectable services and signals.
 - **React, Svelte, vanilla JavaScript and Node:** the framework-agnostic [`@su-labs/core`](projects/su-labs/core/README.md) package.
 
+**Website:** live demos of every utility and all changelogs at [greezaaa.github.io/settings-utils-lib](https://greezaaa.github.io/settings-utils-lib/).
+
 ## Choose Your Environment
 
 | Environment | Package | Guide |
@@ -249,6 +251,7 @@ settings-utils-lib/
 │       ├── notifications/
 │       ├── scroll-spy/
 │       └── font-size/
+├── web/                # Website with live demos (GitHub Pages)
 ├── dist/               # Build output
 ├── package.json        # Root dependencies
 └── angular.json        # Workspace configuration
@@ -270,6 +273,14 @@ npm run build:notifications
 npm run build:scroll-spy
 npm run build:font-size
 ```
+
+### Run the Website
+
+```bash
+npm run start:web
+```
+
+The site in `web/` compiles the libraries from source, so it always shows the current code. It is deployed to GitHub Pages on every push to `main` (`.github/workflows/deploy-web.yml`). Changelogs are read live from GitHub, so a release only needs its `CHANGELOG.md` pushed.
 
 ### Run Tests
 

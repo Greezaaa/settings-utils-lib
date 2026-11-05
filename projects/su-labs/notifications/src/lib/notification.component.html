@@ -1,6 +1,6 @@
-<div class="notification-container" [ngClass]="[service.position]">
+<div class="notification-container {{ service.position }}">
 	@for (notification of notifications(); track notification.id) {
-	<div class="notification" [ngClass]="[notification.type, notification.cssClass]">
+	<div class="notification {{ notification.type }} {{ notification.cssClass ?? '' }}">
 
 		<div class="icon-container">
 			@if (notification.icon) {

@@ -1,0 +1,40 @@
+<div class="card editor">
+  <div class="editor-head">
+    <h3>Try your own theme</h3>
+    <p class="muted">
+      Edit the colors or import a JSON file, then apply it as the library's <code>custom</code> theme. It lasts until
+      you reload or pick another theme.
+    </p>
+  </div>
+
+  <div class="editor-grid">
+    <div class="editor-input">
+      <label class="field">
+        <span>Theme variables (JSON)</span>
+        <textarea
+          rows="9"
+          spellcheck="false"
+          [value]="draft()"
+          (input)="edit($event)"
+          [attr.aria-invalid]="error() ? 'true' : null"
+          aria-describedby="custom-theme-error"
+        ></textarea>
+      </label>
+      <p id="custom-theme-error" class="error" aria-live="polite">{{ error() }}</p>
+
+      <div class="button-row">
+        <button type="button" class="button" (click)="apply()">Apply</button>
+        <label class="button button-secondary file-button">
+          Import JSON
+          <input type="file" accept="application/json,.json" (change)="import($event)" />
+        </label>
+        <button type="button" class="button button-secondary" (click)="resetDraft()">Restore sample</button>
+      </div>
+    </div>
+
+    <div class="editor-usage">
+      <p class="muted">The same palette in your app:</p>
+      <app-code-block [code]="usage" />
+    </div>
+  </div>
+</div>
