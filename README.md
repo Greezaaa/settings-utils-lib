@@ -23,7 +23,7 @@ A collection of lightweight, reactive browser utilities built with modern practi
 | Angular | `@su-labs/theme`, `@su-labs/font-size`, … | [Angular guide](docs/guides/angular.md) |
 | Node.js and server-side rendering | `@su-labs/core` | [Node guide](docs/guides/node.md) |
 
-Utilities are being moved into `@su-labs/core` one at a time; theme, font size, notifications and scroll spy are available now. See [which utilities are available where](docs/README.md#utility-availability).
+Every utility is available in `@su-labs/core`. See [which utilities are available where](docs/README.md#utility-availability).
 
 ---
 
@@ -44,6 +44,7 @@ npm install @su-labs/core
 - Font size controls (`@su-labs/core/font-size`)
 - Toast notifications (`@su-labs/core/notifications`)
 - Scroll spy (`@su-labs/core/scroll-spy`)
+- Visit tracking (`@su-labs/core/visit-tracker`)
 - Works in any framework or none
 - Safe to import in Node and during server-side rendering
 - Zero runtime dependencies

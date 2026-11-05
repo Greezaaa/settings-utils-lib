@@ -202,10 +202,39 @@ Highlight the navigation link of the section in the middle of the screen:
 </script>
 ```
 
+## Visit Tracker
+
+Greet returning visitors:
+
+```html
+<p id="welcome"></p>
+
+<script type="module">
+  import { SuVisitTrackerController } from 'https://esm.sh/@su-labs/core@1.0.0/visit-tracker';
+
+  const visits = new SuVisitTrackerController();
+  visits.init();
+
+  const { count, lastVisit, milestone } = visits.visit.get();
+  const welcome = document.querySelector('#welcome');
+
+  if (milestone) {
+    welcome.textContent = `Visit number ${milestone}. Thanks for coming back!`;
+  } else if (lastVisit) {
+    welcome.textContent = `Welcome back! Visit ${count}, last seen ${new Date(lastVisit).toLocaleDateString()}.`;
+  } else {
+    welcome.textContent = 'Welcome!';
+  }
+</script>
+```
+
+Call `init()` once per page load; every call counts as a visit.
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
 - [Font size configuration and full API](../../projects/su-labs/core/README.md#font-size)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
+- [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Node and server-side rendering](node.md)

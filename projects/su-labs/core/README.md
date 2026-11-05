@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) and [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) wrap these utilities in Angular services with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services with signals.
 
 ## Table of Contents
 
@@ -17,6 +17,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Font Size](#font-size)
 - [Notifications](#notifications)
 - [Scroll Spy](#scroll-spy)
+- [Visit Tracker](#visit-tracker)
 - [License](#license)
 
 ## Installation
@@ -48,6 +49,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/font-size` | `SuFontSizeController` and font size types |
 | `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
+| `@su-labs/core/visit-tracker` | `SuVisitTrackerController` and visit types |
 
 ## Reactive Stores
 
@@ -232,6 +234,35 @@ A section becomes active when it crosses the vertical center of the viewport.
 | `destroy()` | Stops tracking all sections |
 
 `observeSuScrollSpySection(element, onActive)` is the lower-level helper behind `observe()`: it calls `onActive` each time the element reaches the viewport center and returns a stop function. Use it to keep the active section in your own state.
+
+## Visit Tracker
+
+Counts how many times a visitor has opened the site, remembers when they last came, and flags milestone visits such as the 10th. Data is stored in `localStorage`.
+
+```ts
+import { SuVisitTrackerController } from '@su-labs/core/visit-tracker';
+
+const visits = new SuVisitTrackerController();
+visits.init(); // call once per page load
+
+const { count, lastVisit, milestone } = visits.visit.get();
+```
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `init(config?)` | Records the current visit and checks for a milestone. Call once per page load. |
+| `visit` | Read-only store of `{ count, lastVisit, milestone }` |
+
+`count` includes the current visit (`0` before `init()`), `lastVisit` is the start of the previous visit as an ISO string (`null` on the first visit), and `milestone` is the milestone reached on this visit (`null` otherwise). Invalid saved data is ignored and counting starts over.
+
+### Configuration
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `storageKey` | `'su:visits'` | localStorage key for the visit data |
+| `milestoneVisits` | `[10, 100]` | Visit numbers to flag as milestones |
 
 ## License
 

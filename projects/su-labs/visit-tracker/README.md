@@ -13,6 +13,8 @@
 
 A lightweight Angular service to track user visits. Provides reactive signals for visit count, last visit date, and milestone visits.
 
+> **Not using Angular?** The same visit tracker is available for React, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
+
 ## Table of Contents
 
 - [Why Use This Library?](#why-use-this-library)
@@ -31,10 +33,10 @@ A lightweight Angular service to track user visits. Provides reactive signals fo
 
 ## Why Use This Library?
 
-- **Lightweight** - Only ~5KB minified
+- **Lightweight** - Minimal bundle size
 - **Reactive** - Built with Angular Signals
 - **Type-Safe** - Full TypeScript support
-- **Zero Dependencies** - No bloat
+- **SSR Safe** - No browser APIs are touched on the server
 - **Well Tested** - Comprehensive test coverage
 - **Well Documented** - Clear examples and API docs
 
@@ -42,7 +44,7 @@ A lightweight Angular service to track user visits. Provides reactive signals fo
 
 * Tracks number of visits per user.
 * Persists visit data in `localStorage`.
-* Signals for milestones (e.g., 10th, 100th visit).
+* Milestone signal (e.g., 10th, 100th visit).
 * Reactive last visit date signal.
 * Configurable storage key and milestones.
 * Works seamlessly with standalone components and reactive Angular setups.
@@ -65,43 +67,55 @@ npm install @angular/common@^22 @angular/core@^22
 
 ## Quick Start
 
-```typescript
-// 1. Install
-npm install @su-labs/visit-tracker
+1. Record the visit once at startup in `app.config.ts`:
 
-// 2. Inject in your component
+```typescript
+import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
+import { SuVisitTrackerService } from '@su-labs/visit-tracker';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAppInitializer(() => {
+      inject(SuVisitTrackerService).init();
+    }),
+  ],
+};
+```
+
+2. Read the signals in any component:
+
+```typescript
 import { Component, inject } from '@angular/core';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 
 @Component({
   selector: 'app-root',
-  template: `<p>Visits: {{ visitService.count() }}</p>`
+  template: `<p>Visits: {{ visitService.count() }}</p>`,
 })
 export class AppComponent {
-  visitService = inject(SuVisitTrackerService);
+  protected readonly visitService = inject(SuVisitTrackerService);
 }
 ```
 
 ## Usage
 
-### Example 1: Basic initialization
-The service should be provided at the root level. To use it in a component, simply inject it:
+### Example 1: Welcome back message
+After `init()` has run (see [Quick Start](#quick-start)), inject the service wherever you need it:
 
 ```TypeScript
 import { Component, inject } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [DatePipe],
   template: `
     <h1>Welcome back!</h1>
     <p>You have visited {{ visitService.count() }} times.</p>
-    <ng-container *ngIf="visitService.lastVisit() as last">
-      <p>Last visit: {{ last | date:'medium' }}</p>
-    </ng-container>
+    @if (visitService.lastVisit(); as last) {
+      <p>Last visit: {{ last | date: 'medium' }}</p>
+    }
   `,
 })
 export class AppComponent {
@@ -109,22 +123,23 @@ export class AppComponent {
 }
 ```
 
-Automatically increments the visit count and updates the last visit timestamp.
+Each `init()` call increments the visit count and saves the start of this visit for next time.
 
 ### Example 2: Checking milestone visits
-You can reactively check if a milestone visit has been reached:
+`milestone()` holds the milestone reached on this visit, or `null`:
 
 ```HTML
-@if(visitService.isTenthVisit()){
-  <p>Congratulations on your 10th visit!</p>
-}
-
-@if(visitService.isHundredthVisit()){
-  <p>100 visits! You're a power user!</p>
+@switch (visitService.milestone()) {
+  @case (10) {
+    <p>Congratulations on your 10th visit!</p>
+  }
+  @case (100) {
+    <p>100 visits! You're a power user!</p>
+  }
 }
 ```
 
-Signals `isTenthVisit` and `isHundredthVisit` update automatically on service initialization.
+The signal is set when `init()` runs.
 
 ### Example 3: Custom configuration
 For standalone apps, use provideAppInitializer to initialize the tracker with a custom storage key or milestones:
@@ -153,7 +168,7 @@ Allows overriding the localStorage key and defining custom milestone visits.
 ### Example 4: Using last visit date
 
 ```HTML
-@if(visitService.lastVisit() as last) {
+@if (visitService.lastVisit(); as last) {
   <p>
     Your last visit was on {{ last | date:'fullDate' }} at {{ last | date:'shortTime' }}
   </p>
@@ -168,16 +183,15 @@ The service stores last visit as an ISO string (e.g., "2025-08-25T12:34:56.789Z"
 
 | Signal | Type | Description |
 |--------|------|-------------|
-| `count()` | `number` | Current visit count |
-| `lastVisit()` | `string \| null` | ISO string of last visit date |
-| `isTenthVisit()` | `boolean` | True if current count is 10 |
-| `isHundredthVisit()` | `boolean` | True if current count is 100 |
+| `count()` | `number` | Visit count including this visit (`0` before `init()`) |
+| `lastVisit()` | `string \| null` | Start of the previous visit as an ISO string, or `null` on the first visit |
+| `milestone()` | `number \| null` | Milestone reached on this visit, or `null` |
 
 ### Methods
 
 | Method | Parameters | Description |
 |--------|------------|-------------|
-| `init(config?)` | `SuVisitTrackerConfig` | Initialize with custom configuration |
+| `init(config?)` | `SuVisitTrackerConfig` | Record the current visit. Call once at startup. |
 
 ### Types
 
@@ -226,9 +240,13 @@ Part of the **@su-labs** suite:
 
 Make sure localStorage is enabled in your browser and not blocked by privacy settings.
 
-### Milestone signals not updating?
+### Count stays at 0?
 
-Milestones are only checked during service initialization. Call `init()` to recalculate.
+The visit is only recorded when `init()` runs. Call it once at startup, as shown in [Quick Start](#quick-start).
+
+### Milestone signal not updating?
+
+Milestones are only checked when `init()` runs, once per visit.
 
 ### TypeScript errors?
 
@@ -244,7 +262,7 @@ Ensure you have Angular 22+ and TypeScript 6.0+ installed.
 
 - **Signals-based API**: Perfect for standalone components and reactive Angular templates.
 - **Persistence**: Visit count and last visit are automatically stored in localStorage.
-- **Lightweight**: No external dependencies and minimal memory footprint.
+- **Lightweight**: Minimal memory footprint.
 - **Custom milestones**: Track any number of user visit milestones reactively.
 
 ## Contributing

@@ -1,53 +1,44 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
-import { SuVisitData, SuVisitTrackerConfig } from './visit-tracker.types';
+import { Injectable, OnDestroy, signal, WritableSignal } from '@angular/core';
+import { SuVisitTrackerConfig, SuVisitTrackerController } from '@su-labs/core/visit-tracker';
 
+/**
+ * Angular service for tracking user visits.
+ *
+ * Thin wrapper around the framework-agnostic `SuVisitTrackerController` from
+ * `@su-labs/core/visit-tracker` that exposes the visit data as Angular signals.
+ */
 @Injectable({ providedIn: 'root' })
-export class SuVisitTrackerService {
-  /** Key used for localStorage */
-  private storageKey = 'su:visits';
+export class SuVisitTrackerService implements OnDestroy {
+  /** Framework-agnostic visit tracking logic */
+  private readonly controller = new SuVisitTrackerController();
 
-  /** Milestones to track */
-  private _milestones: number[] = [10, 100];
-
-  /** Current visit count */
+  /** Current visit count (0 until {@link init} runs) */
   public count: WritableSignal<number> = signal(0);
 
-  /** Last visit date as ISO string */
+  /** Start of the previous visit as an ISO string, or null on the first visit */
   public lastVisit: WritableSignal<string | null> = signal(null);
 
   /** The number of the milestone reached on the current visit, or null */
   public milestone: WritableSignal<number | null> = signal(null);
 
-  /** Initialize the service and update signals */
+  /** Stops syncing the controller's state into the signals */
+  private readonly unsubscribe = this.controller.visit.subscribe((visit) => {
+    this.count.set(visit.count);
+    this.lastVisit.set(visit.lastVisit);
+    this.milestone.set(visit.milestone);
+  });
+
+  /**
+   * Record the current visit and update the signals.
+   * Call once at application startup.
+   * @param config Optional storage key and milestones.
+   */
   public init(config?: SuVisitTrackerConfig): void {
-    if (config?.storageKey) {
-      this.storageKey = config.storageKey;
-    }
-    if (config?.milestoneVisits && Array.isArray(config.milestoneVisits)) {
-      this._milestones = config.milestoneVisits.sort((a, b) => a - b);
-    }
-
-    const storedData = localStorage.getItem(this.storageKey);
-    const stored: Partial<SuVisitData> = storedData ? JSON.parse(storedData) : {};
-
-    const prevCount = stored.count ?? 0;
-    const prevDate = stored.lastVisit ?? null;
-    const newCount = prevCount + 1;
-
-    this.count.set(newCount);
-    this.lastVisit.set(prevDate);
-
-    this.updateMilestone(newCount);
-
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify({ count: newCount, lastVisit: new Date().toISOString() }),
-    );
+    this.controller.init(config);
   }
 
-  /** Update the milestone signal based on the current count */
-  private updateMilestone(count: number): void {
-    const reachedMilestone = this._milestones.find(m => m === count);
-    this.milestone.set(reachedMilestone ?? null);
+  /** Angular lifecycle hook for service destruction */
+  ngOnDestroy(): void {
+    this.unsubscribe();
   }
 }

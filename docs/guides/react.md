@@ -236,10 +236,44 @@ export function Nav({ sections }: { sections: { id: string; name: string }[] }) 
 }
 ```
 
+## Visit Tracker
+
+### Setup
+
+Record the visit once, when the app starts:
+
+```ts
+// src/visits.ts
+import { SuVisitTrackerController } from '@su-labs/core/visit-tracker';
+
+export const visitTracker = new SuVisitTrackerController();
+visitTracker.init();
+```
+
+### Reading the visit
+
+```tsx
+import { useSyncExternalStore } from 'react';
+import { visitTracker } from './visits';
+
+export function Welcome() {
+  const { visit } = visitTracker;
+  const { count, milestone } = useSyncExternalStore(visit.subscribe, visit.get, visit.get);
+
+  if (milestone) {
+    return <p>Visit number {milestone}. Thanks for coming back!</p>;
+  }
+  return <p>{count > 1 ? `Welcome back! Visit ${count}.` : 'Welcome!'}</p>;
+}
+```
+
+Keep `init()` at module level, not in a component or effect. React Strict Mode runs effects twice in development, which would count two visits.
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
 - [Font size configuration and full API](../../projects/su-labs/core/README.md#font-size)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
+- [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Node and server-side rendering](node.md)

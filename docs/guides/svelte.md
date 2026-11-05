@@ -202,10 +202,39 @@ export function spy(element: Element, sectionId: string) {
 {/each}
 ```
 
+## Visit Tracker
+
+### Setup
+
+```ts
+// src/lib/visits.ts
+import { SuVisitTrackerController } from '@su-labs/core/visit-tracker';
+
+export const visitTracker = new SuVisitTrackerController();
+export const visit = visitTracker.visit;
+```
+
+Call `visitTracker.init()` once in the root layout's `onMount`, next to the theme setup. On the server it does nothing, so the count stays `0` until the page loads.
+
+### Reading the visit
+
+```svelte
+<script lang="ts">
+  import { visit } from '$lib/visits';
+</script>
+
+{#if $visit.milestone}
+  <p>Visit number {$visit.milestone}. Thanks for coming back!</p>
+{:else if $visit.count > 1}
+  <p>Welcome back! Visit {$visit.count}.</p>
+{/if}
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
 - [Font size configuration and full API](../../projects/su-labs/core/README.md#font-size)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
+- [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Node and server-side rendering](node.md)

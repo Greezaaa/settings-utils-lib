@@ -17,7 +17,7 @@ Pick the guide for your environment. Each guide covers installation, setup and u
 
 ## Utility availability
 
-Utilities are being moved into `@su-labs/core` one at a time. Until a utility is in core, it is only available for Angular.
+Every utility is available in `@su-labs/core` for any environment, and as an Angular package with signals.
 
 | Utility | `@su-labs/core` (any environment) | Angular package |
 |---------|-----------------------------------|-----------------|
@@ -25,13 +25,13 @@ Utilities are being moved into `@su-labs/core` one at a time. Until a utility is
 | Font size | `@su-labs/core/font-size` | `@su-labs/font-size` |
 | Notifications | `@su-labs/core/notifications` | `@su-labs/notifications` |
 | Scroll spy | `@su-labs/core/scroll-spy` | `@su-labs/scroll-spy` |
-| Visit tracker | Planned | `@su-labs/visit-tracker` |
+| Visit tracker | `@su-labs/core/visit-tracker` | `@su-labs/visit-tracker` |
 
 ## API reference
 
 The full API of each utility is documented in its package README:
 
-- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, scroll spy)
+- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, scroll spy, visit tracker)
 - [`@su-labs/theme`](../projects/su-labs/theme/README.md)
 - [`@su-labs/font-size`](../projects/su-labs/font-size/README.md)
 - [`@su-labs/notifications`](../projects/su-labs/notifications/README.md)
