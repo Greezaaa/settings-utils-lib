@@ -32,6 +32,7 @@ The utilities manage things that only exist in a browser: the page, `localStorag
 |---------|---------|
 | Store (`createSuStore`) | Works fully |
 | Theme | Keeps state and notifies subscribers. Does not touch the DOM or `localStorage`. `'system'` resolves to `'light'`. |
+| Font size | Keeps state and notifies subscribers. Does not touch the DOM or `localStorage`, so `init()` uses the default size. |
 | Notifications | Works fully (it holds state only and never touches the DOM). Requires Node 19+ for `crypto.randomUUID`. |
 | Scroll spy | Keeps state and notifies subscribers. `observe()` does nothing, since there is no page to watch. |
 

@@ -98,6 +98,43 @@ a {
 
 Single-page apps that remove the controller should call `theme.destroy()` to stop listening to system theme changes.
 
+## Font Size
+
+Text size controls that stay within limits and remember the user's choice:
+
+```html
+<button type="button" id="smaller">A-</button>
+<button type="button" id="reset">A</button>
+<button type="button" id="bigger">A+</button>
+
+<script type="module">
+  import { SuFontSizeController } from 'https://esm.sh/@su-labs/core@1.0.0/font-size';
+
+  const fontSize = new SuFontSizeController();
+  fontSize.init();
+
+  const smaller = document.querySelector('#smaller');
+  const bigger = document.querySelector('#bigger');
+  smaller.addEventListener('click', () => fontSize.decrease());
+  bigger.addEventListener('click', () => fontSize.increase());
+  document.querySelector('#reset').addEventListener('click', () => fontSize.reset());
+
+  fontSize.fontSize.subscribe((size) => {
+    const { minSize, maxSize } = fontSize.limits.get();
+    smaller.disabled = size === minSize;
+    bigger.disabled = size === maxSize;
+  });
+</script>
+```
+
+Size the page from the CSS variable and use `rem` everywhere else:
+
+```css
+html {
+  font-size: var(--base-font-size);
+}
+```
+
 ## Notifications
 
 The controller keeps the list of notifications and closes them on time; you render the list.
@@ -168,6 +205,7 @@ Highlight the navigation link of the section in the middle of the screen:
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
+- [Font size configuration and full API](../../projects/su-labs/core/README.md#font-size)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Node and server-side rendering](node.md)

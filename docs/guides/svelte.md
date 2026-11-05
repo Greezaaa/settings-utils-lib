@@ -87,6 +87,35 @@ The controller sets CSS variables and a `data-theme` attribute on `<html>`:
 
 The server has no saved preference or system setting, so pages render with the `'light'` theme and switch once `init()` runs in `onMount`. Styling with the CSS variables keeps that switch smooth.
 
+## Font Size
+
+### Setup
+
+```ts
+// src/lib/font-size.ts
+import { SuFontSizeController } from '@su-labs/core/font-size';
+
+export const fontSizeController = new SuFontSizeController();
+export const fontSize = fontSizeController.fontSize;
+export const limits = fontSizeController.limits;
+```
+
+Call `fontSizeController.init()` in the root layout's `onMount`, next to the theme setup.
+
+### Controls
+
+```svelte
+<script lang="ts">
+  import { fontSize, fontSizeController, limits } from '$lib/font-size';
+</script>
+
+<button type="button" disabled={$fontSize === $limits.minSize} onclick={() => fontSizeController.decrease()}>A-</button>
+<button type="button" onclick={() => fontSizeController.reset()}>A</button>
+<button type="button" disabled={$fontSize === $limits.maxSize} onclick={() => fontSizeController.increase()}>A+</button>
+```
+
+Size the page with `:global(html) { font-size: var(--base-font-size); }` and use `rem` units elsewhere.
+
 ## Notifications
 
 The controller keeps the list of notifications and closes them on time; you render the list with your own markup.
@@ -176,6 +205,7 @@ export function spy(element: Element, sectionId: string) {
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
+- [Font size configuration and full API](../../projects/su-labs/core/README.md#font-size)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Node and server-side rendering](node.md)

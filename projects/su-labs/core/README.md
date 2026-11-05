@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme) and [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) wrap these utilities in Angular services with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications) and [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) wrap these utilities in Angular services with signals.
 
 ## Table of Contents
 
@@ -14,6 +14,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Entry Points](#entry-points)
 - [Reactive Stores](#reactive-stores)
 - [Theme](#theme)
+- [Font Size](#font-size)
 - [Notifications](#notifications)
 - [Scroll Spy](#scroll-spy)
 - [License](#license)
@@ -44,6 +45,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 |--------|----------|
 | `@su-labs/core` | `createSuStore`, `isBrowser` |
 | `@su-labs/core/theme` | `SuThemeController` and theme types |
+| `@su-labs/core/font-size` | `SuFontSizeController` and font size types |
 | `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 
@@ -115,6 +117,54 @@ a {
   color: var(--su-theme-main-accent);
 }
 ```
+
+## Font Size
+
+Lets users make text bigger or smaller within set limits. The size is applied in pixels to a CSS custom property on `<html>` and saved in `localStorage`.
+
+```ts
+import { SuFontSizeController } from '@su-labs/core/font-size';
+
+const fontSize = new SuFontSizeController();
+fontSize.configure({ minSize: 12, maxSize: 24 }); // optional
+fontSize.init();
+
+fontSize.increase();
+fontSize.fontSize.subscribe((size) => console.log(`${size}px`));
+```
+
+```css
+html {
+  font-size: var(--base-font-size);
+}
+```
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `configure(config?)` | Updates limits, step, storage key or CSS variable name. Omitted values keep their current setting. |
+| `init()` | Loads the saved size (or the default), clamps it and applies it. Call once at startup, after `configure()`. |
+| `setFontSize(size)` | Sets, applies and saves a size, clamped to the limits |
+| `increase(step?)` / `decrease(step?)` | Changes the size by `step` pixels (defaults to the configured step) |
+| `reset()` | Returns to the default size and removes the saved value |
+| `fontSize` | Read-only store of the current size in pixels |
+| `limits` | Read-only store of `{ defaultSize, minSize, maxSize, step }` |
+
+To disable controls at the edges, compare the two stores, for example `fontSize.get() === limits.get().maxSize`.
+
+### Configuration
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `defaultSize` | `14` | Size used before the user picks one, and after `reset()` |
+| `minSize` | `10` | Smallest allowed size |
+| `maxSize` | `22` | Largest allowed size |
+| `step` | `2` | Pixels added or removed by `increase()` / `decrease()` |
+| `storageKey` | `'su:font-size'` | localStorage key for the saved size |
+| `cssVarName` | `'--base-font-size'` | CSS custom property set on `<html>` |
+
+Invalid combinations are corrected: a maximum below the minimum is raised to the minimum, the default is clamped to the range, and a step of zero or less becomes `1`.
 
 ## Notifications
 

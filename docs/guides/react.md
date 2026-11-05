@@ -92,6 +92,47 @@ body {
 - Put components that call `useTheme()` in a file marked `'use client'`.
 - On the server there is no saved preference or system setting, so the theme renders as `'light'` and switches after hydration. Avoid rendering text that depends on the theme during the first render, or style with the CSS variables, which update without re-rendering.
 
+## Font Size
+
+### Setup
+
+```ts
+// src/font-size.ts
+import { SuFontSizeController } from '@su-labs/core/font-size';
+
+export const fontSizeController = new SuFontSizeController();
+fontSizeController.init();
+```
+
+### Controls
+
+```tsx
+import { useSyncExternalStore } from 'react';
+import { fontSizeController } from './font-size';
+
+export function FontSizeControls() {
+  const { fontSize, limits } = fontSizeController;
+  const size = useSyncExternalStore(fontSize.subscribe, fontSize.get, fontSize.get);
+  const { minSize, maxSize } = useSyncExternalStore(limits.subscribe, limits.get, limits.get);
+
+  return (
+    <div>
+      <button type="button" disabled={size === minSize} onClick={() => fontSizeController.decrease()}>
+        A-
+      </button>
+      <button type="button" onClick={() => fontSizeController.reset()}>
+        A
+      </button>
+      <button type="button" disabled={size === maxSize} onClick={() => fontSizeController.increase()}>
+        A+
+      </button>
+    </div>
+  );
+}
+```
+
+Size the page with `html { font-size: var(--base-font-size); }` and use `rem` units elsewhere.
+
 ## Notifications
 
 The controller keeps the list of notifications and closes them on time; you render the list with your own components.
@@ -198,6 +239,7 @@ export function Nav({ sections }: { sections: { id: string; name: string }[] }) 
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
+- [Font size configuration and full API](../../projects/su-labs/core/README.md#font-size)
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Node and server-side rendering](node.md)

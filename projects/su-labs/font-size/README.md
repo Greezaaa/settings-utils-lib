@@ -13,6 +13,8 @@
 
 An accessible Angular service for managing font size preferences. Provides reactive controls for text scaling, user preference persistence, and WCAG-compliant font size management.
 
+> **Not using Angular?** The same font size controls are available for React, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
+
 ## Table of Contents
 
 - [Why Use This Library?](#why-use-this-library)
@@ -34,22 +36,20 @@ An accessible Angular service for managing font size preferences. Provides react
 
 - **Lightweight** - Minimal bundle size
 - **Reactive** - Built with Angular Signals
-- **Accessible** - WCAG 2.1 AA compliant
+- **Accessible** - Helps meet WCAG 2.1 text resizing guidelines
 - **Persistent** - Remembers user preference
 - **CSS Variables** - Modern implementation
+- **SSR Safe** - No browser APIs are touched on the server
 - **Type-Safe** - Full TypeScript support
-- **Zero Dependencies** - No bloat
 - **Well Tested** - Comprehensive test coverage
-- **Well Documented** - Clear examples and API docs
 
 ## Features
 
-* **Reactive State**: Uses Angular signals for efficient, reactive font size management.
-* **Persistence**: Remembers the user's font size preference using `localStorage`.
-* **Multiple Presets**: Support for small, normal, large, and extra-large font sizes.
-* **CSS Variables**: Applies font sizes using CSS custom properties for maximum flexibility.
-* **Accessibility**: Helps users with visual impairments customize text size for better readability.
-* **Configurable**: Customizable storage keys, CSS variable names, and size scales.
+* **Reactive State**: The size, limits and `isDefault` / `isMin` / `isMax` flags are Angular signals.
+* **Bounded**: The size always stays between the configured minimum and maximum.
+* **Persistence**: Remembers the user's font size in `localStorage`.
+* **CSS Variable**: Applies the size in pixels to a CSS custom property on `<html>`.
+* **Configurable**: Customizable limits, step, storage key and CSS variable name.
 
 ## Installation
 
@@ -69,189 +69,150 @@ npm install @angular/common@^22 @angular/core@^22
 
 ## Quick Start
 
+1. Initialize the service in `app.config.ts`:
+
 ```typescript
-// 1. Install
-npm install @su-labs/font-size
+import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
+import { FontSizeService } from '@su-labs/font-size';
 
-// 2. Initialize in app.config.ts
-import { provideAppInitializer, inject } from '@angular/core';
-import { SuFontSizeService } from '@su-labs/font-size';
-
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => {
-      inject(SuFontSizeService).init();
+      inject(FontSizeService).init();
     }),
   ],
 };
+```
 
-// 3. Create font size controls
+2. Add font size controls:
+
+```typescript
 import { Component, inject } from '@angular/core';
-import { SuFontSizeService } from '@su-labs/font-size';
+import { FontSizeService } from '@su-labs/font-size';
 
 @Component({
+  selector: 'app-font-controls',
   template: `
-    <button (click)="fontService.setSize('small')">A-</button>
-    <button (click)="fontService.setSize('normal')">A</button>
-    <button (click)="fontService.setSize('large')">A+</button>
-    <p>Current: {{ fontService.size() }}</p>
-  `
+    <button type="button" (click)="fontSize.decrease()" [disabled]="fontSize.isMin()">A-</button>
+    <button type="button" (click)="fontSize.reset()" [disabled]="fontSize.isDefault()">A</button>
+    <button type="button" (click)="fontSize.increase()" [disabled]="fontSize.isMax()">A+</button>
+    <p>Current: {{ fontSize.fontSize() }}px</p>
+  `,
 })
-export class AppComponent {
-  fontService = inject(SuFontSizeService);
+export class FontControlsComponent {
+  protected readonly fontSize = inject(FontSizeService);
 }
+```
 
-// 4. Use CSS variables in your styles
-body {
-  font-size: var(--su-font-size-base);
+3. Use the CSS variable in your styles:
+
+```css
+html {
+  font-size: var(--base-font-size);
 }
 ```
 
 ## Usage
 
-### Example 1: Basic Font Size Controls
+### Custom Configuration
+
+Call `configure()` before `init()`:
 
 ```typescript
-import { Component, inject } from '@angular/core';
-import { SuFontSizeService, FontSize } from '@su-labs/font-size';
+import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
+import { FontSizeService } from '@su-labs/font-size';
 
-@Component({
-  selector: 'app-font-controls',
-  standalone: true,
-  template: `
-    <div class="font-controls">
-      <h3>Text Size</h3>
-      <div class="button-group">
-        @for (size of fontSizes; track size) {
-          <button 
-            (click)="setFontSize(size)"
-            [class.active]="fontService.size() === size"
-          >
-            {{ size | titlecase }}
-          </button>
-        }
-      </div>
-      <p>Current size: {{ fontService.size() }}</p>
-    </div>
-  `,
-  styles: [`
-    .button-group button.active {
-      background-color: var(--su-theme-primary);
-      color: white;
-    }
-  `]
-})
-export class FontControlsComponent {
-  fontService = inject(SuFontSizeService);
-  fontSizes: FontSize[] = ['small', 'normal', 'large', 'x-large'];
-
-  setFontSize(size: FontSize) {
-    this.fontService.setSize(size);
-  }
-}
-```
-
-### Example 2: Custom Configuration
-
-```typescript
-import { provideAppInitializer, inject } from '@angular/core';
-import { SuFontSizeService, SuFontSizeConfig } from '@su-labs/font-size';
-
-const fontConfig: SuFontSizeConfig = {
-  defaultSize: 'normal',
-  storageKey: 'myApp:fontSize',
-  cssVarPrefix: '--app-font-',
-  sizes: {
-    small: '14px',
-    normal: '16px',
-    large: '18px',
-    'x-large': '20px'
-  }
-};
-
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => {
-      inject(SuFontSizeService).init(fontConfig);
+      const fontSize = inject(FontSizeService);
+      fontSize.configure({
+        defaultSize: 16,
+        minSize: 12,
+        maxSize: 24,
+        step: 2,
+        storageKey: 'myApp:fontSize',
+        cssVarName: '--app-font-size',
+      });
+      fontSize.init();
     }),
   ],
 };
 ```
 
-### Example 3: Using in Your Styles
+### Using the Size in Your Styles
+
+Set the variable on the root element and size everything else in `rem`, so the whole page scales:
 
 ```css
-/* Global styles.css */
-:root {
-  --su-font-size-base: 16px;
-  --su-font-size-small: 14px;
-  --su-font-size-large: 18px;
-}
-
-body {
-  font-size: var(--su-font-size-base);
+html {
+  font-size: var(--base-font-size);
 }
 
 h1 {
-  font-size: calc(var(--su-font-size-base) * 2);
+  font-size: 2rem;
 }
 
-h2 {
-  font-size: calc(var(--su-font-size-base) * 1.5);
-}
-
-.small-text {
-  font-size: var(--su-font-size-small);
-}
-
-.large-text {
-  font-size: var(--su-font-size-large);
+small {
+  font-size: 0.875rem;
 }
 ```
 
 ## API Reference
 
-### Service (SuFontSizeService)
+### Service (FontSizeService)
 
 #### Signals
 
 | Signal | Type | Description |
 |--------|------|-------------|
-| `size()` | `FontSize` | Current font size setting |
+| `fontSize()` | `number` | Current font size in pixels |
+| `defaultSize()` | `number` | Default size |
+| `minSize()` | `number` | Minimum size |
+| `maxSize()` | `number` | Maximum size |
+| `step()` | `number` | Step used by `increase()` / `decrease()` |
+| `isDefault()` | `boolean` | True when the size equals the default |
+| `isMin()` | `boolean` | True when the size equals the minimum |
+| `isMax()` | `boolean` | True when the size equals the maximum |
+
+Change the limits and step with `configure()`, not by writing to their signals.
 
 #### Methods
 
 | Method | Parameters | Description |
 |--------|------------|-------------|
-| `init(config?)` | `SuFontSizeConfig` | Initialize with custom configuration |
-| `setSize(size, persist?)` | `FontSize, boolean` | Change font size (persist defaults to true) |
-| `getSize()` | - | Returns current font size |
-| `increase()` | - | Increase to next larger size |
-| `decrease()` | - | Decrease to next smaller size |
+| `configure(config?)` | `Partial<FontSizeConfig>` | Update limits, step, storage key or CSS variable name. Omitted values keep their current setting. |
+| `init()` | - | Load the saved size (or the default) and apply it. Call once at startup. |
+| `setFontSize(size)` | `number` | Set, apply and save a size (clamped to the limits) |
+| `increase(step?)` | `number` | Increase by `step` (defaults to the configured step) |
+| `decrease(step?)` | `number` | Decrease by `step` (defaults to the configured step) |
+| `reset()` | - | Return to the default size and remove the saved value |
 
 ### Types
 
 ```typescript
-type FontSize = 'small' | 'normal' | 'large' | 'x-large';
-
-interface SuFontSizeConfig {
-  storageKey?: string;           // Default: 'su:fontSize'
-  cssVarPrefix?: string;         // Default: '--su-font-size-'
-  defaultSize?: FontSize;        // Default: 'normal'
-  sizes?: {
-    [key in FontSize]?: string;  // Custom pixel/rem values
-  };
-}
+type FontSizeConfig = {
+  defaultSize: number;
+  minSize: number;
+  maxSize: number;
+  step: number;
+  storageKey?: string;
+  cssVarName?: string;
+};
 ```
 
 ## Configuration Options
 
 | Option | Description | Default Value |
 |--------|-------------|---------------|
-| `storageKey` | The key used to persist font size in `localStorage` | `'su:fontSize'` |
-| `cssVarPrefix` | Prefix for CSS variables | `'--su-font-size-'` |
-| `defaultSize` | Default font size if none saved | `'normal'` |
-| `sizes` | Custom size values (px, rem, em) | `{ small: '14px', normal: '16px', large: '18px', 'x-large': '20px' }` |
+| `defaultSize` | Size used before the user picks one, and after `reset()` | `14` |
+| `minSize` | Smallest allowed size | `10` |
+| `maxSize` | Largest allowed size | `22` |
+| `step` | Pixels added or removed by `increase()` / `decrease()` | `2` |
+| `storageKey` | The key used to persist the size in `localStorage` | `'su:font-size'` |
+| `cssVarName` | CSS custom property set on `<html>` | `'--base-font-size'` |
+
+Invalid combinations are corrected: a maximum below the minimum is raised to the minimum, the default is clamped to the range, and a step of zero or less becomes `1`.
 
 ## Accessibility
 
@@ -301,7 +262,7 @@ Make sure localStorage is enabled and not blocked by privacy settings.
 
 ### CSS variables not updating?
 
-Ensure you're using the correct prefix in your CSS (`--su-font-size-` by default) and that you've initialized the service.
+Ensure you're using the correct variable name in your CSS (`--base-font-size` by default) and that you've called `init()`.
 
 ### Layout breaking at larger sizes?
 

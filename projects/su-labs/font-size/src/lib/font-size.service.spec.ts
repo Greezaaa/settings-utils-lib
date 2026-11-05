@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { FontSizeService } from './font-size.service';
 
+// Size logic is tested in @su-labs/core/font-size; these tests cover the Angular wrapper.
 describe('FontSizeService', () => {
   let service: FontSizeService;
 
@@ -10,70 +11,52 @@ describe('FontSizeService', () => {
     service.init();
   });
 
-  // --- Initialization & defaults ---
-  it('should start with default size', () => {
+  it('should expose the default size and limits as signals', () => {
     expect(service.fontSize()).toBe(14);
     expect(service.isDefault()).toBe(true);
+    expect([service.minSize(), service.maxSize(), service.step()]).toEqual([10, 22, 2]);
   });
 
-  // --- Configuration ---
-  it('should apply custom configuration', () => {
+  it('should sync configuration into the signals', () => {
     service.configure({ minSize: 8, maxSize: 30, defaultSize: 20, step: 5 });
+
     expect(service.minSize()).toBe(8);
     expect(service.maxSize()).toBe(30);
     expect(service.defaultSize()).toBe(20);
     expect(service.step()).toBe(5);
   });
 
-  it('should respect custom storage key', () => {
-    service.configure({ storageKey: 'custom:key' });
-    service.setFontSize(20);
-    expect(localStorage.getItem('custom:key')).toBe('20');
-  });
-
-  // --- Font size changes ---
-  it('should increase by default step', () => {
-    service.increase();
-    expect(service.fontSize()).toBe(16);
-  });
-
-  it('should respect custom step', () => {
-    service.increase(5);
-    expect(service.fontSize()).toBe(19);
-  });
-
-  it('should not exceed max size', () => {
-    service.fontSize.set(22);
-    service.increase();
+  it('should update the size signal and computed flags', () => {
+    service.setFontSize(22);
     expect(service.fontSize()).toBe(22);
     expect(service.isMax()).toBe(true);
-  });
 
-  it('should not go below min size', () => {
-    service.fontSize.set(10);
-    service.decrease();
-    expect(service.fontSize()).toBe(10);
+    service.setFontSize(10);
     expect(service.isMin()).toBe(true);
   });
 
-  // --- Persistence ---
-  it('should read from localStorage on init', () => {
-    localStorage.setItem('su:font-size', '18');
-    service.init();
-    expect(service.fontSize()).toBe(18);
-  });
-
-  it('should write to localStorage on font size change', () => {
-    service.increase();
-    expect(localStorage.getItem('su:font-size')).toBe('16');
-  });
-
-  // --- Reset ---
-  it('should reset to default size and clear storage', () => {
+  it('should increase and decrease by the configured or given step', () => {
     service.increase();
     expect(service.fontSize()).toBe(16);
+
+    service.decrease(4);
+    expect(service.fontSize()).toBe(12);
+  });
+
+  it('should start from a size written directly to the signal', () => {
+    service.fontSize.set(20);
+
+    service.increase();
+
+    expect(service.fontSize()).toBe(22);
+  });
+
+  it('should reset to the default size and clear storage', () => {
+    service.increase();
+
     service.reset();
+
     expect(service.fontSize()).toBe(14);
-    expect(localStorage.getItem('app:font-size')).toBeNull();
+    expect(localStorage.getItem('su:font-size')).toBeNull();
   });
 });

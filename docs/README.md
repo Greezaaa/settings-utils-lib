@@ -22,7 +22,7 @@ Utilities are being moved into `@su-labs/core` one at a time. Until a utility is
 | Utility | `@su-labs/core` (any environment) | Angular package |
 |---------|-----------------------------------|-----------------|
 | Theme | `@su-labs/core/theme` | `@su-labs/theme` |
-| Font size | Planned | `@su-labs/font-size` |
+| Font size | `@su-labs/core/font-size` | `@su-labs/font-size` |
 | Notifications | `@su-labs/core/notifications` | `@su-labs/notifications` |
 | Scroll spy | `@su-labs/core/scroll-spy` | `@su-labs/scroll-spy` |
 | Visit tracker | Planned | `@su-labs/visit-tracker` |
@@ -31,7 +31,7 @@ Utilities are being moved into `@su-labs/core` one at a time. Until a utility is
 
 The full API of each utility is documented in its package README:
 
-- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, notifications, scroll spy)
+- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, scroll spy)
 - [`@su-labs/theme`](../projects/su-labs/theme/README.md)
 - [`@su-labs/font-size`](../projects/su-labs/font-size/README.md)
 - [`@su-labs/notifications`](../projects/su-labs/notifications/README.md)
