@@ -37,6 +37,10 @@ export const npmUrl = (packageName: string): string => `https://www.npmjs.com/pa
 export const marketplaceUrl = (extensionId: string): string =>
   `https://marketplace.visualstudio.com/items?itemName=${extensionId}`;
 
+/** GitHub Releases of one package, found by its tag prefix, e.g. `ts-one-line-imports` for `ts-one-line-imports-v1.0.0` */
+export const githubReleasesUrl = (tagPrefix: string): string =>
+  `${GITHUB_REPO_URL}/releases?q=${encodeURIComponent(tagPrefix)}&expanded=true`;
+
 /** Open VSX page of an extension (Cursor, VSCodium and other editors), by its `publisher.name` ID */
 export const openVsxUrl = (extensionId: string): string => `https://open-vsx.org/extension/${extensionId.replace('.', '/')}`;
 

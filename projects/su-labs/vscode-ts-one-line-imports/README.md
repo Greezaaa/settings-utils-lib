@@ -54,6 +54,8 @@ Or from a terminal:
 code --install-extension su-labs.ts-one-line-imports
 ```
 
+To install it offline or in an editor without either store, download the `.vsix` of any version from [GitHub Releases](https://github.com/Greezaaa/settings-utils-lib/releases?q=ts-one-line-imports&expanded=true), check it against the SHA-256 in the release notes, then use **Install from VSIX...** in the Extensions view.
+
 ## Setup
 
 Make it the default formatter for TypeScript and JavaScript once, in your **user** settings (`Cmd+Shift+P` → **Preferences: Open User Settings (JSON)**), so it applies to every project:

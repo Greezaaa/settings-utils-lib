@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { openVsxUrl, readmeUrl, registryLink, RegistryLink } from '../../core/links';
+import { githubReleasesUrl, openVsxUrl, readmeUrl, registryLink, RegistryLink } from '../../core/links';
 import { PRETTIER_PLUGIN, SuPackage, VSCODE_EXTENSION } from '../../core/packages';
 import { CodeBlock } from '../../shared/code-block';
 import { CodeTab, CodeTabs } from '../../shared/code-tabs';
@@ -111,4 +111,6 @@ export class OneLineImportsPage {
   protected readonly setup = SETUP;
   protected readonly projectModes = PROJECT_MODES;
   protected readonly openVsxUrl = openVsxUrl(VSCODE_EXTENSION.packageName);
+  /** The extension's releases, tagged `ts-one-line-imports-v<version>`, each with its `.vsix` attached */
+  protected readonly vsixDownloadUrl = githubReleasesUrl('ts-one-line-imports');
 }

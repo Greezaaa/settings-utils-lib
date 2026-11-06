@@ -2,7 +2,7 @@
 	"name": "ts-one-line-imports",
 	"displayName": "TS One-Line Imports",
 	"description": "Formats TypeScript and JavaScript with each project's own Prettier config and keeps every import on a single line. Projects without Prettier only get their imports joined.",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "su-labs",
 	"icon": "images/icon.png",
 	"preview": true,
