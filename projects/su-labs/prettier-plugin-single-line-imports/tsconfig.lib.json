@@ -6,6 +6,8 @@
     "target": "ES2020",
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    // Source imports use `.ts` so Node can load it directly (prettier.config.js does); the build rewrites them to `.js`
+    "rewriteRelativeImportExtensions": true,
     "strict": true,
     "noImplicitReturns": true,
     "noImplicitOverride": true,

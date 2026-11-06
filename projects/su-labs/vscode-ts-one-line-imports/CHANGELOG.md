@@ -1,0 +1,18 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2026-11-06
+
+### Added
+- Formatter for TypeScript and JavaScript (`.ts`, `.tsx`, `.js`, `.jsx`, `.mts`, `.cts`, `.mjs`, `.cjs`) that keeps every `import` on a single line
+- Projects with a Prettier config are formatted with that config: options, overrides, `.editorconfig`, `.prettierignore` and the project's own plugins
+- Projects with Prettier installed but no config get Prettier's defaults
+- Projects without Prettier, or whose Prettier plugins aren't installed, only get their imports joined; the rest of the code is left untouched
+- Imports that contain comments are left as they are, so a `//` comment can never swallow code
+- Syntax errors leave the file unchanged; details go to the "TS One-Line Imports" output channel
+- Bundles Prettier 3 and `@su-labs/prettier-plugin-single-line-imports`, so nothing has to be installed in the projects
+- Disabled in Restricted Mode, because loading a project's Prettier config runs that project's code

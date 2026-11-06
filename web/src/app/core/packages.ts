@@ -1,13 +1,18 @@
+/** Where a package is published */
+export type SuRegistry = 'npm' | 'vscode-marketplace';
+
 /** A published package, identified by its folder under `projects/su-labs` */
 export interface SuPackage {
   /** Folder name and URL segment, e.g. `font-size` */
   readonly slug: string;
   /** Display name, e.g. `Font size` */
   readonly name: string;
-  /** npm package name */
+  /** Name in its registry: the npm package name, or `publisher.name` for a VS Code extension */
   readonly packageName: string;
   /** One-line description */
   readonly summary: string;
+  /** Where it's published; npm unless set */
+  readonly registry?: SuRegistry;
 }
 
 /** A utility that ships both as an Angular package and as a `@su-labs/core` entry point */
@@ -63,8 +68,28 @@ export const UTILITIES: readonly SuUtility[] = [
   },
 ];
 
-/** Every package with a changelog: core first, then the utilities */
-export const ALL_PACKAGES: readonly SuPackage[] = [CORE_PACKAGE, ...UTILITIES];
+/** Prettier plugin that keeps every import on one line, added to a project */
+export const PRETTIER_PLUGIN: SuPackage = {
+  slug: 'prettier-plugin-single-line-imports',
+  name: 'Prettier plugin',
+  packageName: '@su-labs/prettier-plugin-single-line-imports',
+  summary: 'Keeps every import on one line in a project, for everyone and every tool that runs Prettier.',
+};
+
+/** VS Code extension that keeps every import on one line in every project you open */
+export const VSCODE_EXTENSION: SuPackage = {
+  slug: 'vscode-ts-one-line-imports',
+  name: 'TS One-Line Imports',
+  packageName: 'su-labs.ts-one-line-imports',
+  summary: 'Keeps every import on one line in every project you open in VS Code, using each project’s own Prettier config.',
+  registry: 'vscode-marketplace',
+};
+
+/** Developer tools, in the order they appear on the site */
+export const TOOLS: readonly SuPackage[] = [VSCODE_EXTENSION, PRETTIER_PLUGIN];
+
+/** Every package with a changelog: core first, then the utilities, then the tools */
+export const ALL_PACKAGES: readonly SuPackage[] = [CORE_PACKAGE, ...UTILITIES, ...TOOLS];
 
 /** Find a package by slug */
 export const findPackage = (slug: string): SuPackage | undefined => ALL_PACKAGES.find((item) => item.slug === slug);

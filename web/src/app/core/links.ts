@@ -1,3 +1,5 @@
+import type { SuPackage } from './packages';
+
 /** Public address of this website, without a trailing slash (also used in index.html and robots.txt) */
 export const SITE_URL = 'https://su-labs.dev';
 
@@ -30,3 +32,23 @@ export const changelogRawUrl = (folder: string): string => `${RAW_MAIN_URL}/proj
 
 /** npm page of a package */
 export const npmUrl = (packageName: string): string => `https://www.npmjs.com/package/${packageName}`;
+
+/** VS Code Marketplace page of an extension, by its `publisher.name` ID */
+export const marketplaceUrl = (extensionId: string): string =>
+  `https://marketplace.visualstudio.com/items?itemName=${extensionId}`;
+
+/** Open VSX page of an extension (Cursor, VSCodium and other editors), by its `publisher.name` ID */
+export const openVsxUrl = (extensionId: string): string => `https://open-vsx.org/extension/${extensionId.replace('.', '/')}`;
+
+/** A link to where a package is published */
+export interface RegistryLink {
+  readonly label: string;
+  readonly url: string;
+}
+
+/** Link to a package in the registry it's published to */
+export function registryLink({ packageName, registry = 'npm' }: SuPackage): RegistryLink {
+  return registry === 'vscode-marketplace'
+    ? { label: 'VS Code Marketplace', url: marketplaceUrl(packageName) }
+    : { label: 'npm', url: npmUrl(packageName) };
+}

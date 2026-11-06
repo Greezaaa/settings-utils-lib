@@ -1,0 +1,89 @@
+<header class="container page-head">
+  <div class="page-meta">
+    @for (option of options; track option.item.slug) {
+      <span class="tag">{{ option.item.packageName }}</span>
+    }
+  </div>
+  <h1>One-line imports</h1>
+  <p class="lead">
+    Every TypeScript and JavaScript import on a single line, whatever its length. Everything else is formatted as
+    before. For teams who miss TypeScript Hero.
+  </p>
+</header>
+
+<section class="container page-section" appReveal aria-labelledby="result-title">
+  <h2 id="result-title" class="section-title">The result</h2>
+  <div class="comparison">
+    <div>
+      <p class="eyebrow">Never this</p>
+      <app-code-block [code]="before" />
+    </div>
+    <div>
+      <p class="eyebrow">Always this</p>
+      <app-code-block [code]="after" />
+    </div>
+  </div>
+  <p class="muted">
+    Imports with a comment inside are left as they are, so a <code>//</code> comment can never swallow code.
+  </p>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="options-title">
+  <h2 id="options-title" class="section-title">Two ways to use it</h2>
+  <p class="muted section-intro">Use one or both: the extension recognizes the plugin when a project already has it.</p>
+  <div class="options">
+    @for (option of options; track option.item.slug; let index = $index) {
+      <article class="card option" appReveal [style.--index]="index">
+        <h3>{{ option.title }}</h3>
+        <p class="muted">{{ option.summary }}</p>
+        <ul class="points">
+          @for (point of option.points; track point) {
+            <li>{{ point }}</li>
+          }
+        </ul>
+        <app-code-block [code]="option.install" />
+        <nav class="page-links" [attr.aria-label]="option.title + ' links'">
+          <a [href]="option.registry.url" target="_blank" rel="noopener">{{ option.registry.label }}</a>
+          <a [href]="option.readme" target="_blank" rel="noopener">Documentation</a>
+          <a [routerLink]="['/changelog', option.item.slug]">Changelog</a>
+        </nav>
+      </article>
+    }
+  </div>
+  <p class="muted">
+    Using Cursor, VSCodium or another editor without the VS Code Marketplace? The extension is also on
+    <a [href]="openVsxUrl" target="_blank" rel="noopener">Open VSX</a>.
+  </p>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="choose-title">
+  <h2 id="choose-title" class="section-title">Which one?</h2>
+  <p>
+    <strong>Just you, across many projects:</strong> the extension. <strong>A shared project with CI, git hooks or
+    ESLint:</strong> add the plugin to the project too, otherwise those tools wrap the imports again.
+  </p>
+  <p class="muted">What the extension does in each project:</p>
+  <div class="table-scroll">
+    <table class="modes">
+      <thead>
+        <tr>
+          <th scope="col">The project has</th>
+          <th scope="col">Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (mode of projectModes; track mode.project) {
+          <tr>
+            <td>{{ mode.project }}</td>
+            <td class="muted">{{ mode.result }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="setup-title">
+  <h2 id="setup-title" class="section-title">Setup</h2>
+  <app-code-tabs [tabs]="setup" />
+</section>

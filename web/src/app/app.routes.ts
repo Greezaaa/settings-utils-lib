@@ -38,6 +38,15 @@ export const routes: Routes = [
     data: utilityMeta('visit-tracker'),
     loadComponent: () => import('./pages/visit-tracker/visit-tracker-page').then((m) => m.VisitTrackerPage),
   },
+  {
+    path: 'one-line-imports',
+    title: `One-line imports · ${SITE_NAME}`,
+    data: {
+      description:
+        'Keep every TypeScript and JavaScript import on one line: a VS Code extension for every project you open, and a Prettier plugin for your team and CI.',
+    },
+    loadComponent: () => import('./pages/one-line-imports/one-line-imports-page').then((m) => m.OneLineImportsPage),
+  },
   { path: 'changelog', redirectTo: 'changelog/core', pathMatch: 'full' },
   {
     path: 'changelog/:slug',

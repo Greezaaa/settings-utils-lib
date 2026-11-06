@@ -2,7 +2,22 @@
 
 <header class="site-header">
   <div class="container header-bar">
-    <a routerLink="/" class="brand" aria-label="su-labs home">su-labs</a>
+    <a routerLink="/" class="brand" aria-label="su-labs home">
+      <!-- Same mark as public/favicon.svg, colored by the site theme -->
+      <svg class="brand-logo" viewBox="0 0 128 128" aria-hidden="true">
+        <rect class="brand-tile" width="128" height="128" rx="28" />
+        <g class="brand-mark" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 32C31 32 30 38 30 48v8c0 5-3 8-8 8 5 0 8 3 8 8v8c0 10 1 16 10 16" />
+          <path d="M88 32c9 0 10 6 10 16v8c0 5 3 8 8 8-5 0-8 3-8 8v8c0 10-1 16-10 16" />
+        </g>
+        <g class="brand-ghost" stroke-width="7" stroke-linecap="round">
+          <path d="M48 44h20" />
+          <path d="M48 84h26" />
+        </g>
+        <path class="brand-mark" d="M48 64h32" stroke-width="9" stroke-linecap="round" />
+      </svg>
+      su-labs
+    </a>
 
     <div class="header-controls">
       <div class="text-size" role="group" aria-label="Text size">
@@ -51,6 +66,7 @@
     @for (utility of utilities; track utility.slug) {
       <a [routerLink]="['/', utility.slug]" routerLinkActive="active">{{ utility.name }}</a>
     }
+    <a routerLink="/one-line-imports" routerLinkActive="active">One-line imports</a>
     <a routerLink="/changelog" routerLinkActive="active">Changelog</a>
   </nav>
 </header>

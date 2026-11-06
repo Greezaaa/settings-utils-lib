@@ -31,11 +31,32 @@
 }
 
 .brand {
+  align-items: center;
   color: var(--heading);
+  display: inline-flex;
   font-family: var(--font-serif);
   font-size: 1.625rem;
+  gap: 0.5rem;
   letter-spacing: -0.02em;
   text-decoration: none;
+}
+
+.brand-logo {
+  flex-shrink: 0;
+  height: 1.75rem;
+  width: 1.75rem;
+}
+
+.brand-tile {
+  fill: var(--heading);
+}
+
+.brand-mark {
+  stroke: var(--bg);
+}
+
+.brand-ghost {
+  stroke: color-mix(in srgb, var(--bg) 25%, var(--heading));
 }
 
 .header-controls,

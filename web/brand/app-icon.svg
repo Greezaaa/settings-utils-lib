@@ -1,0 +1,18 @@
+<!--
+  Source of the full-bleed app icons in web/public: icon-512.png, icon-192.png and apple-touch-icon.png.
+  Same mark as favicon.svg, centered with room around it so masks and rounded corners never cut it.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" fill="#111111" />
+  <g transform="translate(64 64) scale(0.62) translate(-64 -64)">
+    <g fill="none" stroke="#fbfbfa" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40 32C31 32 30 38 30 48v8c0 5-3 8-8 8 5 0 8 3 8 8v8c0 10 1 16 10 16" />
+      <path d="M88 32c9 0 10 6 10 16v8c0 5 3 8 8 8-5 0-8 3-8 8v8c0 10-1 16-10 16" />
+    </g>
+    <g stroke="#3a3a3a" stroke-width="7" stroke-linecap="round">
+      <path d="M48 44h20" />
+      <path d="M48 84h26" />
+    </g>
+    <path d="M48 64h32" stroke="#fbfbfa" stroke-width="9" stroke-linecap="round" />
+  </g>
+</svg>

@@ -16,7 +16,7 @@
       <h2 class="mono">{{ selected().packageName }}</h2>
       <p class="links">
         <a [href]="links().github" target="_blank" rel="noopener">View on GitHub</a>
-        <a [href]="links().npm" target="_blank" rel="noopener">npm</a>
+        <a [href]="links().registry.url" target="_blank" rel="noopener">{{ links().registry.label }}</a>
       </p>
     </div>
 

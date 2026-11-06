@@ -34,6 +34,28 @@
 
 <section class="container section">
   <div class="section-head" appReveal>
+    <p class="eyebrow">Developer tools</p>
+    <h2>Imports on one line, in every project.</h2>
+    <p class="muted">
+      For teams who miss TypeScript Hero: a VS Code extension for your editor and a Prettier plugin for your projects.
+    </p>
+  </div>
+  <a class="card utility-card tool-card" routerLink="/one-line-imports" appReveal>
+    <h3>One-line imports</h3>
+    <p class="muted">
+      Keeps every TypeScript and JavaScript import on a single line and formats the rest with each project’s own
+      Prettier config.
+    </p>
+    <p class="utility-packages mono">
+      @for (tool of tools; track tool.slug) {
+        {{ tool.packageName }}<br />
+      }
+    </p>
+  </a>
+</section>
+
+<section class="container section">
+  <div class="section-head" appReveal>
     <p class="eyebrow">Two ways in</p>
     <h2>Angular packages or a framework-agnostic core.</h2>
     <p class="muted">

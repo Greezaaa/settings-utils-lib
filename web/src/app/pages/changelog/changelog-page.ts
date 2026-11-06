@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { changelogResource } from '../../changelog/changelog.resource';
 import { ReleaseList } from '../../changelog/release-list';
-import { changelogUrl, npmUrl } from '../../core/links';
+import { changelogUrl, registryLink } from '../../core/links';
 import { ALL_PACKAGES, CORE_PACKAGE, findPackage } from '../../core/packages';
 
 /**
@@ -25,6 +25,6 @@ export class ChangelogPage {
   protected readonly changelog = changelogResource(() => this.selected().slug);
   protected readonly links = computed(() => ({
     github: changelogUrl(this.selected().slug),
-    npm: npmUrl(this.selected().packageName),
+    registry: registryLink(this.selected()),
   }));
 }
