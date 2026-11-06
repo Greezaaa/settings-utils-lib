@@ -1,0 +1,44 @@
+{
+	"name": "@su-labs/prettier-plugin-single-line-imports",
+	"version": "1.0.0",
+	"description": "Prettier plugin that keeps every import on a single line, whatever its length. Everything else is formatted by Prettier as usual.",
+	"keywords": [
+		"prettier",
+		"prettier-plugin",
+		"imports",
+		"single-line",
+		"printWidth",
+		"typescript",
+		"angular",
+		"formatting",
+		"typescript-hero"
+	],
+	"homepage": "https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/prettier-plugin-single-line-imports#readme",
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/prettier-plugin-single-line-imports"
+	},
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"type": "module",
+	"main": "./index.js",
+	"types": "./index.d.ts",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"default": "./index.js"
+		}
+	},
+	"peerDependencies": {
+		"prettier": "^3.0.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

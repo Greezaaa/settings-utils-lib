@@ -15,20 +15,11 @@
     "build:font-size": "ng build @su-labs/font-size --configuration production",
     "build:scroll-spy": "ng build @su-labs/scroll-spy --configuration production",
     "build:visit-tracker": "ng build @su-labs/visit-tracker --configuration production",
-    "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker",
+    "build:prettier-single-line-imports": "tsc -p projects/su-labs/prettier-plugin-single-line-imports/tsconfig.lib.json && cd projects/su-labs/prettier-plugin-single-line-imports && cp package.json README.md CHANGELOG.md LICENSE ../../../dist/su-labs/prettier-plugin-single-line-imports/",
+    "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:scroll-spy && npm run build:font-size && npm run build:visit-tracker && npm run build:prettier-single-line-imports",
     "start:web": "ng serve web",
     "build:web": "ng build web && node web/scripts/postbuild.mjs",
     "deploy:web": "npm run build:web && rsync -a --delete dist/web/browser/ su-labs-server:/home/ubuntu/su-labs-site/ && echo \"Deployed to https://su-labs.dev/\""
-  },
-  "prettier": {
-    "overrides": [
-      {
-        "files": "*.html",
-        "options": {
-          "parser": "angular"
-        }
-      }
-    ]
   },
   "private": false,
   "dependencies": {
@@ -49,6 +40,7 @@
     "@angular/compiler-cli": "^22.2.4",
     "@testing-library/angular": "^18.0.0",
     "@testing-library/jest-dom": "^6.7.0",
+    "@types/node": "^24.19.2",
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "@vitest/coverage-v8": "^4.0.0",
     "angular-eslint": "22.6.0",
