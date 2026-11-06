@@ -3,6 +3,9 @@ import type { SuPackage } from './packages';
 /** Public address of this website, without a trailing slash (also used in index.html and robots.txt) */
 export const SITE_URL = 'https://su-labs.dev';
 
+/** The games site, a separate app in this workspace (see games/) */
+export const GAMES_URL = 'https://games.su-labs.dev/';
+
 /** Image shown when a page is shared (1200x630, in web/public) */
 export const SITE_PREVIEW_IMAGE_URL = `${SITE_URL}/og-image.png`;
 

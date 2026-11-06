@@ -40,24 +40,34 @@
   <!--
     Apply the saved theme and text size before the first paint, so the page doesn't flash
     from the default to the visitor's choice while the app loads. The app then takes over.
-    Keys must match SiteTheme.storageKey and the font size storageKey in core/site-setup.ts.
+    Both values live in cookies shared with the other su-labs site; keys must match core/shared-settings.ts.
   -->
   <script>
     (function () {
       var root = document.documentElement;
+      function readSetting(key) {
+        var name = encodeURIComponent(key) + '=';
+        var cookies = document.cookie.split('; ');
+        for (var i = 0; i < cookies.length; i++) {
+          if (cookies[i].indexOf(name) === 0) {
+            return decodeURIComponent(cookies[i].slice(name.length));
+          }
+        }
+        return null;
+      }
       try {
-        var theme = localStorage.getItem('su-labs-site:theme');
+        var theme = readSetting('su-labs:theme');
         if (!theme || theme === 'system') {
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         root.setAttribute('data-theme', theme);
 
-        var fontSize = Number(localStorage.getItem('su-labs-site:font-size'));
+        var fontSize = Number(readSetting('su-labs:font-size'));
         if (fontSize >= 12 && fontSize <= 22) {
           root.style.setProperty('--base-font-size', fontSize + 'px');
         }
       } catch (error) {
-        // Storage blocked: the app applies the defaults once it starts
+        // Cookies blocked: the app applies the defaults once it starts
       }
     })();
   </script>

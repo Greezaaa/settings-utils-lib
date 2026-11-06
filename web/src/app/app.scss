@@ -135,8 +135,16 @@
   }
 }
 
+// Header, page and footer in a column at least one screen tall: the page takes the free space,
+// so the footer sits at the bottom of short pages whatever its height (it grows with the text size setting)
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
 main {
-  min-height: 70vh;
+  flex: 1;
 }
 
 .site-footer {

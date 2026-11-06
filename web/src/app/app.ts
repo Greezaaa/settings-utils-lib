@@ -3,7 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
-import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, GUIDES_URL, npmUrl } from './core/links';
+import { AUTHOR_EMAIL_URL, GAMES_URL, GITHUB_REPO_URL, GUIDES_URL, npmUrl } from './core/links';
 import { CORE_PACKAGE, UTILITIES } from './core/packages';
 import { SiteTheme } from './core/site-theme';
 
@@ -26,6 +26,7 @@ export class App {
   protected readonly githubUrl = GITHUB_REPO_URL;
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly guidesUrl = GUIDES_URL;
+  protected readonly gamesUrl = GAMES_URL;
   protected readonly npmCoreUrl = npmUrl(CORE_PACKAGE.packageName);
   protected readonly year = new Date().getFullYear();
 

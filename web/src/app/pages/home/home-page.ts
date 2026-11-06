@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { guideUrl, GUIDES_URL } from '../../core/links';
+import { GAMES_URL, guideUrl, GUIDES_URL } from '../../core/links';
 import { TOOLS, UTILITIES } from '../../core/packages';
 import { CodeBlock } from '../../shared/code-block';
 import { Reveal } from '../../shared/reveal';
@@ -40,6 +40,7 @@ export class HomePage {
   protected readonly tools = TOOLS;
   protected readonly environments = ENVIRONMENTS.map((environment) => ({ ...environment, url: guideUrl(environment.guide) }));
   protected readonly guidesUrl = GUIDES_URL;
+  protected readonly gamesUrl = GAMES_URL;
   protected readonly angularExample = ANGULAR_EXAMPLE;
   protected readonly coreExample = CORE_EXAMPLE;
 }

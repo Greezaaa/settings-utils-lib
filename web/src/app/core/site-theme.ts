@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { SuThemeConfig, SuThemeName, SuThemeService, ThemeCssVariables } from '@su-labs/theme';
+import { SHARED_SETTINGS } from './shared-settings';
 
 /** Theme colors of the site, applied by @su-labs/theme as --su-theme-* variables */
 const SITE_THEMES: NonNullable<SuThemeConfig['themes']> = {
@@ -40,8 +41,8 @@ export class SiteTheme {
   /** The option the visitor picked, may be 'system' */
   readonly preference = this.preferenceSignal.asReadonly();
 
-  /** localStorage key of the saved preference (also read by the inline script in index.html) */
-  readonly storageKey = 'su-labs-site:theme';
+  /** Key of the saved preference, shared with the other su-labs site (also read by the inline script in index.html) */
+  readonly storageKey = SHARED_SETTINGS.themeKey;
 
   /** The theme actually shown ('light', 'dark' or 'contrast') */
   readonly resolved = this.themeService.theme;
@@ -70,6 +71,6 @@ export class SiteTheme {
   }
 
   private config(themes: SuThemeConfig['themes']): SuThemeConfig {
-    return { defaultTheme: 'system', storageKey: this.storageKey, themes };
+    return { defaultTheme: 'system', storage: SHARED_SETTINGS.storage, storageKey: this.storageKey, themes };
   }
 }

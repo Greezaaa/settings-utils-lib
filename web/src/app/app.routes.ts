@@ -1,5 +1,12 @@
-import { Routes } from '@angular/router';
+import { Route, Routes } from '@angular/router';
 import { SITE_META, SITE_NAME, utilityMeta } from './core/page-meta';
+
+/** The not-found page: prerendered at /404 (copied to 404.html after the build) and shown for unknown links */
+const notFound = {
+  title: `Page not found · ${SITE_NAME}`,
+  data: { description: 'This page doesn’t exist.', noIndex: true },
+  loadComponent: () => import('./pages/not-found/not-found-page').then((m) => m.NotFoundPage),
+} satisfies Omit<Route, 'path'>;
 
 export const routes: Routes = [
   {
@@ -54,5 +61,6 @@ export const routes: Routes = [
     data: { description: 'Release notes for every @su-labs package, read live from each CHANGELOG.md on GitHub.' },
     loadComponent: () => import('./pages/changelog/changelog-page').then((m) => m.ChangelogPage),
   },
-  { path: '**', redirectTo: '' },
+  { path: '404', ...notFound },
+  { path: '**', ...notFound },
 ];

@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationService } from '@su-labs/notifications';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
+import { SHARED_SETTINGS } from './shared-settings';
 import { SiteTheme } from './site-theme';
 
 /** localStorage key for the site's visit data, also used by the visit tracker demo */
@@ -18,8 +19,15 @@ export function setUpSite(): void {
   inject(SiteTheme).init();
 
   const fontSize = inject(FontSizeService);
-  // Storage key and limits are also read by the inline script in index.html
-  fontSize.configure({ defaultSize: 16, minSize: 12, maxSize: 22, step: 2, storageKey: 'su-labs-site:font-size' });
+  // Shared with the other su-labs site; key and limits are also read by the inline script in index.html
+  fontSize.configure({
+    defaultSize: 16,
+    minSize: 12,
+    maxSize: 22,
+    step: 2,
+    storage: SHARED_SETTINGS.storage,
+    storageKey: SHARED_SETTINGS.fontSizeKey,
+  });
   fontSize.init();
 
   const notifications = inject(SuNotificationService);

@@ -1,0 +1,33 @@
+<header class="container page-head">
+  <p class="error-code" aria-hidden="true"><span class="brace">&#123;</span>404<span class="brace">&#125;</span></p>
+  <h1 class="not-found-title">This page doesn’t exist.</h1>
+  <p class="lead">
+    The link may be old or mistyped.
+    <br />
+    Everything on su-labs is one click away from here.
+  </p>
+  <div class="button-row">
+    <a class="button" routerLink="/">Back to home</a>
+    <a class="button button-secondary" routerLink="/changelog">Changelog</a>
+  </div>
+</header>
+
+<section class="container page-section" aria-labelledby="not-found-links">
+  <h2 id="not-found-links" class="section-title">Looking for one of these?</h2>
+  <ul class="destinations">
+    @for (utility of utilities; track utility.slug) {
+      <li>
+        <a [routerLink]="['/', utility.slug]">{{ utility.name }}</a>
+        <span class="muted">{{ utility.summary }}</span>
+      </li>
+    }
+    <li>
+      <a routerLink="/one-line-imports">One-line imports</a>
+      <span class="muted">Keep every TypeScript and JavaScript import on one line.</span>
+    </li>
+    <li>
+      <a [href]="gamesUrl">Smart games</a>
+      <span class="muted">Free math games for kids, on games.su-labs.dev.</span>
+    </li>
+  </ul>
+</section>

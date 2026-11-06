@@ -7,6 +7,8 @@ import { getUtility } from './packages';
 /** Search and link-preview data of a page, set as route `data` */
 export interface PageMeta {
   readonly description: string;
+  /** Keep the page out of search results, e.g. the not-found page */
+  readonly noIndex?: boolean;
 }
 
 export const SITE_NAME = 'su-labs';
@@ -35,11 +37,17 @@ export class PageMetaStrategy extends TitleStrategy {
 
   override updateTitle(snapshot: RouterStateSnapshot): void {
     const title = this.buildTitle(snapshot) ?? SITE_NAME;
-    const { description } = deepestMeta(snapshot.root);
+    const { description, noIndex } = deepestMeta(snapshot.root);
     const url = canonicalUrl(snapshot.url);
 
     this.title.setTitle(title);
-    this.setCanonical(url);
+    if (noIndex) {
+      this.meta.updateTag({ name: 'robots', content: 'noindex' }, 'name="robots"');
+      this.document.head.querySelector('link[rel="canonical"]')?.remove();
+    } else {
+      this.meta.removeTag('name="robots"');
+      this.setCanonical(url);
+    }
 
     const tags: Record<string, string> = {
       description,
@@ -77,7 +85,7 @@ function deepestMeta(route: ActivatedRouteSnapshot): PageMeta {
   for (let current: ActivatedRouteSnapshot | null = route; current; current = current.firstChild) {
     const description: unknown = current.data['description'];
     if (typeof description === 'string') {
-      meta = { description };
+      meta = { description, noIndex: current.data['noIndex'] === true };
     }
   }
   return meta;
