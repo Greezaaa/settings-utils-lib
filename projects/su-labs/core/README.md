@@ -18,6 +18,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Notifications](#notifications)
 - [Scroll Spy](#scroll-spy)
 - [Visit Tracker](#visit-tracker)
+- [Storage](#storage)
 - [License](#license)
 
 ## Installation
@@ -75,7 +76,7 @@ unsubscribe();
 
 ## Theme
 
-Manages light, dark, contrast and custom themes, follows the operating system's `prefers-color-scheme` when set to `'system'`, applies a `data-theme` attribute and CSS variables to `<html>`, and saves the user's choice in `localStorage`.
+Manages light, dark, contrast and custom themes, follows the operating system's `prefers-color-scheme` when set to `'system'`, applies a `data-theme` attribute and CSS variables to `<html>`, and saves the user's choice in `localStorage` (or another [storage](#storage)).
 
 ```ts
 import { SuThemeController } from '@su-labs/core/theme';
@@ -103,7 +104,8 @@ theme.setTheme('dark');
 | Option | Default | Description |
 |--------|---------|-------------|
 | `defaultTheme` | `'system'` | Theme used when nothing is saved |
-| `storageKey` | `'su:theme'` | `localStorage` key |
+| `storageKey` | `'su:theme'` | Key the choice is saved under |
+| `storage` | `localStorage` | Where the choice is saved, see [Storage](#storage) |
 | `cssVarPrefix` | `'--su-theme-'` | Prefix for the CSS variables |
 | `themes` | — | Per-theme CSS variable overrides, e.g. `{ dark: { background: '#000' } }` |
 
@@ -122,7 +124,7 @@ a {
 
 ## Font Size
 
-Lets users make text bigger or smaller within set limits. The size is applied in pixels to a CSS custom property on `<html>` and saved in `localStorage`.
+Lets users make text bigger or smaller within set limits. The size is applied in pixels to a CSS custom property on `<html>` and saved in `localStorage` (or another [storage](#storage)).
 
 ```ts
 import { SuFontSizeController } from '@su-labs/core/font-size';
@@ -163,7 +165,8 @@ To disable controls at the edges, compare the two stores, for example `fontSize.
 | `minSize` | `10` | Smallest allowed size |
 | `maxSize` | `22` | Largest allowed size |
 | `step` | `2` | Pixels added or removed by `increase()` / `decrease()` |
-| `storageKey` | `'su:font-size'` | localStorage key for the saved size |
+| `storageKey` | `'su:font-size'` | Key the size is saved under |
+| `storage` | `localStorage` | Where the size is saved, see [Storage](#storage) |
 | `cssVarName` | `'--base-font-size'` | CSS custom property set on `<html>` |
 
 Invalid combinations are corrected: a maximum below the minimum is raised to the minimum, the default is clamped to the range, and a step of zero or less becomes `1`.
@@ -263,6 +266,33 @@ const { count, lastVisit, milestone } = visits.visit.get();
 |--------|---------|-------------|
 | `storageKey` | `'su:visits'` | localStorage key for the visit data |
 | `milestoneVisits` | `[10, 100]` | Visit numbers to flag as milestones |
+
+## Storage
+
+Theme and font size save the user's choice in `localStorage` by default. Pass `storage` to save it somewhere else: anything with `getItem`, `setItem` and `removeItem` (the `SuStorage` interface) works.
+
+`createSuCookieStorage()` saves in cookies instead, so sites on the same parent domain share the setting. A theme picked on `example.com` then also applies on `app.example.com`:
+
+```ts
+import { createSuCookieStorage } from '@su-labs/core';
+import { SuThemeController } from '@su-labs/core/theme';
+import { SuFontSizeController } from '@su-labs/core/font-size';
+
+const shared = createSuCookieStorage({ domain: 'example.com' });
+
+new SuThemeController().init({ storage: shared, storageKey: 'example:theme' });
+
+const fontSize = new SuFontSizeController();
+fontSize.configure({ storage: shared, storageKey: 'example:font-size' });
+fontSize.init();
+```
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `domain` | — | Parent domain to share with. Only used when the page is on that domain, so `localhost` keeps working with cookies of its own |
+| `maxAgeDays` | `365` | Days before a saved value expires |
+
+Cookies are sent with every request to the domain, so keep them to small settings. Use the same `storageKey` on every site that should share a value. Outside a browser the cookie storage reads and writes nothing.
 
 ## License
 

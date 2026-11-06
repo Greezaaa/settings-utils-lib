@@ -1,6 +1,18 @@
+import { SuStorage } from '@su-labs/core';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SuThemeController } from './theme.controller';
 import { SuThemeConfig } from './theme.types';
+
+/** A storage kept in memory, standing in for a custom one such as cookie storage */
+function memoryStorage(initial: Record<string, string> = {}): SuStorage & { readonly values: Map<string, string> } {
+  const values = new Map(Object.entries(initial));
+  return {
+    values,
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => void values.set(key, value),
+    removeItem: (key) => void values.delete(key),
+  };
+}
 
 let matchMediaCallback: ((e: MediaQueryListEvent) => void) | null = null;
 let currentMatches = false;
@@ -61,6 +73,16 @@ describe('SuThemeController', () => {
     service.init();
     service.setTheme('dark');
     expect(localStorage.getItem('su:theme')).toBe('dark');
+  });
+
+  it('should read and save the preference in a configured storage instead of localStorage', () => {
+    const storage = memoryStorage({ 'su:theme': 'dark' });
+    service.init({ storage });
+    expect(service.getTheme()).toBe('dark');
+
+    service.setTheme('contrast');
+    expect(storage.values.get('su:theme')).toBe('contrast');
+    expect(localStorage.getItem('su:theme')).toBeNull();
   });
 
   it('should resolve system theme when preference is "system"', () => {

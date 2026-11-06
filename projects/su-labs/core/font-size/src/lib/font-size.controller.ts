@@ -1,4 +1,4 @@
-import { createSuStore, isBrowser, SuReadableStore } from '@su-labs/core';
+import { createSuStore, getSuLocalStorage, isBrowser, SuReadableStore, SuStorage } from '@su-labs/core';
 import { SuFontSizeConfig, SuFontSizeLimits } from './font-size.types';
 
 /** Limits used until `configure()` changes them */
@@ -13,13 +13,17 @@ const DEFAULT_LIMITS: SuFontSizeLimits = {
  * Framework-agnostic font size manager.
  *
  * Keeps the font size within configured limits, applies it to `<html>` as a CSS
- * custom property (in pixels), persists it in localStorage, and exposes the size
+ * custom property (in pixels), persists it (in localStorage unless another `storage` is
+ * configured), and exposes the size
  * and limits as reactive stores.
  * Safe to import in Node: browser-only work is skipped when there is no DOM.
  */
 export class SuFontSizeController {
-  /** localStorage key for the saved size */
+  /** Key the size is saved under */
   private storageKey = 'su:font-size';
+
+  /** Where the size is saved; `null` means localStorage in a browser */
+  private customStorage: SuStorage | null = null;
 
   /** CSS custom property set on `<html>` */
   private cssVarName = '--base-font-size';
@@ -48,6 +52,7 @@ export class SuFontSizeController {
     const step = config.step ?? current.step;
 
     this.storageKey = config.storageKey || this.storageKey;
+    this.customStorage = config.storage ?? this.customStorage;
     this.cssVarName = config.cssVarName || this.cssVarName;
     this.limitsStore.set({
       defaultSize,
@@ -76,9 +81,7 @@ export class SuFontSizeController {
     const clamped = this.clamp(size);
     this.fontSizeStore.set(clamped);
     this.applyCssVar(clamped);
-    if (isBrowser()) {
-      localStorage.setItem(this.storageKey, String(clamped));
-    }
+    this.storage()?.setItem(this.storageKey, String(clamped));
   }
 
   /**
@@ -102,9 +105,7 @@ export class SuFontSizeController {
     const { defaultSize } = this.limitsStore.get();
     this.fontSizeStore.set(defaultSize);
     this.applyCssVar(defaultSize);
-    if (isBrowser()) {
-      localStorage.removeItem(this.storageKey);
-    }
+    this.storage()?.removeItem(this.storageKey);
   }
 
   /** Clamp a size to the configured range */
@@ -116,9 +117,14 @@ export class SuFontSizeController {
   /** Saved size, or the default when nothing valid is saved or there is no browser */
   private readFromStorage(): number {
     const { defaultSize } = this.limitsStore.get();
-    const stored = isBrowser() ? localStorage.getItem(this.storageKey) : null;
+    const stored = this.storage()?.getItem(this.storageKey);
     const parsed = stored ? Number(stored) : defaultSize;
     return Number.isFinite(parsed) ? parsed : defaultSize;
+  }
+
+  /** The configured storage, or localStorage in a browser */
+  private storage(): SuStorage | null {
+    return this.customStorage ?? getSuLocalStorage();
   }
 
   /** Set the CSS custom property on `<html>` */

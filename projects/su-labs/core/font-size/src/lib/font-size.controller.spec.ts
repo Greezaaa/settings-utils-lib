@@ -1,7 +1,19 @@
+import { SuStorage } from '@su-labs/core';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { SuFontSizeController } from './font-size.controller';
 
 const cssVar = (name = '--base-font-size'): string => document.documentElement.style.getPropertyValue(name);
+
+/** A storage kept in memory, standing in for a custom one such as cookie storage */
+function memoryStorage(initial: Record<string, string> = {}): SuStorage & { readonly values: Map<string, string> } {
+  const values = new Map(Object.entries(initial));
+  return {
+    values,
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => void values.set(key, value),
+    removeItem: (key) => void values.delete(key),
+  };
+}
 
 describe('SuFontSizeController', () => {
   let controller: SuFontSizeController;
@@ -98,6 +110,22 @@ describe('SuFontSizeController', () => {
       controller.increase();
 
       expect(values).toEqual([14, 16]);
+    });
+  });
+
+  describe('storage', () => {
+    it('should read, save and forget the size in a configured storage instead of localStorage', () => {
+      const storage = memoryStorage({ 'su:font-size': '18' });
+      controller.configure({ storage });
+      controller.init();
+      expect(controller.fontSize.get()).toBe(18);
+
+      controller.setFontSize(20);
+      expect(storage.values.get('su:font-size')).toBe('20');
+      expect(localStorage.getItem('su:font-size')).toBeNull();
+
+      controller.reset();
+      expect(storage.values.has('su:font-size')).toBe(false);
     });
   });
 

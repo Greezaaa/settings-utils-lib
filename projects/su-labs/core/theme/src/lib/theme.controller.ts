@@ -1,4 +1,4 @@
-import { createSuStore, isBrowser, SuReadableStore } from '@su-labs/core';
+import { createSuStore, getSuLocalStorage, isBrowser, SuReadableStore, SuStorage } from '@su-labs/core';
 import { SuThemeConfig, SuThemeName, ThemeCssVariables } from './theme.types';
 
 /** Media query used to detect the operating system's dark mode */
@@ -33,7 +33,8 @@ const DEFAULT_THEMES: Record<SuThemeName, ThemeCssVariables> = {
  * Framework-agnostic theme manager.
  *
  * Resolves the active theme (including 'system'), applies it to the document as a
- * `data-theme` attribute and CSS variables, persists the user's choice in localStorage,
+ * `data-theme` attribute and CSS variables, persists the user's choice (in localStorage unless
+ * another `storage` is configured),
  * and exposes the resolved theme as a reactive store.
  * Safe to import in Node: browser-only work is skipped when there is no DOM.
  */
@@ -44,7 +45,7 @@ export class SuThemeController {
   /** CSS variable prefix, can be customized */
   private cssVarPrefix = '--su-theme-';
 
-  /** localStorage key for storing user preference, can be customized */
+  /** Key the user preference is saved under, can be customized */
   private storageKey = 'su:theme';
 
   /** User selected theme (can be 'system') */
@@ -71,7 +72,7 @@ export class SuThemeController {
     this.cssVarPrefix = this.config.cssVarPrefix ?? this.cssVarPrefix;
     this.storageKey = this.config.storageKey ?? this.storageKey;
 
-    const savedPreference = isBrowser() ? (localStorage.getItem(this.storageKey) as SuThemeName | null) : null;
+    const savedPreference = this.storage()?.getItem(this.storageKey) as SuThemeName | null | undefined;
     this.userPreference = savedPreference ?? this.config.defaultTheme ?? 'system';
 
     this.setTheme(this.userPreference, false);
@@ -96,7 +97,7 @@ export class SuThemeController {
   /**
    * Set a new theme.
    * @param theme The theme to set ('light', 'dark', 'contrast', 'custom', 'system').
-   * @param persist Whether to store the preference in localStorage (default: true).
+   * @param persist Whether to save the preference in the configured storage (default: true).
    */
   public setTheme(theme: SuThemeName, persist: boolean = true): void {
     if (theme !== 'system') {
@@ -106,13 +107,18 @@ export class SuThemeController {
     this.userPreference = theme;
     this.applyResolvedTheme(theme === 'system' ? this.resolveSystemTheme() : theme);
 
-    if (persist && isBrowser()) {
-      localStorage.setItem(this.storageKey, theme);
+    if (persist) {
+      this.storage()?.setItem(this.storageKey, theme);
     }
 
     if (theme === 'system') {
       this.listenToSystemChanges();
     }
+  }
+
+  /** The configured storage, or localStorage in a browser */
+  private storage(): SuStorage | null {
+    return this.config.storage ?? getSuLocalStorage();
   }
 
   /** Stop listening to system theme changes and release browser resources */

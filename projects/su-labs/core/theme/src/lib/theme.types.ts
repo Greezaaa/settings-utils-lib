@@ -1,15 +1,23 @@
+import { SuStorage } from '@su-labs/core';
+
 /** Available theme names */
 export type SuThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
 
 /** Theme configuration */
 export interface SuThemeConfig {
-  /** localStorage key for storing selected theme */
+  /** Key the selected theme is saved under */
   storageKey?: string;
+
+  /**
+   * Where the selected theme is saved (default: `localStorage`).
+   * Pass `createSuCookieStorage({ domain })` to share it with every site on that domain.
+   */
+  storage?: SuStorage;
 
   /** CSS variable prefix, applied to all theme variables */
   cssVarPrefix?: string;
 
-  /** Default theme if nothing saved in localStorage */
+  /** Default theme if nothing is saved */
   defaultTheme?: SuThemeName;
 
   /** Optional CSS variable overrides for specific themes */

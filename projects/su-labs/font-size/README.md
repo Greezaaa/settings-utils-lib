@@ -197,6 +197,7 @@ type FontSizeConfig = {
   maxSize: number;
   step: number;
   storageKey?: string;
+  storage?: SuStorage; // Default: localStorage
   cssVarName?: string;
 };
 ```
@@ -209,7 +210,8 @@ type FontSizeConfig = {
 | `minSize` | Smallest allowed size | `10` |
 | `maxSize` | Largest allowed size | `22` |
 | `step` | Pixels added or removed by `increase()` / `decrease()` | `2` |
-| `storageKey` | The key used to persist the size in `localStorage` | `'su:font-size'` |
+| `storageKey` | The key used to persist the size | `'su:font-size'` |
+| `storage` | Where the size is saved. Use `createSuCookieStorage({ domain })` from `@su-labs/core` to share it across subdomains | `localStorage` |
 | `cssVarName` | CSS custom property set on `<html>` | `'--base-font-size'` |
 
 Invalid combinations are corrected: a maximum below the minimum is raised to the minimum, the default is clamped to the range, and a step of zero or less becomes `1`.
