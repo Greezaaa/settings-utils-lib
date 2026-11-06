@@ -44,6 +44,9 @@
         <app-code-block [code]="option.install" />
         <nav class="page-links" [attr.aria-label]="option.title + ' links'">
           <a [href]="option.registry.url" target="_blank" rel="noopener">{{ option.registry.label }}</a>
+          @if (option.download; as download) {
+            <a [href]="download.url" target="_blank" rel="noopener">{{ download.label }}</a>
+          }
           <a [href]="option.readme" target="_blank" rel="noopener">Documentation</a>
           <a [routerLink]="['/changelog', option.item.slug]">Changelog</a>
         </nav>
@@ -52,8 +55,8 @@
   </div>
   <p class="muted">
     Using Cursor, VSCodium or another editor without the VS Code Marketplace? The extension is also on
-    <a [href]="openVsxUrl" target="_blank" rel="noopener">Open VSX</a>, and every version's <code>.vsix</code> file
-    is on <a [href]="vsixDownloadUrl" target="_blank" rel="noopener">GitHub Releases</a> with its SHA-256 checksum.
+    <a [href]="openVsxUrl" target="_blank" rel="noopener">Open VSX</a>. Each downloadable <code>.vsix</code> comes
+    with its SHA-256 checksum in the release notes.
   </p>
 </section>
 

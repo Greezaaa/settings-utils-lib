@@ -26,6 +26,8 @@ interface Option {
   readonly install: string;
   readonly registry: RegistryLink;
   readonly readme: string;
+  /** A file to download and install by hand, when there is one */
+  readonly download?: RegistryLink;
 }
 
 const OPTIONS: readonly Option[] = [
@@ -42,6 +44,8 @@ const OPTIONS: readonly Option[] = [
     install: `code --install-extension ${VSCODE_EXTENSION.packageName}`,
     registry: registryLink(VSCODE_EXTENSION),
     readme: readmeUrl(VSCODE_EXTENSION.slug),
+    // Releases are tagged `ts-one-line-imports-v<version>`, each with its `.vsix` and SHA-256 checksum
+    download: { label: 'Download .vsix', url: githubReleasesUrl('ts-one-line-imports') },
   },
   {
     item: PRETTIER_PLUGIN,
@@ -111,6 +115,4 @@ export class OneLineImportsPage {
   protected readonly setup = SETUP;
   protected readonly projectModes = PROJECT_MODES;
   protected readonly openVsxUrl = openVsxUrl(VSCODE_EXTENSION.packageName);
-  /** The extension's releases, tagged `ts-one-line-imports-v<version>`, each with its `.vsix` attached */
-  protected readonly vsixDownloadUrl = githubReleasesUrl('ts-one-line-imports');
 }
