@@ -322,6 +322,9 @@ export interface SiteMessages {
     readonly answer: string;
     readonly delete: string;
     readonly check: string;
+    /** Keyboard help, shown on devices with a keyboard */
+    readonly keys: string;
+    readonly builderKeys: string;
     readonly found: (found: number, total: number) => string;
     /** What the word builder says about a word */
     readonly checks: Readonly<Record<WordCheck, string>>;

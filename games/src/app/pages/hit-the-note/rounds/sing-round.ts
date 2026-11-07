@@ -27,17 +27,16 @@ export class SingRound {
   readonly solved = output<void>();
   readonly mistake = output<void>();
 
-  private readonly player = inject(NotePlayer);
+  protected readonly player = inject(NotePlayer);
   protected readonly listener = inject(PitchListener);
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
 
-  private readonly isPlaying = signal(false);
   protected readonly isDone = linkedSignal({ source: this.note, computation: () => false });
   /** How far the voice is from the note right now, while the note isn't playing */
   protected readonly cents = computed(() => {
     const pitch = this.listener.pitch();
-    return pitch === null || this.isPlaying() ? null : centsFrom(pitch, this.note());
+    return pitch === null || this.player.isPlaying() ? null : centsFrom(pitch, this.note());
   });
   protected readonly isInTune = computed(() => {
     const cents = this.cents();
@@ -68,7 +67,7 @@ export class SingRound {
   constructor() {
     effect(() => {
       const note = this.note();
-      untracked(() => void this.listen(note));
+      untracked(() => this.listen(note));
     });
     // Counts how long the voice stays in tune; leaving the band starts over
     effect(() => {
@@ -79,10 +78,8 @@ export class SingRound {
     inject(DestroyRef).onDestroy(() => this.listener.stop());
   }
 
-  protected async listen(note = this.note()): Promise<void> {
-    this.isPlaying.set(true);
-    await this.player.play(note);
-    this.isPlaying.set(false);
+  protected listen(note = this.note()): void {
+    void this.player.play(note);
   }
 
   protected startSinging(): void {

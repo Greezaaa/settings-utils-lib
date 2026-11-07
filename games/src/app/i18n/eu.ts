@@ -410,6 +410,8 @@ export const EU: SiteMessages = {
     answer: 'Zure hitza',
     delete: 'Ezabatu',
     check: 'Egiaztatu',
+    keys: 'Letrak teklatuarekin ere idatz ditzakezu; Atzera teklak azkena kentzen du',
+    builderKeys: 'Idatzi letrak teklatuarekin: Atzera teklak ezabatzen du, Sartu teklak egiaztatzen du',
     found: (found, total) => `Aurkituta: ${found}/${total}`,
     checks: {
       found: 'Ondo aurkitua!',

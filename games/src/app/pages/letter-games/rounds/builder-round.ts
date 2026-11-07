@@ -3,6 +3,7 @@ import { DictionaryStatus } from '../../../core/word-dictionaries';
 import { checkWord, LetterSet, lettersOf, WordCheck } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { roundFeedback } from '../../../shared/round-feedback';
+import { typedKey } from '../../../shared/typed-letter';
 
 /**
  * Word builder: the player taps letters to make a word and checks it. Every word to find shows as empty boxes,
@@ -14,6 +15,7 @@ import { roundFeedback } from '../../../shared/round-feedback';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './builder-round.html',
   styleUrls: ['./letter-round.scss', './builder-round.scss'],
+  host: { '(document:keydown)': 'onKey($event)' },
 })
 export class BuilderRound {
   readonly set = input.required<LetterSet>();
@@ -62,6 +64,29 @@ export class BuilderRound {
     this.bonus.update((bonus) => bonus.filter((bonusWord) => bonusWord !== word));
     this.hasReported.set(true);
     this.reported.emit(word);
+  }
+
+  /** Typing picks letters, Backspace deletes the last one and Enter checks the word */
+  protected onKey(event: KeyboardEvent): void {
+    const key = typedKey(event);
+    if (!key || this.isTimeUp() || this.isAllFound()) {
+      return;
+    }
+    if (key.kind === 'letter') {
+      const tile = this.tiles().find(
+        (candidate) => candidate.letter === key.letter && !this.picked().includes(candidate.id),
+      );
+      if (tile) {
+        event.preventDefault();
+        this.pick(tile.id);
+      }
+    } else if (key.kind === 'delete' && this.picked().length > 0) {
+      event.preventDefault();
+      this.deleteLast();
+    } else if (key.kind === 'enter' && this.picked().length > 0) {
+      event.preventDefault();
+      this.check();
+    }
   }
 
   protected pick(id: number): void {

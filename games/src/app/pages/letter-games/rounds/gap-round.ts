@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSign
 import { GapWord, hintAfter, lettersOf } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { roundFeedback } from '../../../shared/round-feedback';
+import { typedKey } from '../../../shared/typed-letter';
 
 /**
  * A picture and its word with letters missing (the first vowel, or every vowel); the player taps the vowels to
@@ -12,6 +13,7 @@ import { roundFeedback } from '../../../shared/round-feedback';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gap-round.html',
   styleUrl: './letter-round.scss',
+  host: { '(document:keydown)': 'onKey($event)' },
 })
 export class GapRound {
   readonly word = input.required<GapWord>();
@@ -42,6 +44,15 @@ export class GapRound {
   protected isShown(index: number): boolean {
     const gap = this.word().gaps.indexOf(index);
     return gap === -1 || gap < this.filled();
+  }
+
+  /** Typing a vowel fills the next gap, like tapping it */
+  protected onKey(event: KeyboardEvent): void {
+    const key = typedKey(event);
+    if (key?.kind === 'letter' && this.vowels().includes(key.letter)) {
+      event.preventDefault();
+      this.tap(key.letter);
+    }
   }
 
   protected tap(vowel: string): void {

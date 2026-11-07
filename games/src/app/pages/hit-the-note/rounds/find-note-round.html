@@ -1,4 +1,4 @@
-<button type="button" class="button button-secondary listen" (click)="listen()">🔊 {{ t().hitTheNote.listen }}</button>
+<button type="button" class="button button-secondary listen" [disabled]="player.isPlaying()" (click)="listen()">🔊 {{ t().hitTheNote.listen }}</button>
 <div class="keys" [class.is-wrong]="feedback.isWrong()" role="group" [attr.aria-label]="t().hitTheNote.notes">
   @for (id of choices(); track id) {
     <button
@@ -7,6 +7,7 @@
       [attr.data-note]="id"
       [class.is-sharp]="isSharp(id)"
       [class.is-right]="isDone() && id === note().id"
+      [disabled]="player.isPlaying() && !isDone()"
       (click)="tap(id)"
     >
       {{ t().hitTheNote.noteNames[id] }}

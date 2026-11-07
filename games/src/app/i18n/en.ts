@@ -400,6 +400,8 @@ export const EN: SiteMessages = {
     answer: 'Your word',
     delete: 'Delete',
     check: 'Check',
+    keys: 'You can type the letters on your keyboard too; Backspace takes one back',
+    builderKeys: 'Type letters on your keyboard: Backspace deletes, Enter checks',
     found: (found, total) => `Found ${found} of ${total}`,
     checks: {
       found: 'Well found!',

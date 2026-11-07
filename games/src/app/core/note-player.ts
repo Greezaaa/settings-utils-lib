@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { frequencyOf, Note } from '../games/music-notes';
 
 /** How long a note sounds, and the pause between two notes played one after the other */
@@ -18,6 +18,11 @@ const HARMONICS: readonly { readonly multiple: number; readonly volume: number }
 @Injectable({ providedIn: 'root' })
 export class NotePlayer {
   private context: AudioContext | null = null;
+  /** How many `play()` calls are still sounding */
+  private readonly sounding = signal(0);
+
+  /** Whether notes are playing right now; rounds wait for them before taking an answer */
+  readonly isPlaying = computed(() => this.sounding() > 0);
 
   /** The browser's audio context, shared with the microphone listener */
   audioContext(): AudioContext {
@@ -33,7 +38,13 @@ export class NotePlayer {
       this.tone(context, note, context.currentTime + index * (NOTE_SECONDS + GAP_SECONDS)),
     );
     const seconds = notes.length * (NOTE_SECONDS + GAP_SECONDS);
-    return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+    this.sounding.update((count) => count + 1);
+    return new Promise((resolve) =>
+      setTimeout(() => {
+        this.sounding.update((count) => count - 1);
+        resolve();
+      }, seconds * 1000),
+    );
   }
 
   private tone(context: AudioContext, note: Note, start: number): void {

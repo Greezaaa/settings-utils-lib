@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSign
 import { Hint, hintAfter, lettersOf, mixLetters } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { roundFeedback } from '../../../shared/round-feedback';
+import { typedKey } from '../../../shared/typed-letter';
 
 /** A tile of mixed letters; the id tells apart tiles with the same letter */
 interface Tile {
@@ -21,6 +22,7 @@ const NO_HINT: Hint = { showNext: false, revealed: 0 };
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './mixed-round.html',
   styleUrl: './letter-round.scss',
+  host: { '(document:keydown)': 'onKey($event)' },
 })
 export class MixedRound {
   readonly word = input.required<string>();
@@ -65,6 +67,24 @@ export class MixedRound {
 
   protected isPlaced(tile: Tile): boolean {
     return this.placed().includes(tile);
+  }
+
+  /** Typing a letter places the first tile with it; Backspace takes back the last placed letter */
+  protected onKey(event: KeyboardEvent): void {
+    const key = typedKey(event);
+    if (key?.kind === 'letter') {
+      const tile = this.tiles().find((candidate) => candidate.letter === key.letter && !this.isPlaced(candidate));
+      if (tile) {
+        event.preventDefault();
+        this.place(tile);
+      }
+    } else if (key?.kind === 'delete') {
+      const last = this.placed().at(-1);
+      if (last) {
+        event.preventDefault();
+        this.takeBack(last);
+      }
+    }
   }
 
   protected place(tile: Tile): void {

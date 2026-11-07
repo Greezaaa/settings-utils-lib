@@ -15,7 +15,7 @@ export class HigherLowerRound {
   readonly solved = output<void>();
   readonly mistake = output<void>();
 
-  private readonly player = inject(NotePlayer);
+  protected readonly player = inject(NotePlayer);
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly directions: readonly Direction[] = ['lower', 'higher'];
@@ -34,7 +34,7 @@ export class HigherLowerRound {
   }
 
   protected answer(direction: Direction): void {
-    if (this.given()) {
+    if (this.given() || this.player.isPlaying()) {
       return;
     }
     this.given.set(direction);

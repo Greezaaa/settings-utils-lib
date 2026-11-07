@@ -20,7 +20,7 @@ export class FindNoteRound {
   readonly solved = output<void>();
   readonly mistake = output<void>();
 
-  private readonly player = inject(NotePlayer);
+  protected readonly player = inject(NotePlayer);
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly feedback = roundFeedback();
@@ -41,7 +41,7 @@ export class FindNoteRound {
   }
 
   protected tap(id: NoteId): void {
-    if (this.isDone() || this.feedback.isWrong()) {
+    if (this.isDone() || this.feedback.isWrong() || this.player.isPlaying()) {
       return;
     }
     if (id === this.note().id) {

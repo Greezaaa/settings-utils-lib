@@ -142,6 +142,17 @@ button.letter {
   }
 }
 
+// Only for devices with a keyboard and a mouse
+.keys-hint {
+  color: var(--muted);
+  display: none;
+  font-size: 0.8125rem;
+
+  @media (hover: hover) and (pointer: fine) {
+    display: block;
+  }
+}
+
 @keyframes shake {
   25%,
   75% {

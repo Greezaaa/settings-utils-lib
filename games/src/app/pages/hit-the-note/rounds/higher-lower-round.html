@@ -1,4 +1,4 @@
-<button type="button" class="button button-secondary listen" (click)="listen()">🔊 {{ t().hitTheNote.listenTwo }}</button>
+<button type="button" class="button button-secondary listen" [disabled]="player.isPlaying()" (click)="listen()">🔊 {{ t().hitTheNote.listenTwo }}</button>
 <div class="keys directions">
   @for (direction of directions; track direction) {
     <button
@@ -6,6 +6,7 @@
       class="key direction"
       [class.is-right]="given() && direction === round().answer"
       [class.is-wrong-answer]="given() === direction && direction !== round().answer"
+      [disabled]="player.isPlaying() && !given()"
       (click)="answer(direction)"
     >
       {{ direction === 'higher' ? '⬆' : '⬇' }} {{ t().hitTheNote.directions[direction] }}

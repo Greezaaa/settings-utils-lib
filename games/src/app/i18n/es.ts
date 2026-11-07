@@ -410,6 +410,8 @@ export const ES: SiteMessages = {
     answer: 'Tu palabra',
     delete: 'Borrar',
     check: 'Comprobar',
+    keys: 'También puedes escribir las letras con el teclado; Retroceso quita la última',
+    builderKeys: 'Escribe letras con el teclado: Retroceso borra, Intro comprueba',
     found: (found, total) => `${found} de ${total} encontradas`,
     checks: {
       found: '¡Bien encontrada!',

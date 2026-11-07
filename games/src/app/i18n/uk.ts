@@ -412,6 +412,8 @@ export const UK: SiteMessages = {
     answer: 'Твоє слово',
     delete: 'Стерти',
     check: 'Перевірити',
+    keys: 'Букви можна вводити й з клавіатури; Backspace прибирає останню',
+    builderKeys: 'Вводь букви з клавіатури: Backspace стирає, Enter перевіряє',
     found: (found, total) => `Знайдено ${found} з ${total}`,
     checks: {
       found: 'Чудово!',
