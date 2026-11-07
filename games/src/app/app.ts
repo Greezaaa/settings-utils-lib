@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
@@ -8,7 +8,6 @@ import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
 import { SiteNotices } from './core/site-notices';
-import { formatMoment, LATEST_PUBLISHED } from './core/site-updates';
 import { SiteTheme } from './core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
 
@@ -44,16 +43,6 @@ export class App {
   protected readonly githubUrl = GITHUB_REPO_URL;
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly mainSiteUrl = MAIN_SITE_URL;
-
-  /** Shown in the visitor's own time zone, so only once in the browser */
-  private readonly inBrowser = signal(false);
-  protected readonly lastUpdate = computed(() =>
-    this.inBrowser() ? formatMoment(LATEST_PUBLISHED, this.siteLanguage.language()) : null,
-  );
-
-  constructor() {
-    afterNextRender(() => this.inBrowser.set(true));
-  }
 
   /** Label of the theme the switch moves to next */
   protected readonly nextTheme = computed(() => {

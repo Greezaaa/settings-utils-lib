@@ -147,9 +147,6 @@
     <p class="muted">
       {{ t().site.madeBy }} <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
     </p>
-    @if (lastUpdate(); as lastUpdate) {
-      <p class="muted last-update">{{ t().site.lastUpdate(lastUpdate) }}</p>
-    }
     <nav class="footer-links" [attr.aria-label]="t().site.projectLinks">
       <a routerLink="/privacy" routerLinkActive="active">{{ t().site.privacyLink }}</a>
       <a [href]="mainSiteUrl">su-labs.dev</a>

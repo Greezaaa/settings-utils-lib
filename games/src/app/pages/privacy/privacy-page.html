@@ -53,3 +53,7 @@
     }
   </ul>
 </section>
+
+@if (lastUpdate(); as lastUpdate) {
+  <p class="container muted last-update">{{ t().site.lastUpdate(lastUpdate) }}</p>
+}
