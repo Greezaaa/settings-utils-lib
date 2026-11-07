@@ -1,0 +1,70 @@
+// Styles shared by every kind of round: the equation and big tap-friendly buttons
+
+:host {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+  width: 100%;
+}
+
+.equation {
+  color: var(--heading);
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 8vw, 3rem);
+  font-weight: 500;
+  margin-block: 0.5rem;
+  white-space: nowrap;
+}
+
+.pad {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(var(--columns, 2), minmax(0, 1fr));
+  width: 100%;
+}
+
+.key {
+  background: var(--subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  color: var(--heading);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 600;
+  min-height: 4rem;
+  touch-action: manipulation;
+  transition: transform 100ms ease;
+  user-select: none;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.key-false {
+  background: var(--red-bg);
+  border-color: var(--red-text);
+  color: var(--red-text);
+}
+
+.key-true {
+  background: var(--green-bg);
+  border-color: var(--green-text);
+  color: var(--green-text);
+}
+
+.key-muted {
+  color: var(--muted);
+  font-size: 1.25rem;
+}
+
+.hint {
+  color: var(--red-text);
+  font-size: 0.875rem;
+}
+
+.keys {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}

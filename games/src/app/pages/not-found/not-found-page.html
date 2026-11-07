@@ -1,0 +1,25 @@
+<header class="container page-head">
+  <p class="error-code" aria-hidden="true"><span class="brace">&#123;</span>404<span class="brace">&#125;</span></p>
+  <h1 class="not-found-title">Oops, this page isn’t here.</h1>
+  <p class="lead">
+    <span lang="es">Ups, esta página no existe.</span>
+    <br />
+    <span lang="eu">Ups, orri hau ez dago hemen.</span>
+  </p>
+  <div class="button-row">
+    <a class="button" routerLink="/">Back to the games</a>
+  </div>
+</header>
+
+<section class="container page-section" aria-labelledby="not-found-games">
+  <h2 id="not-found-games" class="section-title">Play instead</h2>
+  <div class="games">
+    @for (game of games; track game.slug) {
+      <a class="card game-card" [routerLink]="['/', game.slug]">
+        <span class="tag">{{ game.ages }}</span>
+        <h3 class="game-name">{{ game.name }}</h3>
+        <p class="muted">{{ game.summary }}</p>
+      </a>
+    }
+  </div>
+</section>

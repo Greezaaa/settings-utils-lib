@@ -1,0 +1,18 @@
+// The status code, large and wrapped in braces like the su-labs logo
+.error-code {
+  color: var(--heading);
+  font-family: var(--font-mono);
+  font-size: clamp(4.5rem, 16vw, 8rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.brace {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.not-found-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}

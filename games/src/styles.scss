@@ -1,0 +1,9 @@
+/*
+ * Global styles for games.su-labs.dev.
+ *
+ * The games share the su-labs design system with the main site, so they load its global styles
+ * (tokens, light/dark/contrast/custom themes, base elements and components) instead of copying them.
+ * Anything only the games need goes below.
+ */
+
+@use '../../web/src/styles';

@@ -1,0 +1,6 @@
+<p class="equation" aria-live="polite">{{ equation() }}</p>
+<div class="pad">
+  <button type="button" class="key key-false" (click)="answer(false)">{{ t().trueOrFalse.false }}</button>
+  <button type="button" class="key key-true" (click)="answer(true)">{{ t().trueOrFalse.true }}</button>
+</div>
+<p class="keys">{{ t().trueOrFalse.keys }}</p>

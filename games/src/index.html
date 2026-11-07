@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>su-labs games: free games for kids</title>
+  <meta name="description" content="Short, free games for kids that train quick thinking. No sign-up, made for tablets, phones and computers.">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)">
+  <meta name="author" content="Yevheniy Alekseyev">
+  <!-- Structured data for search engines. URLs must match SITE_URL in app/core/links.ts -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "su-labs games",
+          "url": "https://games.su-labs.dev/",
+          "description": "Short, free games for kids that train quick thinking.",
+          "inLanguage": ["en", "es", "eu"]
+        },
+        {
+          "@type": "VideoGame",
+          "name": "Math games",
+          "url": "https://games.su-labs.dev/math-games/",
+          "description": "A math game for kids: true or false, tap the answer, or find the missing signs. In English, Spanish and Basque.",
+          "genre": "Educational",
+          "audience": { "@type": "PeopleAudience", "suggestedMinAge": 6 },
+          "inLanguage": ["en", "es", "eu"],
+          "isAccessibleForFree": true,
+          "author": { "@type": "Person", "name": "Yevheniy Alekseyev", "url": "https://github.com/Greezaaa" }
+        }
+      ]
+    }
+  </script>
+  <!--
+    Apply the saved theme and text size before the first paint, so the page doesn't flash
+    from the default to the visitor's choice while the app loads. The app then takes over.
+    Both values live in cookies shared with the other su-labs site; keys must match core/shared-settings.ts.
+  -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      function readSetting(key) {
+        var name = encodeURIComponent(key) + '=';
+        var cookies = document.cookie.split('; ');
+        for (var i = 0; i < cookies.length; i++) {
+          if (cookies[i].indexOf(name) === 0) {
+            return decodeURIComponent(cookies[i].slice(name.length));
+          }
+        }
+        return null;
+      }
+      try {
+        var theme = readSetting('su-labs:theme');
+        if (!theme || theme === 'system') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.setAttribute('data-theme', theme);
+
+        var fontSize = Number(readSetting('su-labs:font-size'));
+        if (fontSize >= 12 && fontSize <= 22) {
+          root.style.setProperty('--base-font-size', fontSize + 'px');
+        }
+      } catch (error) {
+        // Cookies blocked: the app applies the defaults once it starts
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,300..600&display=swap">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

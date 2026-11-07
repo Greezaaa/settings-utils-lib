@@ -1,0 +1,16 @@
+<header class="container page-head">
+  <h1>Smart games</h1>
+  <p class="lead">Short games that train quick thinking. Free, no sign-up, and they work on phones and tablets.</p>
+</header>
+
+<section class="container page-section" aria-label="Games">
+  <div class="games">
+    @for (game of games; track game.slug; let index = $index) {
+      <a class="card game-card" [routerLink]="['/', game.slug]" appReveal [style.--index]="index">
+        <span class="tag">{{ game.ages }}</span>
+        <h2 class="game-name">{{ game.name }}</h2>
+        <p class="muted">{{ game.summary }}</p>
+      </a>
+    }
+  </div>
+</section>

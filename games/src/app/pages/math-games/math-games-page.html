@@ -1,0 +1,157 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" [routerLink]="gamesPath">{{ t().page.section }}</a>
+    <span class="tag">{{ t().page.ages }}</span>
+    <div class="languages" role="group" [attr.aria-label]="t().settings.languageGroup">
+      @for (language of languages; track language) {
+        <button
+          type="button"
+          class="button button-secondary button-small"
+          [attr.lang]="language"
+          [attr.aria-pressed]="language === gameLanguage.language()"
+          (click)="chooseLanguage(language)"
+        >
+          {{ gameLanguage.nameOf(language) }}
+        </button>
+      }
+    </div>
+  </div>
+  <h1>{{ t().page.title }}</h1>
+  <p class="lead">
+    {{ t().page.lead }}
+    <br />
+    {{ t().page.rule }}
+  </p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="t().page.game">
+  <div class="card board">
+    @switch (phase()) {
+      @case ('ready') {
+        <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
+          @for (style of answerStyles; track style) {
+            <button
+              type="button"
+              class="button button-secondary"
+              [attr.aria-pressed]="style === answerStyleId()"
+              [title]="t().settings.answerStyles[style].summary"
+              (click)="chooseAnswerStyle(style)"
+            >
+              {{ t().settings.answerStyles[style].name }}
+            </button>
+          }
+        </div>
+        <div class="choices" role="group" [attr.aria-label]="t().settings.timerGroup">
+          @for (timer of timers; track timer) {
+            <button
+              type="button"
+              class="button button-secondary"
+              [attr.aria-pressed]="timer === timerId()"
+              [title]="t().settings.timers[timer].summary"
+              (click)="chooseTimer(timer)"
+            >
+              {{ t().settings.timers[timer].name }}
+            </button>
+          }
+        </div>
+        <div class="choices themes" role="group" [attr.aria-label]="t().settings.coloursGroup">
+          @for (theme of gameThemes; track theme.id) {
+            <button
+              type="button"
+              class="button button-secondary button-small theme-choice"
+              [style.--swatch-background]="theme.preview.background"
+              [style.--swatch-accent]="theme.preview['main-accent']"
+              [attr.aria-pressed]="theme.id === gameTheme()"
+              [title]="t().settings.themes[theme.id].summary"
+              (click)="chooseTheme(theme.id)"
+            >
+              <span class="swatch" aria-hidden="true"></span>
+              {{ t().settings.themes[theme.id].name }}
+            </button>
+          }
+        </div>
+        <div class="levels" role="group" [attr.aria-label]="t().settings.levelGroup">
+          @for (level of levels(); track level.id) {
+            <button
+              type="button"
+              class="button button-secondary level"
+              [attr.aria-pressed]="level.id === levelId()"
+              (click)="chooseLevel(level.id)"
+            >
+              <span class="level-name">{{ level.name }}</span>
+              <span class="level-summary">{{ level.summary }}</span>
+            </button>
+          }
+        </div>
+        <p class="muted">{{ t().settings.bestScore(best()) }}</p>
+        <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>
+      }
+
+      @case ('playing') {
+        <div class="status">
+          <span class="mono">{{ isTimed() ? t().playing.seconds(secondsLeft()) : t().playing.noTimer }}</span>
+          <span class="mono">{{ t().playing.score(score()) }}</span>
+        </div>
+        @if (isTimed()) {
+          <div class="timer" aria-hidden="true">
+            <div
+              class="timer-fill"
+              [class.is-low]="timeShare() < 0.35"
+              [style.transform]="'scaleX(' + timeShare() + ')'"
+            ></div>
+          </div>
+        }
+
+        @switch (answerStyleId()) {
+          @case ('true-or-false') {
+            @if (question(); as question) {
+              <app-true-or-false-round [question]="question" (answered)="onAnswered($event)" />
+            }
+          }
+          @case ('your-answer') {
+            @if (question(); as question) {
+              <app-your-answer-round [question]="question" (answered)="onAnswered($event)" />
+            }
+          }
+          @case ('find-the-signs') {
+            @if (puzzle(); as puzzle) {
+              <app-find-the-signs-round
+                [puzzle]="puzzle"
+                [operators]="signsLevel().operators"
+                (answered)="onAnswered($event)"
+              />
+            }
+          }
+        }
+      }
+
+      @case ('over') {
+        <p class="eyebrow">{{ ending() === 'timeout' ? t().over.outOfTime : t().over.notQuite }}</p>
+        <p class="final-score">{{ score() }}</p>
+        <p class="muted">
+          {{ t().over.correctAnswers(score()) }}
+          @if (isNewBest() && score() > 0) {
+            · <strong class="record">{{ t().over.newRecord }}</strong>
+          } @else {
+            · {{ t().over.best(best()) }}
+          }
+        </p>
+        <p class="muted settings-label">{{ settingsLabel() }}</p>
+        <p class="solution">
+          @if (ending() === 'wrong') {
+            <span class="muted">{{ t().over.youAnswered }}</span>
+            <span class="mono given">{{ given() }}</span>
+          }
+          <span class="muted">{{ t().over.rightAnswer }}</span>
+          <span class="mono">{{ solution() }}</span>
+        </p>
+        <div class="button-row">
+          <button type="button" class="button" (click)="start()">{{ t().over.playAgain }}</button>
+          <button type="button" class="button button-secondary" (click)="backToSettings()">
+            {{ t().over.changeSettings }}
+          </button>
+        </div>
+      }
+    }
+  </div>
+</section>

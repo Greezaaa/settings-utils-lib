@@ -1,0 +1,42 @@
+.signs-equation {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 0.35em;
+  justify-content: center;
+  white-space: normal;
+}
+
+.gap {
+  background: var(--subtle);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--heading);
+  cursor: pointer;
+  font: inherit;
+  height: 1.4em;
+  line-height: 1;
+  touch-action: manipulation;
+  width: 1.4em;
+
+  &.is-empty {
+    color: var(--muted);
+  }
+
+  &.is-selected {
+    border-color: var(--heading);
+  }
+}
+
+.sign-key {
+  font-size: 2rem;
+}
+
+.check {
+  font-size: 1.125rem;
+  opacity: 0.6;
+
+  &.is-ready {
+    opacity: 1;
+  }
+}

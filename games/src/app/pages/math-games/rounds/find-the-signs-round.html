@@ -1,0 +1,38 @@
+<p class="equation signs-equation">
+  @for (number of puzzle().numbers; track $index; let index = $index) {
+    @if (index > 0) {
+      <button
+        type="button"
+        class="gap"
+        [class.is-selected]="selected() === index - 1"
+        [class.is-empty]="!signs()[index - 1]"
+        [attr.aria-label]="t().findTheSigns.gap(index, signs()[index - 1])"
+        (click)="select(index - 1)"
+      >
+        {{ signs()[index - 1] ?? '?' }}
+      </button>
+    }
+    <span>{{ number }}</span>
+  }
+  <span>= {{ puzzle().result }}</span>
+</p>
+
+<div class="pad" [style.--columns]="operators().length" role="group" [attr.aria-label]="t().findTheSigns.signs">
+  @for (operator of operators(); track operator) {
+    <button type="button" class="key sign-key" (click)="choose(operator)">{{ operator }}</button>
+  }
+</div>
+<div class="pad">
+  <button type="button" class="key key-muted" [attr.aria-label]="t().findTheSigns.deleteSign" (click)="erase()">⌫</button>
+  <button type="button" class="key key-true check" [class.is-ready]="isComplete()" (click)="check()">{{ t().findTheSigns.check }}</button>
+</div>
+
+@if (showHint()) {
+  <p class="hint" role="alert">{{ t().findTheSigns.fillEveryGap }}</p>
+}
+<p class="keys">
+  {{ t().findTheSigns.tapGapToChange }}
+  @if (hasPrecedence()) {
+    {{ t().findTheSigns.precedence }}
+  }
+</p>

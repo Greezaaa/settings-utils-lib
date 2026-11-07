@@ -1,0 +1,16 @@
+.typed {
+  border-bottom: 3px solid var(--heading);
+  display: inline-block;
+  min-width: 2.5ch;
+  padding-inline: 0.25rem;
+  text-align: center;
+
+  &.is-empty {
+    border-color: var(--muted);
+    color: var(--muted);
+  }
+}
+
+.key-true {
+  font-size: 1.125rem;
+}

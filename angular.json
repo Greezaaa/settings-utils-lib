@@ -65,6 +65,68 @@
 				}
 			}
 		},
+		"games": {
+			"projectType": "application",
+			"root": "games",
+			"sourceRoot": "games/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:application",
+					"options": {
+						"browser": "games/src/main.ts",
+						"server": "games/src/main.server.ts",
+						"outputMode": "static",
+						"tsConfig": "games/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"assets": [
+							{
+								"glob": "**/*",
+								"input": "games/public"
+							}
+						],
+						"styles": [
+							"games/src/styles.scss"
+						]
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "4kB",
+									"maximumError": "8kB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular/build:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "games:build:production"
+						},
+						"development": {
+							"buildTarget": "games:build:development"
+						}
+					},
+					"defaultConfiguration": "development"
+				}
+			}
+		},
 		"@su-labs/core": {
 			"projectType": "library",
 			"root": "projects/su-labs/core",

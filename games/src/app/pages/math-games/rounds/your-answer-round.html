@@ -1,0 +1,17 @@
+<p class="equation">
+  {{ prompt() }}
+  <output class="typed" [class.is-empty]="!typed()" aria-live="polite" [attr.aria-label]="t().yourAnswer.answer">{{ typed() || '?' }}</output>
+</p>
+
+<div class="pad" style="--columns: 3" role="group" [attr.aria-label]="t().yourAnswer.numberPad">
+  @for (digit of digits; track digit) {
+    <button type="button" class="key" (click)="press(digit)">{{ digit }}</button>
+  }
+  <button type="button" class="key key-muted" [attr.aria-label]="t().yourAnswer.delete" (click)="erase()">⌫</button>
+  <button type="button" class="key" (click)="press('0')">0</button>
+  <button type="button" class="key key-true" (click)="check()">{{ t().yourAnswer.check }}</button>
+</div>
+
+@if (showHint()) {
+  <p class="hint" role="alert">{{ t().yourAnswer.tapNumberFirst }}</p>
+}
