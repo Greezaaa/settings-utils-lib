@@ -1,5 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
+import { GamesApi } from './games-api';
 
 /**
  * Bump when the dictionaries are rebuilt (npm run build:dictionaries), so browsers fetch the new files instead of
@@ -25,9 +26,11 @@ export type DictionaryStatus = 'loading' | 'ready' | 'failed';
 /**
  * The word builder's dictionaries: each language's is downloaded only when first needed, once per visit, then kept
  * in memory; the browser's cache keeps the file for later visits. Nothing is saved by the site itself.
+ * Words players reported, and that don't count for now (from the API), are left out.
  */
 @Injectable({ providedIn: 'root' })
 export class WordDictionaries {
+  private readonly api = inject(GamesApi);
   private readonly words = signal<Partial<Record<LanguageId, ReadonlySet<string>>>>({});
   private readonly statuses = signal<Partial<Record<LanguageId, DictionaryStatus>>>({});
 
@@ -53,11 +56,23 @@ export class WordDictionaries {
       if (!response.ok) {
         throw new Error(`Dictionary ${language}: ${response.status}`);
       }
-      const words = parseDictionary(await response.text());
+      const [text, hidden] = await Promise.all([response.text(), this.api.hiddenWords(language)]);
+      const words = new Set(parseDictionary(text));
+      hidden.forEach((word) => words.delete(word));
       this.words.update((all) => ({ ...all, [language]: words }));
       this.setStatus(language, 'ready');
     } catch {
       this.setStatus(language, 'failed');
+    }
+  }
+
+  /** Stops a word counting for the rest of this visit, e.g. after the player reports it */
+  hide(language: LanguageId, word: string): void {
+    const words = this.wordsOf(language);
+    if (words?.has(word)) {
+      const remaining = new Set(words);
+      remaining.delete(word);
+      this.words.update((all) => ({ ...all, [language]: remaining }));
     }
   }
 

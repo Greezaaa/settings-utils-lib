@@ -1,6 +1,7 @@
 import { afterRenderEffect, ChangeDetectionStrategy, Component, computed, DestroyRef, inject, linkedSignal, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { gameInfo } from '../../core/games';
+import { GamesApi } from '../../core/games-api';
 import { WordDictionaries } from '../../core/word-dictionaries';
 import { BUILDER_LEVELS, BuilderLevelId, createLetterSet, firstVowelWords, GapWord, HINTS_IDS, HintsId, LETTER_MODE_IDS, LetterModeId, LetterSet, missingVowelWords, mixedWords, secondsForGapWord, secondsForMixedWord } from '../../games/letter-games';
 import { TIMER_IDS, TimerId } from '../../games/math-games';
@@ -8,6 +9,7 @@ import { WORD_BANKS } from '../../games/words';
 import { SiteLanguage } from '../../i18n/site-language';
 import { Countdown } from '../../shared/countdown';
 import { GameBoard } from '../../shared/game-board';
+import { GameFeedback } from '../../shared/game-feedback';
 import { TimerBar } from '../../shared/timer-bar';
 import { BuilderRound } from './rounds/builder-round';
 import { GapRound } from './rounds/gap-round';
@@ -25,7 +27,7 @@ const SOLVED_MS = 700;
  */
 @Component({
   selector: 'app-letter-games-page',
-  imports: [BuilderRound, GameBoard, GapRound, MixedRound, RouterLink, TimerBar],
+  imports: [BuilderRound, GameBoard, GameFeedback, GapRound, MixedRound, RouterLink, TimerBar],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './letter-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './letter-games-page.scss'],
@@ -42,6 +44,7 @@ export class LetterGamesPage {
   protected readonly t = this.language.messages;
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('letter-games').minAge;
+  private readonly api = inject(GamesApi);
 
   private readonly bank = computed(() => WORD_BANKS[this.language.language()]);
   /** The word builder's dictionary in the site's language, and how its download is doing */
@@ -92,6 +95,7 @@ export class LetterGamesPage {
   protected readonly wordsDone = computed(() => (this.isTimeUp() ? this.index() : this.total()));
 
   protected start(): void {
+    this.api.countPlay('letter-games');
     const bank = this.bank();
     this.index.set(0);
     this.mistakes.set(0);
@@ -138,6 +142,13 @@ export class LetterGamesPage {
         this.startWordTimer();
       }
     }, SOLVED_MS);
+  }
+
+  /** A bonus word reported as rude: it stops counting here straight away, and the API counts the report */
+  protected onReported(word: string): void {
+    const language = this.language.language();
+    this.dictionaries.hide(language, word);
+    void this.api.reportWord(word, language);
   }
 
   protected onMistake(): void {

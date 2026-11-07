@@ -4,10 +4,12 @@ import { readStored, writeStored } from '../../core/site-storage';
 import { createSignsPuzzle, formatSigns, getSignsLevel, SIGNS_LEVELS, SignsPuzzle } from '../../games/find-the-signs';
 import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatQuestion, getLevel, LEVELS, LevelId, Question, secondsForQuestion, TIMER_IDS, TimerId, Timing } from '../../games/math-games';
 import { gameInfo } from '../../core/games';
+import { GamesApi } from '../../core/games-api';
 import { SiteLanguage } from '../../i18n/site-language';
 import { OptionText } from '../../i18n/site-messages';
 import { Countdown } from '../../shared/countdown';
 import { GameBoard } from '../../shared/game-board';
+import { GameFeedback } from '../../shared/game-feedback';
 import { TimerBar } from '../../shared/timer-bar';
 import { FindTheSignsRound } from './rounds/find-the-signs-round';
 import { RoundResult } from './rounds/round-result';
@@ -39,7 +41,7 @@ const DEFAULT_LEVEL: LevelId = 'normal';
  */
 @Component({
   selector: 'app-math-games-page',
-  imports: [FindTheSignsRound, GameBoard, RouterLink, TimerBar, TrueOrFalseRound, YourAnswerRound],
+  imports: [FindTheSignsRound, GameBoard, GameFeedback, RouterLink, TimerBar, TrueOrFalseRound, YourAnswerRound],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './math-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './math-games-page.scss'],
@@ -54,6 +56,7 @@ export class MathGamesPage {
   protected readonly t = inject(SiteLanguage).messages;
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('math-games').minAge;
+  private readonly api = inject(GamesApi);
 
   protected readonly levelId = signal<LevelId>(DEFAULT_LEVEL);
   protected readonly timerId = signal<TimerId>('timer');
@@ -126,6 +129,7 @@ export class MathGamesPage {
   }
 
   protected start(): void {
+    this.api.countPlay('math-games');
     this.score.set(0);
     this.isNewBest.set(false);
     this.phase.set('playing');

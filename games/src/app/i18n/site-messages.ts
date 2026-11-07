@@ -1,5 +1,6 @@
 import { SuThemeName } from '@su-labs/theme';
 import { GameCategory, GameSlug } from '../core/games';
+import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { PictureId } from '../core/pictures';
 import { SignsLevelId } from '../games/find-the-signs';
 import { BoardLevelId } from '../games/board';
@@ -67,6 +68,7 @@ export interface SiteMessages {
     readonly noticeOk: string;
     readonly privacySettings: string;
     readonly privacyLink: string;
+    readonly suggestionsLink: string;
   };
 
   /** Titles, descriptions and image text for search results and link previews */
@@ -166,6 +168,10 @@ export interface SiteMessages {
     readonly saved: readonly { readonly what: string; readonly where: string; readonly why: string }[];
     readonly differenceTitle: string;
     readonly difference: string;
+    /** What the games send to api.su-labs.dev */
+    readonly sentTitle: string;
+    readonly sentLead: string;
+    readonly sent: readonly string[];
     readonly neverTitle: string;
     readonly never: readonly string[];
     readonly choiceTitle: string;
@@ -189,6 +195,8 @@ export interface SiteMessages {
     readonly ages: (age: number) => string;
     /** Badge on a game added lately */
     readonly new: string;
+    /** Badge on the most played games */
+    readonly popular: string;
     readonly title: string;
     readonly lead: string;
     /** The one rule, shown on its own line below the lead */
@@ -255,6 +263,37 @@ export interface SiteMessages {
     readonly notWholeNumber: string;
   };
 
+  /** The suggestions form */
+  readonly suggestions: {
+    readonly title: string;
+    readonly lead: string;
+    readonly noPersonalData: string;
+    readonly categoryLabel: string;
+    readonly categories: Readonly<Record<SuggestionCategory, string>>;
+    readonly textLabel: string;
+    readonly imageLabel: string;
+    readonly imageHint: string;
+    readonly imageAlt: string;
+    readonly imageError: string;
+    readonly removeImage: string;
+    readonly send: string;
+    readonly sending: string;
+    readonly sent: string;
+    readonly failed: string;
+  };
+
+  /** "Do you like this game?" under every game */
+  readonly feedback: {
+    readonly question: string;
+    readonly votes: Readonly<Record<'up' | 'down', string>>;
+    readonly why: string;
+    readonly reasons: Readonly<Record<FeedbackReason, string>>;
+    readonly justSend: string;
+    readonly sending: string;
+    readonly thanks: string;
+    readonly failed: string;
+  };
+
   /** The letter games: first vowel, missing vowels, mixed letters and word builder */
   readonly letterGames: {
     readonly lead: string;
@@ -289,6 +328,9 @@ export interface SiteMessages {
       readonly failed: string;
       readonly credit: string;
     };
+    /** Report a rude bonus word, and the thanks after it */
+    readonly report: string;
+    readonly reportThanks: string;
     readonly newLetters: string;
     readonly allFound: string;
     readonly solved: string;

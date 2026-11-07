@@ -1,0 +1,56 @@
+<header class="container page-head">
+  <h1>{{ t().suggestions.title }}</h1>
+  <p class="lead">{{ t().suggestions.lead }}</p>
+</header>
+
+<section class="container page-section">
+  <form class="card suggestion" (submit)="$event.preventDefault(); send(form)" #form>
+    <p class="warning" role="note">{{ t().suggestions.noPersonalData }}</p>
+
+    <div class="choices" role="radiogroup" [attr.aria-label]="t().suggestions.categoryLabel">
+      @for (option of categories; track option) {
+        <button
+          type="button"
+          role="radio"
+          class="button button-secondary"
+          [attr.aria-checked]="option === category()"
+          [attr.aria-pressed]="option === category()"
+          (click)="category.set(option)"
+        >
+          {{ t().suggestions.categories[option] }}
+        </button>
+      }
+    </div>
+
+    <label class="field">
+      <span>{{ t().suggestions.textLabel }}</span>
+      <textarea rows="5" [attr.maxlength]="maxLength" required (input)="onText($event)"></textarea>
+      <small class="muted counter">{{ text().length }} / {{ maxLength }}</small>
+    </label>
+
+    <div class="field">
+      <span>{{ t().suggestions.imageLabel }}</span>
+      @if (preview(); as preview) {
+        <div class="preview">
+          <img [src]="preview" [alt]="t().suggestions.imageAlt" />
+          <button type="button" class="button button-secondary button-small" (click)="removeImage()">
+            {{ t().suggestions.removeImage }}
+          </button>
+        </div>
+      } @else {
+        <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onImage($event)" />
+      }
+      <small class="muted">{{ t().suggestions.imageHint }}</small>
+      @if (imageError()) {
+        <small class="error">{{ t().suggestions.imageError }}</small>
+      }
+    </div>
+
+    @if (sending() === 'failed') {
+      <p class="error" role="alert">{{ t().suggestions.failed }}</p>
+    }
+    <button type="submit" class="button start" [disabled]="!canSend()">
+      {{ sending() === 'sending' ? t().suggestions.sending : t().suggestions.send }}
+    </button>
+  </form>
+</section>

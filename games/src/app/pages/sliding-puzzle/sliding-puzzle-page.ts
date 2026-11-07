@@ -5,9 +5,11 @@ import { readStored, writeStored } from '../../core/site-storage';
 import { BoardLevelId } from '../../games/board';
 import { canMove, cellForArrow, createPuzzle, Direction, getPuzzleLevel, isSolved, move, neighbour, Puzzle, PUZZLE_LEVELS, tileNumber } from '../../games/sliding-puzzle';
 import { gameInfo } from '../../core/games';
+import { GamesApi } from '../../core/games-api';
 import { SiteLanguage } from '../../i18n/site-language';
 import { PuzzlePictureMode } from '../../i18n/site-messages';
 import { GameBoard } from '../../shared/game-board';
+import { GameFeedback } from '../../shared/game-feedback';
 import { GameClock } from '../../shared/game-clock';
 import { PictureSlice } from '../../shared/picture-slice';
 import { PuzzleTile } from './puzzle-tile';
@@ -51,7 +53,7 @@ const ARROWS: Readonly<Record<string, Direction>> = {
  */
 @Component({
   selector: 'app-sliding-puzzle-page',
-  imports: [GameBoard, PictureSlice, PuzzleTile, RouterLink],
+  imports: [GameBoard, GameFeedback, PictureSlice, PuzzleTile, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sliding-puzzle-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-done.scss', './sliding-puzzle-page.scss'],
@@ -62,6 +64,7 @@ export class SlidingPuzzlePage {
   protected readonly t = inject(SiteLanguage).messages;
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('sliding-puzzle').minAge;
+  private readonly api = inject(GamesApi);
 
   protected readonly levels = PUZZLE_LEVELS;
   protected readonly levelId = signal<BoardLevelId>(DEFAULT_LEVEL);
@@ -130,6 +133,8 @@ export class SlidingPuzzlePage {
     }
     if (this.moves() === 0) {
       this.clock.start();
+      // The first move starts the game: count it as a play
+      this.api.countPlay('sliding-puzzle');
     }
     this.puzzle.set({ ...puzzle, board: move(puzzle.shape, puzzle.board, cell) });
     this.moves.update((moves) => moves + 1);

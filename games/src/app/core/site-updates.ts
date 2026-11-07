@@ -143,6 +143,38 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 6,
+    published: '2026-11-08T12:00:00+01:00',
+    privacy: true,
+    changes: [
+      {
+        text: {
+          en: 'Tell us what you think of each game with 👍 or 👎, below the game',
+          es: 'Dinos qué te parece cada juego con 👍 o 👎, debajo del juego',
+          eu: 'Esaiguzu zer iruditzen zaizun joko bakoitza 👍 edo 👎 erabiliz, jokoaren azpian',
+          uk: 'Розкажи, як тобі кожна гра, за допомогою 👍 або 👎 під грою',
+        },
+      },
+      {
+        text: {
+          en: 'New page to suggest ideas, with a drawing if you like',
+          es: 'Nueva página para sugerir ideas, con un dibujo si quieres',
+          eu: 'Ideiak proposatzeko orri berria, marrazki batekin nahi baduzu',
+          uk: 'Нова сторінка, щоб запропонувати ідею, за бажанням із малюнком',
+        },
+      },
+      {
+        game: 'letter-games',
+        text: {
+          en: 'Word builder: any real word counts, and you can report rude ones',
+          es: 'Forma palabras: vale cualquier palabra real, y puedes denunciar las groseras',
+          eu: 'Hitz-sortzailea: edozein hitz errealek balio du, eta zakarrak sala ditzakezu',
+          uk: '«Склади слова»: зараховується будь-яке справжнє слово, а на грубі можна поскаржитися',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */

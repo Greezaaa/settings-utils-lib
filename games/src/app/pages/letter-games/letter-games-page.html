@@ -101,6 +101,7 @@
                 [dictionaryStatus]="dictionaryStatus()"
                 (newLetters)="newLetters()"
                 (allFound)="countdown.stop()"
+                (reported)="onReported($event)"
               />
             }
           }
@@ -129,4 +130,5 @@
     }
   </div>
   <p class="credit">{{ t().letterGames.dictionary.credit }}</p>
+  <app-game-feedback game="letter-games" />
 </section>

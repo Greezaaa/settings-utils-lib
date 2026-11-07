@@ -1,0 +1,16 @@
+import { describe, expect, it } from 'vitest';
+import { popularGames } from './popular-games';
+
+describe('popular games', () => {
+  it('marks the most played games that have enough plays', () => {
+    const plays = [
+      { game: 'math-games', plays: 40 },
+      { game: 'letter-games', plays: 90 },
+      { game: 'sliding-puzzle', plays: 25 },
+      { game: 'turn-picture', plays: 5 },
+    ] as const;
+    expect(popularGames(plays)).toEqual(['letter-games', 'math-games']);
+    expect(popularGames(plays, 5)).toEqual(['letter-games', 'math-games', 'sliding-puzzle']);
+    expect(popularGames(plays, 2, 100)).toEqual([]);
+  });
+});

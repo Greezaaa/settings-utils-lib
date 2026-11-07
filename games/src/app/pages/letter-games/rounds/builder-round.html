@@ -29,9 +29,21 @@
           @for (letter of item.letters; track $index) {
             <span class="letter">{{ letter }}</span>
           }
+          <button
+            type="button"
+            class="report"
+            [title]="t().letterGames.report"
+            [attr.aria-label]="t().letterGames.report + ': ' + item.word"
+            (click)="report(item.word)"
+          >
+            ⚑
+          </button>
         </li>
       }
     </ul>
+  }
+  @if (hasReported()) {
+    <p class="dictionary" role="status">{{ t().letterGames.reportThanks }}</p>
   }
 </aside>
 

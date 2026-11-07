@@ -35,6 +35,7 @@ export const EU: SiteMessages = {
     noticeOk: 'Ados',
     privacySettings: 'Pribatutasun-ezarpenak',
     privacyLink: 'Pribatutasuna',
+    suggestionsLink: 'Proposatu ideia bat',
   },
 
   seo: {
@@ -187,10 +188,21 @@ export const EU: SiteMessages = {
       },
       { what: 'Puntuazio onenak', where: 'Biltegiratze lokala', why: 'Zure errekorrak hautsi ahal izateko' },
       { what: 'Ikusitako oharrak', where: 'Biltegiratze lokala', why: 'Berriro ez erakusteko' },
+      { what: 'Baloratu dituzun jokoak', where: 'Tokiko biltegiratzea', why: 'Berriro ez galdetzeko' },
     ],
     differenceTitle: 'Cookieak eta biltegiratze lokala',
     difference:
       'Cookie bat gure zerbitzarira bidaltzen da bisita bakoitzean; biltegiratze lokala nabigatzaile honetan geratzen da eta ez da inora bidaltzen. Cookie bakarra erabiltzen dugu, zure gaia eta testuaren tamaina su-labs.dev-ekin partekatzeko, eta zerbitzariak ez du irakurtzen.',
+    sentTitle: 'Zer bidaltzen duten jokoek',
+    sentLead:
+      'Zer den ezaguna erakusteko eta jokoak hobetzeko, gauza gutxi batzuk bidaltzen dituzte gure zerbitzarira, api.su-labs.dev. Horietako ezerk ez du esaten nor zaren.',
+    sent: [
+      'Zenbat partida jokatzen diren, joko eta egun bakoitzeko',
+      'Joko baten zure 👍 edo 👎 eta arrazoia, bat aukeratzen baduzu',
+      'Hitz-sortzailean zakartzat salatzen dituzun hitzak',
+      'Bidaltzen dituzun proposamenak, beren irudiarekin (ezkutuko informaziorik gabe)',
+      'Zure interneteko helbidea minutu batzuetan bakarrik erabiltzen da spama geldiarazteko, eta ez da inoiz gordetzen',
+    ],
     neverTitle: 'Inoiz egiten ez duguna',
     never: [
       'Ez kontua, ez datu pertsonalik',
@@ -217,6 +229,7 @@ export const EU: SiteMessages = {
     section: 'Joko adimentsuak',
     ages: (age) => `${age} urtetik aurrera`,
     new: 'Berria',
+    popular: 'Ezaguna',
     title: 'Matematika jokoak',
     lead: 'Esan emaitza egia ala gezurra den, sakatu zuk emaitza edo aurkitu falta diren zeinuak. Denborarekin, erantzun barra amaitu baino lehen.',
     rule: 'Ez huts egin, bestela jokoa amaitzen da!',
@@ -297,6 +310,50 @@ export const EU: SiteMessages = {
     notWholeNumber: 'ez da zenbaki osoa',
   },
 
+  suggestions: {
+    title: 'Proposatu ideia bat',
+    lead: 'Esaiguzu zer joko nahi zenukeen, zer hobetuko zenukeen, edo bidali marrazki bat jokoetarako. Mezu guztiak irakurtzen ditugu.',
+    noPersonalData:
+      'Ez idatzi zure izena, helbidea, ikastetxea edo zuri buruzko ezer. Nahi baduzu, eskatu laguntza heldu bati.',
+    categoryLabel: 'Zeri buruzkoa da?',
+    categories: {
+      'new-game': 'Joko berri bat',
+      improvement: 'Hobekuntza bat',
+      drawing: 'Marrazki bat',
+      problem: 'Arazo bat',
+      other: 'Beste zerbait',
+    },
+    textLabel: 'Zure ideia',
+    imageLabel: 'Irudi bat (aukerakoa)',
+    imageHint: 'Txikiagoa egiten da eta ezkutuko informazioa kentzen zaio (non egin zen, adibidez) bidali aurretik.',
+    imageAlt: 'Aukeratu duzun irudia',
+    imageError: 'Irudi hori ezin da erabili. Saiatu beste batekin.',
+    removeImage: 'Kendu',
+    send: 'Bidali',
+    sending: 'Bidaltzen…',
+    sent: 'Eskerrik asko! Zure ideia bidali da.',
+    failed: 'Ez da bidali. Saiatu geroago.',
+  },
+
+  feedback: {
+    question: 'Gustatzen zaizu joko hau?',
+    votes: { up: 'Gustatzen zait', down: 'Ez zait gustatzen' },
+    why: 'Zergatik? (aukerakoa)',
+    reasons: {
+      fun: 'Dibertigarria da',
+      learned: 'Zerbait ikasi dut',
+      'too-easy': 'Errazegia',
+      'too-hard': 'Zailegia',
+      boring: 'Aspergarria',
+      confusing: 'Ulertzen zaila',
+      bug: 'Zerbaitek ez du funtzionatzen',
+    },
+    justSend: 'Bidali besterik gabe',
+    sending: 'Bidaltzen…',
+    thanks: 'Eskerrik asko esateagatik!',
+    failed: 'Ez da bidali. Saiatu geroago.',
+  },
+
   letterGames: {
     lead: 'Ikasi bokalak, osatu falta direnak, ordenatu letra nahasiak edo osatu ahal dituzun hitz guztiak.',
     rule: 'Hitz-sortzailean edozein hitz errealek balio du: jokatzen duzunean bakarrik deskargatzen den hiztegi batekin egiaztatzen dugu.',
@@ -354,6 +411,8 @@ export const EU: SiteMessages = {
       failed: 'Hiztegia ez da deskargatu, beraz ezkutuko hitzek bakarrik balio dute.',
       credit: 'Hiztegia: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
+    report: 'Salatu hitz hau',
+    reportThanks: 'Eskerrik asko! Hitz hori berrikusiko dugu.',
     newLetters: 'Beste letra batzuk',
     allFound: 'Denak aurkitu dituzu!',
     solved: 'Oso ondo!',

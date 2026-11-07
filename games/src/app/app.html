@@ -148,6 +148,7 @@
       {{ t().site.madeBy }} <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
     </p>
     <nav class="footer-links" [attr.aria-label]="t().site.projectLinks">
+      <a routerLink="/suggestions" routerLinkActive="active">{{ t().site.suggestionsLink }}</a>
       <a routerLink="/privacy" routerLinkActive="active">{{ t().site.privacyLink }}</a>
       <a [href]="mainSiteUrl">su-labs.dev</a>
       <a [href]="githubUrl" target="_blank" rel="noopener">GitHub</a>

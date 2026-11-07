@@ -5,8 +5,10 @@ import { BoardLevelId, cellCount } from '../../games/board';
 import { getPictureLevel, PictureModeId } from '../../games/picture-game';
 import { isRight, isSolved, scramble, tilesRight, turn, Turns } from '../../games/turn-picture';
 import { gameInfo } from '../../core/games';
+import { GamesApi } from '../../core/games-api';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
+import { GameFeedback } from '../../shared/game-feedback';
 import { GameClock, formatTime } from '../../shared/game-clock';
 import { BestTimes, pictureScoreKey, readBestTimes, writeBestTimes } from '../../shared/picture-best-times';
 import { PictureSettings } from '../../shared/picture-settings';
@@ -24,7 +26,7 @@ const BEST_TIMES_STORAGE = 'turn-picture:best-seconds';
  */
 @Component({
   selector: 'app-turn-picture-page',
-  imports: [GameBoard, PictureSettings, PictureSlice, RouterLink],
+  imports: [GameBoard, GameFeedback, PictureSettings, PictureSlice, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './turn-picture-page.html',
   styleUrls: [
@@ -39,6 +41,7 @@ export class TurnPicturePage {
   protected readonly t = inject(SiteLanguage).messages;
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('turn-picture').minAge;
+  private readonly api = inject(GamesApi);
 
   protected readonly modeId = signal<PictureModeId>('look');
   protected readonly levelId = signal<BoardLevelId>('normal');
@@ -109,6 +112,8 @@ export class TurnPicturePage {
     }
     if (this.taps() === 0) {
       this.clock.start();
+      // The first move starts the game: count it as a play
+      this.api.countPlay('turn-picture');
     }
     this.turns.update((turns) => turn(turns, cell));
     this.taps.update((taps) => taps + 1);

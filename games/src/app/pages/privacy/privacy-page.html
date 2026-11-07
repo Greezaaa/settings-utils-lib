@@ -45,6 +45,16 @@
   <p class="lead">{{ t().privacy.difference }}</p>
 </section>
 
+<section class="container page-section" aria-labelledby="privacy-sent">
+  <h2 id="privacy-sent" class="section-title">{{ t().privacy.sentTitle }}</h2>
+  <p class="lead">{{ t().privacy.sentLead }}</p>
+  <ul class="never">
+    @for (item of t().privacy.sent; track item) {
+      <li>{{ item }}</li>
+    }
+  </ul>
+</section>
+
 <section class="container page-section" aria-labelledby="privacy-never">
   <h2 id="privacy-never" class="section-title">{{ t().privacy.neverTitle }}</h2>
   <ul class="never">

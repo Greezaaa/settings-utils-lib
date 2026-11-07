@@ -35,6 +35,7 @@ export const ES: SiteMessages = {
     noticeOk: 'Vale',
     privacySettings: 'Ajustes de privacidad',
     privacyLink: 'Privacidad',
+    suggestionsLink: 'Sugiere una idea',
   },
 
   seo: {
@@ -187,10 +188,21 @@ export const ES: SiteMessages = {
       },
       { what: 'Mejores puntuaciones', where: 'Almacenamiento local', why: 'Para que puedas batir tus récords' },
       { what: 'Avisos ya vistos', where: 'Almacenamiento local', why: 'Para no volver a mostrártelos' },
+      { what: 'Juegos que has valorado', where: 'Almacenamiento local', why: 'Para no volver a preguntarte' },
     ],
     differenceTitle: 'Cookies y almacenamiento local',
     difference:
       'Una cookie se envía a nuestro servidor en cada visita; el almacenamiento local se queda en este navegador y nunca se envía a ningún sitio. Solo usamos una cookie, para compartir tu tema y tamaño de texto con su-labs.dev, y el servidor no la lee.',
+    sentTitle: 'Qué envían los juegos',
+    sentLead:
+      'Para mostrar qué es popular y mejorar los juegos, envían unas pocas cosas a nuestro servidor, api.su-labs.dev. Nada de ello dice quién eres.',
+    sent: [
+      'Cuántas partidas se juegan, por juego y día',
+      'Tu 👍 o 👎 de un juego y su motivo, si eliges uno',
+      'Las palabras que denuncias como groseras en Forma palabras',
+      'Las sugerencias que envías, con su imagen (sin información oculta)',
+      'Tu dirección de internet solo se usa unos minutos para frenar el spam y nunca se guarda',
+    ],
     neverTitle: 'Lo que nunca hacemos',
     never: [
       'Ni cuentas ni datos personales',
@@ -217,6 +229,7 @@ export const ES: SiteMessages = {
     section: 'Juegos inteligentes',
     ages: (age) => `Desde ${age} años`,
     new: 'Nuevo',
+    popular: 'Popular',
     title: 'Juegos de matemáticas',
     lead: 'Di si el resultado es verdadero o falso, marca tú el resultado o encuentra los signos que faltan. Con tiempo, responde antes de que se acabe la barra.',
     rule: '¡No falles, o se acaba la partida!',
@@ -297,6 +310,50 @@ export const ES: SiteMessages = {
     notWholeNumber: 'no da un número entero',
   },
 
+  suggestions: {
+    title: 'Sugiere una idea',
+    lead: 'Cuéntanos qué juego te gustaría, qué mejorarías o envía un dibujo para los juegos. Leemos todos los mensajes.',
+    noPersonalData:
+      'No escribas tu nombre, tu dirección, tu colegio ni nada sobre ti. Si quieres, pide ayuda a un adulto.',
+    categoryLabel: '¿De qué se trata?',
+    categories: {
+      'new-game': 'Un juego nuevo',
+      improvement: 'Una mejora',
+      drawing: 'Un dibujo',
+      problem: 'Un problema',
+      other: 'Otra cosa',
+    },
+    textLabel: 'Tu idea',
+    imageLabel: 'Una imagen (opcional)',
+    imageHint: 'Se hace más pequeña y se le quita la información oculta (como dónde se hizo) antes de enviarla.',
+    imageAlt: 'La imagen que has elegido',
+    imageError: 'Esa imagen no se puede usar. Prueba con otra.',
+    removeImage: 'Quitar',
+    send: 'Enviar',
+    sending: 'Enviando…',
+    sent: '¡Gracias! Tu idea se ha enviado.',
+    failed: 'No se ha enviado. Inténtalo más tarde.',
+  },
+
+  feedback: {
+    question: '¿Te gusta este juego?',
+    votes: { up: 'Me gusta', down: 'No me gusta' },
+    why: '¿Por qué? (opcional)',
+    reasons: {
+      fun: 'Es divertido',
+      learned: 'He aprendido algo',
+      'too-easy': 'Muy fácil',
+      'too-hard': 'Muy difícil',
+      boring: 'Aburrido',
+      confusing: 'Difícil de entender',
+      bug: 'Algo no funciona',
+    },
+    justSend: 'Enviar sin más',
+    sending: 'Enviando…',
+    thanks: '¡Gracias por contárnoslo!',
+    failed: 'No se ha enviado. Inténtalo más tarde.',
+  },
+
   letterGames: {
     lead: 'Aprende las vocales, completa las que faltan, ordena letras mezcladas o forma todas las palabras que puedas.',
     rule: 'En Forma palabras vale cualquier palabra real: la comprobamos con un diccionario que se descarga solo cuando juegas.',
@@ -354,6 +411,8 @@ export const ES: SiteMessages = {
       failed: 'El diccionario no se ha descargado, así que solo cuentan las palabras ocultas.',
       credit: 'Diccionario: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
+    report: 'Denunciar esta palabra',
+    reportThanks: '¡Gracias! Revisaremos esa palabra.',
     newLetters: 'Otras letras',
     allFound: '¡Las has encontrado todas!',
     solved: '¡Muy bien!',

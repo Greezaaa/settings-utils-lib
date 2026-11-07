@@ -25,6 +25,8 @@ export class BuilderRound {
   readonly newLetters = output<void>();
   /** Every word was found */
   readonly allFound = output<void>();
+  /** The player reported a bonus word as rude */
+  readonly reported = output<string>();
 
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
@@ -35,6 +37,8 @@ export class BuilderRound {
   protected readonly picked = linkedSignal({ source: this.set, computation: (): readonly number[] => [] });
   protected readonly found = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
   protected readonly bonus = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
+  /** A word was reported with these letters: thank the player */
+  protected readonly hasReported = linkedSignal({ source: this.set, computation: () => false });
   protected readonly bonusWords = computed(() => this.bonus().map((word) => ({ word, letters: lettersOf(word) })));
   protected readonly lastCheck = signal<WordCheck | null>(null);
 
@@ -52,6 +56,13 @@ export class BuilderRound {
     })),
   );
   protected readonly isAllFound = computed(() => this.found().length === this.set().answers.length);
+
+  /** Takes a reported word off the bonus words; the page sends the report */
+  protected report(word: string): void {
+    this.bonus.update((bonus) => bonus.filter((bonusWord) => bonusWord !== word));
+    this.hasReported.set(true);
+    this.reported.emit(word);
+  }
 
   protected pick(id: number): void {
     if (!this.picked().includes(id)) {

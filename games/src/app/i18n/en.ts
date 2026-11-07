@@ -35,6 +35,7 @@ export const EN: SiteMessages = {
     noticeOk: 'OK',
     privacySettings: 'Privacy settings',
     privacyLink: 'Privacy',
+    suggestionsLink: 'Suggest an idea',
   },
 
   seo: {
@@ -178,10 +179,21 @@ export const EN: SiteMessages = {
       { what: 'Game colours and settings', where: 'Local storage', why: 'So the games remember your choices' },
       { what: 'Best scores', where: 'Local storage', why: 'So you can beat your records' },
       { what: 'Notices you’ve seen', where: 'Local storage', why: 'So we don’t show them again' },
+      { what: 'Games you rated', where: 'Local storage', why: 'So we don’t ask again' },
     ],
     differenceTitle: 'Cookies and local storage',
     difference:
       'A cookie is sent to our server with every visit; local storage stays in this browser and is never sent anywhere. We use one cookie, only to share your theme and text size with su-labs.dev, and the server doesn’t read it.',
+    sentTitle: 'What the games send',
+    sentLead:
+      'To show what’s popular and to improve the games, they send a few things to our server, api.su-labs.dev. None of it says who you are.',
+    sent: [
+      'A count of games played, per game and day',
+      'Your 👍 or 👎 for a game and its reason, if you choose one',
+      'Words you report as rude in the word builder',
+      'Suggestions you send, with their picture (cleaned of hidden information)',
+      'Your internet address is only used for a few minutes to stop spam, and is never saved',
+    ],
     neverTitle: 'What we never do',
     never: ['No accounts and no personal data', 'No ads and no tracking', 'Nothing is sold or shared with anyone'],
     choiceTitle: 'Your choice',
@@ -203,6 +215,7 @@ export const EN: SiteMessages = {
     section: 'Smart games',
     ages: (age) => `Ages ${age}+`,
     new: 'New',
+    popular: 'Popular',
     title: 'Math games',
     lead: 'Say whether the result is true or false, tap the result yourself, or find the missing signs. With the timer on, answer before the bar runs out.',
     rule: 'Don’t miss one, or the game is over!',
@@ -283,6 +296,50 @@ export const EN: SiteMessages = {
     notWholeNumber: 'not a whole number',
   },
 
+  suggestions: {
+    title: 'Suggest an idea',
+    lead: 'Tell us about a game you’d like, something to improve, or send a drawing for the games. We read every message.',
+    noPersonalData:
+      'Don’t write your name, address, school or anything else about you. Ask a grown-up to help if you like.',
+    categoryLabel: 'What is it about?',
+    categories: {
+      'new-game': 'A new game',
+      improvement: 'An improvement',
+      drawing: 'A drawing',
+      problem: 'A problem',
+      other: 'Something else',
+    },
+    textLabel: 'Your idea',
+    imageLabel: 'A picture (optional)',
+    imageHint: 'It is made smaller and cleaned of hidden information (like where it was taken) before it’s sent.',
+    imageAlt: 'The picture you chose',
+    imageError: 'That picture can’t be used. Try another one.',
+    removeImage: 'Remove',
+    send: 'Send',
+    sending: 'Sending…',
+    sent: 'Thanks! Your idea was sent.',
+    failed: 'It didn’t send. Try again later.',
+  },
+
+  feedback: {
+    question: 'Do you like this game?',
+    votes: { up: 'I like it', down: 'I don’t like it' },
+    why: 'Why? (optional)',
+    reasons: {
+      fun: 'It’s fun',
+      learned: 'I learned something',
+      'too-easy': 'Too easy',
+      'too-hard': 'Too hard',
+      boring: 'Boring',
+      confusing: 'Hard to understand',
+      bug: 'Something doesn’t work',
+    },
+    justSend: 'Just send',
+    sending: 'Sending…',
+    thanks: 'Thanks for telling us!',
+    failed: 'It didn’t send. Try again later.',
+  },
+
   letterGames: {
     lead: 'Learn the vowels, fill in the missing ones, put mixed letters in order, or make as many words as you can.',
     rule: 'In the word builder, any real word counts, checked with a dictionary that downloads only when you play it.',
@@ -340,6 +397,8 @@ export const EN: SiteMessages = {
       failed: 'The dictionary didn’t download, so only the hidden words count.',
       credit: 'Dictionary: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
+    report: 'Report this word',
+    reportThanks: 'Thanks! We’ll check that word.',
     newLetters: 'New letters',
     allFound: 'You found them all!',
     solved: 'Well done!',
