@@ -288,6 +288,18 @@ npm run deploy:web
 
 This builds the site and uploads `dist/web/browser` with `rsync` to the server's `su-labs-site` nginx folder. It needs an SSH host named `su-labs-server` in `~/.ssh/config` (server address, user and key); the address and key are kept out of the repository. Changelogs are read live from GitHub, so a release only needs its `CHANGELOG.md` pushed.
 
+The games in `games/` are a second site, hosted at [games.su-labs.dev](https://games.su-labs.dev/), with the same commands: `npm run start:games` (port 4310) and `npm run deploy:games`, which uploads `dist/games/browser` to the server's `su-labs-games` folder. Both sites share theme and text size through cookies on `su-labs.dev`.
+
+Each build writes a `404.html`: the site's own "page not found" page, with its header and footer. The full nginx configs of both sites are in [`deploy/nginx/`](deploy/nginx/); the part that serves that page, so missing pages show it with a real 404 status, is:
+
+```nginx
+error_page 404 /404.html;
+
+location / {
+  try_files $uri $uri/ =404;
+}
+```
+
 ### Run Tests
 
 ```bash
