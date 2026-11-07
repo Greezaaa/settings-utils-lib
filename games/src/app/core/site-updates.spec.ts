@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { changesIn, formatMoment, latestChanges, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, SITE_UPDATES, SiteUpdate, updatesSince } from './site-updates';
+import { formatDay, formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, recentChanges, SITE_UPDATES, SiteUpdate } from './site-updates';
 
 const text = (word: string) => ({ en: word, es: word, eu: word, uk: word });
 const UPDATES: readonly SiteUpdate[] = [
@@ -12,19 +12,17 @@ const UPDATES: readonly SiteUpdate[] = [
 ];
 
 describe('site updates', () => {
-  it('lists only the updates after the last one seen', () => {
-    expect(updatesSince(0, UPDATES).map(({ version }) => version)).toEqual([1, 2]);
-    expect(updatesSince(1, UPDATES).map(({ version }) => version)).toEqual([2]);
-    expect(updatesSince(2, UPDATES)).toEqual([]);
+  it('lists every change, newest update first, keeping each update’s order', () => {
+    expect(recentChanges(UPDATES).map(({ change, version }) => `${version}:${change.text.en}`)).toEqual([
+      '2:Two',
+      '2:Three',
+      '1:One',
+    ]);
+    expect(recentChanges(UPDATES)[0].published).toBe('2026-02-01T10:00:00Z');
   });
 
-  it('gathers their changes, oldest first', () => {
-    expect(changesIn(UPDATES).map((change) => change.text.en)).toEqual(['One', 'Two', 'Three']);
-  });
-
-  it('takes the latest changes, oldest first', () => {
-    expect(latestChanges(2, UPDATES).map((change) => change.text.en)).toEqual(['Two', 'Three']);
-    expect(latestChanges(10, UPDATES)).toHaveLength(3);
+  it('formats a day', () => {
+    expect(formatDay('2026-11-07T16:30:00+01:00', 'en')).toMatch(/2026/);
   });
 
   it('formats a moment as a local date and time', () => {

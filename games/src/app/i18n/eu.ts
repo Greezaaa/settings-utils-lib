@@ -28,14 +28,12 @@ export const EU: SiteMessages = {
     projectLinks: 'Proiektuaren estekak',
     privacyNotice:
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
-    whatsNew: 'Zure azken bisitatik dauden berritasunak:',
-    latestChanges: 'Azken berritasunak:',
-    updatedAt: (moment) => `Eguneratua: ${moment}`,
     lastUpdate: (moment) => `Azken eguneratzea: ${moment}`,
     noticeOk: 'Ados',
     privacySettings: 'Pribatutasun-ezarpenak',
     privacyLink: 'Pribatutasuna',
     suggestionsLink: 'Proposatu ideia bat',
+    loading: 'Kargatzen…',
   },
 
   seo: {
@@ -98,6 +96,9 @@ export const EU: SiteMessages = {
     betaLabel: 'Beta',
     betaText:
       'Jokoak beta fasean daude: oraindik ez da azken bertsioa, eta aldatzen jarraituko dute. Laster posta elektronikoz harpidetu ahal izango zara joko berrien eta berritasunen berri izateko.',
+    whatsNewTitle: 'Berritasunak',
+    showMore: 'Ikusi berritasun gehiago',
+    showFewer: 'Ikusi gutxiago',
     madeByTitle: 'Haurrentzat eginak, haurrek eginak',
     madeByText:
       'Joko gehiago prestatzen ari gara. Nire txikiarekin, Lucíarekin, egiten ditut; berak marrazten ditu irudiak.',
@@ -194,7 +195,11 @@ export const EU: SiteMessages = {
         why: 'Jokoek zure aukerak gogora ditzaten',
       },
       { what: 'Puntuazio onenak', where: 'Biltegiratze lokala', why: 'Zure errekorrak hautsi ahal izateko' },
-      { what: 'Ikusitako oharrak', where: 'Biltegiratze lokala', why: 'Berriro ez erakusteko' },
+      {
+        what: 'Ikusitako oharrak eta berritasunak',
+        where: 'Biltegiratze lokala',
+        why: 'Oharrak berriro ez erakusteko eta berria markatzeko',
+      },
       { what: 'Baloratu dituzun jokoak', where: 'Tokiko biltegiratzea', why: 'Berriro ez galdetzeko' },
     ],
     differenceTitle: 'Cookieak eta biltegiratze lokala',

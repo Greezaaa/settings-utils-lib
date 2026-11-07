@@ -28,14 +28,12 @@ export const EN: SiteMessages = {
     projectLinks: 'Project links',
     privacyNotice:
       'We use cookies only to save your preferences, like theme, text size and language. We never sell or share your data with anyone. We love your privacy!',
-    whatsNew: 'New since your last visit:',
-    latestChanges: 'Latest updates:',
-    updatedAt: (moment) => `Updated ${moment}`,
     lastUpdate: (moment) => `Last update: ${moment}`,
     noticeOk: 'OK',
     privacySettings: 'Privacy settings',
     privacyLink: 'Privacy',
     suggestionsLink: 'Suggest an idea',
+    loading: 'Loading…',
   },
 
   seo: {
@@ -98,6 +96,9 @@ export const EN: SiteMessages = {
     betaLabel: 'Beta',
     betaText:
       'These games are in beta: this isn’t the final version yet, and things will keep changing. Soon you’ll be able to subscribe by email to hear about new games and updates.',
+    whatsNewTitle: 'What’s new',
+    showMore: 'Show more updates',
+    showFewer: 'Show fewer',
     madeByTitle: 'Made for kids, by kids',
     madeByText: 'More games are on the way. I make them together with my little one, Lucía, who draws the pictures.',
   },
@@ -185,7 +186,11 @@ export const EN: SiteMessages = {
       { what: 'Language', where: 'This browser’s local storage', why: 'So the games open in your language' },
       { what: 'Game colours and settings', where: 'Local storage', why: 'So the games remember your choices' },
       { what: 'Best scores', where: 'Local storage', why: 'So you can beat your records' },
-      { what: 'Notices you’ve seen', where: 'Local storage', why: 'So we don’t show them again' },
+      {
+        what: 'Notices and news you’ve seen',
+        where: 'Local storage',
+        why: 'So we don’t show notices again, and can mark what’s new',
+      },
       { what: 'Games you rated', where: 'Local storage', why: 'So we don’t ask again' },
     ],
     differenceTitle: 'Cookies and local storage',

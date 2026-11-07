@@ -1,11 +1,7 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
+import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { GAME_SLUGS, GameSlug } from './games';
-
-/** The API of the games site (api/ in this repository) */
-export const API_URL = 'https://api.su-labs.dev';
-/** The API run locally (`npm run start:dev` in api/), used while the site itself runs on localhost */
-const LOCAL_API_URL = 'http://localhost:3000';
 
 /** Preset feedback reasons, as the API accepts them; no free text, so nothing personal can be sent */
 export const FEEDBACK_REASONS = {
@@ -18,10 +14,6 @@ export type FeedbackReason = (typeof FEEDBACK_REASONS)[Vote][number];
 export const SUGGESTION_CATEGORIES = ['new-game', 'improvement', 'drawing', 'problem', 'other'] as const;
 export type SuggestionCategory = (typeof SUGGESTION_CATEGORIES)[number];
 
-/** How long to wait for the API before going on without it (it can be slow or blocked) */
-const READ_TIMEOUT_MS = 4000;
-const SEND_TIMEOUT_MS = 15000;
-
 /** A game the admin switched on or off */
 export interface GameSwitch {
   readonly game: GameSlug;
@@ -33,37 +25,37 @@ export interface GamePlays {
   readonly plays: number;
 }
 
-const isGameSlug = (value: unknown): value is GameSlug => GAME_SLUGS.some((game) => game === value);
+export const isGameSlug = (value: unknown): value is GameSlug => GAME_SLUGS.some((game) => game === value);
 
 /** Reads `{ games: [{ game, plays }] }`, keeping only known games */
 function parsePlays(body: unknown): GamePlays[] {
-  const games: unknown = typeof body === 'object' && body !== null ? Reflect.get(body, 'games') : null;
+  const games = field(body, 'games');
   if (!Array.isArray(games)) {
     return [];
   }
   return games.flatMap((item: unknown) => {
-    const game: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'game') : null;
-    const plays: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'plays') : null;
+    const game = field(item, 'game');
+    const plays = field(item, 'plays');
     return isGameSlug(game) && typeof plays === 'number' ? [{ game, plays }] : [];
   });
 }
 
 /** Reads `{ games: [{ game, enabled }] }`, keeping only known games */
 function parseSwitches(body: unknown): GameSwitch[] {
-  const games: unknown = typeof body === 'object' && body !== null ? Reflect.get(body, 'games') : null;
+  const games = field(body, 'games');
   if (!Array.isArray(games)) {
     return [];
   }
   return games.flatMap((item: unknown) => {
-    const game: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'game') : null;
-    const enabled: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'enabled') : null;
+    const game = field(item, 'game');
+    const enabled = field(item, 'enabled');
     return isGameSlug(game) && typeof enabled === 'boolean' ? [{ game, enabled }] : [];
   });
 }
 
 /** Reads `{ words: string[] }` */
 function parseWords(body: unknown): string[] {
-  const words: unknown = typeof body === 'object' && body !== null ? Reflect.get(body, 'words') : null;
+  const words = field(body, 'words');
   return Array.isArray(words) ? words.filter((word: unknown): word is string => typeof word === 'string') : [];
 }
 
@@ -75,10 +67,6 @@ function parseWords(body: unknown): string[] {
 @Injectable({ providedIn: 'root' })
 export class GamesApi {
   private readonly document = inject(DOCUMENT);
-
-  private get baseUrl(): string {
-    return this.document.location.hostname === 'localhost' ? LOCAL_API_URL : API_URL;
-  }
 
   /** One more play of a game, counted when the player actually starts playing */
   countPlay(game: GameSlug): void {
@@ -113,35 +101,9 @@ export class GamesApi {
     return parseSwitches(await this.read('/v1/games'));
   }
 
-  /** Whether an admin token is right, or the API couldn't be asked */
-  async checkAdmin(token: string): Promise<'right' | 'wrong' | 'offline'> {
-    try {
-      const response = await fetch(`${this.baseUrl}/admin/check`, {
-        headers: { Authorization: `Bearer ${token}` },
-        signal: AbortSignal.timeout(READ_TIMEOUT_MS),
-      });
-      return response.ok ? 'right' : response.status === 401 ? 'wrong' : 'offline';
-    } catch {
-      return 'offline';
-    }
-  }
-
-  /** Opens or closes a game to the public; needs the admin token */
-  setGameEnabled(token: string, game: GameSlug, enabled: boolean): Promise<boolean> {
-    return this.request(
-      `/admin/games/${game}`,
-      {
-        method: 'PUT',
-        body: JSON.stringify({ enabled }),
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      },
-      SEND_TIMEOUT_MS,
-    );
-  }
-
   private async read(path: string): Promise<unknown> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, { signal: AbortSignal.timeout(READ_TIMEOUT_MS) });
+      const response = await fetch(apiUrl(this.document, path), { signal: AbortSignal.timeout(READ_TIMEOUT_MS) });
       return response.ok ? await response.json() : null;
     } catch {
       return null;
@@ -159,7 +121,7 @@ export class GamesApi {
   /** Whether a request succeeded; false when it failed, timed out or couldn't reach the API */
   private async request(path: string, init: RequestInit, timeoutMs: number): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, { ...init, signal: AbortSignal.timeout(timeoutMs) });
+      const response = await fetch(apiUrl(this.document, path), { ...init, signal: AbortSignal.timeout(timeoutMs) });
       return response.ok;
     } catch {
       return false;

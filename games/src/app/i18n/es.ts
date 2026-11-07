@@ -28,14 +28,12 @@ export const ES: SiteMessages = {
     projectLinks: 'Enlaces del proyecto',
     privacyNotice:
       'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
-    whatsNew: 'Novedades desde tu última visita:',
-    latestChanges: 'Últimas novedades:',
-    updatedAt: (moment) => `Actualizado: ${moment}`,
     lastUpdate: (moment) => `Última actualización: ${moment}`,
     noticeOk: 'Vale',
     privacySettings: 'Ajustes de privacidad',
     privacyLink: 'Privacidad',
     suggestionsLink: 'Sugiere una idea',
+    loading: 'Cargando…',
   },
 
   seo: {
@@ -99,6 +97,9 @@ export const ES: SiteMessages = {
     betaLabel: 'Beta',
     betaText:
       'Los juegos están en fase beta: todavía no es la versión final y seguirán cambiando. Pronto podrás suscribirte por correo para que te avisemos de los juegos nuevos y de cada cambio.',
+    whatsNewTitle: 'Novedades',
+    showMore: 'Ver más novedades',
+    showFewer: 'Ver menos',
     madeByTitle: 'Hecho para peques, por peques',
     madeByText: 'Estamos creando más juegos. Los hago junto a mi peque, Lucía, que dibuja las imágenes.',
   },
@@ -194,7 +195,11 @@ export const ES: SiteMessages = {
         why: 'Para que los juegos recuerden tus elecciones',
       },
       { what: 'Mejores puntuaciones', where: 'Almacenamiento local', why: 'Para que puedas batir tus récords' },
-      { what: 'Avisos ya vistos', where: 'Almacenamiento local', why: 'Para no volver a mostrártelos' },
+      {
+        what: 'Avisos y novedades ya vistos',
+        where: 'Almacenamiento local',
+        why: 'Para no repetirte los avisos y marcar lo nuevo',
+      },
       { what: 'Juegos que has valorado', where: 'Almacenamiento local', why: 'Para no volver a preguntarte' },
     ],
     differenceTitle: 'Cookies y almacenamiento local',

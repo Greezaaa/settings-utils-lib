@@ -70,24 +70,4 @@ describe('GamesApi', () => {
     );
     expect(await api.gameSwitches()).toEqual([{ game: 'hit-the-note', enabled: false }]);
   });
-
-  it('tells a wrong admin token from an unreachable API', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(null, { status: 204 })),
-    );
-    expect(await api.checkAdmin('token')).toBe('right');
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(null, { status: 401 })),
-    );
-    expect(await api.checkAdmin('token')).toBe('wrong');
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => {
-        throw new TypeError('offline');
-      }),
-    );
-    expect(await api.checkAdmin('token')).toBe('offline');
-  });
 });

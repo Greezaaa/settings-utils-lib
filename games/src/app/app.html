@@ -138,7 +138,10 @@
   </nav>
 </header>
 
-<main id="main">
+@if (isCheckingGame()) {
+  <p class="container muted page-loading" role="status">{{ t().site.loading }}</p>
+}
+<main id="main" [hidden]="isCheckingGame()">
   <router-outlet />
 </main>
 

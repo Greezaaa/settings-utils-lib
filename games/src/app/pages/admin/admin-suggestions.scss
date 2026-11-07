@@ -1,0 +1,30 @@
+.suggestion {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 48rem;
+
+  > button {
+    justify-self: start;
+  }
+
+  img {
+    border-radius: 6px;
+    max-height: 20rem;
+    max-width: 100%;
+    object-fit: contain;
+    justify-self: start;
+  }
+}
+
+.meta {
+  font-size: 0.8125rem;
+}
+
+.text {
+  color: var(--heading);
+  white-space: pre-line;
+}
+
+.danger {
+  color: var(--red-text);
+}

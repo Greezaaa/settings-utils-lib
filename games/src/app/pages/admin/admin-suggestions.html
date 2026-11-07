@@ -1,0 +1,53 @@
+<div class="filters" role="group" aria-label="Status">
+  @for (option of statuses; track option) {
+    <button
+      type="button"
+      class="button button-secondary button-small"
+      [attr.aria-pressed]="option === status()"
+      (click)="show(option)"
+    >
+      {{ statusNames[option] }}
+    </button>
+  }
+</div>
+
+@if (failed()) {
+  <p class="error" role="alert">That change didn't save. Check the API and try again.</p>
+}
+
+@if (loading()) {
+  <p class="muted">Loading…</p>
+} @else {
+  <ul class="plain-list">
+    @for (suggestion of suggestions(); track suggestion.id) {
+      <li class="card suggestion">
+        <p class="meta muted">
+          <strong>{{ t().suggestions.categories[suggestion.category] }}</strong>
+          · {{ suggestion.language.toUpperCase() }} · {{ suggestion.created.toLocaleString() }}
+        </p>
+        <p class="text">{{ suggestion.text }}</p>
+        @if (suggestion.hasImage) {
+          @if (images().get(suggestion.id); as image) {
+            <img [src]="image" alt="Picture sent with the suggestion" />
+          } @else {
+            <button type="button" class="button button-secondary button-small" (click)="showImage(suggestion.id)">
+              Show picture
+            </button>
+          }
+        }
+        <div class="actions">
+          @for (other of otherStatuses(suggestion.status); track other) {
+            <button type="button" class="button button-secondary button-small" (click)="move(suggestion, other)">
+              Move to {{ statusNames[other] }}
+            </button>
+          }
+          <button type="button" class="button button-secondary button-small danger" (click)="remove(suggestion)">
+            Delete
+          </button>
+        </div>
+      </li>
+    } @empty {
+      <p class="muted">No {{ statusNames[status()].toLowerCase() }} suggestions.</p>
+    }
+  </ul>
+}

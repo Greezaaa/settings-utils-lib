@@ -11,8 +11,9 @@ const PREVIEW_STORAGE = 'admin-preview';
  * off from the admin page, stored in the API. Hidden games leave the lists and their pages send visitors home,
  * except in preview mode, the admin's way to try them.
  *
- * Until the API answers (and whenever it can't be reached) the defaults apply, so prerendered pages list the games
- * that are open by default. The site shell starts loading after its first render; game pages wait for it.
+ * Until the switches are known no game shows, so a game the admin switched off never flashes on screen (prerendered
+ * pages list none either). When the API can't be reached, the defaults apply once it gives up. The site shell starts
+ * loading after its first render; game pages wait for it.
  */
 @Injectable({ providedIn: 'root' })
 export class GameAvailability {
@@ -22,16 +23,21 @@ export class GameAvailability {
 
   /** Whether this browser is in the admin's preview mode */
   readonly isPreview = signal(false);
+  /** Whether the switches are known (or the API gave up and the defaults apply); until then no game shows */
+  readonly isKnown = signal(false);
 
   /** Games open to the public */
   readonly openGames = computed<readonly GameSlug[]>(() =>
     GAMES.filter(({ slug, openByDefault }) => this.switches().get(slug) ?? openByDefault).map(({ slug }) => slug),
   );
 
-  /** Games this visitor sees: the open ones, or all of them in preview */
-  readonly visibleGames = computed<readonly GameSlug[]>(() =>
-    this.isPreview() ? GAMES.map(({ slug }) => slug) : this.openGames(),
-  );
+  /** Games this visitor sees: none until the switches are known, then the open ones, or all of them in preview */
+  readonly visibleGames = computed<readonly GameSlug[]>(() => {
+    if (!this.isKnown()) {
+      return [];
+    }
+    return this.isPreview() ? GAMES.map(({ slug }) => slug) : this.openGames();
+  });
 
   isOpen(game: GameSlug): boolean {
     return this.openGames().includes(game);
@@ -62,5 +68,6 @@ export class GameAvailability {
     this.isPreview.set(readStored(PREVIEW_STORAGE) === true);
     const switches = await this.api.gameSwitches();
     this.switches.set(new Map(switches.map(({ game, enabled }) => [game, enabled])));
+    this.isKnown.set(true);
   }
 }

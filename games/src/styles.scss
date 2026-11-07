@@ -23,14 +23,3 @@
   --button-hover: color-mix(in srgb, var(--su-theme-main-accent) 85%, var(--su-theme-background));
   color: var(--text);
 }
-
-// "New since your last visit": one change per line, under a small, muted update time
-.notification.whats-new .message {
-  display: block;
-  white-space: pre-line;
-
-  &::first-line {
-    color: var(--muted);
-    font-size: 0.75rem;
-  }
-}

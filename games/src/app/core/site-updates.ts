@@ -2,11 +2,12 @@ import { LanguageId } from '../i18n/site-messages';
 import { GameSlug } from './games';
 
 /**
- * Big changes to the games site, oldest first, shown to returning visitors as "New since your last visit".
+ * Big changes to the games site, oldest first, listed on the home page under "What's new"; changes newer than a
+ * visitor's last visit get a "New" badge.
  *
  * Add an entry for changes players would want to know about (a new game, a new setting, a new language),
  * never for small fixes. Give it the next version number and the time it goes live, write each change in
- * every language (with `game` when it is a new game, so the notice links to it), and set `privacy: true`
+ * every language (with `game` when it is a new game, so the list links to it), and set `privacy: true`
  * when the update changes what the site saves, so the privacy notice is shown again.
  */
 export interface UpdateChange {
@@ -190,6 +191,20 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 8,
+    published: '2026-11-08T20:00:00+01:00',
+    changes: [
+      {
+        text: {
+          en: 'What’s new is now on the home page, so you never miss a change',
+          es: 'Las novedades están ahora en la página principal, para que no te pierdas nada',
+          eu: 'Berritasunak orri nagusian daude orain, ezer gal ez dezazun',
+          uk: 'Новини тепер на головній сторінці, щоб ти нічого не пропустив',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */
@@ -200,25 +215,33 @@ export const LATEST_PUBLISHED = SITE_UPDATES.reduce((latest, update) =>
   update.version > latest.version ? update : latest,
 ).published;
 
+/** The site version the visitor last saw (in the browser's storage) */
+export const LAST_SEEN_STORAGE = 'last-seen-version';
+
 /** The newest version that changed what the site saves */
 export const LATEST_PRIVACY_VERSION = Math.max(
   0,
   ...SITE_UPDATES.filter(({ privacy }) => privacy).map(({ version }) => version),
 );
 
-/** Updates newer than `version`, oldest first */
-export function updatesSince(version: number, updates: readonly SiteUpdate[] = SITE_UPDATES): SiteUpdate[] {
-  return updates.filter((update) => update.version > version);
+/** A change with the update it came in */
+export interface DatedChange {
+  readonly change: UpdateChange;
+  readonly version: number;
+  /** When its update went live, as an ISO date and time */
+  readonly published: string;
 }
 
-/** Every change in those updates, oldest first */
-export function changesIn(updates: readonly SiteUpdate[]): UpdateChange[] {
-  return updates.flatMap(({ changes }) => changes);
+/** Every change, newest update first (keeping each update's own order), for the home page's "What's new" */
+export function recentChanges(updates: readonly SiteUpdate[] = SITE_UPDATES): DatedChange[] {
+  return [...updates]
+    .sort((first, second) => second.version - first.version)
+    .flatMap(({ version, published, changes }) => changes.map((change) => ({ change, version, published })));
 }
 
-/** The last `count` changes, oldest first */
-export function latestChanges(count: number, updates: readonly SiteUpdate[] = SITE_UPDATES): UpdateChange[] {
-  return changesIn(updates).slice(-count);
+/** A day as a short local date in a language, e.g. `7 Nov 2026` */
+export function formatDay(iso: string, language: LanguageId): string {
+  return new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(new Date(iso));
 }
 
 /** A moment as a short local date and time in a language, e.g. `7 Nov 2026, 16:30` */

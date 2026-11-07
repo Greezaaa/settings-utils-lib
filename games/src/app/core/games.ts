@@ -56,3 +56,9 @@ export function byCategory(games: readonly GameSlug[]): CategoryGames[] {
     games: games.filter((game) => gameInfo(game).category === category),
   })).filter((group) => group.games.length > 0);
 }
+
+/** The game a page address belongs to, e.g. `/letter-games/` → `letter-games`; null for other pages */
+export function gameOfPath(path: string): GameSlug | null {
+  const firstSegment = path.split(/[/?#]/).find(Boolean) ?? '';
+  return GAME_SLUGS.find((slug) => slug === firstSegment) ?? null;
+}

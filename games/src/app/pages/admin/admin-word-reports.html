@@ -1,0 +1,61 @@
+<div class="filters" role="group" aria-label="Status">
+  @for (option of statuses; track option) {
+    <button
+      type="button"
+      class="button button-secondary button-small"
+      [attr.aria-pressed]="option === status()"
+      (click)="show(option)"
+    >
+      {{ statusNames[option] }}
+    </button>
+  }
+</div>
+<p class="muted">A word reported 3 times stops counting in the word builder until you decide.</p>
+
+@if (failed()) {
+  <p class="error" role="alert">That change didn't save. Check the API and try again.</p>
+}
+
+@if (loading()) {
+  <p class="muted">Loading…</p>
+} @else if (reports().length === 0) {
+  <p class="muted">No words here.</p>
+} @else {
+  <div class="card table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Word</th>
+          <th scope="col">Language</th>
+          <th scope="col" class="number">Reports</th>
+          <th scope="col">First reported</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (report of reports(); track report.language + report.word) {
+          <tr>
+            <th scope="row" [attr.lang]="report.language">{{ report.word }}</th>
+            <td>{{ report.language.toUpperCase() }}</td>
+            <td class="number">{{ report.reports }}</td>
+            <td>{{ report.firstReported }}</td>
+            <td>
+              <div class="actions">
+                @if (report.status !== 'approved') {
+                  <button type="button" class="button button-secondary button-small" (click)="decide(report, 'approved')">
+                    Keep out
+                  </button>
+                }
+                @if (report.status !== 'rejected') {
+                  <button type="button" class="button button-secondary button-small" (click)="decide(report, 'rejected')">
+                    Let it count
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

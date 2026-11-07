@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { byCategory, GAME_SLUGS, GAMES, gameInfo } from './games';
+import { byCategory, GAME_SLUGS, GAMES, gameInfo, gameOfPath } from './games';
 
 describe('games', () => {
   it('lists every game once, in a category', () => {
@@ -14,5 +14,12 @@ describe('games', () => {
 
   it('finds a game’s details', () => {
     expect(gameInfo('math-games').category).toBe('numbers');
+  });
+
+  it('finds the game a page address belongs to', () => {
+    expect(gameOfPath('/letter-games')).toBe('letter-games');
+    expect(gameOfPath('/hit-the-note/?x=1')).toBe('hit-the-note');
+    expect(gameOfPath('/privacy')).toBeNull();
+    expect(gameOfPath('/')).toBeNull();
   });
 });

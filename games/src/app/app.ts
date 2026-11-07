@@ -1,9 +1,11 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DOCUMENT, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { GameAvailability } from './core/game-availability';
+import { gameOfPath } from './core/games';
 import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
@@ -41,6 +43,10 @@ export class App {
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = this.availability.visibleGames;
+  /** The game of the page being shown, from the address (known while prerendering and on the first render too) */
+  private readonly pageGame = signal(gameOfPath(inject(DOCUMENT).location.pathname));
+  /** A game's page waits, hidden, until it's sure the game is open; then it shows or the visitor goes home */
+  protected readonly isCheckingGame = computed(() => this.pageGame() !== null && !this.availability.isKnown());
   protected readonly githubUrl = GITHUB_REPO_URL;
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly mainSiteUrl = MAIN_SITE_URL;
@@ -58,6 +64,12 @@ export class App {
   constructor() {
     // Which games are open (and whether this is the admin's preview) is known once the API answers
     afterNextRender(() => void this.availability.ready());
+    const router = inject(Router);
+    router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.pageGame.set(gameOfPath(event.urlAfterRedirects));
+      }
+    });
   }
 
   protected cycleTheme(): void {

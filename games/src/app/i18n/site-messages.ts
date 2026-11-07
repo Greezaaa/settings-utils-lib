@@ -59,17 +59,15 @@ export interface SiteMessages {
     /** Shown once until closed: what the site stores, and that it is never sold or shared */
     readonly privacyNotice: string;
     /** Heads the list of big changes since the visitor's last visit */
-    readonly whatsNew: string;
-    /** Heading of the latest changes, shown on a first visit */
-    readonly latestChanges: string;
     /** When the site was last updated, in the visitor's local time */
-    readonly updatedAt: (moment: string) => string;
     readonly lastUpdate: (moment: string) => string;
     /** Button in "What's new" that opens a new game */
     readonly noticeOk: string;
     readonly privacySettings: string;
     readonly privacyLink: string;
     readonly suggestionsLink: string;
+    /** Shown while a game's page checks that the game is open */
+    readonly loading: string;
   };
 
   /** Titles, descriptions and image text for search results and link previews */
@@ -96,6 +94,10 @@ export interface SiteMessages {
     readonly betaLabel: string;
     readonly betaText: string;
     /** Note below the games: who makes them */
+    /** "What's new": the latest changes, and the button to see more or fewer */
+    readonly whatsNewTitle: string;
+    readonly showMore: string;
+    readonly showFewer: string;
     readonly madeByTitle: string;
     readonly madeByText: string;
   };
