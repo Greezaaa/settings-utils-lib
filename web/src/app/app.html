@@ -20,36 +20,59 @@
     </a>
 
     <div class="header-controls">
-      <div class="text-size" role="group" aria-label="Text size">
+      <!-- Text size and theme: inline on wide screens, behind this gear button on phones -->
+      <div class="settings" #settings>
         <button
           type="button"
-          class="icon-button"
-          (click)="fontSize.decrease()"
-          [disabled]="fontSize.isMin()"
-          aria-label="Smaller text"
+          class="icon-button settings-toggle"
+          aria-label="Settings"
+          aria-controls="site-settings"
+          [attr.aria-expanded]="settingsOpen()"
+          (click)="toggleSettings()"
         >
-          A<span aria-hidden="true">-</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+              />
+            </g>
+          </svg>
         </button>
-        <button
-          type="button"
-          class="icon-button"
-          (click)="fontSize.increase()"
-          [disabled]="fontSize.isMax()"
-          aria-label="Larger text"
-        >
-          A<span aria-hidden="true">+</span>
-        </button>
-      </div>
 
-      <button
-        type="button"
-        class="theme-switch"
-        (click)="cycleTheme()"
-        [attr.aria-label]="'Theme: ' + theme.preference() + '. Switch to ' + nextTheme()"
-      >
-        <span class="theme-dot" aria-hidden="true"></span>
-        <span class="mono">{{ theme.preference() }}</span>
-      </button>
+        <div id="site-settings" class="settings-panel" [class.is-open]="settingsOpen()">
+          <div class="text-size" role="group" aria-label="Text size">
+            <button
+              type="button"
+              class="icon-button"
+              (click)="fontSize.decrease()"
+              [disabled]="fontSize.isMin()"
+              aria-label="Smaller text"
+            >
+              A<span aria-hidden="true">-</span>
+            </button>
+            <button
+              type="button"
+              class="icon-button"
+              (click)="fontSize.increase()"
+              [disabled]="fontSize.isMax()"
+              aria-label="Larger text"
+            >
+              A<span aria-hidden="true">+</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="theme-switch"
+            (click)="cycleTheme()"
+            [attr.aria-label]="'Theme: ' + theme.preference() + '. Switch to ' + nextTheme()"
+          >
+            <span class="theme-dot" aria-hidden="true"></span>
+            <span class="mono">{{ theme.preference() }}</span>
+          </button>
+        </div>
+      </div>
 
       <a class="icon-button" [href]="githubUrl" target="_blank" rel="noopener" aria-label="GitHub repository">
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">

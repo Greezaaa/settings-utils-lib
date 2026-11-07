@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
@@ -17,6 +17,10 @@ const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contras
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  host: {
+    '(document:click)': 'closeSettingsOnOutsideClick($event)',
+    '(document:keydown.escape)': 'settingsOpen.set(false)',
+  },
 })
 export class App {
   protected readonly theme = inject(SiteTheme);
@@ -36,7 +40,22 @@ export class App {
     return THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
   });
 
+  /** Whether the settings panel is open (only used on phones, where it hides behind the gear button) */
+  protected readonly settingsOpen = signal(false);
+  private readonly settings = viewChild.required<ElementRef<HTMLElement>>('settings');
+
   protected cycleTheme(): void {
     this.theme.set(this.nextTheme());
+  }
+
+  protected toggleSettings(): void {
+    this.settingsOpen.update((open) => !open);
+  }
+
+  /** A tap anywhere outside the settings closes them */
+  protected closeSettingsOnOutsideClick(event: MouseEvent): void {
+    if (event.target instanceof Node && !this.settings().nativeElement.contains(event.target)) {
+      this.settingsOpen.set(false);
+    }
   }
 }

@@ -98,6 +98,52 @@
   }
 }
 
+// Text size and theme sit inline on wide screens; on phones they move into a panel behind a gear button
+.settings {
+  position: relative;
+}
+
+.settings-toggle {
+  display: none;
+}
+
+.settings-panel {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+@media (max-width: 40rem) {
+  .settings-toggle {
+    display: inline-flex;
+  }
+
+  .settings-panel {
+    align-items: stretch;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-large);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 11rem;
+    padding: 0.75rem;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    z-index: 20;
+
+    &.is-open {
+      display: flex;
+    }
+
+    .text-size .icon-button {
+      flex: 1;
+    }
+  }
+}
+
 .theme-dot {
   background: linear-gradient(90deg, var(--heading) 50%, var(--bg) 50%);
   border: 1px solid var(--heading);
