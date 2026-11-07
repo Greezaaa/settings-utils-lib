@@ -1,7 +1,7 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SuNotificationService } from './notification.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { isSuNotificationImageIcon } from '@su-labs/core/notifications';
+import { isSuNotificationImageIcon, SuNotificationAction } from '@su-labs/core/notifications';
 
 /**
  * Component to display notifications on the screen.
@@ -32,6 +32,18 @@ export class SuNotificationComponent {
    */
   dismiss(id: string): void {
     this.service.dismiss(id);
+  }
+
+  /**
+   * Runs an action button of a notification, then closes the notification unless the action says not to.
+   * @param id ID of the notification the button belongs to
+   * @param action The action that was pressed
+   */
+  runAction(id: string, action: SuNotificationAction): void {
+    action.onClick();
+    if (action.dismiss !== false) {
+      this.service.dismiss(id);
+    }
   }
 
   /**

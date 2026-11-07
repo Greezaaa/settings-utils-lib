@@ -1,8 +1,9 @@
 import { afterNextRender, computed, effect, inject, Injectable, Injector, Signal } from '@angular/core';
-import { SuNotificationService } from '@su-labs/notifications';
+import { Router } from '@angular/router';
+import { SuNotificationAction, SuNotificationService } from '@su-labs/notifications';
 import { SiteLanguage } from '../i18n/site-language';
 import { readStored, writeStored } from './site-storage';
-import { changesIn, LATEST_PRIVACY_VERSION, LATEST_VERSION, updatesSince } from './site-updates';
+import { changesIn, formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, updatesSince } from './site-updates';
 
 /** The site version the visitor last saw */
 const LAST_SEEN_STORAGE = 'last-seen-version';
@@ -11,21 +12,34 @@ const PRIVACY_SEEN_STORAGE = 'privacy-notice-version';
 /** Before versions, closing the privacy notice was saved as `true`: that visitor has seen version 1 */
 const OLD_PRIVACY_STORAGE = 'privacy-notice-dismissed';
 
+/** What a notice shows; it is rebuilt when the language changes */
+interface NoticeContent {
+  readonly message: string;
+  readonly actions: SuNotificationAction[];
+}
+
 const readVersion = (name: string): number | null => {
   const value = readStored(name);
   return typeof value === 'number' && Number.isInteger(value) ? value : null;
 };
 
+/** Notices are compared by their text and button labels to tell when the language changed */
+const signature = ({ message, actions }: NoticeContent): string =>
+  [message, ...actions.map(({ label }) => label)].join('\n');
+
 /**
  * The two notices shown when a visitor arrives, with @su-labs/notifications, each until it is closed:
- * - the privacy notice, on a first visit and again whenever an update changes what the site stores;
- * - "New since your last visit", listing the big changes (site-updates.ts) made since the version they saw.
+ * - the privacy notice, on a first visit and again whenever an update changes what the site saves, with
+ *   "OK" and a button to the privacy page;
+ * - "New since your last visit", listing the big changes (site-updates.ts) since the version they saw, when
+ *   the site was updated, and a button for each new game.
  * Closing a notice is what marks it as seen. Both follow the site language while they are open.
  */
 @Injectable({ providedIn: 'root' })
 export class SiteNotices {
   private readonly notifications = inject(SuNotificationService);
   private readonly language = inject(SiteLanguage);
+  private readonly router = inject(Router);
   private readonly injector = inject(Injector);
 
   constructor() {
@@ -40,7 +54,16 @@ export class SiteNotices {
 
     if (privacySeen < LATEST_PRIVACY_VERSION) {
       this.open(
-        computed(() => this.language.messages().site.privacyNotice),
+        computed(() => {
+          const { site } = this.language.messages();
+          return {
+            message: site.privacyNotice,
+            actions: [
+              { label: site.noticeOk, onClick: () => undefined },
+              { label: site.privacySettings, onClick: () => void this.router.navigateByUrl('/privacy') },
+            ],
+          };
+        }),
         () => writeStored(PRIVACY_SEEN_STORAGE, LATEST_VERSION),
       );
     }
@@ -50,12 +73,28 @@ export class SiteNotices {
       writeStored(LAST_SEEN_STORAGE, LATEST_VERSION);
       return;
     }
-    const updates = updatesSince(lastSeen);
-    if (updates.length > 0) {
+    const changes = changesIn(updatesSince(lastSeen));
+    if (changes.length > 0) {
       this.open(
         computed(() => {
-          const changes = changesIn(updates, this.language.language());
-          return [this.language.messages().site.whatsNew, ...changes.map((change) => `• ${change}`)].join('\n');
+          const language = this.language.language();
+          const { site, games } = this.language.messages();
+          const lines = changes.map((change) => `• ${change.text[language]}`);
+          const updated = site.updatedAt(formatMoment(LATEST_PUBLISHED, language));
+          return {
+            // The update time comes first: it is drawn small and muted (see .whats-new in styles.scss)
+            message: [updated, site.whatsNew, ...lines].join('\n'),
+            actions: changes.flatMap(({ game }) =>
+              game
+                ? [
+                    {
+                      label: site.openGame(games[game].name),
+                      onClick: () => void this.router.navigateByUrl(`/${game}`),
+                    },
+                  ]
+                : [],
+            ),
+          };
         }),
         () => writeStored(LAST_SEEN_STORAGE, LATEST_VERSION),
         'whats-new',
@@ -63,21 +102,23 @@ export class SiteNotices {
     }
   }
 
-  /** Shows a notice until it is closed, then calls `onClosed`; shows it again if its text changes meanwhile */
-  private open(message: Signal<string>, onClosed: () => void, cssClass?: string): void {
-    const show = (): string =>
-      this.notifications.show({ type: 'info', message: message(), autoClose: false, cssClass });
+  /** Shows a notice until it is closed, then calls `onClosed`; shows it again if its content changes meanwhile */
+  private open(content: Signal<NoticeContent>, onClosed: () => void, cssClass?: string): void {
+    const show = (): string => this.notifications.show({ type: 'info', autoClose: false, cssClass, ...content() });
     let id = show();
+    let shown = signature(content());
     const watcher = effect(
       () => {
-        const open = this.notifications.notifications().find((notification) => notification.id === id);
-        if (!open) {
+        const isOpen = this.notifications.notifications().some((notification) => notification.id === id);
+        const current = signature(content());
+        if (!isOpen) {
           onClosed();
           watcher.destroy();
-        } else if (open.message !== message()) {
+        } else if (current !== shown) {
           // The language changed: replace it with the same notice in the new language
           this.notifications.dismiss(id);
           id = show();
+          shown = current;
         }
       },
       { injector: this.injector },

@@ -55,6 +55,14 @@ export interface SiteMessages {
     readonly privacyNotice: string;
     /** Heads the list of big changes since the visitor's last visit */
     readonly whatsNew: string;
+    /** When the site was last updated, in the visitor's local time */
+    readonly updatedAt: (moment: string) => string;
+    readonly lastUpdate: (moment: string) => string;
+    /** Button in "What's new" that opens a new game */
+    readonly openGame: (name: string) => string;
+    readonly noticeOk: string;
+    readonly privacySettings: string;
+    readonly privacyLink: string;
   };
 
   /** Titles, descriptions and image text for search results and link previews */
@@ -143,6 +151,25 @@ export interface SiteMessages {
 
   /** Description of each picture, read by screen readers */
   readonly pictures: Readonly<Record<PictureId, string>>;
+
+  /** The privacy page: what is saved, where and why, and the switch to stop saving */
+  readonly privacy: {
+    readonly title: string;
+    readonly lead: string;
+    readonly savedTitle: string;
+    readonly columns: { readonly what: string; readonly where: string; readonly why: string };
+    readonly saved: readonly { readonly what: string; readonly where: string; readonly why: string }[];
+    readonly differenceTitle: string;
+    readonly difference: string;
+    readonly neverTitle: string;
+    readonly never: readonly string[];
+    readonly choiceTitle: string;
+    readonly choiceLabel: string;
+    readonly choiceOn: string;
+    readonly choiceOff: string;
+    readonly deleteSaved: string;
+    readonly deleted: string;
+  };
 
   readonly notFound: {
     readonly title: string;

@@ -1,6 +1,10 @@
-<div class="notification-container {{ service.position }}">
+<div class="notification-container {{ service.position }}" [attr.data-slide]="service.slideFrom">
 	@for (notification of notifications(); track notification.id) {
-	<div class="notification {{ notification.type }} {{ notification.cssClass ?? '' }}">
+	<div
+		class="notification {{ notification.type }} {{ notification.cssClass ?? '' }}"
+		animate.enter="su-notification-enter"
+		animate.leave="su-notification-leave"
+	>
 
 		<div class="icon-container">
 			@if (notification.icon) {
@@ -47,7 +51,17 @@
 			}
 		</div>
 
-		<span class="message">{{ notification.message }}</span>
+		<div class="content">
+			<span class="message">{{ notification.message }}</span>
+
+			@if (notification.actions?.length) {
+			<div class="actions">
+				@for (action of notification.actions; track $index) {
+				<button class="action" type="button" (click)="runAction(notification.id, action)">{{ action.label }}</button>
+				}
+			</div>
+			}
+		</div>
 
 		<button class="close" (click)="dismiss(notification.id)" type="button">×</button>
 	</div>

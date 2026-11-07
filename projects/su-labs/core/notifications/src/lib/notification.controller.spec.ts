@@ -24,7 +24,28 @@ describe('SuNotificationController', () => {
     expect(notifications[0].type).toBe('success');
   });
 
-  it('should apply default options', () => {
+  it('should keep the action buttons of a notification', () => {
+    const controller = new SuNotificationController();
+    const onClick = vi.fn();
+    controller.show({ message: 'Saved', type: 'info', actions: [{ label: 'Undo', onClick, dismiss: false }] });
+
+    const [action] = controller.notifications.get()[0].actions ?? [];
+    expect(action.label).toBe('Undo');
+    expect(action.dismiss).toBe(false);
+    action.onClick();
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+
+    it('should slide from the side by default, and from a chosen direction once configured', () => {
+    const controller = new SuNotificationController();
+    expect(controller.slideFrom.get()).toBe('auto');
+
+    controller.configure({ position: 'top-right', slideFrom: 'top' });
+    expect(controller.position.get()).toBe('top-right');
+    expect(controller.slideFrom.get()).toBe('top');
+  });
+
+    it('should apply default options', () => {
     const controller = new SuNotificationController();
     controller.show({ message: 'Defaults', type: 'info' });
 

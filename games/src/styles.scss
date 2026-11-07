@@ -24,7 +24,13 @@
   color: var(--text);
 }
 
-// "New since your last visit": one change per line
+// "New since your last visit": one change per line, under a small, muted update time
 .notification.whats-new .message {
+  display: block;
   white-space: pre-line;
+
+  &::first-line {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
 }

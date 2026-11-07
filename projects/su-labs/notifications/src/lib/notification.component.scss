@@ -1,54 +1,55 @@
 .notification-container {
+	--_edge: var(--su-notification-container-position, 1rem);
+	// Where a notification starts its slide in (and ends its slide out), per direction
+	--_left: calc(-100% - 2rem) 0;
+	--_right: calc(100% + 2rem) 0;
+	--_top: 0 calc(-100% - 2rem);
+	--_bottom: 0 calc(100% + 2rem);
 	position: fixed;
 	pointer-events: none;
 	display: flex;
+	flex-direction: column;
 	gap: var(--su-notification-container-gap, 1.2rem);
 	width: var(--su-notification-width, max-content);
 	max-width: var(--su-notification-max-width, min(100% - 2rem, 300px));
 	z-index: 999999;
 
-	&.top-right {
-		align-items: flex-end;
-		flex-direction: column;
-		top: var(--su-notification-container-position, 1rem);
-		right: var(--su-notification-container-position, 1rem);
+	// A position is a vertical edge (top, bottom) plus a side (left, right, center), e.g. `top-right`;
+	// notifications slide in from that side, or from the top or bottom edge when centred
+	&[class*='top-'] {
+		top: var(--_edge);
+		--_slide: var(--_top);
 	}
 
-	&.top-left {
-		align-items: flex-start;
-		flex-direction: column;
-		top: var(--su-notification-container-position, 1rem);
-		left: var(--su-notification-container-position, 1rem);
-	}
-
-	&.bottom-right {
-		align-items: flex-end;
+	&[class*='bottom-'] {
+		bottom: var(--_edge);
 		flex-direction: column-reverse;
-		bottom: var(--su-notification-container-position, 1rem);
-		right: var(--su-notification-container-position, 1rem);
+		--_slide: var(--_bottom);
 	}
 
-	&.bottom-left {
+	&[class*='-right'] {
+		align-items: flex-end;
+		right: var(--_edge);
+		--_slide: var(--_right);
+	}
+
+	&[class*='-left'] {
 		align-items: flex-start;
-		flex-direction: column-reverse;
-		bottom: var(--su-notification-container-position, 1rem);
-		left: var(--su-notification-container-position, 1rem);
+		left: var(--_edge);
+		--_slide: var(--_left);
 	}
 
-	&.top-center {
+	&[class*='-center'] {
 		align-items: center;
-		flex-direction: column;
-		top: var(--su-notification-container-position, 1rem);
 		left: 50%;
 		translate: -50% 0;
 	}
 
-	&.bottom-center {
-		align-items: center;
-		flex-direction: column-reverse;
-		bottom: var(--su-notification-container-position, 1rem);
-		left: 50%;
-		translate: -50% 0;
+	// slideFrom: a fixed direction, whatever the position
+	@each $side in left, right, top, bottom {
+		&[data-slide='#{$side}'] {
+			--_slide: var(--_#{$side});
+		}
 	}
 }
 
@@ -59,30 +60,32 @@
 	color: var(--su-notification-text-color, #333);
 	padding-block: var(--su-notification-padding-block, 1rem);
 	padding-inline: var(--su-notification-padding-inline, 1.25rem);
-	box-shadow: 0 4px 8px var(--su-notification-box-shadow, rgba(0, 0, 0, 0.15));
+	// Private shorthands (--_*), defined once and reused below
+	--_shadow: 0 4px 8px var(--su-notification-box-shadow, rgba(0, 0, 0, 0.15));
+	box-shadow: var(--_shadow);
+	border-left: 4px solid var(--_border);
 	display: flex;
 	align-items: center;
 	gap: 1rem;
-	transition: transform 0.2s ease, opacity 0.2s ease;
 
 	&.success {
-		border-left: 4px solid var(--su-notification-success-border-color, #4caf50);
+		--_border: var(--su-notification-success-border-color, #4caf50);
 	}
 
 	&.info {
-		border-left: 4px solid var(--su-notification-info-border-color, #2196f3);
+		--_border: var(--su-notification-info-border-color, #2196f3);
 	}
 
 	&.warning {
-		border-left: 4px solid var(--su-notification-warning-border-color, #ff9800);
+		--_border: var(--su-notification-warning-border-color, #ff9800);
 	}
 
 	&.error {
-		border-left: 4px solid var(--su-notification-error-border-color, #f44336);
+		--_border: var(--su-notification-error-border-color, #f44336);
 	}
 
 	&.custom {
-		border-left: 4px solid var(--su-notification-custom-border-color, #9c27b0);
+		--_border: var(--su-notification-custom-border-color, #9c27b0);
 	}
 
 	.icon-container {
@@ -99,21 +102,40 @@
 		}
 	}
 
-	.message {
+	.content {
+		display: grid;
 		flex: 1;
+		gap: 0.75rem;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.action {
+		background: none;
+		border: 1px solid var(--su-notification-action-border-color, currentColor);
+		border-radius: 6px;
+		color: inherit;
+		cursor: pointer;
+		font: inherit;
+		padding: 0.25rem 0.75rem;
 	}
 
 	.close {
+		--_size: var(--su-notification-close-btn-size, 20px);
 		position: absolute;
-		width: var(--su-notification-close-btn-size, 20px);
-		height: var(--su-notification-close-btn-size, 20px);
-		top: calc(var(--su-notification-close-btn-size, 20px) * -0.5);
-		right: calc(var(--su-notification-close-btn-size, 20px) * -0.5);
+		width: var(--_size);
+		height: var(--_size);
+		top: calc(var(--_size) / -2);
+		right: calc(var(--_size) / -2);
 		background: var(--su-notification-close-btn-background-color, var(--su-notification-background-color, #fff));
 		color: var(--su-notification-close-btn-text-color, var(--su-notification-text-color, #333));
 		border: 1px solid var(--su-notification-close-btn-border-color, rgba(0, 0, 0, 0));
 		border-radius: var(--su-notification-close-btn-border-radius, 50%);
-		box-shadow: 0 4px 8px var(--su-notification-box-shadow, rgba(0, 0, 0, 0.15));
+		box-shadow: var(--_shadow);
 		font-size: var(--su-notification-close-btn-font-size, 1rem);
 		display: flex;
 		justify-content: center;
@@ -125,5 +147,28 @@
 			background: var(--su-notification-close-btn-hover-background, rgba(51, 51, 51, .5));
 			color: var(--su-notification-close-btn-hover-color, #fff);
 		}
+	}
+}
+
+// Slide in from the side the notifications sit on, and back out when closed (Angular's animate.enter/leave)
+.su-notification-enter {
+	animation: su-notification-slide var(--su-notification-enter-duration, 400ms) ease-out;
+}
+
+.su-notification-leave {
+	animation: su-notification-slide var(--su-notification-leave-duration, 300ms) ease-in reverse forwards;
+}
+
+@keyframes su-notification-slide {
+	from {
+		opacity: 0;
+		translate: var(--_slide);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.su-notification-enter,
+	.su-notification-leave {
+		animation: none;
 	}
 }

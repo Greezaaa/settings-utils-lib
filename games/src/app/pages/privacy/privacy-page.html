@@ -1,0 +1,55 @@
+<header class="container page-head">
+  <h1>{{ t().privacy.title }}</h1>
+  <p class="lead">{{ t().privacy.lead }}</p>
+</header>
+
+<section class="container page-section" aria-labelledby="privacy-choice">
+  <h2 id="privacy-choice" class="section-title">{{ t().privacy.choiceTitle }}</h2>
+  <label class="switch">
+    <input type="checkbox" role="switch" [checked]="savingAllowed()" (change)="onChange($event)" />
+    <span class="track" aria-hidden="true"></span>
+    <span>{{ t().privacy.choiceLabel }}</span>
+  </label>
+  <p class="muted" aria-live="polite">{{ savingAllowed() ? t().privacy.choiceOn : t().privacy.choiceOff }}</p>
+  <div class="delete">
+    <button type="button" class="button button-secondary" (click)="deleteSaved()">{{ t().privacy.deleteSaved }}</button>
+  </div>
+</section>
+
+<section class="container page-section" aria-labelledby="privacy-saved">
+  <h2 id="privacy-saved" class="section-title">{{ t().privacy.savedTitle }}</h2>
+  <div class="table-scroll">
+    <table class="saved">
+      <thead>
+        <tr>
+          <th scope="col">{{ t().privacy.columns.what }}</th>
+          <th scope="col">{{ t().privacy.columns.where }}</th>
+          <th scope="col">{{ t().privacy.columns.why }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of t().privacy.saved; track row.what) {
+          <tr>
+            <th scope="row">{{ row.what }}</th>
+            <td>{{ row.where }}</td>
+            <td class="muted">{{ row.why }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="container page-section" aria-labelledby="privacy-difference">
+  <h2 id="privacy-difference" class="section-title">{{ t().privacy.differenceTitle }}</h2>
+  <p class="lead">{{ t().privacy.difference }}</p>
+</section>
+
+<section class="container page-section" aria-labelledby="privacy-never">
+  <h2 id="privacy-never" class="section-title">{{ t().privacy.neverTitle }}</h2>
+  <ul class="never">
+    @for (item of t().privacy.never; track item) {
+      <li>{{ item }}</li>
+    }
+  </ul>
+</section>

@@ -28,6 +28,12 @@ export const ES: SiteMessages = {
     privacyNotice:
       'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
     whatsNew: 'Novedades desde tu última visita:',
+    updatedAt: (moment) => `Actualizado: ${moment}`,
+    lastUpdate: (moment) => `Última actualización: ${moment}`,
+    openGame: (name) => `${name} →`,
+    noticeOk: 'Vale',
+    privacySettings: 'Ajustes de privacidad',
+    privacyLink: 'Privacidad',
   },
 
   seo: {
@@ -147,6 +153,48 @@ export const ES: SiteMessages = {
 
   pictures: {
     family: 'Dibujo infantil de una madre y su hija de la mano, con el sol, la luna y nubes',
+  },
+
+  privacy: {
+    title: 'Privacidad',
+    lead: 'Esta web es para peques, así que guarda lo mínimo. Aquí tienes exactamente qué guarda, dónde y para qué.',
+    savedTitle: 'Qué guardamos',
+    columns: { what: 'Qué', where: 'Dónde', why: 'Para qué' },
+    saved: [
+      {
+        what: 'Tema y tamaño del texto',
+        where: 'Una cookie de su-labs.dev',
+        why: 'Para que su-labs.dev y estos juegos se vean como elegiste',
+      },
+      {
+        what: 'Idioma',
+        where: 'El almacenamiento local de este navegador',
+        why: 'Para que los juegos se abran en tu idioma',
+      },
+      {
+        what: 'Colores y ajustes de los juegos',
+        where: 'Almacenamiento local',
+        why: 'Para que los juegos recuerden tus elecciones',
+      },
+      { what: 'Mejores puntuaciones', where: 'Almacenamiento local', why: 'Para que puedas batir tus récords' },
+      { what: 'Avisos ya vistos', where: 'Almacenamiento local', why: 'Para no volver a mostrártelos' },
+    ],
+    differenceTitle: 'Cookies y almacenamiento local',
+    difference:
+      'Una cookie se envía a nuestro servidor en cada visita; el almacenamiento local se queda en este navegador y nunca se envía a ningún sitio. Solo usamos una cookie, para compartir tu tema y tamaño de texto con su-labs.dev, y el servidor no la lee.',
+    neverTitle: 'Lo que nunca hacemos',
+    never: [
+      'Ni cuentas ni datos personales',
+      'Ni anuncios ni seguimiento',
+      'No vendemos ni compartimos nada con nadie',
+    ],
+    choiceTitle: 'Tu elección',
+    choiceLabel: 'Recordar mis preferencias en este dispositivo',
+    choiceOn: 'Tus preferencias se guardan en este dispositivo.',
+    choiceOff:
+      'No se guarda nada: los ajustes vuelven a los de siempre en cada visita. Solo se recuerda esta elección.',
+    deleteSaved: 'Borrar mis datos guardados',
+    deleted: 'Hecho: se ha borrado todo lo que esta web guardaba en este dispositivo.',
   },
 
   notFound: {

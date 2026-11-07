@@ -183,6 +183,12 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
+Notifications slide in from the side they sit on (from the left here). To slide them in from another direction, whatever the position, set `slideFrom` to `'left'`, `'right'`, `'top'` or `'bottom'` (`'auto'` is the default):
+
+```ts
+notificationService.configure({ position: 'top-right', slideFrom: 'top' });
+```
+
 ## API Reference
 
 ### Service (SuNotificationService)
@@ -220,7 +226,30 @@ interface NotificationConfig {
   autoClose?: boolean;      // Default: true
   cssClass?: string;        // Custom CSS class
   icon?: string;            // Custom SVG string or image URL
+  actions?: NotificationAction[]; // Buttons under the message
 }
+
+interface NotificationAction {
+  label: string;            // Button text
+  onClick: () => void;      // Called when the button is pressed
+  dismiss?: boolean;        // Close the notification afterwards (default: true)
+}
+```
+
+### Action buttons
+
+Give a notification `actions` to show buttons under its message, for example to undo or to open a page. Each button closes the notification after its `onClick` runs, unless it sets `dismiss: false`. Combine with `autoClose: false` to keep the notification until the user answers:
+
+```typescript
+this.notifications.show({
+  type: 'info',
+  message: 'Photo deleted',
+  autoClose: false,
+  actions: [
+    { label: 'Undo', onClick: () => this.restorePhoto() },
+    { label: 'OK', onClick: () => {} },
+  ],
+});
 ```
 
 ## Configuration Options
@@ -248,7 +277,7 @@ interface NotificationConfig {
 
 ## Styling
 
-Every part of a notification can be restyled with CSS variables, set on `:root` or any parent element. For example, to let long messages use more width:
+Notifications slide in from the side of the screen they appear on and slide back out when they close (they simply appear and disappear for visitors who prefer reduced motion). Every part of a notification can be restyled with CSS variables, set on `:root` or any parent element. For example, to let long messages use more width:
 
 ```css
 :root {
@@ -264,12 +293,15 @@ Every part of a notification can be restyled with CSS variables, set on `:root` 
 | `--su-notification-padding-inline` | `1.25rem` | Space left and right of the text |
 | `--su-notification-container-gap` | `1.2rem` | Space between stacked notifications |
 | `--su-notification-container-position` | `1rem` | Distance from the edges of the screen |
+| `--su-notification-enter-duration` | `400ms` | How long a notification takes to slide in from its side of the screen |
+| `--su-notification-leave-duration` | `300ms` | How long it takes to slide back out when closed |
 | `--su-notification-background-color` | `#fff` | Background |
 | `--su-notification-text-color` | `#333` | Text |
 | `--su-notification-box-shadow` | `rgba(0, 0, 0, 0.15)` | Shadow colour |
 | `--su-notification-info-border-color` | `#2196f3` | Left border of `info` (likewise `success`, `warning`, `error`, `custom`) |
 | `--su-notification-icon-color` | `currentColor` | Icon colour |
 | `--su-notification-icon-width` / `-height` | `24px` | Icon size |
+| `--su-notification-action-border-color` | `currentColor` | Border of action buttons (they take the notification's text colour) |
 | `--su-notification-close-btn-size` | `20px` | Close button size |
 | `--su-notification-close-btn-background-color` | the background | Close button background (also `-text-color`, `-border-color`, `-border-radius`, `-font-size`, `-hover-background`, `-hover-color`) |
 

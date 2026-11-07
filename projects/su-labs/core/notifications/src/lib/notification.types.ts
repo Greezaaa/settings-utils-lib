@@ -9,6 +9,23 @@ export type SuNotificationType =
   | 'custom';
 
 /**
+ * A button shown under a notification's message, e.g. "Undo" or "Open".
+ */
+export interface SuNotificationAction {
+  /** Button text */
+  label: string;
+
+  /** Called when the button is pressed */
+  onClick: () => void;
+
+  /**
+   * Whether pressing the button also closes the notification.
+   * @default true
+   */
+  dismiss?: boolean;
+}
+
+/**
  * Options for configuring a notification.
  */
 export interface SuNotificationOptions {
@@ -46,6 +63,12 @@ export interface SuNotificationOptions {
    * - `string`: custom SVG markup or URL for the icon
    */
   icon?: boolean | string;
+
+  /**
+   * Buttons shown under the message, in order. Rendered by the Angular component; with the controller alone,
+   * your own markup renders them and calls `onClick`.
+   */
+  actions?: SuNotificationAction[];
 }
 
 /**
@@ -72,10 +95,22 @@ export type SuNotificationPosition =
 /**
  * Configuration for the notification controller.
  */
+/**
+ * The direction notifications slide in from (and back out to). `auto` uses the side they sit on:
+ * the left or right edge, or the top or bottom edge for the centred positions.
+ */
+export type SuNotificationSlide = 'auto' | 'left' | 'right' | 'top' | 'bottom';
+
 export interface SuNotificationConfig {
   /**
    * Where notifications appear on the screen.
    * @default 'top-right'
    */
   position?: SuNotificationPosition;
+
+  /**
+   * The direction notifications slide in from, whatever their position.
+   * @default 'auto'
+   */
+  slideFrom?: SuNotificationSlide;
 }

@@ -1,5 +1,5 @@
 import { createSuStore, SuReadableStore } from '@su-labs/core';
-import { SuNotification, SuNotificationConfig, SuNotificationOptions, SuNotificationPosition } from './notification.types';
+import { SuNotification, SuNotificationConfig, SuNotificationOptions, SuNotificationPosition, SuNotificationSlide } from './notification.types';
 
 /** Default time in milliseconds before a notification closes itself */
 const DEFAULT_DURATION = 3000;
@@ -18,6 +18,9 @@ export class SuNotificationController {
   /** Where notifications appear on screen */
   private readonly positionStore = createSuStore<SuNotificationPosition>('top-right');
 
+  /** The direction notifications slide in from */
+  private readonly slideFromStore = createSuStore<SuNotificationSlide>('auto');
+
   /** Pending auto-close timers, by notification ID */
   private readonly timers = new Map<string, ReturnType<typeof setTimeout>>();
 
@@ -27,6 +30,9 @@ export class SuNotificationController {
   /** Reactive, read-only position where notifications appear */
   readonly position: SuReadableStore<SuNotificationPosition> = this.positionStore.asReadonly();
 
+  /** Reactive, read-only direction notifications slide in from */
+  readonly slideFrom: SuReadableStore<SuNotificationSlide> = this.slideFromStore.asReadonly();
+
   /**
    * Configure the controller.
    * @param config Configuration object.
@@ -34,6 +40,9 @@ export class SuNotificationController {
   public configure(config: SuNotificationConfig): void {
     if (config.position) {
       this.positionStore.set(config.position);
+    }
+    if (config.slideFrom) {
+      this.slideFromStore.set(config.slideFrom);
     }
   }
 
@@ -51,6 +60,7 @@ export class SuNotificationController {
       autoClose: options.autoClose ?? true,
       cssClass: options.cssClass,
       icon: options.icon ?? true,
+      actions: options.actions,
     };
 
     this.notificationsStore.set([...this.notificationsStore.get(), notification]);

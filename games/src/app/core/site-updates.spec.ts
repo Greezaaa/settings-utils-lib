@@ -1,9 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { changesIn, LATEST_PRIVACY_VERSION, LATEST_VERSION, SITE_UPDATES, SiteUpdate, updatesSince } from './site-updates';
+import { changesIn, formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, SITE_UPDATES, SiteUpdate, updatesSince } from './site-updates';
 
+const text = (word: string) => ({ en: word, es: word, eu: word });
 const UPDATES: readonly SiteUpdate[] = [
-  { version: 1, date: '2026-01-01', privacy: true, changes: { en: ['One'], es: ['Uno'], eu: ['Bat'] } },
-  { version: 2, date: '2026-02-01', changes: { en: ['Two', 'Three'], es: ['Dos', 'Tres'], eu: ['Bi', 'Hiru'] } },
+  { version: 1, published: '2026-01-01T10:00:00Z', privacy: true, changes: [{ text: text('One') }] },
+  {
+    version: 2,
+    published: '2026-02-01T10:00:00Z',
+    changes: [{ text: text('Two'), game: 'math-games' }, { text: text('Three') }],
+  },
 ];
 
 describe('site updates', () => {
@@ -13,19 +18,23 @@ describe('site updates', () => {
     expect(updatesSince(2, UPDATES)).toEqual([]);
   });
 
-  it('gathers their changes in one language', () => {
-    expect(changesIn(UPDATES, 'es')).toEqual(['Uno', 'Dos', 'Tres']);
+  it('gathers their changes, oldest first', () => {
+    expect(changesIn(UPDATES).map((change) => change.text.en)).toEqual(['One', 'Two', 'Three']);
   });
 
-  it('keeps versions counting up, dates in order, and every change in every language', () => {
+  it('formats a moment as a local date and time', () => {
+    expect(formatMoment('2026-11-07T16:30:00+01:00', 'en')).toMatch(/2026/);
+  });
+
+  it('keeps versions counting up, times in order and valid', () => {
     SITE_UPDATES.forEach((update, index) => {
       expect(update.version).toBe(index + 1);
-      expect(update.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(update.date >= (SITE_UPDATES[index - 1]?.date ?? '')).toBe(true);
-      expect(update.changes.es).toHaveLength(update.changes.en.length);
-      expect(update.changes.eu).toHaveLength(update.changes.en.length);
+      expect(Number.isNaN(Date.parse(update.published))).toBe(false);
+      const previous = SITE_UPDATES[index - 1];
+      expect(!previous || Date.parse(update.published) >= Date.parse(previous.published)).toBe(true);
     });
     expect(LATEST_VERSION).toBe(SITE_UPDATES.length);
+    expect(LATEST_PUBLISHED).toBe(SITE_UPDATES[SITE_UPDATES.length - 1].published);
     expect(LATEST_PRIVACY_VERSION).toBeGreaterThanOrEqual(1);
   });
 });

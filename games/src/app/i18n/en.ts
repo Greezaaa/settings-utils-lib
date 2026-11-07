@@ -28,6 +28,12 @@ export const EN: SiteMessages = {
     privacyNotice:
       'We use cookies only to save your preferences, like theme, text size and language. We never sell or share your data with anyone. We love your privacy!',
     whatsNew: 'New since your last visit:',
+    updatedAt: (moment) => `Updated ${moment}`,
+    lastUpdate: (moment) => `Last update: ${moment}`,
+    openGame: (name) => `${name} →`,
+    noticeOk: 'OK',
+    privacySettings: 'Privacy settings',
+    privacyLink: 'Privacy',
   },
 
   seo: {
@@ -146,6 +152,35 @@ export const EN: SiteMessages = {
 
   pictures: {
     family: 'A child’s drawing of a mother and daughter holding hands, with the sun, the moon and clouds',
+  },
+
+  privacy: {
+    title: 'Privacy',
+    lead: 'This site is for kids, so it saves as little as possible. Here’s exactly what it saves, where, and why.',
+    savedTitle: 'What we save',
+    columns: { what: 'What', where: 'Where', why: 'Why' },
+    saved: [
+      {
+        what: 'Theme and text size',
+        where: 'A cookie for su-labs.dev',
+        why: 'So su-labs.dev and these games look the way you chose',
+      },
+      { what: 'Language', where: 'This browser’s local storage', why: 'So the games open in your language' },
+      { what: 'Game colours and settings', where: 'Local storage', why: 'So the games remember your choices' },
+      { what: 'Best scores', where: 'Local storage', why: 'So you can beat your records' },
+      { what: 'Notices you’ve seen', where: 'Local storage', why: 'So we don’t show them again' },
+    ],
+    differenceTitle: 'Cookies and local storage',
+    difference:
+      'A cookie is sent to our server with every visit; local storage stays in this browser and is never sent anywhere. We use one cookie, only to share your theme and text size with su-labs.dev, and the server doesn’t read it.',
+    neverTitle: 'What we never do',
+    never: ['No accounts and no personal data', 'No ads and no tracking', 'Nothing is sold or shared with anyone'],
+    choiceTitle: 'Your choice',
+    choiceLabel: 'Remember my preferences on this device',
+    choiceOn: 'Your preferences are saved on this device.',
+    choiceOff: 'Nothing is saved: settings go back to their defaults on every visit. Only this choice is remembered.',
+    deleteSaved: 'Delete my saved data',
+    deleted: 'Done: everything this site saved on this device is deleted.',
   },
 
   notFound: {

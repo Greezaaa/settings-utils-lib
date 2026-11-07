@@ -193,9 +193,10 @@ notifications.dismiss(id);
 | `show(options)` | Adds a notification and returns its ID |
 | `dismiss(id)` | Removes one notification |
 | `clearAll()` | Removes all notifications |
-| `configure({ position })` | Sets where notifications appear |
+| `configure({ position, slideFrom })` | Sets where notifications appear, and the direction they slide in from (`'auto'`, `'left'`, `'right'`, `'top'`, `'bottom'`) |
 | `notifications` | Read-only store of the active notifications, oldest first |
 | `position` | Read-only store of the position (default `'top-right'`) |
+| `slideFrom` | Read-only store of the slide direction (default `'auto'`: the side they sit on) |
 | `destroy()` | Removes all notifications and cancels pending timers |
 
 `isSuNotificationImageIcon(icon)` tells you whether a string icon is an image path or URL (render with `<img>`) or inline SVG markup (render as HTML).
@@ -210,6 +211,7 @@ notifications.dismiss(id);
 | `autoClose` | `true` | Whether to close automatically after `duration` |
 | `cssClass` | — | Extra CSS class(es) for custom styling |
 | `icon` | `true` | `true` for the type's default icon, `false` for none, or an image URL or inline SVG string |
+| `actions` | — | Buttons under the message: `{ label, onClick, dismiss? }`. Your markup renders them, calls `onClick`, then `dismiss(id)` unless `dismiss` is `false` |
 
 Positions: `'top-right'`, `'top-left'`, `'top-center'`, `'bottom-right'`, `'bottom-left'`, `'bottom-center'`.
 

@@ -28,6 +28,12 @@ export const EU: SiteMessages = {
     privacyNotice:
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
     whatsNew: 'Zure azken bisitatik dauden berritasunak:',
+    updatedAt: (moment) => `Eguneratua: ${moment}`,
+    lastUpdate: (moment) => `Azken eguneratzea: ${moment}`,
+    openGame: (name) => `${name} →`,
+    noticeOk: 'Ados',
+    privacySettings: 'Pribatutasun-ezarpenak',
+    privacyLink: 'Pribatutasuna',
   },
 
   seo: {
@@ -147,6 +153,48 @@ export const EU: SiteMessages = {
 
   pictures: {
     family: 'Ama eta alaba eskutik helduta, eguzkia, ilargia eta hodeiekin, haur-marrazki batean',
+  },
+
+  privacy: {
+    title: 'Pribatutasuna',
+    lead: 'Webgune hau haurrentzat da, beraz ahalik eta gutxien gordetzen du. Hemen duzu zehazki zer gordetzen duen, non eta zertarako.',
+    savedTitle: 'Zer gordetzen dugun',
+    columns: { what: 'Zer', where: 'Non', why: 'Zertarako' },
+    saved: [
+      {
+        what: 'Gaia eta testuaren tamaina',
+        where: 'su-labs.dev-en cookie bat',
+        why: 'su-labs.dev eta joko hauek zuk aukeratu bezala ikus daitezen',
+      },
+      {
+        what: 'Hizkuntza',
+        where: 'Nabigatzaile honen biltegiratze lokala',
+        why: 'Jokoak zure hizkuntzan ireki daitezen',
+      },
+      {
+        what: 'Jokoen koloreak eta ezarpenak',
+        where: 'Biltegiratze lokala',
+        why: 'Jokoek zure aukerak gogora ditzaten',
+      },
+      { what: 'Puntuazio onenak', where: 'Biltegiratze lokala', why: 'Zure errekorrak hautsi ahal izateko' },
+      { what: 'Ikusitako oharrak', where: 'Biltegiratze lokala', why: 'Berriro ez erakusteko' },
+    ],
+    differenceTitle: 'Cookieak eta biltegiratze lokala',
+    difference:
+      'Cookie bat gure zerbitzarira bidaltzen da bisita bakoitzean; biltegiratze lokala nabigatzaile honetan geratzen da eta ez da inora bidaltzen. Cookie bakarra erabiltzen dugu, zure gaia eta testuaren tamaina su-labs.dev-ekin partekatzeko, eta zerbitzariak ez du irakurtzen.',
+    neverTitle: 'Inoiz egiten ez duguna',
+    never: [
+      'Ez kontua, ez datu pertsonalik',
+      'Ez iragarkirik, ez jarraipenik',
+      'Ez dugu ezer saltzen edo inorekin partekatzen',
+    ],
+    choiceTitle: 'Zure aukera',
+    choiceLabel: 'Gogoratu nire hobespenak gailu honetan',
+    choiceOn: 'Zure hobespenak gailu honetan gordetzen dira.',
+    choiceOff:
+      'Ez da ezer gordetzen: ezarpenak hasierakoetara itzultzen dira bisita bakoitzean. Aukera hau bakarrik gogoratzen da.',
+    deleteSaved: 'Ezabatu gordetako datuak',
+    deleted: 'Eginda: webgune honek gailu honetan gordetako guztia ezabatu da.',
   },
 
   notFound: {

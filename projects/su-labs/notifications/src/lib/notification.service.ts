@@ -5,6 +5,7 @@ import {
   SuNotificationController,
   SuNotificationOptions,
   SuNotificationPosition,
+  SuNotificationSlide,
 } from '@su-labs/core/notifications';
 
 /**
@@ -44,9 +45,23 @@ export class SuNotificationService implements OnDestroy {
   }
 
   /**
+   * The direction notifications slide in from, whatever their position.
+   * Can also be set via the `configure` method.
+   * @default 'auto'
+   */
+  get slideFrom(): SuNotificationSlide {
+    return this.controller.slideFrom.get();
+  }
+
+  set slideFrom(slideFrom: SuNotificationSlide) {
+    this.controller.configure({ slideFrom });
+  }
+
+  /**
    * Configure the notification service.
    * @param cfg Configuration object
    * @param cfg.position Optional position to display notifications.
+   * @param cfg.slideFrom Optional direction notifications slide in from.
    */
   configure(cfg: SuNotificationConfig): void {
     this.controller.configure(cfg);

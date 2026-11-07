@@ -2,7 +2,7 @@ import { Route, Routes } from '@angular/router';
 import { GameSlug } from './core/games';
 import { PREVIEW_MESSAGES, SITE_META, SITE_NAME } from './core/page-meta';
 
-const { seo, home, games } = PREVIEW_MESSAGES;
+const { seo, home, games, privacy } = PREVIEW_MESSAGES;
 
 /** Page title and description of a game, for search results and link previews */
 function gameMeta(slug: GameSlug): Pick<Route, 'title' | 'data'> {
@@ -43,6 +43,12 @@ export const routes: Routes = [
     path: 'place-pieces',
     ...gameMeta('place-pieces'),
     loadComponent: () => import('./pages/place-pieces/place-pieces-page').then((m) => m.PlacePiecesPage),
+  },
+  {
+    path: 'privacy',
+    title: `${privacy.title} · ${SITE_NAME}`,
+    data: { description: privacy.lead },
+    loadComponent: () => import('./pages/privacy/privacy-page').then((m) => m.PrivacyPage),
   },
   { path: '404', ...notFound },
   { path: '**', ...notFound },
