@@ -85,6 +85,16 @@ describe('SuThemeController', () => {
     expect(localStorage.getItem('su:theme')).toBeNull();
   });
 
+  it('should apply the theme to a target element instead of <html>', () => {
+    const board = document.createElement('section');
+    service.init({ target: board, defaultTheme: 'custom', themes: { custom: { background: 'navy' } } });
+
+    expect(board.getAttribute('data-theme')).toBe('custom');
+    expect(board.style.getPropertyValue('--su-theme-background')).toBe('navy');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('');
+    expect(document.documentElement.style.getPropertyValue('--su-theme-background')).toBe('');
+  });
+
   it('should resolve system theme when preference is "system"', () => {
     currentMatches = true; // Simulates dark mode
     service.init({ defaultTheme: 'system' });

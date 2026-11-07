@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `createSuCookieStorage({ domain, maxAgeDays })`: saves values in cookies so sites on the same parent domain share them; the domain is only used when the page is on it, so `localhost` keeps working
 - `getSuLocalStorage()`: `localStorage` in a browser, `null` elsewhere
 - `storage` option for `SuThemeController` and `SuFontSizeController` (default: `localStorage`)
+- `target` option for `SuThemeController`: the element the theme is applied to (default: `<html>`), to theme one part of a page
 
 ### Changed
 - Package homepage now points to the website with a live demo

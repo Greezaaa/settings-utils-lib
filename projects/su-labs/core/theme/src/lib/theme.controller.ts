@@ -32,8 +32,8 @@ const DEFAULT_THEMES: Record<SuThemeName, ThemeCssVariables> = {
 /**
  * Framework-agnostic theme manager.
  *
- * Resolves the active theme (including 'system'), applies it to the document as a
- * `data-theme` attribute and CSS variables, persists the user's choice (in localStorage unless
+ * Resolves the active theme (including 'system'), applies it to the document (or a configured
+ * `target` element) as a `data-theme` attribute and CSS variables, persists the user's choice (in localStorage unless
  * another `storage` is configured),
  * and exposes the resolved theme as a reactive store.
  * Safe to import in Node: browser-only work is skipped when there is no DOM.
@@ -116,6 +116,11 @@ export class SuThemeController {
     }
   }
 
+  /** The configured element, or `<html>` in a browser; `null` outside a browser */
+  private target(): HTMLElement | null {
+    return this.config.target ?? (isBrowser() ? document.documentElement : null);
+  }
+
   /** The configured storage, or localStorage in a browser */
   private storage(): SuStorage | null {
     return this.config.storage ?? getSuLocalStorage();
@@ -127,18 +132,19 @@ export class SuThemeController {
   }
 
   /**
-   * Update the store and apply the theme to the document.
+   * Update the store and apply the theme to the target element.
    * @param theme The resolved theme to apply.
    */
   private applyResolvedTheme(theme: SuThemeName): void {
     this.themeStore.set(theme);
 
-    if (!isBrowser()) {
+    const target = this.target();
+    if (!target) {
       return;
     }
 
-    document.documentElement.setAttribute('data-theme', theme);
-    this.applyThemeVariables(theme);
+    target.setAttribute('data-theme', theme);
+    this.applyThemeVariables(target, theme);
   }
 
   /**
@@ -178,9 +184,10 @@ export class SuThemeController {
 
   /**
    * Apply CSS variables for the given theme, merging defaults with config overrides.
+   * @param target The element to set them on.
    * @param theme The theme whose variables should be applied.
    */
-  private applyThemeVariables(theme: SuThemeName): void {
+  private applyThemeVariables(target: HTMLElement, theme: SuThemeName): void {
     const variablesToApply = {
       ...DEFAULT_THEMES[theme],
       ...(this.config.themes?.[theme] ?? {}),
@@ -188,7 +195,7 @@ export class SuThemeController {
 
     for (const [key, value] of Object.entries(variablesToApply)) {
       if (value) {
-        document.documentElement.style.setProperty(`${this.cssVarPrefix}${key}`, value);
+        target.style.setProperty(`${this.cssVarPrefix}${key}`, value);
       }
     }
   }

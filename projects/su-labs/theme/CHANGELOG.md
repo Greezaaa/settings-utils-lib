@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `target` option: the element the theme is applied to (default: `<html>`), to theme one component instead of the whole page
 - `storage` option: where the selected theme is saved (default: `localStorage`); pass `createSuCookieStorage({ domain })` from `@su-labs/core` to share it across subdomains
 
 ### Changed

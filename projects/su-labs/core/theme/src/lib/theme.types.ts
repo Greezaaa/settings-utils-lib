@@ -14,6 +14,12 @@ export interface SuThemeConfig {
    */
   storage?: SuStorage;
 
+  /**
+   * Element the theme is applied to, as a `data-theme` attribute and CSS variables (default: `<html>`).
+   * Pass a component's element to theme only that part of the page; its descendants inherit the variables.
+   */
+  target?: HTMLElement;
+
   /** CSS variable prefix, applied to all theme variables */
   cssVarPrefix?: string;
 

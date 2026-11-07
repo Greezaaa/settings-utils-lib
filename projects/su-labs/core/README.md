@@ -76,7 +76,7 @@ unsubscribe();
 
 ## Theme
 
-Manages light, dark, contrast and custom themes, follows the operating system's `prefers-color-scheme` when set to `'system'`, applies a `data-theme` attribute and CSS variables to `<html>`, and saves the user's choice in `localStorage` (or another [storage](#storage)).
+Manages light, dark, contrast and custom themes, follows the operating system's `prefers-color-scheme` when set to `'system'`, applies a `data-theme` attribute and CSS variables to `<html>` (or a `target` element), and saves the user's choice in `localStorage` (or another [storage](#storage)).
 
 ```ts
 import { SuThemeController } from '@su-labs/core/theme';
@@ -106,6 +106,7 @@ theme.setTheme('dark');
 | `defaultTheme` | `'system'` | Theme used when nothing is saved |
 | `storageKey` | `'su:theme'` | Key the choice is saved under |
 | `storage` | `localStorage` | Where the choice is saved, see [Storage](#storage) |
+| `target` | `<html>` | Element the theme is applied to; pass a component's element to theme only that part of the page |
 | `cssVarPrefix` | `'--su-theme-'` | Prefix for the CSS variables |
 | `themes` | — | Per-theme CSS variable overrides, e.g. `{ dark: { background: '#000' } }` |
 

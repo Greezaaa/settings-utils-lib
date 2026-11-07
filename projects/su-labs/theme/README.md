@@ -222,6 +222,7 @@ type SuThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
 interface SuThemeConfig {
   storageKey?: string;      // Default: 'su:theme'
   storage?: SuStorage;      // Default: localStorage
+  target?: HTMLElement;     // Default: <html>
   cssVarPrefix?: string;    // Default: '--su-theme-'
   defaultTheme?: SuThemeName; // Default: 'system'
   themes?: {
@@ -238,6 +239,7 @@ The service can be configured to fit your application's needs.
 |--------------------|---------------------------------------------------------------|------------------|
 | `storageKey`       | The key used to persist the selected theme.                   | `'su:theme'`     |
 | `storage`          | Where the theme is saved. Use `createSuCookieStorage({ domain })` from `@su-labs/core` to share it across subdomains. | `localStorage` |
+| `target`           | Element the theme is applied to. Pass a component's element to theme only that part of the page. | `<html>` |
 | `cssVarPrefix`     | The prefix for all CSS variables managed by the service.      | `'--su-theme-'`  |
 | `defaultTheme`     | The theme to use if no preference is saved in `localStorage`. | `'system'`       |
 | `themes`           | An object with custom CSS variable overrides for each theme.  | `undefined`      |
