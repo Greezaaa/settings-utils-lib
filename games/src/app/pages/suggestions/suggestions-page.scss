@@ -85,5 +85,11 @@ textarea {
 }
 
 .drop-icon {
-  font-size: 2rem;
+  fill: none;
+  height: 2.5rem;
+  stroke: var(--button-bg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.75;
+  width: 2.5rem;
 }

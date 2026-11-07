@@ -32,7 +32,7 @@ export const EU: SiteMessages = {
     noticeOk: 'Ados',
     privacySettings: 'Pribatutasun-ezarpenak',
     privacyLink: 'Pribatutasuna',
-    suggestionsLink: 'Proposatu ideia bat',
+    suggestionsLink: 'Iradokizunen postontzia',
     loading: 'Kargatzen…',
   },
 
@@ -325,8 +325,8 @@ export const EU: SiteMessages = {
   },
 
   suggestions: {
-    title: 'Proposatu ideia bat',
-    lead: 'Esaiguzu zer joko nahi zenukeen, zer hobetuko zenukeen, edo bidali marrazki bat jokoetarako. Mezu guztiak irakurtzen ditugu.',
+    title: 'Iradokizunen postontzia',
+    lead: 'Hemen ikusi nahiko zenukeen jokoren bat duzu buruan, zure marrazkiak partekatu nahi dituzu edo akatsen bat ikusi duzu? Kontaiguzu: zure iritzia garrantzitsua da eta hobetzen laguntzen digu.',
     noPersonalData:
       'Ez idatzi zure izena, helbidea, ikastetxea edo zuri buruzko ezer. Nahi baduzu, eskatu laguntza heldu bati.',
     categoryLabel: 'Zeri buruzkoa da?',
@@ -343,7 +343,7 @@ export const EU: SiteMessages = {
       'Zure pribatutasuna garrantzitsua da guretzat: irudia bidali aurretik, zure nabigatzaileak metadatuak kentzen dizkio (non eta noiz egin zen edo kameraren modeloa, adibidez) eta konprimatu egiten du.',
     chooseImage: 'Ekarri irudi bat hona, edo egin klik bat aukeratzeko',
     dropHere: 'Utzi hemen',
-    imageTypes: 'JPEG, PNG edo WebP',
+    imageTypes: 'Mugikorreko edo ordenagailuko argazkiak eta marrazkiak (JPG, PNG, HEIC…)',
     imageAlt: 'Aukeratu duzun irudia',
     imageError: 'Irudi hori ezin da erabili. Saiatu beste batekin.',
     removeImage: 'Kendu',

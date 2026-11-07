@@ -32,7 +32,7 @@ export const ES: SiteMessages = {
     noticeOk: 'Vale',
     privacySettings: 'Ajustes de privacidad',
     privacyLink: 'Privacidad',
-    suggestionsLink: 'Sugiere una idea',
+    suggestionsLink: 'Buzón de sugerencias',
     loading: 'Cargando…',
   },
 
@@ -325,8 +325,8 @@ export const ES: SiteMessages = {
   },
 
   suggestions: {
-    title: 'Sugiere una idea',
-    lead: 'Cuéntanos qué juego te gustaría, qué mejorarías o envía un dibujo para los juegos. Leemos todos los mensajes.',
+    title: 'Buzón de sugerencias',
+    lead: '¿Tienes en mente un juego que te gustaría ver aquí, quieres compartir tus dibujos o has visto un error? Cuéntanoslo: tu opinión nos importa y nos ayuda a mejorar.',
     noPersonalData:
       'No escribas tu nombre, tu dirección, tu colegio ni nada sobre ti. Si quieres, pide ayuda a un adulto.',
     categoryLabel: '¿De qué se trata?',
@@ -343,7 +343,7 @@ export const ES: SiteMessages = {
       'Tu privacidad nos importa: antes de enviar la imagen, tu navegador le quita los metadatos (como dónde y cuándo se hizo o el modelo de cámara) y la comprime.',
     chooseImage: 'Arrastra una imagen aquí o haz clic para elegirla',
     dropHere: 'Suéltala aquí',
-    imageTypes: 'JPEG, PNG o WebP',
+    imageTypes: 'Fotos y dibujos del móvil o del ordenador (JPG, PNG, HEIC…)',
     imageAlt: 'La imagen que has elegido',
     imageError: 'Esa imagen no se puede usar. Prueba con otra.',
     removeImage: 'Quitar',

@@ -32,7 +32,7 @@ export const EN: SiteMessages = {
     noticeOk: 'OK',
     privacySettings: 'Privacy settings',
     privacyLink: 'Privacy',
-    suggestionsLink: 'Suggest an idea',
+    suggestionsLink: 'Suggestion box',
     loading: 'Loading…',
   },
 
@@ -315,8 +315,8 @@ export const EN: SiteMessages = {
   },
 
   suggestions: {
-    title: 'Suggest an idea',
-    lead: 'Tell us about a game you’d like, something to improve, or send a drawing for the games. We read every message.',
+    title: 'Suggestion box',
+    lead: 'Got a game in mind you’d like to see here, want to share your drawings, or spotted a mistake? Tell us: your opinion matters and helps us improve.',
     noPersonalData:
       'Don’t write your name, address, school or anything else about you. Ask a grown-up to help if you like.',
     categoryLabel: 'What is it about?',
@@ -333,7 +333,7 @@ export const EN: SiteMessages = {
       'Your privacy matters to us: before sending the picture, your browser removes its metadata (like where and when it was taken, or the camera model) and makes it smaller.',
     chooseImage: 'Drag a picture here, or click to choose one',
     dropHere: 'Drop it here',
-    imageTypes: 'JPEG, PNG or WebP',
+    imageTypes: 'Photos and drawings from your phone or computer (JPG, PNG, HEIC…)',
     imageAlt: 'The picture you chose',
     imageError: 'That picture can’t be used. Try another one.',
     removeImage: 'Remove',
