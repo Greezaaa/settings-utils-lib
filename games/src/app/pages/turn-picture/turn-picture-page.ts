@@ -26,7 +26,12 @@ const BEST_TIMES_STORAGE = 'turn-picture:best-seconds';
   imports: [GameBoard, PictureSettings, PictureSlice, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './turn-picture-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/picture-board.scss', '../../shared/game-done.scss', './turn-picture-page.scss'],
+  styleUrls: [
+    '../../shared/utility-page.scss',
+    '../../shared/picture-board.scss',
+    '../../shared/game-done.scss',
+    './turn-picture-page.scss',
+  ],
 })
 export class TurnPicturePage {
   /** Texts in the site's language */

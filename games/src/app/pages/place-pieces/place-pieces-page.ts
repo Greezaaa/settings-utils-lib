@@ -38,7 +38,12 @@ const DRAG_THRESHOLD = 8;
   imports: [GameBoard, PictureSettings, PictureSlice, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './place-pieces-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/picture-board.scss', '../../shared/game-done.scss', './place-pieces-page.scss'],
+  styleUrls: [
+    '../../shared/utility-page.scss',
+    '../../shared/picture-board.scss',
+    '../../shared/game-done.scss',
+    './place-pieces-page.scss',
+  ],
 })
 export class PlacePiecesPage {
   /** Texts in the site's language */

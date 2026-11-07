@@ -53,6 +53,8 @@ export interface SiteMessages {
     readonly projectLinks: string;
     /** Shown once until closed: what the site stores, and that it is never sold or shared */
     readonly privacyNotice: string;
+    /** Heads the list of big changes since the visitor's last visit */
+    readonly whatsNew: string;
   };
 
   /** Titles, descriptions and image text for search results and link previews */

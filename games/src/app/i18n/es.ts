@@ -27,6 +27,7 @@ export const ES: SiteMessages = {
     projectLinks: 'Enlaces del proyecto',
     privacyNotice:
       'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
+    whatsNew: 'Novedades desde tu última visita:',
   },
 
   seo: {

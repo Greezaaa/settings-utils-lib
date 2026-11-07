@@ -27,6 +27,7 @@ export const EU: SiteMessages = {
     projectLinks: 'Proiektuaren estekak',
     privacyNotice:
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
+    whatsNew: 'Zure azken bisitatik dauden berritasunak:',
   },
 
   seo: {

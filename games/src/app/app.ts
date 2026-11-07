@@ -7,7 +7,7 @@ import { GAME_SLUGS } from './core/games';
 import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
-import { PrivacyNotice } from './core/privacy-notice';
+import { SiteNotices } from './core/site-notices';
 import { SiteTheme } from './core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
 
@@ -31,8 +31,8 @@ export class App {
   protected readonly fontSize = inject(FontSizeService);
 
   protected readonly siteLanguage = inject(SiteLanguage);
-  /** Started with the shell, so it shows on whichever page the visitor lands */
-  private readonly privacyNotice = inject(PrivacyNotice);
+  /** Started with the shell, so the privacy and "what's new" notices show on whichever page the visitor lands */
+  private readonly notices = inject(SiteNotices);
   /** Texts in the site's language */
   protected readonly t = this.siteLanguage.messages;
   protected readonly languages = LANGUAGE_IDS;
