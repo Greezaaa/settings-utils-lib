@@ -155,6 +155,13 @@
       <a routerLink="/privacy" routerLinkActive="active">{{ t().site.privacyLink }}</a>
       <a [href]="mainSiteUrl">su-labs.dev</a>
       <a [href]="githubUrl" target="_blank" rel="noopener">GitHub</a>
+      <!-- The admin team's sign-in; small, as it's not for players -->
+      <a class="admin-link" [routerLink]="['/', adminPath]" [attr.aria-label]="t().admin.title" [title]="t().admin.title">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="5" y="11" width="14" height="10" rx="2" />
+          <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+        </svg>
+      </a>
     </nav>
   </div>
 </footer>

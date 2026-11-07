@@ -14,7 +14,7 @@ import { SiteLanguage } from '../../i18n/site-language';
   styleUrl: './admin.scss',
 })
 export class AdminGames {
-  private readonly admin = inject(AdminApi);
+  protected readonly admin = inject(AdminApi);
   protected readonly availability = inject(GameAvailability);
   /** Game names in the site's language */
   protected readonly t = inject(SiteLanguage).messages;

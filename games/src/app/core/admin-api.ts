@@ -4,9 +4,6 @@ import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { GameSlug } from './games';
 import { isGameSlug, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
 
-/** Keeps the token for this tab only, so the admin can reload without typing it again; gone when the tab closes */
-const TOKEN_SESSION_KEY = 'su-labs-games:admin-token';
-
 const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'uk'];
 const isLanguage = (value: unknown): value is LanguageId => LANGUAGES.some((language) => language === value);
 
@@ -31,6 +28,30 @@ export interface WordReport {
   readonly reports: number;
   readonly status: ReportStatus;
   readonly firstReported: string;
+}
+
+export type AdminRole = 'super' | 'moderator';
+
+/** Who is signed in */
+export interface Me {
+  readonly email: string;
+  readonly role: AdminRole;
+}
+
+/** A team member as the super admin sees them */
+export interface TeamMember {
+  readonly id: string;
+  readonly email: string;
+  readonly role: AdminRole;
+  readonly active: boolean;
+  /** Invited and hasn't chosen a password yet */
+  readonly invited: boolean;
+}
+
+/** An invite link's secret (shown once, to copy) and when it stops working */
+export interface Invite {
+  readonly secret: string;
+  readonly expires: Date;
 }
 
 export interface GameFeedback {
@@ -98,47 +119,116 @@ function parseFeedback(item: unknown): GameFeedback[] {
   return [{ game, up, down, reasons: counts }];
 }
 
+const isRole = oneOf<AdminRole>(['super', 'moderator']);
+
+function parseMe(body: unknown): Me | null {
+  const [email, role] = ['email', 'role'].map((key) => field(body, key));
+  return typeof email === 'string' && isRole(role) ? { email, role } : null;
+}
+
+function parseMember(item: unknown): TeamMember[] {
+  const [id, email, role, active, invited] = ['id', 'email', 'role', 'active', 'invited'].map((key) =>
+    field(item, key),
+  );
+  return typeof id === 'string' &&
+    typeof email === 'string' &&
+    isRole(role) &&
+    typeof active === 'boolean' &&
+    typeof invited === 'boolean'
+    ? [{ id, email, role, active, invited }]
+    : [];
+}
+
+function parseInvite(body: unknown): Invite | null {
+  const [secret, expires] = ['secret', 'expires'].map((key) => field(body, key));
+  return typeof secret === 'string' && typeof expires === 'string' ? { secret, expires: new Date(expires) } : null;
+}
+
 /** A JSON list from an answer, each item checked by `parse` (which returns no item when it doesn't fit) */
+/** A request with a JSON body */
+const jsonInit = (method: string, body: object): RequestInit => ({
+  method,
+  body: JSON.stringify(body),
+  headers: { 'Content-Type': 'application/json' },
+});
+
 const listOf = <T>(body: unknown, parse: (item: unknown) => T[]): T[] =>
   Array.isArray(body) ? body.flatMap((item: unknown) => parse(item)) : [];
 
 /**
- * The admin's side of the API: signing in with the admin token, switching games, and moderating suggestions, reported
- * words and feedback. Only the admin page uses it. The token stays in memory and in this tab's session storage.
+ * The admin team's side of the API: signing in with email and password, the team (for the super admin), switching
+ * games, and moderating suggestions, reported words and feedback. Only the admin pages use it. The session lives in an
+ * HttpOnly cookie for api.su-labs.dev, so no script here can read it.
  */
 @Injectable({ providedIn: 'root' })
 export class AdminApi {
   private readonly document = inject(DOCUMENT);
-  private readonly token = signal<string | null>(null);
+  private readonly signedIn = signal<Me | null>(null);
 
-  readonly isSignedIn = computed(() => this.token() !== null);
+  /** Who is signed in, or null */
+  readonly me = this.signedIn.asReadonly();
+  readonly isSignedIn = computed(() => this.signedIn() !== null);
+  readonly isSuper = computed(() => this.signedIn()?.role === 'super');
 
-  /** Signs in with a token; the answer tells a wrong token from an API that can't be reached */
-  async signIn(token: string): Promise<'right' | 'wrong' | 'offline'> {
-    try {
-      const response = await fetch(apiUrl(this.document, '/admin/check'), {
-        headers: { Authorization: `Bearer ${token}` },
-        signal: AbortSignal.timeout(READ_TIMEOUT_MS),
-      });
-      if (response.ok) {
-        this.token.set(token);
-        sessionStorage.setItem(TOKEN_SESSION_KEY, token);
-        return 'right';
-      }
-      return response.status === 401 ? 'wrong' : 'offline';
-    } catch {
+  /** Asks the API whether this browser is still signed in (the cookie lasts 30 days) */
+  async restore(): Promise<'signed-in' | 'signed-out' | 'offline'> {
+    const response = await this.fetch('/auth/me', {}, READ_TIMEOUT_MS);
+    if (!response) {
       return 'offline';
     }
+    this.signedIn.set(response.ok ? parseMe(await response.json()) : null);
+    return this.signedIn() ? 'signed-in' : 'signed-out';
   }
 
-  /** The token kept from earlier in this tab, if any */
-  savedToken(): string | null {
-    return sessionStorage.getItem(TOKEN_SESSION_KEY);
+  /** Signs in; the answer tells wrong details from an API that can't be reached */
+  async signIn(email: string, password: string): Promise<'right' | 'wrong' | 'offline'> {
+    return this.startSession(await this.fetch('/auth/login', jsonInit('POST', { email, password }), READ_TIMEOUT_MS));
   }
 
-  signOut(): void {
-    sessionStorage.removeItem(TOKEN_SESSION_KEY);
-    this.token.set(null);
+  async signOut(): Promise<void> {
+    await this.fetch('/auth/logout', { method: 'POST' }, READ_TIMEOUT_MS);
+    this.signedIn.set(null);
+  }
+
+  async changePassword(current: string, next: string): Promise<'saved' | 'wrong' | 'offline'> {
+    const response = await this.fetch('/auth/password', jsonInit('POST', { current, next }), SEND_TIMEOUT_MS);
+    return !response ? 'offline' : response.ok ? 'saved' : response.status === 401 ? 'wrong' : 'offline';
+  }
+
+  /** The email an invite link is for, or null when it's wrong, used or expired */
+  async inviteEmail(secret: string): Promise<string | null> {
+    const email = field(await this.read(`/auth/invite/${encodeURIComponent(secret)}`), 'email');
+    return typeof email === 'string' ? email : null;
+  }
+
+  /** Accepts an invite with the chosen password, which also signs in */
+  async acceptInvite(secret: string, password: string): Promise<boolean> {
+    const path = `/auth/invite/${encodeURIComponent(secret)}`;
+    return (
+      (await this.startSession(await this.fetch(path, jsonInit('POST', { password }), SEND_TIMEOUT_MS))) === 'right'
+    );
+  }
+
+  async team(): Promise<TeamMember[]> {
+    return listOf(await this.read('/admin/team'), parseMember);
+  }
+
+  /** Adds a moderator with a starting password, or with an invite link when there is none */
+  async addModerator(email: string, password?: string): Promise<{ invite: Invite | null } | 'exists' | 'failed'> {
+    const response = await this.fetch('/admin/team', jsonInit('POST', { email, password }), SEND_TIMEOUT_MS);
+    if (response?.status === 409) {
+      return 'exists';
+    }
+    return response?.ok ? { invite: parseInvite(field(await response.json(), 'invite')) } : 'failed';
+  }
+
+  async reinvite(id: string): Promise<Invite | null> {
+    const response = await this.fetch(`/admin/team/${id}/invite`, { method: 'POST' }, SEND_TIMEOUT_MS);
+    return response?.ok ? parseInvite(await response.json()) : null;
+  }
+
+  setActive(id: string, active: boolean): Promise<boolean> {
+    return this.change('PATCH', `/admin/team/${id}`, { active });
   }
 
   setGameEnabled(game: GameSlug, enabled: boolean): Promise<boolean> {
@@ -184,18 +274,29 @@ export class AdminApi {
   }
 
   private async change(method: 'PUT' | 'PATCH' | 'DELETE', path: string, body?: object): Promise<boolean> {
-    const init: RequestInit = body
-      ? { method, body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } }
-      : { method };
-    return (await this.fetch(path, init, SEND_TIMEOUT_MS))?.ok ?? false;
+    return (await this.fetch(path, body ? jsonInit(method, body) : { method }, SEND_TIMEOUT_MS))?.ok ?? false;
   }
 
-  /** A request with the admin token; null when it couldn't reach the API */
+  /** After a sign-in or an accepted invite: who is signed in now */
+  private async startSession(response: Response | null): Promise<'right' | 'wrong' | 'offline'> {
+    if (!response) {
+      return 'offline';
+    }
+    if (!response.ok) {
+      return response.status === 401 || response.status === 404 ? 'wrong' : 'offline';
+    }
+    this.signedIn.set(parseMe(await response.json()));
+    return 'right';
+  }
+
+  /** A request with the session cookie; null when it couldn't reach the API */
   private async fetch(path: string, init: RequestInit, timeoutMs: number): Promise<Response | null> {
     try {
-      const headers = new Headers(init.headers);
-      headers.set('Authorization', `Bearer ${this.token() ?? ''}`);
-      return await fetch(apiUrl(this.document, path), { ...init, headers, signal: AbortSignal.timeout(timeoutMs) });
+      return await fetch(apiUrl(this.document, path), {
+        ...init,
+        credentials: 'include',
+        signal: AbortSignal.timeout(timeoutMs),
+      });
     } catch {
       return null;
     }

@@ -21,8 +21,16 @@ export const envSchema = z.object({
     'https://games.su-labs.dev',
     'https://su-labs.dev',
   ]),
-  /** Long random secret for the moderation endpoints (/admin/…), sent as `Authorization: Bearer <token>` */
+  /**
+   * Backup key for the moderation endpoints (/admin/…) for scripts, sent as `Authorization: Bearer <token>`; people
+   * sign in with their own admin account instead (see `npm run create-admin`)
+   */
   ADMIN_TOKEN: z.string().min(32),
+  /** Send the sign-in cookie over HTTPS only; turn off just for the local API on http://localhost */
+  COOKIE_SECURE: z
+    .enum(['true', 'false'])
+    .default('true')
+    .transform((value) => value === 'true'),
   /** Folder where suggestion images are kept (a Docker volume on the server) */
   UPLOADS_DIR: z.string().default('/data/uploads'),
   /** Cloudflare Turnstile secret key; when set, suggestions need a Turnstile token */

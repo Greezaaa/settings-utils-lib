@@ -1,6 +1,7 @@
 import { Route, Routes } from '@angular/router';
 import { gameAvailableGuard } from './core/game-guard';
 import { GameSlug } from './core/games';
+import { ADMIN_INVITE_PATH, ADMIN_PATH } from './core/links';
 import { PREVIEW_MESSAGES, SITE_META, SITE_NAME } from './core/page-meta';
 
 const { seo, home, games, privacy, suggestions, admin } = PREVIEW_MESSAGES;
@@ -73,10 +74,17 @@ export const routes: Routes = [
   },
   {
     // The admin's page: linked from nowhere and kept out of search results
-    path: 'admin',
+    path: ADMIN_PATH,
     title: `${admin.title} · ${SITE_NAME}`,
     data: { description: admin.lead, noIndex: true },
     loadComponent: () => import('./pages/admin/admin-page').then((m) => m.AdminPage),
+  },
+  {
+    // An invite link for a new moderator; never prerendered, as each link is different
+    path: `${ADMIN_INVITE_PATH}/:secret`,
+    title: `${admin.inviteTitle} · ${SITE_NAME}`,
+    data: { description: admin.lead, noIndex: true },
+    loadComponent: () => import('./pages/admin/admin-invite-page').then((m) => m.AdminInvitePage),
   },
   { path: '404', ...notFound },
   { path: '**', ...notFound },

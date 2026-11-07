@@ -9,6 +9,9 @@
 </div>
 
 <h2 class="section-title">{{ t().admin.gamesTitle }}</h2>
+@if (!admin.isSuper()) {
+  <p class="muted">{{ t().admin.onlySuperSwitches }}</p>
+}
 <ul class="card admin-card plain-list">
   @for (game of games; track game.slug) {
     <li>
@@ -24,7 +27,7 @@
           type="checkbox"
           role="switch"
           [checked]="availability.isOpen(game.slug)"
-          [disabled]="saving() !== null"
+          [disabled]="saving() !== null || !admin.isSuper()"
           (change)="toggle(game.slug)"
         />
       </label>

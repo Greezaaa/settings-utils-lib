@@ -1,25 +1,29 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { AdminApi } from '../../core/admin-api';
 import { GameAvailability } from '../../core/game-availability';
 import { SiteLanguage } from '../../i18n/site-language';
+import { AdminAccount } from './admin-account';
 import { AdminGames } from './admin-games';
 import { AdminPlays } from './admin-plays';
 import { AdminSuggestions } from './admin-suggestions';
+import { AdminTeam } from './admin-team';
 import { AdminWordReports } from './admin-word-reports';
 
-type SignIn = 'idle' | 'checking' | 'wrong' | 'offline';
+type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'offline';
 
-const TABS = ['games', 'plays', 'suggestions', 'words'] as const;
+const TABS = ['games', 'plays', 'suggestions', 'words', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];
+/** Tabs only the super admin sees */
+const SUPER_TABS: readonly Tab[] = ['team'];
 
 /**
- * The site admin's page, at /admin and linked from nowhere: sign in with the API's admin token, then switch games,
- * see plays and feedback, and moderate suggestions and reported words, one tab each. Translated like the rest of
- * the site, as there can be more than one admin.
+ * The admin page, at /<ADMIN_PATH> (see core/links.ts): sign in with email and password (the browser stays signed in
+ * for 30 days), then switch games, see plays and feedback, and moderate suggestions and reported words, one tab each.
+ * The super admin also manages the team; everyone can change their own password.
  */
 @Component({
   selector: 'app-admin-page',
-  imports: [AdminGames, AdminPlays, AdminSuggestions, AdminWordReports],
+  imports: [AdminAccount, AdminGames, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],
@@ -27,43 +31,34 @@ type Tab = (typeof TABS)[number];
 export class AdminPage {
   protected readonly admin = inject(AdminApi);
   private readonly availability = inject(GameAvailability);
-
-  protected readonly signIn = signal<SignIn>('idle');
-  protected readonly tabs = TABS;
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
+
+  protected readonly signIn = signal<SignIn>('restoring');
   protected readonly tab = signal<Tab>('games');
+  protected readonly tabs = computed(() => TABS.filter((tab) => this.admin.isSuper() || !SUPER_TABS.includes(tab)));
 
   constructor() {
-    afterNextRender(() => {
-      const token = this.admin.savedToken();
-      if (token) {
-        void this.check(token, false);
-      }
+    afterNextRender(async () => {
+      const restored = await this.admin.restore();
+      this.signIn.set(restored === 'offline' ? 'offline' : 'idle');
     });
   }
 
-  protected submit(event: Event, input: HTMLInputElement): void {
+  protected async submit(event: Event, email: HTMLInputElement, password: HTMLInputElement): Promise<void> {
     event.preventDefault();
-    void this.check(input.value.trim(), true);
-  }
-
-  protected signOut(): void {
-    this.admin.signOut();
-    this.availability.setPreview(false);
-    this.signIn.set('idle');
-  }
-
-  /** Signs in; signing in by hand also turns preview on, coming back to the page keeps the choice */
-  private async check(token: string, startPreview: boolean): Promise<void> {
-    if (!token) {
-      return;
-    }
     this.signIn.set('checking');
-    const answer = await this.admin.signIn(token);
+    const answer = await this.admin.signIn(email.value.trim(), password.value);
     this.signIn.set(answer === 'right' ? 'idle' : answer);
-    if (answer === 'right' && startPreview) {
+    if (answer === 'right') {
+      // Signing in turns preview on; coming back later keeps whatever the admin chose
       this.availability.setPreview(true);
     }
+  }
+
+  protected async signOut(): Promise<void> {
+    await this.admin.signOut();
+    this.availability.setPreview(false);
+    this.tab.set('games');
   }
 }

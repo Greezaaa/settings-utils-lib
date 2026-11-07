@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module.js';
 import { Env, validateEnv } from './config/env.js';
 import { databaseOptions } from './database/database.options.js';
 import { FeedbackModule } from './feedback/feedback.module.js';
@@ -27,6 +28,7 @@ import { WordReportsModule } from './word-reports/word-reports.module.js';
     }),
     // Every endpoint: at most 60 requests a minute per visitor; endpoints that write have tighter limits
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
+    AuthModule,
     PlaysModule,
     FeedbackModule,
     GameSettingsModule,

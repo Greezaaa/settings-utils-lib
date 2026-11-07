@@ -4,15 +4,21 @@
 </header>
 
 <section class="container page-section">
-  @if (!admin.isSignedIn()) {
-    <form class="card admin-card" (submit)="submit($event, tokenInput)">
+  @if (signIn() === 'restoring') {
+    <p class="muted">{{ t().admin.loading }}</p>
+  } @else if (!admin.isSignedIn()) {
+    <form class="card admin-card" (submit)="submit($event, emailInput, passwordInput)">
       <label class="field">
-        <span>{{ t().admin.tokenLabel }}</span>
-        <input #tokenInput type="password" autocomplete="off" spellcheck="false" required />
+        <span>{{ t().admin.email }}</span>
+        <input #emailInput type="email" autocomplete="username" required />
+      </label>
+      <label class="field">
+        <span>{{ t().admin.password }}</span>
+        <input #passwordInput type="password" autocomplete="current-password" required />
       </label>
       @switch (signIn()) {
         @case ('wrong') {
-          <p class="error" role="alert">{{ t().admin.wrongToken }}</p>
+          <p class="error" role="alert">{{ t().admin.wrongCredentials }}</p>
         }
         @case ('offline') {
           <p class="error" role="alert">{{ t().admin.offline }}</p>
@@ -24,7 +30,7 @@
     </form>
   } @else {
     <div class="tabs" role="tablist">
-      @for (option of tabs; track option) {
+      @for (option of tabs(); track option) {
         <button
           type="button"
           role="tab"
@@ -36,7 +42,10 @@
           {{ t().admin.tabs[option] }}
         </button>
       }
-      <button type="button" class="button button-secondary button-small sign-out" (click)="signOut()">{{ t().admin.signOut }}</button>
+      <span class="signed-in muted">{{ admin.me()?.email }}</span>
+      <button type="button" class="button button-secondary button-small" (click)="signOut()">
+        {{ t().admin.signOut }}
+      </button>
     </div>
 
     @switch (tab()) {
@@ -51,6 +60,12 @@
       }
       @case ('words') {
         <app-admin-word-reports />
+      }
+      @case ('team') {
+        <app-admin-team />
+      }
+      @case ('account') {
+        <app-admin-account />
       }
     }
   }

@@ -23,3 +23,25 @@
   --button-hover: color-mix(in srgb, var(--su-theme-main-accent) 85%, var(--su-theme-background));
   color: var(--text);
 }
+
+// The admin team's sign-in in the footer: a small lock
+.site-footer .admin-link {
+  align-items: center;
+  display: inline-flex;
+  opacity: 0.6;
+
+  svg {
+    fill: none;
+    height: 1rem;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    width: 1rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+  }
+}

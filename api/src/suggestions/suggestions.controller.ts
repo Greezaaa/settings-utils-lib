@@ -17,7 +17,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Throttle } from '@nestjs/throttler';
 import { z } from 'zod';
-import { AdminTokenGuard } from '../security/admin-token.guard.js';
+import { AdminGuard } from '../security/admin.guard.js';
 import { IMAGE_MAX_BYTES } from './clean-image.js';
 import { Suggestion } from './suggestion.entity.js';
 import type {
@@ -62,7 +62,7 @@ export class SuggestionsController {
 
 /** For moderators: read suggestions and their pictures, mark them read or archived, or delete them */
 @Controller('admin/suggestions')
-@UseGuards(AdminTokenGuard)
+@UseGuards(AdminGuard)
 export class SuggestionsAdminController {
   constructor(private readonly suggestions: SuggestionsService) {}
 

@@ -6,7 +6,7 @@ import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { GameAvailability } from './core/game-availability';
 import { gameOfPath } from './core/games';
-import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
+import { ADMIN_PATH, AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
 import { SiteNotices } from './core/site-notices';
@@ -50,6 +50,7 @@ export class App {
   protected readonly githubUrl = GITHUB_REPO_URL;
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly mainSiteUrl = MAIN_SITE_URL;
+  protected readonly adminPath = ADMIN_PATH;
 
   /** Label of the theme the switch moves to next */
   protected readonly nextTheme = computed(() => {

@@ -15,6 +15,8 @@ export function setUpApp(app: NestExpressApplication): void {
   app.enableCors({
     origin: config.get('CORS_ORIGINS', { infer: true }),
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    // The admin page's sign-in cookie travels with its requests
+    credentials: true,
   });
   app.disable('x-powered-by');
   VisitorThrottlerGuard.trustCloudflare = config.get('TRUST_CLOUDFLARE', {

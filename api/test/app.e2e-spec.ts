@@ -27,6 +27,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       DATABASE_URL: databaseUrl,
       ADMIN_TOKEN,
       UPLOADS_DIR: uploadsDir,
+      COOKIE_SECURE: 'false',
     });
     // Imported only now: the configuration reads the environment as soon as the module loads
     const { AppModule } = await import('../src/app.module.js');
@@ -152,6 +153,94 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     await request(app.getHttpServer())
       .get('/v1/games')
       .expect(200, { games: [{ game: 'hit-the-note', enabled: true }] });
+  });
+
+  it('signs in the super admin, who adds moderators by password or invite and turns them off', async () => {
+    const { TeamService } = await import('../src/auth/team.service.js');
+    const superPassword = await app
+      .get(TeamService)
+      .createSuperAdmin('Boss@su-labs.dev');
+    const server = app.getHttpServer();
+    const signIn = (email: string, password: string) =>
+      request(server).post('/auth/login').send({ email, password });
+
+    await signIn('boss@su-labs.dev', 'wrong password').expect(401);
+    const boss = await signIn(' BOSS@su-labs.dev ', superPassword).expect(201);
+    const bossCookie = boss.headers['set-cookie'];
+    expect(String(bossCookie)).toMatch(/HttpOnly/);
+    await request(server)
+      .get('/auth/me')
+      .set('Cookie', bossCookie)
+      .expect(200, { email: 'boss@su-labs.dev', role: 'super' });
+
+    // A moderator with a starting password
+    await request(server)
+      .post('/admin/team')
+      .set('Cookie', bossCookie)
+      .send({ email: 'mod@su-labs.dev', password: 'starting-password' })
+      .expect(201);
+    const mod = await signIn('mod@su-labs.dev', 'starting-password').expect(
+      201,
+    );
+    const modCookie = mod.headers['set-cookie'];
+    await request(server)
+      .get('/admin/suggestions')
+      .set('Cookie', modCookie)
+      .expect(200);
+    await request(server)
+      .get('/admin/team')
+      .set('Cookie', modCookie)
+      .expect(403);
+    await request(server)
+      .put('/admin/games/math-games')
+      .set('Cookie', modCookie)
+      .send({ enabled: false })
+      .expect(403);
+
+    // A moderator invited by link, who chooses a password
+    const invited = await request(server)
+      .post('/admin/team')
+      .set('Cookie', bossCookie)
+      .send({ email: 'new@su-labs.dev' })
+      .expect(201);
+    const secret: string = invited.body.invite.secret;
+    await request(server)
+      .get(`/auth/invite/${secret}`)
+      .expect(200, { email: 'new@su-labs.dev' });
+    await request(server)
+      .post(`/auth/invite/${secret}`)
+      .send({ password: 'my own password' })
+      .expect(201);
+    await request(server)
+      .post(`/auth/invite/${secret}`)
+      .send({ password: 'my own password' })
+      .expect(404);
+    await signIn('new@su-labs.dev', 'my own password').expect(201);
+
+    // Turning a moderator off signs them out and stops sign-ins
+    const team = await request(server)
+      .get('/admin/team')
+      .set('Cookie', bossCookie)
+      .expect(200);
+    const modId = team.body.find(
+      (member: { email: string }) => member.email === 'mod@su-labs.dev',
+    ).id;
+    await request(server)
+      .patch(`/admin/team/${modId}`)
+      .set('Cookie', bossCookie)
+      .send({ active: false })
+      .expect(204);
+    await request(server)
+      .get('/admin/suggestions')
+      .set('Cookie', modCookie)
+      .expect(401);
+    await signIn('mod@su-labs.dev', 'starting-password').expect(401);
+
+    await request(server)
+      .post('/auth/logout')
+      .set('Cookie', bossCookie)
+      .expect(204);
+    await request(server).get('/auth/me').set('Cookie', bossCookie).expect(401);
   });
 
   it('keeps suggestions with a cleaned picture for moderators', async () => {

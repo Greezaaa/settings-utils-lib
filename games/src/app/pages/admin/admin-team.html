@@ -1,0 +1,59 @@
+<form class="card admin-card" (submit)="add($event, form, emailInput, passwordInput)" #form>
+  <h2 class="card-title">{{ t().admin.addModerator }}</h2>
+  <label class="field">
+    <span>{{ t().admin.email }}</span>
+    <input #emailInput type="email" autocomplete="off" required />
+  </label>
+  <label class="field">
+    <span>{{ t().admin.startingPassword }}</span>
+    <input #passwordInput type="text" autocomplete="off" minlength="10" spellcheck="false" />
+    <small class="muted">{{ t().admin.startingPasswordHelp }}</small>
+  </label>
+  @switch (problem()) {
+    @case ('exists') {
+      <p class="error" role="alert">{{ t().admin.alreadyOnTeam }}</p>
+    }
+    @case ('failed') {
+      <p class="error" role="alert">{{ t().admin.saveFailed }}</p>
+    }
+  }
+  <button type="submit" class="button" [disabled]="isSaving()">{{ t().admin.add }}</button>
+</form>
+
+@if (invite(); as shown) {
+  <div class="card admin-card invite" role="status">
+    <p>{{ t().admin.inviteFor(shown.email) }}</p>
+    <div class="copy-row">
+      <input type="text" readonly [value]="shown.url" (focus)="selectAll($event)" />
+      <button type="button" class="button button-small" (click)="copy(shown.url)">
+        {{ isCopied() ? t().admin.copied : t().admin.copy }}
+      </button>
+    </div>
+    <small class="muted">{{ t().admin.inviteExpires(shown.expires.toLocaleDateString()) }}</small>
+  </div>
+}
+
+<h2 class="section-title">{{ t().admin.tabs.team }}</h2>
+<ul class="card admin-card plain-list">
+  @for (member of members(); track member.id) {
+    <li class="switch-row">
+      <span>
+        <strong>{{ member.email }}</strong>
+        <small class="muted">
+          {{ member.role === 'super' ? t().admin.roles.super : t().admin.roles.moderator }}
+          · {{ member.invited ? t().admin.invited : member.active ? t().admin.active : t().admin.inactive }}
+        </small>
+      </span>
+      @if (member.role === 'moderator') {
+        <span class="actions">
+          <button type="button" class="button button-secondary button-small" (click)="reinvite(member)">
+            {{ t().admin.newLink }}
+          </button>
+          <button type="button" class="button button-secondary button-small" (click)="toggle(member)">
+            {{ member.active ? t().admin.deactivate : t().admin.activate }}
+          </button>
+        </span>
+      }
+    </li>
+  }
+</ul>

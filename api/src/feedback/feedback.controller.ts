@@ -7,7 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { AdminTokenGuard } from '../security/admin-token.guard.js';
+import { AdminGuard } from '../security/admin.guard.js';
 import type { FeedbackInput } from './feedback.schema.js';
 import { feedbackSchema } from './feedback.schema.js';
 import { FeedbackService, FeedbackSummary } from './feedback.service.js';
@@ -29,7 +29,7 @@ export class FeedbackController {
 
 /** For moderators: what players think of each game */
 @Controller('admin/feedback')
-@UseGuards(AdminTokenGuard)
+@UseGuards(AdminGuard)
 export class FeedbackAdminController {
   constructor(private readonly feedback: FeedbackService) {}
 

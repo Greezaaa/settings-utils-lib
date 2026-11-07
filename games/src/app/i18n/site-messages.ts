@@ -273,6 +273,8 @@ export interface SiteMessages {
   readonly suggestions: {
     readonly title: string;
     readonly lead: string;
+    /** The call to action, on its own line under the lead */
+    readonly rule: string;
     readonly noPersonalData: string;
     readonly categoryLabel: string;
     readonly categories: Readonly<Record<SuggestionCategory, string>>;
@@ -388,8 +390,9 @@ export interface SiteMessages {
   readonly admin: {
     readonly title: string;
     readonly lead: string;
-    readonly tokenLabel: string;
-    readonly wrongToken: string;
+    readonly email: string;
+    readonly password: string;
+    readonly wrongCredentials: string;
     readonly offline: string;
     readonly checking: string;
     readonly signIn: string;
@@ -399,6 +402,8 @@ export interface SiteMessages {
       readonly plays: string;
       readonly suggestions: string;
       readonly words: string;
+      readonly team: string;
+      readonly account: string;
     };
     readonly saveFailed: string;
     readonly loading: string;
@@ -429,5 +434,36 @@ export interface SiteMessages {
     readonly keepOut: string;
     readonly letCount: string;
     readonly noWords: string;
+    readonly onlySuperSwitches: string;
+    /** Team (super admin) */
+    readonly addModerator: string;
+    readonly startingPassword: string;
+    readonly startingPasswordHelp: string;
+    readonly add: string;
+    readonly alreadyOnTeam: string;
+    readonly inviteFor: (email: string) => string;
+    readonly copy: string;
+    readonly copied: string;
+    readonly inviteExpires: (day: string) => string;
+    readonly roles: { readonly super: string; readonly moderator: string };
+    readonly invited: string;
+    readonly active: string;
+    readonly inactive: string;
+    readonly newLink: string;
+    readonly activate: string;
+    readonly deactivate: string;
+    /** Account and invites */
+    readonly changePassword: string;
+    readonly currentPassword: string;
+    readonly newPassword: string;
+    readonly repeatPassword: string;
+    readonly passwordRule: (min: number) => string;
+    readonly passwordChanged: string;
+    readonly wrongPassword: string;
+    readonly passwordsDiffer: string;
+    readonly inviteTitle: string;
+    readonly inviteLead: (email: string) => string;
+    readonly acceptInvite: string;
+    readonly inviteInvalid: string;
   };
 }

@@ -19,3 +19,12 @@ export const AUTHOR_EMAIL_URL = 'mailto:yev.alekseyev@gmail.com';
 
 /** GitHub repository that hosts the games and the libraries they run on */
 export const GITHUB_REPO_URL = 'https://github.com/Greezaaa/settings-utils-lib';
+
+/**
+ * The admin team's pages, kept off the obvious /admin and /login that scanners try first (change it here only; nginx's
+ * invite location in deploy/nginx/games.su-labs.dev.conf must match). Obscurity is only a first fence: the API checks
+ * every sign-in and request.
+ */
+export const ADMIN_PATH = 'crew';
+/** Invite links for new moderators: /<ADMIN_PATH>/invite/<secret> */
+export const ADMIN_INVITE_PATH = `${ADMIN_PATH}/invite`;

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { z } from 'zod';
-import { AdminTokenGuard } from '../security/admin-token.guard.js';
+import { AdminGuard } from '../security/admin.guard.js';
 import type { LanguageId } from '../shared/catalog.js';
 import { languageSchema } from '../shared/catalog.js';
 import { WordReport } from './word-report.entity.js';
@@ -51,7 +51,7 @@ export class WordReportsController {
 
 /** For moderators: approve a report (the word stays out) or reject it (the word counts again) */
 @Controller('admin/word-reports')
-@UseGuards(AdminTokenGuard)
+@UseGuards(AdminGuard)
 export class WordReportsAdminController {
   constructor(private readonly reports: WordReportsService) {}
 

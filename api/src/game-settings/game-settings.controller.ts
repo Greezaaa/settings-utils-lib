@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { z } from 'zod';
-import { AdminTokenGuard } from '../security/admin-token.guard.js';
+import { AdminGuard, SuperAdminGuard } from '../security/admin.guard.js';
 import type { GameSlug } from '../shared/catalog.js';
 import { gameSchema } from '../shared/catalog.js';
 import { GameSettingsService, GameSwitch } from './game-settings.service.js';
@@ -27,9 +27,9 @@ export class GameSettingsController {
   }
 }
 
-/** For the site's admin: check the token, and switch games on or off */
+/** For the admin team: check access; the super admin also switches games on or off */
 @Controller('admin')
-@UseGuards(AdminTokenGuard)
+@UseGuards(AdminGuard)
 export class GameSettingsAdminController {
   constructor(private readonly settings: GameSettingsService) {}
 
@@ -38,6 +38,8 @@ export class GameSettingsAdminController {
   @HttpCode(204)
   check(): void {}
 
+  /** Only the super admin opens or closes games */
+  @UseGuards(SuperAdminGuard)
   @Put('games/:game')
   @HttpCode(204)
   async set(
