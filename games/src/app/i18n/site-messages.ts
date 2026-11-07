@@ -1,5 +1,5 @@
 import { SuThemeName } from '@su-labs/theme';
-import { GameSlug } from '../core/games';
+import { GameCategory, GameSlug } from '../core/games';
 import { PictureId } from '../core/pictures';
 import { SignsLevelId } from '../games/find-the-signs';
 import { BoardLevelId } from '../games/board';
@@ -80,13 +80,14 @@ export interface SiteMessages {
 
   /** Name and description of each game */
   readonly games: Readonly<Record<GameSlug, GameText>>;
+  /** Headings of the home page's game lists */
+  readonly categories: Readonly<Record<GameCategory, string>>;
 
   readonly home: {
     readonly title: string;
     readonly lead: string;
     /** Second line of the lead */
     readonly rule: string;
-    readonly games: string;
     /** Notice that the site is still in beta, shown above the games */
     readonly betaLabel: string;
     readonly betaText: string;
@@ -183,7 +184,10 @@ export interface SiteMessages {
 
   readonly page: {
     readonly section: string;
-    readonly ages: string;
+    /** The youngest recommended age, e.g. `Ages 4+` */
+    readonly ages: (age: number) => string;
+    /** Badge on a game added lately */
+    readonly new: string;
     readonly title: string;
     readonly lead: string;
     /** The one rule, shown on its own line below the lead */

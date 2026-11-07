@@ -4,6 +4,7 @@ import { GamePicture, nextPicture } from '../../core/pictures';
 import { BoardLevelId } from '../../games/board';
 import { getPictureLevel, PictureModeId } from '../../games/picture-game';
 import { Arrangement, isPlaced, isSolved, piecesPlaced, shuffle, solvedArrangement, swap } from '../../games/place-pieces';
+import { gameInfo } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
 import { formatTime, GameClock } from '../../shared/game-clock';
@@ -48,6 +49,8 @@ const DRAG_THRESHOLD = 8;
 export class PlacePiecesPage {
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
+  /** The youngest recommended age, shown under the title */
+  protected readonly minAge = gameInfo('place-pieces').minAge;
 
   protected readonly modeId = signal<PictureModeId>('look');
   protected readonly levelId = signal<BoardLevelId>('normal');

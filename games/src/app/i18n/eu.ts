@@ -74,11 +74,12 @@ export const EU: SiteMessages = {
     },
   },
 
+  categories: { numbers: 'Zenbakiak', puzzles: 'Puzzleak' },
+
   home: {
     title: 'Joko adimentsuak, haur adimentsuentzat',
     lead: 'Logika, oroimena eta azkartasuna lantzeko minijokoak.',
     rule: 'Doan dira, ez dute izena ematea eskatzen, eta ordenagailuetan, tabletetan eta mugikorretan dabiltza.',
-    games: 'Jokoak',
     betaLabel: 'Beta',
     betaText:
       'Jokoak beta fasean daude: oraindik ez da azken bertsioa, eta aldatzen jarraituko dute. Laster posta elektronikoz harpidetu ahal izango zara joko berrien eta berritasunen berri izateko.',
@@ -207,7 +208,8 @@ export const EU: SiteMessages = {
 
   page: {
     section: 'Joko adimentsuak',
-    ages: '6 urtetik aurrera',
+    ages: (age) => `${age} urtetik aurrera`,
+    new: 'Berria',
     title: 'Matematika jokoak',
     lead: 'Esan emaitza egia ala gezurra den, sakatu zuk emaitza edo aurkitu falta diren zeinuak. Denborarekin, erantzun barra amaitu baino lehen.',
     rule: 'Ez huts egin, bestela jokoa amaitzen da!',

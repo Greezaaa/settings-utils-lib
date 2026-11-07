@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { readStored, writeStored } from '../../core/site-storage';
 import { createSignsPuzzle, formatSigns, getSignsLevel, SIGNS_LEVELS, SignsPuzzle } from '../../games/find-the-signs';
 import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatQuestion, getLevel, LEVELS, LevelId, Question, secondsForQuestion, TIMER_IDS, TimerId, Timing } from '../../games/math-games';
+import { gameInfo } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { OptionText } from '../../i18n/site-messages';
 import { GameBoard } from '../../shared/game-board';
@@ -52,6 +53,8 @@ export class MathGamesPage {
 
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
+  /** The youngest recommended age, shown under the title */
+  protected readonly minAge = gameInfo('math-games').minAge;
 
   protected readonly levelId = signal<LevelId>(DEFAULT_LEVEL);
   protected readonly timerId = signal<TimerId>('timer');

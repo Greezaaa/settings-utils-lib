@@ -4,6 +4,7 @@ import { GamePicture, nextPicture } from '../../core/pictures';
 import { readStored, writeStored } from '../../core/site-storage';
 import { BoardLevelId } from '../../games/board';
 import { canMove, cellForArrow, createPuzzle, Direction, getPuzzleLevel, isSolved, move, neighbour, Puzzle, PUZZLE_LEVELS, tileNumber } from '../../games/sliding-puzzle';
+import { gameInfo } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { PuzzlePictureMode } from '../../i18n/site-messages';
 import { GameBoard } from '../../shared/game-board';
@@ -59,6 +60,8 @@ const ARROWS: Readonly<Record<string, Direction>> = {
 export class SlidingPuzzlePage {
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
+  /** The youngest recommended age, shown under the title */
+  protected readonly minAge = gameInfo('sliding-puzzle').minAge;
 
   protected readonly levels = PUZZLE_LEVELS;
   protected readonly levelId = signal<BoardLevelId>(DEFAULT_LEVEL);

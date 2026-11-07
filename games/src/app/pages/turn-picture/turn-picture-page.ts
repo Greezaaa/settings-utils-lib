@@ -4,6 +4,7 @@ import { GamePicture, nextPicture } from '../../core/pictures';
 import { BoardLevelId, cellCount } from '../../games/board';
 import { getPictureLevel, PictureModeId } from '../../games/picture-game';
 import { isRight, isSolved, scramble, tilesRight, turn, Turns } from '../../games/turn-picture';
+import { gameInfo } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
 import { GameClock, formatTime } from '../../shared/game-clock';
@@ -36,6 +37,8 @@ const BEST_TIMES_STORAGE = 'turn-picture:best-seconds';
 export class TurnPicturePage {
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
+  /** The youngest recommended age, shown under the title */
+  protected readonly minAge = gameInfo('turn-picture').minAge;
 
   protected readonly modeId = signal<PictureModeId>('look');
   protected readonly levelId = signal<BoardLevelId>('normal');

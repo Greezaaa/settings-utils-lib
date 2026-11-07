@@ -75,11 +75,12 @@ export const ES: SiteMessages = {
     },
   },
 
+  categories: { numbers: 'Números', puzzles: 'Puzles' },
+
   home: {
     title: 'Juegos inteligentes para mentes despiertas',
     lead: 'Minijuegos para entrenar la lógica, la memoria y la rapidez.',
     rule: 'Son gratis, sin registro y funcionan en ordenadores, tabletas y móviles.',
-    games: 'Juegos',
     betaLabel: 'Beta',
     betaText:
       'Los juegos están en fase beta: todavía no es la versión final y seguirán cambiando. Pronto podrás suscribirte por correo para que te avisemos de los juegos nuevos y de cada cambio.',
@@ -207,7 +208,8 @@ export const ES: SiteMessages = {
 
   page: {
     section: 'Juegos inteligentes',
-    ages: 'Desde 6 años',
+    ages: (age) => `Desde ${age} años`,
+    new: 'Nuevo',
     title: 'Juegos de matemáticas',
     lead: 'Di si el resultado es verdadero o falso, marca tú el resultado o encuentra los signos que faltan. Con tiempo, responde antes de que se acabe la barra.',
     rule: '¡No falles, o se acaba la partida!',

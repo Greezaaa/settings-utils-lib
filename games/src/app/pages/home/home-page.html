@@ -11,17 +11,16 @@
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().home.games">
-  <div class="games">
-    @for (game of games; track game; let index = $index) {
-      <a class="card game-card" [routerLink]="['/', game]" appReveal [style.--index]="index">
-        <span class="tag">{{ t().page.ages }}</span>
-        <h2 class="game-name">{{ t().games[game].name }}</h2>
-        <p class="muted">{{ t().games[game].summary }}</p>
-      </a>
-    }
-  </div>
-</section>
+@for (group of categories; track group.category) {
+  <section class="container page-section" [attr.aria-labelledby]="'category-' + group.category">
+    <h2 class="section-title" [id]="'category-' + group.category">{{ t().categories[group.category] }}</h2>
+    <div class="games">
+      @for (game of group.games; track game; let index = $index) {
+        <app-game-card [game]="game" appReveal [style.--index]="index" />
+      }
+    </div>
+  </section>
+}
 
 <section class="container page-section made-by" aria-labelledby="made-by-title">
   <h2 id="made-by-title" class="section-title">{{ t().home.madeByTitle }}</h2>

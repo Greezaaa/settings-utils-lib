@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GAME_SLUGS } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
+import { GameCard } from '../../shared/game-card';
 
 /**
  * Shown for any address the games site doesn't have. Prerendered as 404.html, which the server
@@ -9,7 +10,7 @@ import { SiteLanguage } from '../../i18n/site-language';
  */
 @Component({
   selector: 'app-not-found-page',
-  imports: [RouterLink],
+  imports: [GameCard, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './not-found-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-cards.scss', './not-found-page.scss'],

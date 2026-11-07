@@ -1,4 +1,4 @@
-// Cards that link to a game: the home page list and the not-found page
+// The grid of game cards: the home page lists and the not-found page
 
 .games {
   display: grid;
@@ -6,19 +6,5 @@
 
   @media (min-width: 48rem) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.game-card {
-  align-content: start;
-  display: grid;
-  gap: 0.75rem;
-  justify-items: start;
-
-  .game-name {
-    font-family: var(--font-serif);
-    font-size: 1.75rem;
-    font-weight: 400;
-    letter-spacing: -0.02em;
   }
 }

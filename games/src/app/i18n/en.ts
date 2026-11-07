@@ -74,11 +74,12 @@ export const EN: SiteMessages = {
     },
   },
 
+  categories: { numbers: 'Numbers', puzzles: 'Puzzles' },
+
   home: {
     title: 'Smart games, for smart kids',
     lead: 'Mini games that train logic, memory and quick thinking.',
     rule: 'They’re free, need no sign-up, and work on computers, tablets and phones.',
-    games: 'Games',
     betaLabel: 'Beta',
     betaText:
       'These games are in beta: this isn’t the final version yet, and things will keep changing. Soon you’ll be able to subscribe by email to hear about new games and updates.',
@@ -193,7 +194,8 @@ export const EN: SiteMessages = {
 
   page: {
     section: 'Smart games',
-    ages: 'Ages 6+',
+    ages: (age) => `Ages ${age}+`,
+    new: 'New',
     title: 'Math games',
     lead: 'Say whether the result is true or false, tap the result yourself, or find the missing signs. With the timer on, answer before the bar runs out.',
     rule: 'Don’t miss one, or the game is over!',
