@@ -16,3 +16,13 @@ export function between({ min, max }: NumberRange, random: Random): number {
 export function pick<T>(items: readonly T[], random: Random): T {
   return items[Math.floor(random() * items.length)];
 }
+
+/** A shuffled copy of a list */
+export function shuffled<T>(items: readonly T[], random: Random): T[] {
+  const copy = [...items];
+  for (let index = copy.length - 1; index > 0; index--) {
+    const other = Math.floor(random() * (index + 1));
+    [copy[index], copy[other]] = [copy[other], copy[index]];
+  }
+  return copy;
+}

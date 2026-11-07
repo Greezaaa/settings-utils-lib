@@ -120,6 +120,29 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 5,
+    published: '2026-11-07T21:00:00+01:00',
+    changes: [
+      {
+        game: 'letter-games',
+        text: {
+          en: 'New game: Letter games, with vowels, mixed letters and a word builder',
+          es: 'Nuevo juego: Juegos de letras, con vocales, letras mezcladas y forma palabras',
+          eu: 'Joko berria: Letra jokoak, bokalekin, letra nahasiekin eta hitz-sortzailearekin',
+          uk: 'Нова гра: Ігри з літерами — голосні, перемішані літери та складання слів',
+        },
+      },
+      {
+        text: {
+          en: 'Games are grouped by category, each with its own recommended age',
+          es: 'Los juegos están agrupados por categorías, cada uno con su edad recomendada',
+          eu: 'Jokoak kategoriatan sailkatuta daude, bakoitza bere adin gomendatuarekin',
+          uk: 'Ігри згруповано за категоріями, у кожної — своя рекомендована вікова група',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */

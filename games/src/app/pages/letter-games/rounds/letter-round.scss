@@ -1,0 +1,161 @@
+// Styles every letter round shares: the picture, the word in letter boxes and the big letter tiles.
+// Letters show in capitals, which young readers learn first.
+
+:host {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  width: 100%;
+}
+
+.picture {
+  font-size: clamp(3.5rem, 18vw, 5rem);
+  line-height: 1;
+}
+
+.word {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+
+  &.is-wrong {
+    animation: shake 450ms ease;
+  }
+
+  &.is-done .letter {
+    border-color: var(--green-text);
+    color: var(--green-text);
+  }
+
+  // Words not found before time ran out
+  &.is-missed .letter {
+    color: var(--muted);
+  }
+}
+
+.letter {
+  align-items: center;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  color: var(--heading);
+  display: inline-flex;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  font-weight: 600;
+  height: 3rem;
+  justify-content: center;
+  text-transform: uppercase;
+  width: 2.5rem;
+}
+
+button.letter {
+  cursor: pointer;
+}
+
+.gap {
+  background: var(--subtle);
+  border-style: dashed;
+
+  &.is-next {
+    border-color: var(--button-bg);
+  }
+}
+
+.small .letter {
+  border-width: 1px;
+  font-size: 1rem;
+  height: 1.75rem;
+  width: 1.5rem;
+}
+
+.answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.tile {
+  width: 3.5rem;
+  background: var(--subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  color: var(--heading);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.75rem;
+  font-weight: 600;
+  height: 3.5rem;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  user-select: none;
+
+  &:active:not(:disabled) {
+    transform: scale(0.94);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.3;
+  }
+
+  // A hint: the letter to tap next glows
+  &.is-hint {
+    animation: hint-glow 900ms ease-in-out infinite alternate;
+    border-color: var(--button-bg);
+  }
+}
+
+// Letters a hint placed stay put
+.letter.is-revealed {
+  border-color: var(--button-bg);
+  cursor: default;
+}
+
+@keyframes hint-glow {
+  to {
+    box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--button-bg) 40%, transparent);
+  }
+}
+
+.feedback {
+  color: var(--red-text);
+  min-height: 1.5em;
+
+  &.is-good {
+    color: var(--green-text);
+  }
+}
+
+@keyframes shake {
+  25%,
+  75% {
+    translate: -0.375rem 0;
+  }
+
+  50% {
+    translate: 0.375rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word.is-wrong,
+  .tile.is-hint {
+    animation: none;
+  }
+}

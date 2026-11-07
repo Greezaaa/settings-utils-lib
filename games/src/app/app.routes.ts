@@ -30,6 +30,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/math-games/math-games-page').then((m) => m.MathGamesPage),
   },
   {
+    path: 'letter-games',
+    ...gameMeta('letter-games'),
+    loadComponent: () => import('./pages/letter-games/letter-games-page').then((m) => m.LetterGamesPage),
+  },
+  {
     path: 'sliding-puzzle',
     ...gameMeta('sliding-puzzle'),
     loadComponent: () => import('./pages/sliding-puzzle/sliding-puzzle-page').then((m) => m.SlidingPuzzlePage),

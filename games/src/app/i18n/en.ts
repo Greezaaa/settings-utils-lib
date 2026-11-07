@@ -54,6 +54,13 @@ export const EN: SiteMessages = {
       subtitle: 'true or false, number pad and missing signs',
       intro: 'A math game for kids.',
     },
+    'letter-games': {
+      name: 'Letter games',
+      summary:
+        'Learn the vowels, fill in the missing ones, put mixed letters in order, or make as many words as you can from 5 to 10 letters.',
+      subtitle: 'vowels, mixed letters and word builder',
+      intro: 'A letter and word game for kids.',
+    },
     'sliding-puzzle': {
       name: 'Sliding puzzle',
       summary: 'Slide the tiles into the gap until the lines join up again. A new picture every game.',
@@ -74,7 +81,7 @@ export const EN: SiteMessages = {
     },
   },
 
-  categories: { numbers: 'Numbers', puzzles: 'Puzzles' },
+  categories: { numbers: 'Numbers', letters: 'Letters', puzzles: 'Puzzles' },
 
   home: {
     title: 'Smart games, for smart kids',
@@ -274,5 +281,60 @@ export const EN: SiteMessages = {
     tapGapToChange: 'Tap a gap to change it.',
     precedence: '× and ÷ are worked out before + and −.',
     notWholeNumber: 'not a whole number',
+  },
+
+  letterGames: {
+    lead: 'Learn the vowels, fill in the missing ones, put mixed letters in order, or make as many words as you can.',
+    rule: 'Only words on our list count, and we keep adding more!',
+    board: 'Letter game',
+    modeGroup: 'Game',
+    modes: {
+      'first-vowel': { name: 'First vowel', summary: 'Tap the vowel the word starts with' },
+      'missing-vowels': { name: 'Missing vowels', summary: 'Fill in every vowel of the word' },
+      'mixed-letters': { name: 'Mixed letters', summary: 'Put the letters in order; the words get longer' },
+      'word-builder': { name: 'Word builder', summary: 'Make as many words as you can' },
+    },
+    levelGroup: 'Letters',
+    builderLevels: {
+      easy: { name: 'Easy', summary: '5 letters' },
+      normal: { name: 'Normal', summary: '7 letters' },
+      hard: { name: 'Hard', summary: '10 letters' },
+    },
+    timers: {
+      timer: 'Finish each word before the bar runs out; in the word builder, find words until it does',
+      'no-timer': 'Take your time',
+    },
+    hintsGroup: 'Hints',
+    hints: {
+      hints: {
+        name: 'With hints',
+        summary: 'After 2 mistakes the next letter lights up; after 5 and 10, the first letters are placed for you',
+      },
+      'no-hints': { name: 'No hints', summary: 'Work it out on your own' },
+    },
+    instructions: {
+      'first-vowel': 'Which vowel does it start with?',
+      'missing-vowels': 'Tap the missing vowels, in order',
+      'mixed-letters': 'Tap the letters in the right order',
+      'word-builder': 'Tap letters to make a word, then Check',
+    },
+    progress: (word, total) => `Word ${word} of ${total}`,
+    mistakes: (mistakes) => `Mistakes ${mistakes}`,
+    gap: 'Missing letter',
+    letters: 'Letters',
+    answer: 'Your word',
+    delete: 'Delete',
+    check: 'Check',
+    found: (found, total) => `Found ${found} of ${total}`,
+    checks: {
+      found: 'Well found!',
+      'already-found': 'You already have that one',
+      'too-short': 'Use at least 3 letters',
+      unknown: 'That one isn’t on our list',
+    },
+    newLetters: 'New letters',
+    allFound: 'You found them all!',
+    solved: 'Well done!',
+    summary: (words, mistakes) => `${words} words · ${mistakes} ${mistakes === 1 ? 'mistake' : 'mistakes'}`,
   },
 };

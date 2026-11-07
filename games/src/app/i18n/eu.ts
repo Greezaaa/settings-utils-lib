@@ -54,6 +54,13 @@ export const EU: SiteMessages = {
       subtitle: 'egia ala gezurra, zenbaki-teklatua eta falta diren zeinuak',
       intro: 'Haurrentzako matematika jokoa.',
     },
+    'letter-games': {
+      name: 'Letra jokoak',
+      summary:
+        'Ikasi bokalak, osatu falta direnak, ordenatu letra nahasiak edo osatu ahal dituzun hitz guztiak 5 eta 10 letra artean.',
+      subtitle: 'bokalak, letra nahasiak eta hitz-sortzailea',
+      intro: 'Letra eta hitz joko bat haurrentzat.',
+    },
     'sliding-puzzle': {
       name: 'Puzzle irristakorra',
       summary: 'Irristatu piezak hutsunera lerroak berriro elkartu arte. Marrazki berria partida bakoitzean.',
@@ -74,7 +81,7 @@ export const EU: SiteMessages = {
     },
   },
 
-  categories: { numbers: 'Zenbakiak', puzzles: 'Puzzleak' },
+  categories: { numbers: 'Zenbakiak', letters: 'Letrak', puzzles: 'Puzzleak' },
 
   home: {
     title: 'Joko adimentsuak, haur adimentsuentzat',
@@ -288,5 +295,60 @@ export const EU: SiteMessages = {
     tapGapToChange: 'Sakatu hutsune bat aldatzeko.',
     precedence: '× eta ÷ + eta − baino lehen kalkulatzen dira.',
     notWholeNumber: 'ez da zenbaki osoa',
+  },
+
+  letterGames: {
+    lead: 'Ikasi bokalak, osatu falta direnak, ordenatu letra nahasiak edo osatu ahal dituzun hitz guztiak.',
+    rule: 'Gure zerrendako hitzek bakarrik balio dute, eta gero eta gehiago gehitzen ditugu!',
+    board: 'Letra jokoa',
+    modeGroup: 'Jokoa',
+    modes: {
+      'first-vowel': { name: 'Lehen bokala', summary: 'Sakatu hitza zein bokalekin hasten den' },
+      'missing-vowels': { name: 'Falta diren bokalak', summary: 'Osatu hitzaren bokal guztiak' },
+      'mixed-letters': { name: 'Letra nahasiak', summary: 'Ordenatu letrak; hitzak gero eta luzeagoak dira' },
+      'word-builder': { name: 'Hitz-sortzailea', summary: 'Osatu ahal dituzun hitz guztiak' },
+    },
+    levelGroup: 'Letrak',
+    builderLevels: {
+      easy: { name: 'Erraza', summary: '5 letra' },
+      normal: { name: 'Normala', summary: '7 letra' },
+      hard: { name: 'Zaila', summary: '10 letra' },
+    },
+    timers: {
+      timer: 'Amaitu hitz bakoitza barra amaitu baino lehen; hitz-sortzailean, bilatu amaitu arte',
+      'no-timer': 'Lasai, presarik gabe',
+    },
+    hintsGroup: 'Pistak',
+    hints: {
+      hints: {
+        name: 'Pistekin',
+        summary: '2 akatsen ondoren hurrengo letra argitzen da; 5 eta 10en ondoren, lehen letrak jartzen dira',
+      },
+      'no-hints': { name: 'Pistarik gabe', summary: 'Ebatzi zuk bakarrik' },
+    },
+    instructions: {
+      'first-vowel': 'Zein bokalekin hasten da?',
+      'missing-vowels': 'Sakatu falta diren bokalak, ordenan',
+      'mixed-letters': 'Sakatu letrak ordena egokian',
+      'word-builder': 'Sakatu letrak hitz bat osatzeko, eta gero Egiaztatu',
+    },
+    progress: (word, total) => `Hitza: ${word}/${total}`,
+    mistakes: (mistakes) => `Akatsak: ${mistakes}`,
+    gap: 'Falta den letra',
+    letters: 'Letrak',
+    answer: 'Zure hitza',
+    delete: 'Ezabatu',
+    check: 'Egiaztatu',
+    found: (found, total) => `Aurkituta: ${found}/${total}`,
+    checks: {
+      found: 'Ondo aurkitua!',
+      'already-found': 'Hori badaukazu jada',
+      'too-short': 'Erabili gutxienez 3 letra',
+      unknown: 'Hori ez dago gure zerrendan',
+    },
+    newLetters: 'Beste letra batzuk',
+    allFound: 'Denak aurkitu dituzu!',
+    solved: 'Oso ondo!',
+    summary: (words, mistakes) => `${words} hitz · ${mistakes} akats`,
   },
 };

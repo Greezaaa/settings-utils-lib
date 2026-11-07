@@ -1,0 +1,16 @@
+<p class="word" [class.is-wrong]="feedback.isWrong()" [class.is-done]="isDone()" role="group" [attr.aria-label]="t().letterGames.answer">
+  @for (slot of slots(); track $index) {
+    @if (slot) {
+      <button type="button" class="letter" [class.is-revealed]="isRevealed($index)" (click)="takeBack(slot)">
+        {{ slot.letter }}
+      </button>
+    } @else {
+      <span class="letter gap" [class.is-next]="$index === placed().length" role="img" [attr.aria-label]="t().letterGames.gap"></span>
+    }
+  }
+</p>
+<div class="tiles" role="group" [attr.aria-label]="t().letterGames.letters">
+  @for (tile of tiles(); track tile.id) {
+    <button type="button" class="tile" [class.is-hint]="tile === nextTile()" [disabled]="isPlaced(tile)" (click)="place(tile)">{{ tile.letter }}</button>
+  }
+</div>

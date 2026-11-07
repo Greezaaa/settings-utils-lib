@@ -1,0 +1,45 @@
+<p class="mono">{{ t().letterGames.found(found().length, set().answers.length) }}</p>
+<ul class="answers">
+  @for (item of answers(); track item.answer) {
+    <li class="word small" [class.is-done]="item.isFound" [class.is-missed]="item.isShown && !item.isFound">
+      @for (letter of item.letters; track $index) {
+        <span class="letter" [class.gap]="!item.isShown">{{ item.isShown ? letter : '' }}</span>
+      }
+    </li>
+  }
+</ul>
+
+@if (isAllFound()) {
+  <p class="feedback is-good">{{ t().letterGames.allFound }}</p>
+} @else if (isTimeUp()) {
+  <p class="feedback">{{ t().over.outOfTime }}</p>
+} @else {
+  <p class="word" [class.is-wrong]="feedback.isWrong()" role="group" [attr.aria-label]="t().letterGames.answer">
+    @for (id of picked(); track id) {
+      <span class="letter">{{ set().letters[id] }}</span>
+    } @empty {
+      <span class="letter gap is-next" role="img" [attr.aria-label]="t().letterGames.gap"></span>
+    }
+  </p>
+  <p class="feedback" [class.is-good]="lastCheck() === 'found'" aria-live="polite">
+    @if (lastCheck(); as check) {
+      {{ t().letterGames.checks[check] }}
+    }
+  </p>
+  <div class="tiles" role="group" [attr.aria-label]="t().letterGames.letters">
+    @for (tile of tiles(); track tile.id) {
+      <button type="button" class="tile" [disabled]="picked().includes(tile.id)" (click)="pick(tile.id)">
+        {{ tile.letter }}
+      </button>
+    }
+  </div>
+  <div class="button-row">
+    <button type="button" class="button button-secondary" [disabled]="picked().length === 0" (click)="deleteLast()">
+      {{ t().letterGames.delete }}
+    </button>
+    <button type="button" class="button" [disabled]="picked().length === 0" (click)="check()">
+      {{ t().letterGames.check }}
+    </button>
+  </div>
+}
+<button type="button" class="button button-secondary" (click)="newLetters.emit()">{{ t().letterGames.newLetters }}</button>

@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  background: var(--subtle);
+  border-radius: 9999px;
+  height: 0.5rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+// The bar uses the theme's button colour, which stands out on every background;
+// when time is short it blinks instead of changing colour
+.timer-fill {
+  background: var(--button-bg);
+  height: 100%;
+  transform-origin: left;
+
+  &.is-low {
+    animation: timer-blink 400ms ease-in-out infinite alternate;
+  }
+}
+
+@keyframes timer-blink {
+  to {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer-fill.is-low {
+    animation: none;
+  }
+}

@@ -54,6 +54,13 @@ export const ES: SiteMessages = {
       subtitle: 'verdadero o falso, teclado numérico y signos que faltan',
       intro: 'Un juego de matemáticas para niños.',
     },
+    'letter-games': {
+      name: 'Juegos de letras',
+      summary:
+        'Aprende las vocales, completa las que faltan, ordena letras mezcladas o forma todas las palabras que puedas con 5 a 10 letras.',
+      subtitle: 'vocales, letras mezcladas y forma palabras',
+      intro: 'Un juego de letras y palabras para niños.',
+    },
     'sliding-puzzle': {
       name: 'Puzle deslizante',
       summary: 'Desliza las piezas al hueco hasta que las líneas vuelvan a unirse. Un dibujo nuevo en cada partida.',
@@ -75,7 +82,7 @@ export const ES: SiteMessages = {
     },
   },
 
-  categories: { numbers: 'Números', puzzles: 'Puzles' },
+  categories: { numbers: 'Números', letters: 'Letras', puzzles: 'Puzles' },
 
   home: {
     title: 'Juegos inteligentes para mentes despiertas',
@@ -288,5 +295,60 @@ export const ES: SiteMessages = {
     tapGapToChange: 'Toca un hueco para cambiarlo.',
     precedence: '× y ÷ se calculan antes que + y −.',
     notWholeNumber: 'no da un número entero',
+  },
+
+  letterGames: {
+    lead: 'Aprende las vocales, completa las que faltan, ordena letras mezcladas o forma todas las palabras que puedas.',
+    rule: '¡Solo cuentan las palabras de nuestra lista, y cada vez añadimos más!',
+    board: 'Juego de letras',
+    modeGroup: 'Juego',
+    modes: {
+      'first-vowel': { name: 'Primera vocal', summary: 'Toca la vocal con la que empieza la palabra' },
+      'missing-vowels': { name: 'Vocales perdidas', summary: 'Completa todas las vocales de la palabra' },
+      'mixed-letters': { name: 'Letras mezcladas', summary: 'Ordena las letras; las palabras son cada vez más largas' },
+      'word-builder': { name: 'Forma palabras', summary: 'Forma todas las palabras que puedas' },
+    },
+    levelGroup: 'Letras',
+    builderLevels: {
+      easy: { name: 'Fácil', summary: '5 letras' },
+      normal: { name: 'Normal', summary: '7 letras' },
+      hard: { name: 'Difícil', summary: '10 letras' },
+    },
+    timers: {
+      timer: 'Termina cada palabra antes de que se acabe la barra; en Forma palabras, busca hasta que se acabe',
+      'no-timer': 'Sin prisa',
+    },
+    hintsGroup: 'Pistas',
+    hints: {
+      hints: {
+        name: 'Con pistas',
+        summary: 'Tras 2 fallos se ilumina la siguiente letra; tras 5 y 10, se colocan las primeras letras',
+      },
+      'no-hints': { name: 'Sin pistas', summary: 'Resuélvelo tú solo' },
+    },
+    instructions: {
+      'first-vowel': '¿Con qué vocal empieza?',
+      'missing-vowels': 'Toca las vocales que faltan, en orden',
+      'mixed-letters': 'Toca las letras en el orden correcto',
+      'word-builder': 'Toca letras para formar una palabra y pulsa Comprobar',
+    },
+    progress: (word, total) => `Palabra ${word} de ${total}`,
+    mistakes: (mistakes) => `Fallos ${mistakes}`,
+    gap: 'Letra que falta',
+    letters: 'Letras',
+    answer: 'Tu palabra',
+    delete: 'Borrar',
+    check: 'Comprobar',
+    found: (found, total) => `${found} de ${total} encontradas`,
+    checks: {
+      found: '¡Bien encontrada!',
+      'already-found': 'Esa ya la tienes',
+      'too-short': 'Usa al menos 3 letras',
+      unknown: 'Esa no está en nuestra lista',
+    },
+    newLetters: 'Otras letras',
+    allFound: '¡Las has encontrado todas!',
+    solved: '¡Muy bien!',
+    summary: (words, mistakes) => `${words} palabras · ${mistakes} ${mistakes === 1 ? 'fallo' : 'fallos'}`,
   },
 };

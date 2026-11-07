@@ -60,17 +60,11 @@
 
       @case ('playing') {
         <div class="status">
-          <span class="mono">{{ isTimed() ? t().playing.seconds(secondsLeft()) : t().playing.noTimer }}</span>
+          <span class="mono">{{ isTimed() ? t().playing.seconds(countdown.secondsLeft()) : t().playing.noTimer }}</span>
           <span class="mono">{{ t().playing.score(score()) }}</span>
         </div>
         @if (isTimed()) {
-          <div class="timer" aria-hidden="true">
-            <div
-              class="timer-fill"
-              [class.is-low]="timeShare() < 0.35"
-              [style.transform]="'scaleX(' + timeShare() + ')'"
-            ></div>
-          </div>
+          <app-timer-bar [share]="countdown.share()" />
         }
 
         @switch (answerStyleId()) {

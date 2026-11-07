@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { readStored, writeStored } from '../../core/site-storage';
 import { createSignsPuzzle, formatSigns, getSignsLevel, SIGNS_LEVELS, SignsPuzzle } from '../../games/find-the-signs';
@@ -6,7 +6,9 @@ import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatQuestion, getLev
 import { gameInfo } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { OptionText } from '../../i18n/site-messages';
+import { Countdown } from '../../shared/countdown';
 import { GameBoard } from '../../shared/game-board';
+import { TimerBar } from '../../shared/timer-bar';
 import { FindTheSignsRound } from './rounds/find-the-signs-round';
 import { RoundResult } from './rounds/round-result';
 import { TrueOrFalseRound } from './rounds/true-or-false-round';
@@ -30,9 +32,6 @@ const BEST_SCORES_STORAGE = 'math-games:best';
 /** Level picked when the chosen one doesn't exist for the new answer style */
 const DEFAULT_LEVEL: LevelId = 'normal';
 
-/** How often the timer bar is redrawn */
-const TICK_MS = 50;
-
 /**
  * Math games: the settings screen, the score and the timer.
  * Each answer style is its own round component; this page only hears whether an answer was right.
@@ -40,10 +39,10 @@ const TICK_MS = 50;
  */
 @Component({
   selector: 'app-math-games-page',
-  imports: [FindTheSignsRound, GameBoard, RouterLink, TrueOrFalseRound, YourAnswerRound],
+  imports: [FindTheSignsRound, GameBoard, RouterLink, TimerBar, TrueOrFalseRound, YourAnswerRound],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './math-games-page.html',
-  styleUrls: ['../../shared/utility-page.scss', './math-games-page.scss'],
+  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './math-games-page.scss'],
 })
 export class MathGamesPage {
   /** The home page, which lists every game */
@@ -93,10 +92,7 @@ export class MathGamesPage {
   private readonly scoreKey = computed<ScoreKey>(() => `${this.answerStyleId()}:${this.timerId()}:${this.levelId()}`);
   protected readonly best = computed(() => this.bestScores()[this.scoreKey()] ?? 0);
 
-  private readonly questionMs = signal(1);
-  private readonly remainingMs = signal(0);
-  protected readonly secondsLeft = computed(() => Math.ceil(this.remainingMs() / 1000));
-  protected readonly timeShare = computed(() => this.remainingMs() / this.questionMs());
+  protected readonly countdown = new Countdown();
 
   /** The equation with its right answer, shown when the game ends */
   protected readonly solution = computed(() => {
@@ -108,15 +104,9 @@ export class MathGamesPage {
     return question ? formatQuestion({ ...question, shown: question.answer }) : '';
   });
 
-  private deadline = 0;
-  private timer?: ReturnType<typeof setInterval>;
-
   constructor() {
     afterNextRender(() => {
       this.bestScores.set(readBestScores());
-    });
-    inject(DestroyRef).onDestroy(() => {
-      this.stopTimer();
     });
   }
 
@@ -166,30 +156,14 @@ export class MathGamesPage {
       this.question.set(createQuestion(this.level()));
     }
     if (this.isTimed()) {
-      this.startTimer(secondsForQuestion(this.timing(), this.score(), this.answerStyleId()) * 1000);
+      this.countdown.start(secondsForQuestion(this.timing(), this.score(), this.answerStyleId()) * 1000, () =>
+        this.finish('timeout'),
+      );
     }
   }
 
-  private startTimer(ms: number): void {
-    this.stopTimer();
-    this.questionMs.set(ms);
-    this.remainingMs.set(ms);
-    this.deadline = Date.now() + ms;
-    this.timer = setInterval(() => {
-      const remaining = Math.max(0, this.deadline - Date.now());
-      this.remainingMs.set(remaining);
-      if (remaining === 0) {
-        this.finish('timeout');
-      }
-    }, TICK_MS);
-  }
-
-  private stopTimer(): void {
-    clearInterval(this.timer);
-  }
-
   private finish(ending: Ending): void {
-    this.stopTimer();
+    this.countdown.stop();
     this.ending.set(ending);
     this.phase.set('over');
 

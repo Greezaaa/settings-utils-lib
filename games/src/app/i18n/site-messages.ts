@@ -5,6 +5,7 @@ import { SignsLevelId } from '../games/find-the-signs';
 import { BoardLevelId } from '../games/board';
 import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
+import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
 import { GameThemeId } from '../core/game-themes';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
@@ -252,5 +253,37 @@ export interface SiteMessages {
     readonly precedence: string;
     /** Shown instead of a result when the player's signs leave a remainder or go below zero */
     readonly notWholeNumber: string;
+  };
+
+  /** The letter games: first vowel, missing vowels, mixed letters and word builder */
+  readonly letterGames: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    readonly modeGroup: string;
+    readonly modes: Readonly<Record<LetterModeId, OptionText>>;
+    readonly levelGroup: string;
+    readonly builderLevels: Readonly<Record<BuilderLevelId, OptionText>>;
+    /** What the timer option means here; its name comes from settings.timers */
+    readonly timers: Readonly<Record<TimerId, string>>;
+    readonly hintsGroup: string;
+    readonly hints: Readonly<Record<HintsId, OptionText>>;
+    /** What to do, shown above each word */
+    readonly instructions: Readonly<Record<LetterModeId, string>>;
+    readonly progress: (word: number, total: number) => string;
+    readonly mistakes: (mistakes: number) => string;
+    /** Name of an empty letter box, for screen readers */
+    readonly gap: string;
+    readonly letters: string;
+    readonly answer: string;
+    readonly delete: string;
+    readonly check: string;
+    readonly found: (found: number, total: number) => string;
+    /** What the word builder says about a word */
+    readonly checks: Readonly<Record<WordCheck, string>>;
+    readonly newLetters: string;
+    readonly allFound: string;
+    readonly solved: string;
+    readonly summary: (words: number, mistakes: number) => string;
   };
 }
