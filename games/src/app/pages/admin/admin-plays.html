@@ -1,7 +1,7 @@
 <div class="filters">
-  <p class="muted">Last 30 days · {{ totalPlays() }} plays in all</p>
+  <p class="muted">{{ t().admin.playsPeriod(totalPlays()) }}</p>
   <button type="button" class="button button-secondary button-small" [disabled]="loading()" (click)="load()">
-    Refresh
+    {{ t().admin.refresh }}
   </button>
 </div>
 
@@ -9,11 +9,11 @@
   <table>
     <thead>
       <tr>
-        <th scope="col">Game</th>
-        <th scope="col" class="number">Plays</th>
+        <th scope="col">{{ t().admin.playsColumns.game }}</th>
+        <th scope="col" class="number">{{ t().admin.playsColumns.plays }}</th>
         <th scope="col" class="number">👍</th>
         <th scope="col" class="number">👎</th>
-        <th scope="col">Reasons</th>
+        <th scope="col">{{ t().admin.playsColumns.reasons }}</th>
       </tr>
     </thead>
     <tbody>

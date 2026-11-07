@@ -1,6 +1,7 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AdminApi } from '../../core/admin-api';
 import { GameAvailability } from '../../core/game-availability';
+import { SiteLanguage } from '../../i18n/site-language';
 import { AdminGames } from './admin-games';
 import { AdminPlays } from './admin-plays';
 import { AdminSuggestions } from './admin-suggestions';
@@ -10,17 +11,11 @@ type SignIn = 'idle' | 'checking' | 'wrong' | 'offline';
 
 const TABS = ['games', 'plays', 'suggestions', 'words'] as const;
 type Tab = (typeof TABS)[number];
-const TAB_NAMES: Readonly<Record<Tab, string>> = {
-  games: 'Games',
-  plays: 'Plays and feedback',
-  suggestions: 'Suggestions',
-  words: 'Reported words',
-};
 
 /**
  * The site admin's page, at /admin and linked from nowhere: sign in with the API's admin token, then switch games,
- * see plays and feedback, and moderate suggestions and reported words, one tab each. Only the author uses it, so its
- * texts are in English only.
+ * see plays and feedback, and moderate suggestions and reported words, one tab each. Translated like the rest of
+ * the site, as there can be more than one admin.
  */
 @Component({
   selector: 'app-admin-page',
@@ -35,7 +30,8 @@ export class AdminPage {
 
   protected readonly signIn = signal<SignIn>('idle');
   protected readonly tabs = TABS;
-  protected readonly tabNames = TAB_NAMES;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
   protected readonly tab = signal<Tab>('games');
 
   constructor() {

@@ -11,37 +11,27 @@
       <p class="dictionary" role="status">{{ t().letterGames.dictionary.failed }}</p>
     }
   }
-  <p class="mono">{{ t().letterGames.found(found().length, set().answers.length) }}</p>
+  <p class="mono">{{ t().letterGames.found(foundCount(), answers().length) }}</p>
   <ul class="answers">
     @for (item of answers(); track item.answer) {
       <li class="word small" [class.is-done]="item.isFound" [class.is-missed]="item.isShown && !item.isFound">
         @for (letter of item.letters; track $index) {
           <span class="letter" [class.gap]="!item.isShown">{{ item.isShown ? letter : '' }}</span>
         }
-      </li>
-    }
-  </ul>
-  @if (bonus().length > 0) {
-    <p class="mono">{{ t().letterGames.bonusWords(bonus().length) }}</p>
-    <ul class="answers">
-      @for (item of bonusWords(); track item.word) {
-        <li class="word small is-bonus">
-          @for (letter of item.letters; track $index) {
-            <span class="letter">{{ letter }}</span>
-          }
+        @if (item.isShown && item.canReport) {
           <button
             type="button"
             class="report"
             [title]="t().letterGames.report"
-            [attr.aria-label]="t().letterGames.report + ': ' + item.word"
-            (click)="report(item.word)"
+            [attr.aria-label]="t().letterGames.report + ': ' + item.answer"
+            (click)="report(item.answer)"
           >
             ⚑
           </button>
-        </li>
-      }
-    </ul>
-  }
+        }
+      </li>
+    }
+  </ul>
   @if (hasReported()) {
     <p class="dictionary" role="status">{{ t().letterGames.reportThanks }}</p>
   }
@@ -52,6 +42,8 @@
     <p class="feedback is-good">{{ t().letterGames.allFound }}</p>
   } @else if (isTimeUp()) {
     <p class="feedback">{{ t().over.outOfTime }}</p>
+  } @else if (isRevealed()) {
+    <p class="feedback">{{ t().letterGames.wordsShown }}</p>
   } @else {
     <p class="word" [class.is-wrong]="feedback.isWrong()" role="group" [attr.aria-label]="t().letterGames.answer">
       @for (id of picked(); track id) {
@@ -81,6 +73,9 @@
       </button>
     </div>
     <p class="keys-hint">{{ t().letterGames.builderKeys }}</p>
+    <button type="button" class="button button-secondary button-small" (click)="showWords()">
+      {{ t().letterGames.showWords }}
+    </button>
   }
   <button type="button" class="button button-secondary" (click)="newLetters.emit()">{{ t().letterGames.newLetters }}</button>
 </div>

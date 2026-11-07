@@ -1,14 +1,14 @@
 <div class="card admin-card">
   <label class="switch-row">
     <span>
-      <strong>Preview mode</strong>
-      <small class="muted">This browser shows every game, open or not, marked “{{ t().page.hidden }}” when hidden.</small>
+      <strong>{{ t().admin.previewTitle }}</strong>
+      <small class="muted">{{ t().admin.previewHelp(t().page.hidden) }}</small>
     </span>
     <input type="checkbox" role="switch" [checked]="availability.isPreview()" (change)="togglePreview()" />
   </label>
 </div>
 
-<h2 class="section-title">Games</h2>
+<h2 class="section-title">{{ t().admin.gamesTitle }}</h2>
 <ul class="card admin-card plain-list">
   @for (game of games; track game.slug) {
     <li>
@@ -16,8 +16,8 @@
         <span>
           <a [routerLink]="['/', game.slug]">{{ t().games[game.slug].name }}</a>
           <small class="muted">
-            {{ availability.isOpen(game.slug) ? 'Open to everyone' : 'Hidden from the public' }}
-            · default: {{ game.openByDefault ? 'open' : 'hidden' }}
+            {{ availability.isOpen(game.slug) ? t().admin.open : t().admin.hidden }}
+            · {{ t().admin.byDefault(game.openByDefault) }}
           </small>
         </span>
         <input
@@ -32,5 +32,5 @@
   }
 </ul>
 @if (saveFailed()) {
-  <p class="error" role="alert">That change didn't save. Check the API and try again.</p>
+  <p class="error" role="alert">{{ t().admin.saveFailed }}</p>
 }

@@ -240,19 +240,42 @@ export function createLetterSet(bank: WordBank, count: number, random: Random): 
   return best;
 }
 
-/**
- * What a word the player made counts as: one of the words to find (`found`), another real word from the dictionary
- * (`bonus`), one they already have, too short, or a word we don't know
- */
-export type WordCheck = 'found' | 'bonus' | 'already-found' | 'too-short' | 'unknown';
+/** What a word the player made counts as: a real word (`found`), one they already have, too short, or unknown */
+export type WordCheck = 'found' | 'already-found' | 'too-short' | 'unknown';
+
+/** Most words to find in one set of letters, so the list stays readable */
+export const MAX_TARGET_WORDS = 30;
 
 /**
- * What a word the player made counts as. `found` lists every word they already have, bonus words included;
- * `dictionary` is the language's full dictionary, once downloaded.
+ * The words to find for a set of letters: the checked word bank's words, then common dictionary words the letters
+ * make, longest first, at most MAX_TARGET_WORDS (the word bank's always fit). `common` is the dictionary's most common
+ * words, most common first, once downloaded.
+ */
+export function targetWords(set: LetterSet, common: Iterable<string> = []): string[] {
+  const fromDictionary: string[] = [];
+  for (const word of common) {
+    if (fromDictionary.length >= MAX_TARGET_WORDS) {
+      break;
+    }
+    const isNew = !set.answers.includes(word) && !fromDictionary.includes(word);
+    if (isNew && lettersOf(word).length >= MIN_WORD_LENGTH && canMake(word, set.letters)) {
+      fromDictionary.push(word);
+    }
+  }
+  const room = Math.max(0, MAX_TARGET_WORDS - set.answers.length);
+  return [...set.answers, ...fromDictionary.slice(0, room)].sort(
+    (first, second) => lettersOf(second).length - lettersOf(first).length || first.localeCompare(second),
+  );
+}
+
+/**
+ * What a word the player made counts as: found when it's one of the words to find, or any real word of the language's
+ * dictionary (once downloaded) the letters make; `found` lists the words they already have.
  */
 export function checkWord(
   word: string,
   set: LetterSet,
+  targets: readonly string[],
   found: readonly string[],
   dictionary?: ReadonlySet<string>,
 ): WordCheck {
@@ -262,8 +285,6 @@ export function checkWord(
   if (found.includes(word)) {
     return 'already-found';
   }
-  if (set.answers.includes(word)) {
-    return 'found';
-  }
-  return dictionary?.has(word) && canMake(word, set.letters) ? 'bonus' : 'unknown';
+  const isReal = targets.includes(word) || set.answers.includes(word) || dictionary?.has(word) === true;
+  return isReal && canMake(word, set.letters) ? 'found' : 'unknown';
 }

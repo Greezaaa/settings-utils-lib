@@ -1,4 +1,4 @@
-<div class="filters" role="group" aria-label="Status">
+<div class="filters" role="group" [attr.aria-label]="t().admin.tabs.suggestions">
   @for (option of statuses; track option) {
     <button
       type="button"
@@ -6,17 +6,17 @@
       [attr.aria-pressed]="option === status()"
       (click)="show(option)"
     >
-      {{ statusNames[option] }}
+      {{ t().admin.suggestionStatuses[option] }}
     </button>
   }
 </div>
 
 @if (failed()) {
-  <p class="error" role="alert">That change didn't save. Check the API and try again.</p>
+  <p class="error" role="alert">{{ t().admin.saveFailed }}</p>
 }
 
 @if (loading()) {
-  <p class="muted">Loading…</p>
+  <p class="muted">{{ t().admin.loading }}</p>
 } @else {
   <ul class="plain-list">
     @for (suggestion of suggestions(); track suggestion.id) {
@@ -28,26 +28,26 @@
         <p class="text">{{ suggestion.text }}</p>
         @if (suggestion.hasImage) {
           @if (images().get(suggestion.id); as image) {
-            <img [src]="image" alt="Picture sent with the suggestion" />
+            <img [src]="image" [alt]="t().admin.pictureAlt" />
           } @else {
             <button type="button" class="button button-secondary button-small" (click)="showImage(suggestion.id)">
-              Show picture
+              {{ t().admin.showPicture }}
             </button>
           }
         }
         <div class="actions">
           @for (other of otherStatuses(suggestion.status); track other) {
             <button type="button" class="button button-secondary button-small" (click)="move(suggestion, other)">
-              Move to {{ statusNames[other] }}
+              {{ t().admin.moveTo(t().admin.suggestionStatuses[other]) }}
             </button>
           }
           <button type="button" class="button button-secondary button-small danger" (click)="remove(suggestion)">
-            Delete
+            {{ t().admin.delete }}
           </button>
         </div>
       </li>
     } @empty {
-      <p class="muted">No {{ statusNames[status()].toLowerCase() }} suggestions.</p>
+      <p class="muted">{{ t().admin.noSuggestions }}</p>
     }
   </ul>
 }

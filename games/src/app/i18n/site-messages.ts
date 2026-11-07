@@ -6,6 +6,7 @@ import { SignsLevelId } from '../games/find-the-signs';
 import { BoardLevelId } from '../games/board';
 import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
+import { ReportStatus, SuggestionStatus } from '../core/admin-api';
 import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { GameThemeId } from '../core/game-themes';
@@ -328,7 +329,9 @@ export interface SiteMessages {
     readonly found: (found: number, total: number) => string;
     /** What the word builder says about a word */
     readonly checks: Readonly<Record<WordCheck, string>>;
-    readonly bonusWords: (count: number) => string;
+    /** Shows the words still missing, and says they are shown */
+    readonly showWords: string;
+    readonly wordsShown: string;
     /** The word builder's dictionary: downloading (with why, for its tooltip), failed, and its credit */
     readonly dictionary: {
       readonly loading: string;
@@ -375,5 +378,52 @@ export interface SiteMessages {
     readonly skip: string;
     readonly solved: string;
     readonly summary: (right: number, total: number) => string;
+  };
+
+  /** The admin page (/admin): sign in, game switches, plays and feedback, suggestions and reported words */
+  readonly admin: {
+    readonly title: string;
+    readonly lead: string;
+    readonly tokenLabel: string;
+    readonly wrongToken: string;
+    readonly offline: string;
+    readonly checking: string;
+    readonly signIn: string;
+    readonly signOut: string;
+    readonly tabs: {
+      readonly games: string;
+      readonly plays: string;
+      readonly suggestions: string;
+      readonly words: string;
+    };
+    readonly saveFailed: string;
+    readonly loading: string;
+    readonly previewTitle: string;
+    readonly previewHelp: (hiddenBadge: string) => string;
+    readonly gamesTitle: string;
+    readonly open: string;
+    readonly hidden: string;
+    readonly byDefault: (open: boolean) => string;
+    readonly playsPeriod: (total: number) => string;
+    readonly refresh: string;
+    readonly playsColumns: { readonly game: string; readonly plays: string; readonly reasons: string };
+    readonly suggestionStatuses: Readonly<Record<SuggestionStatus, string>>;
+    readonly showPicture: string;
+    readonly pictureAlt: string;
+    readonly moveTo: (status: string) => string;
+    readonly delete: string;
+    readonly confirmDelete: string;
+    readonly noSuggestions: string;
+    readonly reportStatuses: Readonly<Record<ReportStatus, string>>;
+    readonly reportsHelp: string;
+    readonly reportColumns: {
+      readonly word: string;
+      readonly language: string;
+      readonly reports: string;
+      readonly firstReported: string;
+    };
+    readonly keepOut: string;
+    readonly letCount: string;
+    readonly noWords: string;
   };
 }

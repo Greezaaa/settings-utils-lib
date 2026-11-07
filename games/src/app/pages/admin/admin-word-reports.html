@@ -1,4 +1,4 @@
-<div class="filters" role="group" aria-label="Status">
+<div class="filters" role="group" [attr.aria-label]="t().admin.tabs.words">
   @for (option of statuses; track option) {
     <button
       type="button"
@@ -6,29 +6,29 @@
       [attr.aria-pressed]="option === status()"
       (click)="show(option)"
     >
-      {{ statusNames[option] }}
+      {{ t().admin.reportStatuses[option] }}
     </button>
   }
 </div>
-<p class="muted">A word reported 3 times stops counting in the word builder until you decide.</p>
+<p class="muted">{{ t().admin.reportsHelp }}</p>
 
 @if (failed()) {
-  <p class="error" role="alert">That change didn't save. Check the API and try again.</p>
+  <p class="error" role="alert">{{ t().admin.saveFailed }}</p>
 }
 
 @if (loading()) {
-  <p class="muted">Loading…</p>
+  <p class="muted">{{ t().admin.loading }}</p>
 } @else if (reports().length === 0) {
-  <p class="muted">No words here.</p>
+  <p class="muted">{{ t().admin.noWords }}</p>
 } @else {
   <div class="card table-scroll">
     <table>
       <thead>
         <tr>
-          <th scope="col">Word</th>
-          <th scope="col">Language</th>
-          <th scope="col" class="number">Reports</th>
-          <th scope="col">First reported</th>
+          <th scope="col">{{ t().admin.reportColumns.word }}</th>
+          <th scope="col">{{ t().admin.reportColumns.language }}</th>
+          <th scope="col" class="number">{{ t().admin.reportColumns.reports }}</th>
+          <th scope="col">{{ t().admin.reportColumns.firstReported }}</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -43,12 +43,12 @@
               <div class="actions">
                 @if (report.status !== 'approved') {
                   <button type="button" class="button button-secondary button-small" (click)="decide(report, 'approved')">
-                    Keep out
+                    {{ t().admin.keepOut }}
                   </button>
                 }
                 @if (report.status !== 'rejected') {
                   <button type="button" class="button button-secondary button-small" (click)="decide(report, 'rejected')">
-                    Let it count
+                    {{ t().admin.letCount }}
                   </button>
                 }
               </div>

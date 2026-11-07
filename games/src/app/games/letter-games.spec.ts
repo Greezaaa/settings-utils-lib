@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allWords, answersFor, canMake, checkWord, createLetterSet, firstVowelWords, lettersOf, LetterSet, missingVowelWords, mixedWords, mixLetters, hintAfter, secondsForGapWord, seedWords, secondsForMixedWord, WordBank, WORDS_PER_GAME } from './letter-games';
+import { allWords, answersFor, canMake, checkWord, createLetterSet, firstVowelWords, lettersOf, LetterSet, missingVowelWords, mixedWords, mixLetters, hintAfter, MAX_TARGET_WORDS, secondsForGapWord, seedWords, targetWords, secondsForMixedWord, WordBank, WORDS_PER_GAME } from './letter-games';
 import { LanguageId } from '../i18n/site-messages';
 import { Random } from './random';
 import { WORD_BANKS } from './words';
@@ -100,13 +100,25 @@ describe('letter games', () => {
 
   it('checks the words the player makes', () => {
     const set: LetterSet = { letters: ['e', 'a', 't', 's'], answers: ['east', 'eat'] };
-    expect(checkWord('at', set, [])).toBe('too-short');
-    expect(checkWord('eat', set, [])).toBe('found');
-    expect(checkWord('eat', set, ['eat'])).toBe('already-found');
-    expect(checkWord('tas', set, [])).toBe('unknown');
-    expect(checkWord('sat', set, [], new Set(['sat']))).toBe('bonus');
-    expect(checkWord('sat', set, ['sat'], new Set(['sat']))).toBe('already-found');
-    expect(checkWord('seats', set, [], new Set(['seats']))).toBe('unknown');
+    const targets = ['east', 'eat', 'tea'];
+    expect(checkWord('at', set, targets, [])).toBe('too-short');
+    expect(checkWord('eat', set, targets, [])).toBe('found');
+    expect(checkWord('tea', set, targets, [])).toBe('found');
+    expect(checkWord('eat', set, targets, ['eat'])).toBe('already-found');
+    expect(checkWord('tas', set, targets, [])).toBe('unknown');
+    // Any real word the letters make counts, even when it isn't asked for
+    expect(checkWord('sat', set, targets, [], new Set(['sat']))).toBe('found');
+    expect(checkWord('seats', set, targets, [], new Set(['seats']))).toBe('unknown');
+  });
+
+  it('asks for the word bank’s words and common dictionary words, longest first, up to a limit', () => {
+    const set: LetterSet = { letters: ['e', 'a', 't', 's'], answers: ['east'] };
+    expect(targetWords(set, ['the', 'sat', 'tea', 'seats', 'eats', 'at'])).toEqual(['east', 'eats', 'sat', 'tea']);
+    expect(targetWords(set)).toEqual(['east']);
+    const many = Array.from({ length: 50 }, () => 'eat');
+    expect(targetWords({ letters: ['e', 'a', 't'], answers: ['tea'] }, many).length).toBeLessThanOrEqual(
+      MAX_TARGET_WORDS,
+    );
   });
 
   it('keeps every word bank in its own alphabet, with pictures for most vowels', () => {

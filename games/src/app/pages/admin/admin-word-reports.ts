@@ -1,11 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AdminApi, REPORT_STATUSES, ReportStatus, WordReport } from '../../core/admin-api';
-
-const STATUS_NAMES: Readonly<Record<ReportStatus, string>> = {
-  pending: 'Waiting',
-  approved: 'Kept out',
-  rejected: 'Counting again',
-};
+import { SiteLanguage } from '../../i18n/site-language';
 
 /**
  * Admin tab: words players reported in the word builder. A word reported 3 times stops counting until decided:
@@ -21,7 +16,8 @@ export class AdminWordReports {
   private readonly admin = inject(AdminApi);
 
   protected readonly statuses = REPORT_STATUSES;
-  protected readonly statusNames = STATUS_NAMES;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
   protected readonly status = signal<ReportStatus>('pending');
   protected readonly reports = signal<readonly WordReport[]>([]);
   protected readonly loading = signal(true);

@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output, signal } from '@angular/core';
 import { DictionaryStatus } from '../../../core/word-dictionaries';
-import { checkWord, LetterSet, lettersOf, WordCheck } from '../../../games/letter-games';
+import { checkWord, LetterSet, lettersOf, targetWords, WordCheck } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { roundFeedback } from '../../../shared/round-feedback';
 import { typedKey } from '../../../shared/typed-letter';
 
 /**
  * Word builder: the player taps letters to make a word and checks it. Every word to find shows as empty boxes,
- * longest first, and fills in once found. Other real words, checked with the language's dictionary once it has
- * downloaded, count as bonus words.
+ * longest first, and fills in once found: the checked word bank's words and, once the language's dictionary has
+ * downloaded, its common words the letters make. Any other real word the player makes counts too and joins the list.
+ * "Show the words" reveals the ones still missing.
  */
 @Component({
   selector: 'app-builder-round',
@@ -21,13 +22,14 @@ export class BuilderRound {
   readonly set = input.required<LetterSet>();
   /** With the timer on, time ran out: show every word and stop taking new ones */
   readonly isTimeUp = input(false);
-  /** The language's dictionary, once downloaded, and how its download is doing */
+  /** The language's dictionary, once downloaded, its most common words, and how its download is doing */
   readonly dictionary = input<ReadonlySet<string>>();
+  readonly commonWords = input<readonly string[]>([]);
   readonly dictionaryStatus = input<DictionaryStatus>();
   readonly newLetters = output<void>();
   /** Every word was found */
   readonly allFound = output<void>();
-  /** The player reported a bonus word as rude */
+  /** The player reported a word from the dictionary as rude */
   readonly reported = output<string>();
 
   /** Texts in the site's language */
@@ -38,10 +40,14 @@ export class BuilderRound {
   /** Ids of the tiles in the word being made */
   protected readonly picked = linkedSignal({ source: this.set, computation: (): readonly number[] => [] });
   protected readonly found = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
-  protected readonly bonus = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
+  /** Real words the player made that weren't asked for; they join the list */
+  private readonly extras = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
+  /** Words the player reported, taken off the list */
+  private readonly removed = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
+  /** The player asked to see the words still missing */
+  private readonly gaveUp = linkedSignal({ source: this.set, computation: () => false });
   /** A word was reported with these letters: thank the player */
   protected readonly hasReported = linkedSignal({ source: this.set, computation: () => false });
-  protected readonly bonusWords = computed(() => this.bonus().map((word) => ({ word, letters: lettersOf(word) })));
   protected readonly lastCheck = signal<WordCheck | null>(null);
 
   protected readonly word = computed(() =>
@@ -49,19 +55,39 @@ export class BuilderRound {
       .map((id) => this.set().letters[id])
       .join(''),
   );
-  protected readonly answers = computed(() =>
-    this.set().answers.map((answer) => ({
-      answer,
-      isFound: this.found().includes(answer),
-      isShown: this.found().includes(answer) || this.isTimeUp(),
-      letters: lettersOf(answer),
-    })),
+  /** Every word to find: the word bank's, common dictionary words, and real words the player added; longest first */
+  private readonly targets = computed(() =>
+    [...targetWords(this.set(), this.commonWords()), ...this.extras()]
+      .filter((word) => !this.removed().includes(word))
+      .sort((first, second) => lettersOf(second).length - lettersOf(first).length || first.localeCompare(second)),
   );
-  protected readonly isAllFound = computed(() => this.found().length === this.set().answers.length);
+  protected readonly isRevealed = computed(() => this.isTimeUp() || this.gaveUp());
+  protected readonly answers = computed(() =>
+    this.targets().map((answer) => {
+      const isFound = this.found().includes(answer);
+      return {
+        answer,
+        isFound,
+        isShown: isFound || this.isRevealed(),
+        /** Words from the dictionary rather than the checked word bank can be reported */
+        canReport: !this.set().answers.includes(answer),
+        letters: lettersOf(answer),
+      };
+    }),
+  );
+  protected readonly foundCount = computed(() => this.answers().filter(({ isFound }) => isFound).length);
+  protected readonly isAllFound = computed(() => this.foundCount() === this.answers().length);
 
-  /** Takes a reported word off the bonus words; the page sends the report */
+  /** Shows the words still missing and ends these letters */
+  protected showWords(): void {
+    this.gaveUp.set(true);
+    this.picked.set([]);
+  }
+
+  /** Takes a reported word off the list; the page sends the report */
   protected report(word: string): void {
-    this.bonus.update((bonus) => bonus.filter((bonusWord) => bonusWord !== word));
+    this.removed.update((removed) => [...removed, word]);
+    this.found.update((found) => found.filter((foundWord) => foundWord !== word));
     this.hasReported.set(true);
     this.reported.emit(word);
   }
@@ -69,7 +95,7 @@ export class BuilderRound {
   /** Typing picks letters, Backspace deletes the last one and Enter checks the word */
   protected onKey(event: KeyboardEvent): void {
     const key = typedKey(event);
-    if (!key || this.isTimeUp() || this.isAllFound()) {
+    if (!key || this.isRevealed() || this.isAllFound()) {
       return;
     }
     if (key.kind === 'letter') {
@@ -103,12 +129,12 @@ export class BuilderRound {
 
   protected check(): void {
     const word = this.word();
-    const result = checkWord(word, this.set(), [...this.found(), ...this.bonus()], this.dictionary());
+    const result = checkWord(word, this.set(), this.targets(), this.found(), this.dictionary());
     this.lastCheck.set(result);
-    if (result === 'bonus') {
-      this.bonus.update((bonus) => [...bonus, word]);
-    }
     if (result === 'found') {
+      if (!this.targets().includes(word)) {
+        this.extras.update((extras) => [...extras, word]);
+      }
       this.found.update((found) => [...found, word]);
       if (this.isAllFound()) {
         this.allFound.emit();

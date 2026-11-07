@@ -6,12 +6,18 @@ import { GamesApi } from './games-api';
  * Bump when the dictionaries are rebuilt (npm run build:dictionaries), so browsers fetch the new files instead of
  * their cached copy.
  */
-export const DICTIONARY_VERSION = 2;
+export const DICTIONARY_VERSION = 5;
 
 /** Where a dictionary is, as served from games/public/dictionaries/ */
 export const dictionaryUrl = (language: LanguageId): string => `/dictionaries/${language}.txt?v=${DICTIONARY_VERSION}`;
 
-/** A dictionary file, one word per line, as a set of words */
+/**
+ * How many of the most common words of a dictionary can be words to find in the word builder; rarer words still
+ * count when typed, but aren't asked for
+ */
+export const COMMON_WORDS = 15_000;
+
+/** A dictionary file, one word per line, most common first, as a set of words in that order */
 export function parseDictionary(text: string): ReadonlySet<string> {
   return new Set(
     text
@@ -42,6 +48,11 @@ export class WordDictionaries {
   /** A language's words, once downloaded */
   wordsOf(language: LanguageId): ReadonlySet<string> | undefined {
     return this.words()[language];
+  }
+
+  /** A language's most common words (see COMMON_WORDS), once downloaded */
+  commonWordsOf(language: LanguageId): readonly string[] {
+    return [...(this.wordsOf(language) ?? [])].slice(0, COMMON_WORDS);
   }
 
   /** Downloads a language's dictionary unless it is loaded or loading; a failed download is tried again */

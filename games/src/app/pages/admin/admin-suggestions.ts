@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '
 import { AdminApi, AdminSuggestion, SUGGESTION_STATUSES, SuggestionStatus } from '../../core/admin-api';
 import { SiteLanguage } from '../../i18n/site-language';
 
-const STATUS_NAMES: Readonly<Record<SuggestionStatus, string>> = { new: 'New', read: 'Read', archived: 'Archived' };
-
 /**
  * Admin tab: the suggestions players sent, by status (new, read, archived), with their pictures on request; each can
  * be moved to another status or deleted for good.
@@ -20,7 +18,6 @@ export class AdminSuggestions {
   protected readonly t = inject(SiteLanguage).messages;
 
   protected readonly statuses = SUGGESTION_STATUSES;
-  protected readonly statusNames = STATUS_NAMES;
   protected readonly status = signal<SuggestionStatus>('new');
   protected readonly suggestions = signal<readonly AdminSuggestion[]>([]);
   protected readonly loading = signal(true);
@@ -56,7 +53,7 @@ export class AdminSuggestions {
   }
 
   protected async remove(suggestion: AdminSuggestion): Promise<void> {
-    if (confirm('Delete this suggestion and its picture for good?')) {
+    if (confirm(this.t().admin.confirmDelete)) {
       await this.afterChange(this.admin.deleteSuggestion(suggestion.id));
     }
   }

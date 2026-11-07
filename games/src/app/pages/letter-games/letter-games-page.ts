@@ -50,6 +50,7 @@ export class LetterGamesPage {
   /** The word builder's dictionary in the site's language, and how its download is doing */
   protected readonly dictionary = computed(() => this.dictionaries.wordsOf(this.language.language()));
   protected readonly dictionaryStatus = computed(() => this.dictionaries.status(this.language.language()));
+  protected readonly commonWords = computed(() => this.dictionaries.commonWordsOf(this.language.language()));
   protected readonly vowels = computed(() => this.bank().vowels);
 
   protected readonly modeId = signal<LetterModeId>('first-vowel');

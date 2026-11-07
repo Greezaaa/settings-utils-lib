@@ -1,25 +1,25 @@
 <header class="container page-head">
-  <h1>Admin</h1>
-  <p class="lead">Switch games on or off, see what's played, and moderate suggestions and reported words.</p>
+  <h1>{{ t().admin.title }}</h1>
+  <p class="lead">{{ t().admin.lead }}</p>
 </header>
 
 <section class="container page-section">
   @if (!admin.isSignedIn()) {
     <form class="card admin-card" (submit)="submit($event, tokenInput)">
       <label class="field">
-        <span>Admin token (ADMIN_TOKEN in the API's .env)</span>
+        <span>{{ t().admin.tokenLabel }}</span>
         <input #tokenInput type="password" autocomplete="off" spellcheck="false" required />
       </label>
       @switch (signIn()) {
         @case ('wrong') {
-          <p class="error" role="alert">That token is wrong.</p>
+          <p class="error" role="alert">{{ t().admin.wrongToken }}</p>
         }
         @case ('offline') {
-          <p class="error" role="alert">The API can't be reached right now. Try again later.</p>
+          <p class="error" role="alert">{{ t().admin.offline }}</p>
         }
       }
       <button type="submit" class="button" [disabled]="signIn() === 'checking'">
-        {{ signIn() === 'checking' ? 'Checking…' : 'Sign in' }}
+        {{ signIn() === 'checking' ? t().admin.checking : t().admin.signIn }}
       </button>
     </form>
   } @else {
@@ -33,10 +33,10 @@
           [attr.aria-pressed]="option === tab()"
           (click)="tab.set(option)"
         >
-          {{ tabNames[option] }}
+          {{ t().admin.tabs[option] }}
         </button>
       }
-      <button type="button" class="button button-secondary button-small sign-out" (click)="signOut()">Sign out</button>
+      <button type="button" class="button button-secondary button-small sign-out" (click)="signOut()">{{ t().admin.signOut }}</button>
     </div>
 
     @switch (tab()) {

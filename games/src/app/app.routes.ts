@@ -3,7 +3,7 @@ import { gameAvailableGuard } from './core/game-guard';
 import { GameSlug } from './core/games';
 import { PREVIEW_MESSAGES, SITE_META, SITE_NAME } from './core/page-meta';
 
-const { seo, home, games, privacy, suggestions } = PREVIEW_MESSAGES;
+const { seo, home, games, privacy, suggestions, admin } = PREVIEW_MESSAGES;
 
 /** Page title and description of a game, for search results and link previews; the page opens only when the game does */
 function gameMeta(slug: GameSlug): Pick<Route, 'title' | 'data' | 'canActivate'> {
@@ -74,8 +74,8 @@ export const routes: Routes = [
   {
     // The admin's page: linked from nowhere and kept out of search results
     path: 'admin',
-    title: `Admin · ${SITE_NAME}`,
-    data: { description: 'Site administration', noIndex: true },
+    title: `${admin.title} · ${SITE_NAME}`,
+    data: { description: admin.lead, noIndex: true },
     loadComponent: () => import('./pages/admin/admin-page').then((m) => m.AdminPage),
   },
   { path: '404', ...notFound },

@@ -1,6 +1,7 @@
 // Builds the word builder's dictionaries for games.su-labs.dev: `npm run build:dictionaries`.
 //
-// Writes games/public/dictionaries/<language>.txt, one word per line, which the site downloads on demand (only the
+// Writes games/public/dictionaries/<language>.txt, one word per line, most common first (the game takes the first
+// ones as the words to find), which the site downloads on demand (only the
 // visitor's language, the first time they open the word builder) to tell whether a word they made is real.
 // The words to find and the words shown to the player still come from the checked lists in
 // games/src/app/games/words/, so the game never shows a dictionary word by itself.
@@ -27,35 +28,47 @@ const MIN_LENGTH = 3;
 const MAX_LENGTH = 10;
 
 /**
- * Whether a word looks like a real word, not an abbreviation (bbc, cctv) or text broken in the subtitles
- * (бкьмб, бксйвют): it has a vowel, never 5 consonants in a row, and doesn't start with 4.
+ * Whether a word has the shape of a real word of its language, not an abbreviation (bbc, cctv) or text broken in the
+ * subtitles (бкьмб, бксйвют): it has a vowel, at most `maxRun` consonants in a row anywhere, and at most
+ * `maxLeading` before its first vowel (each language allows different clusters: str- in English, never in Spanish).
  */
-function looksLikeWord(word, vowels) {
+function looksLikeWord(word, { vowels, maxRun, maxLeading }) {
   const consonantRuns = word.split(new RegExp(`[${vowels}]+`));
   return (
     consonantRuns.length > 1 &&
-    consonantRuns.every((run) => Array.from(run).length < 5) &&
-    Array.from(consonantRuns[0]).length < 4
+    consonantRuns.every((run) => Array.from(run).length <= maxRun) &&
+    Array.from(consonantRuns[0]).length <= maxLeading
   );
 }
 
 /**
- * Per language: the letters a word may have (as in the game's word banks), its vowels, how to write words without the accent
- * marks the game has no buttons for, the LDNOOBW lists to block, and rude words of our own:
- * `words` are blocked as they are, `roots` wherever they appear in a word (only roots that are never part of a
- * harmless word).
+ * Every filter, per language, as one rule for all languages breaks words in some and lets junk through in others:
+ * - `alphabet`: the letters a word may have (as in the game's word banks)
+ * - `shape`: its vowels and the consonant clusters it allows (see looksLikeWord)
+ * - `plain`: how to write words without the accent marks the game has no buttons for
+ * - `blockedEndings`: endings that make a blocked word's other forms (plurals and the like) blocked too
+ * - `nameHints`: languages to compare with, as a word more common in one of them is probably a film name or a
+ *   borrowed word (it still counts, but is never asked for)
+ * - `blocklists`: the LDNOOBW lists to block; `words` are blocked as they are, `roots` wherever they appear in a word
+ *   (only roots that are never part of a harmless word)
  */
 const LANGUAGES = {
   en: {
     alphabet: /^[a-z]+$/,
-    vowels: 'aeiouy',
+    // str-, spl-, -ngths…
+    shape: { vowels: 'aeiouy', maxRun: 4, maxLeading: 3 },
+    blockedEndings: ['s', 'es'],
+    nameHints: ['es'],
     blocklists: ['en'],
     words: ['crap', 'damn', 'hell', 'poop', 'kill', 'killer', 'killing', 'murder', 'suicide', 'drug', 'drugs'],
     roots: ['fuck', 'shit', 'bitch', 'whore', 'slut', 'cunt', 'nigg', 'faggot', 'dildo', 'porn', 'pussy'],
   },
   es: {
     alphabet: /^[a-zñ]+$/,
-    vowels: 'aeiou',
+    // At most two consonants start a word (tr-, pl-, ps-); inside, up to four (instrumento)
+    shape: { vowels: 'aeiou', maxRun: 4, maxLeading: 2 },
+    blockedEndings: ['s', 'es'],
+    nameHints: ['en'],
     // á é í ó ú ü → a e i o u u; ñ stays, it is its own letter
     plain: (word) =>
       word
@@ -110,14 +123,22 @@ const LANGUAGES = {
   },
   eu: {
     alphabet: /^[a-zñ]+$/,
-    vowels: 'aeiou',
+    // tx-, tz-, tr- at most at the start
+    shape: { vowels: 'aeiou', maxRun: 4, maxLeading: 2 },
+    // Basque adds -a (the), -k and -ak (plural, or the doer)
+    blockedEndings: ['a', 'k', 'ak'],
+    nameHints: ['en', 'es'],
     blocklists: ['es'],
     words: ['puta', 'putak', 'kaka', 'hostia', 'ostia', 'joder', 'kabroi', 'kabroia', 'zakila', 'potorro', 'sexu'],
     roots: ['putakum', 'puttakum', 'mierda'],
   },
   uk: {
     alphabet: /^[абвгґдеєжзиіїйклмнопрстуфхцчшщьюя]+$/,
-    vowels: 'аеиіоуєюяї',
+    // вст-, взд- (the soft sign counts as a consonant here)
+    shape: { vowels: 'аеиіоуєюяї', maxRun: 4, maxLeading: 3 },
+    // Ukrainian forms change inside the word too, so its own list of words and roots covers them
+    blockedEndings: [],
+    nameHints: [],
     blocklists: ['ru'],
     words: [
       'сука',
@@ -183,30 +204,54 @@ const linesOf = (text) =>
     .map((line) => line.trim().toLowerCase())
     .filter(Boolean);
 
-async function build(language, { alphabet, vowels, plain = (word) => word, blocklists, words, roots }) {
+async function build(language, settings, sources) {
+  const { alphabet, shape, plain = (word) => word, blockedEndings, nameHints, blocklists, words, roots } = settings;
   const blocked = new Set(words);
   for (const list of blocklists) {
     linesOf(await download(BLOCKLIST_URL(list))).forEach((entry) => blocked.add(plain(entry)));
   }
-  // Plurals and simple endings of blocked words are blocked too
+  // A blocked word's forms with the language's endings are blocked too
   const isBlocked = (word) =>
     blocked.has(word) ||
-    blocked.has(word.replace(/e?s$/, '')) ||
-    blocked.has(word.replace(/k$/, '')) ||
+    blockedEndings.some((ending) => word.endsWith(ending) && blocked.has(word.slice(0, -ending.length))) ||
     roots.some((rootWord) => word.includes(rootWord));
 
-  const source = linesOf(await download(FREQUENCY_URL(language))).map((line) => plain(line.split(' ')[0]));
-  const dictionary = [...new Set(source)]
-    .filter((word) => alphabet.test(word) && looksLikeWord(word, vowels))
+  const original = sources.get(language);
+  const rankHere = new Map(original.map((word, rank) => [word, rank]).reverse());
+  const ranksElsewhere = nameHints.map(
+    (other) =>
+      new Map(
+        sources
+          .get(other)
+          .map((word, rank) => [word, rank])
+          .reverse(),
+      ),
+  );
+  const isMoreCommonElsewhere = (word) =>
+    ranksElsewhere.some((ranks) => (ranks.get(word) ?? Infinity) < (rankHere.get(word) ?? Infinity));
+  const usable = [...new Set(original.map(plain))]
+    .filter((word) => alphabet.test(word) && looksLikeWord(word, shape))
     .filter((word) => Array.from(word).length >= MIN_LENGTH && Array.from(word).length <= MAX_LENGTH)
-    .filter((word) => !isBlocked(word))
-    .sort((first, second) => first.localeCompare(second, language));
+    .filter((word) => !isBlocked(word));
+  // Words that lost a written accent (ahí → ahi) or look like names still count when typed, but go last, after the
+  // common words the game asks for
+  const written = new Set(original);
+  const isOdd = (word) => !written.has(word) || isMoreCommonElsewhere(word);
+  const dictionary = [...usable.filter((word) => !isOdd(word)), ...usable.filter(isOdd)];
 
   await writeFile(join(outputDir, `${language}.txt`), `${dictionary.join('\n')}\n`);
   console.log(`${language}: ${dictionary.length} words`);
 }
 
 await mkdir(outputDir, { recursive: true });
+/** Each language's words as written, most common first */
+const sources = new Map();
+for (const language of Object.keys(LANGUAGES)) {
+  sources.set(
+    language,
+    linesOf(await download(FREQUENCY_URL(language))).map((line) => line.split(' ')[0]),
+  );
+}
 for (const [language, settings] of Object.entries(LANGUAGES)) {
-  await build(language, settings);
+  await build(language, settings, sources);
 }
