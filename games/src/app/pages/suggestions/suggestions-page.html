@@ -38,7 +38,18 @@
           </button>
         </div>
       } @else {
-        <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onImage($event)" />
+        <label
+          class="drop-zone"
+          [class.is-dragging]="isDragging()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="isDragging.set(false)"
+          (drop)="onDrop($event)"
+        >
+          <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onImage($event)" />
+          <span class="drop-icon" aria-hidden="true">🖼️</span>
+          <strong>{{ isDragging() ? t().suggestions.dropHere : t().suggestions.chooseImage }}</strong>
+          <small class="muted">{{ t().suggestions.imageTypes }}</small>
+        </label>
       }
       <small class="muted">{{ t().suggestions.imageHint }}</small>
       @if (imageError()) {

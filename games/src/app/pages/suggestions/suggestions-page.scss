@@ -47,3 +47,43 @@ textarea {
 .start {
   justify-self: center;
 }
+
+// The picture's drop zone: a big dashed area to click or drop a picture on; the real file input is inside it, hidden
+.drop-zone {
+  align-items: center;
+  background: var(--subtle);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-large);
+  cursor: pointer;
+  display: grid;
+  gap: 0.25rem;
+  justify-items: center;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover,
+  &:focus-within,
+  &.is-dragging {
+    background: color-mix(in srgb, var(--button-bg) 8%, var(--subtle));
+    border-color: var(--button-bg);
+  }
+
+  input {
+    height: 1px;
+    opacity: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  // Dragging across its text mustn't count as leaving the zone
+  > :not(input) {
+    pointer-events: none;
+  }
+}
+
+.drop-icon {
+  font-size: 2rem;
+}

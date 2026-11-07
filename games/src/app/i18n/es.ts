@@ -339,7 +339,11 @@ export const ES: SiteMessages = {
     },
     textLabel: 'Tu idea',
     imageLabel: 'Una imagen (opcional)',
-    imageHint: 'Se hace más pequeña y se le quita la información oculta (como dónde se hizo) antes de enviarla.',
+    imageHint:
+      'Tu privacidad nos importa: antes de enviar la imagen, tu navegador le quita los metadatos (como dónde y cuándo se hizo o el modelo de cámara) y la comprime.',
+    chooseImage: 'Arrastra una imagen aquí o haz clic para elegirla',
+    dropHere: 'Suéltala aquí',
+    imageTypes: 'JPEG, PNG o WebP',
     imageAlt: 'La imagen que has elegido',
     imageError: 'Esa imagen no se puede usar. Prueba con otra.',
     removeImage: 'Quitar',

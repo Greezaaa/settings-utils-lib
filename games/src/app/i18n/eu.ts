@@ -339,7 +339,11 @@ export const EU: SiteMessages = {
     },
     textLabel: 'Zure ideia',
     imageLabel: 'Irudi bat (aukerakoa)',
-    imageHint: 'Txikiagoa egiten da eta ezkutuko informazioa kentzen zaio (non egin zen, adibidez) bidali aurretik.',
+    imageHint:
+      'Zure pribatutasuna garrantzitsua da guretzat: irudia bidali aurretik, zure nabigatzaileak metadatuak kentzen dizkio (non eta noiz egin zen edo kameraren modeloa, adibidez) eta konprimatu egiten du.',
+    chooseImage: 'Ekarri irudi bat hona, edo egin klik bat aukeratzeko',
+    dropHere: 'Utzi hemen',
+    imageTypes: 'JPEG, PNG edo WebP',
     imageAlt: 'Aukeratu duzun irudia',
     imageError: 'Irudi hori ezin da erabili. Saiatu beste batekin.',
     removeImage: 'Kendu',

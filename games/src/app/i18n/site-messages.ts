@@ -279,6 +279,10 @@ export interface SiteMessages {
     readonly textLabel: string;
     readonly imageLabel: string;
     readonly imageHint: string;
+    /** The picture's drop zone: what it says, while a file is over it, and which files it takes */
+    readonly chooseImage: string;
+    readonly dropHere: string;
+    readonly imageTypes: string;
     readonly imageAlt: string;
     readonly imageError: string;
     readonly removeImage: string;
