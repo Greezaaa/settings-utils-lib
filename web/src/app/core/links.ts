@@ -9,6 +9,9 @@ export const GAMES_URL = 'https://games.su-labs.dev/';
 /** Image shown when a page is shared (1200x630, in web/public) */
 export const SITE_PREVIEW_IMAGE_URL = `${SITE_URL}/og-image.png`;
 
+/** Size, type and description of the preview image, declared so chat apps render it without probing the file */
+export const SITE_PREVIEW_IMAGE = { width: '1200', height: '630', type: 'image/png', alt: 'su-labs: settings utilities for Angular and any framework' } as const;
+
 /** How to reach the author */
 export const AUTHOR_EMAIL_URL = 'mailto:yev.alekseyev@gmail.com';
 

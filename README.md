@@ -290,7 +290,9 @@ This builds the site and uploads `dist/web/browser` with `rsync` to the server's
 
 The games in `games/` are a second site, hosted at [games.su-labs.dev](https://games.su-labs.dev/), with the same commands: `npm run start:games` (port 4310) and `npm run deploy:games`, which uploads `dist/games/browser` to the server's `su-labs-games` folder. Both sites share theme and text size through cookies on `su-labs.dev`.
 
-Each build writes a `404.html`: the site's own "page not found" page, with its header and footer. The full nginx configs of both sites are in [`deploy/nginx/`](deploy/nginx/); the part that serves that page, so missing pages show it with a real 404 status, is:
+On the server, each site is an `nginx:alpine` Docker container (`su-labs-site` on port 3000, `su-labs-games` on port 3001) that mounts its folder as `/usr/share/nginx/html` and its config from [`deploy/nginx/`](deploy/nginx/) as `/etc/nginx/conf.d/default.conf`. A Cloudflare Tunnel forwards each hostname to its port and handles HTTPS.
+
+Each build writes a `404.html`: the site's own "page not found" page, with its header and footer. The part of the nginx config that serves it, so missing pages show it with a real 404 status, is:
 
 ```nginx
 error_page 404 /404.html;

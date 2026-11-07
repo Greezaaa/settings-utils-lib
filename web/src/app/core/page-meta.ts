@@ -1,7 +1,7 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, TitleStrategy } from '@angular/router';
-import { SITE_PREVIEW_IMAGE_URL, SITE_URL } from './links';
+import { SITE_PREVIEW_IMAGE, SITE_PREVIEW_IMAGE_URL, SITE_URL } from './links';
 import { getUtility } from './packages';
 
 /** Search and link-preview data of a page, set as route `data` */
@@ -57,10 +57,15 @@ export class PageMetaStrategy extends TitleStrategy {
       'og:description': description,
       'og:url': url,
       'og:image': SITE_PREVIEW_IMAGE_URL,
+      'og:image:width': SITE_PREVIEW_IMAGE.width,
+      'og:image:height': SITE_PREVIEW_IMAGE.height,
+      'og:image:type': SITE_PREVIEW_IMAGE.type,
+      'og:image:alt': SITE_PREVIEW_IMAGE.alt,
       'twitter:card': 'summary_large_image',
       'twitter:title': title,
       'twitter:description': description,
       'twitter:image': SITE_PREVIEW_IMAGE_URL,
+      'twitter:image:alt': SITE_PREVIEW_IMAGE.alt,
     };
     for (const [key, content] of Object.entries(tags)) {
       const attribute = key.startsWith('og:') ? 'property' : 'name';
