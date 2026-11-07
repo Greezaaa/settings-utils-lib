@@ -42,6 +42,8 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* @su-labs/notifications, styled to match the site */
+  /* Wide enough for a sentence or two; short messages stay as narrow as their text */
+  --su-notification-max-width: min(100% - 2rem, 26rem);
   --su-notification-background-color: var(--surface);
   --su-notification-text-color: var(--text);
   --su-notification-icon-color: var(--text);

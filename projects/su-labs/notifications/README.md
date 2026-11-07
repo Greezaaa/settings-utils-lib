@@ -24,6 +24,7 @@ A highly customizable Angular notification library built with modern practices, 
 - [Usage](#usage)
 - [API Reference](#api-reference)
 - [Configuration Options](#configuration-options)
+- [Styling](#styling)
 - [How It Works](#how-it-works)
 - [Browser Compatibility](#browser-compatibility)
 - [Related Libraries](#related-libraries)
@@ -244,6 +245,33 @@ interface NotificationConfig {
 | `bottom-right` | Bottom right corner |
 | `bottom-left` | Bottom left corner |
 | `bottom-center` | Bottom center |
+
+## Styling
+
+Every part of a notification can be restyled with CSS variables, set on `:root` or any parent element. For example, to let long messages use more width:
+
+```css
+:root {
+  --su-notification-max-width: min(100% - 2rem, 26rem);
+}
+```
+
+| Variable | Default | Controls |
+|----------|---------|----------|
+| `--su-notification-width` | `max-content` | Width of a notification; by default it fits its text |
+| `--su-notification-max-width` | `min(100% - 2rem, 300px)` | Widest a notification gets before its text wraps |
+| `--su-notification-padding-block` | `1rem` | Space above and below the text |
+| `--su-notification-padding-inline` | `1.25rem` | Space left and right of the text |
+| `--su-notification-container-gap` | `1.2rem` | Space between stacked notifications |
+| `--su-notification-container-position` | `1rem` | Distance from the edges of the screen |
+| `--su-notification-background-color` | `#fff` | Background |
+| `--su-notification-text-color` | `#333` | Text |
+| `--su-notification-box-shadow` | `rgba(0, 0, 0, 0.15)` | Shadow colour |
+| `--su-notification-info-border-color` | `#2196f3` | Left border of `info` (likewise `success`, `warning`, `error`, `custom`) |
+| `--su-notification-icon-color` | `currentColor` | Icon colour |
+| `--su-notification-icon-width` / `-height` | `24px` | Icon size |
+| `--su-notification-close-btn-size` | `20px` | Close button size |
+| `--su-notification-close-btn-background-color` | the background | Close button background (also `-text-color`, `-border-color`, `-border-radius`, `-font-size`, `-hover-background`, `-hover-color`) |
 
 ## How It Works
 

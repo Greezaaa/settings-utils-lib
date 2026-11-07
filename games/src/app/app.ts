@@ -1,9 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
+import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { GAME_SLUGS } from './core/games';
 import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
+import { BoardColours } from './core/board-colours';
+import { GAME_THEMES } from './core/game-themes';
+import { PrivacyNotice } from './core/privacy-notice';
 import { SiteTheme } from './core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
 
@@ -13,7 +17,7 @@ const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contras
 /** Site shell: header with text size, theme and language settings and the list of games, page outlet and footer */
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, SuNotificationComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -27,9 +31,13 @@ export class App {
   protected readonly fontSize = inject(FontSizeService);
 
   protected readonly siteLanguage = inject(SiteLanguage);
+  /** Started with the shell, so it shows on whichever page the visitor lands */
+  private readonly privacyNotice = inject(PrivacyNotice);
   /** Texts in the site's language */
   protected readonly t = this.siteLanguage.messages;
   protected readonly languages = LANGUAGE_IDS;
+  protected readonly boardColours = inject(BoardColours);
+  protected readonly gameThemes = GAME_THEMES;
 
   protected readonly games = GAME_SLUGS;
   protected readonly githubUrl = GITHUB_REPO_URL;

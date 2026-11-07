@@ -1,0 +1,101 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/">{{ t().page.section }}</a>
+    <span class="tag">{{ t().page.ages }}</span>
+  </div>
+  <h1>{{ t().games['turn-picture'].name }}</h1>
+  <p class="lead">
+    {{ t().turnPicture.lead }}
+    <br />
+    {{ t().turnPicture.rule }}
+  </p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="t().turnPicture.board">
+  <div class="card play" appGameBoard>
+    <div class="choices" role="group" [attr.aria-label]="t().turnPicture.modeGroup">
+      @for (mode of modes; track mode) {
+        <button
+          type="button"
+          class="button button-secondary"
+          [attr.aria-pressed]="mode === modeId()"
+          [title]="t().turnPicture.modes[mode].summary"
+          (click)="chooseMode(mode)"
+        >
+          {{ t().turnPicture.modes[mode].name }}
+        </button>
+      }
+    </div>
+
+    <div class="levels" role="group" [attr.aria-label]="t().turnPicture.levelGroup">
+      @for (level of levels; track level.id) {
+        <button
+          type="button"
+          class="button button-secondary level"
+          [attr.aria-pressed]="level.id === levelId()"
+          (click)="chooseLevel(level.id)"
+        >
+          <span class="level-name">{{ t().turnPicture.levels[level.id].name }}</span>
+          <span class="level-summary">{{ t().turnPicture.levels[level.id].summary }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="status">
+      <span class="mono">{{ t().turnPicture.turns(taps()) }}</span>
+      <span class="mono">{{ time() }}</span>
+    </div>
+
+    @if (picture(); as picture) {
+      <div
+        class="board"
+        [class.is-solved]="phase() === 'solved'"
+        [class.is-preview]="phase() === 'preview'"
+        [style.--columns]="level().columns"
+        role="group"
+        [attr.aria-label]="t().turnPicture.board"
+      >
+        @for (cell of cells(); track cell) {
+          <button
+            type="button"
+            class="tile"
+            [style.transform]="rotation(cell)"
+            [attr.aria-label]="t().turnPicture.tile(cell + 1)"
+            (click)="tap(cell)"
+          >
+            <app-picture-slice [src]="picture.src" [shape]="level()" [cell]="cell" />
+          </button>
+        }
+      </div>
+
+      @if (phase() === 'preview') {
+        <p class="muted">{{ t().turnPicture.memorize }}</p>
+        <button type="button" class="button ready" (click)="ready()">{{ t().turnPicture.ready }}</button>
+      }
+
+      @if (phase() === 'solved') {
+        <p class="solved" role="status">
+          <strong>{{ t().turnPicture.solved }}</strong>
+          {{ t().turnPicture.solvedIn(taps(), time()) }}
+          @if (isNewBest()) {
+            · <span class="record">{{ t().turnPicture.newRecord }}</span>
+          }
+        </p>
+      }
+
+      @if (modeId() === 'look') {
+        <figure class="reference">
+          <img [src]="picture.src" [alt]="t().pictures[picture.id]" />
+          <figcaption class="muted">{{ t().turnPicture.picture }}</figcaption>
+        </figure>
+      }
+    }
+
+    <div class="actions">
+      <button type="button" class="button button-secondary" (click)="newGame()">{{ t().turnPicture.newGame }}</button>
+      @if (best(); as best) {
+        <p class="muted best">{{ t().turnPicture.best(best) }}</p>
+      }
+    </div>
+  </div>
+</section>

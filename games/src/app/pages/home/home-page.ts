@@ -10,7 +10,7 @@ import { Reveal } from '../../shared/reveal';
   imports: [Reveal, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-cards.scss'],
+  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-cards.scss', './home-page.scss'],
 })
 export class HomePage {
   /** Texts in the site's language */

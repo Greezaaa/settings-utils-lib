@@ -9,21 +9,30 @@ export const EU: SiteMessages = {
     gamesNav: 'Jokoak',
     settings: 'Ezarpenak',
     textSize: 'Testuaren tamaina',
+    theme: 'Gaia',
     smallerText: 'Testu txikiagoa',
     largerText: 'Testu handiagoa',
     themeNames: { system: 'sistema', light: 'argia', dark: 'iluna', contrast: 'kontrastea', custom: 'pertsonalizatua' },
     themeSwitch: (current, next) => `Gaia: ${current}. Aldatu honetara: ${next}`,
     language: 'Hizkuntza',
+    boardColours: 'Jokoaren koloreak',
+    boardThemes: {
+      light: { name: 'Argia', summary: 'Webgunearen kolore argiak' },
+      dark: { name: 'Iluna', summary: 'Webgunearen kolore ilunak' },
+      ocean: { name: 'Ozeanoa', summary: 'Itsas urdina eta eguzki horia' },
+      party: { name: 'Festa', summary: 'More iluna, zuria eta horia' },
+      night: { name: 'Gaua', summary: 'Itsas urdina, menda eta arrosa' },
+    },
     madeBy: 'Maitasunez ❤️ egina:',
     projectLinks: 'Proiektuaren estekak',
+    privacyNotice:
+      'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
   },
 
   seo: {
     locale: 'eu_ES',
     siteDescription:
-      'Haurrek azkar pentsatzeko joko labur eta doakoak. Izena eman gabe, tableta, mugikor eta ordenagailuetarako.',
-    mathGamesSubtitle: 'egia ala gezurra, zenbaki-teklatua eta falta diren zeinuak',
-    mathGamesIntro: 'Haurrentzako matematika jokoa.',
+      'Haurrek logika, oroimena eta azkartasuna lantzeko minijoko doakoak. Izena eman gabe, ordenagailu, tableta eta mugikorretarako.',
     notFoundTitle: 'Orria ez da aurkitu',
     notFoundDescription: 'Orri hau ez dago.',
     previewImageAlt: 'su-labs games: Joko adimentsuak, haur adimentsuentzat',
@@ -34,14 +43,90 @@ export const EU: SiteMessages = {
       name: 'Matematika jokoak',
       summary:
         'Egia ala gezurra, sakatu erantzuna edo aurkitu falta diren zeinuak. Denborarekin edo gabe, 20 arteko batuketetatik hiru zifrako zatiketetara. Ingelesez, gaztelaniaz eta euskaraz.',
+      subtitle: 'egia ala gezurra, zenbaki-teklatua eta falta diren zeinuak',
+      intro: 'Haurrentzako matematika jokoa.',
+    },
+    'sliding-puzzle': {
+      name: 'Puzzle irristakorra',
+      summary: 'Irristatu piezak hutsunera lerroak berriro elkartu arte. Marrazki berria partida bakoitzean.',
+      subtitle: 'irristatu piezak eta lotu lerroak',
+      intro: 'Haurrentzako puzzlea.',
+    },
+    'turn-picture': {
+      name: 'Biratu irudia',
+      summary: 'Sakatu karratuak biratzeko marrazkia berriro osorik egon arte. Begiratu edo osatu oroimenez.',
+      subtitle: 'sakatu karratuak biratzeko eta marrazkia osatzeko',
+      intro: 'Haurrentzako irudi-puzzlea.',
     },
   },
 
   home: {
     title: 'Joko adimentsuak, haur adimentsuentzat',
-    lead: 'Azkar pentsatzeko joko laburrak.',
-    rule: 'Doan, izena eman gabe, eta mugikorretan eta tabletetan dabiltza.',
+    lead: 'Logika, oroimena eta azkartasuna lantzeko minijokoak.',
+    rule: 'Doan dira, ez dute izena ematea eskatzen, eta ordenagailuetan, tabletetan eta mugikorretan dabiltza.',
     games: 'Jokoak',
+    betaLabel: 'Beta',
+    betaText:
+      'Jokoak beta fasean daude: oraindik ez da azken bertsioa, eta aldatzen jarraituko dute. Laster posta elektronikoz harpidetu ahal izango zara joko berrien eta berritasunen berri izateko.',
+    madeByTitle: 'Haurrentzat eginak, haurrek eginak',
+    madeByText:
+      'Joko gehiago prestatzen ari gara. Nire txikiarekin, Lucíarekin, egiten ditut; berak marrazten ditu irudiak.',
+  },
+
+  slidingPuzzle: {
+    lead: 'Sakatu hutsunearen ondoko pieza bat hara mugitzeko. Jarri pieza guztiak beren lekuan lerroek marrazki bakarra osa dezaten.',
+    rule: 'Hutsunea leku berrian dago partida bakoitzean!',
+    board: 'Puzzlea',
+    levelGroup: 'Maila',
+    levels: {
+      easy: { name: 'Erraza', summary: '2 × 3 · 5 pieza' },
+      normal: { name: 'Normala', summary: '3 × 3 · 8 pieza' },
+      hard: { name: 'Zaila', summary: '4 × 4 · 15 pieza' },
+      expert: { name: 'Aditua', summary: '5 × 5 · 24 pieza' },
+    },
+    goal: 'Helburua',
+    pictureGroup: 'Irudia',
+    pictureModes: { lines: 'Lerroak', drawing: 'Marrazkia' },
+    moves: (moves) => `Mugimenduak ${moves}`,
+    tile: (number) => `${number}. pieza`,
+    newPuzzle: 'Puzzle berria',
+    solved: 'Oso ondo!',
+    solvedIn: (moves, time) => `${moves} mugimendu eta ${time} behar izan dituzu`,
+    best: (moves) => `Errekorra: ${moves} mugimendu`,
+    newRecord: 'Errekor berria!',
+    keys: 'Teklatua: geziek pieza bat hutsunera mugitzen dute',
+  },
+
+  turnPicture: {
+    lead: 'Sakatu karratu bat laurden bat biratzeko. Biratu guztiak marrazkia ondo egon arte.',
+    rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
+    modeGroup: 'Modua',
+    modes: {
+      look: { name: 'Begiratu', summary: 'Marrazkia taularen azpian geratzen da' },
+      memory: { name: 'Oroimena', summary: 'Ikusi lehenengo, gero osatu' },
+    },
+    levelGroup: 'Maila',
+    levels: {
+      easy: { name: 'Erraza', summary: '2 × 2 · 4 karratu' },
+      normal: { name: 'Normala', summary: '3 × 3 · 9 karratu' },
+      hard: { name: 'Zaila', summary: '4 × 4 · 16 karratu' },
+      expert: { name: 'Aditua', summary: '5 × 5 · 25 karratu' },
+    },
+    board: 'Irudia',
+    tile: (number) => `${number}. karratua`,
+    picture: 'Marrazkia',
+    memorize: 'Begiratu ondo eta sakatu Prest.',
+    ready: 'Prest',
+    turns: (turns) => `Birak ${turns}`,
+    newGame: 'Partida berria',
+    solved: 'Oso ondo!',
+    solvedIn: (turns, time) => `${turns} bira eta ${time} behar izan dituzu`,
+    best: (time) => `Errekorra: ${time}`,
+    newRecord: 'Errekor berria!',
+  },
+
+  pictures: {
+    family: 'Ama eta alaba eskutik helduta, eguzkia, ilargia eta hodeiekin, haur-marrazki batean',
   },
 
   notFound: {
@@ -63,7 +148,6 @@ export const EU: SiteMessages = {
   settings: {
     answerStyleGroup: 'Nola erantzun',
     timerGroup: 'Denbora',
-    coloursGroup: 'Koloreak',
     levelGroup: 'Maila',
     answerStyles: {
       'true-or-false': { name: 'Egia ala gezurra', summary: 'Esan emaitza zuzena den' },
@@ -86,13 +170,6 @@ export const EU: SiteMessages = {
       normal: { name: 'Normala', summary: '+ eta − 50 arteko zenbakiekin' },
       hard: { name: 'Zaila', summary: '+, − eta ×; × lehenengo' },
       expert: { name: 'Aditua', summary: 'Lau zeinuak; bi edo hiru falta dira' },
-    },
-    themes: {
-      light: { name: 'Argia', summary: 'Webgunearen kolore argiak' },
-      dark: { name: 'Iluna', summary: 'Webgunearen kolore ilunak' },
-      ocean: { name: 'Ozeanoa', summary: 'Itsas urdina eta eguzki horia' },
-      party: { name: 'Festa', summary: 'More iluna, zuria eta horia' },
-      night: { name: 'Gaua', summary: 'Itsas urdina, menda eta arrosa' },
     },
     bestScore: (best) => `Puntuazio onena: ${best}`,
     start: 'Hasi',

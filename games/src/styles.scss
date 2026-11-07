@@ -7,3 +7,19 @@
  */
 
 @use '../../web/src/styles';
+
+// Game boards (the appGameBoard directive) take the board colours chosen in the header settings.
+// @su-labs/theme sets data-theme and --su-theme-* on the board; like the site's custom theme,
+// every other colour is mixed from text, background and accent.
+.game-board[data-theme] {
+  --text: var(--su-theme-color);
+  --heading: var(--su-theme-color);
+  --muted: color-mix(in srgb, var(--su-theme-color) 65%, var(--su-theme-background));
+  --surface: var(--su-theme-background);
+  --subtle: color-mix(in srgb, var(--su-theme-color) 10%, var(--su-theme-background));
+  --border: color-mix(in srgb, var(--su-theme-color) 18%, var(--su-theme-background));
+  --button-bg: var(--su-theme-main-accent);
+  --button-text: var(--su-theme-background);
+  --button-hover: color-mix(in srgb, var(--su-theme-main-accent) 85%, var(--su-theme-background));
+  color: var(--text);
+}

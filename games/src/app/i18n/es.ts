@@ -9,21 +9,30 @@ export const ES: SiteMessages = {
     gamesNav: 'Juegos',
     settings: 'Ajustes',
     textSize: 'Tamaño del texto',
+    theme: 'Tema',
     smallerText: 'Texto más pequeño',
     largerText: 'Texto más grande',
     themeNames: { system: 'sistema', light: 'claro', dark: 'oscuro', contrast: 'contraste', custom: 'personalizado' },
     themeSwitch: (current, next) => `Tema: ${current}. Cambiar a ${next}`,
     language: 'Idioma',
+    boardColours: 'Colores del juego',
+    boardThemes: {
+      light: { name: 'Claro', summary: 'Los colores claros de la web' },
+      dark: { name: 'Oscuro', summary: 'Los colores oscuros de la web' },
+      ocean: { name: 'Océano', summary: 'Azul marino con amarillo sol' },
+      party: { name: 'Fiesta', summary: 'Morado oscuro con blanco y amarillo' },
+      night: { name: 'Noche', summary: 'Azul marino, menta y rosa' },
+    },
     madeBy: 'Hecho con ❤️ por',
     projectLinks: 'Enlaces del proyecto',
+    privacyNotice:
+      'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
   },
 
   seo: {
     locale: 'es_ES',
     siteDescription:
-      'Juegos cortos y gratuitos para que los niños piensen rápido. Sin registro, para tabletas, móviles y ordenadores.',
-    mathGamesSubtitle: 'verdadero o falso, teclado numérico y signos que faltan',
-    mathGamesIntro: 'Un juego de matemáticas para niños.',
+      'Minijuegos gratuitos para que los niños entrenen la lógica, la memoria y la rapidez. Sin registro, para ordenadores, tabletas y móviles.',
     notFoundTitle: 'Página no encontrada',
     notFoundDescription: 'Esta página no existe.',
     previewImageAlt: 'su-labs games: Juegos inteligentes para mentes despiertas',
@@ -34,14 +43,90 @@ export const ES: SiteMessages = {
       name: 'Juegos de matemáticas',
       summary:
         'Verdadero o falso, marca la respuesta o encuentra los signos que faltan. Con o sin tiempo, desde sumas hasta 20 hasta divisiones de tres cifras. En inglés, español y euskera.',
+      subtitle: 'verdadero o falso, teclado numérico y signos que faltan',
+      intro: 'Un juego de matemáticas para niños.',
+    },
+    'sliding-puzzle': {
+      name: 'Puzle deslizante',
+      summary: 'Desliza las piezas al hueco hasta que las líneas vuelvan a unirse. Un dibujo nuevo en cada partida.',
+      subtitle: 'desliza las piezas y une las líneas',
+      intro: 'Un puzle para niños.',
+    },
+    'turn-picture': {
+      name: 'Gira la imagen',
+      summary:
+        'Toca los cuadrados para girarlos hasta que el dibujo vuelva a estar entero. Míralo o reconstrúyelo de memoria.',
+      subtitle: 'toca para girar los cuadrados y reconstruir el dibujo',
+      intro: 'Un puzle de imágenes para niños.',
     },
   },
 
   home: {
     title: 'Juegos inteligentes para mentes despiertas',
-    lead: 'Juegos cortos para pensar rápido.',
-    rule: 'Gratis, sin registro, y funcionan en móviles y tabletas.',
+    lead: 'Minijuegos para entrenar la lógica, la memoria y la rapidez.',
+    rule: 'Son gratis, sin registro y funcionan en ordenadores, tabletas y móviles.',
     games: 'Juegos',
+    betaLabel: 'Beta',
+    betaText:
+      'Los juegos están en fase beta: todavía no es la versión final y seguirán cambiando. Pronto podrás suscribirte por correo para que te avisemos de los juegos nuevos y de cada cambio.',
+    madeByTitle: 'Hecho para peques, por peques',
+    madeByText: 'Estamos creando más juegos. Los hago junto a mi peque, Lucía, que dibuja las imágenes.',
+  },
+
+  slidingPuzzle: {
+    lead: 'Toca una pieza junto al hueco para moverla allí. Coloca todas las piezas para que las líneas formen un solo dibujo.',
+    rule: '¡El hueco cambia de sitio en cada partida!',
+    board: 'Puzle',
+    levelGroup: 'Nivel',
+    levels: {
+      easy: { name: 'Fácil', summary: '2 × 3 · 5 piezas' },
+      normal: { name: 'Normal', summary: '3 × 3 · 8 piezas' },
+      hard: { name: 'Difícil', summary: '4 × 4 · 15 piezas' },
+      expert: { name: 'Experto', summary: '5 × 5 · 24 piezas' },
+    },
+    goal: 'Objetivo',
+    pictureGroup: 'Imagen',
+    pictureModes: { lines: 'Líneas', drawing: 'Dibujo' },
+    moves: (moves) => `Movimientos ${moves}`,
+    tile: (number) => `Pieza ${number}`,
+    newPuzzle: 'Nuevo puzle',
+    solved: '¡Muy bien!',
+    solvedIn: (moves, time) => `Terminado en ${moves} ${moves === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
+    best: (moves) => `Récord: ${moves} movimientos`,
+    newRecord: '¡Nuevo récord!',
+    keys: 'Teclado: las flechas mueven una pieza al hueco',
+  },
+
+  turnPicture: {
+    lead: 'Toca un cuadrado para girarlo un cuarto de vuelta. Gira todos hasta que el dibujo esté bien.',
+    rule: 'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+    modeGroup: 'Modo',
+    modes: {
+      look: { name: 'Mirar', summary: 'El dibujo se queda debajo del tablero' },
+      memory: { name: 'Memoria', summary: 'Míralo primero y luego reconstrúyelo' },
+    },
+    levelGroup: 'Nivel',
+    levels: {
+      easy: { name: 'Fácil', summary: '2 × 2 · 4 cuadrados' },
+      normal: { name: 'Normal', summary: '3 × 3 · 9 cuadrados' },
+      hard: { name: 'Difícil', summary: '4 × 4 · 16 cuadrados' },
+      expert: { name: 'Experto', summary: '5 × 5 · 25 cuadrados' },
+    },
+    board: 'Imagen',
+    tile: (number) => `Cuadrado ${number}`,
+    picture: 'El dibujo',
+    memorize: 'Fíjate bien y pulsa Listo.',
+    ready: 'Listo',
+    turns: (turns) => `Giros ${turns}`,
+    newGame: 'Nueva partida',
+    solved: '¡Muy bien!',
+    solvedIn: (turns, time) => `Terminado en ${turns} ${turns === 1 ? 'giro' : 'giros'} y ${time}`,
+    best: (time) => `Récord: ${time}`,
+    newRecord: '¡Nuevo récord!',
+  },
+
+  pictures: {
+    family: 'Dibujo infantil de una madre y su hija de la mano, con el sol, la luna y nubes',
   },
 
   notFound: {
@@ -63,7 +148,6 @@ export const ES: SiteMessages = {
   settings: {
     answerStyleGroup: 'Cómo responder',
     timerGroup: 'Tiempo',
-    coloursGroup: 'Colores',
     levelGroup: 'Nivel',
     answerStyles: {
       'true-or-false': { name: 'Verdadero o falso', summary: 'Di si el resultado es correcto' },
@@ -86,13 +170,6 @@ export const ES: SiteMessages = {
       normal: { name: 'Normal', summary: '+ y − con números hasta 50' },
       hard: { name: 'Difícil', summary: '+, − y ×; la × va primero' },
       expert: { name: 'Experto', summary: 'Los cuatro signos; faltan dos o tres' },
-    },
-    themes: {
-      light: { name: 'Claro', summary: 'Los colores claros de la web' },
-      dark: { name: 'Oscuro', summary: 'Los colores oscuros de la web' },
-      ocean: { name: 'Océano', summary: 'Azul marino con amarillo sol' },
-      party: { name: 'Fiesta', summary: 'Morado oscuro con blanco y amarillo' },
-      night: { name: 'Noche', summary: 'Azul marino, menta y rosa' },
     },
     bestScore: (best) => `Mejor puntuación: ${best}`,
     start: 'Empezar',

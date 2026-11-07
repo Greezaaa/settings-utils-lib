@@ -1,7 +1,14 @@
 import { Route, Routes } from '@angular/router';
+import { GameSlug } from './core/games';
 import { PREVIEW_MESSAGES, SITE_META, SITE_NAME } from './core/page-meta';
 
 const { seo, home, games } = PREVIEW_MESSAGES;
+
+/** Page title and description of a game, for search results and link previews */
+function gameMeta(slug: GameSlug): Pick<Route, 'title' | 'data'> {
+  const { name, subtitle, intro, summary } = games[slug];
+  return { title: `${name}: ${subtitle} · ${SITE_NAME}`, data: { description: `${intro} ${summary}` } };
+}
 
 /** The not-found page: prerendered at /404 (copied to 404.html after the build) and shown for unknown links */
 const notFound = {
@@ -19,9 +26,18 @@ export const routes: Routes = [
   },
   {
     path: 'math-games',
-    title: `${games['math-games'].name}: ${seo.mathGamesSubtitle} · ${SITE_NAME}`,
-    data: { description: `${seo.mathGamesIntro} ${games['math-games'].summary}` },
+    ...gameMeta('math-games'),
     loadComponent: () => import('./pages/math-games/math-games-page').then((m) => m.MathGamesPage),
+  },
+  {
+    path: 'sliding-puzzle',
+    ...gameMeta('sliding-puzzle'),
+    loadComponent: () => import('./pages/sliding-puzzle/sliding-puzzle-page').then((m) => m.SlidingPuzzlePage),
+  },
+  {
+    path: 'turn-picture',
+    ...gameMeta('turn-picture'),
+    loadComponent: () => import('./pages/turn-picture/turn-picture-page').then((m) => m.TurnPicturePage),
   },
   { path: '404', ...notFound },
   { path: '**', ...notFound },

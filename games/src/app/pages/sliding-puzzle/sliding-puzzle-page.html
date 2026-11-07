@@ -1,0 +1,130 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/">{{ t().page.section }}</a>
+    <span class="tag">{{ t().page.ages }}</span>
+  </div>
+  <h1>{{ t().games['sliding-puzzle'].name }}</h1>
+  <p class="lead">
+    {{ t().slidingPuzzle.lead }}
+    <br />
+    {{ t().slidingPuzzle.rule }}
+  </p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="t().slidingPuzzle.board">
+  <div class="card play" appGameBoard>
+    <div class="choices" role="group" [attr.aria-label]="t().slidingPuzzle.pictureGroup">
+      @for (mode of pictureModes; track mode) {
+        <button
+          type="button"
+          class="button button-secondary"
+          [attr.aria-pressed]="mode === pictureMode()"
+          (click)="choosePictureMode(mode)"
+        >
+          {{ t().slidingPuzzle.pictureModes[mode] }}
+        </button>
+      }
+    </div>
+
+    <div class="levels" role="group" [attr.aria-label]="t().slidingPuzzle.levelGroup">
+      @for (level of levels; track level.id) {
+        <button
+          type="button"
+          class="button button-secondary level"
+          [attr.aria-pressed]="level.id === levelId()"
+          (click)="chooseLevel(level.id)"
+        >
+          <span class="level-name">{{ t().slidingPuzzle.levels[level.id].name }}</span>
+          <span class="level-summary">{{ t().slidingPuzzle.levels[level.id].summary }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="status">
+      <span class="mono">{{ t().slidingPuzzle.moves(moves()) }}</span>
+      <span class="mono">{{ time() }}</span>
+    </div>
+
+    <div
+      class="board"
+      [class.is-solved]="isSolved()"
+      [style.--rows]="puzzle()?.shape?.rows ?? 3"
+      [style.--columns]="puzzle()?.shape?.columns ?? 3"
+      role="group"
+      [attr.aria-label]="t().slidingPuzzle.board"
+    >
+      @if (puzzle(); as puzzle) {
+        @for (placed of tiles(); track placed.tile) {
+          <button
+            type="button"
+            class="tile"
+            [class.can-move]="placed.canMove"
+            [style.transform]="position(placed.cell)"
+            [attr.aria-label]="t().slidingPuzzle.tile(placed.number)"
+            (click)="slide(placed.cell)"
+          >
+            @if (pictureMode() === 'drawing' && picture(); as drawing) {
+              <app-picture-slice class="slice" [src]="drawing.src" [shape]="puzzle.shape" [cell]="placed.tile" />
+              @if (!isSolved()) {
+                <span class="drawing-number">{{ placed.number }}</span>
+              }
+            } @else {
+              <app-puzzle-tile [lines]="puzzle.picture[placed.tile]" [number]="isSolved() ? null : placed.number" />
+            }
+          </button>
+        }
+        @if (isSolved() && pictureMode() === 'drawing' && picture(); as drawing) {
+          <div class="tile" [style.transform]="position(puzzle.gap)" aria-hidden="true">
+            <app-picture-slice class="slice" [src]="drawing.src" [shape]="puzzle.shape" [cell]="puzzle.gap" />
+          </div>
+        }
+      }
+    </div>
+
+    @if (isSolved()) {
+      <p class="solved" role="status">
+        <strong>{{ t().slidingPuzzle.solved }}</strong>
+        {{ t().slidingPuzzle.solvedIn(moves(), time()) }}
+        @if (isNewBest()) {
+          · <span class="record">{{ t().slidingPuzzle.newRecord }}</span>
+        }
+      </p>
+    }
+
+    <div class="footer-row">
+      @if (puzzle(); as puzzle) {
+        <figure class="goal">
+          @if (pictureMode() === 'drawing' && picture(); as drawing) {
+            <img
+              class="goal-board goal-drawing"
+              [src]="drawing.src"
+              [alt]="t().pictures[drawing.id]"
+              [style.--rows]="puzzle.shape.rows"
+              [style.--columns]="puzzle.shape.columns"
+            />
+          } @else {
+            <div
+              class="goal-board"
+              [style.--rows]="puzzle.shape.rows"
+              [style.--columns]="puzzle.shape.columns"
+              aria-hidden="true"
+            >
+              @for (lines of puzzle.picture; track $index) {
+                <app-puzzle-tile [lines]="lines" />
+              }
+            </div>
+          }
+          <figcaption class="muted">{{ t().slidingPuzzle.goal }}</figcaption>
+        </figure>
+      }
+      <div class="actions">
+        <button type="button" class="button" (click)="newPuzzle()">{{ t().slidingPuzzle.newPuzzle }}</button>
+        @if (bestMoves(); as best) {
+          <p class="muted best">{{ t().slidingPuzzle.best(best) }}</p>
+        }
+      </div>
+    </div>
+
+    <p class="muted keys">{{ t().slidingPuzzle.keys }}</p>
+  </div>
+</section>

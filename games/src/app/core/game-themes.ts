@@ -1,12 +1,13 @@
 import { ThemeCssVariables } from '@su-labs/theme';
-import { SITE_THEMES } from '../../core/site-theme';
+import { SITE_THEMES } from './site-theme';
 
 export type GameThemeId = 'light' | 'dark' | 'ocean' | 'party' | 'night';
 
 /**
- * Colours of the game board, applied to the board only with @su-labs/theme's `target` option (the rest of
- * the page keeps the site theme). Every theme is a palette of text, background and accent; the board mixes
- * its other colours from these (see `.board[data-theme]` in math-games-page.scss). Names are translated.
+ * Colours of the game boards, a site-wide setting (see BoardColours). They apply to each board only, with
+ * @su-labs/theme's `target` option, so the rest of the page keeps the site theme. Every theme is a palette of
+ * text, background and accent; boards mix their other colours from these (see `.game-board` in styles.scss).
+ * Names are translated.
  */
 export interface GameTheme {
   readonly id: GameThemeId;

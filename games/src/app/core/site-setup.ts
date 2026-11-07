@@ -1,11 +1,12 @@
 import { inject } from '@angular/core';
 import { FontSizeService } from '@su-labs/font-size';
+import { SuNotificationService } from '@su-labs/notifications';
 import { SHARED_SETTINGS } from './shared-settings';
 import { SiteTheme } from './site-theme';
 
 /**
  * Start the site's utilities once, before the first render.
- * The games run on the su-labs libraries too: theme and font size.
+ * The games run on the su-labs libraries too: theme, font size and notifications.
  */
 export function setUpSite(): void {
   inject(SiteTheme).init();
@@ -21,4 +22,7 @@ export function setUpSite(): void {
     storageKey: SHARED_SETTINGS.fontSizeKey,
   });
   fontSize.init();
+
+  // Bottom right, clear of the header's settings and the game boards
+  inject(SuNotificationService).configure({ position: 'bottom-right' });
 }

@@ -1,0 +1,25 @@
+// The beta notice: still being built, email updates to come
+.beta {
+  background: var(--yellow-bg);
+  border: 1px solid color-mix(in srgb, var(--yellow-text) 35%, transparent);
+  border-radius: var(--radius-large);
+  color: var(--text);
+  font-size: 0.9375rem;
+  max-width: 40rem;
+  padding: 0.875rem 1rem;
+}
+
+.beta-label {
+  background: var(--yellow-text);
+  border-radius: 9999px;
+  color: var(--yellow-bg);
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-right: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  text-transform: uppercase;
+  vertical-align: 0.1em;
+}

@@ -1,18 +1,3 @@
-// The board's own colours (see game-themes.ts). @su-labs/theme sets data-theme and --su-theme-* on the
-// board; like the site's custom theme, every other colour is mixed from text, background and accent
-.board[data-theme] {
-  --text: var(--su-theme-color);
-  --heading: var(--su-theme-color);
-  --muted: color-mix(in srgb, var(--su-theme-color) 65%, var(--su-theme-background));
-  --surface: var(--su-theme-background);
-  --subtle: color-mix(in srgb, var(--su-theme-color) 10%, var(--su-theme-background));
-  --border: color-mix(in srgb, var(--su-theme-color) 18%, var(--su-theme-background));
-  --button-bg: var(--su-theme-main-accent);
-  --button-text: var(--su-theme-background);
-  --button-hover: color-mix(in srgb, var(--su-theme-main-accent) 85%, var(--su-theme-background));
-  color: var(--text);
-}
-
 .board {
   display: grid;
   gap: 1.25rem;
@@ -30,30 +15,6 @@
   gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   width: 100%;
-}
-
-// Small buttons in a centred row that wraps evenly, however many themes there are
-.themes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  justify-content: center;
-}
-
-.theme-choice {
-  gap: 0.375rem;
-  padding-inline: 0.5rem;
-}
-
-// A small preview of each theme: its background with its accent in the middle
-.swatch {
-  background: var(--swatch-accent);
-  border: 3px solid var(--swatch-background);
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--border);
-  flex-shrink: 0;
-  height: 0.875rem;
-  width: 0.875rem;
 }
 
 .levels {

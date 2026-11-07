@@ -98,50 +98,58 @@
   }
 }
 
-// Text size and theme sit inline on wide screens; on phones they move into a panel behind a gear button
+// Settings: behind the gear button on every screen size, one labelled row per setting
+// (the same panel as games.su-labs.dev)
 .settings {
   position: relative;
 }
 
-.settings-toggle {
-  display: none;
-}
-
 .settings-panel {
-  align-items: center;
-  display: flex;
-  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 15rem;
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  z-index: 20;
+
+  &.is-open {
+    display: flex;
+  }
 }
 
-@media (max-width: 40rem) {
-  .settings-toggle {
-    display: inline-flex;
-  }
+// While the panel is open the gear button inverts, like a pressed button
+.icon-button.settings-toggle[aria-expanded='true'],
+.icon-button.settings-toggle[aria-expanded='true']:hover:not(:disabled) {
+  background: var(--button-bg);
+  border-color: var(--button-bg);
+  color: var(--button-text);
+}
 
-  .settings-panel {
-    align-items: stretch;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-large);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    display: none;
-    flex-direction: column;
-    gap: 0.5rem;
-    min-width: 11rem;
-    padding: 0.75rem;
-    position: absolute;
-    right: 0;
-    top: calc(100% + 0.5rem);
-    z-index: 20;
+.setting {
+  display: grid;
+  gap: 0.375rem;
+}
 
-    &.is-open {
-      display: flex;
-    }
+.setting-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
 
-    .text-size .icon-button {
-      flex: 1;
-    }
-  }
+.text-size .icon-button {
+  flex: 1;
+}
+
+.theme-switch {
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .theme-dot {

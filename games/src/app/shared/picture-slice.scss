@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+// Percentages of left and top are of the tile, which is square, so they move by whole tiles
+img {
+  aspect-ratio: 1;
+  max-width: none;
+  object-fit: cover;
+  position: absolute;
+  user-select: none;
+}

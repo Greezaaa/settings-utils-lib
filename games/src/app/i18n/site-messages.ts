@@ -1,8 +1,11 @@
 import { SuThemeName } from '@su-labs/theme';
 import { GameSlug } from '../core/games';
+import { PictureId } from '../core/pictures';
 import { SignsLevelId } from '../games/find-the-signs';
+import { BoardLevelId } from '../games/board';
+import { TurnModeId } from '../games/turn-picture';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
-import { GameThemeId } from '../pages/math-games/game-themes';
+import { GameThemeId } from '../core/game-themes';
 
 export type LanguageId = 'en' | 'es' | 'eu';
 
@@ -10,6 +13,19 @@ export type LanguageId = 'en' | 'es' | 'eu';
 export interface OptionText {
   readonly name: string;
   readonly summary: string;
+}
+
+/** How the sliding puzzle's tiles are drawn: pieces of a line, or pieces of a drawing */
+export type PuzzlePictureMode = 'lines' | 'drawing';
+
+/** A game's texts: its name and summary on cards, and its page title and description for search results */
+export interface GameText {
+  readonly name: string;
+  readonly summary: string;
+  /** Follows the name in the page title, e.g. `Math games: true or false, …` */
+  readonly subtitle: string;
+  /** Comes before the summary in the page description */
+  readonly intro: string;
 }
 
 /** Every text of the games site in one language; each language must fill all of it */
@@ -24,14 +40,19 @@ export interface SiteMessages {
     readonly gamesNav: string;
     readonly settings: string;
     readonly textSize: string;
+    readonly theme: string;
     readonly smallerText: string;
     readonly largerText: string;
     readonly themeNames: Readonly<Record<SuThemeName, string>>;
     /** Label of the theme switch, e.g. `Theme: dark. Switch to contrast` */
     readonly themeSwitch: (current: string, next: string) => string;
     readonly language: string;
+    readonly boardColours: string;
+    readonly boardThemes: Readonly<Record<GameThemeId, OptionText>>;
     readonly madeBy: string;
     readonly projectLinks: string;
+    /** Shown once until closed: what the site stores, and that it is never sold or shared */
+    readonly privacyNotice: string;
   };
 
   /** Titles, descriptions and image text for search results and link previews */
@@ -39,17 +60,13 @@ export interface SiteMessages {
     /** Open Graph locale, e.g. `es_ES` */
     readonly locale: string;
     readonly siteDescription: string;
-    /** Follows the game's name in its page title */
-    readonly mathGamesSubtitle: string;
-    /** Comes before the game's summary in its description */
-    readonly mathGamesIntro: string;
     readonly notFoundTitle: string;
     readonly notFoundDescription: string;
     readonly previewImageAlt: string;
   };
 
   /** Name and description of each game */
-  readonly games: Readonly<Record<GameSlug, { readonly name: string; readonly summary: string }>>;
+  readonly games: Readonly<Record<GameSlug, GameText>>;
 
   readonly home: {
     readonly title: string;
@@ -57,7 +74,57 @@ export interface SiteMessages {
     /** Second line of the lead */
     readonly rule: string;
     readonly games: string;
+    /** Notice that the site is still in beta, shown above the games */
+    readonly betaLabel: string;
+    readonly betaText: string;
+    /** Note below the games: who makes them */
+    readonly madeByTitle: string;
+    readonly madeByText: string;
   };
+
+  readonly slidingPuzzle: {
+    readonly lead: string;
+    /** Second line of the lead */
+    readonly rule: string;
+    readonly board: string;
+    readonly levelGroup: string;
+    readonly levels: Readonly<Record<BoardLevelId, OptionText>>;
+    readonly pictureGroup: string;
+    readonly pictureModes: Readonly<Record<PuzzlePictureMode, string>>;
+    readonly goal: string;
+    readonly moves: (moves: number) => string;
+    readonly tile: (number: number) => string;
+    readonly newPuzzle: string;
+    readonly solved: string;
+    readonly solvedIn: (moves: number, time: string) => string;
+    readonly best: (moves: number) => string;
+    readonly newRecord: string;
+    readonly keys: string;
+  };
+
+  readonly turnPicture: {
+    readonly lead: string;
+    /** Second line of the lead */
+    readonly rule: string;
+    readonly modeGroup: string;
+    readonly modes: Readonly<Record<TurnModeId, OptionText>>;
+    readonly levelGroup: string;
+    readonly levels: Readonly<Record<BoardLevelId, OptionText>>;
+    readonly board: string;
+    readonly tile: (number: number) => string;
+    readonly picture: string;
+    readonly memorize: string;
+    readonly ready: string;
+    readonly turns: (turns: number) => string;
+    readonly newGame: string;
+    readonly solved: string;
+    readonly solvedIn: (turns: number, time: string) => string;
+    readonly best: (time: string) => string;
+    readonly newRecord: string;
+  };
+
+  /** Description of each picture, read by screen readers */
+  readonly pictures: Readonly<Record<PictureId, string>>;
 
   readonly notFound: {
     readonly title: string;
@@ -79,13 +146,11 @@ export interface SiteMessages {
   readonly settings: {
     readonly answerStyleGroup: string;
     readonly timerGroup: string;
-    readonly coloursGroup: string;
     readonly levelGroup: string;
     readonly answerStyles: Readonly<Record<AnswerStyleId, OptionText>>;
     readonly timers: Readonly<Record<TimerId, OptionText>>;
     readonly levels: Readonly<Record<LevelId, OptionText>>;
     readonly signsLevels: Readonly<Record<SignsLevelId, OptionText>>;
-    readonly themes: Readonly<Record<GameThemeId, OptionText>>;
     readonly bestScore: (best: number) => string;
     readonly start: string;
   };

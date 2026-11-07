@@ -1,14 +1,11 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { SuStorage } from '@su-labs/core';
-import { SuThemeController } from '@su-labs/core/theme';
 import { RouterLink } from '@angular/router';
 import { readStored, writeStored } from '../../core/site-storage';
-import { SiteTheme } from '../../core/site-theme';
 import { createSignsPuzzle, formatSigns, getSignsLevel, SIGNS_LEVELS, SignsPuzzle } from '../../games/find-the-signs';
 import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatQuestion, getLevel, LEVELS, LevelId, Question, secondsForQuestion, TIMER_IDS, TimerId, Timing } from '../../games/math-games';
-import { GAME_THEMES, GameThemeId, getGameTheme, isGameThemeId } from './game-themes';
 import { SiteLanguage } from '../../i18n/site-language';
 import { OptionText } from '../../i18n/site-messages';
+import { GameBoard } from '../../shared/game-board';
 import { FindTheSignsRound } from './rounds/find-the-signs-round';
 import { RoundResult } from './rounds/round-result';
 import { TrueOrFalseRound } from './rounds/true-or-false-round';
@@ -26,12 +23,8 @@ type BestScores = Partial<Record<ScoreKey, number>>;
 /** A level button: its id and its translated text */
 type LevelOption = OptionText & { readonly id: LevelId };
 
-/** The board's theme controller saves nothing: the game keeps the chosen colours itself (THEME_STORAGE) */
-const UNSAVED: SuStorage = { getItem: () => null, setItem: () => undefined, removeItem: () => undefined };
-
 /** Names of the values the game keeps in this browser */
 const BEST_SCORES_STORAGE = 'math-games:best';
-const THEME_STORAGE = 'math-games:theme';
 
 /** Level picked when the chosen one doesn't exist for the new answer style */
 const DEFAULT_LEVEL: LevelId = 'normal';
@@ -46,7 +39,7 @@ const TICK_MS = 50;
  */
 @Component({
   selector: 'app-math-games-page',
-  imports: [FindTheSignsRound, RouterLink, TrueOrFalseRound, YourAnswerRound],
+  imports: [FindTheSignsRound, GameBoard, RouterLink, TrueOrFalseRound, YourAnswerRound],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './math-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', './math-games-page.scss'],
@@ -56,21 +49,9 @@ export class MathGamesPage {
   protected readonly gamesPath = '/';
   protected readonly timers = TIMER_IDS;
   protected readonly answerStyles = ANSWER_STYLE_IDS;
-  protected readonly gameThemes = GAME_THEMES;
 
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
-
-  private readonly siteTheme = inject(SiteTheme);
-  /** Colours the player picked, if any */
-  private readonly chosenTheme = signal<GameThemeId | null>(null);
-  /** The board, the only element the game's colours apply to */
-  private readonly board = viewChild.required<ElementRef<HTMLElement>>('board');
-  private readonly boardTheme = new SuThemeController();
-  /** Board colours: the player's choice, or the site's light or dark (the page's own colours) until they pick one */
-  protected readonly gameTheme = computed<GameThemeId>(
-    () => this.chosenTheme() ?? (this.siteTheme.resolved() === 'dark' ? 'dark' : 'light'),
-  );
 
   protected readonly levelId = signal<LevelId>(DEFAULT_LEVEL);
   protected readonly timerId = signal<TimerId>('timer');
@@ -130,31 +111,10 @@ export class MathGamesPage {
   constructor() {
     afterNextRender(() => {
       this.bestScores.set(readBestScores());
-      const theme = readStored(THEME_STORAGE);
-      if (isGameThemeId(theme)) {
-        this.applyTheme(theme);
-      }
     });
     inject(DestroyRef).onDestroy(() => {
       this.stopTimer();
-      this.boardTheme.destroy();
     });
-  }
-
-  protected chooseTheme(id: GameThemeId): void {
-    this.applyTheme(id);
-    writeStored(THEME_STORAGE, id);
-  }
-
-  /** Colours the board only, as a custom theme of its own; the rest of the page keeps the site theme */
-  private applyTheme(id: GameThemeId): void {
-    this.boardTheme.init({
-      target: this.board().nativeElement,
-      storage: UNSAVED,
-      defaultTheme: 'custom',
-      themes: { custom: getGameTheme(id).palette },
-    });
-    this.chosenTheme.set(id);
   }
 
   protected chooseLevel(id: LevelId): void {

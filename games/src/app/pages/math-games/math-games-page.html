@@ -12,7 +12,7 @@
 </header>
 
 <section class="container page-section" [attr.aria-label]="t().page.game">
-  <div class="card board" #board>
+  <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
         <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
@@ -38,22 +38,6 @@
               (click)="chooseTimer(timer)"
             >
               {{ t().settings.timers[timer].name }}
-            </button>
-          }
-        </div>
-        <div class="choices themes" role="group" [attr.aria-label]="t().settings.coloursGroup">
-          @for (theme of gameThemes; track theme.id) {
-            <button
-              type="button"
-              class="button button-secondary button-small theme-choice"
-              [style.--swatch-background]="theme.palette.background"
-              [style.--swatch-accent]="theme.palette['main-accent']"
-              [attr.aria-pressed]="theme.id === gameTheme()"
-              [title]="t().settings.themes[theme.id].summary"
-              (click)="chooseTheme(theme.id)"
-            >
-              <span class="swatch" aria-hidden="true"></span>
-              {{ t().settings.themes[theme.id].name }}
             </button>
           }
         </div>
