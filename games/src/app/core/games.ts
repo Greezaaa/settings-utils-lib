@@ -1,9 +1,15 @@
 /** URL path of each game; their names and descriptions are translated in i18n/ */
-export type GameSlug = 'math-games' | 'letter-games' | 'sliding-puzzle' | 'turn-picture' | 'place-pieces';
+export type GameSlug =
+  | 'math-games'
+  | 'letter-games'
+  | 'hit-the-note'
+  | 'sliding-puzzle'
+  | 'turn-picture'
+  | 'place-pieces';
 
 /** What a game trains; the home page lists the games by category, in this order */
-export type GameCategory = 'numbers' | 'letters' | 'puzzles';
-export const GAME_CATEGORIES: readonly GameCategory[] = ['numbers', 'letters', 'puzzles'];
+export type GameCategory = 'numbers' | 'letters' | 'music' | 'puzzles';
+export const GAME_CATEGORIES: readonly GameCategory[] = ['numbers', 'letters', 'music', 'puzzles'];
 
 export interface GameInfo {
   readonly slug: GameSlug;
@@ -16,6 +22,7 @@ export interface GameInfo {
 export const GAMES: readonly GameInfo[] = [
   { slug: 'math-games', category: 'numbers', minAge: 6 },
   { slug: 'letter-games', category: 'letters', minAge: 4 },
+  { slug: 'hit-the-note', category: 'music', minAge: 4 },
   { slug: 'sliding-puzzle', category: 'puzzles', minAge: 5 },
   { slug: 'turn-picture', category: 'puzzles', minAge: 4 },
   { slug: 'place-pieces', category: 'puzzles', minAge: 4 },

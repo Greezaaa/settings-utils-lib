@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSign
 import { DictionaryStatus } from '../../../core/word-dictionaries';
 import { checkWord, LetterSet, lettersOf, WordCheck } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
-import { roundFeedback } from './round-feedback';
+import { roundFeedback } from '../../../shared/round-feedback';
 
 /**
  * Word builder: the player taps letters to make a word and checks it. Every word to find shows as empty boxes,

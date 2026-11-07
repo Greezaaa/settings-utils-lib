@@ -175,6 +175,21 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 7,
+    published: '2026-11-08T18:00:00+01:00',
+    changes: [
+      {
+        game: 'hit-the-note',
+        text: {
+          en: 'New game: Hit the note, find, compare and sing notes',
+          es: 'Nuevo juego: Dando la nota, encuentra, compara y canta notas',
+          eu: 'Joko berria: Asmatu nota, aurkitu, alderatu eta abestu notak',
+          uk: 'Нова гра: Влуч у ноту — знаходь, порівнюй і співай ноти',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */

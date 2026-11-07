@@ -7,6 +7,7 @@ import { BoardLevelId } from '../games/board';
 import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
 import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
+import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { GameThemeId } from '../core/game-themes';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
@@ -335,5 +336,37 @@ export interface SiteMessages {
     readonly allFound: string;
     readonly solved: string;
     readonly summary: (words: number, mistakes: number) => string;
+  };
+
+  /** Hit the note: find the note, higher or lower, sing it */
+  readonly hitTheNote: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    readonly modeGroup: string;
+    readonly modes: Readonly<Record<MusicModeId, OptionText>>;
+    readonly levelGroup: string;
+    readonly levels: Readonly<Record<MusicLevelId, OptionText>>;
+    /** What to do, shown above each round */
+    readonly instructions: Readonly<Record<MusicModeId, string>>;
+    readonly progress: (round: number, total: number) => string;
+    readonly mistakes: (mistakes: number) => string;
+    /** Each note's name in this language (C, Do, До…) */
+    readonly noteNames: Readonly<Record<NoteId, string>>;
+    readonly notes: string;
+    readonly listen: string;
+    readonly listenTwo: string;
+    readonly directions: Readonly<Record<Direction, string>>;
+    readonly startSinging: string;
+    readonly micPrivacy: string;
+    readonly micAsking: string;
+    readonly micDenied: string;
+    readonly micUnavailable: string;
+    readonly meter: string;
+    /** What the singing meter says: done, silence, hold it, too low, too high */
+    readonly singHints: Readonly<Record<'done' | 'silent' | 'hold' | 'low' | 'high', string>>;
+    readonly skip: string;
+    readonly solved: string;
+    readonly summary: (right: number, total: number) => string;
   };
 }

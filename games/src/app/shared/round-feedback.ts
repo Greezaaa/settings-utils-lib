@@ -3,7 +3,7 @@ import { DestroyRef, inject, signal } from '@angular/core';
 /** How long a wrong answer shakes */
 export const WRONG_MS = 450;
 
-/** The short shake every letter round shows on a mistake; a pending timer is cleared when the round goes away */
+/** The short shake a round shows on a mistake (letter and music games); a pending timer is cleared when the round goes away */
 export function roundFeedback() {
   const timers = new Set<ReturnType<typeof setTimeout>>();
   inject(DestroyRef).onDestroy(() => timers.forEach(clearTimeout));

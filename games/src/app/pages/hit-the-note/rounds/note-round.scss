@@ -1,0 +1,186 @@
+// Styles the music rounds share: big coloured note keys, the listen button and the singing meter.
+// Each note keeps its colour in every theme (like the coloured bells and tubes used to teach music).
+
+:host {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  width: 100%;
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+
+  &.is-wrong {
+    animation: shake 450ms ease;
+  }
+}
+
+.key {
+  background: var(--note, var(--subtle));
+  border: 2px solid transparent;
+  border-radius: var(--radius-large);
+  color: #1d1d1f;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  min-height: 4rem;
+  min-width: 4rem;
+  padding: 0 0.75rem;
+  touch-action: manipulation;
+
+  &:active {
+    transform: scale(0.94);
+  }
+
+  &.is-sharp {
+    background: color-mix(in srgb, var(--note) 55%, #1d1d1f);
+    color: #fff;
+  }
+
+  &.is-right {
+    border-color: var(--green-text);
+    box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--green-text) 35%, transparent);
+  }
+
+  &.is-wrong-answer {
+    border-color: var(--red-text);
+  }
+}
+
+.direction {
+  background: var(--subtle);
+  color: var(--heading);
+  min-width: 9rem;
+}
+
+[data-note^='C'] {
+  --note: #ff6b6b;
+}
+[data-note^='D'] {
+  --note: #ffa94d;
+}
+[data-note^='E'] {
+  --note: #ffe066;
+}
+[data-note^='F'] {
+  --note: #8ce99a;
+}
+[data-note^='G'] {
+  --note: #63e6be;
+}
+[data-note^='A'] {
+  --note: #74c0fc;
+}
+[data-note^='B'] {
+  --note: #b197fc;
+}
+
+.target {
+  background: var(--note);
+  border-radius: 50%;
+  color: #1d1d1f;
+  display: grid;
+  font-size: 2rem;
+  font-weight: 700;
+  height: 6rem;
+  place-items: center;
+  width: 6rem;
+}
+
+// The singing meter: the green band in the middle is in tune; the needle shows the voice
+.meter {
+  background: linear-gradient(to right, var(--red-bg), var(--subtle) 35% 65%, var(--red-bg));
+  border-radius: 9999px;
+  height: 1.5rem;
+  position: relative;
+  width: 100%;
+}
+
+.band {
+  background: var(--green-bg);
+  border: 1px solid var(--green-text);
+  border-radius: 9999px;
+  height: 100%;
+  left: 50%;
+  position: absolute;
+  translate: -50% 0;
+}
+
+.needle {
+  background: var(--heading);
+  border-radius: 2px;
+  height: 2.25rem;
+  position: absolute;
+  top: -0.375rem;
+  transition: left 80ms linear;
+  translate: -50% 0;
+  width: 0.375rem;
+
+  &.is-silent {
+    opacity: 0.25;
+  }
+
+  &.is-in-tune {
+    background: var(--green-text);
+  }
+}
+
+.hold {
+  background: var(--subtle);
+  border-radius: 9999px;
+  height: 0.375rem;
+  overflow: hidden;
+  width: 60%;
+
+  span {
+    background: var(--green-text);
+    display: block;
+    height: 100%;
+  }
+}
+
+.hint {
+  color: var(--heading);
+  font-weight: 600;
+  min-height: 1.5em;
+
+  &.is-good {
+    color: var(--green-text);
+  }
+
+  &.error {
+    color: var(--red-text);
+  }
+}
+
+.small {
+  font-size: 0.8125rem;
+  max-width: 24rem;
+  text-align: center;
+}
+
+@keyframes shake {
+  25%,
+  75% {
+    translate: -0.375rem 0;
+  }
+
+  50% {
+    translate: 0.375rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keys.is-wrong {
+    animation: none;
+  }
+
+  .needle {
+    transition: none;
+  }
+}

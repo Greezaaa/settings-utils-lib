@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output } from '@angular/core';
 import { Hint, hintAfter, lettersOf, mixLetters } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
-import { roundFeedback } from './round-feedback';
+import { roundFeedback } from '../../../shared/round-feedback';
 
 /** A tile of mixed letters; the id tells apart tiles with the same letter */
 interface Tile {

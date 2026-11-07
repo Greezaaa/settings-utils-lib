@@ -62,6 +62,13 @@ export const ES: SiteMessages = {
       subtitle: 'vocales, letras mezcladas y forma palabras',
       intro: 'Un juego de letras y palabras para niños.',
     },
+    'hit-the-note': {
+      name: 'Dando la nota',
+      summary:
+        'Encuentra la nota que oyes, di si la melodía sube o baja, o canta la nota al micrófono. Entrena el oído y la voz.',
+      subtitle: 'encuentra la nota, sube o baja, y cántala',
+      intro: 'Un juego de música para niños.',
+    },
     'sliding-puzzle': {
       name: 'Puzle deslizante',
       summary: 'Desliza las piezas al hueco hasta que las líneas vuelvan a unirse. Un dibujo nuevo en cada partida.',
@@ -83,7 +90,7 @@ export const ES: SiteMessages = {
     },
   },
 
-  categories: { numbers: 'Números', letters: 'Letras', puzzles: 'Puzles' },
+  categories: { numbers: 'Números', letters: 'Letras', music: 'Música', puzzles: 'Puzles' },
 
   home: {
     title: 'Juegos inteligentes para mentes despiertas',
@@ -208,6 +215,7 @@ export const ES: SiteMessages = {
       'Ni cuentas ni datos personales',
       'Ni anuncios ni seguimiento',
       'No vendemos ni compartimos nada con nadie',
+      'El micrófono solo se usa mientras juegas a Cántala, y el sonido nunca se graba ni se envía',
     ],
     choiceTitle: 'Tu elección',
     choiceLabel: 'Recordar mis preferencias en este dispositivo',
@@ -417,5 +425,72 @@ export const ES: SiteMessages = {
     allFound: '¡Las has encontrado todas!',
     solved: '¡Muy bien!',
     summary: (words, mistakes) => `${words} palabras · ${mistakes} ${mistakes === 1 ? 'fallo' : 'fallos'}`,
+  },
+
+  hitTheNote: {
+    lead: 'Encuentra la nota que oyes, di si la segunda nota es más aguda o más grave, o cántala al micrófono.',
+    rule: 'Cántala usa el micrófono solo mientras juegas: el sonido no sale de tu dispositivo y nunca se graba.',
+    board: 'Juego de música',
+    modeGroup: 'Juego',
+    modes: {
+      'find-the-note': { name: 'Encuentra la nota', summary: 'Escucha una nota y toca su nombre' },
+      'higher-or-lower': { name: '¿Sube o baja?', summary: 'Escucha dos notas: ¿la segunda sube o baja?' },
+      'sing-it': { name: 'Cántala', summary: 'Escucha una nota y cántala' },
+    },
+    levelGroup: 'Nivel',
+    levels: {
+      easy: { name: 'Fácil', summary: 'Do, Re y Mi · saltos grandes · fácil de afinar' },
+      normal: { name: 'Normal', summary: 'De Do a Sol · saltos más pequeños' },
+      hard: { name: 'Difícil', summary: 'Toda la escala, de Do a Si · notas cercanas' },
+      expert: {
+        name: 'Experto',
+        summary: 'Las 12 notas, también los sostenidos · de una en una · afina con mucha precisión',
+      },
+    },
+    instructions: {
+      'find-the-note': '¿Qué nota es?',
+      'higher-or-lower': '¿La segunda nota es más aguda o más grave?',
+      'sing-it': 'Escucha y luego canta la nota y mantenla',
+    },
+    progress: (round, total) => `Ronda ${round} de ${total}`,
+    mistakes: (mistakes) => `Fallos ${mistakes}`,
+    noteNames: {
+      C: 'Do',
+      'C#': 'Do♯',
+      D: 'Re',
+      'D#': 'Re♯',
+      E: 'Mi',
+      F: 'Fa',
+      'F#': 'Fa♯',
+      G: 'Sol',
+      'G#': 'Sol♯',
+      A: 'La',
+      'A#': 'La♯',
+      B: 'Si',
+    },
+    notes: 'Notas',
+    listen: 'Escuchar otra vez',
+    listenTwo: 'Escuchar las dos otra vez',
+    directions: {
+      higher: 'Más aguda',
+      lower: 'Más grave',
+    },
+    startSinging: 'Empezar a cantar',
+    micPrivacy:
+      'Tu navegador pedirá permiso para usar el micrófono. El sonido no sale de este dispositivo: nunca se graba ni se envía.',
+    micAsking: 'Esperando al micrófono…',
+    micDenied: 'El micrófono está bloqueado. Permítelo en tu navegador o salta esta ronda.',
+    micUnavailable: 'No hay micrófono en este dispositivo. Puedes saltar las rondas.',
+    meter: 'Lo cerca que está tu voz de la nota',
+    singHints: {
+      done: '¡Afinado! ¡Muy bien!',
+      silent: 'Canta ahora: «aaah»…',
+      hold: '¡Eso es, mantenla…!',
+      low: 'Un poco más agudo ⬆',
+      high: 'Un poco más grave ⬇',
+    },
+    skip: 'Saltar',
+    solved: '¡Muy bien!',
+    summary: (right, total) => `${right} de ${total} a la primera`,
   },
 };

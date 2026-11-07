@@ -1,0 +1,101 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/">{{ t().page.section }}</a>
+    <span class="tag">{{ t().page.ages(minAge) }}</span>
+  </div>
+  <h1>{{ t().games['hit-the-note'].name }}</h1>
+  <p class="lead">
+    {{ t().hitTheNote.lead }}
+    <br />
+    {{ t().hitTheNote.rule }}
+  </p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="t().hitTheNote.board">
+  <div class="card board" appGameBoard>
+    @switch (phase()) {
+      @case ('ready') {
+        <div class="levels" role="group" [attr.aria-label]="t().hitTheNote.modeGroup">
+          @for (mode of modes; track mode) {
+            <button
+              type="button"
+              class="button button-secondary level"
+              [attr.aria-pressed]="mode === modeId()"
+              (click)="modeId.set(mode)"
+            >
+              <span class="level-name">{{ t().hitTheNote.modes[mode].name }}</span>
+              <span class="level-summary">{{ t().hitTheNote.modes[mode].summary }}</span>
+            </button>
+          }
+        </div>
+        <div class="choices" role="group" [attr.aria-label]="t().hitTheNote.levelGroup">
+          @for (level of levels; track level.id) {
+            <button
+              type="button"
+              class="button button-secondary"
+              [attr.aria-pressed]="level.id === levelId()"
+              [title]="t().hitTheNote.levels[level.id].summary"
+              (click)="levelId.set(level.id)"
+            >
+              {{ t().hitTheNote.levels[level.id].name }}
+            </button>
+          }
+        </div>
+        <p class="muted level-help">{{ t().hitTheNote.levels[levelId()].summary }}</p>
+        <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>
+      }
+
+      @case ('playing') {
+        <p class="instructions">{{ t().hitTheNote.instructions[modeId()] }}</p>
+        <div class="status">
+          <span class="mono">{{ t().hitTheNote.progress(index() + 1, total) }}</span>
+          <span class="mono">{{ t().hitTheNote.mistakes(mistakes()) }}</span>
+        </div>
+
+        @switch (modeId()) {
+          @case ('find-the-note') {
+            @if (note(); as note) {
+              <app-find-note-round
+                [note]="note"
+                [choices]="level().notes"
+                (solved)="onSolved()"
+                (mistake)="onMistake()"
+              />
+            }
+          }
+          @case ('higher-or-lower') {
+            @if (pair(); as pair) {
+              <app-higher-lower-round [round]="pair" (solved)="onSolved()" (mistake)="onMistake()" />
+            }
+          }
+          @case ('sing-it') {
+            @if (note(); as note) {
+              <app-sing-round
+                [note]="note"
+                [tolerance]="level().tolerance"
+                (solved)="onSolved()"
+                (mistake)="onMistake()"
+              />
+            }
+          }
+        }
+        <button type="button" class="button button-secondary" (click)="backToSettings()">
+          {{ t().over.changeSettings }}
+        </button>
+      }
+
+      @case ('done') {
+        <p class="eyebrow">{{ t().hitTheNote.solved }}</p>
+        <p class="final-score">{{ firstTries() }}</p>
+        <p class="muted">{{ t().hitTheNote.summary(firstTries(), total) }}</p>
+        <div class="button-row">
+          <button type="button" class="button" (click)="start()">{{ t().over.playAgain }}</button>
+          <button type="button" class="button button-secondary" (click)="backToSettings()">
+            {{ t().over.changeSettings }}
+          </button>
+        </div>
+      }
+    }
+  </div>
+  <app-game-feedback game="hit-the-note" />
+</section>

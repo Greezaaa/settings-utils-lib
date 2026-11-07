@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output } from '@angular/core';
 import { GapWord, hintAfter, lettersOf } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
-import { roundFeedback } from './round-feedback';
+import { roundFeedback } from '../../../shared/round-feedback';
 
 /**
  * A picture and its word with letters missing (the first vowel, or every vowel); the player taps the vowels to

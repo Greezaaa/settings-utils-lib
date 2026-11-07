@@ -62,6 +62,13 @@ export const EU: SiteMessages = {
       subtitle: 'bokalak, letra nahasiak eta hitz-sortzailea',
       intro: 'Letra eta hitz joko bat haurrentzat.',
     },
+    'hit-the-note': {
+      name: 'Asmatu nota',
+      summary:
+        'Aurkitu entzuten duzun nota, esan doinua igotzen ala jaisten den, edo abestu nota mikrofonoan. Entrenatu belarria eta ahotsa.',
+      subtitle: 'aurkitu nota, gora ala behera, eta abestu',
+      intro: 'Musika joko bat haurrentzat.',
+    },
     'sliding-puzzle': {
       name: 'Puzzle irristakorra',
       summary: 'Irristatu piezak hutsunera lerroak berriro elkartu arte. Marrazki berria partida bakoitzean.',
@@ -82,7 +89,7 @@ export const EU: SiteMessages = {
     },
   },
 
-  categories: { numbers: 'Zenbakiak', letters: 'Letrak', puzzles: 'Puzzleak' },
+  categories: { numbers: 'Zenbakiak', letters: 'Letrak', music: 'Musika', puzzles: 'Puzzleak' },
 
   home: {
     title: 'Joko adimentsuak, haur adimentsuentzat',
@@ -208,6 +215,7 @@ export const EU: SiteMessages = {
       'Ez kontua, ez datu pertsonalik',
       'Ez iragarkirik, ez jarraipenik',
       'Ez dugu ezer saltzen edo inorekin partekatzen',
+      'Mikrofonoa Abestu moduan jokatzean bakarrik erabiltzen da, eta soinua ez da inoiz grabatzen ezta bidaltzen ere',
     ],
     choiceTitle: 'Zure aukera',
     choiceLabel: 'Gogoratu nire hobespenak gailu honetan',
@@ -417,5 +425,69 @@ export const EU: SiteMessages = {
     allFound: 'Denak aurkitu dituzu!',
     solved: 'Oso ondo!',
     summary: (words, mistakes) => `${words} hitz · ${mistakes} akats`,
+  },
+
+  hitTheNote: {
+    lead: 'Aurkitu entzuten duzun nota, esan bigarren nota altuagoa ala baxuagoa den, edo abestu mikrofonoan.',
+    rule: 'Abestu moduak jokatzen duzun bitartean bakarrik erabiltzen du mikrofonoa: soinua zure gailuan geratzen da eta ez da inoiz grabatzen.',
+    board: 'Musika jokoa',
+    modeGroup: 'Jokoa',
+    modes: {
+      'find-the-note': { name: 'Aurkitu nota', summary: 'Entzun nota bat eta sakatu bere izena' },
+      'higher-or-lower': { name: 'Gora ala behera?', summary: 'Entzun bi nota: bigarrena igotzen ala jaisten da?' },
+      'sing-it': { name: 'Abestu', summary: 'Entzun nota bat eta abestu' },
+    },
+    levelGroup: 'Maila',
+    levels: {
+      easy: { name: 'Erraza', summary: 'Do, Re eta Mi · jauzi handiak · afinatzeko erraza' },
+      normal: { name: 'Normala', summary: 'Dotik Solera · jauzi txikiagoak' },
+      hard: { name: 'Zaila', summary: 'Eskala osoa, Dotik Sira · nota hurbilak' },
+      expert: { name: 'Aditua', summary: '12 notak, diesak ere bai · banan-banan · oso zehatz afinatu' },
+    },
+    instructions: {
+      'find-the-note': 'Zein nota da?',
+      'higher-or-lower': 'Bigarren nota altuagoa ala baxuagoa da?',
+      'sing-it': 'Entzun, gero abestu nota eta eutsi',
+    },
+    progress: (round, total) => `Txanda: ${round}/${total}`,
+    mistakes: (mistakes) => `Akatsak: ${mistakes}`,
+    noteNames: {
+      C: 'Do',
+      'C#': 'Do♯',
+      D: 'Re',
+      'D#': 'Re♯',
+      E: 'Mi',
+      F: 'Fa',
+      'F#': 'Fa♯',
+      G: 'Sol',
+      'G#': 'Sol♯',
+      A: 'La',
+      'A#': 'La♯',
+      B: 'Si',
+    },
+    notes: 'Notak',
+    listen: 'Entzun berriro',
+    listenTwo: 'Entzun biak berriro',
+    directions: {
+      higher: 'Altuagoa',
+      lower: 'Baxuagoa',
+    },
+    startSinging: 'Hasi abesten',
+    micPrivacy:
+      'Zure nabigatzaileak mikrofonoa erabiltzeko baimena eskatuko du. Soinua gailu honetan geratzen da: ez da inoiz grabatzen ezta bidaltzen ere.',
+    micAsking: 'Mikrofonoaren zain…',
+    micDenied: 'Mikrofonoa blokeatuta dago. Baimendu zure nabigatzailean, edo saltatu txanda hau.',
+    micUnavailable: 'Gailu honek ez du mikrofonorik. Txandak salta ditzakezu.',
+    meter: 'Zure ahotsa notatik zein hurbil dagoen',
+    singHints: {
+      done: 'Afinatuta! Oso ondo!',
+      silent: 'Abestu orain: «aaah»…',
+      hold: 'Hori da, eutsi…',
+      low: 'Pixka bat altuago ⬆',
+      high: 'Pixka bat baxuago ⬇',
+    },
+    skip: 'Saltatu',
+    solved: 'Oso ondo!',
+    summary: (right, total) => `${right}/${total} lehen saiakeran`,
   },
 };

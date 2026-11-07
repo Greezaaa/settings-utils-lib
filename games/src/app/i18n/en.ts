@@ -62,6 +62,13 @@ export const EN: SiteMessages = {
       subtitle: 'vowels, mixed letters and word builder',
       intro: 'A letter and word game for kids.',
     },
+    'hit-the-note': {
+      name: 'Hit the note',
+      summary:
+        'Find the note you hear, tell whether the tune goes higher or lower, or sing the note into the microphone. Train your ear and your voice.',
+      subtitle: 'find the note, higher or lower, and sing it',
+      intro: 'A music game for kids.',
+    },
     'sliding-puzzle': {
       name: 'Sliding puzzle',
       summary: 'Slide the tiles into the gap until the lines join up again. A new picture every game.',
@@ -82,7 +89,7 @@ export const EN: SiteMessages = {
     },
   },
 
-  categories: { numbers: 'Numbers', letters: 'Letters', puzzles: 'Puzzles' },
+  categories: { numbers: 'Numbers', letters: 'Letters', music: 'Music', puzzles: 'Puzzles' },
 
   home: {
     title: 'Smart games, for smart kids',
@@ -195,7 +202,12 @@ export const EN: SiteMessages = {
       'Your internet address is only used for a few minutes to stop spam, and is never saved',
     ],
     neverTitle: 'What we never do',
-    never: ['No accounts and no personal data', 'No ads and no tracking', 'Nothing is sold or shared with anyone'],
+    never: [
+      'No accounts and no personal data',
+      'No ads and no tracking',
+      'Nothing is sold or shared with anyone',
+      'The microphone is only used while you play Sing it, and the sound is never recorded or sent',
+    ],
     choiceTitle: 'Your choice',
     choiceLabel: 'Remember my preferences on this device',
     choiceOn: 'Your preferences are saved on this device.',
@@ -403,5 +415,69 @@ export const EN: SiteMessages = {
     allFound: 'You found them all!',
     solved: 'Well done!',
     summary: (words, mistakes) => `${words} words · ${mistakes} ${mistakes === 1 ? 'mistake' : 'mistakes'}`,
+  },
+
+  hitTheNote: {
+    lead: 'Find the note you hear, say whether the second note is higher or lower, or sing it into the microphone.',
+    rule: 'Sing it uses the microphone only while you play: the sound stays on your device and is never recorded.',
+    board: 'Music game',
+    modeGroup: 'Game',
+    modes: {
+      'find-the-note': { name: 'Find the note', summary: 'Hear a note and tap its name' },
+      'higher-or-lower': { name: 'Higher or lower', summary: 'Hear two notes: does the second go up or down?' },
+      'sing-it': { name: 'Sing it', summary: 'Hear a note and sing it back' },
+    },
+    levelGroup: 'Level',
+    levels: {
+      easy: { name: 'Easy', summary: 'C, D and E · big jumps · easy to sing in tune' },
+      normal: { name: 'Normal', summary: 'C to G · smaller jumps' },
+      hard: { name: 'Hard', summary: 'The whole scale, C to B · close notes' },
+      expert: { name: 'Expert', summary: 'All 12 notes, sharps too · one step apart · sing very precisely' },
+    },
+    instructions: {
+      'find-the-note': 'Which note is it?',
+      'higher-or-lower': 'Is the second note higher or lower?',
+      'sing-it': 'Listen, then sing the note and hold it',
+    },
+    progress: (round, total) => `Round ${round} of ${total}`,
+    mistakes: (mistakes) => `Mistakes ${mistakes}`,
+    noteNames: {
+      C: 'C',
+      'C#': 'C♯',
+      D: 'D',
+      'D#': 'D♯',
+      E: 'E',
+      F: 'F',
+      'F#': 'F♯',
+      G: 'G',
+      'G#': 'G♯',
+      A: 'A',
+      'A#': 'A♯',
+      B: 'B',
+    },
+    notes: 'Notes',
+    listen: 'Listen again',
+    listenTwo: 'Listen to both again',
+    directions: {
+      higher: 'Higher',
+      lower: 'Lower',
+    },
+    startSinging: 'Start singing',
+    micPrivacy:
+      'Your browser will ask to use the microphone. The sound stays on this device: it is never recorded or sent.',
+    micAsking: 'Waiting for the microphone…',
+    micDenied: 'The microphone is blocked. Allow it in your browser, or skip this round.',
+    micUnavailable: 'No microphone found on this device. You can skip the rounds.',
+    meter: 'How close your voice is to the note',
+    singHints: {
+      done: 'In tune! Well done!',
+      silent: 'Sing now: “aaah”…',
+      hold: 'That’s it, hold it…',
+      low: 'A little higher ⬆',
+      high: 'A little lower ⬇',
+    },
+    skip: 'Skip',
+    solved: 'Well done!',
+    summary: (right, total) => `${right} of ${total} right at the first try`,
   },
 };

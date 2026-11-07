@@ -7,6 +7,7 @@ import { z } from 'zod';
 export const GAME_SLUGS = [
   'math-games',
   'letter-games',
+  'hit-the-note',
   'sliding-puzzle',
   'turn-picture',
   'place-pieces',

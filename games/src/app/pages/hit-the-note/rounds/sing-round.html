@@ -1,0 +1,29 @@
+<p class="target" [attr.data-note]="note().id">{{ t().hitTheNote.noteNames[note().id] }}</p>
+<button type="button" class="button button-secondary listen" (click)="listen()">🔊 {{ t().hitTheNote.listen }}</button>
+
+@switch (listener.state()) {
+  @case ('listening') {
+    <div class="meter" role="img" [attr.aria-label]="t().hitTheNote.meter">
+      <span class="band" [style.width.%]="band()"></span>
+      <span class="needle" [class.is-silent]="cents() === null" [class.is-in-tune]="isInTune()" [style.left.%]="needle()"></span>
+    </div>
+    <div class="hold" aria-hidden="true"><span [style.width.%]="held() * 100"></span></div>
+    <p class="hint" [class.is-good]="hint() === 'done' || hint() === 'hold'" aria-live="polite">
+      {{ t().hitTheNote.singHints[hint()] }}
+    </p>
+  }
+  @case ('asking') {
+    <p class="hint">{{ t().hitTheNote.micAsking }}</p>
+  }
+  @case ('denied') {
+    <p class="hint error">{{ t().hitTheNote.micDenied }}</p>
+  }
+  @case ('unavailable') {
+    <p class="hint error">{{ t().hitTheNote.micUnavailable }}</p>
+  }
+  @default {
+    <button type="button" class="button" (click)="startSinging()">🎤 {{ t().hitTheNote.startSinging }}</button>
+    <p class="muted small">{{ t().hitTheNote.micPrivacy }}</p>
+  }
+}
+<button type="button" class="button button-secondary button-small" [disabled]="isDone()" (click)="skip()">{{ t().hitTheNote.skip }}</button>
