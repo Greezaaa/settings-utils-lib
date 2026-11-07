@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-07
+
 ### Added
 - `actions` option for `SuNotificationController` notifications (`SuNotificationAction`: `label`, `onClick`, `dismiss`), kept on each notification for your markup to render
 - `slideFrom` option and store for `SuNotificationController` (`'auto'` by default): the direction notifications slide in from
