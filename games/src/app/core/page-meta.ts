@@ -1,6 +1,8 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, TitleStrategy } from '@angular/router';
+import { ES } from '../i18n/es';
+import { SiteMessages } from '../i18n/site-messages';
 import { SITE_PREVIEW_IMAGE, SITE_PREVIEW_IMAGE_URL, SITE_URL } from './links';
 
 /** Search and link-preview data of a page, set as route `data` */
@@ -12,8 +14,14 @@ export interface PageMeta {
 
 export const SITE_NAME = 'su-labs games';
 
-const SITE_DESCRIPTION =
-  'Short, free games for kids that train quick thinking. No sign-up, made for tablets, phones and computers.';
+/**
+ * Language of search results and link previews (page titles, descriptions, preview image text).
+ * Spanish for now, as most players are Spanish kids; the site itself still opens in each visitor's language.
+ * The preview image (public/og-image.png) is drawn in this language too.
+ */
+export const PREVIEW_MESSAGES: SiteMessages = ES;
+
+const SITE_DESCRIPTION = PREVIEW_MESSAGES.seo.siteDescription;
 
 /** Route data for the home page and any page without its own description */
 export const SITE_META: PageMeta = { description: SITE_DESCRIPTION };
@@ -45,6 +53,7 @@ export class PageMetaStrategy extends TitleStrategy {
     const tags: Record<string, string> = {
       description,
       'og:type': 'website',
+      'og:locale': PREVIEW_MESSAGES.seo.locale,
       'og:site_name': SITE_NAME,
       'og:title': title,
       'og:description': description,
@@ -53,12 +62,12 @@ export class PageMetaStrategy extends TitleStrategy {
       'og:image:width': SITE_PREVIEW_IMAGE.width,
       'og:image:height': SITE_PREVIEW_IMAGE.height,
       'og:image:type': SITE_PREVIEW_IMAGE.type,
-      'og:image:alt': SITE_PREVIEW_IMAGE.alt,
+      'og:image:alt': PREVIEW_MESSAGES.seo.previewImageAlt,
       'twitter:card': 'summary_large_image',
       'twitter:title': title,
       'twitter:description': description,
       'twitter:image': SITE_PREVIEW_IMAGE_URL,
-      'twitter:image:alt': SITE_PREVIEW_IMAGE.alt,
+      'twitter:image:alt': PREVIEW_MESSAGES.seo.previewImageAlt,
     };
     for (const [key, content] of Object.entries(tags)) {
       const attribute = key.startsWith('og:') ? 'property' : 'name';

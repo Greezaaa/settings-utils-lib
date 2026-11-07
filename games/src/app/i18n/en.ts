@@ -18,6 +18,17 @@ export const EN: SiteMessages = {
     projectLinks: 'Project links',
   },
 
+  seo: {
+    locale: 'en_US',
+    siteDescription:
+      'Short, free games for kids that train quick thinking. No sign-up, made for tablets, phones and computers.',
+    mathGamesSubtitle: 'true or false, number pad and missing signs',
+    mathGamesIntro: 'A math game for kids.',
+    notFoundTitle: 'Page not found',
+    notFoundDescription: 'This page doesn’t exist.',
+    previewImageAlt: 'su-labs games: Smart games, for smart kids',
+  },
+
   games: {
     'math-games': {
       name: 'Math games',
@@ -27,7 +38,7 @@ export const EN: SiteMessages = {
   },
 
   home: {
-    title: 'Smart games',
+    title: 'Smart games, for smart kids',
     lead: 'Short games that train quick thinking.',
     rule: 'Free, no sign-up, and they work on phones and tablets.',
     games: 'Games',

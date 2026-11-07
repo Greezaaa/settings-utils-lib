@@ -18,6 +18,17 @@ export const ES: SiteMessages = {
     projectLinks: 'Enlaces del proyecto',
   },
 
+  seo: {
+    locale: 'es_ES',
+    siteDescription:
+      'Juegos cortos y gratuitos para que los niños piensen rápido. Sin registro, para tabletas, móviles y ordenadores.',
+    mathGamesSubtitle: 'verdadero o falso, teclado numérico y signos que faltan',
+    mathGamesIntro: 'Un juego de matemáticas para niños.',
+    notFoundTitle: 'Página no encontrada',
+    notFoundDescription: 'Esta página no existe.',
+    previewImageAlt: 'su-labs games: Juegos inteligentes para mentes despiertas',
+  },
+
   games: {
     'math-games': {
       name: 'Juegos de matemáticas',
@@ -27,7 +38,7 @@ export const ES: SiteMessages = {
   },
 
   home: {
-    title: 'Juegos inteligentes',
+    title: 'Juegos inteligentes para mentes despiertas',
     lead: 'Juegos cortos para pensar rápido.',
     rule: 'Gratis, sin registro, y funcionan en móviles y tabletas.',
     games: 'Juegos',

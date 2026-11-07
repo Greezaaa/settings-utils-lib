@@ -18,6 +18,17 @@ export const EU: SiteMessages = {
     projectLinks: 'Proiektuaren estekak',
   },
 
+  seo: {
+    locale: 'eu_ES',
+    siteDescription:
+      'Haurrek azkar pentsatzeko joko labur eta doakoak. Izena eman gabe, tableta, mugikor eta ordenagailuetarako.',
+    mathGamesSubtitle: 'egia ala gezurra, zenbaki-teklatua eta falta diren zeinuak',
+    mathGamesIntro: 'Haurrentzako matematika jokoa.',
+    notFoundTitle: 'Orria ez da aurkitu',
+    notFoundDescription: 'Orri hau ez dago.',
+    previewImageAlt: 'su-labs games: Joko adimentsuak, haur adimentsuentzat',
+  },
+
   games: {
     'math-games': {
       name: 'Matematika jokoak',
@@ -27,7 +38,7 @@ export const EU: SiteMessages = {
   },
 
   home: {
-    title: 'Joko adimentsuak',
+    title: 'Joko adimentsuak, haur adimentsuentzat',
     lead: 'Azkar pentsatzeko joko laburrak.',
     rule: 'Doan, izena eman gabe, eta mugikorretan eta tabletetan dabiltza.',
     games: 'Jokoak',

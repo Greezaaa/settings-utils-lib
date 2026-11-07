@@ -34,6 +34,20 @@ export interface SiteMessages {
     readonly projectLinks: string;
   };
 
+  /** Titles, descriptions and image text for search results and link previews */
+  readonly seo: {
+    /** Open Graph locale, e.g. `es_ES` */
+    readonly locale: string;
+    readonly siteDescription: string;
+    /** Follows the game's name in its page title */
+    readonly mathGamesSubtitle: string;
+    /** Comes before the game's summary in its description */
+    readonly mathGamesIntro: string;
+    readonly notFoundTitle: string;
+    readonly notFoundDescription: string;
+    readonly previewImageAlt: string;
+  };
+
   /** Name and description of each game */
   readonly games: Readonly<Record<GameSlug, { readonly name: string; readonly summary: string }>>;
 
