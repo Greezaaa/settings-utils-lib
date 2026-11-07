@@ -44,5 +44,5 @@ Thumbs.db
 # Vitest cache/results
 .vite/
 **/.vite/
-# Claude Code session worktrees
-/.claude/worktrees/
+# Claude Code keeps its local files (previews, worktrees) out of the project
+/.claude/
