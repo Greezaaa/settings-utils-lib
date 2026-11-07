@@ -24,7 +24,8 @@
     "deploy:web": "npm run build:web && rsync -a --delete dist/web/browser/ su-labs-server:/home/ubuntu/su-labs-site/ && echo \"Deployed to https://su-labs.dev/\"",
     "start:games": "ng serve games --port 4310",
     "build:games": "ng build games && node scripts/postbuild-site.mjs games",
-    "deploy:games": "npm run build:games && rsync -a --delete dist/games/browser/ su-labs-server:/home/ubuntu/su-labs-games/ && echo \"Deployed to https://games.su-labs.dev/\""
+    "deploy:games": "npm run build:games && rsync -a --delete dist/games/browser/ su-labs-server:/home/ubuntu/su-labs-games/ && echo \"Deployed to https://games.su-labs.dev/\"",
+    "deploy": "npm run deploy:web && npm run deploy:games"
   },
   "private": false,
   "dependencies": {

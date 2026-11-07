@@ -288,7 +288,7 @@ npm run deploy:web
 
 This builds the site and uploads `dist/web/browser` with `rsync` to the server's `su-labs-site` nginx folder. It needs an SSH host named `su-labs-server` in `~/.ssh/config` (server address, user and key); the address and key are kept out of the repository. Changelogs are read live from GitHub, so a release only needs its `CHANGELOG.md` pushed.
 
-The games in `games/` are a second site, hosted at [games.su-labs.dev](https://games.su-labs.dev/), with the same commands: `npm run start:games` (port 4310) and `npm run deploy:games`, which uploads `dist/games/browser` to the server's `su-labs-games` folder. Both sites share theme and text size through cookies on `su-labs.dev`.
+The games in `games/` are a second site, hosted at [games.su-labs.dev](https://games.su-labs.dev/), with the same commands: `npm run start:games` (port 4310) and `npm run deploy:games`, which uploads `dist/games/browser` to the server's `su-labs-games` folder. `npm run deploy` deploys both sites, one after the other. Both sites share theme and text size through cookies on `su-labs.dev`.
 
 On the server, each site is an `nginx:alpine` Docker container (`su-labs-site` on port 3000, `su-labs-games` on port 3001) that mounts its folder as `/usr/share/nginx/html` and its config from [`deploy/nginx/`](deploy/nginx/) as `/etc/nginx/conf.d/default.conf`. A Cloudflare Tunnel forwards each hostname to its port and handles HTTPS.
 

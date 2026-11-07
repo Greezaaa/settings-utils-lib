@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-07
+
 ### Added
 - `SuStorage`: the storage interface the utilities save to (`getItem`, `setItem`, `removeItem`); `localStorage` fits as is
 - `createSuCookieStorage({ domain, maxAgeDays })`: saves values in cookies so sites on the same parent domain share them; the domain is only used when the page is on it, so `localhost` keeps working

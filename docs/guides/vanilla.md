@@ -22,7 +22,7 @@ Load the package as an ES module directly in the browser:
 
 ```html
 <script type="module">
-  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.0.0/theme';
+  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.1.0/theme';
 </script>
 ```
 
@@ -61,7 +61,7 @@ theme.init({ defaultTheme: 'system' });
 <p>Current theme: <span id="current-theme"></span></p>
 
 <script type="module">
-  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.0.0/theme';
+  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.1.0/theme';
 
   const theme = new SuThemeController();
   theme.init();
@@ -108,7 +108,7 @@ Text size controls that stay within limits and remember the user's choice:
 <button type="button" id="bigger">A+</button>
 
 <script type="module">
-  import { SuFontSizeController } from 'https://esm.sh/@su-labs/core@1.0.0/font-size';
+  import { SuFontSizeController } from 'https://esm.sh/@su-labs/core@1.1.0/font-size';
 
   const fontSize = new SuFontSizeController();
   fontSize.init();
@@ -144,7 +144,7 @@ The controller keeps the list of notifications and closes them on time; you rend
 <button type="button" id="save">Save</button>
 
 <script type="module">
-  import { SuNotificationController } from 'https://esm.sh/@su-labs/core@1.0.0/notifications';
+  import { SuNotificationController } from 'https://esm.sh/@su-labs/core@1.1.0/notifications';
 
   const notifications = new SuNotificationController();
   const container = document.querySelector('#notifications');
@@ -189,7 +189,7 @@ Highlight the navigation link of the section in the middle of the screen:
 <section id="about">...</section>
 
 <script type="module">
-  import { SuScrollSpyController } from 'https://esm.sh/@su-labs/core@1.0.0/scroll-spy';
+  import { SuScrollSpyController } from 'https://esm.sh/@su-labs/core@1.1.0/scroll-spy';
 
   const scrollSpy = new SuScrollSpyController();
   document.querySelectorAll('section[id]').forEach((section) => scrollSpy.observe(section, section.id));
@@ -210,7 +210,7 @@ Greet returning visitors:
 <p id="welcome"></p>
 
 <script type="module">
-  import { SuVisitTrackerController } from 'https://esm.sh/@su-labs/core@1.0.0/visit-tracker';
+  import { SuVisitTrackerController } from 'https://esm.sh/@su-labs/core@1.1.0/visit-tracker';
 
   const visits = new SuVisitTrackerController();
   visits.init();

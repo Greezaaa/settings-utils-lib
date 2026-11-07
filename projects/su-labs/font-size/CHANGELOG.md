@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [22.2.0] - 2026-11-07
+
 ### Added
 - `storage` option: where the size is saved (default: `localStorage`); pass `createSuCookieStorage({ domain })` from `@su-labs/core` to share it across subdomains
 
 ### Changed
+- Requires `@su-labs/core` 1.1.0 or later
 - Package homepage now points to the website with a live demo
 
 ## [22.1.0] - 2026-11-05
