@@ -46,3 +46,9 @@ Thumbs.db
 **/.vite/
 # Claude Code keeps its local files (previews, worktrees) out of the project
 /.claude/
+
+# api/ (NestJS): its own dependencies, build and the server's secrets
+/api/node_modules
+/api/dist
+/api/coverage
+/api/.env

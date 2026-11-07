@@ -1,0 +1,90 @@
+import { randomUUID } from 'node:crypto';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import type { Env } from '../config/env.js';
+import { cleanImage } from './clean-image.js';
+import { Suggestion } from './suggestion.entity.js';
+import {
+  StatusInput,
+  SuggestionInput,
+  SuggestionStatus,
+} from './suggestions.schema.js';
+
+@Injectable()
+export class SuggestionsService implements OnModuleInit {
+  private readonly uploadsDir: string;
+
+  constructor(
+    @InjectRepository(Suggestion)
+    private readonly suggestions: Repository<Suggestion>,
+    config: ConfigService<Env, true>,
+  ) {
+    this.uploadsDir = config.get('UPLOADS_DIR', { infer: true });
+  }
+
+  async onModuleInit(): Promise<void> {
+    await mkdir(this.uploadsDir, { recursive: true });
+  }
+
+  /** Saves a suggestion and its picture, cleaned of metadata */
+  async add(
+    { category, text, language }: SuggestionInput,
+    image?: Buffer,
+  ): Promise<void> {
+    let imageName: string | null = null;
+    if (image) {
+      imageName = `${randomUUID()}.webp`;
+      await writeFile(
+        join(this.uploadsDir, imageName),
+        await cleanImage(image),
+      );
+    }
+    await this.suggestions.insert({
+      category,
+      text,
+      language,
+      image: imageName,
+    });
+  }
+
+  list(status: SuggestionStatus): Promise<Suggestion[]> {
+    return this.suggestions.find({
+      where: { status },
+      order: { created: 'DESC' },
+    });
+  }
+
+  async image(id: string): Promise<Buffer> {
+    const suggestion = await this.find(id);
+    if (!suggestion.image) {
+      throw new NotFoundException();
+    }
+    return readFile(join(this.uploadsDir, suggestion.image));
+  }
+
+  async setStatus(id: string, { status }: StatusInput): Promise<void> {
+    await this.find(id);
+    await this.suggestions.update({ id }, { status });
+  }
+
+  /** Deletes a suggestion and its picture for good */
+  async remove(id: string): Promise<void> {
+    const suggestion = await this.find(id);
+    if (suggestion.image) {
+      await rm(join(this.uploadsDir, suggestion.image), { force: true });
+    }
+    await this.suggestions.delete({ id });
+  }
+
+  private async find(id: string): Promise<Suggestion> {
+    const suggestion = await this.suggestions.findOneBy({ id });
+    if (!suggestion) {
+      throw new NotFoundException();
+    }
+    return suggestion;
+  }
+}

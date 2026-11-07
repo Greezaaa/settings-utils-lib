@@ -12,8 +12,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    // .claude/ holds local tooling, including git worktrees of other sessions
-    exclude: [...configDefaults.exclude, '.claude/**'],
+    // .claude/ holds local tooling, including git worktrees of other sessions; api/ runs its own tests (npm run test:api)
+    exclude: [...configDefaults.exclude, '.claude/**', 'api/**'],
     setupFiles: resolve(__dirname, 'vitest.setup.ts'),
     coverage: {
       reporter: ['text', 'html'],
