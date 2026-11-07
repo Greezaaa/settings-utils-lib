@@ -8,6 +8,7 @@ export type {
   SuNotification,
   SuNotificationAction,
   SuNotificationConfig,
+  SuNotificationMessagePart,
   SuNotificationOptions,
   SuNotificationPosition,
   SuNotificationSlide,

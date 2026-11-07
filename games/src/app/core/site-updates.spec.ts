@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { changesIn, formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, SITE_UPDATES, SiteUpdate, updatesSince } from './site-updates';
+import { changesIn, formatMoment, latestChanges, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, SITE_UPDATES, SiteUpdate, updatesSince } from './site-updates';
 
-const text = (word: string) => ({ en: word, es: word, eu: word });
+const text = (word: string) => ({ en: word, es: word, eu: word, uk: word });
 const UPDATES: readonly SiteUpdate[] = [
   { version: 1, published: '2026-01-01T10:00:00Z', privacy: true, changes: [{ text: text('One') }] },
   {
@@ -20,6 +20,11 @@ describe('site updates', () => {
 
   it('gathers their changes, oldest first', () => {
     expect(changesIn(UPDATES).map((change) => change.text.en)).toEqual(['One', 'Two', 'Three']);
+  });
+
+  it('takes the latest changes, oldest first', () => {
+    expect(latestChanges(2, UPDATES).map((change) => change.text.en)).toEqual(['Two', 'Three']);
+    expect(latestChanges(10, UPDATES)).toHaveLength(3);
   });
 
   it('formats a moment as a local date and time', () => {

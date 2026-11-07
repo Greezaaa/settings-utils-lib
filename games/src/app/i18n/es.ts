@@ -2,6 +2,7 @@ import { SiteMessages } from './site-messages';
 
 export const ES: SiteMessages = {
   languageName: 'Español',
+  languageCode: 'ES',
 
   site: {
     skipToContent: 'Saltar al contenido',
@@ -28,9 +29,9 @@ export const ES: SiteMessages = {
     privacyNotice:
       'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
     whatsNew: 'Novedades desde tu última visita:',
+    latestChanges: 'Últimas novedades:',
     updatedAt: (moment) => `Actualizado: ${moment}`,
     lastUpdate: (moment) => `Última actualización: ${moment}`,
-    openGame: (name) => `${name} →`,
     noticeOk: 'Vale',
     privacySettings: 'Ajustes de privacidad',
     privacyLink: 'Privacidad',
@@ -49,7 +50,7 @@ export const ES: SiteMessages = {
     'math-games': {
       name: 'Juegos de matemáticas',
       summary:
-        'Verdadero o falso, marca la respuesta o encuentra los signos que faltan. Con o sin tiempo, desde sumas hasta 20 hasta divisiones de tres cifras. En inglés, español y euskera.',
+        'Verdadero o falso, marca la respuesta o encuentra los signos que faltan. Con o sin tiempo, desde sumas hasta 20 hasta divisiones de tres cifras. En inglés, español, euskera y ucraniano.',
       subtitle: 'verdadero o falso, teclado numérico y signos que faltan',
       intro: 'Un juego de matemáticas para niños.',
     },

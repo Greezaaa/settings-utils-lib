@@ -88,42 +88,6 @@
 		--_border: var(--su-notification-custom-border-color, #9c27b0);
 	}
 
-	.icon-container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: var(--su-notification-icon-width, 24px);
-		height: var(--su-notification-icon-height, var(--su-notification-icon-width, 24px));
-		color: var(--su-notification-icon-color, currentColor);
-
-		.icon {
-			width: 100%;
-			height: 100%;
-		}
-	}
-
-	.content {
-		display: grid;
-		flex: 1;
-		gap: 0.75rem;
-	}
-
-	.actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-
-	.action {
-		background: none;
-		border: 1px solid var(--su-notification-action-border-color, currentColor);
-		border-radius: 6px;
-		color: inherit;
-		cursor: pointer;
-		font: inherit;
-		padding: 0.25rem 0.75rem;
-	}
-
 	.close {
 		--_size: var(--su-notification-close-btn-size, 20px);
 		position: absolute;
@@ -148,6 +112,55 @@
 			color: var(--su-notification-close-btn-hover-color, #fff);
 		}
 	}
+}
+
+// Not nested under .notification: the styles are scoped to this component anyway, and shorter selectors keep
+// them under the 4 kB component style budget
+.icon-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--su-notification-icon-width, 24px);
+	height: var(--su-notification-icon-height, var(--su-notification-icon-width, 24px));
+	color: var(--su-notification-icon-color, currentColor);
+}
+
+.icon {
+	width: 100%;
+	height: 100%;
+}
+
+.content {
+	display: grid;
+	flex: 1;
+	gap: 0.75rem;
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+// The buttons under the message, and links inside it
+.action,
+.link {
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+}
+
+.action {
+	border: 1px solid var(--su-notification-action-border-color, currentColor);
+	border-radius: 6px;
+	padding: 0.25rem 0.75rem;
+}
+
+.link {
+	border: 0;
+	padding: 0;
+	text-decoration: underline;
 }
 
 // Slide in from the side the notifications sit on, and back out when closed (Angular's animate.enter/leave)

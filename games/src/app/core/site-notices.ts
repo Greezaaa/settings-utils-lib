@@ -1,22 +1,26 @@
 import { afterNextRender, computed, effect, inject, Injectable, Injector, Signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { SuNotificationAction, SuNotificationService } from '@su-labs/notifications';
+import { SuNotificationAction, SuNotificationMessagePart, SuNotificationService } from '@su-labs/notifications';
 import { SiteLanguage } from '../i18n/site-language';
 import { readStored, writeStored } from './site-storage';
-import { changesIn, formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, updatesSince } from './site-updates';
+import { changesIn, formatMoment, latestChanges, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, updatesSince } from './site-updates';
 
 /** The site version the visitor last saw */
 const LAST_SEEN_STORAGE = 'last-seen-version';
 /** The version whose privacy notice the visitor closed */
 const PRIVACY_SEEN_STORAGE = 'privacy-notice-version';
+/** How many of the latest changes a first-time visitor sees */
+const FIRST_VISIT_CHANGES = 10;
 /** Before versions, closing the privacy notice was saved as `true`: that visitor has seen version 1 */
 const OLD_PRIVACY_STORAGE = 'privacy-notice-dismissed';
 
 /** What a notice shows; it is rebuilt when the language changes */
 interface NoticeContent {
-  readonly message: string;
+  readonly message: string | readonly SuNotificationMessagePart[];
   readonly actions: SuNotificationAction[];
 }
+
+const textOf = (part: SuNotificationMessagePart): string => (typeof part === 'string' ? part : part.label);
 
 const readVersion = (name: string): number | null => {
   const value = readStored(name);
@@ -25,14 +29,17 @@ const readVersion = (name: string): number | null => {
 
 /** Notices are compared by their text and button labels to tell when the language changed */
 const signature = ({ message, actions }: NoticeContent): string =>
-  [message, ...actions.map(({ label }) => label)].join('\n');
+  [typeof message === 'string' ? message : message.map(textOf).join(''), ...actions.map(({ label }) => label)].join(
+    '\n',
+  );
 
 /**
  * The two notices shown when a visitor arrives, with @su-labs/notifications, each until it is closed:
  * - the privacy notice, on a first visit and again whenever an update changes what the site saves, with
  *   "OK" and a button to the privacy page;
- * - "New since your last visit", listing the big changes (site-updates.ts) since the version they saw, when
- *   the site was updated, and a button for each new game.
+ * - "New since your last visit", listing the big changes (site-updates.ts) since the version they saw (on a
+ *   first visit, "Latest updates" with the last few changes), when
+ *   the site was updated, where each change about a game is a link to it.
  * Closing a notice is what marks it as seen. Both follow the site language while they are open.
  */
 @Injectable({ providedIn: 'root' })
@@ -68,32 +75,25 @@ export class SiteNotices {
       );
     }
 
-    if (lastSeen === null) {
-      // A first visit: everything is new, so there is nothing to list
-      writeStored(LAST_SEEN_STORAGE, LATEST_VERSION);
-      return;
-    }
-    const changes = changesIn(updatesSince(lastSeen));
+    // A first visit lists the latest changes, to show the site is alive; a return visit, what is new since then
+    const isFirstVisit = lastSeen === null;
+    const changes = isFirstVisit ? latestChanges(FIRST_VISIT_CHANGES) : changesIn(updatesSince(lastSeen));
     if (changes.length > 0) {
       this.open(
         computed(() => {
           const language = this.language.language();
-          const { site, games } = this.language.messages();
-          const lines = changes.map((change) => `• ${change.text[language]}`);
+          const { site } = this.language.messages();
           const updated = site.updatedAt(formatMoment(LATEST_PUBLISHED, language));
+          const lines = changes.flatMap(({ text, game }): SuNotificationMessagePart[] => [
+            '\n• ',
+            game
+              ? { label: text[language], onClick: () => void this.router.navigateByUrl(`/${game}`) }
+              : text[language],
+          ]);
           return {
             // The update time comes first: it is drawn small and muted (see .whats-new in styles.scss)
-            message: [updated, site.whatsNew, ...lines].join('\n'),
-            actions: changes.flatMap(({ game }) =>
-              game
-                ? [
-                    {
-                      label: site.openGame(games[game].name),
-                      onClick: () => void this.router.navigateByUrl(`/${game}`),
-                    },
-                  ]
-                : [],
-            ),
+            message: [`${updated}\n${isFirstVisit ? site.latestChanges : site.whatsNew}`, ...lines],
+            actions: [],
           };
         }),
         () => writeStored(LAST_SEEN_STORAGE, LATEST_VERSION),

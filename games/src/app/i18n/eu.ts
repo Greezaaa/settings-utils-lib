@@ -2,6 +2,7 @@ import { SiteMessages } from './site-messages';
 
 export const EU: SiteMessages = {
   languageName: 'Euskara',
+  languageCode: 'EU',
 
   site: {
     skipToContent: 'Joan edukira',
@@ -28,9 +29,9 @@ export const EU: SiteMessages = {
     privacyNotice:
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
     whatsNew: 'Zure azken bisitatik dauden berritasunak:',
+    latestChanges: 'Azken berritasunak:',
     updatedAt: (moment) => `Eguneratua: ${moment}`,
     lastUpdate: (moment) => `Azken eguneratzea: ${moment}`,
-    openGame: (name) => `${name} →`,
     noticeOk: 'Ados',
     privacySettings: 'Pribatutasun-ezarpenak',
     privacyLink: 'Pribatutasuna',
@@ -49,7 +50,7 @@ export const EU: SiteMessages = {
     'math-games': {
       name: 'Matematika jokoak',
       summary:
-        'Egia ala gezurra, sakatu erantzuna edo aurkitu falta diren zeinuak. Denborarekin edo gabe, 20 arteko batuketetatik hiru zifrako zatiketetara. Ingelesez, gaztelaniaz eta euskaraz.',
+        'Egia ala gezurra, sakatu erantzuna edo aurkitu falta diren zeinuak. Denborarekin edo gabe, 20 arteko batuketetatik hiru zifrako zatiketetara. Ingelesez, gaztelaniaz, euskaraz eta ukraineraz.',
       subtitle: 'egia ala gezurra, zenbaki-teklatua eta falta diren zeinuak',
       intro: 'Haurrentzako matematika jokoa.',
     },

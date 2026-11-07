@@ -2,6 +2,7 @@ import { SiteMessages } from './site-messages';
 
 export const EN: SiteMessages = {
   languageName: 'English',
+  languageCode: 'EN',
 
   site: {
     skipToContent: 'Skip to content',
@@ -28,9 +29,9 @@ export const EN: SiteMessages = {
     privacyNotice:
       'We use cookies only to save your preferences, like theme, text size and language. We never sell or share your data with anyone. We love your privacy!',
     whatsNew: 'New since your last visit:',
+    latestChanges: 'Latest updates:',
     updatedAt: (moment) => `Updated ${moment}`,
     lastUpdate: (moment) => `Last update: ${moment}`,
-    openGame: (name) => `${name} →`,
     noticeOk: 'OK',
     privacySettings: 'Privacy settings',
     privacyLink: 'Privacy',
@@ -49,7 +50,7 @@ export const EN: SiteMessages = {
     'math-games': {
       name: 'Math games',
       summary:
-        'True or false, tap the answer, or find the missing signs. With or without a timer, from sums up to 20 to three-digit division. In English, Spanish and Basque.',
+        'True or false, tap the answer, or find the missing signs. With or without a timer, from sums up to 20 to three-digit division. In English, Spanish, Basque and Ukrainian.',
       subtitle: 'true or false, number pad and missing signs',
       intro: 'A math game for kids.',
     },

@@ -221,7 +221,7 @@ type NotificationPosition =
 
 interface NotificationConfig {
   type: NotificationType;
-  message: string;
+  message: string | (string | NotificationAction)[]; // Text, or text and links
   duration?: number;        // Default: 3000ms
   autoClose?: boolean;      // Default: true
   cssClass?: string;        // Custom CSS class
@@ -251,6 +251,19 @@ this.notifications.show({
   ],
 });
 ```
+
+### Links in the message
+
+Pass `message` as a list to make part of it a link. Text pieces show as they are; each `{ label, onClick }` piece is a link that runs `onClick`, then closes the notification unless it sets `dismiss: false`:
+
+```typescript
+this.notifications.show({
+  type: 'info',
+  message: ['New: ', { label: 'Sliding puzzle', onClick: () => this.router.navigateByUrl('/sliding-puzzle') }],
+});
+```
+
+Restyle the links with the `.link` class inside `su-lib-notifications`.
 
 ## Configuration Options
 

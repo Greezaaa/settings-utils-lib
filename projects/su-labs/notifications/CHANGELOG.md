@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [22.3.0] - 2026-11-07
+
+### Added
+- Links inside the message: pass `message` as a list of text and links (`{ label, onClick, dismiss }`), each link closing the notification unless `dismiss: false`
+
+### Changed
+- Depends on exactly `@su-labs/core` 1.3.0
+
 ## [22.2.0] - 2026-11-07
 
 ### Added

@@ -7,7 +7,7 @@ import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
 import { GameThemeId } from '../core/game-themes';
 
-export type LanguageId = 'en' | 'es' | 'eu';
+export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
 
 /** A setting's name on its button, and a longer description shown on hover or below it */
 export interface OptionText {
@@ -32,6 +32,8 @@ export interface GameText {
 export interface SiteMessages {
   /** The language's own name, e.g. `Español` */
   readonly languageName: string;
+  /** Its short code on the language picker, e.g. `ES` */
+  readonly languageCode: string;
 
   /** Header, settings and footer */
   readonly site: {
@@ -55,11 +57,12 @@ export interface SiteMessages {
     readonly privacyNotice: string;
     /** Heads the list of big changes since the visitor's last visit */
     readonly whatsNew: string;
+    /** Heading of the latest changes, shown on a first visit */
+    readonly latestChanges: string;
     /** When the site was last updated, in the visitor's local time */
     readonly updatedAt: (moment: string) => string;
     readonly lastUpdate: (moment: string) => string;
     /** Button in "What's new" that opens a new game */
-    readonly openGame: (name: string) => string;
     readonly noticeOk: string;
     readonly privacySettings: string;
     readonly privacyLink: string;

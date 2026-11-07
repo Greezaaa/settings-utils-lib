@@ -26,6 +26,12 @@ export interface SuNotificationAction {
 }
 
 /**
+ * A piece of a notification's message: plain text, or a link that runs `onClick` when pressed
+ * (and closes the notification unless `dismiss: false`).
+ */
+export type SuNotificationMessagePart = string | SuNotificationAction;
+
+/**
  * Options for configuring a notification.
  */
 export interface SuNotificationOptions {
@@ -35,9 +41,10 @@ export interface SuNotificationOptions {
   type: SuNotificationType;
 
   /**
-   * The main message text to display in the notification.
+   * The main message text to display in the notification, or its pieces in order: text and links,
+   * e.g. `['Saved. ', { label: 'Open it', onClick: open }]`.
    */
-  message: string;
+  message: string | readonly SuNotificationMessagePart[];
 
   /**
    * Duration in milliseconds before the notification automatically closes.

@@ -52,7 +52,15 @@
 		</div>
 
 		<div class="content">
-			<span class="message">{{ notification.message }}</span>
+			<span class="message">
+				@if (typeof notification.message === 'string') {
+					{{ notification.message }}
+				} @else {
+					@for (part of notification.message; track $index) {
+						@if (typeof part === 'string') {{{ part }}} @else {<button class="link" type="button" (click)="runAction(notification.id, part)">{{ part.label }}</button>}
+					}
+				}
+			</span>
 
 			@if (notification.actions?.length) {
 			<div class="actions">

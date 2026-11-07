@@ -37,6 +37,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           en: 'Math games: true or false, number pad and find the signs',
           es: 'Juegos de matemáticas: verdadero o falso, teclado numérico y encuentra los signos',
           eu: 'Matematika jokoak: egia ala gezurra, zenbaki-teklatua eta aurkitu zeinuak',
+          uk: 'Математичні ігри: правда чи неправда, цифрова клавіатура й знайди знаки',
         },
       },
     ],
@@ -51,11 +52,17 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           en: 'New game: Sliding puzzle, with lines or a drawing',
           es: 'Nuevo juego: Puzle deslizante, con líneas o con un dibujo',
           eu: 'Joko berria: Puzzle irristakorra, lerroekin edo marrazki batekin',
+          uk: 'Нова гра: П’ятнашки, з лініями або малюнком',
         },
       },
       {
         game: 'turn-picture',
-        text: { en: 'New game: Turn the picture', es: 'Nuevo juego: Gira la imagen', eu: 'Joko berria: Biratu irudia' },
+        text: {
+          en: 'New game: Turn the picture',
+          es: 'Nuevo juego: Gira la imagen',
+          eu: 'Joko berria: Biratu irudia',
+          uk: 'Нова гра: Поверни малюнок',
+        },
       },
       {
         game: 'place-pieces',
@@ -63,6 +70,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           en: 'New game: Place the pieces',
           es: 'Nuevo juego: Coloca las piezas',
           eu: 'Joko berria: Kokatu piezak',
+          uk: 'Нова гра: Розклади шматочки',
         },
       },
       {
@@ -70,6 +78,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           en: 'Game colours for every game, in the settings',
           es: 'Colores del juego para todos los juegos, en los ajustes',
           eu: 'Jokoaren koloreak joko guztietarako, ezarpenetan',
+          uk: 'Кольори гри для всіх ігор, у налаштуваннях',
         },
       },
       {
@@ -77,6 +86,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           en: 'Play in English, Spanish or Basque, in the settings',
           es: 'Juega en inglés, español o euskera, en los ajustes',
           eu: 'Jokatu ingelesez, gaztelaniaz edo euskaraz, ezarpenetan',
+          uk: 'Грай англійською, іспанською чи баскською, у налаштуваннях',
         },
       },
     ],
@@ -91,6 +101,21 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           en: 'New Privacy page: choose whether this device remembers your preferences, or delete what is saved',
           es: 'Nueva página de Privacidad: elige si este dispositivo recuerda tus preferencias o borra lo guardado',
           eu: 'Pribatutasun orri berria: aukeratu gailu honek zure hobespenak gogoratzen dituen, edo ezabatu gordetakoa',
+          uk: 'Нова сторінка «Приватність»: обери, чи пам’ятає цей пристрій твої налаштування, або видали збережене',
+        },
+      },
+    ],
+  },
+  {
+    version: 4,
+    published: '2026-11-07T19:00:00+01:00',
+    changes: [
+      {
+        text: {
+          en: 'The games are now in Ukrainian too, in the settings',
+          es: 'Los juegos ya están también en ucraniano, en los ajustes',
+          eu: 'Jokoak ukraineraz ere badaude, ezarpenetan',
+          uk: 'Ігри тепер є й українською, у налаштуваннях',
         },
       },
     ],
@@ -119,6 +144,11 @@ export function updatesSince(version: number, updates: readonly SiteUpdate[] = S
 /** Every change in those updates, oldest first */
 export function changesIn(updates: readonly SiteUpdate[]): UpdateChange[] {
   return updates.flatMap(({ changes }) => changes);
+}
+
+/** The last `count` changes, oldest first */
+export function latestChanges(count: number, updates: readonly SiteUpdate[] = SITE_UPDATES): UpdateChange[] {
+  return changesIn(updates).slice(-count);
 }
 
 /** A moment as a short local date and time in a language, e.g. `7 Nov 2026, 16:30` */

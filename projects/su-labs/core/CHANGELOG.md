@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-07
+
+### Added
+- A notification `message` can be a list of pieces (`SuNotificationMessagePart`): text and links (`label`, `onClick`, `dismiss`), so part of the message itself opens something
+
 ## [1.2.0] - 2026-11-07
 
 ### Added

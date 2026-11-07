@@ -120,7 +120,7 @@
                   [title]="siteLanguage.nameOf(language)"
                   (click)="siteLanguage.set(language)"
                 >
-                  {{ language.toUpperCase() }}
+                  {{ siteLanguage.codeOf(language) }}
                 </button>
               }
             </div>
