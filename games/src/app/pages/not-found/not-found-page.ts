@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SMART_GAMES } from '../../core/games';
+import { GAME_SLUGS } from '../../core/games';
+import { SiteLanguage } from '../../i18n/site-language';
 
 /**
  * Shown for any address the games site doesn't have. Prerendered as 404.html, which the server
  * sends with a 404 status, and shown by the app itself for unknown links inside the site.
- * Says it in every language the games speak, since kids may not read English.
  */
 @Component({
   selector: 'app-not-found-page',
@@ -15,5 +15,7 @@ import { SMART_GAMES } from '../../core/games';
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-cards.scss', './not-found-page.scss'],
 })
 export class NotFoundPage {
-  protected readonly games = SMART_GAMES;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
+  protected readonly games = GAME_SLUGS;
 }

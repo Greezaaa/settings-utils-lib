@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { SuThemeConfig, SuThemeName, SuThemeService, ThemeCssVariables } from '@su-labs/theme';
+import { SuThemeConfig, SuThemeName, SuThemeService } from '@su-labs/theme';
 import { SHARED_SETTINGS } from './shared-settings';
 
 /** Theme colors of the site, applied by @su-labs/theme as --su-theme-* variables */
@@ -51,31 +51,6 @@ export class SiteTheme {
   init(): void {
     this.themeService.init(this.config(SITE_THEMES));
     this.preferenceSignal.set(this.themeService.getUserPreference());
-  }
-
-  /**
-   * Show the library's 'custom' theme with the given variables, for this visit only.
-   * It is not saved, so a reload returns to the visitor's saved theme.
-   * `init()` is how the library takes new theme variables; it keeps the saved preference.
-   */
-  applyCustom(variables: ThemeCssVariables): void {
-    this.themeService.init(this.config({ ...SITE_THEMES, custom: variables }));
-    this.themeService.setTheme('custom', false);
-    this.preferenceSignal.set('custom');
-  }
-
-  /**
-   * Show a theme for this visit only, without changing the saved preference.
-   * `restore()` brings the saved theme back.
-   */
-  show(theme: SuThemeName): void {
-    this.themeService.setTheme(theme, false);
-    this.preferenceSignal.set(theme);
-  }
-
-  /** Go back to the visitor's saved theme after `show()` or `applyCustom()` */
-  restore(): void {
-    this.init();
   }
 
   /** Switch and remember a theme */

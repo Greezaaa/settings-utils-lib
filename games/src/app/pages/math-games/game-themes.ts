@@ -4,16 +4,13 @@ import { SITE_THEMES } from '../../core/site-theme';
 export type GameThemeId = 'light' | 'dark' | 'ocean' | 'party' | 'night';
 
 /**
- * Page colours while playing, applied with @su-labs/theme. Names are translated with the rest of the game.
- * Light and dark are the site's own themes; the others are brighter, for kids, and use its custom theme
- * (the site mixes every other colour from these three, see `:root[data-theme='custom']` in styles.scss).
+ * Colours of the game board, applied to the board only with @su-labs/theme's `target` option (the rest of
+ * the page keeps the site theme). Every theme is a palette of text, background and accent; the board mixes
+ * its other colours from these (see `.board[data-theme]` in math-games-page.scss). Names are translated.
  */
 export interface GameTheme {
   readonly id: GameThemeId;
-  /** A site theme to show, or the variables of a custom one */
-  readonly palette: 'light' | 'dark' | ThemeCssVariables;
-  /** Colours of the swatch on its button */
-  readonly preview: ThemeCssVariables;
+  readonly palette: ThemeCssVariables;
 }
 
 // Kids' palettes, picked for contrast: text on background at least 7.7:1, buttons at least 4.5:1.
@@ -22,11 +19,11 @@ const PARTY: ThemeCssVariables = { color: '#ffffff', background: '#3d0e7e', 'mai
 const NIGHT: ThemeCssVariables = { color: '#b8f2e6', background: '#023047', 'main-accent': '#f15bb5' };
 
 export const GAME_THEMES: readonly GameTheme[] = [
-  { id: 'light', palette: 'light', preview: SITE_THEMES.light },
-  { id: 'dark', palette: 'dark', preview: SITE_THEMES.dark },
-  { id: 'ocean', palette: OCEAN, preview: OCEAN },
-  { id: 'party', palette: PARTY, preview: PARTY },
-  { id: 'night', palette: NIGHT, preview: NIGHT },
+  { id: 'light', palette: SITE_THEMES.light },
+  { id: 'dark', palette: SITE_THEMES.dark },
+  { id: 'ocean', palette: OCEAN },
+  { id: 'party', palette: PARTY },
+  { id: 'night', palette: NIGHT },
 ];
 
 export const isGameThemeId = (value: unknown): value is GameThemeId => GAME_THEMES.some(({ id }) => id === value);

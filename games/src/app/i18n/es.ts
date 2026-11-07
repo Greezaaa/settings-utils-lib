@@ -1,7 +1,44 @@
-import { GameMessages } from './game-messages';
+import { SiteMessages } from './site-messages';
 
-export const ES: GameMessages = {
+export const ES: SiteMessages = {
   languageName: 'Español',
+
+  site: {
+    skipToContent: 'Saltar al contenido',
+    sites: 'Sitios',
+    gamesNav: 'Juegos',
+    settings: 'Ajustes',
+    textSize: 'Tamaño del texto',
+    smallerText: 'Texto más pequeño',
+    largerText: 'Texto más grande',
+    themeNames: { system: 'sistema', light: 'claro', dark: 'oscuro', contrast: 'contraste', custom: 'personalizado' },
+    themeSwitch: (current, next) => `Tema: ${current}. Cambiar a ${next}`,
+    language: 'Idioma',
+    madeBy: 'Hecho con ❤️ por',
+    projectLinks: 'Enlaces del proyecto',
+  },
+
+  games: {
+    'math-games': {
+      name: 'Juegos de matemáticas',
+      summary:
+        'Verdadero o falso, marca la respuesta o encuentra los signos que faltan. Con o sin tiempo, desde sumas hasta 20 hasta divisiones de tres cifras. En inglés, español y euskera.',
+    },
+  },
+
+  home: {
+    title: 'Juegos inteligentes',
+    lead: 'Juegos cortos para pensar rápido.',
+    rule: 'Gratis, sin registro, y funcionan en móviles y tabletas.',
+    games: 'Juegos',
+  },
+
+  notFound: {
+    title: 'Ups, esta página no existe.',
+    lead: 'Puede que el enlace sea antiguo o esté mal escrito.',
+    back: 'Volver a los juegos',
+    playInstead: 'Juega a esto',
+  },
 
   page: {
     section: 'Juegos inteligentes',
@@ -17,7 +54,6 @@ export const ES: GameMessages = {
     timerGroup: 'Tiempo',
     coloursGroup: 'Colores',
     levelGroup: 'Nivel',
-    languageGroup: 'Idioma',
     answerStyles: {
       'true-or-false': { name: 'Verdadero o falso', summary: 'Di si el resultado es correcto' },
       'your-answer': { name: 'Tu respuesta', summary: 'Marca el resultado en el teclado numérico' },

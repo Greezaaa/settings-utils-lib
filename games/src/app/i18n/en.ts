@@ -1,7 +1,44 @@
-import { GameMessages } from './game-messages';
+import { SiteMessages } from './site-messages';
 
-export const EN: GameMessages = {
+export const EN: SiteMessages = {
   languageName: 'English',
+
+  site: {
+    skipToContent: 'Skip to content',
+    sites: 'Sites',
+    gamesNav: 'Games',
+    settings: 'Settings',
+    textSize: 'Text size',
+    smallerText: 'Smaller text',
+    largerText: 'Larger text',
+    themeNames: { system: 'system', light: 'light', dark: 'dark', contrast: 'contrast', custom: 'custom' },
+    themeSwitch: (current, next) => `Theme: ${current}. Switch to ${next}`,
+    language: 'Language',
+    madeBy: 'Made with ❤️ by',
+    projectLinks: 'Project links',
+  },
+
+  games: {
+    'math-games': {
+      name: 'Math games',
+      summary:
+        'True or false, tap the answer, or find the missing signs. With or without a timer, from sums up to 20 to three-digit division. In English, Spanish and Basque.',
+    },
+  },
+
+  home: {
+    title: 'Smart games',
+    lead: 'Short games that train quick thinking.',
+    rule: 'Free, no sign-up, and they work on phones and tablets.',
+    games: 'Games',
+  },
+
+  notFound: {
+    title: 'Oops, this page isn’t here.',
+    lead: 'The link may be old or mistyped.',
+    back: 'Back to the games',
+    playInstead: 'Play instead',
+  },
 
   page: {
     section: 'Smart games',
@@ -17,7 +54,6 @@ export const EN: GameMessages = {
     timerGroup: 'Timer',
     coloursGroup: 'Colours',
     levelGroup: 'Level',
-    languageGroup: 'Language',
     answerStyles: {
       'true-or-false': { name: 'True or false', summary: 'Say whether the result shown is right' },
       'your-answer': { name: 'Your answer', summary: 'Tap the result on the number pad' },

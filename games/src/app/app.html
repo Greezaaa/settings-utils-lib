@@ -1,9 +1,9 @@
-<a class="skip-link" [routerLink]="[]" fragment="main">Skip to content</a>
+<a class="skip-link" [routerLink]="[]" fragment="main">{{ t().site.skipToContent }}</a>
 
 <header class="site-header">
   <div class="container header-bar">
     <!-- Breadcrumb brand: su-labs goes to the main site, games to this site's home -->
-    <nav class="brand-trail" aria-label="Sites">
+    <nav class="brand-trail" [attr.aria-label]="t().site.sites">
       <a [href]="mainSiteUrl" class="brand">
         <!-- Same mark as public/favicon.svg, colored by the site theme -->
         <svg class="brand-logo" viewBox="0 0 128 128" aria-hidden="true">
@@ -25,36 +25,75 @@
     </nav>
 
     <div class="header-controls">
-      <div class="text-size" role="group" aria-label="Text size">
+      <!-- Text size, theme and language: inline on wide screens, behind this gear button on phones -->
+      <div class="settings" #settings>
         <button
           type="button"
-          class="icon-button"
-          (click)="fontSize.decrease()"
-          [disabled]="fontSize.isMin()"
-          aria-label="Smaller text"
+          class="icon-button settings-toggle"
+          [attr.aria-label]="t().site.settings"
+          aria-controls="site-settings"
+          [attr.aria-expanded]="settingsOpen()"
+          (click)="toggleSettings()"
         >
-          A<span aria-hidden="true">-</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+              />
+            </g>
+          </svg>
         </button>
-        <button
-          type="button"
-          class="icon-button"
-          (click)="fontSize.increase()"
-          [disabled]="fontSize.isMax()"
-          aria-label="Larger text"
-        >
-          A<span aria-hidden="true">+</span>
-        </button>
-      </div>
 
-      <button
-        type="button"
-        class="theme-switch"
-        (click)="cycleTheme()"
-        [attr.aria-label]="'Theme: ' + theme.preference() + '. Switch to ' + nextTheme()"
-      >
-        <span class="theme-dot" aria-hidden="true"></span>
-        <span class="mono">{{ theme.preference() }}</span>
-      </button>
+        <div id="site-settings" class="settings-panel" [class.is-open]="settingsOpen()">
+          <div class="text-size" role="group" [attr.aria-label]="t().site.textSize">
+            <button
+              type="button"
+              class="icon-button"
+              (click)="fontSize.decrease()"
+              [disabled]="fontSize.isMin()"
+              [attr.aria-label]="t().site.smallerText"
+            >
+              A<span aria-hidden="true">-</span>
+            </button>
+            <button
+              type="button"
+              class="icon-button"
+              (click)="fontSize.increase()"
+              [disabled]="fontSize.isMax()"
+              [attr.aria-label]="t().site.largerText"
+            >
+              A<span aria-hidden="true">+</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="theme-switch"
+            (click)="cycleTheme()"
+            [attr.aria-label]="t().site.themeSwitch(t().site.themeNames[theme.preference()], t().site.themeNames[nextTheme()])"
+          >
+            <span class="theme-dot" aria-hidden="true"></span>
+            <span class="mono">{{ t().site.themeNames[theme.preference()] }}</span>
+          </button>
+
+          <div class="languages" role="group" [attr.aria-label]="t().site.language">
+            @for (language of languages; track language) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.lang]="language"
+                [attr.aria-label]="siteLanguage.nameOf(language)"
+                [attr.aria-pressed]="language === siteLanguage.language()"
+                [title]="siteLanguage.nameOf(language)"
+                (click)="siteLanguage.set(language)"
+              >
+                {{ language.toUpperCase() }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
 
       <a class="icon-button" [href]="githubUrl" target="_blank" rel="noopener" aria-label="GitHub repository">
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
@@ -67,9 +106,9 @@
     </div>
   </div>
 
-  <nav class="container site-nav" aria-label="Games">
-    @for (game of games; track game.slug) {
-      <a [routerLink]="['/', game.slug]" routerLinkActive="active">{{ game.name }}</a>
+  <nav class="container site-nav" [attr.aria-label]="t().site.gamesNav">
+    @for (game of games; track game) {
+      <a [routerLink]="['/', game]" routerLinkActive="active">{{ t().games[game].name }}</a>
     }
   </nav>
 </header>
@@ -81,9 +120,9 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <p class="muted">
-      Made with ❤️ by <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
+      {{ t().site.madeBy }} <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
     </p>
-    <nav class="footer-links" aria-label="Project links">
+    <nav class="footer-links" [attr.aria-label]="t().site.projectLinks">
       <a [href]="mainSiteUrl">su-labs.dev</a>
       <a [href]="githubUrl" target="_blank" rel="noopener">GitHub</a>
     </nav>

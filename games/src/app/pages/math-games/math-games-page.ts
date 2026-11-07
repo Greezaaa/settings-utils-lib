@@ -1,12 +1,14 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { SuStorage } from '@su-labs/core';
+import { SuThemeController } from '@su-labs/core/theme';
 import { RouterLink } from '@angular/router';
+import { readStored, writeStored } from '../../core/site-storage';
 import { SiteTheme } from '../../core/site-theme';
 import { createSignsPuzzle, formatSigns, getSignsLevel, SIGNS_LEVELS, SignsPuzzle } from '../../games/find-the-signs';
 import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatQuestion, getLevel, LEVELS, LevelId, Question, secondsForQuestion, TIMER_IDS, TimerId, Timing } from '../../games/math-games';
-import { readStored, writeStored } from './game-storage';
 import { GAME_THEMES, GameThemeId, getGameTheme, isGameThemeId } from './game-themes';
-import { GameLanguage, LANGUAGE_IDS } from './i18n/game-language';
-import { LanguageId, OptionText } from './i18n/game-messages';
+import { SiteLanguage } from '../../i18n/site-language';
+import { OptionText } from '../../i18n/site-messages';
 import { FindTheSignsRound } from './rounds/find-the-signs-round';
 import { RoundResult } from './rounds/round-result';
 import { TrueOrFalseRound } from './rounds/true-or-false-round';
@@ -24,9 +26,12 @@ type BestScores = Partial<Record<ScoreKey, number>>;
 /** A level button: its id and its translated text */
 type LevelOption = OptionText & { readonly id: LevelId };
 
+/** The board's theme controller saves nothing: the game keeps the chosen colours itself (THEME_STORAGE) */
+const UNSAVED: SuStorage = { getItem: () => null, setItem: () => undefined, removeItem: () => undefined };
+
 /** Names of the values the game keeps in this browser */
-const BEST_SCORES_STORAGE = 'best';
-const THEME_STORAGE = 'theme';
+const BEST_SCORES_STORAGE = 'math-games:best';
+const THEME_STORAGE = 'math-games:theme';
 
 /** Level picked when the chosen one doesn't exist for the new answer style */
 const DEFAULT_LEVEL: LevelId = 'normal';
@@ -37,16 +42,14 @@ const TICK_MS = 50;
 /**
  * Math games: the settings screen, the score and the timer.
  * Each answer style is its own round component; this page only hears whether an answer was right.
- * All text comes from the game's language (see i18n/).
+ * All text comes from the site's language (see i18n/).
  */
 @Component({
   selector: 'app-math-games-page',
   imports: [FindTheSignsRound, RouterLink, TrueOrFalseRound, YourAnswerRound],
-  providers: [GameLanguage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './math-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', './math-games-page.scss'],
-  host: { '[attr.lang]': 'gameLanguage.language()' },
 })
 export class MathGamesPage {
   /** The home page, which lists every game */
@@ -54,16 +57,17 @@ export class MathGamesPage {
   protected readonly timers = TIMER_IDS;
   protected readonly answerStyles = ANSWER_STYLE_IDS;
   protected readonly gameThemes = GAME_THEMES;
-  protected readonly languages = LANGUAGE_IDS;
 
-  protected readonly gameLanguage = inject(GameLanguage);
-  /** Texts in the current language */
-  protected readonly t = this.gameLanguage.messages;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
 
   private readonly siteTheme = inject(SiteTheme);
   /** Colours the player picked, if any */
   private readonly chosenTheme = signal<GameThemeId | null>(null);
-  /** Page colours while playing: the player's choice, or the site's light or dark until they pick one */
+  /** The board, the only element the game's colours apply to */
+  private readonly board = viewChild.required<ElementRef<HTMLElement>>('board');
+  private readonly boardTheme = new SuThemeController();
+  /** Board colours: the player's choice, or the site's light or dark (the page's own colours) until they pick one */
   protected readonly gameTheme = computed<GameThemeId>(
     () => this.chosenTheme() ?? (this.siteTheme.resolved() === 'dark' ? 'dark' : 'light'),
   );
@@ -133,15 +137,8 @@ export class MathGamesPage {
     });
     inject(DestroyRef).onDestroy(() => {
       this.stopTimer();
-      // The game's colours are for this page only: leaving it brings back the visitor's site theme
-      if (this.chosenTheme()) {
-        this.siteTheme.restore();
-      }
+      this.boardTheme.destroy();
     });
-  }
-
-  protected chooseLanguage(id: LanguageId): void {
-    this.gameLanguage.set(id);
   }
 
   protected chooseTheme(id: GameThemeId): void {
@@ -149,14 +146,14 @@ export class MathGamesPage {
     writeStored(THEME_STORAGE, id);
   }
 
-  /** Shows the theme on the whole page for this visit, without changing the visitor's saved site theme */
+  /** Colours the board only, as a custom theme of its own; the rest of the page keeps the site theme */
   private applyTheme(id: GameThemeId): void {
-    const { palette } = getGameTheme(id);
-    if (typeof palette === 'string') {
-      this.siteTheme.show(palette);
-    } else {
-      this.siteTheme.applyCustom(palette);
-    }
+    this.boardTheme.init({
+      target: this.board().nativeElement,
+      storage: UNSAVED,
+      defaultTheme: 'custom',
+      themes: { custom: getGameTheme(id).palette },
+    });
     this.chosenTheme.set(id);
   }
 

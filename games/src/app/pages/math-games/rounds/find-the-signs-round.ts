@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output } from '@angular/core';
 import { evaluate, formatSigns, SignsPuzzle, solves } from '../../../games/find-the-signs';
 import { Operator } from '../../../games/math-games';
-import { GameLanguage } from '../i18n/game-language';
+import { SiteLanguage } from '../../../i18n/site-language';
 import { RoundResult } from './round-result';
 
 /** Keyboard keys for each sign, so the round also works with a keyboard */
@@ -21,8 +21,8 @@ export class FindTheSignsRound {
   readonly operators = input.required<readonly Operator[]>();
   readonly answered = output<RoundResult>();
 
-  /** Texts in the game's language */
-  protected readonly t = inject(GameLanguage).messages;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
 
   /** The player's sign for each gap, `null` while empty; cleared for every new puzzle */
   protected readonly signs = linkedSignal<SignsPuzzle, readonly (Operator | null)[]>({

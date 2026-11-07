@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SMART_GAMES } from '../../core/games';
+import { GAME_SLUGS } from '../../core/games';
+import { SiteLanguage } from '../../i18n/site-language';
 import { Reveal } from '../../shared/reveal';
 
 /** Home page: the list of games */
@@ -12,5 +13,7 @@ import { Reveal } from '../../shared/reveal';
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-cards.scss'],
 })
 export class HomePage {
-  protected readonly games = SMART_GAMES;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
+  protected readonly games = GAME_SLUGS;
 }

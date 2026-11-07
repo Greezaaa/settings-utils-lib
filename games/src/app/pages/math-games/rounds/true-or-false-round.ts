@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { formatQuestion, isTrue, Question } from '../../../games/math-games';
-import { GameLanguage } from '../i18n/game-language';
+import { SiteLanguage } from '../../../i18n/site-language';
 import { RoundResult } from './round-result';
 
 /** Arrow keys answer too, so the round also works with a keyboard in every language */
@@ -18,8 +18,8 @@ export class TrueOrFalseRound {
   readonly question = input.required<Question>();
   readonly answered = output<RoundResult>();
 
-  /** Texts in the game's language */
-  protected readonly t = inject(GameLanguage).messages;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
 
   protected readonly equation = computed(() => formatQuestion(this.question()));
 

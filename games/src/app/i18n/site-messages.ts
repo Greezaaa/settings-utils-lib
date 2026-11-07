@@ -1,6 +1,8 @@
-import { SignsLevelId } from '../../../games/find-the-signs';
-import { AnswerStyleId, LevelId, TimerId } from '../../../games/math-games';
-import { GameThemeId } from '../game-themes';
+import { SuThemeName } from '@su-labs/theme';
+import { GameSlug } from '../core/games';
+import { SignsLevelId } from '../games/find-the-signs';
+import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
+import { GameThemeId } from '../pages/math-games/game-themes';
 
 export type LanguageId = 'en' | 'es' | 'eu';
 
@@ -10,10 +12,45 @@ export interface OptionText {
   readonly summary: string;
 }
 
-/** Every text of the Math games in one language; each language must fill all of it */
-export interface GameMessages {
+/** Every text of the games site in one language; each language must fill all of it */
+export interface SiteMessages {
   /** The language's own name, e.g. `Español` */
   readonly languageName: string;
+
+  /** Header, settings and footer */
+  readonly site: {
+    readonly skipToContent: string;
+    readonly sites: string;
+    readonly gamesNav: string;
+    readonly settings: string;
+    readonly textSize: string;
+    readonly smallerText: string;
+    readonly largerText: string;
+    readonly themeNames: Readonly<Record<SuThemeName, string>>;
+    /** Label of the theme switch, e.g. `Theme: dark. Switch to contrast` */
+    readonly themeSwitch: (current: string, next: string) => string;
+    readonly language: string;
+    readonly madeBy: string;
+    readonly projectLinks: string;
+  };
+
+  /** Name and description of each game */
+  readonly games: Readonly<Record<GameSlug, { readonly name: string; readonly summary: string }>>;
+
+  readonly home: {
+    readonly title: string;
+    readonly lead: string;
+    /** Second line of the lead */
+    readonly rule: string;
+    readonly games: string;
+  };
+
+  readonly notFound: {
+    readonly title: string;
+    readonly lead: string;
+    readonly back: string;
+    readonly playInstead: string;
+  };
 
   readonly page: {
     readonly section: string;
@@ -30,7 +67,6 @@ export interface GameMessages {
     readonly timerGroup: string;
     readonly coloursGroup: string;
     readonly levelGroup: string;
-    readonly languageGroup: string;
     readonly answerStyles: Readonly<Record<AnswerStyleId, OptionText>>;
     readonly timers: Readonly<Record<TimerId, OptionText>>;
     readonly levels: Readonly<Record<LevelId, OptionText>>;

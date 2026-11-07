@@ -1,3 +1,18 @@
+// The board's own colours (see game-themes.ts). @su-labs/theme sets data-theme and --su-theme-* on the
+// board; like the site's custom theme, every other colour is mixed from text, background and accent
+.board[data-theme] {
+  --text: var(--su-theme-color);
+  --heading: var(--su-theme-color);
+  --muted: color-mix(in srgb, var(--su-theme-color) 65%, var(--su-theme-background));
+  --surface: var(--su-theme-background);
+  --subtle: color-mix(in srgb, var(--su-theme-color) 10%, var(--su-theme-background));
+  --border: color-mix(in srgb, var(--su-theme-color) 18%, var(--su-theme-background));
+  --button-bg: var(--su-theme-main-accent);
+  --button-text: var(--su-theme-background);
+  --button-hover: color-mix(in srgb, var(--su-theme-main-accent) 85%, var(--su-theme-background));
+  color: var(--text);
+}
+
 .board {
   display: grid;
   gap: 1.25rem;
@@ -8,14 +23,6 @@
   align-content: center;
   text-align: center;
   width: 100%;
-}
-
-// Language picker, at the end of the tag row
-.languages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-  margin-left: auto;
 }
 
 .choices {

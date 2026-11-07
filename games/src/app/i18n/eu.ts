@@ -1,7 +1,44 @@
-import { GameMessages } from './game-messages';
+import { SiteMessages } from './site-messages';
 
-export const EU: GameMessages = {
+export const EU: SiteMessages = {
   languageName: 'Euskara',
+
+  site: {
+    skipToContent: 'Joan edukira',
+    sites: 'Guneak',
+    gamesNav: 'Jokoak',
+    settings: 'Ezarpenak',
+    textSize: 'Testuaren tamaina',
+    smallerText: 'Testu txikiagoa',
+    largerText: 'Testu handiagoa',
+    themeNames: { system: 'sistema', light: 'argia', dark: 'iluna', contrast: 'kontrastea', custom: 'pertsonalizatua' },
+    themeSwitch: (current, next) => `Gaia: ${current}. Aldatu honetara: ${next}`,
+    language: 'Hizkuntza',
+    madeBy: 'Maitasunez ❤️ egina:',
+    projectLinks: 'Proiektuaren estekak',
+  },
+
+  games: {
+    'math-games': {
+      name: 'Matematika jokoak',
+      summary:
+        'Egia ala gezurra, sakatu erantzuna edo aurkitu falta diren zeinuak. Denborarekin edo gabe, 20 arteko batuketetatik hiru zifrako zatiketetara. Ingelesez, gaztelaniaz eta euskaraz.',
+    },
+  },
+
+  home: {
+    title: 'Joko adimentsuak',
+    lead: 'Azkar pentsatzeko joko laburrak.',
+    rule: 'Doan, izena eman gabe, eta mugikorretan eta tabletetan dabiltza.',
+    games: 'Jokoak',
+  },
+
+  notFound: {
+    title: 'Ups, orri hau ez dago hemen.',
+    lead: 'Esteka zaharra edo gaizki idatzita egon daiteke.',
+    back: 'Itzuli jokoetara',
+    playInstead: 'Jokatu honetara',
+  },
 
   page: {
     section: 'Joko adimentsuak',
@@ -17,7 +54,6 @@ export const EU: GameMessages = {
     timerGroup: 'Denbora',
     coloursGroup: 'Koloreak',
     levelGroup: 'Maila',
-    languageGroup: 'Hizkuntza',
     answerStyles: {
       'true-or-false': { name: 'Egia ala gezurra', summary: 'Esan emaitza zuzena den' },
       'your-answer': { name: 'Zure erantzuna', summary: 'Sakatu emaitza zenbaki-teklatuan' },

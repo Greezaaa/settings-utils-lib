@@ -1,15 +1,19 @@
 <header class="container page-head">
-  <h1>Smart games</h1>
-  <p class="lead">Short games that train quick thinking. Free, no sign-up, and they work on phones and tablets.</p>
+  <h1>{{ t().home.title }}</h1>
+  <p class="lead">
+    {{ t().home.lead }}
+    <br />
+    {{ t().home.rule }}
+  </p>
 </header>
 
-<section class="container page-section" aria-label="Games">
+<section class="container page-section" [attr.aria-label]="t().home.games">
   <div class="games">
-    @for (game of games; track game.slug; let index = $index) {
-      <a class="card game-card" [routerLink]="['/', game.slug]" appReveal [style.--index]="index">
-        <span class="tag">{{ game.ages }}</span>
-        <h2 class="game-name">{{ game.name }}</h2>
-        <p class="muted">{{ game.summary }}</p>
+    @for (game of games; track game; let index = $index) {
+      <a class="card game-card" [routerLink]="['/', game]" appReveal [style.--index]="index">
+        <span class="tag">{{ t().page.ages }}</span>
+        <h2 class="game-name">{{ t().games[game].name }}</h2>
+        <p class="muted">{{ t().games[game].summary }}</p>
       </a>
     }
   </div>

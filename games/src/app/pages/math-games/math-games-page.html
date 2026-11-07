@@ -2,19 +2,6 @@
   <div class="page-meta">
     <a class="tag" [routerLink]="gamesPath">{{ t().page.section }}</a>
     <span class="tag">{{ t().page.ages }}</span>
-    <div class="languages" role="group" [attr.aria-label]="t().settings.languageGroup">
-      @for (language of languages; track language) {
-        <button
-          type="button"
-          class="button button-secondary button-small"
-          [attr.lang]="language"
-          [attr.aria-pressed]="language === gameLanguage.language()"
-          (click)="chooseLanguage(language)"
-        >
-          {{ gameLanguage.nameOf(language) }}
-        </button>
-      }
-    </div>
   </div>
   <h1>{{ t().page.title }}</h1>
   <p class="lead">
@@ -25,7 +12,7 @@
 </header>
 
 <section class="container page-section" [attr.aria-label]="t().page.game">
-  <div class="card board">
+  <div class="card board" #board>
     @switch (phase()) {
       @case ('ready') {
         <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
@@ -59,8 +46,8 @@
             <button
               type="button"
               class="button button-secondary button-small theme-choice"
-              [style.--swatch-background]="theme.preview.background"
-              [style.--swatch-accent]="theme.preview['main-accent']"
+              [style.--swatch-background]="theme.palette.background"
+              [style.--swatch-accent]="theme.palette['main-accent']"
               [attr.aria-pressed]="theme.id === gameTheme()"
               [title]="t().settings.themes[theme.id].summary"
               (click)="chooseTheme(theme.id)"

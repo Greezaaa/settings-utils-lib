@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output } from '@angular/core';
 import { formatPrompt, isCorrectAnswer, Question } from '../../../games/math-games';
-import { GameLanguage } from '../i18n/game-language';
+import { SiteLanguage } from '../../../i18n/site-language';
 import { RoundResult } from './round-result';
 
 /** Enough digits for the largest result of any level */
@@ -21,8 +21,8 @@ export class YourAnswerRound {
   readonly question = input.required<Question>();
   readonly answered = output<RoundResult>();
 
-  /** Texts in the game's language */
-  protected readonly t = inject(GameLanguage).messages;
+  /** Texts in the site's language */
+  protected readonly t = inject(SiteLanguage).messages;
 
   protected readonly digits = DIGITS;
   protected readonly prompt = computed(() => formatPrompt(this.question()));
