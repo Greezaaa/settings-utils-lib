@@ -1,0 +1,48 @@
+// The board, tiles, progress and "done" styles come from shared/picture-board.scss
+
+.play {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+  margin-inline: auto;
+  max-width: 32rem;
+  width: 100%;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+// Pieces are dragged, so the page must not scroll under the finger
+.tile {
+  touch-action: none;
+  user-select: none;
+}
+
+// A piece chosen by a tap waits, lifted, for the second tap
+.tile.is-picked {
+  box-shadow:
+    0 0 0 3px var(--button-bg),
+    0 6px 16px rgba(0, 0, 0, 0.25);
+  transform: scale(1.04);
+}
+
+// The dragged piece follows the pointer above the others, without easing
+.tile.is-dragging {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  cursor: grabbing;
+  transition: none;
+  z-index: 10;
+}
+
+.actions {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+}
+
+.best {
+  font-size: 0.8125rem;
+}

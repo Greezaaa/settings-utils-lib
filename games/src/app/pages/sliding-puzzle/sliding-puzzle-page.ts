@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 import { GamePicture, nextPicture } from '../../core/pictures';
 import { readStored, writeStored } from '../../core/site-storage';
 import { BoardLevelId } from '../../games/board';
-import { canMove, cellForArrow, createPuzzle, Direction, getPuzzleLevel, isSolved, move, Puzzle, PUZZLE_LEVELS, tileNumber } from '../../games/sliding-puzzle';
+import { canMove, cellForArrow, createPuzzle, Direction, getPuzzleLevel, isSolved, move, neighbour, Puzzle, PUZZLE_LEVELS, tileNumber } from '../../games/sliding-puzzle';
 import { SiteLanguage } from '../../i18n/site-language';
 import { PuzzlePictureMode } from '../../i18n/site-messages';
 import { GameBoard } from '../../shared/game-board';
+import { GameClock } from '../../shared/game-clock';
 import { PictureSlice } from '../../shared/picture-slice';
 import { PuzzleTile } from './puzzle-tile';
 
@@ -24,6 +25,17 @@ type BestMoves = Partial<Record<BoardLevelId, number>>;
 
 const DEFAULT_LEVEL: BoardLevelId = 'normal';
 
+/** A press on a tile: where it started, to tell a swipe from a tap */
+interface Press {
+  readonly cell: number;
+  readonly pointerId: number;
+  readonly x: number;
+  readonly y: number;
+}
+
+/** Pointer movement, in pixels, from which a press counts as a swipe */
+const SWIPE_THRESHOLD = 16;
+
 const ARROWS: Readonly<Record<string, Direction>> = {
   ArrowUp: 'up',
   ArrowRight: 'right',
@@ -32,7 +44,7 @@ const ARROWS: Readonly<Record<string, Direction>> = {
 };
 
 /**
- * Sliding puzzle: tap a tile next to the gap to slide it there, until the lines join into the picture.
+ * Sliding puzzle: tap or swipe a tile next to the gap to slide it there, until the picture joins up.
  * Four board sizes, from 2 × 3 to 5 × 5, with tiles showing pieces of a line or of a drawing.
  * Counts moves and time, and remembers the fewest moves per size.
  */
@@ -41,7 +53,7 @@ const ARROWS: Readonly<Record<string, Direction>> = {
   imports: [GameBoard, PictureSlice, PuzzleTile, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sliding-puzzle-page.html',
-  styleUrls: ['../../shared/utility-page.scss', './sliding-puzzle-page.scss'],
+  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-done.scss', './sliding-puzzle-page.scss'],
   host: { '(document:keydown)': 'onKey($event)' },
 })
 export class SlidingPuzzlePage {
@@ -58,7 +70,8 @@ export class SlidingPuzzlePage {
   /** Created in the browser only, so the prerendered page and the first render agree */
   protected readonly puzzle = signal<Puzzle | null>(null);
   protected readonly moves = signal(0);
-  protected readonly seconds = signal(0);
+  protected readonly clock = new GameClock();
+  private press: Press | null = null;
   private readonly bestMovesByLevel = signal<BestMoves>({});
   protected readonly bestMoves = computed(() => this.bestMovesByLevel()[this.levelId()] ?? null);
   protected readonly isNewBest = signal(false);
@@ -80,16 +93,12 @@ export class SlidingPuzzlePage {
     );
   });
 
-  protected readonly time = computed(() => formatTime(this.seconds()));
-
-  private timer?: ReturnType<typeof setInterval>;
-
   constructor() {
     afterNextRender(() => {
       this.bestMovesByLevel.set(readBestMoves());
       this.newPuzzle();
     });
-    inject(DestroyRef).onDestroy(() => this.stopTimer());
+    inject(DestroyRef).onDestroy(() => this.clock.stop());
   }
 
   protected choosePictureMode(mode: PuzzlePictureMode): void {
@@ -103,11 +112,10 @@ export class SlidingPuzzlePage {
   }
 
   protected newPuzzle(): void {
-    this.stopTimer();
+    this.clock.reset();
     this.puzzle.set(createPuzzle(getPuzzleLevel(this.levelId())));
     this.picture.set(nextPicture(this.picture()?.id ?? null));
     this.moves.set(0);
-    this.seconds.set(0);
     this.isNewBest.set(false);
   }
 
@@ -118,13 +126,46 @@ export class SlidingPuzzlePage {
       return;
     }
     if (this.moves() === 0) {
-      this.startTimer();
+      this.clock.start();
     }
     this.puzzle.set({ ...puzzle, board: move(puzzle.shape, puzzle.board, cell) });
     this.moves.update((moves) => moves + 1);
     if (this.isSolved()) {
       this.finish();
     }
+  }
+
+  protected onPointerDown(event: PointerEvent, cell: number): void {
+    if (!event.isPrimary) {
+      return;
+    }
+    if (event.currentTarget instanceof Element) {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+    this.press = { cell, pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+  }
+
+  /** A swipe slides the tile when the gap lies in the direction of the swipe; taps are clicks */
+  protected onPointerUp(event: PointerEvent): void {
+    const press = this.press;
+    this.press = null;
+    const puzzle = this.puzzle();
+    if (press?.pointerId !== event.pointerId || !puzzle) {
+      return;
+    }
+    const dx = event.clientX - press.x;
+    const dy = event.clientY - press.y;
+    if (Math.hypot(dx, dy) < SWIPE_THRESHOLD) {
+      return;
+    }
+    const direction: Direction = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up';
+    if (neighbour(puzzle.shape, press.cell, direction) === puzzle.board.indexOf(null)) {
+      this.slide(press.cell);
+    }
+  }
+
+  protected cancelPress(): void {
+    this.press = null;
   }
 
   protected onKey(event: KeyboardEvent): void {
@@ -147,22 +188,13 @@ export class SlidingPuzzlePage {
   }
 
   private finish(): void {
-    this.stopTimer();
+    this.clock.stop();
     const best = this.bestMoves();
     if (best === null || this.moves() < best) {
       this.bestMovesByLevel.update((scores) => ({ ...scores, [this.levelId()]: this.moves() }));
       this.isNewBest.set(true);
       writeStored(BEST_MOVES_STORAGE, this.bestMovesByLevel());
     }
-  }
-
-  private startTimer(): void {
-    const startedAt = Date.now();
-    this.timer = setInterval(() => this.seconds.set(Math.floor((Date.now() - startedAt) / 1000)), 1000);
-  }
-
-  private stopTimer(): void {
-    clearInterval(this.timer);
   }
 }
 
@@ -180,9 +212,4 @@ function readBestMoves(): BestMoves {
     }
   }
   return scores;
-}
-
-/** Seconds as `m:ss`, e.g. `1:05` */
-function formatTime(seconds: number): string {
-  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }

@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { fewestTaps, getTurnLevel, isRight, isSolved, scramble, turn, TURN_LEVELS } from './turn-picture';
+import { getPictureLevel, PICTURE_LEVELS } from './picture-game';
+import { fewestTaps, isRight, isSolved, scramble, tilesRight, turn } from './turn-picture';
 
 describe('turn the picture rules', () => {
   it('has square boards from 2 × 2 to 5 × 5', () => {
-    expect(TURN_LEVELS.map(({ rows, columns }) => `${rows}x${columns}`)).toEqual(['2x2', '3x3', '4x4', '5x5']);
-    expect(getTurnLevel('expert')).toMatchObject({ rows: 5, columns: 5 });
+    expect(PICTURE_LEVELS.map(({ rows, columns }) => `${rows}x${columns}`)).toEqual(['2x2', '3x3', '4x4', '5x5']);
+    expect(getPictureLevel('expert')).toMatchObject({ rows: 5, columns: 5 });
   });
 
-  it.each(TURN_LEVELS.map((level) => [level.id, level] as const))(
+  it.each(PICTURE_LEVELS.map((level) => [level.id, level] as const))(
     'turns every %s tile away from its place',
     (_, shape) => {
       for (let run = 0; run < 200; run++) {
@@ -28,6 +29,10 @@ describe('turn the picture rules', () => {
     expect([0, 4, 8].every(isRight)).toBe(true);
     expect([1, 2, 3, 5].some(isRight)).toBe(false);
     expect(isSolved([4, 8, 0, 12])).toBe(true);
+  });
+
+  it('counts the tiles that are right', () => {
+    expect(tilesRight([0, 1, 4, 6, 8])).toBe(3);
   });
 
   it('knows the fewest taps that finish the picture', () => {

@@ -42,7 +42,7 @@
 
     <div class="status">
       <span class="mono">{{ t().slidingPuzzle.moves(moves()) }}</span>
-      <span class="mono">{{ time() }}</span>
+      <span class="mono">{{ clock.time() }}</span>
     </div>
 
     <div
@@ -61,6 +61,9 @@
             [class.can-move]="placed.canMove"
             [style.transform]="position(placed.cell)"
             [attr.aria-label]="t().slidingPuzzle.tile(placed.number)"
+            (pointerdown)="onPointerDown($event, placed.cell)"
+            (pointerup)="onPointerUp($event)"
+            (pointercancel)="cancelPress()"
             (click)="slide(placed.cell)"
           >
             @if (pictureMode() === 'drawing' && picture(); as drawing) {
@@ -82,11 +85,11 @@
     </div>
 
     @if (isSolved()) {
-      <p class="solved" role="status">
-        <strong>{{ t().slidingPuzzle.solved }}</strong>
-        {{ t().slidingPuzzle.solvedIn(moves(), time()) }}
+      <p class="done" role="status">
+        {{ t().slidingPuzzle.solved }}
+        <small>{{ t().slidingPuzzle.solvedIn(moves(), clock.time()) }}</small>
         @if (isNewBest()) {
-          · <span class="record">{{ t().slidingPuzzle.newRecord }}</span>
+          <small class="record">{{ t().slidingPuzzle.newRecord }}</small>
         }
       </p>
     }

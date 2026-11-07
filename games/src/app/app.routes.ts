@@ -39,6 +39,11 @@ export const routes: Routes = [
     ...gameMeta('turn-picture'),
     loadComponent: () => import('./pages/turn-picture/turn-picture-page').then((m) => m.TurnPicturePage),
   },
+  {
+    path: 'place-pieces',
+    ...gameMeta('place-pieces'),
+    loadComponent: () => import('./pages/place-pieces/place-pieces-page').then((m) => m.PlacePiecesPage),
+  },
   { path: '404', ...notFound },
   { path: '**', ...notFound },
 ];

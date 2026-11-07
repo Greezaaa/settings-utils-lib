@@ -3,7 +3,7 @@ import { GameSlug } from '../core/games';
 import { PictureId } from '../core/pictures';
 import { SignsLevelId } from '../games/find-the-signs';
 import { BoardLevelId } from '../games/board';
-import { TurnModeId } from '../games/turn-picture';
+import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
 import { GameThemeId } from '../core/game-themes';
 
@@ -102,25 +102,41 @@ export interface SiteMessages {
     readonly keys: string;
   };
 
+  /** Texts both picture games share: modes, sizes and the end of a game */
+  readonly pictureGames: {
+    readonly modeGroup: string;
+    readonly modes: Readonly<Record<PictureModeId, OptionText>>;
+    readonly levelGroup: string;
+    readonly levels: Readonly<Record<BoardLevelId, OptionText>>;
+    readonly picture: string;
+    readonly memorize: string;
+    readonly ready: string;
+    /** Progress, e.g. `6 of 9 in place` */
+    readonly inPlace: (placed: number, total: number) => string;
+    readonly newGame: string;
+    readonly solved: string;
+    readonly best: (time: string) => string;
+    readonly newRecord: string;
+  };
+
   readonly turnPicture: {
     readonly lead: string;
     /** Second line of the lead */
     readonly rule: string;
-    readonly modeGroup: string;
-    readonly modes: Readonly<Record<TurnModeId, OptionText>>;
-    readonly levelGroup: string;
-    readonly levels: Readonly<Record<BoardLevelId, OptionText>>;
     readonly board: string;
     readonly tile: (number: number) => string;
-    readonly picture: string;
-    readonly memorize: string;
-    readonly ready: string;
     readonly turns: (turns: number) => string;
-    readonly newGame: string;
-    readonly solved: string;
     readonly solvedIn: (turns: number, time: string) => string;
-    readonly best: (time: string) => string;
-    readonly newRecord: string;
+  };
+
+  readonly placePieces: {
+    readonly lead: string;
+    /** Second line of the lead */
+    readonly rule: string;
+    readonly board: string;
+    readonly piece: (number: number, picked: boolean) => string;
+    readonly swaps: (swaps: number) => string;
+    readonly solvedIn: (swaps: number, time: string) => string;
   };
 
   /** Description of each picture, read by screen readers */

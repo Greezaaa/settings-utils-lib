@@ -1,0 +1,94 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/">{{ t().page.section }}</a>
+    <span class="tag">{{ t().page.ages }}</span>
+  </div>
+  <h1>{{ t().games['place-pieces'].name }}</h1>
+  <p class="lead">
+    {{ t().placePieces.lead }}
+    <br />
+    {{ t().placePieces.rule }}
+  </p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="t().placePieces.board">
+  <div class="card play" appGameBoard>
+    <app-picture-settings
+      [mode]="modeId()"
+      [level]="levelId()"
+      (modeChange)="chooseMode($event)"
+      (levelChange)="chooseLevel($event)"
+    />
+
+    <div class="status">
+      <span class="mono">{{ t().placePieces.swaps(moves()) }}</span>
+      <span class="mono">{{ clock.time() }}</span>
+    </div>
+
+    @if (picture(); as picture) {
+      <div
+        #board
+        class="board"
+        [class.is-solved]="phase() === 'solved'"
+        [class.is-preview]="phase() === 'preview'"
+        [style.--columns]="level().columns"
+        role="group"
+        [attr.aria-label]="t().placePieces.board"
+      >
+        @for (piece of arrangement(); track piece; let cell = $index) {
+          <button
+            type="button"
+            class="tile"
+            [attr.data-cell]="cell"
+            [class.is-right]="showHints() && isPieceRight(cell)"
+            [class.is-picked]="picked() === cell"
+            [class.is-dragging]="drag()?.cell === cell"
+            [style.transform]="dragTransform(cell)"
+            [attr.aria-label]="t().placePieces.piece(piece + 1, picked() === cell)"
+            [attr.aria-pressed]="picked() === cell"
+            (pointerdown)="onPointerDown($event, cell)"
+            (pointermove)="onPointerMove($event)"
+            (pointerup)="onPointerUp($event)"
+            (pointercancel)="cancelDrag()"
+            (click)="onClick($event, cell)"
+          >
+            <app-picture-slice [src]="picture.src" [shape]="level()" [cell]="piece" />
+          </button>
+        }
+      </div>
+
+      @if (phase() === 'solved') {
+        <p class="done" role="status">
+          {{ t().pictureGames.solved }}
+          <small>{{ t().placePieces.solvedIn(moves(), clock.time()) }}</small>
+          @if (isNewBest()) {
+            <small class="record">{{ t().pictureGames.newRecord }}</small>
+          }
+        </p>
+      }
+
+      @if (phase() === 'playing') {
+        <p class="progress" aria-live="polite">{{ t().pictureGames.inPlace(placed(), arrangement().length) }}</p>
+      }
+
+      @if (phase() === 'preview') {
+        <p class="muted">{{ t().pictureGames.memorize }}</p>
+        <button type="button" class="button ready" (click)="ready()">{{ t().pictureGames.ready }}</button>
+      }
+
+      @if (modeId() === 'look') {
+        <figure class="reference">
+          <img [src]="picture.src" [alt]="t().pictures[picture.id]" />
+          <figcaption class="muted">{{ t().pictureGames.picture }}</figcaption>
+        </figure>
+      }
+    }
+
+    <div class="actions">
+      <button type="button" class="button button-secondary" (click)="newGame()">{{ t().pictureGames.newGame }}</button>
+      @if (best(); as best) {
+        <p class="muted best">{{ t().pictureGames.best(best) }}</p>
+      }
+    </div>
+  </div>
+</section>

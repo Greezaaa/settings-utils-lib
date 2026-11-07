@@ -59,6 +59,12 @@ export const ES: SiteMessages = {
       subtitle: 'toca para girar los cuadrados y reconstruir el dibujo',
       intro: 'Un puzle de imágenes para niños.',
     },
+    'place-pieces': {
+      name: 'Coloca las piezas',
+      summary: 'Arrastra las piezas del dibujo a su sitio. Míralo o reconstrúyelo de memoria.',
+      subtitle: 'arrastra las piezas y reconstruye el dibujo',
+      intro: 'Un puzle de imágenes para niños.',
+    },
   },
 
   home: {
@@ -97,9 +103,7 @@ export const ES: SiteMessages = {
     keys: 'Teclado: las flechas mueven una pieza al hueco',
   },
 
-  turnPicture: {
-    lead: 'Toca un cuadrado para girarlo un cuarto de vuelta. Gira todos hasta que el dibujo esté bien.',
-    rule: 'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+  pictureGames: {
     modeGroup: 'Modo',
     modes: {
       look: { name: 'Mirar', summary: 'El dibujo se queda debajo del tablero' },
@@ -112,17 +116,32 @@ export const ES: SiteMessages = {
       hard: { name: 'Difícil', summary: '4 × 4 · 16 cuadrados' },
       expert: { name: 'Experto', summary: '5 × 5 · 25 cuadrados' },
     },
-    board: 'Imagen',
-    tile: (number) => `Cuadrado ${number}`,
     picture: 'El dibujo',
     memorize: 'Fíjate bien y pulsa Listo.',
     ready: 'Listo',
-    turns: (turns) => `Giros ${turns}`,
+    inPlace: (placed, total) => `${placed} de ${total} en su sitio`,
     newGame: 'Nueva partida',
     solved: '¡Muy bien!',
-    solvedIn: (turns, time) => `Terminado en ${turns} ${turns === 1 ? 'giro' : 'giros'} y ${time}`,
     best: (time) => `Récord: ${time}`,
     newRecord: '¡Nuevo récord!',
+  },
+
+  turnPicture: {
+    lead: 'Toca un cuadrado para girarlo un cuarto de vuelta. Gira todos hasta que el dibujo esté bien.',
+    rule: 'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+    board: 'Imagen',
+    tile: (number) => `Cuadrado ${number}`,
+    turns: (turns) => `Giros ${turns}`,
+    solvedIn: (turns, time) => `Terminado en ${turns} ${turns === 1 ? 'giro' : 'giros'} y ${time}`,
+  },
+
+  placePieces: {
+    lead: 'Arrastra una pieza sobre otra para cambiarlas de sitio, o toca dos piezas. Coloca todas para terminar el dibujo.',
+    rule: 'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+    board: 'Imagen',
+    piece: (number, picked) => `Pieza ${number}${picked ? ', elegida' : ''}`,
+    swaps: (swaps) => `Movimientos ${swaps}`,
+    solvedIn: (swaps, time) => `Terminado en ${swaps} ${swaps === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
   },
 
   pictures: {

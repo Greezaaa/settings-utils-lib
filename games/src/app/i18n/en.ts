@@ -58,6 +58,12 @@ export const EN: SiteMessages = {
       subtitle: 'tap to turn the squares and rebuild the drawing',
       intro: 'A picture puzzle for kids.',
     },
+    'place-pieces': {
+      name: 'Place the pieces',
+      summary: 'Drag the pieces of the drawing back to their places. Look at it, or rebuild it from memory.',
+      subtitle: 'drag the pieces and rebuild the drawing',
+      intro: 'A picture puzzle for kids.',
+    },
   },
 
   home: {
@@ -96,9 +102,7 @@ export const EN: SiteMessages = {
     keys: 'Keyboard: the arrow keys slide a tile into the gap',
   },
 
-  turnPicture: {
-    lead: 'Tap a square to turn it a quarter. Turn every square until the drawing is right.',
-    rule: 'In Memory mode, look carefully: the drawing hides once you press Ready!',
+  pictureGames: {
     modeGroup: 'Mode',
     modes: {
       look: { name: 'Look', summary: 'The drawing stays under the board' },
@@ -111,17 +115,32 @@ export const EN: SiteMessages = {
       hard: { name: 'Hard', summary: '4 × 4 · 16 squares' },
       expert: { name: 'Expert', summary: '5 × 5 · 25 squares' },
     },
-    board: 'Picture',
-    tile: (number) => `Square ${number}`,
     picture: 'The drawing',
     memorize: 'Look carefully, then press Ready.',
     ready: 'Ready',
-    turns: (turns) => `Turns ${turns}`,
+    inPlace: (placed, total) => `${placed} of ${total} in place`,
     newGame: 'New game',
     solved: 'Well done!',
-    solvedIn: (turns, time) => `Finished in ${turns} ${turns === 1 ? 'turn' : 'turns'} and ${time}`,
     best: (time) => `Best: ${time}`,
     newRecord: 'New record!',
+  },
+
+  turnPicture: {
+    lead: 'Tap a square to turn it a quarter. Turn every square until the drawing is right.',
+    rule: 'In Memory mode, look carefully: the drawing hides once you press Ready!',
+    board: 'Picture',
+    tile: (number) => `Square ${number}`,
+    turns: (turns) => `Turns ${turns}`,
+    solvedIn: (turns, time) => `Finished in ${turns} ${turns === 1 ? 'turn' : 'turns'} and ${time}`,
+  },
+
+  placePieces: {
+    lead: 'Drag a piece onto another to swap them, or tap two pieces. Put every piece in its place to finish the drawing.',
+    rule: 'In Memory mode, look carefully: the drawing hides once you press Ready!',
+    board: 'Picture',
+    piece: (number, picked) => `Piece ${number}${picked ? ', picked up' : ''}`,
+    swaps: (swaps) => `Moves ${swaps}`,
+    solvedIn: (swaps, time) => `Finished in ${swaps} ${swaps === 1 ? 'move' : 'moves'} and ${time}`,
   },
 
   pictures: {

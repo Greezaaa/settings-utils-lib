@@ -58,6 +58,12 @@ export const EU: SiteMessages = {
       subtitle: 'sakatu karratuak biratzeko eta marrazkia osatzeko',
       intro: 'Haurrentzako irudi-puzzlea.',
     },
+    'place-pieces': {
+      name: 'Kokatu piezak',
+      summary: 'Arrastatu marrazkiaren piezak beren lekura. Begiratu edo osatu oroimenez.',
+      subtitle: 'arrastatu piezak eta osatu marrazkia',
+      intro: 'Haurrentzako irudi-puzzlea.',
+    },
   },
 
   home: {
@@ -97,9 +103,7 @@ export const EU: SiteMessages = {
     keys: 'Teklatua: geziek pieza bat hutsunera mugitzen dute',
   },
 
-  turnPicture: {
-    lead: 'Sakatu karratu bat laurden bat biratzeko. Biratu guztiak marrazkia ondo egon arte.',
-    rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
+  pictureGames: {
     modeGroup: 'Modua',
     modes: {
       look: { name: 'Begiratu', summary: 'Marrazkia taularen azpian geratzen da' },
@@ -112,17 +116,32 @@ export const EU: SiteMessages = {
       hard: { name: 'Zaila', summary: '4 × 4 · 16 karratu' },
       expert: { name: 'Aditua', summary: '5 × 5 · 25 karratu' },
     },
-    board: 'Irudia',
-    tile: (number) => `${number}. karratua`,
     picture: 'Marrazkia',
     memorize: 'Begiratu ondo eta sakatu Prest.',
     ready: 'Prest',
-    turns: (turns) => `Birak ${turns}`,
+    inPlace: (placed, total) => `${placed}/${total} bere lekuan`,
     newGame: 'Partida berria',
     solved: 'Oso ondo!',
-    solvedIn: (turns, time) => `${turns} bira eta ${time} behar izan dituzu`,
     best: (time) => `Errekorra: ${time}`,
     newRecord: 'Errekor berria!',
+  },
+
+  turnPicture: {
+    lead: 'Sakatu karratu bat laurden bat biratzeko. Biratu guztiak marrazkia ondo egon arte.',
+    rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
+    board: 'Irudia',
+    tile: (number) => `${number}. karratua`,
+    turns: (turns) => `Birak ${turns}`,
+    solvedIn: (turns, time) => `${turns} bira eta ${time} behar izan dituzu`,
+  },
+
+  placePieces: {
+    lead: 'Arrastatu pieza bat beste baten gainera lekuz aldatzeko, edo sakatu bi pieza. Jarri guztiak beren lekuan marrazkia osatzeko.',
+    rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
+    board: 'Irudia',
+    piece: (number, picked) => `${number}. pieza${picked ? ', hautatuta' : ''}`,
+    swaps: (swaps) => `Mugimenduak ${swaps}`,
+    solvedIn: (swaps, time) => `${swaps} mugimendu eta ${time} behar izan dituzu`,
   },
 
   pictures: {

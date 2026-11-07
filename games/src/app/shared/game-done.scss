@@ -1,0 +1,54 @@
+// How every puzzle ends: its pieces join into one picture (each board closes its own gaps), then the
+// whole board celebrates with a little pop and a glow, and "Well done!" appears below it, never over it.
+
+.board.is-solved {
+  // Starts once the pieces have joined
+  animation: board-celebrate 700ms ease 300ms both;
+}
+
+@keyframes board-celebrate {
+  40% {
+    filter: drop-shadow(0 0 0.75rem color-mix(in srgb, var(--button-bg) 45%, transparent));
+    scale: 1.04;
+  }
+}
+
+.done {
+  animation: done-in 300ms ease 900ms both;
+  background: var(--surface);
+  border-radius: var(--radius-large);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+  color: var(--heading);
+  display: grid;
+  font-size: 1.25rem;
+  font-weight: 600;
+  gap: 0.25rem;
+  justify-items: center;
+  padding: 0.75rem 1.25rem;
+  text-align: center;
+
+  small {
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 400;
+  }
+
+  .record {
+    color: var(--green-text);
+    font-weight: 600;
+  }
+}
+
+@keyframes done-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board.is-solved,
+  .done {
+    animation: none;
+  }
+}

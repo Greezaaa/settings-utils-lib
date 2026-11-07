@@ -1,0 +1,36 @@
+:host {
+  display: grid;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.choices {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+// Four sizes, side by side on wide screens and two by two on phones
+.levels {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+}
+
+.level {
+  display: grid;
+  gap: 0.125rem;
+  justify-content: center;
+  justify-items: center;
+  padding: 0.5rem;
+}
+
+.level-name {
+  font-weight: 600;
+}
+
+.level-summary {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.75;
+}
