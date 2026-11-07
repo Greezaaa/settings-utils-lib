@@ -285,7 +285,7 @@ export const EN: SiteMessages = {
 
   letterGames: {
     lead: 'Learn the vowels, fill in the missing ones, put mixed letters in order, or make as many words as you can.',
-    rule: 'Only words on our list count, and we keep adding more!',
+    rule: 'In the word builder, any real word counts, checked with a dictionary that downloads only when you play it.',
     board: 'Letter game',
     modeGroup: 'Game',
     modes: {
@@ -330,7 +330,15 @@ export const EN: SiteMessages = {
       found: 'Well found!',
       'already-found': 'You already have that one',
       'too-short': 'Use at least 3 letters',
-      unknown: 'That one isn’t on our list',
+      bonus: 'A real word! Bonus',
+      unknown: 'We don’t know that word',
+    },
+    bonusWords: (count) => `Bonus words: ${count}`,
+    dictionary: {
+      loading: 'Downloading the dictionary…',
+      why: 'The first time you play, we download the dictionary of your language (about 100 KB) to check your words. Your browser keeps it for next time.',
+      failed: 'The dictionary didn’t download, so only the hidden words count.',
+      credit: 'Dictionary: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
     newLetters: 'New letters',
     allFound: 'You found them all!',

@@ -44,6 +44,8 @@ const MIXED_LENGTHS = { min: 3, max: 8 } as const;
 const LETTER_SET_TRIES = 40;
 /** A letter set should hide at least this many words */
 const MIN_ANSWERS = 4;
+/** Enough long words to pick from, so the letter sets don't keep repeating */
+const MIN_SEEDS = 8;
 
 export type BuilderLevelId = 'easy' | 'normal' | 'hard';
 export interface BuilderLevel {
@@ -198,15 +200,31 @@ export function answersFor(letters: readonly string[], bank: WordBank): string[]
 }
 
 /**
- * Letters for the word builder: a bank word that fits, topped up with letters of other words, so there is always
- * one long word to find. Tries a few sets and keeps the one that makes the most words.
+ * Bank words long enough to build a letter set around: using all or nearly all of the letters (5 → 4 or 5,
+ * 7 → 6 or 7, 10 → 8 to 10), or as close as the bank gets
+ */
+export function seedWords(bank: WordBank, count: number): string[] {
+  const words = allWords(bank);
+  for (let shortest = count - Math.floor(count / 4); shortest >= MIN_WORD_LENGTH; shortest--) {
+    const seeds = words.filter((word) => {
+      const length = lettersOf(word).length;
+      return length >= shortest && length <= count;
+    });
+    if (seeds.length >= MIN_SEEDS) {
+      return seeds;
+    }
+  }
+  return words.filter((word) => lettersOf(word).length <= count);
+}
+
+/**
+ * Letters for the word builder: a long bank word that fits (see `seedWords`), topped up with letters of other words,
+ * so there is always one long word to find besides the short ones. Tries a few sets and keeps the one that makes
+ * the most words.
  */
 export function createLetterSet(bank: WordBank, count: number, random: Random): LetterSet {
   const words = allWords(bank);
-  const seeds = words.filter((word) => {
-    const length = lettersOf(word).length;
-    return length <= count && length >= Math.min(count, MIXED_LENGTHS.max) - 3;
-  });
+  const seeds = seedWords(bank, count);
   const fillers = words.flatMap(lettersOf);
   let best: LetterSet = { letters: [], answers: [] };
   for (let attempt = 0; attempt < LETTER_SET_TRIES && best.answers.length < MIN_ANSWERS; attempt++) {
@@ -222,15 +240,30 @@ export function createLetterSet(bank: WordBank, count: number, random: Random): 
   return best;
 }
 
-export type WordCheck = 'found' | 'already-found' | 'too-short' | 'unknown';
+/**
+ * What a word the player made counts as: one of the words to find (`found`), another real word from the dictionary
+ * (`bonus`), one they already have, too short, or a word we don't know
+ */
+export type WordCheck = 'found' | 'bonus' | 'already-found' | 'too-short' | 'unknown';
 
-/** What a word the player made counts as */
-export function checkWord(word: string, set: LetterSet, found: readonly string[]): WordCheck {
+/**
+ * What a word the player made counts as. `found` lists every word they already have, bonus words included;
+ * `dictionary` is the language's full dictionary, once downloaded.
+ */
+export function checkWord(
+  word: string,
+  set: LetterSet,
+  found: readonly string[],
+  dictionary?: ReadonlySet<string>,
+): WordCheck {
   if (lettersOf(word).length < MIN_WORD_LENGTH) {
     return 'too-short';
   }
   if (found.includes(word)) {
     return 'already-found';
   }
-  return set.answers.includes(word) ? 'found' : 'unknown';
+  if (set.answers.includes(word)) {
+    return 'found';
+  }
+  return dictionary?.has(word) && canMake(word, set.letters) ? 'bonus' : 'unknown';
 }

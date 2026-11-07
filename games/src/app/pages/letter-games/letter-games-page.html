@@ -12,7 +12,7 @@
 </header>
 
 <section class="container page-section" [attr.aria-label]="t().letterGames.board">
-  <div class="card board" appGameBoard>
+  <div class="card board" [class.is-wide]="isBuilder() && phase() === 'playing'" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
         <div class="levels" role="group" [attr.aria-label]="t().letterGames.modeGroup">
@@ -97,6 +97,8 @@
               <app-builder-round
                 [set]="set"
                 [isTimeUp]="isTimeUp()"
+                [dictionary]="dictionary()"
+                [dictionaryStatus]="dictionaryStatus()"
                 (newLetters)="newLetters()"
                 (allFound)="countdown.stop()"
               />
@@ -126,4 +128,5 @@
       }
     }
   </div>
+  <p class="credit">{{ t().letterGames.dictionary.credit }}</p>
 </section>

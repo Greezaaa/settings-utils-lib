@@ -281,6 +281,14 @@ export interface SiteMessages {
     readonly found: (found: number, total: number) => string;
     /** What the word builder says about a word */
     readonly checks: Readonly<Record<WordCheck, string>>;
+    readonly bonusWords: (count: number) => string;
+    /** The word builder's dictionary: downloading (with why, for its tooltip), failed, and its credit */
+    readonly dictionary: {
+      readonly loading: string;
+      readonly why: string;
+      readonly failed: string;
+      readonly credit: string;
+    };
     readonly newLetters: string;
     readonly allFound: string;
     readonly solved: string;

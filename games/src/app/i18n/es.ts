@@ -299,7 +299,7 @@ export const ES: SiteMessages = {
 
   letterGames: {
     lead: 'Aprende las vocales, completa las que faltan, ordena letras mezcladas o forma todas las palabras que puedas.',
-    rule: '¡Solo cuentan las palabras de nuestra lista, y cada vez añadimos más!',
+    rule: 'En Forma palabras vale cualquier palabra real: la comprobamos con un diccionario que se descarga solo cuando juegas.',
     board: 'Juego de letras',
     modeGroup: 'Juego',
     modes: {
@@ -344,7 +344,15 @@ export const ES: SiteMessages = {
       found: '¡Bien encontrada!',
       'already-found': 'Esa ya la tienes',
       'too-short': 'Usa al menos 3 letras',
-      unknown: 'Esa no está en nuestra lista',
+      bonus: '¡Palabra real! Extra',
+      unknown: 'No conocemos esa palabra',
+    },
+    bonusWords: (count) => `Palabras extra: ${count}`,
+    dictionary: {
+      loading: 'Descargando el diccionario…',
+      why: 'La primera vez que juegas descargamos el diccionario de tu idioma (unos 100 KB) para comprobar tus palabras. Tu navegador lo guarda para la próxima vez.',
+      failed: 'El diccionario no se ha descargado, así que solo cuentan las palabras ocultas.',
+      credit: 'Diccionario: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
     newLetters: 'Otras letras',
     allFound: '¡Las has encontrado todas!',

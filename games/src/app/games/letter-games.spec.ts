@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allWords, answersFor, canMake, checkWord, createLetterSet, firstVowelWords, lettersOf, LetterSet, missingVowelWords, mixedWords, mixLetters, hintAfter, secondsForGapWord, secondsForMixedWord, WordBank, WORDS_PER_GAME } from './letter-games';
+import { allWords, answersFor, canMake, checkWord, createLetterSet, firstVowelWords, lettersOf, LetterSet, missingVowelWords, mixedWords, mixLetters, hintAfter, secondsForGapWord, seedWords, secondsForMixedWord, WordBank, WORDS_PER_GAME } from './letter-games';
 import { LanguageId } from '../i18n/site-messages';
 import { Random } from './random';
 import { WORD_BANKS } from './words';
@@ -92,6 +92,8 @@ describe('letter games', () => {
         expect(set.letters).toHaveLength(count);
         expect(set.answers.length).toBeGreaterThanOrEqual(2);
         expect(set.answers.every((word) => canMake(word, set.letters))).toBe(true);
+        const longest = Math.min(...seedWords(bank, count).map((word) => lettersOf(word).length));
+        expect(lettersOf(set.answers[0]).length).toBeGreaterThanOrEqual(longest);
       }
     }
   });
@@ -102,6 +104,9 @@ describe('letter games', () => {
     expect(checkWord('eat', set, [])).toBe('found');
     expect(checkWord('eat', set, ['eat'])).toBe('already-found');
     expect(checkWord('tas', set, [])).toBe('unknown');
+    expect(checkWord('sat', set, [], new Set(['sat']))).toBe('bonus');
+    expect(checkWord('sat', set, ['sat'], new Set(['sat']))).toBe('already-found');
+    expect(checkWord('seats', set, [], new Set(['seats']))).toBe('unknown');
   });
 
   it('keeps every word bank in its own alphabet, with pictures for most vowels', () => {

@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, linkedSignal, signal } from '@angular/core';
+import { afterRenderEffect, ChangeDetectionStrategy, Component, computed, DestroyRef, inject, linkedSignal, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { gameInfo } from '../../core/games';
+import { WordDictionaries } from '../../core/word-dictionaries';
 import { BUILDER_LEVELS, BuilderLevelId, createLetterSet, firstVowelWords, GapWord, HINTS_IDS, HintsId, LETTER_MODE_IDS, LetterModeId, LetterSet, missingVowelWords, mixedWords, secondsForGapWord, secondsForMixedWord } from '../../games/letter-games';
 import { TIMER_IDS, TimerId } from '../../games/math-games';
 import { WORD_BANKS } from '../../games/words';
@@ -31,6 +32,7 @@ const SOLVED_MS = 700;
 })
 export class LetterGamesPage {
   private readonly language = inject(SiteLanguage);
+  private readonly dictionaries = inject(WordDictionaries);
 
   protected readonly modes = LETTER_MODE_IDS;
   protected readonly builderLevels = BUILDER_LEVELS;
@@ -42,6 +44,9 @@ export class LetterGamesPage {
   protected readonly minAge = gameInfo('letter-games').minAge;
 
   private readonly bank = computed(() => WORD_BANKS[this.language.language()]);
+  /** The word builder's dictionary in the site's language, and how its download is doing */
+  protected readonly dictionary = computed(() => this.dictionaries.wordsOf(this.language.language()));
+  protected readonly dictionaryStatus = computed(() => this.dictionaries.status(this.language.language()));
   protected readonly vowels = computed(() => this.bank().vowels);
 
   protected readonly modeId = signal<LetterModeId>('first-vowel');
@@ -64,6 +69,12 @@ export class LetterGamesPage {
 
   constructor() {
     inject(DestroyRef).onDestroy(() => this.stopTimers());
+    // The dictionary downloads as soon as the word builder is chosen, in the browser only
+    afterRenderEffect(() => {
+      if (this.isBuilder()) {
+        void this.dictionaries.load(this.language.language());
+      }
+    });
   }
 
   protected readonly gapWords = signal<readonly GapWord[]>([]);

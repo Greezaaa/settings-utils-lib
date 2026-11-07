@@ -130,7 +130,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           en: 'New game: Letter games, with vowels, mixed letters and a word builder',
           es: 'Nuevo juego: Juegos de letras, con vocales, letras mezcladas y forma palabras',
           eu: 'Joko berria: Letra jokoak, bokalekin, letra nahasiekin eta hitz-sortzailearekin',
-          uk: 'Нова гра: Ігри з літерами — голосні, перемішані літери та складання слів',
+          uk: 'Нова гра: Ігри з буквами — голосні, перемішані букви та складання слів',
         },
       },
       {

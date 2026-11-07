@@ -1,22 +1,27 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output, signal } from '@angular/core';
+import { DictionaryStatus } from '../../../core/word-dictionaries';
 import { checkWord, LetterSet, lettersOf, WordCheck } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { roundFeedback } from './round-feedback';
 
 /**
  * Word builder: the player taps letters to make a word and checks it. Every word to find shows as empty boxes,
- * longest first, and fills in once found.
+ * longest first, and fills in once found. Other real words, checked with the language's dictionary once it has
+ * downloaded, count as bonus words.
  */
 @Component({
   selector: 'app-builder-round',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './builder-round.html',
-  styleUrl: './letter-round.scss',
+  styleUrls: ['./letter-round.scss', './builder-round.scss'],
 })
 export class BuilderRound {
   readonly set = input.required<LetterSet>();
   /** With the timer on, time ran out: show every word and stop taking new ones */
   readonly isTimeUp = input(false);
+  /** The language's dictionary, once downloaded, and how its download is doing */
+  readonly dictionary = input<ReadonlySet<string>>();
+  readonly dictionaryStatus = input<DictionaryStatus>();
   readonly newLetters = output<void>();
   /** Every word was found */
   readonly allFound = output<void>();
@@ -29,6 +34,8 @@ export class BuilderRound {
   /** Ids of the tiles in the word being made */
   protected readonly picked = linkedSignal({ source: this.set, computation: (): readonly number[] => [] });
   protected readonly found = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
+  protected readonly bonus = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
+  protected readonly bonusWords = computed(() => this.bonus().map((word) => ({ word, letters: lettersOf(word) })));
   protected readonly lastCheck = signal<WordCheck | null>(null);
 
   protected readonly word = computed(() =>
@@ -60,8 +67,11 @@ export class BuilderRound {
 
   protected check(): void {
     const word = this.word();
-    const result = checkWord(word, this.set(), this.found());
+    const result = checkWord(word, this.set(), [...this.found(), ...this.bonus()], this.dictionary());
     this.lastCheck.set(result);
+    if (result === 'bonus') {
+      this.bonus.update((bonus) => [...bonus, word]);
+    }
     if (result === 'found') {
       this.found.update((found) => [...found, word]);
       if (this.isAllFound()) {

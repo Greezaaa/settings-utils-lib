@@ -299,7 +299,7 @@ export const EU: SiteMessages = {
 
   letterGames: {
     lead: 'Ikasi bokalak, osatu falta direnak, ordenatu letra nahasiak edo osatu ahal dituzun hitz guztiak.',
-    rule: 'Gure zerrendako hitzek bakarrik balio dute, eta gero eta gehiago gehitzen ditugu!',
+    rule: 'Hitz-sortzailean edozein hitz errealek balio du: jokatzen duzunean bakarrik deskargatzen den hiztegi batekin egiaztatzen dugu.',
     board: 'Letra jokoa',
     modeGroup: 'Jokoa',
     modes: {
@@ -344,7 +344,15 @@ export const EU: SiteMessages = {
       found: 'Ondo aurkitua!',
       'already-found': 'Hori badaukazu jada',
       'too-short': 'Erabili gutxienez 3 letra',
-      unknown: 'Hori ez dago gure zerrendan',
+      bonus: 'Benetako hitza! Gehigarria',
+      unknown: 'Ez dugu hitz hori ezagutzen',
+    },
+    bonusWords: (count) => `Hitz gehigarriak: ${count}`,
+    dictionary: {
+      loading: 'Hiztegia deskargatzen…',
+      why: 'Lehen aldiz jokatzean zure hizkuntzako hiztegia deskargatzen dugu (100 KB inguru) zure hitzak egiaztatzeko. Zure nabigatzaileak hurrengorako gordetzen du.',
+      failed: 'Hiztegia ez da deskargatu, beraz ezkutuko hitzek bakarrik balio dute.',
+      credit: 'Hiztegia: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
     newLetters: 'Beste letra batzuk',
     allFound: 'Denak aurkitu dituzu!',

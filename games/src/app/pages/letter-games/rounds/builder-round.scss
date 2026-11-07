@@ -1,0 +1,55 @@
+// Word builder: the words to find in a column on the left of the letters on wide screens, above them on phones
+
+.found-list,
+.play {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+// The dictionary download, with why in its tooltip
+.dictionary {
+  align-items: center;
+  color: var(--muted);
+  cursor: help;
+  display: flex;
+  font-size: 0.8125rem;
+  gap: 0.5rem;
+}
+
+.spinner {
+  animation: spin 800ms linear infinite;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  border-top-color: var(--button-bg);
+  height: 0.875rem;
+  width: 0.875rem;
+}
+
+@keyframes spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+.is-bonus .letter {
+  border-color: var(--button-bg);
+}
+
+@media (min-width: 40rem) {
+  :host {
+    align-items: start;
+    grid-template-columns: auto 1fr;
+    justify-items: stretch;
+  }
+
+  .found-list {
+    justify-items: start;
+
+    .answers {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}
