@@ -18,6 +18,16 @@ export type FeedbackReason = (typeof FEEDBACK_REASONS)[Vote][number];
 export const SUGGESTION_CATEGORIES = ['new-game', 'improvement', 'drawing', 'problem', 'other'] as const;
 export type SuggestionCategory = (typeof SUGGESTION_CATEGORIES)[number];
 
+/** How long to wait for the API before going on without it (it can be slow or blocked) */
+const READ_TIMEOUT_MS = 4000;
+const SEND_TIMEOUT_MS = 15000;
+
+/** A game the admin switched on or off */
+export interface GameSwitch {
+  readonly game: GameSlug;
+  readonly enabled: boolean;
+}
+
 export interface GamePlays {
   readonly game: GameSlug;
   readonly plays: number;
@@ -35,6 +45,19 @@ function parsePlays(body: unknown): GamePlays[] {
     const game: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'game') : null;
     const plays: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'plays') : null;
     return isGameSlug(game) && typeof plays === 'number' ? [{ game, plays }] : [];
+  });
+}
+
+/** Reads `{ games: [{ game, enabled }] }`, keeping only known games */
+function parseSwitches(body: unknown): GameSwitch[] {
+  const games: unknown = typeof body === 'object' && body !== null ? Reflect.get(body, 'games') : null;
+  if (!Array.isArray(games)) {
+    return [];
+  }
+  return games.flatMap((item: unknown) => {
+    const game: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'game') : null;
+    const enabled: unknown = typeof item === 'object' && item !== null ? Reflect.get(item, 'enabled') : null;
+    return isGameSlug(game) && typeof enabled === 'boolean' ? [{ game, enabled }] : [];
   });
 }
 
@@ -85,23 +108,58 @@ export class GamesApi {
     return this.send('/v1/suggestions', form);
   }
 
+  /** The games the admin switched on or off */
+  async gameSwitches(): Promise<GameSwitch[]> {
+    return parseSwitches(await this.read('/v1/games'));
+  }
+
+  /** Whether an admin token is right, or the API couldn't be asked */
+  async checkAdmin(token: string): Promise<'right' | 'wrong' | 'offline'> {
+    try {
+      const response = await fetch(`${this.baseUrl}/admin/check`, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: AbortSignal.timeout(READ_TIMEOUT_MS),
+      });
+      return response.ok ? 'right' : response.status === 401 ? 'wrong' : 'offline';
+    } catch {
+      return 'offline';
+    }
+  }
+
+  /** Opens or closes a game to the public; needs the admin token */
+  setGameEnabled(token: string, game: GameSlug, enabled: boolean): Promise<boolean> {
+    return this.request(
+      `/admin/games/${game}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify({ enabled }),
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      },
+      SEND_TIMEOUT_MS,
+    );
+  }
+
   private async read(path: string): Promise<unknown> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`);
+      const response = await fetch(`${this.baseUrl}${path}`, { signal: AbortSignal.timeout(READ_TIMEOUT_MS) });
       return response.ok ? await response.json() : null;
     } catch {
       return null;
     }
   }
 
-  private async send(path: string, body: object | FormData): Promise<boolean> {
+  private send(path: string, body: object | FormData): Promise<boolean> {
+    const init: RequestInit =
+      body instanceof FormData
+        ? { method: 'POST', body }
+        : { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } };
+    return this.request(path, init, SEND_TIMEOUT_MS);
+  }
+
+  /** Whether a request succeeded; false when it failed, timed out or couldn't reach the API */
+  private async request(path: string, init: RequestInit, timeoutMs: number): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, {
-        method: 'POST',
-        ...(body instanceof FormData
-          ? { body }
-          : { body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } }),
-      });
+      const response = await fetch(`${this.baseUrl}${path}`, { ...init, signal: AbortSignal.timeout(timeoutMs) });
       return response.ok;
     } catch {
       return false;

@@ -1,13 +1,18 @@
 import { Route, Routes } from '@angular/router';
+import { gameAvailableGuard } from './core/game-guard';
 import { GameSlug } from './core/games';
 import { PREVIEW_MESSAGES, SITE_META, SITE_NAME } from './core/page-meta';
 
 const { seo, home, games, privacy, suggestions } = PREVIEW_MESSAGES;
 
-/** Page title and description of a game, for search results and link previews */
-function gameMeta(slug: GameSlug): Pick<Route, 'title' | 'data'> {
+/** Page title and description of a game, for search results and link previews; the page opens only when the game does */
+function gameMeta(slug: GameSlug): Pick<Route, 'title' | 'data' | 'canActivate'> {
   const { name, subtitle, intro, summary } = games[slug];
-  return { title: `${name}: ${subtitle} · ${SITE_NAME}`, data: { description: `${intro} ${summary}` } };
+  return {
+    title: `${name}: ${subtitle} · ${SITE_NAME}`,
+    data: { description: `${intro} ${summary}` },
+    canActivate: [gameAvailableGuard(slug)],
+  };
 }
 
 /** The not-found page: prerendered at /404 (copied to 404.html after the build) and shown for unknown links */
@@ -65,6 +70,13 @@ export const routes: Routes = [
     title: `${suggestions.title} · ${SITE_NAME}`,
     data: { description: suggestions.lead },
     loadComponent: () => import('./pages/suggestions/suggestions-page').then((m) => m.SuggestionsPage),
+  },
+  {
+    // The admin's page: linked from nowhere and kept out of search results
+    path: 'admin',
+    title: `Admin · ${SITE_NAME}`,
+    data: { description: 'Site administration', noIndex: true },
+    loadComponent: () => import('./pages/admin/admin-page').then((m) => m.AdminPage),
   },
   { path: '404', ...notFound },
   { path: '**', ...notFound },

@@ -4,6 +4,9 @@
     @if (isNew()) {
       <span class="tag tag-green">{{ t().page.new }}</span>
     }
+    @if (isHidden()) {
+      <span class="tag tag-red">{{ t().page.hidden }}</span>
+    }
     @if (isPopular()) {
       <span class="tag tag-yellow">{{ t().page.popular }}</span>
     }

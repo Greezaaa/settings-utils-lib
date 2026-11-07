@@ -228,6 +228,7 @@ export const EN: SiteMessages = {
     ages: (age) => `Ages ${age}+`,
     new: 'New',
     popular: 'Popular',
+    hidden: 'Hidden',
     title: 'Math games',
     lead: 'Say whether the result is true or false, tap the result yourself, or find the missing signs. With the timer on, answer before the bar runs out.',
     rule: 'Don’t miss one, or the game is over!',

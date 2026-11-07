@@ -20,8 +20,11 @@ export class PitchListener {
   private frame = 0;
 
   readonly state = signal<MicrophoneState>('off');
-  /** The pitch heard just now, in hertz, or null in silence */
-  readonly pitch = signal<number | null>(null);
+  /**
+   * The pitch heard just now, in hertz, or null in silence. Updated on every reading, even when the value is the
+   * same, so whatever times a steady note (like holding it in tune) keeps counting.
+   */
+  readonly pitch = signal<number | null>(null, { equal: () => false });
 
   async start(): Promise<void> {
     if (this.stream) {

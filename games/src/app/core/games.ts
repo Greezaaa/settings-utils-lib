@@ -16,16 +16,21 @@ export interface GameInfo {
   readonly category: GameCategory;
   /** The youngest age it is recommended from, shown as e.g. "Ages 4+" */
   readonly minAge: number;
+  /**
+   * Whether the game is open to the public until the admin switches it (see GameAvailability), and whenever the API
+   * can't be reached. Add a new game with `false` to try it in preview before opening it.
+   */
+  readonly openByDefault: boolean;
 }
 
 /** All games, in the order they appear on the site */
 export const GAMES: readonly GameInfo[] = [
-  { slug: 'math-games', category: 'numbers', minAge: 6 },
-  { slug: 'letter-games', category: 'letters', minAge: 4 },
-  { slug: 'hit-the-note', category: 'music', minAge: 4 },
-  { slug: 'sliding-puzzle', category: 'puzzles', minAge: 5 },
-  { slug: 'turn-picture', category: 'puzzles', minAge: 4 },
-  { slug: 'place-pieces', category: 'puzzles', minAge: 4 },
+  { slug: 'math-games', category: 'numbers', minAge: 6, openByDefault: true },
+  { slug: 'letter-games', category: 'letters', minAge: 4, openByDefault: true },
+  { slug: 'hit-the-note', category: 'music', minAge: 4, openByDefault: true },
+  { slug: 'sliding-puzzle', category: 'puzzles', minAge: 5, openByDefault: true },
+  { slug: 'turn-picture', category: 'puzzles', minAge: 4, openByDefault: true },
+  { slug: 'place-pieces', category: 'puzzles', minAge: 4, openByDefault: true },
 ];
 
 export const GAME_SLUGS: readonly GameSlug[] = GAMES.map(({ slug }) => slug);
@@ -39,9 +44,15 @@ export function gameInfo(slug: GameSlug): GameInfo {
   return game;
 }
 
-/** The games of each category that has any, in site order */
-export const GAMES_BY_CATEGORY: readonly { readonly category: GameCategory; readonly games: readonly GameSlug[] }[] =
-  GAME_CATEGORIES.map((category) => ({
+export interface CategoryGames {
+  readonly category: GameCategory;
+  readonly games: readonly GameSlug[];
+}
+
+/** The given games grouped by category, in site order, leaving out empty categories */
+export function byCategory(games: readonly GameSlug[]): CategoryGames[] {
+  return GAME_CATEGORIES.map((category) => ({
     category,
-    games: GAMES.filter((game) => game.category === category).map(({ slug }) => slug),
-  })).filter(({ games }) => games.length > 0);
+    games: games.filter((game) => gameInfo(game).category === category),
+  })).filter((group) => group.games.length > 0);
+}

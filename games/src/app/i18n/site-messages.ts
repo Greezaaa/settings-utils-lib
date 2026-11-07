@@ -198,6 +198,8 @@ export interface SiteMessages {
     readonly new: string;
     /** Badge on the most played games */
     readonly popular: string;
+    /** Badge the admin sees in preview on games closed to the public */
+    readonly hidden: string;
     readonly title: string;
     readonly lead: string;
     /** The one rule, shown on its own line below the lead */

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { GAMES_BY_CATEGORY } from '../../core/games';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GameAvailability } from '../../core/game-availability';
+import { byCategory } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameCard } from '../../shared/game-card';
 import { Reveal } from '../../shared/reveal';
@@ -15,5 +16,6 @@ import { Reveal } from '../../shared/reveal';
 export class HomePage {
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
-  protected readonly categories = GAMES_BY_CATEGORY;
+  private readonly availability = inject(GameAvailability);
+  protected readonly categories = computed(() => byCategory(this.availability.visibleGames()));
 }

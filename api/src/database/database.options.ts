@@ -1,9 +1,11 @@
 import type { DataSourceOptions } from 'typeorm';
 import { Feedback } from '../feedback/feedback.entity.js';
+import { GameSetting } from '../game-settings/game-setting.entity.js';
 import { PlayCount } from '../plays/play-count.entity.js';
 import { Suggestion } from '../suggestions/suggestion.entity.js';
 import { WordReport } from '../word-reports/word-report.entity.js';
 import { Initial1794100000000 } from './migrations/1794100000000-initial.js';
+import { GameSettings1794200000000 } from './migrations/1794200000000-game-settings.js';
 
 /**
  * How the API reaches PostgreSQL. The tables are only ever changed by migrations, which run when the API starts;
@@ -12,8 +14,8 @@ import { Initial1794100000000 } from './migrations/1794100000000-initial.js';
 export const databaseOptions = (url: string): DataSourceOptions => ({
   type: 'postgres',
   url,
-  entities: [Feedback, PlayCount, Suggestion, WordReport],
-  migrations: [Initial1794100000000],
+  entities: [Feedback, GameSetting, PlayCount, Suggestion, WordReport],
+  migrations: [Initial1794100000000, GameSettings1794200000000],
   migrationsRun: true,
   synchronize: false,
 });

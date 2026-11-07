@@ -57,4 +57,37 @@ describe('GamesApi', () => {
     expect(String(url)).toBe('http://localhost:3000/v1/feedback');
     expect(init?.body).toBe(JSON.stringify({ game: 'letter-games', vote: 'up', language: 'eu', reason: 'fun' }));
   });
+
+  it('reads game switches, keeping known games only', async () => {
+    vi.stubGlobal(
+      'fetch',
+      answer({
+        games: [
+          { game: 'hit-the-note', enabled: false },
+          { game: 'chess', enabled: true },
+        ],
+      }),
+    );
+    expect(await api.gameSwitches()).toEqual([{ game: 'hit-the-note', enabled: false }]);
+  });
+
+  it('tells a wrong admin token from an unreachable API', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(null, { status: 204 })),
+    );
+    expect(await api.checkAdmin('token')).toBe('right');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(null, { status: 401 })),
+    );
+    expect(await api.checkAdmin('token')).toBe('wrong');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('offline');
+      }),
+    );
+    expect(await api.checkAdmin('token')).toBe('offline');
+  });
 });

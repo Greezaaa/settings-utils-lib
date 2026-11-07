@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_SLUGS, GAMES, GAMES_BY_CATEGORY, gameInfo } from './games';
+import { byCategory, GAME_SLUGS, GAMES, gameInfo } from './games';
 
 describe('games', () => {
   it('lists every game once, in a category', () => {
     expect(new Set(GAME_SLUGS).size).toBe(GAMES.length);
-    expect(GAMES_BY_CATEGORY.flatMap(({ games }) => games).sort()).toEqual([...GAME_SLUGS].sort());
+    expect(
+      byCategory(GAME_SLUGS)
+        .flatMap(({ games }) => games)
+        .sort(),
+    ).toEqual([...GAME_SLUGS].sort());
+    expect(byCategory(['hit-the-note'])).toEqual([{ category: 'music', games: ['hit-the-note'] }]);
   });
 
   it('finds a game’s details', () => {

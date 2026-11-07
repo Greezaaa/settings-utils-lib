@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GAME_SLUGS } from '../../core/games';
+import { GameAvailability } from '../../core/game-availability';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameCard } from '../../shared/game-card';
 
@@ -18,5 +18,5 @@ import { GameCard } from '../../shared/game-card';
 export class NotFoundPage {
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
-  protected readonly games = GAME_SLUGS;
+  protected readonly games = inject(GameAvailability).visibleGames;
 }

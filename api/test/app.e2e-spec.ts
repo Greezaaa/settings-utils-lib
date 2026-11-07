@@ -121,6 +121,39 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     expect(await hidden()).toEqual([]);
   });
 
+  it('switches games on and off for the admin only', async () => {
+    await request(app.getHttpServer()).get('/admin/check').expect(401);
+    await request(app.getHttpServer())
+      .get('/admin/check')
+      .set(admin)
+      .expect(204);
+    await request(app.getHttpServer())
+      .get('/v1/games')
+      .expect(200, { games: [] });
+    await request(app.getHttpServer())
+      .put('/admin/games/hit-the-note')
+      .send({ enabled: false })
+      .expect(401);
+    await request(app.getHttpServer())
+      .put('/admin/games/chess')
+      .set(admin)
+      .send({ enabled: false })
+      .expect(400);
+    await request(app.getHttpServer())
+      .put('/admin/games/hit-the-note')
+      .set(admin)
+      .send({ enabled: false })
+      .expect(204);
+    await request(app.getHttpServer())
+      .put('/admin/games/hit-the-note')
+      .set(admin)
+      .send({ enabled: true })
+      .expect(204);
+    await request(app.getHttpServer())
+      .get('/v1/games')
+      .expect(200, { games: [{ game: 'hit-the-note', enabled: true }] });
+  });
+
   it('keeps suggestions with a cleaned picture for moderators', async () => {
     const photo = await sharp({
       create: { width: 20, height: 20, channels: 3, background: '#ff0000' },

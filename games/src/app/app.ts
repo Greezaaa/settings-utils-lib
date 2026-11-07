@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
-import { GAME_SLUGS } from './core/games';
+import { GameAvailability } from './core/game-availability';
 import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
@@ -39,7 +39,8 @@ export class App {
   protected readonly boardColours = inject(BoardColours);
   protected readonly gameThemes = GAME_THEMES;
 
-  protected readonly games = GAME_SLUGS;
+  private readonly availability = inject(GameAvailability);
+  protected readonly games = this.availability.visibleGames;
   protected readonly githubUrl = GITHUB_REPO_URL;
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly mainSiteUrl = MAIN_SITE_URL;
@@ -53,6 +54,11 @@ export class App {
   /** Whether the settings panel is open (only used on phones, where it hides behind the gear button) */
   protected readonly settingsOpen = signal(false);
   private readonly settings = viewChild.required<ElementRef<HTMLElement>>('settings');
+
+  constructor() {
+    // Which games are open (and whether this is the admin's preview) is known once the API answers
+    afterNextRender(() => void this.availability.ready());
+  }
 
   protected cycleTheme(): void {
     this.theme.set(this.nextTheme());

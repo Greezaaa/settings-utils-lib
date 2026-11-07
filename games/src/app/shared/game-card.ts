@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GameSlug, gameInfo } from '../core/games';
+import { GameAvailability } from '../core/game-availability';
 import { NewGames } from '../core/new-games';
 import { PopularGames } from '../core/popular-games';
 import { SiteLanguage } from '../i18n/site-language';
@@ -20,8 +21,11 @@ export class GameCard {
   protected readonly t = inject(SiteLanguage).messages;
   private readonly newGames = inject(NewGames).games;
   private readonly popularGames = inject(PopularGames).games;
+  private readonly availability = inject(GameAvailability);
 
   protected readonly minAge = computed(() => gameInfo(this.game()).minAge);
   protected readonly isNew = computed(() => this.newGames().includes(this.game()));
   protected readonly isPopular = computed(() => this.popularGames().includes(this.game()));
+  /** Shown to the admin in preview: the game isn't open to the public */
+  protected readonly isHidden = computed(() => !this.availability.isOpen(this.game()));
 }

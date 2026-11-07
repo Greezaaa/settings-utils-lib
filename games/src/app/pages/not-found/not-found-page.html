@@ -10,7 +10,7 @@
 <section class="container page-section" aria-labelledby="not-found-games">
   <h2 id="not-found-games" class="section-title">{{ t().notFound.playInstead }}</h2>
   <div class="games">
-    @for (game of games; track game) {
+    @for (game of games(); track game) {
       <app-game-card [game]="game" />
     }
   </div>

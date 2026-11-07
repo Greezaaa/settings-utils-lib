@@ -238,6 +238,7 @@ export const EU: SiteMessages = {
     ages: (age) => `${age} urtetik aurrera`,
     new: 'Berria',
     popular: 'Ezaguna',
+    hidden: 'Ezkutuan',
     title: 'Matematika jokoak',
     lead: 'Esan emaitza egia ala gezurra den, sakatu zuk emaitza edo aurkitu falta diren zeinuak. Denborarekin, erantzun barra amaitu baino lehen.',
     rule: 'Ez huts egin, bestela jokoa amaitzen da!',

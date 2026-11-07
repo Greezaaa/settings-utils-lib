@@ -11,7 +11,7 @@
   </p>
 </header>
 
-@for (group of categories; track group.category) {
+@for (group of categories(); track group.category) {
   <section class="container page-section" [attr.aria-labelledby]="'category-' + group.category">
     <h2 class="section-title" [id]="'category-' + group.category">{{ t().categories[group.category] }}</h2>
     <div class="games">

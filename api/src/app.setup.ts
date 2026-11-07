@@ -14,7 +14,7 @@ export function setUpApp(app: NestExpressApplication): void {
   app.useGlobalPipes(new StandardSchemaValidationPipe());
   app.enableCors({
     origin: config.get('CORS_ORIGINS', { infer: true }),
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT'],
   });
   app.disable('x-powered-by');
   VisitorThrottlerGuard.trustCloudflare = config.get('TRUST_CLOUDFLARE', {

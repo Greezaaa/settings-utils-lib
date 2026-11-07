@@ -238,6 +238,7 @@ export const ES: SiteMessages = {
     ages: (age) => `Desde ${age} años`,
     new: 'Nuevo',
     popular: 'Popular',
+    hidden: 'Oculto',
     title: 'Juegos de matemáticas',
     lead: 'Di si el resultado es verdadero o falso, marca tú el resultado o encuentra los signos que faltan. Con tiempo, responde antes de que se acabe la barra.',
     rule: '¡No falles, o se acaba la partida!',

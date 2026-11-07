@@ -1,0 +1,64 @@
+<header class="container page-head">
+  <h1>Admin</h1>
+  <p class="lead">Switch games on or off for the public, and try hidden games in preview mode.</p>
+</header>
+
+<section class="container page-section">
+  @if (!isSignedIn()) {
+    <form class="card admin-card" (submit)="submit($event, tokenInput)">
+      <label class="field">
+        <span>Admin token (ADMIN_TOKEN in the API's .env)</span>
+        <input #tokenInput type="password" autocomplete="off" spellcheck="false" required />
+      </label>
+      @switch (signIn()) {
+        @case ('wrong') {
+          <p class="error" role="alert">That token is wrong.</p>
+        }
+        @case ('offline') {
+          <p class="error" role="alert">The API can't be reached right now. Try again later.</p>
+        }
+      }
+      <button type="submit" class="button" [disabled]="signIn() === 'checking'">
+        {{ signIn() === 'checking' ? 'Checking…' : 'Sign in' }}
+      </button>
+    </form>
+  } @else {
+    <div class="card admin-card">
+      <label class="switch-row">
+        <span>
+          <strong>Preview mode</strong>
+          <small class="muted">This browser shows every game, open or not, marked “{{ t().page.hidden }}” when hidden.</small>
+        </span>
+        <input type="checkbox" role="switch" [checked]="availability.isPreview()" (change)="togglePreview()" />
+      </label>
+    </div>
+
+    <h2 class="section-title">Games</h2>
+    <ul class="card admin-card games">
+      @for (game of games; track game.slug) {
+        <li>
+          <label class="switch-row">
+            <span>
+              <a [routerLink]="['/', game.slug]">{{ t().games[game.slug].name }}</a>
+              <small class="muted">
+                {{ availability.isOpen(game.slug) ? 'Open to everyone' : 'Hidden from the public' }}
+                · default: {{ game.openByDefault ? 'open' : 'hidden' }}
+              </small>
+            </span>
+            <input
+              type="checkbox"
+              role="switch"
+              [checked]="availability.isOpen(game.slug)"
+              [disabled]="saving() !== null"
+              (change)="toggle(game.slug)"
+            />
+          </label>
+        </li>
+      }
+    </ul>
+    @if (saveFailed()) {
+      <p class="error" role="alert">That change didn't save. Check the API and try again.</p>
+    }
+    <button type="button" class="button button-secondary" (click)="signOut()">Sign out</button>
+  }
+</section>
