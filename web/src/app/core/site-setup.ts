@@ -3,9 +3,13 @@ import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationService } from '@su-labs/notifications';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 import { SHARED_SETTINGS } from './shared-settings';
+import { isSavingAllowed } from './site-storage';
 import { SiteTheme } from './site-theme';
 
-/** localStorage key for the site's visit data, also used by the visit tracker demo */
+/**
+ * localStorage key for the site's visit data, also used by the visit tracker demo; under the site's prefix, so turning
+ * saving off deletes it
+ */
 export const VISIT_STORAGE_KEY = 'su-labs-site:visits';
 
 /** Visit numbers celebrated with a notification */
@@ -33,7 +37,11 @@ export function setUpSite(): void {
   const notifications = inject(SuNotificationService);
   notifications.configure({ position: 'bottom-right' });
 
+  // Visits are only counted (and saved) while the visitor allows saving
   const visits = inject(SuVisitTrackerService);
+  if (!isSavingAllowed()) {
+    return;
+  }
   visits.init({ storageKey: VISIT_STORAGE_KEY, milestoneVisits: VISIT_MILESTONES });
 
   const milestone = visits.milestone();

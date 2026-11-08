@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { SuNotificationService } from '@su-labs/notifications';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 import { getUtility } from '../../core/packages';
 import { VISIT_MILESTONES, VISIT_STORAGE_KEY } from '../../core/site-setup';
+import { isSavingAllowed } from '../../core/site-storage';
 import { CodeTab } from '../../shared/code-tabs';
 import { UtilityPage } from '../../shared/utility-page';
 
@@ -31,7 +33,7 @@ const { count, lastVisit, milestone } = visits.visit.get();`,
 
 @Component({
   selector: 'app-visit-tracker-page',
-  imports: [DatePipe, UtilityPage],
+  imports: [DatePipe, RouterLink, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './visit-tracker-page.html',
 })
@@ -43,6 +45,12 @@ export class VisitTrackerPage {
   protected readonly visits = inject(SuVisitTrackerService);
 
   private readonly notifications = inject(SuNotificationService);
+  /** Visits are only counted while the visitor allows saving; read in the browser */
+  protected readonly savingAllowed = signal(true);
+
+  constructor() {
+    afterNextRender(() => this.savingAllowed.set(isSavingAllowed()));
+  }
 
   /** Remove the saved visits so the next page load counts as the first visit */
   protected forget(): void {

@@ -1,22 +1,29 @@
+import { createSuCookieStorage } from '@su-labs/core';
+
 /**
  * The games site's small per-browser memory (language, best scores, chosen colours…), as JSON under
  * `su-labs-games:<name>`, and the visitor's choice about it.
  *
  * Saving is on unless the visitor turns it off on the privacy page. Then nothing is saved — not here and
  * not in the shared cookies — and what was saved is deleted; only that choice itself is remembered.
+ * The choice is shared with su-labs.dev (one cookie on su-labs.dev, `su-labs:storage-consent`), as both sites share
+ * the theme and text size cookies: turning saving off on either site stops both.
  * Storage can also be missing or blocked (private mode, prerendering): reads fall back to `undefined` and
  * writes may be lost.
  */
 
 const KEY_PREFIX = 'su-labs-games:';
 
-/** Where the visitor's choice is kept; the one thing saved even when saving is off */
+/** Where this site kept the visitor's choice before it was shared; still honoured */
 const CONSENT_KEY = `${KEY_PREFIX}storage-consent`;
+/** The visitor's choice, shared by both su-labs sites; the one thing saved even when saving is off */
+export const CONSENT_COOKIE = 'su-labs:storage-consent';
+const consentCookies = createSuCookieStorage({ domain: 'su-labs.dev', maxAgeDays: 365 });
 
-/** Whether the visitor allows saving their preferences (they do until they say otherwise) */
+/** Whether the visitor allows saving their preferences (they do until they say otherwise, on either site) */
 export function isSavingAllowed(): boolean {
   try {
-    return localStorage.getItem(CONSENT_KEY) !== 'denied';
+    return consentCookies.getItem(CONSENT_COOKIE) !== 'denied' && localStorage.getItem(CONSENT_KEY) !== 'denied';
   } catch {
     return false;
   }
@@ -27,6 +34,11 @@ export function isSavingAllowed(): boolean {
  * `forget` deletes the rest (the shared cookies), since this module doesn't know about them.
  */
 export function setSavingAllowed(allowed: boolean, forget: () => void): void {
+  if (allowed) {
+    consentCookies.removeItem(CONSENT_COOKIE);
+  } else {
+    consentCookies.setItem(CONSENT_COOKIE, 'denied');
+  }
   try {
     if (allowed) {
       localStorage.removeItem(CONSENT_KEY);

@@ -38,7 +38,10 @@ theme.theme.subscribe((name) => console.log(name));`;
 export class HomePage {
   protected readonly utilities = UTILITIES;
   protected readonly tools = TOOLS;
-  protected readonly environments = ENVIRONMENTS.map((environment) => ({ ...environment, url: guideUrl(environment.guide) }));
+  protected readonly environments = ENVIRONMENTS.map((environment) => ({
+    ...environment,
+    url: guideUrl(environment.guide),
+  }));
   protected readonly guidesUrl = GUIDES_URL;
   protected readonly gamesUrl = GAMES_URL;
   protected readonly angularExample = ANGULAR_EXAMPLE;

@@ -22,7 +22,9 @@ export const SITE_META: PageMeta = { description: SITE_DESCRIPTION };
 /** Route data for a utility page, built from its entry in packages.ts */
 export function utilityMeta(slug: string): PageMeta {
   const utility = getUtility(slug);
-  return { description: `${utility.summary} For Angular (${utility.packageName}) and any framework (${utility.coreEntry}).` };
+  return {
+    description: `${utility.summary} For Angular (${utility.packageName}) and any framework (${utility.coreEntry}).`,
+  };
 }
 
 /**

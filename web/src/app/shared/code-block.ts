@@ -11,7 +11,12 @@ import { SuNotificationService } from '@su-labs/notifications';
       <button type="button" class="copy" (click)="copy()" aria-label="Copy code">
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
           <rect x="5" y="5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6" />
-          <path d="M11 3.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+          <path
+            d="M11 3.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+          />
         </svg>
       </button>
     </div>
@@ -67,7 +72,10 @@ export class CodeBlock {
       await navigator.clipboard.writeText(this.code());
       this.notifications.show({ type: 'success', message: 'Copied to clipboard.', duration: 2000 });
     } catch {
-      this.notifications.show({ type: 'error', message: 'Copying is blocked in this browser. Select the code instead.' });
+      this.notifications.show({
+        type: 'error',
+        message: 'Copying is blocked in this browser. Select the code instead.',
+      });
     }
   }
 }

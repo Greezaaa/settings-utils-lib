@@ -28,9 +28,15 @@ describe('parseCustomTheme', () => {
   });
 
   it('should require readable, opaque text', () => {
-    expect(parse('{ "main-accent": "#123456" }')).toMatchObject({ error: 'Add "background" and "color" so the text stays readable.' });
-    expect(parse('{ "background": "#ffffff", "color": "transparent" }')).toMatchObject({ error: expect.stringContaining('fully opaque') });
-    expect(parse('{ "background": "#ffffff", "color": "#ffffff" }')).toMatchObject({ error: expect.stringContaining('1.0:1') });
+    expect(parse('{ "main-accent": "#123456" }')).toMatchObject({
+      error: 'Add "background" and "color" so the text stays readable.',
+    });
+    expect(parse('{ "background": "#ffffff", "color": "transparent" }')).toMatchObject({
+      error: expect.stringContaining('fully opaque'),
+    });
+    expect(parse('{ "background": "#ffffff", "color": "#ffffff" }')).toMatchObject({
+      error: expect.stringContaining('1.0:1'),
+    });
   });
 
   describe('hostile input', () => {
@@ -60,7 +66,10 @@ describe('parseCustomTheme', () => {
       const deepNesting = '['.repeat(100_000) + ']'.repeat(100_000);
 
       for (const json of [manyKeys, deepNesting, 'x'.repeat(MAX_CUSTOM_THEME_LENGTH + 1)]) {
-        expect(parse(json)).toMatchObject({ ok: false, error: expect.stringContaining(`under ${MAX_CUSTOM_THEME_LENGTH} characters`) });
+        expect(parse(json)).toMatchObject({
+          ok: false,
+          error: expect.stringContaining(`under ${MAX_CUSTOM_THEME_LENGTH} characters`),
+        });
       }
     });
   });

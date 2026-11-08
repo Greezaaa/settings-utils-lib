@@ -10,6 +10,12 @@ const notFound = {
 
 export const routes: Routes = [
   {
+    path: 'privacy',
+    title: `Privacy · ${SITE_NAME}`,
+    data: { description: 'What su-labs.dev saves, where and why, and how to turn saving off.' },
+    loadComponent: () => import('./pages/privacy/privacy-page').then((m) => m.PrivacyPage),
+  },
+  {
     path: '',
     title: `${SITE_NAME}: settings utilities for Angular and any framework`,
     data: SITE_META,

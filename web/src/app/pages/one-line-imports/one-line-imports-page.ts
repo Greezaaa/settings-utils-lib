@@ -93,7 +93,10 @@ const SETUP: readonly CodeTab[] = [
 
 /** How the extension treats each kind of project */
 const PROJECT_MODES: readonly { readonly project: string; readonly result: string }[] = [
-  { project: 'A Prettier config', result: 'Formatted with that config: options, overrides, plugins, .editorconfig and .prettierignore' },
+  {
+    project: 'A Prettier config',
+    result: 'Formatted with that config: options, overrides, plugins, .editorconfig and .prettierignore',
+  },
   { project: 'Prettier installed, no config', result: 'Formatted with Prettier’s defaults' },
   { project: 'No Prettier', result: 'Only wrapped imports are joined; the rest of the code stays as it is' },
   { project: 'Prettier plugins not installed', result: 'Only imports are joined, with a hint to run npm install' },

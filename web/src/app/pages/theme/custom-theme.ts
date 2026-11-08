@@ -55,7 +55,10 @@ export function parseCustomTheme(json: string, readColor: ColorReader = readCanv
   const colors = new Map<string, Rgba>();
   for (const [name, value] of Object.entries(parsed)) {
     if (!ALLOWED_KEYS.includes(name)) {
-      return { ok: false, error: `"${name}" is not a theme variable. Use ${ALLOWED_KEYS.map((key) => `"${key}"`).join(', ')}.` };
+      return {
+        ok: false,
+        error: `"${name}" is not a theme variable. Use ${ALLOWED_KEYS.map((key) => `"${key}"`).join(', ')}.`,
+      };
     }
     const rgba = typeof value === 'string' ? readColor(value) : null;
     if (typeof value !== 'string' || !rgba) {

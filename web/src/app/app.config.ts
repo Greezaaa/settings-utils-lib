@@ -9,7 +9,11 @@ import { setUpSite } from './core/site-setup';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withComponentInputBinding(), withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' })),
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' }),
+    ),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
     { provide: TitleStrategy, useClass: PageMetaStrategy },

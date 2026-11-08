@@ -81,7 +81,8 @@ export const VSCODE_EXTENSION: SuPackage = {
   slug: 'vscode-ts-one-line-imports',
   name: 'TS One-Line Imports',
   packageName: 'su-labs.ts-one-line-imports',
-  summary: 'Keeps every import on one line in every project you open in VS Code, using each project’s own Prettier config.',
+  summary:
+    'Keeps every import on one line in every project you open in VS Code, using each project’s own Prettier config.',
   registry: 'vscode-marketplace',
 };
 

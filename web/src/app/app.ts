@@ -5,6 +5,7 @@ import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { AUTHOR_EMAIL_URL, GAMES_URL, GITHUB_REPO_URL, GUIDES_URL, npmUrl } from './core/links';
 import { CORE_PACKAGE, UTILITIES } from './core/packages';
+import { PrivacyNotice } from './core/privacy-notice';
 import { SiteTheme } from './core/site-theme';
 
 /** Order of the header theme switch */
@@ -25,6 +26,8 @@ const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contras
 export class App {
   protected readonly theme = inject(SiteTheme);
   protected readonly fontSize = inject(FontSizeService);
+  /** Started with the shell, so the privacy notice shows on whichever page the visitor lands */
+  private readonly privacyNotice = inject(PrivacyNotice);
 
   protected readonly utilities = UTILITIES;
   protected readonly githubUrl = GITHUB_REPO_URL;

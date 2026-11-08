@@ -1,0 +1,70 @@
+<header class="container page-head">
+  <h1>Privacy</h1>
+  <p class="lead">
+    su-labs.dev saves as little as possible.
+    <br />
+    Here’s exactly what it saves, where, and why.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="privacy-choice">
+  <h2 id="privacy-choice" class="section-title">Your choice</h2>
+  <label class="switch">
+    <input type="checkbox" role="switch" [checked]="savingAllowed()" (change)="onChange($event)" />
+    <span class="track" aria-hidden="true"></span>
+    <span>Remember my preferences on this device</span>
+  </label>
+  <p class="muted" aria-live="polite">
+    @if (savingAllowed()) {
+      Your preferences are saved on this device.
+    } @else {
+      Nothing is saved, here or on games.su-labs.dev: settings go back to their defaults on every visit. Only this
+      choice is remembered.
+    }
+  </p>
+  <div class="delete">
+    <button type="button" class="button button-secondary" (click)="deleteSaved()">Delete my saved data</button>
+  </div>
+</section>
+
+<section class="container page-section" aria-labelledby="privacy-saved">
+  <h2 id="privacy-saved" class="section-title">What we save</h2>
+  <div class="table-scroll">
+    <table class="saved">
+      <thead>
+        <tr>
+          <th scope="col">What</th>
+          <th scope="col">Where</th>
+          <th scope="col">Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of saved; track row.what) {
+          <tr>
+            <th scope="row">{{ row.what }}</th>
+            <td>{{ row.where }}</td>
+            <td class="muted">{{ row.why }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="container page-section" aria-labelledby="privacy-difference">
+  <h2 id="privacy-difference" class="section-title">Cookies and local storage</h2>
+  <p class="lead">
+    A cookie is sent to our server with every visit; local storage stays in this browser and is never sent anywhere.
+    <br />
+    We use cookies only to share your theme and text size with games.su-labs.dev, and the server doesn’t read them.
+  </p>
+</section>
+
+<section class="container page-section" aria-labelledby="privacy-never">
+  <h2 id="privacy-never" class="section-title">What we never do</h2>
+  <ul class="never">
+    @for (item of never; track item) {
+      <li>{{ item }}</li>
+    }
+  </ul>
+</section>

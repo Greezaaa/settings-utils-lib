@@ -47,7 +47,6 @@ const SECTION_TAGS: Readonly<Record<string, string>> = {
         </li>
       }
     </ol>
-
   `,
   styles: `
     .releases {
