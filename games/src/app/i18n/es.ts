@@ -122,6 +122,13 @@ export const ES: SiteMessages = {
       subtitle: 'ángulos, fracciones y rectas numéricas',
       intro: 'Un juego de medir para niños.',
     },
+    'climb-tower': {
+      name: 'Sube la torre',
+      summary:
+        'Cada respuesta correcta te sube un piso; si fallas, te caes. ¿Hasta dónde llegarás?',
+      subtitle: 'verdadero o falso, o elige la operación correcta, piso a piso',
+      intro: 'Un juego de matemáticas para niños.',
+    },
     'letter-games': {
       name: 'Juegos de letras',
       summary:
@@ -664,6 +671,30 @@ export const ES: SiteMessages = {
     progress: (exercise, total) => `${exercise} de ${total}`,
     done: 'Terminado',
     summary: (right, total) => `${right} de ${total} bien`,
+  },
+
+  climbTower: {
+    lead: 'Cada respuesta correcta te sube un piso. Si fallas, te caes.',
+    rule: '¿Hasta dónde puedes subir?',
+    board: 'Sube la torre',
+    modeGroup: 'Juego',
+    modes: {
+      'true-or-false': {
+        name: 'Verdadero o falso',
+        summary: '¿Está bien el resultado? Responde para saltar.',
+      },
+      'which-one': {
+        name: '¿Cuál es?',
+        summary:
+          'Salta a la plataforma cuya operación da el número de la caja.',
+      },
+    },
+    answers: 'Respuestas',
+    floors: floors => `Piso ${floors}`,
+    best: floors => `Récord: piso ${floors}`,
+    fell: '¡Te caíste!',
+    summary: floors =>
+      floors === 1 ? '1 piso subido' : `${floors} pisos subidos`,
   },
 
   hitTheNote: {

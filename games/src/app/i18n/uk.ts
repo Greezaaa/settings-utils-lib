@@ -151,6 +151,14 @@ export const UK: SiteMessages = {
       subtitle: 'кути, дроби і числові прямі',
       intro: 'Гра у вимірювання для дітей.',
     },
+    'climb-tower': {
+      name: 'Піднімись на вежу',
+      summary:
+        'Кожна правильна відповідь піднімає на поверх вище; помилка — і ти падаєш. Як високо ти залізеш?',
+      subtitle:
+        'правда чи ні, або обери правильний приклад, поверх за поверхом',
+      intro: 'Математична гра для дітей.',
+    },
     'letter-games': {
       name: 'Ігри з буквами',
       summary:
@@ -694,6 +702,28 @@ export const UK: SiteMessages = {
     progress: (exercise, total) => `${exercise} з ${total}`,
     done: 'Готово',
     summary: (right, total) => `${right} з ${total} правильно`,
+  },
+
+  climbTower: {
+    lead: 'Кожна правильна відповідь піднімає тебе на поверх вище. Помилка — і ти падаєш.',
+    rule: 'Як високо ти зможеш піднятися?',
+    board: 'Піднімись на вежу',
+    modeGroup: 'Гра',
+    modes: {
+      'true-or-false': {
+        name: 'Правда чи ні',
+        summary: 'Чи правильний результат? Відповідай, щоб стрибнути.',
+      },
+      'which-one': {
+        name: 'Який саме?',
+        summary: 'Стрибни на платформу з прикладом, що дає число в рамці.',
+      },
+    },
+    answers: 'Відповіді',
+    floors: floors => `Поверх ${floors}`,
+    best: floors => `Рекорд: поверх ${floors}`,
+    fell: 'Ти впав!',
+    summary: floors => `Поверхів пройдено: ${floors}`,
   },
 
   hitTheNote: {

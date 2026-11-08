@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  width: min(100%, 22rem);
+}
+
+.tower {
+  background: color-mix(in srgb, var(--button-bg) 4%, transparent);
+  border-radius: var(--radius-large);
+  display: block;
+  overflow: hidden;
+  width: 100%;
+}
+
+// The tower scrolls down once the climber has landed
+.world {
+  transition: transform 450ms ease-in-out 300ms;
+}
+
+.ground,
+.platform {
+  fill: var(--heading);
+}
+
+.platform-label {
+  fill: var(--heading);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.climber {
+  fill: var(--button-bg);
+  stroke: var(--button-bg);
+  stroke-linecap: round;
+  stroke-width: 3;
+  transition: transform 320ms ease-out;
+
+  &.is-falling {
+    transition: transform 900ms cubic-bezier(0.5, 0, 0.9, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world,
+  .climber,
+  .climber.is-falling {
+    transition: none;
+  }
+}

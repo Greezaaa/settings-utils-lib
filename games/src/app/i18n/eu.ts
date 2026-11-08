@@ -122,6 +122,14 @@ export const EU: SiteMessages = {
       subtitle: 'angeluak, zatikiak eta zenbaki-zuzenak',
       intro: 'Neurtzeko joko bat haurrentzat.',
     },
+    'climb-tower': {
+      name: 'Igo dorrea',
+      summary:
+        'Erantzun zuzen bakoitzak solairu bat igotzen zaitu; huts egiten baduzu, erori egingo zara. Noraino igoko zara?',
+      subtitle:
+        'egia ala gezurra, edo aukeratu eragiketa zuzena, solairuz solairu',
+      intro: 'Matematika joko bat haurrentzat.',
+    },
     'letter-games': {
       name: 'Letra jokoak',
       summary:
@@ -665,6 +673,29 @@ export const EU: SiteMessages = {
     progress: (exercise, total) => `${exercise} / ${total}`,
     done: 'Amaituta',
     summary: (right, total) => `Ondo: ${right} / ${total}`,
+  },
+
+  climbTower: {
+    lead: 'Erantzun zuzen bakoitzak solairu bat igotzen zaitu. Huts egiten baduzu, erori egiten zara.',
+    rule: 'Noraino igo zaitezke?',
+    board: 'Igo dorrea',
+    modeGroup: 'Jokoa',
+    modes: {
+      'true-or-false': {
+        name: 'Egia ala gezurra',
+        summary: 'Emaitza zuzena da? Erantzun salto egiteko.',
+      },
+      'which-one': {
+        name: 'Zein da?',
+        summary:
+          'Egin salto kutxako zenbakia ematen duen eragiketaren plataformara.',
+      },
+    },
+    answers: 'Erantzunak',
+    floors: floors => `${floors}. solairua`,
+    best: floors => `Errekorra: ${floors}. solairua`,
+    fell: 'Erori zara!',
+    summary: floors => `${floors} solairu igota`,
   },
 
   hitTheNote: {

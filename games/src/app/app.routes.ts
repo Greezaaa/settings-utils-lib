@@ -48,6 +48,14 @@ export const routes: Routes = [
       import('./pages/measure-it/measure-it-page').then(m => m.MeasureItPage),
   },
   {
+    path: 'climb-tower',
+    ...gameMeta('climb-tower'),
+    loadComponent: () =>
+      import('./pages/climb-tower/climb-tower-page').then(
+        m => m.ClimbTowerPage
+      ),
+  },
+  {
     path: 'letter-games',
     ...gameMeta('letter-games'),
     loadComponent: () =>

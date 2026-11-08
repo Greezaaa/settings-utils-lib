@@ -140,7 +140,10 @@ export const formatQuestion = ({ left, operator, right, shown }: Question): stri
 export const formatSolution = (question: Question): string => formatQuestion({ ...question, shown: question.answer });
 
 /** The equation without its result, for the player to complete, e.g. `12 + 34 =` */
-export const formatPrompt = ({ left, operator, right }: Question): string => `${left} ${operator} ${right} =`;
+export const formatPrompt = (question: Question): string => `${formatExpression(question)} =`;
+
+/** The operation alone, e.g. `12 + 34` */
+export const formatExpression = ({ left, operator, right }: Question): string => `${left} ${operator} ${right}`;
 
 /**
  * Seconds for the next question: shorter as the score grows, but never under the level's minimum.

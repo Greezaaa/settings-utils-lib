@@ -220,6 +220,21 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 10,
+    published: '2026-11-10T12:00:00+01:00',
+    changes: [
+      {
+        game: 'climb-tower',
+        text: {
+          en: 'New game: Climb the tower, true or false and which one',
+          es: 'Nuevo juego: Sube la torre, verdadero o falso y cuál es',
+          eu: 'Joko berria: Igo dorrea, egia ala gezurra eta zein da',
+          uk: 'Нова гра: Піднімись на вежу, правда чи ні та який саме',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */

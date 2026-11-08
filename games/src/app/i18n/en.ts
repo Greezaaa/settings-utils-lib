@@ -118,6 +118,13 @@ export const EN: SiteMessages = {
       subtitle: 'angles, fractions and number lines',
       intro: 'A measuring game for kids.',
     },
+    'climb-tower': {
+      name: 'Climb the tower',
+      summary:
+        'Every right answer jumps you up a floor; a wrong one and you fall. How high can you climb?',
+      subtitle: 'true or false, or pick the right sum, floor by floor',
+      intro: 'A math game for kids.',
+    },
     'letter-games': {
       name: 'Letter games',
       summary:
@@ -643,6 +650,30 @@ export const EN: SiteMessages = {
     progress: (exercise, total) => `${exercise} of ${total}`,
     done: 'All done',
     summary: (right, total) => `${right} of ${total} right`,
+  },
+
+  climbTower: {
+    lead: 'Every right answer jumps you up a floor. A wrong one, and you fall.',
+    rule: 'How high can you climb?',
+    board: 'Climb the tower',
+    modeGroup: 'Game',
+    modes: {
+      'true-or-false': {
+        name: 'True or false',
+        summary: 'Is the result right? Answer to jump up.',
+      },
+      'which-one': {
+        name: 'Which one?',
+        summary:
+          'Jump onto the platform whose sum makes the number in the box.',
+      },
+    },
+    answers: 'Answers',
+    floors: floors => `Floor ${floors}`,
+    best: floors => `Best: floor ${floors}`,
+    fell: 'You fell!',
+    summary: floors =>
+      floors === 1 ? '1 floor climbed' : `${floors} floors climbed`,
   },
 
   hitTheNote: {

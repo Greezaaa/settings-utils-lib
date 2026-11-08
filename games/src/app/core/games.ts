@@ -2,6 +2,7 @@
 export type GameSlug =
   | 'math-games'
   | 'measure-it'
+  | 'climb-tower'
   | 'letter-games'
   | 'hit-the-note'
   | 'sliding-puzzle'
@@ -33,6 +34,7 @@ export interface GameInfo {
 export const GAMES: readonly GameInfo[] = [
   { slug: 'math-games', category: 'numbers', minAge: 6, openByDefault: true },
   { slug: 'measure-it', category: 'numbers', minAge: 7, openByDefault: false },
+  { slug: 'climb-tower', category: 'numbers', minAge: 6, openByDefault: false },
   { slug: 'letter-games', category: 'letters', minAge: 4, openByDefault: true },
   { slug: 'hit-the-note', category: 'music', minAge: 4, openByDefault: true },
   {

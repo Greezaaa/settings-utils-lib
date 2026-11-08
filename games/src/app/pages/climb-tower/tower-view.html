@@ -1,0 +1,27 @@
+<svg class="tower" [attr.viewBox]="viewBox" role="img" aria-hidden="true">
+  <g class="world" [style.transform]="worldTransform()">
+    <rect class="ground" [attr.x]="ground.x" y="0" [attr.width]="ground.width" height="12" />
+    @for (platform of drawn(); track platform.floor + ':' + platform.x) {
+      @if (platform.floor > 0) {
+        <rect
+          class="platform"
+          [attr.x]="platform.x - platformWidth / 2"
+          [attr.y]="platform.y"
+          [attr.width]="platformWidth"
+          height="8"
+          rx="2"
+        />
+      }
+      @if (platform.label) {
+        <text class="platform-label" [attr.x]="platform.x" [attr.y]="platform.y - 12">{{ platform.label }}</text>
+      }
+    }
+    <g class="climber" [class.is-falling]="isFalling()" [style.transform]="climberTransform()">
+      <circle cx="0" cy="-38" r="7" />
+      <line x1="0" y1="-31" x2="0" y2="-14" />
+      <line x1="-10" y1="-26" x2="10" y2="-26" />
+      <line x1="0" y1="-14" x2="-8" y2="0" />
+      <line x1="0" y1="-14" x2="8" y2="0" />
+    </g>
+  </g>
+</svg>

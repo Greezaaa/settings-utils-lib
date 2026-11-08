@@ -13,6 +13,7 @@ import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/lette
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { GameThemeId } from '../core/game-themes';
 import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
+import { ClimbModeId } from '../games/climb-tower';
 import { AnswerStyle } from '../core/answer-words';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
@@ -403,6 +404,21 @@ export interface SiteMessages {
     readonly progress: (exercise: number, total: number) => string;
     readonly done: string;
     readonly summary: (right: number, total: number) => string;
+  };
+
+  /** Climb the tower: right answers climb a floor, a wrong one falls */
+  readonly climbTower: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    readonly modeGroup: string;
+    readonly modes: Readonly<Record<ClimbModeId, OptionText>>;
+    /** Name of the two answer buttons, for screen readers */
+    readonly answers: string;
+    readonly floors: (floors: number) => string;
+    readonly best: (floors: number) => string;
+    readonly fell: string;
+    readonly summary: (floors: number) => string;
   };
 
   /** Hit the note: find the note, higher or lower, sing it */
