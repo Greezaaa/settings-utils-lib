@@ -5,7 +5,8 @@ import { between, pick, Random, shuffled } from './random';
  *
  * - Read the angle: a protractor (0 to 180°) shows a ray; slide to the angle it makes.
  * - Make the angle: turn the ray to a given angle, with fewer marks on the protractor as levels go up.
- * - Glass of water: how full is the glass? Pick the fraction (two glasses on the hardest level: 1 ½…).
+ * - Glass of water: how full is the glass? Pick the fraction (on the hardest level, 2 to 10 glasses, written as
+ *   improper fractions like 7/2).
  * - Number line: only its ends are labelled; slide to the number at the mark.
  */
 export type MeasureModeId =
@@ -115,13 +116,26 @@ interface GlassLevel {
   /** Whole full glasses that can come before the fraction */
   readonly wholes: readonly number[];
   readonly choices: number;
+  /** Fractions written improper (7/2, not 3 ½), with the wrong choices close to the right one */
+  readonly improper: boolean;
 }
 
 const GLASS_LEVELS: Readonly<Record<MeasureLevelId, GlassLevel>> = {
-  easy: { denominators: [2, 4], wholes: [0], choices: 3 },
-  normal: { denominators: [2, 3, 4], wholes: [0], choices: 4 },
-  hard: { denominators: [3, 4, 5, 6, 8], wholes: [0], choices: 4 },
-  expert: { denominators: [2, 3, 4], wholes: [1], choices: 4 },
+  easy: { denominators: [2, 4], wholes: [0], choices: 3, improper: false },
+  normal: { denominators: [2, 3, 4], wholes: [0], choices: 4, improper: false },
+  hard: {
+    denominators: [3, 4, 5, 6, 8],
+    wholes: [0],
+    choices: 4,
+    improper: false,
+  },
+  // 1 to 9 full glasses, so 2 to 10 glasses in all
+  expert: {
+    denominators: [2, 3, 4],
+    wholes: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    choices: 4,
+    improper: true,
+  },
 };
 
 export interface GlassExercise {
@@ -129,6 +143,35 @@ export interface GlassExercise {
   readonly fill: Fill;
   /** The answers to choose from, the right one among them */
   readonly choices: readonly Fill[];
+  /** Written as improper fractions (7/2), not mixed numbers (3 ½) */
+  readonly improper: boolean;
+}
+
+/** How a fill is written: whole glasses (null when none, or when improper), then the fraction */
+export interface FillParts {
+  readonly whole: number | null;
+  readonly numerator: number;
+  readonly denominator: number;
+}
+
+export function fillParts(
+  { whole, numerator, denominator }: Fill,
+  improper: boolean
+): FillParts {
+  if (improper) {
+    return {
+      whole: null,
+      numerator: whole * denominator + numerator,
+      denominator,
+    };
+  }
+  return { whole: whole > 0 ? whole : null, numerator, denominator };
+}
+
+/** A fill as text: `3/4`, `1 1/2`, or improper `7/2` */
+export function formatFill(fill: Fill, improper: boolean): string {
+  const { whole, numerator, denominator } = fillParts(fill, improper);
+  return `${whole === null ? '' : `${whole} `}${numerator}/${denominator}`;
 }
 
 const fillValue = ({ whole, numerator, denominator }: Fill): number =>
@@ -160,14 +203,22 @@ export function glassExercise(
   const level = GLASS_LEVELS[levelId];
   const fills = levelFills(level);
   const fill = pick(fills, random);
-  const others = shuffled(
+  const distance = (other: Fill): number =>
+    Math.abs(fillValue(other) - fillValue(fill));
+  const wrong = shuffled(
     fills.filter(other => fillValue(other) !== fillValue(fill)),
     random
+  );
+  // Close wrong answers, so counting the full glasses isn't enough (the sort keeps the shuffled order on ties)
+  const others = (
+    level.improper
+      ? wrong.sort((first, second) => distance(first) - distance(second))
+      : wrong
   ).slice(0, level.choices - 1);
-  const choices = shuffled([fill, ...others], random).sort(
+  const choices = [fill, ...others].sort(
     (first, second) => fillValue(first) - fillValue(second)
   );
-  return { kind: 'glass', fill, choices };
+  return { kind: 'glass', fill, choices, improper: level.improper };
 }
 
 export const isSameFill = (first: Fill, second: Fill): boolean =>

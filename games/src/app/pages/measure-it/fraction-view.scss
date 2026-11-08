@@ -1,0 +1,16 @@
+:host {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.25em;
+}
+
+.stacked {
+  display: inline-grid;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.numerator {
+  border-bottom: 2px solid currentColor;
+  padding-inline: 0.15em;
+}

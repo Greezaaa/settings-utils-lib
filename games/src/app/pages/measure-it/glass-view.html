@@ -1,4 +1,4 @@
-<div class="glasses">
+<div class="glasses" [class.is-many]="glasses().length > 3">
   @for (glass of glasses(); track glass.index) {
     <svg
       class="drawing glass"

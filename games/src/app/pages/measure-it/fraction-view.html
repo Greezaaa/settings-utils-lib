@@ -1,0 +1,8 @@
+@let fraction = parts();
+@if (fraction.whole !== null) {
+  <span class="whole">{{ fraction.whole }}</span>
+}
+<span class="stacked" aria-hidden="true">
+  <span class="numerator">{{ fraction.numerator }}</span>
+  <span>{{ fraction.denominator }}</span>
+</span>

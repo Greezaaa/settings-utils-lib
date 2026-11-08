@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { aimHint, ANGLE_LEVELS, angleExercise, glassExercise, isAngleRight, isLineRight, isSameFill, lineEnd, lineExercise, lineValue, MEASURE_LEVEL_IDS, MEASURE_MODE_IDS, measureExercises, rightValue } from './measure-it';
+import { aimHint, ANGLE_LEVELS, angleExercise, fillParts, formatFill, glassExercise, isAngleRight, isLineRight, isSameFill, lineEnd, lineExercise, lineValue, MEASURE_LEVEL_IDS, MEASURE_MODE_IDS, measureExercises, rightValue } from './measure-it';
 import { seededRandom } from './random';
 
 describe('measure it', () => {
@@ -42,7 +42,13 @@ describe('measure it', () => {
         );
       }
     }
-    expect(glassExercise('expert', seededRandom(5)).fill.whole).toBe(1);
+    const wholes = Array.from(
+      { length: 30 },
+      (_, seed) => glassExercise('expert', seededRandom(seed)).fill.whole
+    );
+    expect(Math.min(...wholes)).toBeGreaterThanOrEqual(1);
+    expect(Math.max(...wholes)).toBeLessThanOrEqual(9);
+    expect(new Set(wholes).size).toBeGreaterThan(3);
   });
 
   it('marks a tick inside the number line and checks the answer', () => {
@@ -86,5 +92,28 @@ describe('measure it', () => {
       'more',
       'less',
     ]);
+  });
+
+  it('writes fills as mixed numbers, or as improper fractions on the hardest level', () => {
+    const fill = { whole: 3, numerator: 1, denominator: 2 };
+    expect(formatFill(fill, false)).toBe('3 1/2');
+    expect(formatFill(fill, true)).toBe('7/2');
+    expect(
+      fillParts({ whole: 0, numerator: 3, denominator: 4 }, false)
+    ).toEqual({
+      whole: null,
+      numerator: 3,
+      denominator: 4,
+    });
+    const {
+      improper,
+      choices,
+      fill: right,
+    } = glassExercise('expert', seededRandom(11));
+    expect(improper).toBe(true);
+    // Close choices: every wrong one within a glass of the right one
+    for (const choice of choices) {
+      expect(Math.abs(choice.whole - right.whole)).toBeLessThanOrEqual(1);
+    }
   });
 });

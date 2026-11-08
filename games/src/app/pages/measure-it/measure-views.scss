@@ -88,12 +88,22 @@
 
 .glasses {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
 }
 
 .glass {
   width: 6rem;
+}
+
+// Up to 10 glasses on the hardest level: smaller, in rows
+.is-many {
+  gap: 0.5rem;
+
+  .glass {
+    width: 3.5rem;
+  }
 }
 
 .glass-outline {

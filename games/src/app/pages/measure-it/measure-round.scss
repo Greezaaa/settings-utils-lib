@@ -44,8 +44,9 @@
   font-family: var(--font-mono);
   font-size: 1.25rem;
   font-weight: 600;
-  min-height: 3.5rem;
+  min-height: 4.5rem;
   min-width: 4.5rem;
+  padding: 0.25rem 0.75rem;
 }
 
 // The answer in colour: green when right, red when wrong (a wrong glass stays red while the player tries again)

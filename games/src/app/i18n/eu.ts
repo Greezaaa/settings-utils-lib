@@ -635,7 +635,7 @@ export const EU: SiteMessages = {
         easy: 'Erdiak eta laurdenak',
         normal: 'Erdiak, herenak eta laurdenak',
         hard: 'Zortzirenetaraino',
-        expert: 'Baso bat baino gehiago',
+        expert: '10 basoraino, 7/2 bezalako zatikiak',
       },
       'number-line': {
         easy: '1etik 1era',

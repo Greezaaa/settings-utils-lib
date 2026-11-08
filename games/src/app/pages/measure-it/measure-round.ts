@@ -1,17 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, linkedSignal, output } from '@angular/core';
-import { aimHint, AimHint, AngleExercise, Fill, GlassExercise, isAngleRight, isLineRight, isSameFill, LineExercise, lineEnd, MeasureExercise, MeasureModeId, rightValue } from '../../games/measure-it';
+import { aimHint, AimHint, AngleExercise, Fill, fillParts, formatFill, GlassExercise, isAngleRight, isLineRight, isSameFill, LineExercise, lineEnd, MeasureExercise, MeasureModeId, rightValue } from '../../games/measure-it';
 import { SiteLanguage } from '../../i18n/site-language';
 import { AnswerLine } from '../../shared/answer-line';
+import { FractionView } from './fraction-view';
 import { GlassView } from './glass-view';
 import { formatNumber, NumberLineView } from './number-line-view';
 import { CheckedRay, ProtractorView } from './protractor-view';
 
 /** How long the answer (right, or the right one) shows before the next exercise */
 const FEEDBACK_MS = 1300;
-
-/** A fraction as written: `3/4`, `1 1/2` */
-export const formatFill = ({ whole, numerator, denominator }: Fill): string =>
-  `${whole > 0 ? `${whole} ` : ''}${numerator}/${denominator}`;
 
 /** An exercise answered with the slider */
 type SliderExercise = AngleExercise | LineExercise;
@@ -28,7 +25,13 @@ const isSliderRight = (exercise: SliderExercise, answer: number): boolean =>
  */
 @Component({
   selector: 'app-measure-round',
-  imports: [AnswerLine, GlassView, NumberLineView, ProtractorView],
+  imports: [
+    AnswerLine,
+    FractionView,
+    GlassView,
+    NumberLineView,
+    ProtractorView,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './measure-round.html',
   styleUrl: './measure-round.scss',
@@ -43,6 +46,7 @@ export class MeasureRound {
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly formatFill = formatFill;
+  protected readonly fillParts = fillParts;
   protected readonly formatNumber = formatNumber;
 
   /** Everything below starts again with each exercise */
@@ -103,7 +107,7 @@ export class MeasureRound {
       case 'angle':
         return `${exercise.angle}°`;
       case 'glass':
-        return formatFill(exercise.fill);
+        return formatFill(exercise.fill, exercise.improper);
       default:
         return formatNumber(rightValue(exercise));
     }

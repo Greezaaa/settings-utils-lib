@@ -616,7 +616,7 @@ export const EN: SiteMessages = {
         easy: 'Halves and quarters',
         normal: 'Halves, thirds and quarters',
         hard: 'Up to eighths',
-        expert: 'More than one glass',
+        expert: 'Up to 10 glasses, fractions like 7/2',
       },
       'number-line': {
         easy: 'Steps of 1',

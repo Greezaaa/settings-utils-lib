@@ -7,7 +7,7 @@ const BOTTOM = 150;
 const LEFT = 14;
 const WIDTH = 72;
 
-/** One glass or more (whole full glasses first, then the part-filled one), filled to `fill` */
+/** One glass or more (whole full glasses first, then the part-filled one), filled to `fill`; up to 10 */
 @Component({
   selector: 'app-glass-view',
   changeDetection: ChangeDetectionStrategy.OnPush,

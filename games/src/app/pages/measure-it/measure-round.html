@@ -38,15 +38,16 @@
     class="choices-row"
     role="group"
     [attr.aria-label]="t().measureIt.yourAnswer">
-    @for (choice of glass.choices; track formatFill(choice)) {
+    @for (choice of glass.choices; track formatFill(choice, false)) {
       <button
         type="button"
         class="key"
+        [attr.aria-label]="formatFill(choice, glass.improper)"
         [class.is-right]="isRightChoice(choice)"
         [class.is-wrong]="isWrongChoice(choice)"
         [disabled]="isDone() || isWrongChoice(choice)"
         (click)="choose(choice)">
-        {{ formatFill(choice) }}
+        <app-fraction-view [parts]="fillParts(choice, glass.improper)" />
       </button>
     }
   </div>

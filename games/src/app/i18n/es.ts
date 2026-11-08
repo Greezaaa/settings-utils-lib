@@ -637,7 +637,7 @@ export const ES: SiteMessages = {
         easy: 'Medios y cuartos',
         normal: 'Medios, tercios y cuartos',
         hard: 'Hasta octavos',
-        expert: 'Más de un vaso',
+        expert: 'Hasta 10 vasos, fracciones como 7/2',
       },
       'number-line': {
         easy: 'De 1 en 1',
