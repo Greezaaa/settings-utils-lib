@@ -34,7 +34,7 @@
         </svg>
       </a>
 
-      <!-- Settings behind the gear button: text size, theme, game colours and language -->
+      <!-- Settings behind the gear button: text size, theme, game colours, answers (when switched on) and language -->
       <div class="settings" #settings>
         <button
           type="button"
@@ -107,6 +107,24 @@
               }
             </div>
           </div>
+          @if (answerWords.isAvailable()) {
+            <div class="setting">
+              <p class="setting-label" id="setting-answers">{{ t().site.answerStyle }}</p>
+              <div class="languages" role="group" aria-labelledby="setting-answers">
+                @for (style of answerStyles; track style) {
+                  <button
+                    type="button"
+                    class="icon-button"
+                    [attr.aria-pressed]="style === answerWords.style()"
+                    [title]="t().site.answerStyles[style].summary"
+                    (click)="answerWords.set(style)"
+                  >
+                    {{ t().site.answerStyles[style].name }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
           <div class="setting">
             <p class="setting-label" id="setting-language">{{ t().site.language }}</p>
             <div class="languages" role="group" aria-labelledby="setting-language">

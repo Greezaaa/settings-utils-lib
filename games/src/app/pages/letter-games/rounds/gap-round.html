@@ -13,4 +13,5 @@
     <button type="button" class="tile" [class.is-hint]="vowel === hintVowel()" [disabled]="isDone()" (click)="tap(vowel)">{{ vowel }}</button>
   }
 </div>
+<app-answer-line [result]="result()" />
 <p class="keys-hint">{{ t().letterGames.keys }}</p>

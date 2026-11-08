@@ -73,12 +73,3 @@
   font-weight: 600;
   min-height: 1.5em;
 }
-
-.visually-hidden {
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}

@@ -1,6 +1,14 @@
-<p class="equation" aria-live="polite">{{ equation() }}</p>
+<p
+  class="equation"
+  [class.is-right]="flash.result() === true"
+  [class.is-wrong]="flash.result() === false"
+  aria-live="polite"
+>
+  {{ equation() }}
+</p>
 <div class="pad">
   <button type="button" class="key key-false" (click)="answer(false)">{{ t().trueOrFalse.false }}</button>
   <button type="button" class="key key-true" (click)="answer(true)">{{ t().trueOrFalse.true }}</button>
 </div>
+<app-answer-line [result]="flash.result()" [answer]="solution()" />
 <p class="keys">{{ t().trueOrFalse.keys }}</p>

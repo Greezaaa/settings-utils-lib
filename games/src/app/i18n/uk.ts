@@ -72,6 +72,12 @@ export const UK: SiteMessages = {
   languageName: 'Українська',
   languageCode: 'УКР',
 
+  answers: {
+    right: 'Правильно!',
+    wrong: 'Майже',
+    wrongWith: answer => `Майже: було ${answer}`,
+  },
+
   site: {
     skipToContent: 'Перейти до вмісту',
     sites: 'Сайти',
@@ -97,6 +103,17 @@ export const UK: SiteMessages = {
       ocean: { name: 'Океан', summary: 'Темно-синій із сонячно-жовтим' },
       party: { name: 'Свято', summary: 'Темно-фіолетовий із білим і жовтим' },
       night: { name: 'Ніч', summary: 'Темно-синій, м’ятний і рожевий' },
+    },
+    answerStyle: 'Відповіді',
+    answerStyles: {
+      colours: {
+        name: 'Кольори',
+        summary: 'Відповіді видно зеленим або червоним',
+      },
+      words: {
+        name: 'Зі словами',
+        summary: 'Відповіді видно кольором і ще кількома словами',
+      },
     },
     madeBy: 'Зроблено з ❤️:',
     projectLinks: 'Посилання проєкту',
@@ -674,8 +691,6 @@ export const UK: SiteMessages = {
     whichNumber: 'Яке число x?',
     yourAnswer: 'Твоя відповідь',
     check: 'Перевірити',
-    right: 'Правильно!',
-    wrong: answer => `Майже: було ${answer}`,
     progress: (exercise, total) => `${exercise} з ${total}`,
     done: 'Готово',
     summary: (right, total) => `${right} з ${total} правильно`,
@@ -826,6 +841,7 @@ export const UK: SiteMessages = {
       rooms: 'Грати разом (кімнати)',
       'rooms-math-games': 'Математика в кімнатах',
       'rooms-measure-it': 'Виміряй у кімнатах',
+      'answer-words': 'Відповіді словами (налаштування)',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:

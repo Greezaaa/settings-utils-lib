@@ -14,4 +14,5 @@
     <button type="button" class="tile" [class.is-hint]="tile === nextTile()" [disabled]="isPlaced(tile)" (click)="place(tile)">{{ tile.letter }}</button>
   }
 </div>
+<app-answer-line [result]="result()" />
 <p class="keys-hint">{{ t().letterGames.keys }}</p>

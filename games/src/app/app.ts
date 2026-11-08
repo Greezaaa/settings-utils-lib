@@ -8,6 +8,7 @@ import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { gameOfPath } from './core/games';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
+import { ANSWER_STYLES, AnswerWords } from './core/answer-words';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
 import { SiteNotices } from './core/site-notices';
@@ -40,6 +41,8 @@ export class App {
   protected readonly t = this.siteLanguage.messages;
   protected readonly languages = LANGUAGE_IDS;
   protected readonly boardColours = inject(BoardColours);
+  protected readonly answerWords = inject(AnswerWords);
+  protected readonly answerStyles = ANSWER_STYLES;
   protected readonly gameThemes = GAME_THEMES;
 
   private readonly availability = inject(GameAvailability);

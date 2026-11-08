@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, linkedSignal, output } from '@angular/core';
 import { aimHint, AimHint, AngleExercise, Fill, GlassExercise, isAngleRight, isLineRight, isSameFill, LineExercise, lineEnd, MeasureExercise, MeasureModeId, rightValue } from '../../games/measure-it';
 import { SiteLanguage } from '../../i18n/site-language';
+import { AnswerLine } from '../../shared/answer-line';
 import { GlassView } from './glass-view';
 import { formatNumber, NumberLineView } from './number-line-view';
 import { CheckedRay, ProtractorView } from './protractor-view';
@@ -27,7 +28,7 @@ const isSliderRight = (exercise: SliderExercise, answer: number): boolean =>
  */
 @Component({
   selector: 'app-measure-round',
-  imports: [GlassView, NumberLineView, ProtractorView],
+  imports: [AnswerLine, GlassView, NumberLineView, ProtractorView],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './measure-round.html',
   styleUrl: './measure-round.scss',
@@ -95,7 +96,7 @@ export class MeasureRound {
     const line = this.line();
     return line && this.isDone() ? rightValue(line) : null;
   });
-  /** The right answer as text, for screen readers */
+  /** The right answer as text, for the answer line */
   protected readonly rightText = computed(() => {
     const exercise = this.exercise();
     switch (exercise.kind) {

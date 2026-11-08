@@ -16,12 +16,14 @@ export const GAME_SLUGS = [
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'uk'] as const;
 /**
  * Features the admin switches on or off for the public (games/src/app/core/features.ts): rooms, and each game in rooms
- * on its own (`rooms-<game>`), apart from the game's single-player switch
+ * on its own (`rooms-<game>`), apart from the game's single-player switch, and
+ * settings like answers in words (`answer-words`)
  */
 export const FEATURE_IDS = [
   'rooms',
   'rooms-math-games',
   'rooms-measure-it',
+  'answer-words',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

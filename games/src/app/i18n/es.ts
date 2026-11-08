@@ -42,6 +42,12 @@ export const ES: SiteMessages = {
   languageName: 'Español',
   languageCode: 'ES',
 
+  answers: {
+    right: '¡Correcto!',
+    wrong: 'Casi',
+    wrongWith: answer => `Casi: era ${answer}`,
+  },
+
   site: {
     skipToContent: 'Saltar al contenido',
     sites: 'Sitios',
@@ -67,6 +73,17 @@ export const ES: SiteMessages = {
       ocean: { name: 'Océano', summary: 'Azul marino con amarillo sol' },
       party: { name: 'Fiesta', summary: 'Morado oscuro con blanco y amarillo' },
       night: { name: 'Noche', summary: 'Azul marino, menta y rosa' },
+    },
+    answerStyle: 'Respuestas',
+    answerStyles: {
+      colours: {
+        name: 'Colores',
+        summary: 'Las respuestas se ven en verde o rojo',
+      },
+      words: {
+        name: 'Con palabras',
+        summary: 'Las respuestas se ven en color y también con palabras',
+      },
     },
     madeBy: 'Hecho con ❤️ por',
     projectLinks: 'Enlaces del proyecto',
@@ -644,8 +661,6 @@ export const ES: SiteMessages = {
     whichNumber: '¿Qué número es x?',
     yourAnswer: 'Tu respuesta',
     check: 'Comprobar',
-    right: '¡Correcto!',
-    wrong: answer => `Casi: era ${answer}`,
     progress: (exercise, total) => `${exercise} de ${total}`,
     done: 'Terminado',
     summary: (right, total) => `${right} de ${total} bien`,
@@ -798,6 +813,7 @@ export const ES: SiteMessages = {
       rooms: 'Jugar juntos (salas)',
       'rooms-math-games': 'Matemáticas en salas',
       'rooms-measure-it': 'A medir en salas',
+      'answer-words': 'Respuestas con palabras (ajuste)',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:

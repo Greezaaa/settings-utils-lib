@@ -42,6 +42,12 @@ export const EN: SiteMessages = {
   languageName: 'English',
   languageCode: 'EN',
 
+  answers: {
+    right: 'Right!',
+    wrong: 'Not quite',
+    wrongWith: answer => `Not quite: it was ${answer}`,
+  },
+
   site: {
     skipToContent: 'Skip to content',
     sites: 'Sites',
@@ -67,6 +73,14 @@ export const EN: SiteMessages = {
       ocean: { name: 'Ocean', summary: 'Deep blue with sunny yellow' },
       party: { name: 'Party', summary: 'Deep purple with white and yellow' },
       night: { name: 'Night', summary: 'Deep blue, mint and pink' },
+    },
+    answerStyle: 'Answers',
+    answerStyles: {
+      colours: { name: 'Colours', summary: 'Answers show in green or red' },
+      words: {
+        name: 'With words',
+        summary: 'Answers show in colour, with a few words too',
+      },
     },
     madeBy: 'Made with ❤️ by',
     projectLinks: 'Project links',
@@ -626,8 +640,6 @@ export const EN: SiteMessages = {
     whichNumber: 'Which number is x?',
     yourAnswer: 'Your answer',
     check: 'Check',
-    right: 'Right!',
-    wrong: answer => `Not quite: it was ${answer}`,
     progress: (exercise, total) => `${exercise} of ${total}`,
     done: 'All done',
     summary: (right, total) => `${right} of ${total} right`,
@@ -772,6 +784,7 @@ export const EN: SiteMessages = {
       rooms: 'Play together (rooms)',
       'rooms-math-games': 'Math games in rooms',
       'rooms-measure-it': 'Measure it in rooms',
+      'answer-words': 'Answers in words (setting)',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:

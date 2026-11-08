@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+.answer-line {
+  font-weight: 600;
+  min-height: 1.5em;
+  text-align: center;
+
+  &.is-right {
+    color: var(--green-text);
+  }
+
+  &.is-wrong {
+    color: var(--red-text);
+  }
+}
+
+.visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  min-height: 0;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

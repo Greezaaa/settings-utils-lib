@@ -1,4 +1,4 @@
-<p class="equation">
+<p class="equation" [class.is-right]="flash.result() === true" [class.is-wrong]="flash.result() === false">
   {{ prompt() }}
   <output class="typed" [class.is-empty]="!typed()" aria-live="polite" [attr.aria-label]="t().yourAnswer.answer">{{ typed() || '?' }}</output>
 </p>
@@ -12,6 +12,7 @@
   <button type="button" class="key key-true" (click)="check()">{{ t().yourAnswer.check }}</button>
 </div>
 
+<app-answer-line [result]="flash.result()" [answer]="solution()" />
 @if (showHint()) {
   <p class="hint" role="alert">{{ t().yourAnswer.tapNumberFirst }}</p>
 }

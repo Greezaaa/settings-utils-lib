@@ -6,7 +6,11 @@ import { GameSlug } from './games';
  * Each game playable in rooms has its own multiplayer switch (`rooms-<game>`), apart from its single-player one.
  * Keep in sync with FEATURE_IDS in api/src/shared/catalog.ts (its tests check).
  */
-export type FeatureId = 'rooms' | 'rooms-math-games' | 'rooms-measure-it';
+export type FeatureId =
+  | 'rooms'
+  | 'rooms-math-games'
+  | 'rooms-measure-it'
+  | 'answer-words';
 
 /** Games playable in rooms, each with its multiplayer switch */
 export type RoomGame = Extract<GameSlug, 'math-games' | 'measure-it'>;
@@ -23,6 +27,8 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'rooms', openByDefault: false },
   { id: 'rooms-math-games', openByDefault: false, roomGame: 'math-games' },
   { id: 'rooms-measure-it', openByDefault: false, roomGame: 'measure-it' },
+  /** The header setting to show answers in words too, not only colours */
+  { id: 'answer-words', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

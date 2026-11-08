@@ -88,8 +88,4 @@
     }
   }
 </p>
-<p class="visually-hidden" aria-live="polite">
-  @if (isRight() !== null) {
-    {{ isRight() ? t().measureIt.right : t().measureIt.wrong(rightText()) }}
-  }
-</p>
+<app-answer-line [result]="isRight()" [answer]="rightText()" />

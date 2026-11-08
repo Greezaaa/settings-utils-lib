@@ -13,6 +13,7 @@ import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/lette
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { GameThemeId } from '../core/game-themes';
 import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
+import { AnswerStyle } from '../core/answer-words';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
 
@@ -42,6 +43,13 @@ export interface SiteMessages {
   /** Its short code on the language picker, e.g. `ES` */
   readonly languageCode: string;
 
+  /** What every game says about an answer (in words when the visitor chose them; always for screen readers) */
+  readonly answers: {
+    readonly right: string;
+    readonly wrong: string;
+    readonly wrongWith: (answer: string) => string;
+  };
+
   /** Header, settings and footer */
   readonly site: {
     readonly skipToContent: string;
@@ -58,6 +66,9 @@ export interface SiteMessages {
     readonly language: string;
     readonly boardColours: string;
     readonly boardThemes: Readonly<Record<GameThemeId, OptionText>>;
+    /** How games show answers: colours only, or colours and words */
+    readonly answerStyle: string;
+    readonly answerStyles: Readonly<Record<AnswerStyle, OptionText>>;
     readonly madeBy: string;
     readonly projectLinks: string;
     /** Shown once until closed: what the site stores, and that it is never sold or shared */
@@ -389,8 +400,6 @@ export interface SiteMessages {
     /** Name of the slider or the choices, for screen readers */
     readonly yourAnswer: string;
     readonly check: string;
-    readonly right: string;
-    readonly wrong: (answer: string) => string;
     readonly progress: (exercise: number, total: number) => string;
     readonly done: string;
     readonly summary: (right: number, total: number) => string;

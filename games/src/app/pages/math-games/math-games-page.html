@@ -70,12 +70,12 @@
         @switch (answerStyleId()) {
           @case ('true-or-false') {
             @if (question(); as question) {
-              <app-true-or-false-round [question]="question" (answered)="onAnswered($event)" />
+              <app-true-or-false-round [question]="question" (answering)="countdown.stop()" (answered)="onAnswered($event)" />
             }
           }
           @case ('your-answer') {
             @if (question(); as question) {
-              <app-your-answer-round [question]="question" (answered)="onAnswered($event)" />
+              <app-your-answer-round [question]="question" (answering)="countdown.stop()" (answered)="onAnswered($event)" />
             }
           }
           @case ('find-the-signs') {
@@ -83,6 +83,7 @@
               <app-find-the-signs-round
                 [puzzle]="puzzle"
                 [operators]="signsLevel().operators"
+                (answering)="countdown.stop()"
                 (answered)="onAnswered($event)"
               />
             }

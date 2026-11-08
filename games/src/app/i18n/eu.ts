@@ -42,6 +42,12 @@ export const EU: SiteMessages = {
   languageName: 'Euskara',
   languageCode: 'EU',
 
+  answers: {
+    right: 'Ondo!',
+    wrong: 'Ia',
+    wrongWith: answer => `Ia: ${answer} zen`,
+  },
+
   site: {
     skipToContent: 'Joan edukira',
     sites: 'Guneak',
@@ -68,6 +74,17 @@ export const EU: SiteMessages = {
       ocean: { name: 'Ozeanoa', summary: 'Itsas urdina eta eguzki horia' },
       party: { name: 'Festa', summary: 'More iluna, zuria eta horia' },
       night: { name: 'Gaua', summary: 'Itsas urdina, menda eta arrosa' },
+    },
+    answerStyle: 'Erantzunak',
+    answerStyles: {
+      colours: {
+        name: 'Koloreak',
+        summary: 'Erantzunak berdez edo gorriz ikusten dira',
+      },
+      words: {
+        name: 'Hitzekin',
+        summary: 'Erantzunak koloretan eta hitzekin ere ikusten dira',
+      },
     },
     madeBy: 'Maitasunez ❤️ egina:',
     projectLinks: 'Proiektuaren estekak',
@@ -645,8 +662,6 @@ export const EU: SiteMessages = {
     whichNumber: 'Zein zenbaki da x?',
     yourAnswer: 'Zure erantzuna',
     check: 'Egiaztatu',
-    right: 'Ondo!',
-    wrong: answer => `Ia: ${answer} zen`,
     progress: (exercise, total) => `${exercise} / ${total}`,
     done: 'Amaituta',
     summary: (right, total) => `Ondo: ${right} / ${total}`,
@@ -796,6 +811,7 @@ export const EU: SiteMessages = {
       rooms: 'Elkarrekin jokatu (gelak)',
       'rooms-math-games': 'Matematika geletan',
       'rooms-measure-it': 'Neurtu geletan',
+      'answer-words': 'Erantzunak hitzekin (ezarpena)',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:

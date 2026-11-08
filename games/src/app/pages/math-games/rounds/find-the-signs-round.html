@@ -1,4 +1,4 @@
-<p class="equation signs-equation">
+<p class="equation signs-equation" [class.is-right]="flash.result() === true" [class.is-wrong]="flash.result() === false">
   @for (number of puzzle().numbers; track $index; let index = $index) {
     @if (index > 0) {
       <button
@@ -27,6 +27,7 @@
   <button type="button" class="key key-true check" [class.is-ready]="isComplete()" (click)="check()">{{ t().findTheSigns.check }}</button>
 </div>
 
+<app-answer-line [result]="flash.result()" [answer]="solution()" />
 @if (showHint()) {
   <p class="hint" role="alert">{{ t().findTheSigns.fillEveryGap }}</p>
 }

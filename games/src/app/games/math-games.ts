@@ -136,6 +136,9 @@ export const isTrue = (question: Question): boolean => question.shown === questi
 export const formatQuestion = ({ left, operator, right, shown }: Question): string =>
   `${left} ${operator} ${right} = ${shown}`;
 
+/** The equation with its real result, e.g. `12 + 34 = 46` */
+export const formatSolution = (question: Question): string => formatQuestion({ ...question, shown: question.answer });
+
 /** The equation without its result, for the player to complete, e.g. `12 + 34 =` */
 export const formatPrompt = ({ left, operator, right }: Question): string => `${left} ${operator} ${right} =`;
 

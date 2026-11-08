@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output } from '@angular/core';
 import { GapWord, hintAfter, lettersOf } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
+import { AnswerLine } from '../../../shared/answer-line';
 import { roundFeedback } from '../../../shared/round-feedback';
 import { typedKey } from '../../../shared/typed-letter';
 
@@ -10,6 +11,7 @@ import { typedKey } from '../../../shared/typed-letter';
  */
 @Component({
   selector: 'app-gap-round',
+  imports: [AnswerLine],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gap-round.html',
   styleUrl: './letter-round.scss',
@@ -32,6 +34,10 @@ export class GapRound {
   private readonly filled = linkedSignal({ source: this.word, computation: () => 0 });
   protected readonly nextGap = computed(() => this.word().gaps[this.filled()] ?? null);
   protected readonly isDone = computed(() => this.nextGap() === null);
+  /** The last try was wrong; cleared by the next right one and with each new word */
+  private readonly missed = linkedSignal({ source: this.word, computation: () => false });
+  /** For the answer line: right once done, wrong after a miss, nothing in between */
+  protected readonly result = computed(() => (this.isDone() ? true : this.missed() ? false : null));
   /** Mistakes on this word; zero again with each word */
   private readonly wordMistakes = linkedSignal({ source: this.word, computation: () => 0 });
   /** With hints on, after a few mistakes the right vowel lights up */
@@ -63,9 +69,11 @@ export class GapRound {
     if (this.letters()[gap] !== vowel) {
       this.mistake.emit();
       this.wordMistakes.update((mistakes) => mistakes + 1);
+      this.missed.set(true);
       this.feedback.wrong();
       return;
     }
+    this.missed.set(false);
     this.filled.update((filled) => filled + 1);
     if (this.isDone()) {
       this.solved.emit();

@@ -2,7 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, 
 import { RouterLink } from '@angular/router';
 import { readStored, writeStored } from '../../core/site-storage';
 import { createSignsPuzzle, formatSigns, getSignsLevel, SIGNS_LEVELS, SignsPuzzle } from '../../games/find-the-signs';
-import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatQuestion, getLevel, LEVELS, LevelId, Question, secondsForQuestion, TIMER_IDS, TimerId, Timing } from '../../games/math-games';
+import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatSolution, getLevel, LEVELS, LevelId, Question, secondsForQuestion, TIMER_IDS, TimerId, Timing } from '../../games/math-games';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
 import { SiteLanguage } from '../../i18n/site-language';
@@ -104,7 +104,7 @@ export class MathGamesPage {
     if (this.isSigns() && puzzle) {
       return formatSigns(puzzle.numbers, puzzle.operators, puzzle.result);
     }
-    return question ? formatQuestion({ ...question, shown: question.answer }) : '';
+    return question ? formatSolution(question) : '';
   });
 
   constructor() {

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, output } from '@angular/core';
 import { Hint, hintAfter, lettersOf, mixLetters } from '../../../games/letter-games';
 import { SiteLanguage } from '../../../i18n/site-language';
+import { AnswerLine } from '../../../shared/answer-line';
 import { roundFeedback } from '../../../shared/round-feedback';
 import { typedKey } from '../../../shared/typed-letter';
 
@@ -19,6 +20,7 @@ const NO_HINT: Hint = { showNext: false, revealed: 0 };
  */
 @Component({
   selector: 'app-mixed-round',
+  imports: [AnswerLine],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './mixed-round.html',
   styleUrl: './letter-round.scss',
@@ -65,6 +67,11 @@ export class MixedRound {
         .join('') === this.word(),
   );
 
+  /** The last try was wrong; cleared by the next right one and with each new word */
+  private readonly missed = linkedSignal({ source: this.tiles, computation: () => false });
+  /** For the answer line: right once done, wrong after a miss, nothing in between */
+  protected readonly result = computed(() => (this.isDone() ? true : this.missed() ? false : null));
+
   protected isPlaced(tile: Tile): boolean {
     return this.placed().includes(tile);
   }
@@ -91,6 +98,7 @@ export class MixedRound {
     if (this.isPlaced(tile) || this.isDone() || this.feedback.isWrong()) {
       return;
     }
+    this.missed.set(false);
     this.placed.update((placed) => [...placed, tile]);
     if (this.placed().length < this.tiles().length) {
       return;
@@ -100,6 +108,7 @@ export class MixedRound {
     } else {
       this.mistake.emit();
       this.wordMistakes.update((mistakes) => mistakes + 1);
+      this.missed.set(true);
       this.feedback.wrong(() => this.placed.set(this.firstLetters(this.hint().revealed)));
     }
   }

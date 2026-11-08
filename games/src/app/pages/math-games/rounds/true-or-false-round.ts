@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
-import { formatQuestion, isTrue, Question } from '../../../games/math-games';
+import { formatQuestion, formatSolution, isTrue, Question } from '../../../games/math-games';
 import { SiteLanguage } from '../../../i18n/site-language';
+import { answerFlash } from '../../../shared/answer-flash';
+import { AnswerLine } from '../../../shared/answer-line';
 import { RoundResult } from './round-result';
 
 /** Arrow keys answer too, so the round also works with a keyboard in every language */
@@ -9,6 +11,7 @@ const ANSWER_KEYS: Readonly<Record<string, boolean>> = { ArrowLeft: false, Arrow
 /** Shows a full equation; the player taps whether its result is true or false */
 @Component({
   selector: 'app-true-or-false-round',
+  imports: [AnswerLine],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './true-or-false-round.html',
   styleUrl: './round.scss',
@@ -16,18 +19,26 @@ const ANSWER_KEYS: Readonly<Record<string, boolean>> = { ArrowLeft: false, Arrow
 })
 export class TrueOrFalseRound {
   readonly question = input.required<Question>();
+  readonly answering = output<void>();
   readonly answered = output<RoundResult>();
 
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
 
   protected readonly equation = computed(() => formatQuestion(this.question()));
+  protected readonly solution = computed(() => formatSolution(this.question()));
+  protected readonly flash = answerFlash();
 
   protected answer(saysTrue: boolean): void {
-    this.answered.emit({
+    if (this.flash.isShowing()) {
+      return;
+    }
+    const result: RoundResult = {
       isCorrect: saysTrue === isTrue(this.question()),
       given: this.t().trueOrFalse.given(saysTrue),
-    });
+    };
+    this.answering.emit();
+    this.flash.show(result.isCorrect, () => this.answered.emit(result));
   }
 
   protected onKey(event: KeyboardEvent): void {
