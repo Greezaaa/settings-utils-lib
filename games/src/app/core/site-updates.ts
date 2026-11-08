@@ -235,6 +235,21 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 11,
+    published: '2026-11-11T12:00:00+01:00',
+    changes: [
+      {
+        game: 'find-pairs',
+        text: {
+          en: 'New game: Find the pairs, turn the cards and remember the pictures',
+          es: 'Nuevo juego: Encuentra las parejas, gira las cartas y recuerda los dibujos',
+          eu: 'Joko berria: Aurkitu bikoteak, biratu kartak eta gogoratu marrazkiak',
+          uk: 'Нова гра: Знайди пари, перевертай картки й запам’ятовуй картинки',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */

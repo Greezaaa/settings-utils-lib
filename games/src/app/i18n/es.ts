@@ -129,6 +129,13 @@ export const ES: SiteMessages = {
       subtitle: 'verdadero o falso, o elige la operación correcta, piso a piso',
       intro: 'Un juego de matemáticas para niños.',
     },
+    'find-pairs': {
+      name: 'Encuentra las parejas',
+      summary:
+        'Gira las cartas de dos en dos y recuerda dónde está cada dibujo. Encuentra todas las parejas en el menor número de movimientos.',
+      subtitle: 'gira dos cartas y encuentra los dibujos iguales',
+      intro: 'Un juego de memoria para niños.',
+    },
     'letter-games': {
       name: 'Juegos de letras',
       summary:
@@ -695,6 +702,26 @@ export const ES: SiteMessages = {
     fell: '¡Te caíste!',
     summary: floors =>
       floors === 1 ? '1 piso subido' : `${floors} pisos subidos`,
+  },
+
+  findPairs: {
+    lead: 'Gira dos cartas. ¿El mismo dibujo? Se quedan boca arriba. Si no, se vuelven a girar.',
+    rule: 'Recuerda dónde está cada dibujo y encuentra todas las parejas con los menos movimientos posibles.',
+    board: 'Cartas',
+    levels: {
+      easy: { name: 'Fácil', summary: '12 cartas · 6 parejas' },
+      normal: { name: 'Normal', summary: '24 cartas · 12 parejas' },
+      hard: { name: 'Difícil', summary: '30 cartas · 15 parejas' },
+      expert: { name: 'Experto', summary: '36 cartas · 18 parejas' },
+    },
+    moves: moves => `Movimientos ${moves}`,
+    pairs: (found, total) => `Parejas ${found}/${total}`,
+    card: number => `Carta ${number}, boca abajo`,
+    done: '¡Todas las parejas encontradas!',
+    summary: (moves, time) =>
+      `En ${moves} ${moves === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
+    best: moves => `Récord: ${moves} movimientos`,
+    newGame: 'Nueva partida',
   },
 
   hitTheNote: {

@@ -1,0 +1,86 @@
+.play {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+.cards {
+  display: grid;
+  gap: clamp(0.25rem, 1.5vw, 0.625rem);
+  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  width: min(100%, 36rem);
+}
+
+// A card turns over in 3D: its back (a pattern) faces up until it is turned or matched
+.pair-card {
+  aspect-ratio: 3 / 4;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  perspective: 40rem;
+  touch-action: manipulation;
+}
+
+.inner {
+  display: block;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 300ms ease;
+}
+
+.is-up .inner {
+  transform: rotateY(180deg);
+}
+
+.face {
+  align-items: center;
+  backface-visibility: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: absolute;
+}
+
+.back {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--button-bg) 0 6px,
+    color-mix(in srgb, var(--button-bg) 80%, var(--surface)) 6px 12px
+  );
+}
+
+.front {
+  background: var(--surface);
+  font-size: clamp(1.25rem, 6vw, 2.5rem);
+  transform: rotateY(180deg);
+}
+
+.is-matched .front {
+  background: var(--green-bg);
+  border-color: var(--green-text);
+}
+
+.done {
+  display: grid;
+  font-weight: 600;
+  gap: 0.25rem;
+  justify-items: center;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inner {
+    transition: none;
+  }
+}

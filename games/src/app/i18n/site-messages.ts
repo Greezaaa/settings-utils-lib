@@ -421,6 +421,23 @@ export interface SiteMessages {
     readonly summary: (floors: number) => string;
   };
 
+  /** Find the pairs: turn the cards two at a time and find every pair */
+  readonly findPairs: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    /** Board sizes: name, and how many cards and pictures */
+    readonly levels: Readonly<Record<BoardLevelId, OptionText>>;
+    readonly moves: (moves: number) => string;
+    readonly pairs: (found: number, total: number) => string;
+    /** A face-down card, for screen readers */
+    readonly card: (number: number) => string;
+    readonly done: string;
+    readonly summary: (moves: number, time: string) => string;
+    readonly best: (moves: number) => string;
+    readonly newGame: string;
+  };
+
   /** Hit the note: find the note, higher or lower, sing it */
   readonly hitTheNote: {
     readonly lead: string;

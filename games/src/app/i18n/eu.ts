@@ -130,6 +130,13 @@ export const EU: SiteMessages = {
         'egia ala gezurra, edo aukeratu eragiketa zuzena, solairuz solairu',
       intro: 'Matematika joko bat haurrentzat.',
     },
+    'find-pairs': {
+      name: 'Aurkitu bikoteak',
+      summary:
+        'Biratu kartak binaka eta gogoratu marrazki bakoitza non dagoen. Aurkitu bikote guztiak ahalik eta mugimendu gutxienekin.',
+      subtitle: 'biratu bi karta eta aurkitu marrazki berdinak',
+      intro: 'Memoria joko bat haurrentzat.',
+    },
     'letter-games': {
       name: 'Letra jokoak',
       summary:
@@ -696,6 +703,25 @@ export const EU: SiteMessages = {
     best: floors => `Errekorra: ${floors}. solairua`,
     fell: 'Erori zara!',
     summary: floors => `${floors} solairu igota`,
+  },
+
+  findPairs: {
+    lead: 'Biratu bi karta. Marrazki bera? Gora geratzen dira. Bestela, berriro biratzen dira.',
+    rule: 'Gogoratu marrazki bakoitza non dagoen eta aurkitu bikote guztiak ahalik eta mugimendu gutxienekin.',
+    board: 'Kartak',
+    levels: {
+      easy: { name: 'Erraza', summary: '12 karta · 6 bikote' },
+      normal: { name: 'Normala', summary: '24 karta · 12 bikote' },
+      hard: { name: 'Zaila', summary: '30 karta · 15 bikote' },
+      expert: { name: 'Aditua', summary: '36 karta · 18 bikote' },
+    },
+    moves: moves => `Mugimenduak ${moves}`,
+    pairs: (found, total) => `Bikoteak ${found}/${total}`,
+    card: number => `${number}. karta, buruz behera`,
+    done: 'Bikote guztiak aurkitu dituzu!',
+    summary: (moves, time) => `${moves} mugimendu eta ${time}`,
+    best: moves => `Errekorra: ${moves} mugimendu`,
+    newGame: 'Partida berria',
   },
 
   hitTheNote: {

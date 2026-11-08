@@ -96,6 +96,12 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'find-pairs',
+    ...gameMeta('find-pairs'),
+    loadComponent: () =>
+      import('./pages/find-pairs/find-pairs-page').then(m => m.FindPairsPage),
+  },
+  {
     path: 'rooms',
     title: `${rooms.title} · ${SITE_NAME}`,
     data: { description: `${rooms.lead} ${rooms.rule}` },

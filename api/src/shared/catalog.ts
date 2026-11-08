@@ -13,6 +13,7 @@ export const GAME_SLUGS = [
   'sliding-puzzle',
   'turn-picture',
   'place-pieces',
+  'find-pairs',
 ] as const;
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'uk'] as const;
 /**

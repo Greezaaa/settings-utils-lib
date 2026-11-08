@@ -125,6 +125,13 @@ export const EN: SiteMessages = {
       subtitle: 'true or false, or pick the right sum, floor by floor',
       intro: 'A math game for kids.',
     },
+    'find-pairs': {
+      name: 'Find the pairs',
+      summary:
+        'Turn the cards two at a time and remember where each picture is. Find every pair in as few moves as you can.',
+      subtitle: 'turn two cards and find the matching pictures',
+      intro: 'A memory game for kids.',
+    },
     'letter-games': {
       name: 'Letter games',
       summary:
@@ -674,6 +681,26 @@ export const EN: SiteMessages = {
     fell: 'You fell!',
     summary: floors =>
       floors === 1 ? '1 floor climbed' : `${floors} floors climbed`,
+  },
+
+  findPairs: {
+    lead: 'Turn two cards. Same picture? They stay up. If not, they turn back over.',
+    rule: 'Remember where each picture is and find every pair in as few moves as you can.',
+    board: 'Cards',
+    levels: {
+      easy: { name: 'Easy', summary: '12 cards · 6 pairs' },
+      normal: { name: 'Normal', summary: '24 cards · 12 pairs' },
+      hard: { name: 'Hard', summary: '30 cards · 15 pairs' },
+      expert: { name: 'Expert', summary: '36 cards · 18 pairs' },
+    },
+    moves: moves => `Moves ${moves}`,
+    pairs: (found, total) => `Pairs ${found}/${total}`,
+    card: number => `Card ${number}, face down`,
+    done: 'All pairs found!',
+    summary: (moves, time) =>
+      `In ${moves} ${moves === 1 ? 'move' : 'moves'} and ${time}`,
+    best: moves => `Best: ${moves} moves`,
+    newGame: 'New game',
   },
 
   hitTheNote: {
