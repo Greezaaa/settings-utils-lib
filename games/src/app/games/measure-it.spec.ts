@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ANGLE_LEVELS, angleExercise, glassExercise, isAngleRight, isLineRight, isSameFill, lineEnd, lineExercise, lineValue, MEASURE_LEVEL_IDS, MEASURE_MODE_IDS, measureExercises } from './measure-it';
+import { aimHint, ANGLE_LEVELS, angleExercise, glassExercise, isAngleRight, isLineRight, isSameFill, lineEnd, lineExercise, lineValue, MEASURE_LEVEL_IDS, MEASURE_MODE_IDS, measureExercises, rightValue } from './measure-it';
 import { seededRandom } from './random';
 
 describe('measure it', () => {
@@ -69,5 +69,22 @@ describe('measure it', () => {
         measureExercises(mode, 'normal', seededRandom(9))
       );
     }
+  });
+
+  it('hints which way a wrong answer is off', () => {
+    const angle = {
+      kind: 'angle',
+      angle: 60,
+      level: ANGLE_LEVELS.easy,
+    } as const;
+    expect([rightValue(angle), aimHint(angle, 40), aimHint(angle, 90)]).toEqual(
+      [60, 'more', 'less']
+    );
+    const line = { kind: 'line', start: 1, step: 1, gaps: 6, mark: 3 } as const;
+    expect([rightValue(line), aimHint(line, 2), aimHint(line, 6)]).toEqual([
+      4,
+      'more',
+      'less',
+    ]);
   });
 });

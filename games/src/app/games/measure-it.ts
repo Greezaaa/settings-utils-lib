@@ -41,13 +41,39 @@ export interface AngleLevel {
   /** Make the angle: the marks the protractor shows (every n degrees; 0 = none) and whether they have numbers */
   readonly marksEvery: number;
   readonly markLabels: boolean;
+  /** How many degrees the slider moves at a time */
+  readonly step: number;
 }
 
 export const ANGLE_LEVELS: Readonly<Record<MeasureLevelId, AngleLevel>> = {
-  easy: { multipleOf: 30, tolerance: 5, marksEvery: 30, markLabels: true },
-  normal: { multipleOf: 10, tolerance: 5, marksEvery: 30, markLabels: false },
-  hard: { multipleOf: 5, tolerance: 3, marksEvery: 90, markLabels: false },
-  expert: { multipleOf: 1, tolerance: 2, marksEvery: 0, markLabels: false },
+  easy: {
+    multipleOf: 30,
+    tolerance: 5,
+    marksEvery: 30,
+    markLabels: true,
+    step: 5,
+  },
+  normal: {
+    multipleOf: 10,
+    tolerance: 5,
+    marksEvery: 30,
+    markLabels: false,
+    step: 5,
+  },
+  hard: {
+    multipleOf: 5,
+    tolerance: 3,
+    marksEvery: 90,
+    markLabels: false,
+    step: 5,
+  },
+  expert: {
+    multipleOf: 1,
+    tolerance: 2,
+    marksEvery: 0,
+    markLabels: false,
+    step: 1,
+  },
 };
 
 export interface AngleExercise {
@@ -249,3 +275,17 @@ export function measureExercises(
     measureExercise(mode, level, random)
   );
 }
+
+/** Which way a wrong slider answer is off, for the hint: the right answer is more, or less */
+export type AimHint = 'more' | 'less';
+
+/** The right value of a slider exercise (an angle's degrees, the number at a line's mark) */
+export const rightValue = (exercise: AngleExercise | LineExercise): number =>
+  exercise.kind === 'angle'
+    ? exercise.angle
+    : lineValue(exercise, exercise.mark);
+
+export const aimHint = (
+  exercise: AngleExercise | LineExercise,
+  answer: number
+): AimHint => (rightValue(exercise) > answer ? 'more' : 'less');

@@ -12,7 +12,7 @@ import { RoomError } from '../core/room-view';
 import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { GameThemeId } from '../core/game-themes';
-import { MeasureLevelId, MeasureModeId } from '../games/measure-it';
+import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
 
@@ -377,6 +377,10 @@ export interface SiteMessages {
     readonly levelSummaries: Readonly<
       Record<MeasureModeId, Readonly<Record<MeasureLevelId, string>>>
     >;
+    readonly hintsGroup: string;
+    readonly hintOptions: Readonly<Record<HintsId, OptionText>>;
+    /** The hint after a wrong first try: the right answer is more, or less */
+    readonly aim: Readonly<Record<AimHint, string>>;
     /** The question above each exercise */
     readonly whichAngle: string;
     readonly makeAngle: (angle: number) => string;

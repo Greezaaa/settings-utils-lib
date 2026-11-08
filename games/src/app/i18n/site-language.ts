@@ -6,14 +6,20 @@ import { EU } from './eu';
 import { UK } from './uk';
 import { LanguageId, SiteMessages } from './site-messages';
 
-const MESSAGES: Readonly<Record<LanguageId, SiteMessages>> = { en: EN, es: ES, eu: EU, uk: UK };
+const MESSAGES: Readonly<Record<LanguageId, SiteMessages>> = {
+  en: EN,
+  es: ES,
+  eu: EU,
+  uk: UK,
+};
 
 /** Languages in the order of the picker */
 export const LANGUAGE_IDS: readonly LanguageId[] = ['en', 'es', 'eu', 'uk'];
 
 const LANGUAGE_STORAGE = 'language';
 
-const isLanguageId = (value: unknown): value is LanguageId => LANGUAGE_IDS.some((id) => id === value);
+const isLanguageId = (value: unknown): value is LanguageId =>
+  LANGUAGE_IDS.some(id => id === value);
 
 /**
  * The language the whole games site is shown in: header, footer and every page.
@@ -31,7 +37,9 @@ export class SiteLanguage {
   constructor() {
     afterNextRender(() => this.languageId.set(initialLanguage()));
     // Screen readers and browser translation read the page language from <html lang>
-    effect(() => this.document.documentElement.setAttribute('lang', this.languageId()));
+    effect(() =>
+      this.document.documentElement.setAttribute('lang', this.languageId())
+    );
   }
 
   /** Switch language and remember it in this browser */
@@ -57,6 +65,8 @@ function initialLanguage(): LanguageId {
     return stored;
   }
   // e.g. `es-ES` → `es`
-  const browser = navigator.languages.map((tag) => tag.slice(0, 2).toLowerCase()).find(isLanguageId);
+  const browser = navigator.languages
+    .map(tag => tag.slice(0, 2).toLowerCase())
+    .find(isLanguageId);
   return browser ?? 'en';
 }

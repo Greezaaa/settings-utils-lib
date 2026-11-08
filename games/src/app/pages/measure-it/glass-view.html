@@ -1,8 +1,19 @@
 <div class="glasses">
   @for (glass of glasses(); track glass.index) {
-    <svg class="drawing glass" viewBox="0 0 100 160" role="img" aria-hidden="true">
-      <rect class="water" [attr.x]="inside.x" [attr.y]="glass.waterY" [attr.width]="inside.width" [attr.height]="glass.waterHeight" />
-      <path class="glass-outline" d="M 10 6 L 14 150 Q 14 156 20 156 L 80 156 Q 86 156 86 150 L 90 6" />
+    <svg
+      class="drawing glass"
+      viewBox="0 0 100 160"
+      role="img"
+      aria-hidden="true">
+      <rect
+        class="water"
+        [attr.x]="inside.x"
+        [attr.y]="glass.waterY"
+        [attr.width]="inside.width"
+        [attr.height]="glass.waterHeight" />
+      <path
+        class="glass-outline"
+        d="M 10 6 L 14 150 Q 14 156 20 156 L 80 156 Q 86 156 86 150 L 90 6" />
     </svg>
   }
 </div>

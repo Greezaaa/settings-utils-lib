@@ -603,10 +603,10 @@ export const EU: SiteMessages = {
     },
     levelSummaries: {
       'read-angle': {
-        easy: '30°-z 30°',
-        normal: '10°-z 10°',
-        hard: '5°-z 5°',
-        expert: 'Edozein angelu, 2°-ko tartea',
+        easy: '30°-z 30°, zenbakiekin',
+        normal: '10°-z 10°, markak zenbakirik gabe',
+        hard: '5°-z 5°, angelu zuzena bakarrik markatuta',
+        expert: 'Edozein angelu, markarik gabe',
       },
       'set-angle': {
         easy: '30°-z 30°, zenbakiekin',
@@ -627,6 +627,18 @@ export const EU: SiteMessages = {
         expert: 'Erdiak, laurdenak eta zero azpiko zenbakiak',
       },
     },
+    hintsGroup: 'Pistak',
+    hintOptions: {
+      hints: {
+        name: 'Pistekin',
+        summary: 'Huts egiten baduzu, pista bat eta beste saiakera bat',
+      },
+      'no-hints': {
+        name: 'Pistarik gabe',
+        summary: 'Saiakera bat ariketa bakoitzeko',
+      },
+    },
+    aim: { more: 'Pixka bat gehiago ↑', less: 'Pixka bat gutxiago ↓' },
     whichAngle: 'Zenbat gradu?',
     makeAngle: angle => `Egin ${angle}°`,
     howFull: 'Zenbat beteta dago?',

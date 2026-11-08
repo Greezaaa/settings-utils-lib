@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { gameInfo } from '../../core/games';
+import { HINTS_IDS, HintsId } from '../../games/letter-games';
 import { GamesApi } from '../../core/games-api';
 import { MEASURE_LEVEL_IDS, MEASURE_MODE_IDS, MeasureExercise, measureExercises, MeasureLevelId, MeasureModeId } from '../../games/measure-it';
 import { SiteLanguage } from '../../i18n/site-language';
@@ -27,6 +28,7 @@ type Phase = 'ready' | 'playing' | 'done';
 export class MeasureItPage {
   protected readonly modes = MEASURE_MODE_IDS;
   protected readonly levels = MEASURE_LEVEL_IDS;
+  protected readonly hintOptions = HINTS_IDS;
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   /** The youngest recommended age, shown under the title */
@@ -35,6 +37,8 @@ export class MeasureItPage {
 
   protected readonly modeId = signal<MeasureModeId>('read-angle');
   protected readonly levelId = signal<MeasureLevelId>('easy');
+  protected readonly hintsId = signal<HintsId>('hints');
+  protected readonly hasHints = computed(() => this.hintsId() === 'hints');
   protected readonly phase = signal<Phase>('ready');
 
   private readonly exercises = signal<readonly MeasureExercise[]>([]);

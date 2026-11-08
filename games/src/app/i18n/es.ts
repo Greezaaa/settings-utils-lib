@@ -605,10 +605,10 @@ export const ES: SiteMessages = {
     },
     levelSummaries: {
       'read-angle': {
-        easy: 'De 30° en 30°',
-        normal: 'De 10° en 10°',
-        hard: 'De 5° en 5°',
-        expert: 'Cualquier ángulo, 2° de margen',
+        easy: 'De 30° en 30°, con números',
+        normal: 'De 10° en 10°, marcas sin números',
+        hard: 'De 5° en 5°, solo el ángulo recto marcado',
+        expert: 'Cualquier ángulo, sin marcas',
       },
       'set-angle': {
         easy: 'De 30° en 30°, con números',
@@ -629,6 +629,15 @@ export const ES: SiteMessages = {
         expert: 'Medios, cuartos y números bajo cero',
       },
     },
+    hintsGroup: 'Pistas',
+    hintOptions: {
+      hints: {
+        name: 'Con pistas',
+        summary: 'Si fallas, recibes una pista y otro intento',
+      },
+      'no-hints': { name: 'Sin pistas', summary: 'Un intento por ejercicio' },
+    },
+    aim: { more: 'Un poco más ↑', less: 'Un poco menos ↓' },
     whichAngle: '¿Cuántos grados?',
     makeAngle: angle => `Forma ${angle}°`,
     howFull: '¿Cuánto está lleno?',

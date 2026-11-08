@@ -14,9 +14,16 @@ function pointAt(degrees: number, radius: number): { x: number; y: number } {
   };
 }
 
+/** A ray drawn after an answer: green when right, red when wrong */
+export interface CheckedRay {
+  readonly angle: number;
+  readonly isRight: boolean;
+}
+
 /**
  * A drawn protractor from 0 to 180°, with a ray at `angle` from the 0° line. Its marks are every `marksEvery` degrees
- * (0 for none), numbered when `labels` is on, so harder levels can hide them.
+ * (0 for none), numbered when `labels` is on, so harder levels can hide them. After an answer, `checked` adds a
+ * coloured ray: the player's guess, or the right angle.
  */
 @Component({
   selector: 'app-protractor-view',
@@ -28,6 +35,7 @@ export class ProtractorView {
   readonly angle = input.required<number>();
   readonly marksEvery = input(10);
   readonly labels = input(true);
+  readonly checked = input<CheckedRay | null>(null);
 
   protected readonly arc = `M ${CX - RADIUS} ${CY} A ${RADIUS} ${RADIUS} 0 0 1 ${CX + RADIUS} ${CY}`;
   protected readonly baseline = {
@@ -52,6 +60,15 @@ export class ProtractorView {
   });
 
   protected readonly ray = computed(() => pointAt(this.angle(), RADIUS + 6));
+  protected readonly checkedRay = computed(() => {
+    const checked = this.checked();
+    return (
+      checked && {
+        ...pointAt(checked.angle, RADIUS + 6),
+        isRight: checked.isRight,
+      }
+    );
+  });
   /** The small arc between the 0° line and the ray, showing the angle */
   protected readonly angleArc = computed(() => {
     const end = pointAt(this.angle(), 26);

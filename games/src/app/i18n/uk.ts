@@ -635,10 +635,10 @@ export const UK: SiteMessages = {
     },
     levelSummaries: {
       'read-angle': {
-        easy: 'Кожні 30°',
-        normal: 'Кожні 10°',
-        hard: 'Кожні 5°',
-        expert: 'Будь-який кут, похибка до 2°',
+        easy: 'Кожні 30°, з числами',
+        normal: 'Кожні 10°, позначки без чисел',
+        hard: 'Кожні 5°, позначено лише прямий кут',
+        expert: 'Будь-який кут, без позначок',
       },
       'set-angle': {
         easy: 'Кожні 30°, з числами',
@@ -659,6 +659,15 @@ export const UK: SiteMessages = {
         expert: 'Половини, чверті й числа менші за нуль',
       },
     },
+    hintsGroup: 'Підказки',
+    hintOptions: {
+      hints: {
+        name: 'З підказками',
+        summary: 'Після помилки — підказка і ще одна спроба',
+      },
+      'no-hints': { name: 'Без підказок', summary: 'Одна спроба на вправу' },
+    },
+    aim: { more: 'Трохи більше ↑', less: 'Трохи менше ↓' },
     whichAngle: 'Скільки градусів?',
     makeAngle: angle => `Побудуй ${angle}°`,
     howFull: 'Наскільки повна?',

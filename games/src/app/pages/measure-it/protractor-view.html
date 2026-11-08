@@ -1,15 +1,50 @@
-<svg class="drawing protractor" viewBox="0 0 240 132" role="img" aria-hidden="true">
+<svg
+  class="drawing protractor"
+  viewBox="0 0 240 132"
+  role="img"
+  aria-hidden="true">
   <path class="plate" [attr.d]="arc + ' Z'" />
   <path class="outline" [attr.d]="arc" />
-  <line class="outline" [attr.x1]="baseline.x1" [attr.x2]="baseline.x2" [attr.y1]="baseline.y" [attr.y2]="baseline.y" />
+  <line
+    class="outline"
+    [attr.x1]="baseline.x1"
+    [attr.x2]="baseline.x2"
+    [attr.y1]="baseline.y"
+    [attr.y2]="baseline.y" />
   @for (mark of marks(); track mark.degrees) {
-    <line class="mark" [attr.x1]="mark.outer.x" [attr.y1]="mark.outer.y" [attr.x2]="mark.inner.x" [attr.y2]="mark.inner.y" />
+    <line
+      class="mark"
+      [attr.x1]="mark.outer.x"
+      [attr.y1]="mark.outer.y"
+      [attr.x2]="mark.inner.x"
+      [attr.y2]="mark.inner.y" />
     @if (labels() && mark.degrees % 10 === 0) {
-      <text class="mark-label" [attr.x]="mark.label.x" [attr.y]="mark.label.y">{{ mark.degrees }}</text>
+      <text class="mark-label" [attr.x]="mark.label.x" [attr.y]="mark.label.y">
+        {{ mark.degrees }}
+      </text>
     }
   }
   <path class="angle-arc" [attr.d]="angleArc()" />
-  <line class="ray" [attr.x1]="center.x" [attr.y1]="center.y" [attr.x2]="center.x + 106" [attr.y2]="center.y" />
-  <line class="ray" [attr.x1]="center.x" [attr.y1]="center.y" [attr.x2]="ray().x" [attr.y2]="ray().y" />
+  <line
+    class="ray"
+    [attr.x1]="center.x"
+    [attr.y1]="center.y"
+    [attr.x2]="center.x + 106"
+    [attr.y2]="center.y" />
+  <line
+    class="ray"
+    [attr.x1]="center.x"
+    [attr.y1]="center.y"
+    [attr.x2]="ray().x"
+    [attr.y2]="ray().y" />
+  @if (checkedRay(); as checked) {
+    <line
+      class="ray checked-ray"
+      [class.is-right]="checked.isRight"
+      [attr.x1]="center.x"
+      [attr.y1]="center.y"
+      [attr.x2]="checked.x"
+      [attr.y2]="checked.y" />
+  }
   <circle class="pivot" [attr.cx]="center.x" [attr.cy]="center.y" r="3" />
 </svg>

@@ -587,10 +587,10 @@ export const EN: SiteMessages = {
     levels: { easy: 'Easy', normal: 'Normal', hard: 'Hard', expert: 'Expert' },
     levelSummaries: {
       'read-angle': {
-        easy: 'Every 30°',
-        normal: 'Every 10°',
-        hard: 'Every 5°',
-        expert: 'Any angle, 2° off at most',
+        easy: 'Every 30°, with numbers',
+        normal: 'Every 10°, marks without numbers',
+        hard: 'Every 5°, only the right angle marked',
+        expert: 'Any angle, no marks',
       },
       'set-angle': {
         easy: 'Every 30°, with numbers',
@@ -611,6 +611,15 @@ export const EN: SiteMessages = {
         expert: 'Halves, quarters and numbers below zero',
       },
     },
+    hintsGroup: 'Hints',
+    hintOptions: {
+      hints: {
+        name: 'With hints',
+        summary: 'A wrong answer gets a hint and one more try',
+      },
+      'no-hints': { name: 'No hints', summary: 'One try per exercise' },
+    },
+    aim: { more: 'A bit more ↑', less: 'A bit less ↓' },
     whichAngle: 'How many degrees?',
     makeAngle: angle => `Make ${angle}°`,
     howFull: 'How full is it?',

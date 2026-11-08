@@ -9,7 +9,10 @@ const Y = 40;
 export const formatNumber = (value: number): string =>
   String(Math.round(value * 100) / 100).replace('-', '−');
 
-/** A number line with only its ends numbered, its ticks, and an x over the tick to find */
+/**
+ * A number line with only its ends numbered, its ticks, and an x over the tick to find; after an answer, `answer`
+ * shows the right number there instead, in green
+ */
 @Component({
   selector: 'app-number-line-view',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +21,8 @@ export const formatNumber = (value: number): string =>
 })
 export class NumberLineView {
   readonly line = input.required<LineExercise>();
+  readonly answer = input<number | null>(null);
+  protected readonly formatNumber = formatNumber;
 
   protected readonly axis = { x1: LEFT - 10, x2: RIGHT + 10, y: Y };
   protected readonly ticks = computed(() => {

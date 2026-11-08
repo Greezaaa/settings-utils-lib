@@ -64,6 +64,18 @@
   stroke-width: 3;
 }
 
+.line-x.is-right {
+  fill: var(--green-text);
+}
+
+.checked-ray {
+  stroke: var(--red-text);
+
+  &.is-right {
+    stroke: var(--green-text);
+  }
+}
+
 .angle-arc {
   fill: none;
   stroke: var(--button-bg);

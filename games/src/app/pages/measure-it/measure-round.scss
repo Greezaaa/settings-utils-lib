@@ -48,12 +48,37 @@
   min-width: 4.5rem;
 }
 
-.feedback {
-  color: var(--red-text);
+// The answer in colour: green when right, red when wrong (a wrong glass stays red while the player tries again)
+.key,
+.check {
+  &.is-right,
+  &.is-right:disabled {
+    background: var(--green-bg);
+    border-color: var(--green-text);
+    color: var(--green-text);
+    opacity: 1;
+  }
+
+  &.is-wrong,
+  &.is-wrong:disabled {
+    background: var(--red-bg);
+    border-color: var(--red-text);
+    color: var(--red-text);
+    opacity: 1;
+  }
+}
+
+.hint {
+  color: var(--heading);
   font-weight: 600;
   min-height: 1.5em;
+}
 
-  &.is-right {
-    color: var(--green-text);
-  }
+.visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

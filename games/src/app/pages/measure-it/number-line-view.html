@@ -1,11 +1,36 @@
-<svg class="drawing number-line" viewBox="0 0 320 70" role="img" aria-hidden="true">
-  <line class="outline" [attr.x1]="axis.x1" [attr.x2]="axis.x2" [attr.y1]="axis.y" [attr.y2]="axis.y" />
+<svg
+  class="drawing number-line"
+  viewBox="0 0 320 70"
+  role="img"
+  aria-hidden="true">
+  <line
+    class="outline"
+    [attr.x1]="axis.x1"
+    [attr.x2]="axis.x2"
+    [attr.y1]="axis.y"
+    [attr.y2]="axis.y" />
   @for (tick of ticks(); track tick.tick) {
-    <line class="mark" [attr.x1]="tick.x" [attr.x2]="tick.x" [attr.y1]="axis.y - 8" [attr.y2]="axis.y + 8" />
+    <line
+      class="mark"
+      [attr.x1]="tick.x"
+      [attr.x2]="tick.x"
+      [attr.y1]="axis.y - 8"
+      [attr.y2]="axis.y + 8" />
     @if (tick.isMark) {
-      <text class="line-x" [attr.x]="tick.x" [attr.y]="axis.y - 14">x</text>
+      @let shown = answer();
+      @if (shown !== null) {
+        <text class="line-x is-right" [attr.x]="tick.x" [attr.y]="axis.y - 14">
+          {{ formatNumber(shown) }}
+        </text>
+      } @else {
+        <text class="line-x" [attr.x]="tick.x" [attr.y]="axis.y - 14">x</text>
+      }
     }
   }
-  <text class="line-label" [attr.x]="ends.left" [attr.y]="ends.y + 26">{{ startLabel() }}</text>
-  <text class="line-label" [attr.x]="ends.right" [attr.y]="ends.y + 26">{{ endLabel() }}</text>
+  <text class="line-label" [attr.x]="ends.left" [attr.y]="ends.y + 26">
+    {{ startLabel() }}
+  </text>
+  <text class="line-label" [attr.x]="ends.right" [attr.y]="ends.y + 26">
+    {{ endLabel() }}
+  </text>
 </svg>
