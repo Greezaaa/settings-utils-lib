@@ -7,11 +7,17 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
+import type { Request } from 'express';
 import { z } from 'zod';
 import { AdminGuard } from '../security/admin.guard.js';
+import {
+  visitorAddress,
+  VisitorThrottlerGuard,
+} from '../security/visitor-throttler.guard.js';
 import type { LanguageId } from '../shared/catalog.js';
 import { languageSchema } from '../shared/catalog.js';
 import { WordReport } from './word-report.entity.js';
@@ -37,8 +43,12 @@ export class WordReportsController {
   @Throttle({ default: { limit: 20, ttl: 3_600_000 } })
   async report(
     @Body({ schema: reportSchema }) input: ReportInput,
+    @Req() request: Request,
   ): Promise<void> {
-    await this.reports.report(input);
+    await this.reports.report(
+      input,
+      visitorAddress(request, VisitorThrottlerGuard.trustCloudflare),
+    );
   }
 
   @Get('hidden')

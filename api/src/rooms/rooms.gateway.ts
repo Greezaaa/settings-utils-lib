@@ -51,12 +51,22 @@ const TICK_MS = 250;
 const MAX_ROOM_TRIES_PER_MINUTE = 20;
 /** Largest message accepted; every message is a few short fields */
 const MAX_MESSAGE_BYTES = 2048;
+/** Rooms open at once; far more than the site needs, so a flood of new rooms can't fill the server's memory */
+const MAX_ROOMS = 2000;
+/**
+ * Messages a connection may send in a room every few seconds (scores come at most 3 a second); more are ignored, so
+ * one player can't flood the others with updates
+ */
+const MAX_MESSAGES = 40;
+const MESSAGE_WINDOW_MS = 5_000;
 
 /** Which room and player a connection belongs to, and the visitor's address for the limits */
 interface Seat {
   code: string | null;
   playerId: string | null;
   readonly ip: string;
+  /** When its recent room messages came, for the message limit */
+  messages: number[];
 }
 
 /**
@@ -95,7 +105,7 @@ export class RoomsGateway
       this.trustCloudflare && typeof cloudflareIp === 'string'
         ? cloudflareIp
         : (request.socket.remoteAddress ?? '');
-    this.seats.set(client, { code: null, playerId: null, ip });
+    this.seats.set(client, { code: null, playerId: null, ip, messages: [] });
   }
 
   /** A dropped player keeps their seat for a while (see tick) */
@@ -120,6 +130,11 @@ export class RoomsGateway
     if (!data || !this.allowTry(client)) {
       return;
     }
+    if (this.rooms.size >= MAX_ROOMS) {
+      this.send(client, 'error', { error: 'too-many' });
+      return;
+    }
+    this.leaveCurrentRoom(client);
     const now = Date.now();
     const host = newPlayer([]);
     const room = createRoom(
@@ -146,6 +161,8 @@ export class RoomsGateway
       this.send(client, 'error', { error: 'not-found' });
       return;
     }
+    // One connection, one seat: joining again (here or elsewhere) gives up the old one, never leaving a ghost behind
+    this.leaveCurrentRoom(client);
     const player = newPlayer(room.players);
     const error = join(room, player, Date.now());
     if (error) {
@@ -170,6 +187,9 @@ export class RoomsGateway
     if (!room || !player) {
       this.send(client, 'error', { error: 'not-found' });
       return;
+    }
+    if (this.seats.get(client)?.playerId !== player.id) {
+      this.leaveCurrentRoom(client);
     }
     this.socketOf(room.code, player.id)?.close(4000, 'Opened elsewhere');
     player.connected = true;
@@ -241,11 +261,7 @@ export class RoomsGateway
       removePlayer(room, data.playerId, now);
       if (socket) {
         this.send(socket, 'kicked', {});
-        this.seats.set(socket, {
-          code: null,
-          playerId: null,
-          ip: this.seats.get(socket)?.ip ?? '',
-        });
+        this.unseat(socket);
       }
       return null;
     });
@@ -253,14 +269,30 @@ export class RoomsGateway
 
   @SubscribeMessage('leave')
   leave(@ConnectedSocket() client: WebSocket): void {
+    if (this.leaveCurrentRoom(client)) {
+      this.send(client, 'left', {});
+    }
+  }
+
+  /** Takes the connection's player out of its room, if it has one; true when it did */
+  private leaveCurrentRoom(client: WebSocket): boolean {
     const seat = this.seats.get(client);
     const room = seat?.code ? this.rooms.get(seat.code) : undefined;
-    if (room && seat?.playerId) {
-      removePlayer(room, seat.playerId, Date.now());
-      this.seats.set(client, { code: null, playerId: null, ip: seat.ip });
-      this.send(client, 'left', {});
-      this.closeIfEmpty(room);
-      this.broadcast(room);
+    if (!room || !seat?.playerId) {
+      return false;
+    }
+    removePlayer(room, seat.playerId, Date.now());
+    this.unseat(client);
+    this.closeIfEmpty(room);
+    this.broadcast(room);
+    return true;
+  }
+
+  /** The connection stays open, in no room */
+  private unseat(client: WebSocket): void {
+    const seat = this.seats.get(client);
+    if (seat) {
+      this.seats.set(client, { ...seat, code: null, playerId: null });
     }
   }
 
@@ -272,7 +304,7 @@ export class RoomsGateway
   ) {
     const seat = this.seats.get(client);
     const room = seat?.code ? this.rooms.get(seat.code) : undefined;
-    if (!data || !room || !seat?.playerId) {
+    if (!data || !room || !seat?.playerId || !this.allowMessage(seat)) {
       return;
     }
     const error = change(room, seat.playerId, Date.now());
@@ -293,6 +325,7 @@ export class RoomsGateway
       code: room.code,
       playerId,
       ip: this.seats.get(client)?.ip ?? '',
+      messages: this.seats.get(client)?.messages ?? [],
     });
     this.send(client, 'joined', { code: room.code, playerId, token });
     this.broadcast(room);
@@ -339,6 +372,19 @@ export class RoomsGateway
     if (room.players.length === 0) {
       this.rooms.delete(room.code);
     }
+  }
+
+  /** At most MAX_MESSAGES room messages every MESSAGE_WINDOW_MS per connection; the rest are dropped quietly */
+  private allowMessage(seat: Seat): boolean {
+    const now = Date.now();
+    seat.messages = seat.messages.filter(
+      (time) => now - time < MESSAGE_WINDOW_MS,
+    );
+    if (seat.messages.length >= MAX_MESSAGES) {
+      return false;
+    }
+    seat.messages.push(now);
+    return true;
   }
 
   /** At most MAX_ROOM_TRIES_PER_MINUTE creates and joins a minute per visitor */

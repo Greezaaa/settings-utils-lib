@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import type { Env } from '../config/env.js';
 
 const VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+/** How long to wait for Cloudflare's answer before refusing, so a slow check never holds requests open */
+const VERIFY_TIMEOUT_MS = 5_000;
 
 /**
  * Checks Cloudflare Turnstile answers, the bot check on the suggestions form. Without a TURNSTILE_SECRET (e.g. in
@@ -23,11 +25,13 @@ export class TurnstileService {
     if (!token) {
       throw new ForbiddenException('Bot check missing');
     }
-    const response = await fetch(VERIFY_URL, {
+    const result = await fetch(VERIFY_URL, {
       method: 'POST',
       body: new URLSearchParams({ secret: this.secret, response: token }),
-    });
-    const result: { success?: boolean } = await response.json();
+      signal: AbortSignal.timeout(VERIFY_TIMEOUT_MS),
+    })
+      .then((response): Promise<{ success?: boolean }> => response.json())
+      .catch(() => ({ success: false }));
     if (!result.success) {
       throw new ForbiddenException('Bot check failed');
     }

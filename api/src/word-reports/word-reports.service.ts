@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LanguageId } from '../shared/catalog.js';
 import { today } from '../shared/day.js';
+import { RecentReports } from './recent-reports.js';
 import { WordReport } from './word-report.entity.js';
 import {
   DecisionInput,
@@ -13,13 +14,25 @@ import {
 
 @Injectable()
 export class WordReportsService {
+  private readonly recent = new RecentReports();
+
   constructor(
     @InjectRepository(WordReport)
     private readonly reports: Repository<WordReport>,
   ) {}
 
-  /** Counts one more report of a word; a word a moderator already decided on keeps that decision */
-  async report({ word, language }: ReportInput, day = today()): Promise<void> {
+  /**
+   * Counts one more report of a word, once per visitor a day; a word a moderator already decided on keeps that
+   * decision
+   */
+  async report(
+    { word, language }: ReportInput,
+    visitor: string,
+    day = today(),
+  ): Promise<void> {
+    if (!this.recent.isNew(visitor, language, word)) {
+      return;
+    }
     await this.reports.query(
       `INSERT INTO word_reports (language, word, reports, "firstReported") VALUES ($1, $2, 1, $3)
        ON CONFLICT (language, word) DO UPDATE SET reports = word_reports.reports + 1`,

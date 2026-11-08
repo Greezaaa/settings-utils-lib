@@ -28,7 +28,8 @@
     "deploy:games": "npm run build:games && rsync -a --delete dist/games/browser/ su-labs-server:/home/ubuntu/su-labs-games/ && echo \"Deployed to https://games.su-labs.dev/\"",
     "deploy:api": "rsync -a --delete --exclude node_modules --exclude dist --exclude coverage --exclude .env api/ su-labs-server:/home/ubuntu/su-labs-api/ && ssh su-labs-server 'cd /home/ubuntu/su-labs-api && docker compose up -d --build' && echo \"Deployed to https://api.su-labs.dev/\"",
     "test:api": "cd api && npm test",
-    "deploy": "npm run deploy:web && npm run deploy:games"
+    "deploy": "npm run deploy:web && npm run deploy:games",
+    "backup:pull": "mkdir -p backups && rsync -a su-labs-server:/home/ubuntu/su-labs-backups/ backups/ && echo \"Backups copied to backups/\""
   },
   "private": false,
   "dependencies": {

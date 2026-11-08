@@ -187,4 +187,21 @@ describe('rooms service (e2e)', () => {
     fifth.send('join', { code });
     expect(await fifth.next('error')).toEqual({ error: 'full' });
   });
+
+  it('gives up the old seat when a connection joins again, leaving no ghost player', async () => {
+    const host = await connect();
+    host.send('create', { language: 'en' });
+    const code = String((await host.next('joined'))['code']);
+    const guest = await connect();
+    for (let index = 0; index < 3; index++) {
+      guest.send('join', { code });
+      await guest.next('joined');
+    }
+    // Each join replaced the guest's old seat, so the room isn't full: two more can still come in
+    for (let index = 0; index < 2; index++) {
+      const other = await connect();
+      other.send('join', { code });
+      await other.next('joined');
+    }
+  });
 });

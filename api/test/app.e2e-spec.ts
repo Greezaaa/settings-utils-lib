@@ -100,7 +100,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     ]);
   });
 
-  it('hides a word after three reports until a moderator decides', async () => {
+  it('hides a word after three visitors report it, until a moderator decides', async () => {
     const report = { word: 'rudeword', language: 'en' };
     const hidden = async () =>
       (
@@ -108,13 +108,20 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           .get('/v1/word-reports/hidden?language=en')
           .expect(200)
       ).body.words;
-    for (let reports = 1; reports <= 3; reports++) {
-      expect(await hidden()).toEqual([]);
-      await request(app.getHttpServer())
+    const reportFrom = (visitor: string) =>
+      request(app.getHttpServer())
         .post('/v1/word-reports')
+        .set('cf-connecting-ip', visitor)
         .send(report)
         .expect(204);
+    // One visitor reporting again and again counts once
+    for (let reports = 1; reports <= 3; reports++) {
+      await reportFrom('10.0.1.1');
     }
+    expect(await hidden()).toEqual([]);
+    await reportFrom('10.0.1.2');
+    expect(await hidden()).toEqual([]);
+    await reportFrom('10.0.1.3');
     expect(await hidden()).toEqual(['rudeword']);
     await request(app.getHttpServer())
       .patch('/admin/word-reports/en/rudeword')
@@ -217,7 +224,25 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .post(`/auth/invite/${secret}`)
       .send({ password: 'my own password' })
       .expect(404);
-    await signIn('new@su-labs.dev', 'my own password').expect(201);
+    const newcomer = await signIn('new@su-labs.dev', 'my own password').expect(
+      201,
+    );
+    const newcomerCookie = newcomer.headers['set-cookie'];
+
+    // A new invite resets a forgotten password: accepting it signs out the browsers still on the old one
+    const newcomerId = invited.body.member.id;
+    const again = await request(server)
+      .post(`/admin/team/${newcomerId}/invite`)
+      .set('Cookie', bossCookie)
+      .expect(201);
+    await request(server)
+      .post(`/auth/invite/${again.body.secret}`)
+      .send({ password: 'a fresh password' })
+      .expect(201);
+    await request(server)
+      .get('/admin/suggestions')
+      .set('Cookie', newcomerCookie)
+      .expect(401);
 
     // Turning a moderator off signs them out and stops sign-ins
     const team = await request(server)

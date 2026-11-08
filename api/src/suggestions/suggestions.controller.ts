@@ -48,7 +48,14 @@ export class SuggestionsController {
   @Throttle({ default: { limit: 3, ttl: 3_600_000 } })
   @UseInterceptors(
     FileInterceptor('image', {
-      limits: { fileSize: IMAGE_MAX_BYTES, files: 1 },
+      // The picture, and the form's few short text fields (category, text, language, bot check)
+      limits: {
+        fileSize: IMAGE_MAX_BYTES,
+        files: 1,
+        fields: 6,
+        fieldSize: 4096,
+        parts: 8,
+      },
     }),
   )
   async add(

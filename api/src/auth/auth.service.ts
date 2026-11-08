@@ -132,7 +132,10 @@ export class AuthService {
       : null;
   }
 
-  /** Accepts an invite: the admin chooses their password, the link stops working, and they are signed in */
+  /**
+   * Accepts an invite: the admin chooses their password, the link stops working, any browser still signed in with
+   * the old password is signed out (a new invite is also how a forgotten password is reset), and they are signed in
+   */
   async acceptInvite(
     secret: string,
     password: string,
@@ -151,6 +154,7 @@ export class AuthService {
         failedLogins: 0,
       },
     );
+    await this.signOutEverywhere(admin.id);
     return this.startSession(admin, now);
   }
 

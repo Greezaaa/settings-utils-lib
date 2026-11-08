@@ -52,3 +52,6 @@ Thumbs.db
 /api/dist
 /api/coverage
 /api/.env
+
+# Copies of the server's backups (npm run backup:pull); never commit them
+/backups/

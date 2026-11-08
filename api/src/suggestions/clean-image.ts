@@ -6,6 +6,11 @@ export const IMAGE_MAX_BYTES = 2 * 1024 * 1024;
 /** Longest side of a stored picture */
 const MAX_SIDE = 1600;
 const ACCEPTED_FORMATS = ['jpeg', 'png', 'webp'];
+/**
+ * Most pixels a picture may have once decoded (about a 40-megapixel photo): a small file can still unpack into a
+ * huge image, which would take the server's memory
+ */
+const MAX_INPUT_PIXELS = 40_000_000;
 
 /**
  * Re-encodes an uploaded picture as WebP: turned upright, no larger than 1600 px, and without any metadata
@@ -13,7 +18,10 @@ const ACCEPTED_FORMATS = ['jpeg', 'png', 'webp'];
  */
 export async function cleanImage(input: Buffer): Promise<Buffer> {
   try {
-    const image = sharp(input, { failOn: 'error' });
+    const image = sharp(input, {
+      failOn: 'error',
+      limitInputPixels: MAX_INPUT_PIXELS,
+    });
     const { format } = await image.metadata();
     if (!format || !ACCEPTED_FORMATS.includes(format)) {
       throw new Error(`Unsupported format: ${format}`);
