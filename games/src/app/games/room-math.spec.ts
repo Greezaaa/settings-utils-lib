@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createQuestion, getLevel } from './math-games';
 import { seededRandom } from './random';
-import { levelIdsFor, roomMath } from './room-math';
+import { levelIdsFor, roomExercises, roomMath } from './room-math';
 
 describe('room math', () => {
   it('keeps known settings and falls back for unknown ones', () => {
@@ -18,5 +18,15 @@ describe('room math', () => {
     };
     expect(questions(123)).toEqual(questions(123));
     expect(questions(123)).not.toEqual(questions(124));
+  });
+
+  it('builds the same list of exercises from the same seed, for every answer style', () => {
+    for (const style of ['true-or-false', 'your-answer', 'find-the-signs'] as const) {
+      const math = roomMath(style, 'normal');
+      const list = roomExercises(math, 99, 50);
+      expect(list).toHaveLength(50);
+      expect(roomExercises(math, 99, 50)).toEqual(list);
+      expect(roomExercises(math, 100, 50)).not.toEqual(list);
+    }
   });
 });

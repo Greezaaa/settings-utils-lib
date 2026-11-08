@@ -1,5 +1,5 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, DOCUMENT, inject, input, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { GameAvailability } from '../../core/game-availability';
 import { GamesApi } from '../../core/games-api';
 import { RoomClient } from '../../core/room-client';
@@ -33,6 +33,7 @@ export class RoomPage {
   private readonly api = inject(GamesApi);
   private readonly availability = inject(GameAvailability);
   private readonly document = inject(DOCUMENT);
+  private readonly router = inject(Router);
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
 
@@ -41,6 +42,8 @@ export class RoomPage {
   protected readonly roundSeconds = ROUND_SECONDS;
   protected readonly answerStyles = ANSWER_STYLE_IDS;
   protected readonly isCopied = signal(false);
+  /** The page has started connecting (it does right after the first render) */
+  protected readonly hasEntered = signal(false);
 
   protected readonly room = this.client.room;
   protected readonly math = computed(() => {
@@ -62,7 +65,10 @@ export class RoomPage {
   });
 
   constructor() {
-    afterNextRender(() => this.client.enter(this.code()));
+    afterNextRender(() => {
+      this.client.enter(this.code());
+      this.hasEntered.set(true);
+    });
     const ticker = setInterval(() => this.now.set(this.client.serverNow()), TICK_MS);
     inject(DestroyRef).onDestroy(() => {
       clearInterval(ticker);
@@ -96,6 +102,12 @@ export class RoomPage {
     if (settings) {
       this.client.setSettings({ ...settings, seconds });
     }
+  }
+
+  /** Leaves the room for good and goes back to Play together */
+  protected leave(): void {
+    this.client.leave();
+    void this.router.navigateByUrl('/rooms');
   }
 
   protected start(): void {

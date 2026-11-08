@@ -15,6 +15,9 @@
     @if (client.error(); as error) {
       <p class="error" role="alert">{{ t().rooms.errors[error] }}</p>
       <a class="button" routerLink="/rooms">{{ t().rooms.title }}</a>
+    } @else if (hasEntered() && client.connection() === 'closed') {
+      <!-- Not connected and not trying: never leave the player waiting on "Connecting…" -->
+      <a class="button" routerLink="/rooms">{{ t().rooms.title }}</a>
     } @else {
       <p class="muted">{{ t().rooms.connecting }}</p>
     }
@@ -123,7 +126,7 @@
     @if (client.error(); as error) {
       <p class="error" role="alert">{{ t().rooms.errors[error] }}</p>
     }
-    <button type="button" class="button button-secondary button-small leave" (click)="client.leave()">
+    <button type="button" class="button button-secondary button-small leave" (click)="leave()">
       {{ t().rooms.leave }}
     </button>
   }
