@@ -6,10 +6,10 @@ import { GameSlug } from './games';
  * Each game playable in rooms has its own multiplayer switch (`rooms-<game>`), apart from its single-player one.
  * Keep in sync with FEATURE_IDS in api/src/shared/catalog.ts (its tests check).
  */
-export type FeatureId = 'rooms' | 'rooms-math-games';
+export type FeatureId = 'rooms' | 'rooms-math-games' | 'rooms-measure-it';
 
 /** Games playable in rooms, each with its multiplayer switch */
-export type RoomGame = Extract<GameSlug, 'math-games'>;
+export type RoomGame = Extract<GameSlug, 'math-games' | 'measure-it'>;
 
 export interface FeatureInfo {
   readonly id: FeatureId;
@@ -22,9 +22,18 @@ export interface FeatureInfo {
 export const FEATURES: readonly FeatureInfo[] = [
   { id: 'rooms', openByDefault: false },
   { id: 'rooms-math-games', openByDefault: false, roomGame: 'math-games' },
+  { id: 'rooms-measure-it', openByDefault: false, roomGame: 'measure-it' },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);
 
+/** Games playable in rooms, in the order the host sees them */
+export const ROOM_GAMES: readonly RoomGame[] = FEATURES.flatMap(
+  ({ roomGame }) => (roomGame ? [roomGame] : [])
+);
+
 /** The multiplayer switch of each game played in rooms */
-export const ROOM_GAME_FEATURES: Readonly<Record<RoomGame, FeatureId>> = { 'math-games': 'rooms-math-games' };
+export const ROOM_GAME_FEATURES: Readonly<Record<RoomGame, FeatureId>> = {
+  'math-games': 'rooms-math-games',
+  'measure-it': 'rooms-measure-it',
+};

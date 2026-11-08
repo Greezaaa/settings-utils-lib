@@ -51,8 +51,15 @@ export const EU: SiteMessages = {
     theme: 'Gaia',
     smallerText: 'Testu txikiagoa',
     largerText: 'Testu handiagoa',
-    themeNames: { system: 'sistema', light: 'argia', dark: 'iluna', contrast: 'kontrastea', custom: 'pertsonalizatua' },
-    themeSwitch: (current, next) => `Gaia: ${current}. Aldatu honetara: ${next}`,
+    themeNames: {
+      system: 'sistema',
+      light: 'argia',
+      dark: 'iluna',
+      contrast: 'kontrastea',
+      custom: 'pertsonalizatua',
+    },
+    themeSwitch: (current, next) =>
+      `Gaia: ${current}. Aldatu honetara: ${next}`,
     language: 'Hizkuntza',
     boardColours: 'Jokoaren koloreak',
     boardThemes: {
@@ -66,7 +73,7 @@ export const EU: SiteMessages = {
     projectLinks: 'Proiektuaren estekak',
     privacyNotice:
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
-    lastUpdate: (moment) => `Azken eguneratzea: ${moment}`,
+    lastUpdate: moment => `Azken eguneratzea: ${moment}`,
     noticeOk: 'Ados',
     privacySettings: 'Pribatutasun-ezarpenak',
     privacyLink: 'Pribatutasuna',
@@ -91,6 +98,13 @@ export const EU: SiteMessages = {
       subtitle: 'egia ala gezurra, zenbaki-teklatua eta falta diren zeinuak',
       intro: 'Haurrentzako matematika jokoa.',
     },
+    'measure-it': {
+      name: 'Neurtu',
+      summary:
+        'Irakurri eta egin angeluak garraiagailuan, esan basoa zenbat beteta dagoen eta aurkitu zenbakia zuzenean.',
+      subtitle: 'angeluak, zatikiak eta zenbaki-zuzenak',
+      intro: 'Neurtzeko joko bat haurrentzat.',
+    },
     'letter-games': {
       name: 'Letra jokoak',
       summary:
@@ -107,25 +121,33 @@ export const EU: SiteMessages = {
     },
     'sliding-puzzle': {
       name: 'Puzzle irristakorra',
-      summary: 'Irristatu piezak hutsunera lerroak berriro elkartu arte. Marrazki berria partida bakoitzean.',
+      summary:
+        'Irristatu piezak hutsunera lerroak berriro elkartu arte. Marrazki berria partida bakoitzean.',
       subtitle: 'irristatu piezak eta lotu lerroak',
       intro: 'Haurrentzako puzzlea.',
     },
     'turn-picture': {
       name: 'Biratu irudia',
-      summary: 'Sakatu karratuak biratzeko marrazkia berriro osorik egon arte. Begiratu edo osatu oroimenez.',
+      summary:
+        'Sakatu karratuak biratzeko marrazkia berriro osorik egon arte. Begiratu edo osatu oroimenez.',
       subtitle: 'sakatu karratuak biratzeko eta marrazkia osatzeko',
       intro: 'Haurrentzako irudi-puzzlea.',
     },
     'place-pieces': {
       name: 'Kokatu piezak',
-      summary: 'Arrastatu marrazkiaren piezak beren lekura. Begiratu edo osatu oroimenez.',
+      summary:
+        'Arrastatu marrazkiaren piezak beren lekura. Begiratu edo osatu oroimenez.',
       subtitle: 'arrastatu piezak eta osatu marrazkia',
       intro: 'Haurrentzako irudi-puzzlea.',
     },
   },
 
-  categories: { numbers: 'Zenbakiak', letters: 'Letrak', music: 'Musika', puzzles: 'Puzzleak' },
+  categories: {
+    numbers: 'Zenbakiak',
+    letters: 'Letrak',
+    music: 'Musika',
+    puzzles: 'Puzzleak',
+  },
 
   home: {
     title: 'Joko adimentsuak, haur adimentsuentzat',
@@ -156,12 +178,13 @@ export const EU: SiteMessages = {
     goal: 'Helburua',
     pictureGroup: 'Irudia',
     pictureModes: { lines: 'Lerroak', drawing: 'Marrazkia' },
-    moves: (moves) => `Mugimenduak ${moves}`,
-    tile: (number) => `${number}. pieza`,
+    moves: moves => `Mugimenduak ${moves}`,
+    tile: number => `${number}. pieza`,
     newPuzzle: 'Puzzle berria',
     solved: 'Oso ondo!',
-    solvedIn: (moves, time) => `${moves} mugimendu eta ${time} behar izan dituzu`,
-    best: (moves) => `Errekorra: ${moves} mugimendu`,
+    solvedIn: (moves, time) =>
+      `${moves} mugimendu eta ${time} behar izan dituzu`,
+    best: moves => `Errekorra: ${moves} mugimendu`,
     newRecord: 'Errekor berria!',
     keys: 'Teklatua: geziek pieza bat hutsunera mugitzen dute',
   },
@@ -169,7 +192,10 @@ export const EU: SiteMessages = {
   pictureGames: {
     modeGroup: 'Modua',
     modes: {
-      look: { name: 'Begiratu', summary: 'Marrazkia taularen azpian geratzen da' },
+      look: {
+        name: 'Begiratu',
+        summary: 'Marrazkia taularen azpian geratzen da',
+      },
       memory: { name: 'Oroimena', summary: 'Ikusi lehenengo, gero osatu' },
     },
     levelGroup: 'Maila',
@@ -185,7 +211,7 @@ export const EU: SiteMessages = {
     inPlace: (placed, total) => `${placed}/${total} bere lekuan`,
     newGame: 'Partida berria',
     solved: 'Oso ondo!',
-    best: (time) => `Errekorra: ${time}`,
+    best: time => `Errekorra: ${time}`,
     newRecord: 'Errekor berria!',
   },
 
@@ -193,8 +219,8 @@ export const EU: SiteMessages = {
     lead: 'Sakatu karratu bat laurden bat biratzeko. Biratu guztiak marrazkia ondo egon arte.',
     rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
     board: 'Irudia',
-    tile: (number) => `${number}. karratua`,
-    turns: (turns) => `Birak ${turns}`,
+    tile: number => `${number}. karratua`,
+    turns: turns => `Birak ${turns}`,
     solvedIn: (turns, time) => `${turns} bira eta ${time} behar izan dituzu`,
   },
 
@@ -203,12 +229,14 @@ export const EU: SiteMessages = {
     rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
     board: 'Irudia',
     piece: (number, picked) => `${number}. pieza${picked ? ', hautatuta' : ''}`,
-    swaps: (swaps) => `Mugimenduak ${swaps}`,
-    solvedIn: (swaps, time) => `${swaps} mugimendu eta ${time} behar izan dituzu`,
+    swaps: swaps => `Mugimenduak ${swaps}`,
+    solvedIn: (swaps, time) =>
+      `${swaps} mugimendu eta ${time} behar izan dituzu`,
   },
 
   pictures: {
-    family: 'Ama eta alaba eskutik helduta, eguzkia, ilargia eta hodeiekin, haur-marrazki batean',
+    family:
+      'Ama eta alaba eskutik helduta, eguzkia, ilargia eta hodeiekin, haur-marrazki batean',
   },
 
   privacy: {
@@ -232,13 +260,21 @@ export const EU: SiteMessages = {
         where: 'Biltegiratze lokala',
         why: 'Jokoek zure aukerak gogora ditzaten',
       },
-      { what: 'Puntuazio onenak', where: 'Biltegiratze lokala', why: 'Zure errekorrak hautsi ahal izateko' },
+      {
+        what: 'Puntuazio onenak',
+        where: 'Biltegiratze lokala',
+        why: 'Zure errekorrak hautsi ahal izateko',
+      },
       {
         what: 'Ikusitako oharrak eta berritasunak',
         where: 'Biltegiratze lokala',
         why: 'Oharrak berriro ez erakusteko eta berria markatzeko',
       },
-      { what: 'Baloratu dituzun jokoak', where: 'Tokiko biltegiratzea', why: 'Berriro ez galdetzeko' },
+      {
+        what: 'Baloratu dituzun jokoak',
+        where: 'Tokiko biltegiratzea',
+        why: 'Berriro ez galdetzeko',
+      },
       {
         what: 'Administrazio saioa (taldea bakarrik)',
         where: 'api.su-labs.dev-ren cookie bat',
@@ -289,7 +325,7 @@ export const EU: SiteMessages = {
 
   page: {
     section: 'Joko adimentsuak',
-    ages: (age) => `${age} urtetik aurrera`,
+    ages: age => `${age} urtetik aurrera`,
     new: 'Berria',
     popular: 'Ezaguna',
     hidden: 'Ezkutuan',
@@ -304,35 +340,65 @@ export const EU: SiteMessages = {
     timerGroup: 'Denbora',
     levelGroup: 'Maila',
     answerStyles: {
-      'true-or-false': { name: 'Egia ala gezurra', summary: 'Esan emaitza zuzena den' },
-      'your-answer': { name: 'Zure erantzuna', summary: 'Sakatu emaitza zenbaki-teklatuan' },
-      'find-the-signs': { name: 'Aurkitu zeinuak', summary: 'Aukeratu + − × ÷ berdintza egia izan dadin' },
+      'true-or-false': {
+        name: 'Egia ala gezurra',
+        summary: 'Esan emaitza zuzena den',
+      },
+      'your-answer': {
+        name: 'Zure erantzuna',
+        summary: 'Sakatu emaitza zenbaki-teklatuan',
+      },
+      'find-the-signs': {
+        name: 'Aurkitu zeinuak',
+        summary: 'Aukeratu + − × ÷ berdintza egia izan dadin',
+      },
     },
     timers: {
-      timer: { name: 'Denborarekin', summary: 'Erantzun barra amaitu baino lehen' },
-      'no-timer': { name: 'Denborarik gabe', summary: 'Hartu behar duzun denbora; akats batek amaitzen du' },
+      timer: {
+        name: 'Denborarekin',
+        summary: 'Erantzun barra amaitu baino lehen',
+      },
+      'no-timer': {
+        name: 'Denborarik gabe',
+        summary: 'Hartu behar duzun denbora; akats batek amaitzen du',
+      },
     },
     levels: {
       easy: { name: 'Erraza', summary: 'Batu eta kendu 20 arte' },
-      normal: { name: 'Normala', summary: 'Bi zifrako zenbakiak, erlojuan bezala' },
-      hard: { name: 'Zaila', summary: 'Bi zifrako zenbakiak eta biderketa-taulak' },
-      advanced: { name: 'Aurreratua', summary: 'Biderkatu eta zatitu zifra bateko zenbakiekin' },
-      expert: { name: 'Aditua', summary: 'Bi eta hiru zifrako zenbakiak, lau eragiketak' },
+      normal: {
+        name: 'Normala',
+        summary: 'Bi zifrako zenbakiak, erlojuan bezala',
+      },
+      hard: {
+        name: 'Zaila',
+        summary: 'Bi zifrako zenbakiak eta biderketa-taulak',
+      },
+      advanced: {
+        name: 'Aurreratua',
+        summary: 'Biderkatu eta zatitu zifra bateko zenbakiekin',
+      },
+      expert: {
+        name: 'Aditua',
+        summary: 'Bi eta hiru zifrako zenbakiak, lau eragiketak',
+      },
     },
     signsLevels: {
       easy: { name: 'Erraza', summary: '+ eta − 20 arteko zenbakiekin' },
       normal: { name: 'Normala', summary: '+ eta − 50 arteko zenbakiekin' },
       hard: { name: 'Zaila', summary: '+, − eta ×; × lehenengo' },
-      expert: { name: 'Aditua', summary: 'Lau zeinuak; bi edo hiru falta dira' },
+      expert: {
+        name: 'Aditua',
+        summary: 'Lau zeinuak; bi edo hiru falta dira',
+      },
     },
-    bestScore: (best) => `Puntuazio onena: ${best}`,
+    bestScore: best => `Puntuazio onena: ${best}`,
     start: 'Hasi',
   },
 
   playing: {
-    seconds: (seconds) => `${seconds} s`,
+    seconds: seconds => `${seconds} s`,
     noTimer: 'Denborarik gabe',
-    score: (score) => `Puntuak ${score}`,
+    score: score => `Puntuak ${score}`,
   },
 
   over: {
@@ -340,7 +406,7 @@ export const EU: SiteMessages = {
     notQuite: 'Ia-ia!',
     correctAnswers: () => 'erantzun zuzen',
     newRecord: 'errekor berria',
-    best: (best) => `onena ${best}`,
+    best: best => `onena ${best}`,
     youAnswered: 'Zure erantzuna',
     rightAnswer: 'Erantzun zuzena hau zen',
     playAgain: 'Jokatu berriro',
@@ -350,7 +416,7 @@ export const EU: SiteMessages = {
   trueOrFalse: {
     true: 'Egia',
     false: 'Gezurra',
-    given: (saysTrue) => (saysTrue ? 'egia' : 'gezurra'),
+    given: saysTrue => (saysTrue ? 'egia' : 'gezurra'),
     keys: 'Teklatua: ← gezurra, → egia',
   },
 
@@ -393,7 +459,8 @@ export const EU: SiteMessages = {
       'Zure pribatutasuna garrantzitsua da guretzat: irudia bidali aurretik, zure nabigatzaileak metadatuak kentzen dizkio (non eta noiz egin zen edo kameraren modeloa, adibidez) eta konprimatu egiten du.',
     chooseImage: 'Ekarri irudi bat hona, edo egin klik bat aukeratzeko',
     dropHere: 'Utzi hemen',
-    imageTypes: 'Mugikorreko edo ordenagailuko argazkiak eta marrazkiak (JPG, PNG, HEIC…)',
+    imageTypes:
+      'Mugikorreko edo ordenagailuko argazkiak eta marrazkiak (JPG, PNG, HEIC…)',
     imageAlt: 'Aukeratu duzun irudia',
     imageError: 'Irudi hori ezin da erabili. Saiatu beste batekin.',
     removeImage: 'Kendu',
@@ -428,10 +495,22 @@ export const EU: SiteMessages = {
     board: 'Letra jokoa',
     modeGroup: 'Jokoa',
     modes: {
-      'first-vowel': { name: 'Lehen bokala', summary: 'Sakatu hitza zein bokalekin hasten den' },
-      'missing-vowels': { name: 'Falta diren bokalak', summary: 'Osatu hitzaren bokal guztiak' },
-      'mixed-letters': { name: 'Letra nahasiak', summary: 'Ordenatu letrak; hitzak gero eta luzeagoak dira' },
-      'word-builder': { name: 'Hitz-sortzailea', summary: 'Osatu ahal dituzun hitz guztiak' },
+      'first-vowel': {
+        name: 'Lehen bokala',
+        summary: 'Sakatu hitza zein bokalekin hasten den',
+      },
+      'missing-vowels': {
+        name: 'Falta diren bokalak',
+        summary: 'Osatu hitzaren bokal guztiak',
+      },
+      'mixed-letters': {
+        name: 'Letra nahasiak',
+        summary: 'Ordenatu letrak; hitzak gero eta luzeagoak dira',
+      },
+      'word-builder': {
+        name: 'Hitz-sortzailea',
+        summary: 'Osatu ahal dituzun hitz guztiak',
+      },
     },
     levelGroup: 'Letrak',
     builderLevels: {
@@ -440,14 +519,16 @@ export const EU: SiteMessages = {
       hard: { name: 'Zaila', summary: '10 letra' },
     },
     timers: {
-      timer: 'Amaitu hitz bakoitza barra amaitu baino lehen; hitz-sortzailean, bilatu amaitu arte',
+      timer:
+        'Amaitu hitz bakoitza barra amaitu baino lehen; hitz-sortzailean, bilatu amaitu arte',
       'no-timer': 'Lasai, presarik gabe',
     },
     hintsGroup: 'Pistak',
     hints: {
       hints: {
         name: 'Pistekin',
-        summary: '2 akatsen ondoren hurrengo letra argitzen da; 5 eta 10en ondoren, lehen letrak jartzen dira',
+        summary:
+          '2 akatsen ondoren hurrengo letra argitzen da; 5 eta 10en ondoren, lehen letrak jartzen dira',
       },
       'no-hints': { name: 'Pistarik gabe', summary: 'Ebatzi zuk bakarrik' },
     },
@@ -458,14 +539,15 @@ export const EU: SiteMessages = {
       'word-builder': 'Sakatu letrak hitz bat osatzeko, eta gero Egiaztatu',
     },
     progress: (word, total) => `Hitza: ${word}/${total}`,
-    mistakes: (mistakes) => `Akatsak: ${mistakes}`,
+    mistakes: mistakes => `Akatsak: ${mistakes}`,
     gap: 'Falta den letra',
     letters: 'Letrak',
     answer: 'Zure hitza',
     delete: 'Ezabatu',
     check: 'Egiaztatu',
     keys: 'Letrak teklatuarekin ere idatz ditzakezu; Atzera teklak azkena kentzen du',
-    builderKeys: 'Idatzi letrak teklatuarekin: Atzera teklak ezabatzen du, Sartu teklak egiaztatzen du',
+    builderKeys:
+      'Idatzi letrak teklatuarekin: Atzera teklak ezabatzen du, Sartu teklak egiaztatzen du',
     found: (found, total) => `Aurkituta: ${found}/${total}`,
     checks: {
       found: 'Ondo aurkitua!',
@@ -478,7 +560,8 @@ export const EU: SiteMessages = {
     dictionary: {
       loading: 'Hiztegia deskargatzen…',
       why: 'Lehen aldiz jokatzean zure hizkuntzako hiztegia deskargatzen dugu (100 KB inguru) zure hitzak egiaztatzeko. Zure nabigatzaileak hurrengorako gordetzen du.',
-      failed: 'Hiztegia ez da deskargatu, beraz ezkutuko hitzek bakarrik balio dute.',
+      failed:
+        'Hiztegia ez da deskargatu, beraz ezkutuko hitzek bakarrik balio dute.',
       credit: 'Hiztegia: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
     report: 'Salatu hitz hau',
@@ -489,22 +572,105 @@ export const EU: SiteMessages = {
     summary: (words, mistakes) => `${words} hitz · ${mistakes} akats`,
   },
 
+  measureIt: {
+    lead: 'Angeluak garraiagailuan, ur-basoak eta zenbaki-zuzenak.',
+    rule: 'Begiratu ondo, erantzun eta sakatu Egiaztatu. Hamar jarraian.',
+    board: 'Neurtu',
+    modeGroup: 'Zer neurtu',
+    modes: {
+      'read-angle': {
+        name: 'Irakurri angelua',
+        summary: 'Zenbat gradu ditu angeluak?',
+      },
+      'set-angle': {
+        name: 'Egin angelua',
+        summary: 'Biratu lerroa eskatutako angelua egin arte.',
+      },
+      'fill-glass': {
+        name: 'Ur-basoa',
+        summary: 'Zenbat beteta dago basoa: 1/2, 1/3, 3/4…?',
+      },
+      'number-line': {
+        name: 'Zenbaki-zuzena',
+        summary: 'Zein zenbaki dago x-n?',
+      },
+    },
+    levels: {
+      easy: 'Erraza',
+      normal: 'Normala',
+      hard: 'Zaila',
+      expert: 'Aditua',
+    },
+    levelSummaries: {
+      'read-angle': {
+        easy: '30°-z 30°',
+        normal: '10°-z 10°',
+        hard: '5°-z 5°',
+        expert: 'Edozein angelu, 2°-ko tartea',
+      },
+      'set-angle': {
+        easy: '30°-z 30°, zenbakiekin',
+        normal: '10°-z 10°, markak zenbakirik gabe',
+        hard: '5°-z 5°, angelu zuzena bakarrik markatuta',
+        expert: 'Edozein angelu, markarik gabe',
+      },
+      'fill-glass': {
+        easy: 'Erdiak eta laurdenak',
+        normal: 'Erdiak, herenak eta laurdenak',
+        hard: 'Zortzirenetaraino',
+        expert: 'Baso bat baino gehiago',
+      },
+      'number-line': {
+        easy: '1etik 1era',
+        normal: '2tik 2ra eta 5etik 5era',
+        hard: '10, 25 eta 50eko pausoak',
+        expert: 'Erdiak, laurdenak eta zero azpiko zenbakiak',
+      },
+    },
+    whichAngle: 'Zenbat gradu?',
+    makeAngle: angle => `Egin ${angle}°`,
+    howFull: 'Zenbat beteta dago?',
+    whichNumber: 'Zein zenbaki da x?',
+    yourAnswer: 'Zure erantzuna',
+    check: 'Egiaztatu',
+    right: 'Ondo!',
+    wrong: answer => `Ia: ${answer} zen`,
+    progress: (exercise, total) => `${exercise} / ${total}`,
+    done: 'Amaituta',
+    summary: (right, total) => `Ondo: ${right} / ${total}`,
+  },
+
   hitTheNote: {
     lead: 'Aurkitu entzuten duzun nota, esan bigarren nota altuagoa ala baxuagoa den, edo abestu mikrofonoan.',
     rule: 'Abestu moduak jokatzen duzun bitartean bakarrik erabiltzen du mikrofonoa: soinua zure gailuan geratzen da eta ez da inoiz grabatzen.',
     board: 'Musika jokoa',
     modeGroup: 'Jokoa',
     modes: {
-      'find-the-note': { name: 'Aurkitu nota', summary: 'Entzun nota bat eta sakatu bere izena' },
-      'higher-or-lower': { name: 'Gora ala behera?', summary: 'Entzun bi nota: bigarrena igotzen ala jaisten da?' },
+      'find-the-note': {
+        name: 'Aurkitu nota',
+        summary: 'Entzun nota bat eta sakatu bere izena',
+      },
+      'higher-or-lower': {
+        name: 'Gora ala behera?',
+        summary: 'Entzun bi nota: bigarrena igotzen ala jaisten da?',
+      },
       'sing-it': { name: 'Abestu', summary: 'Entzun nota bat eta abestu' },
     },
     levelGroup: 'Maila',
     levels: {
-      easy: { name: 'Erraza', summary: 'Do, Re eta Mi · jauzi handiak · afinatzeko erraza' },
+      easy: {
+        name: 'Erraza',
+        summary: 'Do, Re eta Mi · jauzi handiak · afinatzeko erraza',
+      },
       normal: { name: 'Normala', summary: 'Dotik Solera · jauzi txikiagoak' },
-      hard: { name: 'Zaila', summary: 'Eskala osoa, Dotik Sira · nota hurbilak' },
-      expert: { name: 'Aditua', summary: '12 notak, diesak ere bai · banan-banan · oso zehatz afinatu' },
+      hard: {
+        name: 'Zaila',
+        summary: 'Eskala osoa, Dotik Sira · nota hurbilak',
+      },
+      expert: {
+        name: 'Aditua',
+        summary: '12 notak, diesak ere bai · banan-banan · oso zehatz afinatu',
+      },
     },
     instructions: {
       'find-the-note': 'Zein nota da?',
@@ -512,7 +678,7 @@ export const EU: SiteMessages = {
       'sing-it': 'Entzun, gero abestu nota eta eutsi',
     },
     progress: (round, total) => `Txanda: ${round}/${total}`,
-    mistakes: (mistakes) => `Akatsak: ${mistakes}`,
+    mistakes: mistakes => `Akatsak: ${mistakes}`,
     noteNames: {
       C: 'Do',
       'C#': 'Do♯',
@@ -538,7 +704,8 @@ export const EU: SiteMessages = {
     micPrivacy:
       'Zure nabigatzaileak mikrofonoa erabiltzeko baimena eskatuko du. Soinua gailu honetan geratzen da: ez da inoiz grabatzen ezta bidaltzen ere.',
     micAsking: 'Mikrofonoaren zain…',
-    micDenied: 'Mikrofonoa blokeatuta dago. Baimendu zure nabigatzailean, edo saltatu txanda hau.',
+    micDenied:
+      'Mikrofonoa blokeatuta dago. Baimendu zure nabigatzailean, edo saltatu txanda hau.',
     micUnavailable: 'Gailu honek ez du mikrofonorik. Txandak salta ditzakezu.',
     meter: 'Zure ahotsa notatik zein hurbil dagoen',
     singHints: {
@@ -574,31 +741,50 @@ export const EU: SiteMessages = {
     saveFailed: 'Aldaketa ez da gorde. Begiratu APIa eta saiatu berriro.',
     loading: 'Kargatzen…',
     previewTitle: 'Aurrebista modua',
-    previewHelp: (hiddenBadge) =>
+    previewHelp: hiddenBadge =>
       `Nabigatzaile honek joko guztiak erakusten ditu, irekiak izan ala ez, «${hiddenBadge}» markarekin ezkutuan daudenean.`,
     gamesTitle: 'Jokoak',
     open: 'Denentzat irekita',
     hidden: 'Publikoari ezkutatuta',
-    byDefault: (open) => `berez: ${open ? 'irekita' : 'ezkutuan'}`,
-    playsPeriod: (total) => `Azken 30 egunak · ${total} partida guztira`,
+    byDefault: open => `berez: ${open ? 'irekita' : 'ezkutuan'}`,
+    playsPeriod: total => `Azken 30 egunak · ${total} partida guztira`,
     refresh: 'Freskatu',
     playsColumns: { game: 'Jokoa', plays: 'Partidak', reasons: 'Arrazoiak' },
-    suggestionStatuses: { new: 'Berriak', read: 'Irakurriak', archived: 'Artxibatuak' },
+    suggestionStatuses: {
+      new: 'Berriak',
+      read: 'Irakurriak',
+      archived: 'Artxibatuak',
+    },
     showPicture: 'Ikusi irudia',
     pictureAlt: 'Proposamenarekin bidalitako irudia',
-    moveTo: (status) => `Eraman hona: ${status}`,
+    moveTo: status => `Eraman hona: ${status}`,
     delete: 'Ezabatu',
     confirmDelete: 'Proposamen hau eta bere irudia betiko ezabatu?',
     noSuggestions: 'Ez dago proposamenik hemen.',
-    reportStatuses: { pending: 'Zain', approved: 'Blokeatuak', rejected: 'Baimenduak' },
-    reportsHelp: '3 aldiz salatutako hitzak ez du balio hitz-sortzailean zuk erabaki arte.',
-    reportColumns: { word: 'Hitza', language: 'Hizkuntza', reports: 'Salaketak', firstReported: 'Lehen salaketa' },
+    reportStatuses: {
+      pending: 'Zain',
+      approved: 'Blokeatuak',
+      rejected: 'Baimenduak',
+    },
+    reportsHelp:
+      '3 aldiz salatutako hitzak ez du balio hitz-sortzailean zuk erabaki arte.',
+    reportColumns: {
+      word: 'Hitza',
+      language: 'Hizkuntza',
+      reports: 'Salaketak',
+      firstReported: 'Lehen salaketa',
+    },
     keepOut: 'Blokeatu',
     letCount: 'Baimendu',
     noWords: 'Ez dago hitzik hemen.',
     featuresTitle: 'Funtzioak',
-    featuresHelp: 'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
-    featureNames: { rooms: 'Elkarrekin jokatu (gelak)', 'rooms-math-games': 'Matematika geletan' },
+    featuresHelp:
+      'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
+    featureNames: {
+      rooms: 'Elkarrekin jokatu (gelak)',
+      'rooms-math-games': 'Matematika geletan',
+      'rooms-measure-it': 'Neurtu geletan',
+    },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
       'Joko bakoitzak bere etengailua du geletarako, bakarka jokatzekoaz gain: joko bat irekita egon daiteke eta geletan itxita.',
@@ -613,14 +799,20 @@ export const EU: SiteMessages = {
     makeTester: 'Egin tester',
     makeModerator: 'Egin moderatzaile',
     startingPassword: 'Hasierako pasahitza (aukerakoa)',
-    startingPasswordHelp: 'Utzi hutsik gonbidapen-esteka bat lortzeko: berak aukeratuko du pasahitza.',
+    startingPasswordHelp:
+      'Utzi hutsik gonbidapen-esteka bat lortzeko: berak aukeratuko du pasahitza.',
     add: 'Gehitu',
     alreadyOnTeam: 'Badago norbait taldean helbide horrekin.',
-    inviteFor: (email) => `Gonbidapen-esteka ${email} helbiderako: kopiatu eta bidali.`,
+    inviteFor: email =>
+      `Gonbidapen-esteka ${email} helbiderako: kopiatu eta bidali.`,
     copy: 'Kopiatu',
     copied: 'Kopiatuta',
-    inviteExpires: (day) => `Behin bakarrik balio du, ${day} arte.`,
-    roles: { super: 'Superadministratzailea', moderator: 'Moderatzailea', tester: 'Testerra' },
+    inviteExpires: day => `Behin bakarrik balio du, ${day} arte.`,
+    roles: {
+      super: 'Superadministratzailea',
+      moderator: 'Moderatzailea',
+      tester: 'Testerra',
+    },
     invited: 'Gonbidatuta, oraindik pasahitzik gabe',
     active: 'Aktibo',
     inactive: 'Desaktibatuta',
@@ -631,14 +823,16 @@ export const EU: SiteMessages = {
     currentPassword: 'Oraingo pasahitza',
     newPassword: 'Pasahitz berria',
     repeatPassword: 'Errepikatu pasahitz berria',
-    passwordRule: (min) => `Gutxienez ${min} karaktere.`,
-    passwordChanged: 'Pasahitza aldatu da. Zure kontuarekin zeuden beste nabigatzaileetan saioa itxi da.',
+    passwordRule: min => `Gutxienez ${min} karaktere.`,
+    passwordChanged:
+      'Pasahitza aldatu da. Zure kontuarekin zeuden beste nabigatzaileetan saioa itxi da.',
     wrongPassword: 'Oraingo pasahitza ez da zuzena.',
     passwordsDiffer: 'Bi pasahitzak ez datoz bat.',
     inviteTitle: 'Batu administrazio taldera',
-    inviteLead: (email) => `Aukeratu pasahitz bat ${email} helbiderako.`,
+    inviteLead: email => `Aukeratu pasahitz bat ${email} helbiderako.`,
     acceptInvite: 'Gorde eta sartu',
-    inviteInvalid: 'Gonbidapen-esteka honek ez du balio jada. Eskatu berri bat.',
+    inviteInvalid:
+      'Gonbidapen-esteka honek ez du balio jada. Eskatu berri bat.',
   },
 
   rooms: {
@@ -651,17 +845,22 @@ export const EU: SiteMessages = {
     codeLabel: 'Gelaren kodea',
     join: 'Sartu',
     homeTitle: 'Elkarrekin jokatu',
-    homeText: '4 jokalari arte, ariketa berak aldi berean. Nork asmatzen du gehien?',
+    homeText:
+      '4 jokalari arte, ariketa berak aldi berean. Nork asmatzen du gehien?',
     errors: {
-      'not-found': 'Ez dago gelarik kode horrekin. Begiratu edo eskatu berri bat.',
+      'not-found':
+        'Ez dago gelarik kode horrekin. Begiratu edo eskatu berri bat.',
       full: 'Gela hori beteta dago: 4 jokalari ditu jada.',
-      'in-game': 'Gela horretan jokatzen ari dira orain. Saiatu berriro txanda amaitzean.',
+      'in-game':
+        'Gela horretan jokatzen ari dira orain. Saiatu berriro txanda amaitzean.',
       'not-host': 'Gelako anfitrioiak bakarrik egin dezake hori.',
-      'not-ready': 'Lehenik denek prest egon behar dute, gutxienez 2 jokalarirekin.',
+      'not-ready':
+        'Lehenik denek prest egon behar dute, gutxienez 2 jokalarirekin.',
       'wrong-phase': 'Orain ezin da hori egin.',
       invalid: 'Kode hori ez dirudi zuzena: 6 letra eta zenbaki ditu.',
       'too-many': 'Saiakera gehiegi. Itxaron minutu bat eta saiatu berriro.',
-      offline: 'Orain ezin da geletara konektatu. Begiratu zure konexioa eta saiatu berriro.',
+      offline:
+        'Orain ezin da geletara konektatu. Begiratu zure konexioa eta saiatu berriro.',
     },
     connecting: 'Konektatzen…',
     reconnecting: 'Berriro konektatzen…',
@@ -677,27 +876,29 @@ export const EU: SiteMessages = {
     imReady: 'Prest nago',
     notReadyYet: 'Oraindik ez nago prest',
     start: 'Hasi',
-    needPlayers: (min) => `Gutxienez ${min} jokalari behar dira.`,
+    needPlayers: min => `Gutxienez ${min} jokalari behar dira.`,
     waitingForReady: 'Denak prest egon arte itxaroten…',
     waitingForHost: 'Anfitrioiak hasi arte itxaroten…',
     settingsTitle: 'Jokoaren ezarpenak',
+    gameGroup: 'Jokoa',
     roundLength: 'Txandaren iraupena',
     showScores: 'Puntuazioa txandan zehar',
     scoresShown: 'Erakutsi puntuazioa',
     scoresHidden: 'Puntuazioa amaieran bakarrik',
-    seconds: (seconds) => `${seconds} s`,
+    seconds: seconds => `${seconds} s`,
     getReady: 'Prest!',
-    timeLeft: (seconds) => `${seconds} s falta dira`,
-    yourScore: (score) => `Zure puntuazioa: ${score}`,
+    timeLeft: seconds => `${seconds} s falta dira`,
+    yourScore: score => `Zure puntuazioa: ${score}`,
     resultsTitle: 'Emaitzak',
-    place: (place) => `${place}.`,
-    points: (points) => `${points} puntu`,
+    place: place => `${place}.`,
+    points: points => `${points} puntu`,
     playAgain: 'Jokatu berriro',
     leave: 'Irten gelatik',
     kick: 'Kendu',
     kicked: 'Anfitrioiak gelatik kendu zaitu.',
     gameUnavailable: 'Joko hau ez dago irekita geletan oraintxe.',
     animals: ANIMALS,
-    nickname: (adjective, animal) => `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
+    nickname: (adjective, animal) =>
+      `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
   },
 };

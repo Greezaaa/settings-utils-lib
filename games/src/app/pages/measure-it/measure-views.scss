@@ -1,0 +1,94 @@
+// The drawings of Measure it: protractor, glass and number line, in the theme's colours
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.drawing {
+  display: block;
+  margin-inline: auto;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.protractor {
+  width: min(100%, 26rem);
+}
+
+.number-line {
+  width: min(100%, 30rem);
+}
+
+.plate {
+  fill: color-mix(in srgb, var(--button-bg) 6%, transparent);
+}
+
+.outline,
+.mark,
+.glass-outline {
+  fill: none;
+  stroke: var(--heading);
+  stroke-linecap: round;
+  stroke-width: 1.5;
+}
+
+.mark {
+  stroke-width: 1;
+}
+
+.mark-label,
+.line-label {
+  fill: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  text-anchor: middle;
+}
+
+.line-label {
+  fill: var(--heading);
+  font-size: 13px;
+}
+
+.line-x {
+  fill: var(--red-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.ray {
+  stroke: var(--button-bg);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.angle-arc {
+  fill: none;
+  stroke: var(--button-bg);
+  stroke-width: 1.5;
+}
+
+.pivot {
+  fill: var(--button-bg);
+}
+
+.glasses {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.glass {
+  width: 6rem;
+}
+
+.glass-outline {
+  stroke-width: 3;
+}
+
+.water {
+  fill: #4fc3f7;
+  opacity: 0.8;
+}

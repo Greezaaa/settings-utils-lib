@@ -1,5 +1,6 @@
 import { LanguageId } from '../i18n/site-messages';
 import { field } from './api-url';
+import { ROOM_GAMES, RoomGame } from './features';
 
 /** A room's state as the rooms service (rooms.su-labs.dev, api/src/rooms/) sends it; every field is checked */
 export type RoomPhase = 'lobby' | 'countdown' | 'playing' | 'results';
@@ -9,7 +10,7 @@ export const MAX_PLAYERS = 4;
 export const MIN_PLAYERS_TO_START = 2;
 
 export interface RoomSettings {
-  readonly game: 'math-games';
+  readonly game: RoomGame;
   readonly mode: string;
   readonly level: string;
   readonly seconds: RoundSeconds;
@@ -71,23 +72,37 @@ const ROOM_ERRORS: readonly RoomError[] = [
   'too-many',
   'offline',
 ];
-const PHASES: readonly RoomPhase[] = ['lobby', 'countdown', 'playing', 'results'];
+const PHASES: readonly RoomPhase[] = [
+  'lobby',
+  'countdown',
+  'playing',
+  'results',
+];
 const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'uk'];
 
-const isNumber = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
+const isNumber = (value: unknown): value is number =>
+  typeof value === 'number' && Number.isFinite(value);
 const oneOf =
   <T>(values: readonly T[]) =>
   (value: unknown): value is T =>
-    values.some((item) => item === value);
+    values.some(item => item === value);
 
 export const isRoomError = oneOf(ROOM_ERRORS);
 
 function parsePlayer(item: unknown): RoomPlayer[] {
   const nickname = field(item, 'nickname');
-  const [id, color, ready, connected, score, place] = ['id', 'color', 'ready', 'connected', 'score', 'place'].map(
-    (key) => field(item, key),
-  );
-  const [adjective, animal] = [field(nickname, 'adjective'), field(nickname, 'animal')];
+  const [id, color, ready, connected, score, place] = [
+    'id',
+    'color',
+    'ready',
+    'connected',
+    'score',
+    'place',
+  ].map(key => field(item, key));
+  const [adjective, animal] = [
+    field(nickname, 'adjective'),
+    field(nickname, 'animal'),
+  ];
   return typeof id === 'string' &&
     isNumber(adjective) &&
     isNumber(animal) &&
@@ -96,7 +111,17 @@ function parsePlayer(item: unknown): RoomPlayer[] {
     typeof connected === 'boolean' &&
     isNumber(score) &&
     (place === null || isNumber(place))
-    ? [{ id, nickname: { adjective, animal }, color, ready, connected, score, place }]
+    ? [
+        {
+          id,
+          nickname: { adjective, animal },
+          color,
+          ready,
+          connected,
+          score,
+          place,
+        },
+      ]
     : [];
 }
 
@@ -108,8 +133,8 @@ function parseSettings(value: unknown): RoomSettings | null {
     'seconds',
     'language',
     'showScores',
-  ].map((key) => field(value, key));
-  return game === 'math-games' &&
+  ].map(key => field(value, key));
+  return oneOf(ROOM_GAMES)(game) &&
     typeof mode === 'string' &&
     typeof level === 'string' &&
     oneOf(ROUND_SECONDS)(seconds) &&
@@ -120,15 +145,23 @@ function parseSettings(value: unknown): RoomSettings | null {
 }
 
 function parseRound(value: unknown): Round | null {
-  const [seed, startsAt, endsAt] = ['seed', 'startsAt', 'endsAt'].map((key) => field(value, key));
-  return isNumber(seed) && isNumber(startsAt) && isNumber(endsAt) ? { seed, startsAt, endsAt } : null;
+  const [seed, startsAt, endsAt] = ['seed', 'startsAt', 'endsAt'].map(key =>
+    field(value, key)
+  );
+  return isNumber(seed) && isNumber(startsAt) && isNumber(endsAt)
+    ? { seed, startsAt, endsAt }
+    : null;
 }
 
 /** A room message from the server, or null when it doesn't have the right shape */
 export function parseRoomView(data: unknown): RoomView | null {
-  const [code, hostId, phase, players, serverNow] = ['code', 'hostId', 'phase', 'players', 'serverNow'].map((key) =>
-    field(data, key),
-  );
+  const [code, hostId, phase, players, serverNow] = [
+    'code',
+    'hostId',
+    'phase',
+    'players',
+    'serverNow',
+  ].map(key => field(data, key));
   const settings = parseSettings(field(data, 'settings'));
   if (
     typeof code !== 'string' ||

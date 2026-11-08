@@ -44,33 +44,79 @@
               </button>
             </div>
 
-            <h2 class="card-title">{{ t().rooms.settingsTitle }} · {{ t().games['math-games'].name }}</h2>
-            <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
-              @for (style of answerStyles; track style) {
-                <button
-                  type="button"
-                  class="button button-secondary"
-                  [attr.aria-pressed]="style === math().style"
-                  [disabled]="!client.isHost()"
-                  (click)="chooseStyle(style)"
-                >
-                  {{ t().settings.answerStyles[style].name }}
-                </button>
-              }
-            </div>
-            <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
-              @for (level of levels(); track level) {
-                <button
-                  type="button"
-                  class="button button-secondary"
-                  [attr.aria-pressed]="level === math().levelId"
-                  [disabled]="!client.isHost()"
-                  (click)="chooseLevel(level)"
-                >
-                  {{ levelName(level) }}
-                </button>
-              }
-            </div>
+            <h2 class="card-title">{{ t().rooms.settingsTitle }} · {{ t().games[game()].name }}</h2>
+            @if (openGames().length > 1) {
+              <div class="choices" role="group" [attr.aria-label]="t().rooms.gameGroup">
+                @for (option of openGames(); track option) {
+                  <button
+                    type="button"
+                    class="button button-secondary"
+                    [attr.aria-pressed]="option === game()"
+                    [disabled]="!client.isHost()"
+                    (click)="chooseGame(option)"
+                  >
+                    {{ t().games[option].name }}
+                  </button>
+                }
+              </div>
+            }
+            @if (game() === 'measure-it') {
+              <div class="choices" role="group" [attr.aria-label]="t().measureIt.modeGroup">
+                @for (mode of measureModes; track mode) {
+                  <button
+                    type="button"
+                    class="button button-secondary"
+                    [attr.aria-pressed]="mode === measure().mode"
+                    [disabled]="!client.isHost()"
+                    [title]="t().measureIt.modes[mode].summary"
+                    (click)="chooseMeasureMode(mode)"
+                  >
+                    {{ t().measureIt.modes[mode].name }}
+                  </button>
+                }
+              </div>
+              <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+                @for (level of measureLevels; track level) {
+                  <button
+                    type="button"
+                    class="button button-secondary"
+                    [attr.aria-pressed]="level === measure().levelId"
+                    [disabled]="!client.isHost()"
+                    [title]="t().measureIt.levelSummaries[measure().mode][level]"
+                    (click)="chooseLevel(level)"
+                  >
+                    {{ t().measureIt.levels[level] }}
+                  </button>
+                }
+              </div>
+            } @else {
+              <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
+                @for (style of answerStyles; track style) {
+                  <button
+                    type="button"
+                    class="button button-secondary"
+                    [attr.aria-pressed]="style === math().style"
+                    [disabled]="!client.isHost()"
+                    (click)="chooseStyle(style)"
+                  >
+                    {{ t().settings.answerStyles[style].name }}
+                  </button>
+                }
+              </div>
+              <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+                @for (level of levels(); track level) {
+                  <button
+                    type="button"
+                    class="button button-secondary"
+                    [attr.aria-pressed]="level === math().levelId"
+                    [disabled]="!client.isHost()"
+                    (click)="chooseLevel(level)"
+                  >
+                    {{ levelName(level) }}
+                  </button>
+                }
+              </div>
+            }
             <div class="choices" role="group" [attr.aria-label]="t().rooms.roundLength">
               @for (seconds of roundSeconds; track seconds) {
                 <button
@@ -105,7 +151,7 @@
                 {{ me.ready ? t().rooms.notReadyYet : t().rooms.imReady }}
               </button>
             }
-            @if (!canPlayMath()) {
+            @if (!canPlayGame()) {
               <p class="error" role="status">{{ t().rooms.gameUnavailable }}</p>
             }
             @if (client.isHost()) {
@@ -125,12 +171,21 @@
           }
           @case ('playing') {
             @if (room.round; as round) {
-              <app-room-math-round
+              @if (game() === 'measure-it') {
+                <app-room-measure-round
+                  [measure]="measure()"
+                  [round]="round"
+                  [showScore]="room.settings.showScores"
+                  (scored)="client.reportScore($event)"
+                />
+              } @else {
+                <app-room-math-round
                   [math]="math()"
                   [round]="round"
                   [showScore]="room.settings.showScores"
                   (scored)="client.reportScore($event)"
                 />
+              }
             }
           }
           @case ('results') {

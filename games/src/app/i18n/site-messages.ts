@@ -12,6 +12,7 @@ import { RoomError } from '../core/room-view';
 import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { GameThemeId } from '../core/game-themes';
+import { MeasureLevelId, MeasureModeId } from '../games/measure-it';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
 
@@ -170,8 +171,16 @@ export interface SiteMessages {
     readonly title: string;
     readonly lead: string;
     readonly savedTitle: string;
-    readonly columns: { readonly what: string; readonly where: string; readonly why: string };
-    readonly saved: readonly { readonly what: string; readonly where: string; readonly why: string }[];
+    readonly columns: {
+      readonly what: string;
+      readonly where: string;
+      readonly why: string;
+    };
+    readonly saved: readonly {
+      readonly what: string;
+      readonly where: string;
+      readonly why: string;
+    }[];
     readonly differenceTitle: string;
     readonly difference: string;
     /** What the games send to api.su-labs.dev */
@@ -356,6 +365,33 @@ export interface SiteMessages {
     readonly summary: (words: number, mistakes: number) => string;
   };
 
+  /** Measure it: read and make angles, how full a glass is, numbers on a line */
+  readonly measureIt: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    readonly modeGroup: string;
+    readonly modes: Readonly<Record<MeasureModeId, OptionText>>;
+    readonly levels: Readonly<Record<MeasureLevelId, string>>;
+    /** What each level means in each mode */
+    readonly levelSummaries: Readonly<
+      Record<MeasureModeId, Readonly<Record<MeasureLevelId, string>>>
+    >;
+    /** The question above each exercise */
+    readonly whichAngle: string;
+    readonly makeAngle: (angle: number) => string;
+    readonly howFull: string;
+    readonly whichNumber: string;
+    /** Name of the slider or the choices, for screen readers */
+    readonly yourAnswer: string;
+    readonly check: string;
+    readonly right: string;
+    readonly wrong: (answer: string) => string;
+    readonly progress: (exercise: number, total: number) => string;
+    readonly done: string;
+    readonly summary: (right: number, total: number) => string;
+  };
+
   /** Hit the note: find the note, higher or lower, sing it */
   readonly hitTheNote: {
     readonly lead: string;
@@ -382,7 +418,9 @@ export interface SiteMessages {
     readonly micUnavailable: string;
     readonly meter: string;
     /** What the singing meter says: done, silence, hold it, too low, too high */
-    readonly singHints: Readonly<Record<'done' | 'silent' | 'hold' | 'low' | 'high', string>>;
+    readonly singHints: Readonly<
+      Record<'done' | 'silent' | 'hold' | 'low' | 'high', string>
+    >;
     readonly skip: string;
     readonly solved: string;
     readonly summary: (right: number, total: number) => string;
@@ -417,7 +455,11 @@ export interface SiteMessages {
     readonly byDefault: (open: boolean) => string;
     readonly playsPeriod: (total: number) => string;
     readonly refresh: string;
-    readonly playsColumns: { readonly game: string; readonly plays: string; readonly reasons: string };
+    readonly playsColumns: {
+      readonly game: string;
+      readonly plays: string;
+      readonly reasons: string;
+    };
     readonly suggestionStatuses: Readonly<Record<SuggestionStatus, string>>;
     readonly showPicture: string;
     readonly pictureAlt: string;
@@ -458,7 +500,11 @@ export interface SiteMessages {
     readonly copy: string;
     readonly copied: string;
     readonly inviteExpires: (day: string) => string;
-    readonly roles: { readonly super: string; readonly moderator: string; readonly tester: string };
+    readonly roles: {
+      readonly super: string;
+      readonly moderator: string;
+      readonly tester: string;
+    };
     readonly invited: string;
     readonly active: string;
     readonly inactive: string;
@@ -511,6 +557,8 @@ export interface SiteMessages {
     readonly waitingForReady: string;
     readonly waitingForHost: string;
     readonly settingsTitle: string;
+    /** The host's choice of game, when more than one is open in rooms */
+    readonly gameGroup: string;
     readonly roundLength: string;
     /** Whether scores show during the round */
     readonly showScores: string;

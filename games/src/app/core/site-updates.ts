@@ -205,14 +205,31 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 9,
+    published: '2026-11-09T12:00:00+01:00',
+    changes: [
+      {
+        game: 'measure-it',
+        text: {
+          en: 'New game: Measure it, with angles, glasses of water and number lines',
+          es: 'Nuevo juego: A medir, con ángulos, vasos de agua y rectas numéricas',
+          eu: 'Joko berria: Neurtu, angeluekin, ur-basoekin eta zenbaki-zuzenekin',
+          uk: 'Нова гра: Виміряй, з кутами, склянками води і числовими прямими',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */
-export const LATEST_VERSION = Math.max(...SITE_UPDATES.map(({ version }) => version));
+export const LATEST_VERSION = Math.max(
+  ...SITE_UPDATES.map(({ version }) => version)
+);
 
 /** When the current version went live */
 export const LATEST_PUBLISHED = SITE_UPDATES.reduce((latest, update) =>
-  update.version > latest.version ? update : latest,
+  update.version > latest.version ? update : latest
 ).published;
 
 /** The site version the visitor last saw (in the browser's storage) */
@@ -221,7 +238,7 @@ export const LAST_SEEN_STORAGE = 'last-seen-version';
 /** The newest version that changed what the site saves */
 export const LATEST_PRIVACY_VERSION = Math.max(
   0,
-  ...SITE_UPDATES.filter(({ privacy }) => privacy).map(({ version }) => version),
+  ...SITE_UPDATES.filter(({ privacy }) => privacy).map(({ version }) => version)
 );
 
 /** A change with the update it came in */
@@ -233,18 +250,27 @@ export interface DatedChange {
 }
 
 /** Every change, newest update first (keeping each update's own order), for the home page's "What's new" */
-export function recentChanges(updates: readonly SiteUpdate[] = SITE_UPDATES): DatedChange[] {
+export function recentChanges(
+  updates: readonly SiteUpdate[] = SITE_UPDATES
+): DatedChange[] {
   return [...updates]
     .sort((first, second) => second.version - first.version)
-    .flatMap(({ version, published, changes }) => changes.map((change) => ({ change, version, published })));
+    .flatMap(({ version, published, changes }) =>
+      changes.map(change => ({ change, version, published }))
+    );
 }
 
 /** A day as a short local date in a language, e.g. `7 Nov 2026` */
 export function formatDay(iso: string, language: LanguageId): string {
-  return new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(new Date(iso));
+  return new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(
+    new Date(iso)
+  );
 }
 
 /** A moment as a short local date and time in a language, e.g. `7 Nov 2026, 16:30` */
 export function formatMoment(iso: string, language: LanguageId): string {
-  return new Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
+  return new Intl.DateTimeFormat(language, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(iso));
 }

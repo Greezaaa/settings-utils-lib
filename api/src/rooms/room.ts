@@ -29,12 +29,12 @@ export const ANIMAL_COUNT = 16;
 export const COLOR_COUNT = 8;
 
 /** Games that can be played in a room, for now */
-export const ROOM_GAMES = ['math-games'] as const;
+export const ROOM_GAMES = ['math-games', 'measure-it'] as const;
 export type RoomGame = (typeof ROOM_GAMES)[number];
 
 export interface RoomSettings {
   readonly game: RoomGame;
-  /** The game's own mode and level ids (math: answer style and level), checked by the games site */
+  /** The game's own mode and level ids (math: answer style and level; measure it: mode and level), checked by the games site */
   readonly mode: string;
   readonly level: string;
   readonly seconds: RoundSeconds;

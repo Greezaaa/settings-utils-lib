@@ -38,7 +38,7 @@ describe('GameAvailability', () => {
     expect(availability.canPlay('math-games')).toBe(true);
     expect(availability.isOpen('hit-the-note')).toBe(false);
     expect(availability.canPlay('hit-the-note')).toBe(false);
-    expect(availability.visibleGames()).toHaveLength(GAMES.length - 1);
+    expect(availability.visibleGames()).toHaveLength(GAMES.filter((game) => game.openByDefault).length - 1);
   });
 
   it('falls back to the defaults when the API gives no switches', async () => {
