@@ -1,4 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { AdminApi } from './admin-api';
 import { GAMES, GameSlug } from './games';
 import { GamesApi } from './games-api';
 import { readStored, writeStored } from './site-storage';
@@ -9,7 +10,7 @@ const PREVIEW_STORAGE = 'admin-preview';
 /**
  * Which games are open to the public. Each game has a default in core/games.ts; the admin can switch any game on or
  * off from the admin page, stored in the API. Hidden games leave the lists and their pages send visitors home,
- * except in preview mode, the admin's way to try them.
+ * except in preview mode: the super admin's and testers' way to try them.
  *
  * Until the switches are known no game shows, so a game the admin switched off never flashes on screen (prerendered
  * pages list none either). When the API can't be reached, the defaults apply once it gives up. The site shell starts
@@ -18,6 +19,7 @@ const PREVIEW_STORAGE = 'admin-preview';
 @Injectable({ providedIn: 'root' })
 export class GameAvailability {
   private readonly api = inject(GamesApi);
+  private readonly admin = inject(AdminApi);
   private readonly switches = signal<ReadonlyMap<GameSlug, boolean>>(new Map());
   private loading: Promise<void> | null = null;
 
@@ -65,9 +67,25 @@ export class GameAvailability {
   }
 
   private async load(): Promise<void> {
-    this.isPreview.set(readStored(PREVIEW_STORAGE) === true);
-    const switches = await this.api.gameSwitches();
+    const wantsPreview = readStored(PREVIEW_STORAGE) === true;
+    const [switches, previewAllowed] = await Promise.all([
+      this.api.gameSwitches(),
+      wantsPreview ? this.previewAllowed() : Promise.resolve(false),
+    ]);
+    this.isPreview.set(previewAllowed);
+    if (wantsPreview && !previewAllowed) {
+      writeStored(PREVIEW_STORAGE, false);
+    }
     this.switches.set(new Map(switches.map(({ game, enabled }) => [game, enabled])));
     this.isKnown.set(true);
+  }
+
+  /**
+   * Preview is only for a signed-in super admin or tester, checked with the API (a flag in the browser alone isn't
+   * enough); when the API can't be reached, the browser's flag is trusted until it can
+   */
+  private async previewAllowed(): Promise<boolean> {
+    const session = await this.admin.restore();
+    return session === 'offline' || this.admin.canPreview();
   }
 }

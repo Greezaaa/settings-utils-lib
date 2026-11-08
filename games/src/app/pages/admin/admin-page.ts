@@ -13,13 +13,14 @@ type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'offline';
 
 const TABS = ['games', 'plays', 'suggestions', 'words', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];
-/** Tabs only the super admin sees */
-const SUPER_TABS: readonly Tab[] = ['team'];
+/** Tabs only the super admin sees: switching games and features, and the team */
+const SUPER_TABS: readonly Tab[] = ['games', 'team'];
 
 /**
  * The admin page, at /<ADMIN_PATH> (see core/links.ts): sign in with email and password (the browser stays signed in
  * for 30 days), then switch games, see plays and feedback, and moderate suggestions and reported words, one tab each.
- * The super admin also manages the team; everyone can change their own password.
+ * Only the super admin switches games and features and manages the team; moderators and testers moderate, and
+ * testers also use preview. Everyone can change their own password.
  */
 @Component({
   selector: 'app-admin-page',
@@ -35,13 +36,16 @@ export class AdminPage {
   protected readonly t = inject(SiteLanguage).messages;
 
   protected readonly signIn = signal<SignIn>('restoring');
-  protected readonly tab = signal<Tab>('games');
+  protected readonly tab = signal<Tab>('plays');
   protected readonly tabs = computed(() => TABS.filter((tab) => this.admin.isSuper() || !SUPER_TABS.includes(tab)));
 
   constructor() {
     afterNextRender(async () => {
       const restored = await this.admin.restore();
       this.signIn.set(restored === 'offline' ? 'offline' : 'idle');
+      if (this.admin.isSuper()) {
+        this.tab.set('games');
+      }
     });
   }
 
@@ -51,14 +55,15 @@ export class AdminPage {
     const answer = await this.admin.signIn(email.value.trim(), password.value);
     this.signIn.set(answer === 'right' ? 'idle' : answer);
     if (answer === 'right') {
-      // Signing in turns preview on; coming back later keeps whatever the admin chose
-      this.availability.setPreview(true);
+      // The super admin starts on the switches; signing in turns preview on for those who may use it
+      this.tab.set(this.admin.isSuper() ? 'games' : 'plays');
+      this.availability.setPreview(this.admin.canPreview());
     }
   }
 
   protected async signOut(): Promise<void> {
     await this.admin.signOut();
     this.availability.setPreview(false);
-    this.tab.set('games');
+    this.tab.set('plays');
   }
 }

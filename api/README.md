@@ -17,9 +17,9 @@ suggestions. No accounts and no personal data; visitor addresses are only held i
 
 Admin sign-in (a 30-day HttpOnly session cookie): `POST /auth/login` (`{ email, password }`), `GET /auth/me`,
 `POST /auth/logout`, `POST /auth/password` (`{ current, next }`), `GET`/`POST /auth/invite/:secret` (accept an invite
-with `{ password }`). The super admin manages the team: `GET /admin/team`, `POST /admin/team` (`{ email, password? }`;
+with `{ password }`). The super admin manages the team: `GET /admin/team`, `POST /admin/team` (`{ email, role: moderator|tester, password? }`;
 without a password the answer has an invite link secret), `POST /admin/team/:id/invite`, `PATCH /admin/team/:id`
-(`{ active }`), and switches games (`PUT /admin/games/:game`).
+(`{ active?, role? }`), and switches games (`PUT /admin/games/:game`).
 
 Moderation, signed in or with the backup key `Authorization: Bearer <ADMIN_TOKEN>`:
 `GET /admin/feedback`, `GET /admin/word-reports?status=`, `PATCH /admin/word-reports/:language/:word`
@@ -54,8 +54,10 @@ Create the super admin on the server (or give that account a new password, print
 docker compose exec api node dist/cli/create-admin.js you@example.com
 ```
 
-Sign in at games.su-labs.dev/crew (the address is set in games/src/app/core/links.ts) and change the password in the Account tab. Add moderators in the Team tab, with a
-starting password or an invite link (it works once, for 7 days). `ADMIN_TOKEN` stays as a backup key for scripts.
+Sign in at games.su-labs.dev/crew (the address is set in games/src/app/core/links.ts) and change the password in the Account tab. Add moderators and testers in the Team tab,
+with a starting password or an invite link (it works once, for 7 days). Moderators read suggestions, decide on
+reported words and see plays and feedback; testers do the same and also see switched-off games and features in
+preview. Only the super admin switches games and features and manages the team. `ADMIN_TOKEN` stays as a backup key for scripts.
 
 ## Server
 

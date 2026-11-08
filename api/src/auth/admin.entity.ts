@@ -5,9 +5,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-export const ADMIN_ROLES = ['super', 'moderator'] as const;
-/** The super admin manages the team; moderators moderate */
+export const ADMIN_ROLES = ['super', 'moderator', 'tester'] as const;
+/**
+ * The super admin (only one, created on the server) manages the team and switches games and features. Moderators read
+ * suggestions, decide on reported words and read plays and feedback; testers do the same and also see every game and
+ * feature in preview, even those switched off for the public.
+ */
 export type AdminRole = (typeof ADMIN_ROLES)[number];
+/** The roles the super admin gives team members */
+export const MEMBER_ROLES = ['moderator', 'tester'] as const;
+export type MemberRole = (typeof MEMBER_ROLES)[number];
 
 /**
  * Someone allowed to use the admin page. The super admin is created on the server (`npm run create-admin`); moderators

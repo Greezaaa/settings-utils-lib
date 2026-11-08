@@ -1,9 +1,27 @@
 <form class="card admin-card" (submit)="add($event, form, emailInput, passwordInput)" #form>
-  <h2 class="card-title">{{ t().admin.addModerator }}</h2>
+  <h2 class="card-title">{{ t().admin.addMember }}</h2>
   <label class="field">
     <span>{{ t().admin.email }}</span>
     <input #emailInput type="email" autocomplete="off" required />
   </label>
+  <div class="field">
+    <span>{{ t().admin.roleLabel }}</span>
+    <div class="filters" role="radiogroup" [attr.aria-label]="t().admin.roleLabel">
+      @for (role of roles; track role) {
+        <button
+          type="button"
+          role="radio"
+          class="button button-secondary button-small"
+          [attr.aria-checked]="role === newRole()"
+          [attr.aria-pressed]="role === newRole()"
+          (click)="newRole.set(role)"
+        >
+          {{ t().admin.roles[role] }}
+        </button>
+      }
+    </div>
+    <small class="muted">{{ t().admin.roleHelp[newRole()] }}</small>
+  </div>
   <label class="field">
     <span>{{ t().admin.startingPassword }}</span>
     <input #passwordInput type="text" autocomplete="off" minlength="10" spellcheck="false" />
@@ -40,12 +58,15 @@
       <span>
         <strong>{{ member.email }}</strong>
         <small class="muted">
-          {{ member.role === 'super' ? t().admin.roles.super : t().admin.roles.moderator }}
+          {{ t().admin.roles[member.role] }}
           · {{ member.invited ? t().admin.invited : member.active ? t().admin.active : t().admin.inactive }}
         </small>
       </span>
-      @if (member.role === 'moderator') {
+      @if (member.role !== 'super') {
         <span class="actions">
+          <button type="button" class="button button-secondary button-small" (click)="switchRole(member)">
+            {{ member.role === 'tester' ? t().admin.makeModerator : t().admin.makeTester }}
+          </button>
           <button type="button" class="button button-secondary button-small" (click)="reinvite(member)">
             {{ t().admin.newLink }}
           </button>

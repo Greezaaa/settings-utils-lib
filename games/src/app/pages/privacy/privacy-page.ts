@@ -13,7 +13,7 @@ import { SiteLanguage } from '../../i18n/site-language';
   selector: 'app-privacy-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './privacy-page.html',
-  styleUrls: ['../../shared/utility-page.scss', './privacy-page.scss'],
+  styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', './privacy-page.scss'],
 })
 export class PrivacyPage {
   /** Texts in the site's language */

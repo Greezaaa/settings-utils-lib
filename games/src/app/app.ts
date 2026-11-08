@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
+import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { gameOfPath } from './core/games';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
@@ -43,6 +44,7 @@ export class App {
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = this.availability.visibleGames;
+  protected readonly features = inject(FeatureFlags);
   /** The game of the page being shown, from the address (known while prerendering and on the first render too) */
   private readonly pageGame = signal(gameOfPath(inject(DOCUMENT).location.pathname));
   /** A game's page waits, hidden, until it's sure the game is open; then it shows or the visitor goes home */
@@ -64,7 +66,10 @@ export class App {
 
   constructor() {
     // Which games are open (and whether this is the admin's preview) is known once the API answers
-    afterNextRender(() => void this.availability.ready());
+    afterNextRender(() => {
+      void this.availability.ready();
+      void this.features.ready();
+    });
     const router = inject(Router);
     router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
       if (event instanceof NavigationEnd) {

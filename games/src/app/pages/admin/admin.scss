@@ -70,21 +70,20 @@ input[type='text'] {
 
 .switch-row {
   align-items: center;
-  cursor: pointer;
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+  width: 100%;
 
-  > span {
+  > span:not(.track):not(.actions) {
     display: grid;
+    flex: 1;
     gap: 0.125rem;
   }
+}
 
-  input {
-    accent-color: var(--button-bg);
-    height: 1.25rem;
-    width: 1.25rem;
-  }
+.switch-text {
+  font-weight: 400;
 }
 
 .plain-list {

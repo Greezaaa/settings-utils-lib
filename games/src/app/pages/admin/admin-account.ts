@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AdminApi } from '../../core/admin-api';
+import { GameAvailability } from '../../core/game-availability';
 import { SiteLanguage } from '../../i18n/site-language';
 
 /** Shortest password the API accepts */
@@ -7,19 +8,24 @@ export const MIN_PASSWORD_LENGTH = 10;
 
 type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
 
-/** Admin tab: change your own password (other browsers signed in with it are signed out) */
+/** Admin tab: preview mode (super admin and testers), and changing your own password (other browsers are signed out) */
 @Component({
   selector: 'app-admin-account',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-account.html',
-  styleUrl: './admin.scss',
+  styleUrls: ['./admin.scss', '../../shared/switch.scss'],
 })
 export class AdminAccount {
   protected readonly admin = inject(AdminApi);
+  protected readonly availability = inject(GameAvailability);
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly minLength = MIN_PASSWORD_LENGTH;
   protected readonly saving = signal<Saving>('idle');
+
+  protected togglePreview(): void {
+    this.availability.setPreview(!this.availability.isPreview());
+  }
 
   protected async change(
     event: Event,

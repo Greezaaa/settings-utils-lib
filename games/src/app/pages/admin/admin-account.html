@@ -1,3 +1,16 @@
+@if (admin.canPreview()) {
+  <div class="card admin-card">
+    <label class="switch switch-row">
+      <span class="switch-text">
+        <strong>{{ t().admin.previewTitle }}</strong>
+        <small class="muted">{{ t().admin.previewHelp(t().page.hidden) }}</small>
+      </span>
+      <input type="checkbox" role="switch" [checked]="availability.isPreview()" (change)="togglePreview()" />
+      <span class="track" aria-hidden="true"></span>
+    </label>
+  </div>
+}
+
 <form class="card admin-card" (submit)="change($event, form, current, next, repeat)" #form>
   <h2 class="card-title">{{ t().admin.changePassword }}</h2>
   <p class="muted">{{ admin.me()?.email }}</p>

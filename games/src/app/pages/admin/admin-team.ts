@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { AdminApi, Invite, TeamMember } from '../../core/admin-api';
+import { AdminApi, Invite, MEMBER_ROLES, MemberRole, TeamMember } from '../../core/admin-api';
 import { ADMIN_INVITE_PATH } from '../../core/links';
 import { SiteLanguage } from '../../i18n/site-language';
 
@@ -12,8 +12,9 @@ interface ShownInvite {
 }
 
 /**
- * Super admin tab: the team. Add a moderator with a starting password, or leave the password empty to get an invite
- * link to copy and send (they choose their own password); turn moderators on or off, or make a new link for them.
+ * Super admin tab: the team. Add a moderator or tester with a starting password, or leave the password empty to get an
+ * invite link to copy and send (they choose their own password); change their role, turn them on or off, or make a new
+ * link for them.
  */
 @Component({
   selector: 'app-admin-team',
@@ -32,6 +33,9 @@ export class AdminTeam {
   protected readonly isCopied = signal(false);
   protected readonly problem = signal<'exists' | 'failed' | null>(null);
   protected readonly isSaving = signal(false);
+  protected readonly roles = MEMBER_ROLES;
+  /** The role for the next member added */
+  protected readonly newRole = signal<MemberRole>('moderator');
 
   constructor() {
     void this.load();
@@ -41,7 +45,7 @@ export class AdminTeam {
     event.preventDefault();
     this.isSaving.set(true);
     this.problem.set(null);
-    const added = await this.admin.addModerator(email.value.trim(), password.value || undefined);
+    const added = await this.admin.addMember(email.value.trim(), this.newRole(), password.value || undefined);
     this.isSaving.set(false);
     if (added === 'exists' || added === 'failed') {
       this.problem.set(added);
@@ -54,6 +58,16 @@ export class AdminTeam {
 
   protected async reinvite(member: TeamMember): Promise<void> {
     this.show(member.email, await this.admin.reinvite(member.id));
+  }
+
+  /** Moderator ↔ tester */
+  protected async switchRole(member: TeamMember): Promise<void> {
+    const role: MemberRole = member.role === 'tester' ? 'moderator' : 'tester';
+    if (await this.admin.setRole(member.id, role)) {
+      await this.load();
+    } else {
+      this.problem.set('failed');
+    }
   }
 
   protected async toggle(member: TeamMember): Promise<void> {

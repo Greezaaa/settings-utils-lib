@@ -596,9 +596,19 @@ export const EU: SiteMessages = {
     keepOut: 'Blokeatu',
     letCount: 'Baimendu',
     noWords: 'Ez dago hitzik hemen.',
-    onlySuperSwitches:
-      'Superadministratzaileak bakarrik ireki edo itxi ditzake jokoak; hala ere, guztiak proba ditzakezu aurrebistan.',
-    addModerator: 'Gehitu moderatzailea',
+    featuresTitle: 'Funtzioak',
+    featuresHelp: 'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
+    featureNames: { rooms: 'Elkarrekin jokatu (gelak)' },
+    addMember: 'Gehitu norbait taldera',
+    roleLabel: 'Rola',
+    roleHelp: {
+      moderator:
+        'Proposamenak irakurtzen ditu, salatutako hitzei buruz erabakitzen du, eta partidak eta balorazioak ikusten ditu.',
+      tester:
+        'Moderatzaile bat bezala, eta gainera joko eta funtzio guztiak ikusten ditu aurrebistan, desaktibatuak ere bai.',
+    },
+    makeTester: 'Egin tester',
+    makeModerator: 'Egin moderatzaile',
     startingPassword: 'Hasierako pasahitza (aukerakoa)',
     startingPasswordHelp: 'Utzi hutsik gonbidapen-esteka bat lortzeko: berak aukeratuko du pasahitza.',
     add: 'Gehitu',
@@ -607,7 +617,7 @@ export const EU: SiteMessages = {
     copy: 'Kopiatu',
     copied: 'Kopiatuta',
     inviteExpires: (day) => `Behin bakarrik balio du, ${day} arte.`,
-    roles: { super: 'Superadministratzailea', moderator: 'Moderatzailea' },
+    roles: { super: 'Superadministratzailea', moderator: 'Moderatzailea', tester: 'Testerra' },
     invited: 'Gonbidatuta, oraindik pasahitzik gabe',
     active: 'Aktibo',
     inactive: 'Desaktibatuta',

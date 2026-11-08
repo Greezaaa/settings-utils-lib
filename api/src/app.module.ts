@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module.js';
 import { Env, validateEnv } from './config/env.js';
 import { databaseOptions } from './database/database.options.js';
+import { FeatureFlagsModule } from './feature-flags/feature-flags.module.js';
 import { FeedbackModule } from './feedback/feedback.module.js';
 import { GameSettingsModule } from './game-settings/game-settings.module.js';
 import { HealthController } from './health/health.controller.js';
@@ -31,6 +32,7 @@ import { WordReportsModule } from './word-reports/word-reports.module.js';
     AuthModule,
     PlaysModule,
     FeedbackModule,
+    FeatureFlagsModule,
     GameSettingsModule,
     WordReportsModule,
     SuggestionsModule,

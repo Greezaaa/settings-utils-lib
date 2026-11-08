@@ -1,6 +1,7 @@
 import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
 import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import { FeatureId } from './features';
 import { GameSlug } from './games';
 import { isGameSlug, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
 
@@ -30,7 +31,13 @@ export interface WordReport {
   readonly firstReported: string;
 }
 
-export type AdminRole = 'super' | 'moderator';
+/** The super admin manages everything; moderators and testers moderate, and testers also see everything in preview */
+export type AdminRole = 'super' | 'moderator' | 'tester';
+/** The roles the super admin gives team members */
+export const MEMBER_ROLES = ['moderator', 'tester'] as const;
+export type MemberRole = (typeof MEMBER_ROLES)[number];
+/** Roles that see games and features switched off for the public */
+export const canPreview = (role: AdminRole | undefined): boolean => role === 'super' || role === 'tester';
 
 /** Who is signed in */
 export interface Me {
@@ -119,7 +126,7 @@ function parseFeedback(item: unknown): GameFeedback[] {
   return [{ game, up, down, reasons: counts }];
 }
 
-const isRole = oneOf<AdminRole>(['super', 'moderator']);
+const isRole = oneOf<AdminRole>(['super', 'moderator', 'tester']);
 
 function parseMe(body: unknown): Me | null {
   const [email, role] = ['email', 'role'].map((key) => field(body, key));
@@ -169,6 +176,8 @@ export class AdminApi {
   readonly me = this.signedIn.asReadonly();
   readonly isSignedIn = computed(() => this.signedIn() !== null);
   readonly isSuper = computed(() => this.signedIn()?.role === 'super');
+  /** The super admin and testers see every game and feature in preview */
+  readonly canPreview = computed(() => canPreview(this.signedIn()?.role));
 
   /** Asks the API whether this browser is still signed in (the cookie lasts 30 days) */
   async restore(): Promise<'signed-in' | 'signed-out' | 'offline'> {
@@ -213,9 +222,13 @@ export class AdminApi {
     return listOf(await this.read('/admin/team'), parseMember);
   }
 
-  /** Adds a moderator with a starting password, or with an invite link when there is none */
-  async addModerator(email: string, password?: string): Promise<{ invite: Invite | null } | 'exists' | 'failed'> {
-    const response = await this.fetch('/admin/team', jsonInit('POST', { email, password }), SEND_TIMEOUT_MS);
+  /** Adds a moderator or tester with a starting password, or with an invite link when there is none */
+  async addMember(
+    email: string,
+    role: MemberRole,
+    password?: string,
+  ): Promise<{ invite: Invite | null } | 'exists' | 'failed'> {
+    const response = await this.fetch('/admin/team', jsonInit('POST', { email, role, password }), SEND_TIMEOUT_MS);
     if (response?.status === 409) {
       return 'exists';
     }
@@ -227,8 +240,16 @@ export class AdminApi {
     return response?.ok ? parseInvite(await response.json()) : null;
   }
 
+  setRole(id: string, role: MemberRole): Promise<boolean> {
+    return this.change('PATCH', `/admin/team/${id}`, { role });
+  }
+
   setActive(id: string, active: boolean): Promise<boolean> {
     return this.change('PATCH', `/admin/team/${id}`, { active });
+  }
+
+  setFeatureEnabled(feature: FeatureId, enabled: boolean): Promise<boolean> {
+    return this.change('PUT', `/admin/features/${feature}`, { enabled });
   }
 
   setGameEnabled(game: GameSlug, enabled: boolean): Promise<boolean> {

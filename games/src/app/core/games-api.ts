@@ -1,6 +1,7 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
 import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import { FEATURE_IDS, FeatureId } from './features';
 import { GAME_SLUGS, GameSlug } from './games';
 
 /** Preset feedback reasons, as the API accepts them; no free text, so nothing personal can be sent */
@@ -53,6 +54,27 @@ function parseSwitches(body: unknown): GameSwitch[] {
   });
 }
 
+/** A feature the admin switched on or off */
+export interface FeatureSwitch {
+  readonly feature: FeatureId;
+  readonly enabled: boolean;
+}
+
+const isFeatureId = (value: unknown): value is FeatureId => FEATURE_IDS.some((feature) => feature === value);
+
+/** Reads `{ features: [{ feature, enabled }] }`, keeping only known features */
+function parseFeatureSwitches(body: unknown): FeatureSwitch[] {
+  const features = field(body, 'features');
+  if (!Array.isArray(features)) {
+    return [];
+  }
+  return features.flatMap((item: unknown) => {
+    const feature = field(item, 'feature');
+    const enabled = field(item, 'enabled');
+    return isFeatureId(feature) && typeof enabled === 'boolean' ? [{ feature, enabled }] : [];
+  });
+}
+
 /** Reads `{ words: string[] }` */
 function parseWords(body: unknown): string[] {
   const words = field(body, 'words');
@@ -94,6 +116,11 @@ export class GamesApi {
   /** The suggestions form, as multipart form data (category, text, language and an optional image) */
   sendSuggestion(form: FormData): Promise<boolean> {
     return this.send('/v1/suggestions', form);
+  }
+
+  /** The features the admin switched on or off */
+  async featureSwitches(): Promise<FeatureSwitch[]> {
+    return parseFeatureSwitches(await this.read('/v1/features'));
   }
 
   /** The games the admin switched on or off */

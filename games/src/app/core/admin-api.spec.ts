@@ -51,18 +51,18 @@ describe('AdminApi', () => {
     expect(api.isSignedIn()).toBe(false);
   });
 
-  it('adds moderators, with an invite link when there is no password', async () => {
+  it('adds team members, with an invite link when there is no password', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => json({ member: {}, invite: { secret: 'abc', expires: '2026-11-15T10:00:00Z' } }, 201)),
     );
-    const added = await api.addModerator('new@su-labs.dev');
+    const added = await api.addMember('new@su-labs.dev', 'tester');
     expect(added).toEqual({ invite: { secret: 'abc', expires: new Date('2026-11-15T10:00:00Z') } });
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => json({}, 409)),
     );
-    expect(await api.addModerator('new@su-labs.dev', 'a starting password')).toBe('exists');
+    expect(await api.addMember('new@su-labs.dev', 'moderator', 'a starting password')).toBe('exists');
   });
 
   it('keeps only well-formed answers', async () => {

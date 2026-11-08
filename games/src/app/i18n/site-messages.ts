@@ -1,5 +1,6 @@
 import { SuThemeName } from '@su-labs/theme';
 import { GameCategory, GameSlug } from '../core/games';
+import { FeatureId } from '../core/features';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { PictureId } from '../core/pictures';
 import { SignsLevelId } from '../games/find-the-signs';
@@ -435,9 +436,17 @@ export interface SiteMessages {
     readonly keepOut: string;
     readonly letCount: string;
     readonly noWords: string;
-    readonly onlySuperSwitches: string;
+    /** Feature switches, like rooms; every new feature gets one */
+    readonly featuresTitle: string;
+    readonly featuresHelp: string;
+    readonly featureNames: Readonly<Record<FeatureId, string>>;
     /** Team (super admin) */
-    readonly addModerator: string;
+    readonly addMember: string;
+    readonly roleLabel: string;
+    /** What each role can do, shown when adding a member */
+    readonly roleHelp: { readonly moderator: string; readonly tester: string };
+    readonly makeTester: string;
+    readonly makeModerator: string;
     readonly startingPassword: string;
     readonly startingPasswordHelp: string;
     readonly add: string;
@@ -446,7 +455,7 @@ export interface SiteMessages {
     readonly copy: string;
     readonly copied: string;
     readonly inviteExpires: (day: string) => string;
-    readonly roles: { readonly super: string; readonly moderator: string };
+    readonly roles: { readonly super: string; readonly moderator: string; readonly tester: string };
     readonly invited: string;
     readonly active: string;
     readonly inactive: string;

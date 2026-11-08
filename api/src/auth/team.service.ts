@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Admin, AdminRole } from './admin.entity.js';
+import { Admin, AdminRole, MemberRole } from './admin.entity.js';
 import { AuthService, normalizeEmail } from './auth.service.js';
 import { hashPassword, newSessionToken, randomPassword } from './passwords.js';
 
@@ -48,7 +48,8 @@ const toMember = ({
 });
 
 /**
- * The admin team: the super admin (created on the server) adds moderators with a starting password or an invite link,
+ * The admin team: the super admin (created on the server) adds moderators and testers with a starting password or an
+ * invite link,
  * and turns them on or off.
  */
 @Injectable()
@@ -65,9 +66,10 @@ export class TeamService {
     return admins.map(toMember);
   }
 
-  /** Adds a moderator with a starting password, or with an invite link when there is no password */
-  async addModerator(
+  /** Adds a moderator or tester with a starting password, or with an invite link when there is no password */
+  async addMember(
     email: string,
+    role: MemberRole,
     password?: string,
   ): Promise<{ member: TeamMember; invite: Invite | null }> {
     const normalized = normalizeEmail(email);
@@ -79,7 +81,7 @@ export class TeamService {
     const invite = password ? null : newInvite();
     await this.admins.insert({
       email: normalized,
-      role: 'moderator',
+      role,
       passwordHash: password ? await hashPassword(password) : null,
       inviteHash: invite?.hash ?? null,
       inviteExpires: invite?.expires ?? null,
@@ -91,9 +93,9 @@ export class TeamService {
     };
   }
 
-  /** A fresh invite link for a moderator who hasn't chosen a password yet, or who forgot theirs */
+  /** A fresh invite link for a member who hasn't chosen a password yet, or who forgot theirs */
   async reinvite(id: string): Promise<Invite> {
-    const admin = await this.moderator(id);
+    const admin = await this.member(id);
     const invite = newInvite();
     await this.admins.update(
       { id: admin.id },
@@ -102,13 +104,19 @@ export class TeamService {
     return { secret: invite.secret, expires: invite.expires };
   }
 
-  /** Turns a moderator on or off; off signs them out everywhere */
+  /** Turns a member on or off; off signs them out everywhere */
   async setActive(id: string, active: boolean): Promise<void> {
-    const admin = await this.moderator(id);
+    const admin = await this.member(id);
     await this.admins.update({ id: admin.id }, { active });
     if (!active) {
       await this.auth.signOutEverywhere(admin.id);
     }
+  }
+
+  /** Makes a member a moderator or a tester */
+  async setRole(id: string, role: MemberRole): Promise<void> {
+    const admin = await this.member(id);
+    await this.admins.update({ id: admin.id }, { role });
   }
 
   /**
@@ -142,13 +150,13 @@ export class TeamService {
     return password;
   }
 
-  /** A moderator by id; the super admin can't be changed from the admin page */
-  private async moderator(id: string): Promise<Admin> {
+  /** A team member (moderator or tester) by id; the super admin can't be changed from the admin page */
+  private async member(id: string): Promise<Admin> {
     const admin = await this.admins.findOneBy({ id });
     if (!admin) {
       throw new NotFoundException();
     }
-    if (admin.role !== 'moderator') {
+    if (admin.role === 'super') {
       throw new ForbiddenException('The super admin is managed on the server');
     }
     return admin;

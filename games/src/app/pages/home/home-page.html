@@ -22,11 +22,13 @@
   </section>
 }
 
-<section class="container page-section play-together" aria-labelledby="play-together-title">
-  <h2 id="play-together-title" class="section-title">{{ t().rooms.homeTitle }}</h2>
-  <p class="lead">{{ t().rooms.homeText }}</p>
-  <a class="button" routerLink="/rooms">{{ t().rooms.create }}</a>
-</section>
+@if (features.canUse('rooms')) {
+  <section class="container page-section play-together" aria-labelledby="play-together-title">
+    <h2 id="play-together-title" class="section-title">{{ t().rooms.homeTitle }}</h2>
+    <p class="lead">{{ t().rooms.homeText }}</p>
+    <a class="button" routerLink="/rooms">{{ t().rooms.create }}</a>
+  </section>
+}
 
 <section class="container page-section" aria-labelledby="whats-new-title">
   <h2 id="whats-new-title" class="section-title">{{ t().home.whatsNewTitle }}</h2>

@@ -28,6 +28,8 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       ADMIN_TOKEN,
       UPLOADS_DIR: uploadsDir,
       COOKIE_SECURE: 'false',
+      // Tests that sign in a lot pass their own visitor address, like Cloudflare does, to stay under the sign-in limit
+      TRUST_CLOUDFLARE: 'true',
     });
     // Imported only now: the configuration reads the environment as soon as the module loads
     const { AppModule } = await import('../src/app.module.js');
@@ -241,6 +243,120 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .set('Cookie', bossCookie)
       .expect(204);
     await request(server).get('/auth/me').set('Cookie', bossCookie).expect(401);
+  });
+
+  it('adds testers, who moderate like moderators but switch nothing, and changes roles', async () => {
+    const { TeamService } = await import('../src/auth/team.service.js');
+    const superPassword = await app
+      .get(TeamService)
+      .createSuperAdmin('boss2@su-labs.dev');
+    const server = app.getHttpServer();
+    const signIn = (email: string, password: string) =>
+      request(server)
+        .post('/auth/login')
+        .set('cf-connecting-ip', '10.0.0.2')
+        .send({ email, password })
+        .expect(201);
+    const bossCookie = (await signIn('boss2@su-labs.dev', superPassword))
+      .headers['set-cookie'];
+
+    await request(server)
+      .post('/admin/team')
+      .set('Cookie', bossCookie)
+      .send({
+        email: 'tester@su-labs.dev',
+        role: 'tester',
+        password: 'tester-password',
+      })
+      .expect(201);
+    await request(server)
+      .post('/admin/team')
+      .set('Cookie', bossCookie)
+      .send({
+        email: 'other@su-labs.dev',
+        role: 'super',
+        password: 'tester-password',
+      })
+      .expect(400);
+    const testerCookie = (await signIn('tester@su-labs.dev', 'tester-password'))
+      .headers['set-cookie'];
+    await request(server)
+      .get('/auth/me')
+      .set('Cookie', testerCookie)
+      .expect(200, { email: 'tester@su-labs.dev', role: 'tester' });
+    await request(server)
+      .get('/admin/suggestions')
+      .set('Cookie', testerCookie)
+      .expect(200);
+    await request(server)
+      .get('/admin/word-reports')
+      .set('Cookie', testerCookie)
+      .expect(200);
+    await request(server)
+      .get('/admin/feedback')
+      .set('Cookie', testerCookie)
+      .expect(200);
+    await request(server)
+      .get('/admin/team')
+      .set('Cookie', testerCookie)
+      .expect(403);
+    await request(server)
+      .put('/admin/features/rooms')
+      .set('Cookie', testerCookie)
+      .send({ enabled: true })
+      .expect(403);
+    await request(server)
+      .put('/admin/games/math-games')
+      .set('Cookie', testerCookie)
+      .send({ enabled: false })
+      .expect(403);
+
+    const team = await request(server)
+      .get('/admin/team')
+      .set('Cookie', bossCookie)
+      .expect(200);
+    const testerId = team.body.find(
+      (member: { email: string }) => member.email === 'tester@su-labs.dev',
+    ).id;
+    const bossId = team.body.find(
+      (member: { email: string }) => member.email === 'boss2@su-labs.dev',
+    ).id;
+    await request(server)
+      .patch(`/admin/team/${testerId}`)
+      .set('Cookie', bossCookie)
+      .send({ role: 'moderator' })
+      .expect(204);
+    await request(server)
+      .get('/auth/me')
+      .set('Cookie', testerCookie)
+      .expect(200, { email: 'tester@su-labs.dev', role: 'moderator' });
+    await request(server)
+      .patch(`/admin/team/${bossId}`)
+      .set('Cookie', bossCookie)
+      .send({ role: 'tester' })
+      .expect(403);
+  });
+
+  it('switches features on and off for the super admin only', async () => {
+    const server = app.getHttpServer();
+    await request(server).get('/v1/features').expect(200, { features: [] });
+    await request(server)
+      .put('/admin/features/rooms')
+      .send({ enabled: true })
+      .expect(401);
+    await request(server)
+      .put('/admin/features/teleport')
+      .set(admin)
+      .send({ enabled: true })
+      .expect(400);
+    await request(server)
+      .put('/admin/features/rooms')
+      .set(admin)
+      .send({ enabled: true })
+      .expect(204);
+    await request(server)
+      .get('/v1/features')
+      .expect(200, { features: [{ feature: 'rooms', enabled: true }] });
   });
 
   it('keeps suggestions with a cleaned picture for moderators', async () => {

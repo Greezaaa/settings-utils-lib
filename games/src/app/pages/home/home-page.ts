@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { FeatureFlags } from '../../core/feature-flags';
 import { GameAvailability } from '../../core/game-availability';
 import { byCategory } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
@@ -19,5 +20,6 @@ export class HomePage {
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   private readonly availability = inject(GameAvailability);
+  protected readonly features = inject(FeatureFlags);
   protected readonly categories = computed(() => byCategory(this.availability.visibleGames()));
 }

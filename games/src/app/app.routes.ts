@@ -1,4 +1,5 @@
 import { Route, Routes } from '@angular/router';
+import { featureGuard } from './core/feature-guard';
 import { gameAvailableGuard } from './core/game-guard';
 import { GameSlug } from './core/games';
 import { ADMIN_INVITE_PATH, ADMIN_PATH } from './core/links';
@@ -64,6 +65,7 @@ export const routes: Routes = [
     path: 'rooms',
     title: `${rooms.title} · ${SITE_NAME}`,
     data: { description: `${rooms.lead} ${rooms.rule}` },
+    canActivate: [featureGuard('rooms')],
     loadComponent: () => import('./pages/rooms/rooms-page').then((m) => m.RoomsPage),
   },
   {
@@ -71,6 +73,7 @@ export const routes: Routes = [
     path: 'r/:code',
     title: `${rooms.title} · ${SITE_NAME}`,
     data: { description: rooms.lead, noIndex: true },
+    canActivate: [featureGuard('rooms')],
     loadComponent: () => import('./pages/rooms/room-page').then((m) => m.RoomPage),
   },
   {
