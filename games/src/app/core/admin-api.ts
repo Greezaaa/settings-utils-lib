@@ -97,6 +97,48 @@ function parseSuggestion(item: unknown): AdminSuggestion[] {
     : [];
 }
 
+/** Where an error happened: the API, or a visitor's browser */
+export const ERROR_SOURCES = ['api', 'site'] as const;
+export type ErrorSource = (typeof ERROR_SOURCES)[number];
+
+/** An error in the log: one row per distinct error, with how often and when it happened */
+export interface LoggedError {
+  readonly id: string;
+  readonly source: ErrorSource;
+  readonly code: string;
+  readonly title: string;
+  readonly problem: string;
+  readonly path: string;
+  readonly count: number;
+  readonly firstSeen: string;
+  readonly lastSeen: string;
+}
+
+function parseError(item: unknown): LoggedError[] {
+  const [id, source, code, title, problem, path, count, firstSeen, lastSeen] = [
+    'id',
+    'source',
+    'code',
+    'title',
+    'problem',
+    'path',
+    'count',
+    'firstSeen',
+    'lastSeen',
+  ].map((key) => field(item, key));
+  return typeof id === 'string' &&
+    oneOf(ERROR_SOURCES)(source) &&
+    typeof code === 'string' &&
+    typeof title === 'string' &&
+    typeof problem === 'string' &&
+    typeof path === 'string' &&
+    typeof count === 'number' &&
+    typeof firstSeen === 'string' &&
+    typeof lastSeen === 'string'
+    ? [{ id, source, code, title, problem, path, count, firstSeen, lastSeen }]
+    : [];
+}
+
 function parseReport(item: unknown): WordReport[] {
   const [word, language, reports, status, firstReported] = [
     'word',
@@ -270,6 +312,20 @@ export class AdminApi {
 
   deleteSuggestion(id: string): Promise<boolean> {
     return this.change('DELETE', `/admin/suggestions/${id}`);
+  }
+
+  /** The error log, latest first (super admin only) */
+  async errors(): Promise<LoggedError[]> {
+    return listOf(await this.read('/admin/errors'), parseError);
+  }
+
+  /** Removes one error from the log, once it's fixed */
+  deleteError(id: string): Promise<boolean> {
+    return this.change('DELETE', `/admin/errors/${id}`);
+  }
+
+  clearErrors(): Promise<boolean> {
+    return this.change('DELETE', '/admin/errors');
   }
 
   async wordReports(status: ReportStatus): Promise<WordReport[]> {

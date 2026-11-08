@@ -11,10 +11,6 @@
   }
 </div>
 
-@if (failed()) {
-  <p class="error" role="alert">{{ t().admin.saveFailed }}</p>
-}
-
 @if (loading()) {
   <p class="muted">{{ t().admin.loading }}</p>
 } @else {

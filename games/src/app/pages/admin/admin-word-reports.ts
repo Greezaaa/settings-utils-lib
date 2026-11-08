@@ -6,6 +6,8 @@ import { SiteLanguage } from '../../i18n/site-language';
  * Admin tab: words players reported in the word builder. A word reported 3 times stops counting until decided:
  * keep it out for good, or let it count again.
  */
+import { saveFailedNotice } from './save-failed-notice';
+
 @Component({
   selector: 'app-admin-word-reports',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +23,7 @@ export class AdminWordReports {
   protected readonly status = signal<ReportStatus>('pending');
   protected readonly reports = signal<readonly WordReport[]>([]);
   protected readonly loading = signal(true);
-  protected readonly failed = signal(false);
+  private readonly notifySaveFailed = saveFailedNotice();
 
   constructor() {
     void this.load();
@@ -40,9 +42,10 @@ export class AdminWordReports {
 
   protected async decide(report: WordReport, status: 'approved' | 'rejected'): Promise<void> {
     const saved = await this.admin.decideWord(report, status);
-    this.failed.set(!saved);
     if (saved) {
       await this.load();
+    } else {
+      this.notifySaveFailed();
     }
   }
 }

@@ -3,6 +3,7 @@ import { AdminApi } from '../../core/admin-api';
 import { GameAvailability } from '../../core/game-availability';
 import { SiteLanguage } from '../../i18n/site-language';
 import { AdminAccount } from './admin-account';
+import { AdminErrors } from './admin-errors';
 import { AdminGames } from './admin-games';
 import { AdminPlays } from './admin-plays';
 import { AdminSuggestions } from './admin-suggestions';
@@ -11,10 +12,10 @@ import { AdminWordReports } from './admin-word-reports';
 
 type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'offline';
 
-const TABS = ['games', 'plays', 'suggestions', 'words', 'team', 'account'] as const;
+const TABS = ['games', 'plays', 'suggestions', 'words', 'errors', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];
-/** Tabs only the super admin sees: switching games and features, and the team */
-const SUPER_TABS: readonly Tab[] = ['games', 'team'];
+/** Tabs only the super admin sees: switching games and features, the error log, and the team */
+const SUPER_TABS: readonly Tab[] = ['games', 'errors', 'team'];
 
 /**
  * The admin page, at /<ADMIN_PATH> (see core/links.ts): sign in with email and password (the browser stays signed in
@@ -24,7 +25,7 @@ const SUPER_TABS: readonly Tab[] = ['games', 'team'];
  */
 @Component({
   selector: 'app-admin-page',
-  imports: [AdminAccount, AdminGames, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
+  imports: [AdminAccount, AdminErrors, AdminGames, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],

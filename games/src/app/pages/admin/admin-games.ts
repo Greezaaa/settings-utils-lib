@@ -8,6 +8,8 @@ import { GAMES, GameSlug } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 
 /** Super admin tab: an on/off switch for the public per game and per feature */
+import { saveFailedNotice } from './save-failed-notice';
+
 @Component({
   selector: 'app-admin-games',
   imports: [RouterLink],
@@ -27,19 +29,20 @@ export class AdminGames {
   protected readonly games = GAMES;
   /** The game or feature being switched, while the API answers */
   protected readonly saving = signal<GameSlug | FeatureId | null>(null);
-  protected readonly saveFailed = signal(false);
+  private readonly notifySaveFailed = saveFailedNotice();
 
   protected async toggle(game: GameSlug): Promise<void> {
     if (this.saving()) {
       return;
     }
     this.saving.set(game);
-    this.saveFailed.set(false);
     const saved = await this.admin.setGameEnabled(game, !this.availability.isOpen(game));
     if (saved) {
       await this.availability.refresh();
     }
-    this.saveFailed.set(!saved);
+    if (!saved) {
+      this.notifySaveFailed();
+    }
     this.saving.set(null);
   }
 
@@ -48,12 +51,13 @@ export class AdminGames {
       return;
     }
     this.saving.set(feature);
-    this.saveFailed.set(false);
     const saved = await this.admin.setFeatureEnabled(feature, !this.flags.isOpen(feature));
     if (saved) {
       await this.flags.refresh();
     }
-    this.saveFailed.set(!saved);
+    if (!saved) {
+      this.notifySaveFailed();
+    }
     this.saving.set(null);
   }
 }

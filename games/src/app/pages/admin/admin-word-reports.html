@@ -12,9 +12,6 @@
 </div>
 <p class="muted">{{ t().admin.reportsHelp }}</p>
 
-@if (failed()) {
-  <p class="error" role="alert">{{ t().admin.saveFailed }}</p>
-}
 
 @if (loading()) {
   <p class="muted">{{ t().admin.loading }}</p>

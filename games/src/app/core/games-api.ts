@@ -21,6 +21,16 @@ export interface GameSwitch {
   readonly enabled: boolean;
 }
 
+/** An error the site hit (see ReportingErrorHandler) */
+export interface SiteError {
+  /** A short code, e.g. `js` */
+  readonly code: string;
+  readonly title: string;
+  readonly problem: string;
+  /** The page, without its query */
+  readonly path: string;
+}
+
 export interface GamePlays {
   readonly game: GameSlug;
   readonly plays: number;
@@ -106,6 +116,11 @@ export class GamesApi {
 
   reportWord(word: string, language: LanguageId): Promise<boolean> {
     return this.send('/v1/word-reports', { word, language });
+  }
+
+  /** An error this page hit, for the admin's error log: what went wrong and the page, nothing about the visitor */
+  reportError(error: SiteError): Promise<boolean> {
+    return this.send('/v1/errors', error);
   }
 
   /** Words players reported that don't count in the word builder for now */

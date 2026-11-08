@@ -7,7 +7,7 @@ import { SignsLevelId } from '../games/find-the-signs';
 import { BoardLevelId } from '../games/board';
 import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
-import { ReportStatus, StatsPeriod, SuggestionStatus } from '../core/admin-api';
+import { ErrorSource, ReportStatus, StatsPeriod, SuggestionStatus } from '../core/admin-api';
 import { RoomError } from '../core/room-view';
 import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
@@ -500,11 +500,26 @@ export interface SiteMessages {
       readonly plays: string;
       readonly suggestions: string;
       readonly words: string;
+      readonly errors: string;
       readonly team: string;
       readonly account: string;
     };
     readonly saveFailed: string;
     readonly loading: string;
+    /** The error log */
+    readonly errorsHelp: string;
+    readonly noErrors: string;
+    readonly clearErrors: string;
+    readonly confirmClearErrors: string;
+    readonly resolveError: string;
+    readonly firstSeen: (moment: string) => string;
+    readonly errorSources: Readonly<Record<ErrorSource, string>>;
+    readonly errorColumns: Readonly<
+      Record<
+        'when' | 'code' | 'title' | 'problem' | 'page' | 'count' | 'actions',
+        string
+      >
+    >;
     readonly previewTitle: string;
     readonly previewHelp: (hiddenBadge: string) => string;
     readonly gamesTitle: string;

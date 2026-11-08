@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountsModule } from './accounts/accounts.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { Env, validateEnv } from './config/env.js';
+import { ErrorLogsModule } from './error-logs/error-logs.module.js';
 import { databaseOptions } from './database/database.options.js';
 import { FeatureFlagsModule } from './feature-flags/feature-flags.module.js';
 import { FeedbackModule } from './feedback/feedback.module.js';
@@ -33,6 +34,7 @@ import { WordReportsModule } from './word-reports/word-reports.module.js';
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
     AuthModule,
     AccountsModule,
+    ErrorLogsModule,
     PlaysModule,
     FeedbackModule,
     FeatureFlagsModule,

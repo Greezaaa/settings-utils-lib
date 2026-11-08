@@ -1,0 +1,56 @@
+<div class="filters">
+  <p class="muted">{{ t().admin.errorsHelp }}</p>
+  <button type="button" class="button button-secondary button-small" [disabled]="loading()" (click)="load()">
+    {{ t().admin.refresh }}
+  </button>
+  @if (errors().length > 0) {
+    <button type="button" class="button button-secondary button-small" (click)="clear()">
+      {{ t().admin.clearErrors }}
+    </button>
+  }
+</div>
+
+@if (!loading() && errors().length === 0) {
+  <p class="muted">{{ t().admin.noErrors }}</p>
+} @else {
+  <div class="card table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{{ t().admin.errorColumns.when }}</th>
+          <th scope="col">{{ t().admin.errorColumns.code }}</th>
+          <th scope="col">{{ t().admin.errorColumns.title }}</th>
+          <th scope="col">{{ t().admin.errorColumns.problem }}</th>
+          <th scope="col">{{ t().admin.errorColumns.page }}</th>
+          <th scope="col" class="number">{{ t().admin.errorColumns.count }}</th>
+          <th scope="col">
+            <span class="visually-hidden">{{ t().admin.errorColumns.actions }}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (error of errors(); track error.id) {
+          <tr>
+            <td>
+              {{ when(error.lastSeen) }}
+              @if (error.count > 1) {
+                <br />
+                <small class="muted">{{ t().admin.firstSeen(when(error.firstSeen)) }}</small>
+              }
+            </td>
+            <td class="mono">{{ t().admin.errorSources[error.source] }} · {{ error.code }}</td>
+            <td>{{ error.title }}</td>
+            <td class="mono problem">{{ error.problem }}</td>
+            <td class="mono">{{ error.path }}</td>
+            <td class="number">{{ error.count }}</td>
+            <td>
+              <button type="button" class="button button-secondary button-small" (click)="remove(error)">
+                {{ t().admin.resolveError }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

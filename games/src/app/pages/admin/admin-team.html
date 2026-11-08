@@ -27,13 +27,8 @@
     <input #passwordInput type="text" autocomplete="off" minlength="10" spellcheck="false" />
     <small class="muted">{{ t().admin.startingPasswordHelp }}</small>
   </label>
-  @switch (problem()) {
-    @case ('exists') {
-      <p class="error" role="alert">{{ t().admin.alreadyOnTeam }}</p>
-    }
-    @case ('failed') {
-      <p class="error" role="alert">{{ t().admin.saveFailed }}</p>
-    }
+  @if (isAlreadyOnTeam()) {
+    <p class="error" role="alert">{{ t().admin.alreadyOnTeam }}</p>
   }
   <button type="submit" class="button" [disabled]="isSaving()">{{ t().admin.add }}</button>
 </form>

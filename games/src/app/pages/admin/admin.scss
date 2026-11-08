@@ -120,3 +120,19 @@ table {
 .error {
   color: var(--red-text);
 }
+
+// The error log: long problems wrap instead of widening the table
+.problem {
+  max-width: 28rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

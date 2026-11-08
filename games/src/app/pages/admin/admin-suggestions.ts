@@ -6,6 +6,8 @@ import { SiteLanguage } from '../../i18n/site-language';
  * Admin tab: the suggestions players sent, by status (new, read, archived), with their pictures on request; each can
  * be moved to another status or deleted for good.
  */
+import { saveFailedNotice } from './save-failed-notice';
+
 @Component({
   selector: 'app-admin-suggestions',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +23,7 @@ export class AdminSuggestions {
   protected readonly status = signal<SuggestionStatus>('new');
   protected readonly suggestions = signal<readonly AdminSuggestion[]>([]);
   protected readonly loading = signal(true);
-  protected readonly failed = signal(false);
+  private readonly notifySaveFailed = saveFailedNotice();
   /** Pictures loaded so far, by suggestion, as object URLs released when the tab closes */
   protected readonly images = signal<ReadonlyMap<string, string>>(new Map());
 
@@ -64,9 +66,10 @@ export class AdminSuggestions {
 
   private async afterChange(change: Promise<boolean>): Promise<void> {
     const saved = await change;
-    this.failed.set(!saved);
     if (saved) {
       await this.load();
+    } else {
+      this.notifySaveFailed();
     }
   }
 }

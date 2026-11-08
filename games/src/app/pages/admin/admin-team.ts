@@ -16,6 +16,8 @@ interface ShownInvite {
  * invite link to copy and send (they choose their own password); change their role, turn them on or off, or make a new
  * link for them.
  */
+import { saveFailedNotice } from './save-failed-notice';
+
 @Component({
   selector: 'app-admin-team',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +33,9 @@ export class AdminTeam {
   protected readonly members = signal<readonly TeamMember[]>([]);
   protected readonly invite = signal<ShownInvite | null>(null);
   protected readonly isCopied = signal(false);
-  protected readonly problem = signal<'exists' | 'failed' | null>(null);
+  /** Adding someone already on the team; other failures show as a notification */
+  protected readonly isAlreadyOnTeam = signal(false);
+  private readonly notifySaveFailed = saveFailedNotice();
   protected readonly isSaving = signal(false);
   protected readonly roles = MEMBER_ROLES;
   /** The role for the next member added */
@@ -44,11 +48,15 @@ export class AdminTeam {
   protected async add(event: Event, form: HTMLFormElement, email: HTMLInputElement, password: HTMLInputElement) {
     event.preventDefault();
     this.isSaving.set(true);
-    this.problem.set(null);
+    this.isAlreadyOnTeam.set(false);
     const added = await this.admin.addMember(email.value.trim(), this.newRole(), password.value || undefined);
     this.isSaving.set(false);
-    if (added === 'exists' || added === 'failed') {
-      this.problem.set(added);
+    if (added === 'exists') {
+      this.isAlreadyOnTeam.set(true);
+      return;
+    }
+    if (added === 'failed') {
+      this.notifySaveFailed();
       return;
     }
     this.show(email.value.trim(), added.invite);
@@ -66,7 +74,7 @@ export class AdminTeam {
     if (await this.admin.setRole(member.id, role)) {
       await this.load();
     } else {
-      this.problem.set('failed');
+      this.notifySaveFailed();
     }
   }
 
@@ -74,7 +82,7 @@ export class AdminTeam {
     if (await this.admin.setActive(member.id, !member.active)) {
       await this.load();
     } else {
-      this.problem.set('failed');
+      this.notifySaveFailed();
     }
   }
 

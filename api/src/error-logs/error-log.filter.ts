@@ -1,0 +1,43 @@
+import {
+  ArgumentsHost,
+  Catch,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
+import type { Request } from 'express';
+import { ErrorLogsService } from './error-logs.service.js';
+
+/**
+ * Logs the API's own failures (status 500 and up: bugs, the database down…) to the error log, then answers as
+ * NestJS always does. Expected answers (a wrong password, a bad request, a missing page) aren't errors and aren't
+ * logged.
+ */
+@Catch()
+export class ErrorLogFilter extends BaseExceptionFilter {
+  constructor(
+    adapterHost: HttpAdapterHost,
+    private readonly errors: ErrorLogsService,
+  ) {
+    super(adapterHost.httpAdapter);
+  }
+
+  override catch(exception: unknown, host: ArgumentsHost): void {
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
+    if (status >= 500 && host.getType() === 'http') {
+      const request = host.switchToHttp().getRequest<Request>();
+      void this.errors.add({
+        source: 'api',
+        code: String(status),
+        title: exception instanceof Error ? exception.name : 'Error',
+        problem:
+          exception instanceof Error ? exception.message : String(exception),
+        path: `${request.method} ${request.path}`,
+      });
+    }
+    super.catch(exception, host);
+  }
+}

@@ -447,6 +447,40 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     ).toEqual([]);
   });
 
+  it('logs errors once each with a count, for the super admin to read and clear', async () => {
+    const server = app.getHttpServer();
+    const report = {
+      code: 'js',
+      title: 'TypeError',
+      problem: 'x is undefined',
+      path: '/find-pairs/',
+    };
+    for (let time = 0; time < 2; time++) {
+      await request(server)
+        .post('/v1/errors')
+        .set('cf-connecting-ip', '10.2.0.1')
+        .send(report)
+        .expect(204);
+    }
+    await request(server)
+      .post('/v1/errors')
+      .set('cf-connecting-ip', '10.2.0.1')
+      .send({ ...report, path: '/page?with=query' })
+      .expect(400);
+    await request(server).get('/admin/errors').expect(401);
+    const { body } = await request(server)
+      .get('/admin/errors')
+      .set(admin)
+      .expect(200);
+    expect(body).toHaveLength(1);
+    expect(body[0]).toMatchObject({ source: 'site', ...report, count: 2 });
+    await request(server)
+      .delete(`/admin/errors/${body[0].id}`)
+      .set(admin)
+      .expect(204);
+    await request(server).get('/admin/errors').set(admin).expect(200, []);
+  });
+
   describe('player accounts', () => {
     /** A browser of its own (keeping its cookies), from its own address so the sign-in limits don't add up */
     const browser = (address: string) => {
