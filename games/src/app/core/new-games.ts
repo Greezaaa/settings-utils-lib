@@ -20,6 +20,14 @@ export function newGames(
   days = NEW_GAME_DAYS,
   limit = NEW_GAMES_LIMIT,
 ): GameSlug[] {
+  const added = addedTimes(updates);
+  return recentlyAdded(updates)
+    .filter((game) => now.getTime() - (added.get(game) ?? 0) < days * DAY_MS)
+    .slice(0, limit);
+}
+
+/** When each game was added: the time of the first update that mentions it */
+function addedTimes(updates: readonly SiteUpdate[]): Map<GameSlug, number> {
   const added = new Map<GameSlug, number>();
   updates.forEach(({ published, changes }) =>
     changes.forEach(({ game }) => {
@@ -28,12 +36,13 @@ export function newGames(
       }
     }),
   );
-  const order = [...added.keys()];
-  return order
-    .filter((game) => now.getTime() - (added.get(game) ?? 0) < days * DAY_MS)
-    .reverse()
-    .sort((first, second) => (added.get(second) ?? 0) - (added.get(first) ?? 0))
-    .slice(0, limit);
+  return added;
+}
+
+/** Every game an update added, newest first (within one update, later changes count as newer) */
+export function recentlyAdded(updates: readonly SiteUpdate[] = SITE_UPDATES): GameSlug[] {
+  const added = addedTimes(updates);
+  return [...added.keys()].reverse().sort((first, second) => (added.get(second) ?? 0) - (added.get(first) ?? 0));
 }
 
 /**

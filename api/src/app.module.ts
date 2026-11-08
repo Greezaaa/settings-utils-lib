@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AccountsModule } from './accounts/accounts.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { Env, validateEnv } from './config/env.js';
 import { databaseOptions } from './database/database.options.js';
@@ -16,8 +17,9 @@ import { SuggestionsModule } from './suggestions/suggestions.module.js';
 import { WordReportsModule } from './word-reports/word-reports.module.js';
 
 /**
- * api.su-labs.dev: anonymous play counts, feedback, word reports, suggestions and game switches for games.su-labs.dev.
- * No accounts and no personal data: visitor addresses are only held in memory by the rate limits.
+ * api.su-labs.dev: anonymous play counts, feedback, word reports, suggestions and game switches for games.su-labs.dev,
+ * and optional player accounts (a login name, a screen name, an optional email, favourites and best results).
+ * Visitor addresses are only held in memory by the rate limits.
  */
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { WordReportsModule } from './word-reports/word-reports.module.js';
     // Every endpoint: at most 60 requests a minute per visitor; endpoints that write have tighter limits
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
     AuthModule,
+    AccountsModule,
     PlaysModule,
     FeedbackModule,
     FeatureFlagsModule,

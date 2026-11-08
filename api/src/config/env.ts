@@ -43,6 +43,15 @@ export const envSchema = z.object({
     .enum(['true', 'false'])
     .default('false')
     .transform((value) => value === 'true'),
+  /**
+   * Mail server for players' password-reset emails, e.g. `smtps://user:password@smtp.example.com:465`. Without it,
+   * accounts have no email (and a forgotten password can't be reset)
+   */
+  SMTP_URL: z.url().optional(),
+  /** Who the emails come from, e.g. `su-labs games <games@su-labs.dev>` */
+  MAIL_FROM: z.string().default('su-labs games <games@su-labs.dev>'),
+  /** The games site, for links in emails */
+  GAMES_URL: z.url().default('https://games.su-labs.dev'),
 });
 
 export type Env = z.infer<typeof envSchema>;

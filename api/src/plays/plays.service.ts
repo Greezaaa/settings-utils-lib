@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GAME_SLUGS, GameSlug } from '../shared/catalog.js';
 import { today } from '../shared/day.js';
+import { periodStart, StatsPeriod } from '../shared/period.js';
 import { PlayCount } from './play-count.entity.js';
 
 export interface GamePlays {
@@ -34,9 +35,22 @@ export class PlaysService {
       `SELECT game, SUM(count) AS plays FROM play_counts WHERE day > current_date - $1::integer GROUP BY game`,
       [days],
     );
-    const totals = new Map(
-      rows.map(({ game, plays }) => [game, Number(plays)]),
-    );
-    return GAME_SLUGS.map((game) => ({ game, plays: totals.get(game) ?? 0 }));
+    return withEveryGame(rows);
   }
+
+  /** Plays of every game in a period, for the admin page */
+  async inPeriod(period: StatsPeriod, now = new Date()): Promise<GamePlays[]> {
+    const start = periodStart(period, now);
+    const rows: { game: string; plays: string }[] = await this.counts.query(
+      `SELECT game, SUM(count) AS plays FROM play_counts WHERE $1::date IS NULL OR day >= $1::date GROUP BY game`,
+      [start],
+    );
+    return withEveryGame(rows);
+  }
+}
+
+/** Totals as numbers for every known game, 0 for games with no row */
+function withEveryGame(rows: { game: string; plays: string }[]): GamePlays[] {
+  const totals = new Map(rows.map(({ game, plays }) => [game, Number(plays)]));
+  return GAME_SLUGS.map((game) => ({ game, plays: totals.get(game) ?? 0 }));
 }

@@ -6,6 +6,8 @@ import { getPictureLevel, PictureModeId } from '../../games/picture-game';
 import { isRight, isSolved, scramble, tilesRight, turn, Turns } from '../../games/turn-picture';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
+import { PlayerAccount } from '../../core/player-account';
+import { RESULT_GAMES } from '../../core/player-results';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
 import { GameFeedback } from '../../shared/game-feedback';
@@ -17,7 +19,7 @@ import { PictureSlice } from '../../shared/picture-slice';
 /** Memory mode starts with the whole picture on show, until the player presses Ready */
 type Phase = 'preview' | 'playing' | 'solved';
 
-const BEST_TIMES_STORAGE = 'turn-picture:best-seconds';
+const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
 
 /**
  * Turn the picture: tap squares to turn them a quarter clockwise until the drawing is right again.
@@ -42,6 +44,8 @@ export class TurnPicturePage {
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('turn-picture').minAge;
   private readonly api = inject(GamesApi);
+  /** Sends finished games to the player's account, when signed in */
+  private readonly account = inject(PlayerAccount);
 
   protected readonly modeId = signal<PictureModeId>('look');
   protected readonly levelId = signal<BoardLevelId>('normal');
@@ -135,6 +139,7 @@ export class TurnPicturePage {
     this.clock.stop();
     this.phase.set('solved');
     const seconds = this.clock.seconds();
+    this.account.record('turn-picture', this.scoreKey(), seconds);
     const best = this.bestTimes()[this.scoreKey()];
     if (best === undefined || seconds < best) {
       this.bestTimes.update((times) => ({ ...times, [this.scoreKey()]: seconds }));

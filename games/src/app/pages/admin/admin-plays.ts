@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { AdminApi, GameFeedback } from '../../core/admin-api';
+import { AdminApi, GameFeedback, STATS_PERIODS, StatsPeriod } from '../../core/admin-api';
 import { GAMES } from '../../core/games';
-import { GamePlays, GamesApi } from '../../core/games-api';
+import { GamePlays } from '../../core/games-api';
 import { SiteLanguage } from '../../i18n/site-language';
 
-/** Admin tab: plays per game over the last 30 days, with each game's 👍/👎 and the reasons given */
+/** Admin tab: plays per game in a chosen period, with each game's 👍/👎 and the reasons given in it */
 @Component({
   selector: 'app-admin-plays',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,11 +12,12 @@ import { SiteLanguage } from '../../i18n/site-language';
   styleUrl: './admin.scss',
 })
 export class AdminPlays {
-  private readonly api = inject(GamesApi);
   private readonly admin = inject(AdminApi);
   /** Game names and feedback reasons in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
 
+  protected readonly periods = STATS_PERIODS;
+  protected readonly period = signal<StatsPeriod>('month');
   private readonly plays = signal<readonly GamePlays[]>([]);
   private readonly feedback = signal<readonly GameFeedback[]>([]);
   protected readonly loading = signal(true);
@@ -42,10 +43,16 @@ export class AdminPlays {
 
   protected async load(): Promise<void> {
     this.loading.set(true);
-    const [plays, feedback] = await Promise.all([this.api.plays(), this.admin.feedback()]);
+    const period = this.period();
+    const [plays, feedback] = await Promise.all([this.admin.plays(period), this.admin.feedback(period)]);
     this.plays.set(plays);
     this.feedback.set(feedback);
     this.loading.set(false);
+  }
+
+  protected choosePeriod(period: StatsPeriod): void {
+    this.period.set(period);
+    void this.load();
   }
 
   /** A feedback reason in the site's language, or as the API sent it if it's unknown */

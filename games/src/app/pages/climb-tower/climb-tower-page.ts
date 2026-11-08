@@ -2,6 +2,8 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyR
 import { RouterLink } from '@angular/router';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
+import { PlayerAccount } from '../../core/player-account';
+import { RESULT_GAMES } from '../../core/player-results';
 import { readStored, writeStored } from '../../core/site-storage';
 import { CLIMB_MODE_IDS, ClimbModeId, ClimbStep, climbStep, Side, SIDES } from '../../games/climb-tower';
 import { formatExpression, formatQuestion, formatSolution, getLevel, isTrue, LEVELS, LevelId } from '../../games/math-games';
@@ -15,7 +17,7 @@ type Phase = 'ready' | 'playing' | 'over';
 /** Best heights are kept apart for each mode and level, e.g. `which-one:normal` */
 type BestKey = `${ClimbModeId}:${LevelId}`;
 type BestFloors = Partial<Record<BestKey, number>>;
-const BEST_STORAGE = 'climb-tower:best';
+const BEST_STORAGE = RESULT_GAMES['climb-tower'].storage;
 
 /** How long a jump takes before the next exercise shows, and a fall before the end screen */
 const JUMP_MS = 800;
@@ -53,6 +55,8 @@ export class ClimbTowerPage {
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('climb-tower').minAge;
   private readonly api = inject(GamesApi);
+  /** Sends finished games to the player's account, when signed in */
+  private readonly account = inject(PlayerAccount);
   protected readonly formatExpression = formatExpression;
 
   protected readonly modeId = signal<ClimbModeId>('true-or-false');
@@ -173,6 +177,7 @@ export class ClimbTowerPage {
 
   private finish(): void {
     this.phase.set('over');
+    this.account.record('climb-tower', this.bestKey(), this.floor());
     if (this.floor() > this.best()) {
       this.isNewBest.set(true);
       this.bestFloors.update((floors) => ({ ...floors, [this.bestKey()]: this.floor() }));

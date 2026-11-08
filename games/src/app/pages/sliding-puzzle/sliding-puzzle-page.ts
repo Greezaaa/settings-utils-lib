@@ -6,6 +6,8 @@ import { BoardLevelId } from '../../games/board';
 import { canMove, cellForArrow, createPuzzle, Direction, getPuzzleLevel, isSolved, move, neighbour, Puzzle, PUZZLE_LEVELS, tileNumber } from '../../games/sliding-puzzle';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
+import { PlayerAccount } from '../../core/player-account';
+import { RESULT_GAMES } from '../../core/player-results';
 import { SiteLanguage } from '../../i18n/site-language';
 import { PuzzlePictureMode } from '../../i18n/site-messages';
 import { GameBoard } from '../../shared/game-board';
@@ -23,7 +25,7 @@ interface PlacedTile {
 }
 
 /** Fewest moves per level, saved in this browser */
-const BEST_MOVES_STORAGE = 'sliding-puzzle:best-moves';
+const BEST_MOVES_STORAGE = RESULT_GAMES['sliding-puzzle'].storage;
 type BestMoves = Partial<Record<BoardLevelId, number>>;
 
 const DEFAULT_LEVEL: BoardLevelId = 'normal';
@@ -65,6 +67,8 @@ export class SlidingPuzzlePage {
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('sliding-puzzle').minAge;
   private readonly api = inject(GamesApi);
+  /** Sends finished games to the player's account, when signed in */
+  private readonly account = inject(PlayerAccount);
 
   protected readonly levels = PUZZLE_LEVELS;
   protected readonly levelId = signal<BoardLevelId>(DEFAULT_LEVEL);
@@ -197,6 +201,7 @@ export class SlidingPuzzlePage {
 
   private finish(): void {
     this.clock.stop();
+    this.account.record('sliding-puzzle', this.levelId(), this.moves());
     const best = this.bestMoves();
     if (best === null || this.moves() < best) {
       this.bestMovesByLevel.update((scores) => ({ ...scores, [this.levelId()]: this.moves() }));

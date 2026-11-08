@@ -28,17 +28,17 @@ export interface GamePlays {
 
 export const isGameSlug = (value: unknown): value is GameSlug => GAME_SLUGS.some((game) => game === value);
 
+/** One `{ game, plays }`, or nothing when the game is unknown or the count isn't a number */
+export function parseGamePlays(item: unknown): GamePlays[] {
+  const game = field(item, 'game');
+  const plays = field(item, 'plays');
+  return isGameSlug(game) && typeof plays === 'number' ? [{ game, plays }] : [];
+}
+
 /** Reads `{ games: [{ game, plays }] }`, keeping only known games */
 function parsePlays(body: unknown): GamePlays[] {
   const games = field(body, 'games');
-  if (!Array.isArray(games)) {
-    return [];
-  }
-  return games.flatMap((item: unknown) => {
-    const game = field(item, 'game');
-    const plays = field(item, 'plays');
-    return isGameSlug(game) && typeof plays === 'number' ? [{ game, plays }] : [];
-  });
+  return Array.isArray(games) ? games.flatMap((item: unknown) => parseGamePlays(item)) : [];
 }
 
 /** Reads `{ games: [{ game, enabled }] }`, keeping only known games */

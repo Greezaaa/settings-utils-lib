@@ -2,17 +2,23 @@ import type { CookieOptions, Request, Response } from 'express';
 
 /** The cookie that keeps an admin signed in; HttpOnly, so the page's scripts can't read it */
 export const SESSION_COOKIE = 'su_labs_admin';
+/** The cookie that keeps a player signed in to their account */
+export const PLAYER_COOKIE = 'su_labs_player';
 
-/** The session token from a request's cookies, if any */
-export function sessionToken(request: Request): string | null {
+/** A cookie's value from a request, if any */
+export function readCookie(request: Request, name: string): string | null {
   for (const part of (request.headers.cookie ?? '').split(';')) {
-    const [name, ...value] = part.trim().split('=');
-    if (name === SESSION_COOKIE && value.length > 0) {
+    const [key, ...value] = part.trim().split('=');
+    if (key === name && value.length > 0) {
       return decodeURIComponent(value.join('='));
     }
   }
   return null;
 }
+
+/** The admin session token from a request's cookies, if any */
+export const sessionToken = (request: Request): string | null =>
+  readCookie(request, SESSION_COOKIE);
 
 /**
  * Cookie settings: sent only to the API, never readable by scripts, and only over HTTPS when `secure` (always in
@@ -26,15 +32,21 @@ const cookieOptions = (secure: boolean): CookieOptions => ({
   path: '/',
 });
 
+/** Sets a session cookie (`name` is SESSION_COOKIE or PLAYER_COOKIE) */
 export function setSessionCookie(
   response: Response,
   token: string,
   expires: Date,
   secure: boolean,
+  name = SESSION_COOKIE,
 ): void {
-  response.cookie(SESSION_COOKIE, token, { ...cookieOptions(secure), expires });
+  response.cookie(name, token, { ...cookieOptions(secure), expires });
 }
 
-export function clearSessionCookie(response: Response, secure: boolean): void {
-  response.clearCookie(SESSION_COOKIE, cookieOptions(secure));
+export function clearSessionCookie(
+  response: Response,
+  secure: boolean,
+  name = SESSION_COOKIE,
+): void {
+  response.clearCookie(name, cookieOptions(secure));
 }

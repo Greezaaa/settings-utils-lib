@@ -4,10 +4,13 @@ import {
   Get,
   HttpCode,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { AdminGuard } from '../security/admin.guard.js';
+import type { StatsPeriod } from '../shared/period.js';
+import { periodSchema } from '../shared/period.js';
 import type { FeedbackInput } from './feedback.schema.js';
 import { feedbackSchema } from './feedback.schema.js';
 import { FeedbackService, FeedbackSummary } from './feedback.service.js';
@@ -34,7 +37,9 @@ export class FeedbackAdminController {
   constructor(private readonly feedback: FeedbackService) {}
 
   @Get()
-  summary(): Promise<FeedbackSummary[]> {
-    return this.feedback.summary();
+  summary(
+    @Query('period', { schema: periodSchema }) period: StatsPeriod,
+  ): Promise<FeedbackSummary[]> {
+    return this.feedback.summary(period);
   }
 }

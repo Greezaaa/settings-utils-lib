@@ -173,6 +173,13 @@ export const ES: SiteMessages = {
     },
   },
 
+  categoryIntros: {
+    numbers: 'Contar, sumar, medir y escalar: juegos que hacen divertidos los números.',
+    letters: 'Vocales, letras que faltan y palabras nuevas.',
+    music: 'Escuchar, comparar y cantar notas.',
+    puzzles: 'Deslizar, girar, colocar y recordar dibujos.',
+  },
+
   categories: {
     numbers: 'Números',
     letters: 'Letras',
@@ -193,6 +200,11 @@ export const ES: SiteMessages = {
     madeByTitle: 'Hecho para peques, por peques',
     madeByText:
       'Estamos creando más juegos. Los hago junto a mi peque, Lucía, que dibuja las imágenes.',
+    favoritesTitle: 'Tus favoritos',
+    popularTitle: 'Los más jugados',
+    recentTitle: 'Recién añadidos',
+    categoriesTitle: 'Todos los juegos',
+    categoryGames: games => (games === 1 ? '1 juego' : `${games} juegos`),
   },
 
   slidingPuzzle: {
@@ -362,6 +374,8 @@ export const ES: SiteMessages = {
     new: 'Nuevo',
     popular: 'Popular',
     hidden: 'Oculto',
+    addFavorite: game => `Añadir ${game} a favoritos`,
+    removeFavorite: game => `Quitar ${game} de favoritos`,
     title: 'Juegos de matemáticas',
     lead: 'Di si el resultado es verdadero o falso, marca tú el resultado o encuentra los signos que faltan. Con tiempo, responde antes de que se acabe la barra.',
     rule: '¡No falles, o se acaba la partida!',
@@ -834,7 +848,9 @@ export const ES: SiteMessages = {
     open: 'Abierto para todos',
     hidden: 'Oculto al público',
     byDefault: open => `por defecto: ${open ? 'abierto' : 'oculto'}`,
-    playsPeriod: total => `Últimos 30 días · ${total} partidas en total`,
+    periodGroup: 'Periodo',
+    periods: { all: 'Siempre', day: 'Hoy', week: 'Últimos 7 días', month: 'Últimos 30 días', year: 'Este año' },
+    playsTotal: total => `${total} partidas en total`,
     refresh: 'Actualizar',
     playsColumns: { game: 'Juego', plays: 'Partidas', reasons: 'Motivos' },
     suggestionStatuses: {
@@ -872,6 +888,9 @@ export const ES: SiteMessages = {
       'rooms-math-games': 'Matemáticas en salas',
       'rooms-measure-it': 'A medir en salas',
       'answer-words': 'Respuestas con palabras (ajuste)',
+      'category-menu': 'Menú de categorías',
+      accounts: 'Cuentas de jugador',
+      leaderboard: 'Clasificación',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:

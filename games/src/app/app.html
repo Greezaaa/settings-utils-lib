@@ -150,8 +150,15 @@
   </div>
 
   <nav class="container site-nav" [attr.aria-label]="t().site.gamesNav">
-    @for (game of games(); track game) {
-      <a [routerLink]="['/', game]" routerLinkActive="active">{{ t().games[game].name }}</a>
+    <!-- With the categories menu, a link per category; otherwise a link per game -->
+    @if (features.canUse('category-menu')) {
+      @for (group of categories(); track group.category) {
+        <a [routerLink]="['/category', group.category]" routerLinkActive="active">{{ t().categories[group.category] }}</a>
+      }
+    } @else {
+      @for (game of games(); track game) {
+        <a [routerLink]="['/', game]" routerLinkActive="active">{{ t().games[game].name }}</a>
+      }
     }
     @if (features.canUse('rooms')) {
       <a routerLink="/rooms" routerLinkActive="active">{{ t().rooms.navLink }}</a>

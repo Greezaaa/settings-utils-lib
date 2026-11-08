@@ -100,6 +100,25 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     ]);
   });
 
+  it('gives the admin team plays per period', async () => {
+    await request(app.getHttpServer())
+      .post('/v1/plays')
+      .send({ game: 'find-pairs' })
+      .expect(204);
+    await request(app.getHttpServer()).get('/admin/plays').expect(401);
+    for (const period of ['all', 'day', 'week', 'month', 'year']) {
+      const { body } = await request(app.getHttpServer())
+        .get(`/admin/plays?period=${period}`)
+        .set(admin)
+        .expect(200);
+      expect(body).toContainEqual({ game: 'find-pairs', plays: 1 });
+    }
+    await request(app.getHttpServer())
+      .get('/admin/plays?period=decade')
+      .set(admin)
+      .expect(400);
+  });
+
   it('hides a word after three visitors report it, until a moderator decides', async () => {
     const report = { word: 'rudeword', language: 'en' };
     const hidden = async () =>
@@ -426,5 +445,233 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       (await request(app.getHttpServer()).get('/admin/suggestions').set(admin))
         .body,
     ).toEqual([]);
+  });
+
+  describe('player accounts', () => {
+    /** A browser of its own (keeping its cookies), from its own address so the sign-in limits don't add up */
+    const browser = (address: string) => {
+      const agent = request.agent(app.getHttpServer());
+      return {
+        agent,
+        post: (path: string) =>
+          agent.post(path).set('cf-connecting-ip', address),
+        get: (path: string) => agent.get(path).set('cf-connecting-ip', address),
+        put: (path: string) => agent.put(path).set('cf-connecting-ip', address),
+        patch: (path: string) =>
+          agent.patch(path).set('cf-connecting-ip', address),
+        delete: (path: string) =>
+          agent.delete(path).set('cf-connecting-ip', address),
+      };
+    };
+
+    it('signs up with a login name, keeps names unique, and signs in on another device', async () => {
+      const first = browser('10.1.0.1');
+      const { body } = await first
+        .post('/v1/account')
+        .send({
+          loginName: ' Lucia_7 ',
+          password: 'a long password',
+          screenName: '  Star   Cat ',
+        })
+        .expect(201);
+      expect(body).toMatchObject({
+        loginName: 'lucia_7',
+        screenName: 'Star Cat',
+        email: null,
+        favorites: [],
+        results: [],
+      });
+      await first.get('/v1/account').expect(200);
+
+      const someoneElse = browser('10.1.0.2');
+      await someoneElse
+        .post('/v1/account')
+        .send({
+          loginName: 'lucia_7',
+          password: 'a long password',
+          screenName: 'Other',
+        })
+        .expect(409, /login-taken/);
+      await someoneElse
+        .post('/v1/account')
+        .send({
+          loginName: 'other',
+          password: 'a long password',
+          screenName: 'STAR CAT',
+        })
+        .expect(409, /screen-name-taken/);
+      // No mail server here, so no emails either
+      await someoneElse
+        .post('/v1/account')
+        .send({
+          loginName: 'other',
+          password: 'a long password',
+          screenName: 'Other',
+          email: 'a@b.dev',
+        })
+        .expect(400, /email-unavailable/);
+      await someoneElse
+        .get('/v1/account/options')
+        .expect(200, { email: false });
+
+      const phone = browser('10.1.0.3');
+      await phone
+        .post('/v1/account/login')
+        .send({ loginName: 'lucia_7', password: 'wrong password' })
+        .expect(401);
+      await phone
+        .post('/v1/account/login')
+        .send({ loginName: 'LUCIA_7', password: 'a long password' })
+        .expect(201);
+      await phone.get('/v1/account').expect(200);
+      await phone.post('/v1/account/logout').expect(204);
+      await phone.get('/v1/account').expect(401);
+    });
+
+    it('keeps favourites and results, and ranks the leaderboards for signed-in players only', async () => {
+      const ana = browser('10.1.1.1');
+      const ben = browser('10.1.1.2');
+      await ana
+        .post('/v1/account')
+        .send({
+          loginName: 'ana',
+          password: 'a long password',
+          screenName: 'Ana',
+        })
+        .expect(201);
+      await ben
+        .post('/v1/account')
+        .send({
+          loginName: 'ben',
+          password: 'a long password',
+          screenName: 'Ben',
+        })
+        .expect(201);
+
+      await ana
+        .put('/v1/account/favorites')
+        .send({ games: ['find-pairs', 'math-games'] })
+        .expect(204);
+      // Fewer moves is better in Find the pairs; a higher floor in Climb the tower
+      for (const [player, value] of [
+        [ana, 20],
+        [ana, 16],
+        [ben, 18],
+      ] as const) {
+        await player
+          .post('/v1/account/results')
+          .send({ game: 'find-pairs', key: 'normal', value })
+          .expect(204);
+      }
+      await ben
+        .post('/v1/account/results')
+        .send({ game: 'climb-tower', key: 'which-one:easy', value: 7 })
+        .expect(204);
+      // Bests kept in the browser before signing in: counted when better, without plays
+      await ben
+        .put('/v1/account/bests')
+        .send({
+          bests: [{ game: 'climb-tower', key: 'which-one:easy', value: 12 }],
+        })
+        .expect(204);
+      await ana
+        .post('/v1/account/results')
+        .send({ game: 'hit-the-note', key: 'x', value: 1 })
+        .expect(400);
+
+      const { body: account } = await ana.get('/v1/account').expect(200);
+      expect(account.favorites).toEqual(['find-pairs', 'math-games']);
+      expect(account.results).toEqual([
+        { game: 'find-pairs', key: 'normal', plays: 2, best: 16 },
+      ]);
+
+      const { body: pairs } = await ana
+        .get('/v1/leaderboard/find-pairs')
+        .expect(200);
+      expect(pairs.boards).toEqual([
+        {
+          key: 'normal',
+          entries: [
+            { place: 1, screenName: 'Ana', plays: 2, best: 16, isMe: true },
+            { place: 2, screenName: 'Ben', plays: 1, best: 18, isMe: false },
+          ],
+        },
+      ]);
+      const { body: tower } = await ana
+        .get('/v1/leaderboard/climb-tower')
+        .expect(200);
+      expect(tower.boards[0].entries[0]).toMatchObject({
+        screenName: 'Ben',
+        plays: 1,
+        best: 12,
+      });
+      await request(app.getHttpServer())
+        .get('/v1/leaderboard/find-pairs')
+        .expect(401);
+    });
+
+    it('changes the screen name and password, resets a forgotten one, and deletes the account', async () => {
+      const kid = browser('10.1.2.1');
+      await kid
+        .post('/v1/account')
+        .send({
+          loginName: 'kid',
+          password: 'a long password',
+          screenName: 'Kid',
+        })
+        .expect(201);
+      await kid
+        .patch('/v1/account')
+        .send({ screenName: 'Ana' })
+        .expect(409, /screen-name-taken/);
+      await kid.patch('/v1/account').send({ screenName: 'Rocket' }).expect(204);
+      await kid
+        .post('/v1/account/password')
+        .send({ current: 'wrong', next: 'new long password' })
+        .expect(401);
+      await kid
+        .post('/v1/account/password')
+        .send({ current: 'a long password', next: 'new long password' })
+        .expect(204);
+      expect((await kid.get('/v1/account').expect(200)).body.screenName).toBe(
+        'Rocket',
+      );
+      // Always the same answer, whether or not an account has that email
+      await kid
+        .post('/v1/account/forgot')
+        .send({ email: 'nobody@su-labs.dev' })
+        .expect(204);
+
+      // A reset link (sent by email when a mail server is set up)
+      const { hashToken } = await import('../src/auth/passwords.js');
+      const secret = 'r'.repeat(43);
+      await app
+        .get(DataSource)
+        .query(
+          `UPDATE players SET reset_hash = $1, reset_expires = now() + interval '1 hour' WHERE login_name = 'kid'`,
+          [hashToken(secret)],
+        );
+      const other = browser('10.1.2.2');
+      await other
+        .post(`/v1/account/reset/${secret}`)
+        .send({ password: 'reset long password' })
+        .expect(201);
+      await other
+        .post(`/v1/account/reset/${secret}`)
+        .send({ password: 'reset long password' })
+        .expect(404);
+      // The reset signed out the browser still on the old password
+      await kid.get('/v1/account').expect(401);
+
+      await other.delete('/v1/account').send({ password: 'wrong' }).expect(401);
+      await other
+        .delete('/v1/account')
+        .send({ password: 'reset long password' })
+        .expect(204);
+      await browser('10.1.2.3')
+        .post('/v1/account/login')
+        .send({ loginName: 'kid', password: 'reset long password' })
+        .expect(401);
+    });
   });
 });

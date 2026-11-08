@@ -1,12 +1,21 @@
 import { Route, Routes } from '@angular/router';
 import { featureGuard } from './core/feature-guard';
 import { gameAvailableGuard } from './core/game-guard';
-import { GameSlug } from './core/games';
+import { GAME_CATEGORIES, GameSlug } from './core/games';
 import { ADMIN_INVITE_PATH, ADMIN_PATH } from './core/links';
 import { PREVIEW_MESSAGES, SITE_META, SITE_NAME } from './core/page-meta';
 
-const { seo, home, games, privacy, suggestions, admin, rooms } =
-  PREVIEW_MESSAGES;
+const {
+  seo,
+  home,
+  games,
+  privacy,
+  suggestions,
+  admin,
+  rooms,
+  categories,
+  categoryIntros,
+} = PREVIEW_MESSAGES;
 
 /** Page title and description of a game, for search results and link previews; the page opens only when the game does */
 function gameMeta(
@@ -27,6 +36,16 @@ const notFound = {
   loadComponent: () =>
     import('./pages/not-found/not-found-page').then(m => m.NotFoundPage),
 } satisfies Omit<Route, 'path'>;
+
+/** A page per category (from the categories menu), at /category/<category> */
+const categoryRoutes: Routes = GAME_CATEGORIES.map(category => ({
+  path: `category/${category}`,
+  title: `${categories[category]} · ${SITE_NAME}`,
+  data: { description: categoryIntros[category], category },
+  canActivate: [featureGuard('category-menu')],
+  loadComponent: () =>
+    import('./pages/category/category-page').then(m => m.CategoryPage),
+}));
 
 export const routes: Routes = [
   {
@@ -101,6 +120,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/find-pairs/find-pairs-page').then(m => m.FindPairsPage),
   },
+  ...categoryRoutes,
   {
     path: 'rooms',
     title: `${rooms.title} · ${SITE_NAME}`,

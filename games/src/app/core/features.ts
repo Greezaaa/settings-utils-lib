@@ -10,7 +10,10 @@ export type FeatureId =
   | 'rooms'
   | 'rooms-math-games'
   | 'rooms-measure-it'
-  | 'answer-words';
+  | 'answer-words'
+  | 'category-menu'
+  | 'accounts'
+  | 'leaderboard';
 
 /** Games playable in rooms, each with its multiplayer switch */
 export type RoomGame = Extract<GameSlug, 'math-games' | 'measure-it'>;
@@ -29,6 +32,12 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'rooms-measure-it', openByDefault: false, roomGame: 'measure-it' },
   /** The header setting to show answers in words too, not only colours */
   { id: 'answer-words', openByDefault: false },
+  /** The header lists the categories (each with its page of games) instead of every game */
+  { id: 'category-menu', openByDefault: false },
+  /** Player accounts: sign in on any device, keeping favourites and best results */
+  { id: 'accounts', openByDefault: false },
+  /** Leaderboards for signed-in players (needs accounts) */
+  { id: 'leaderboard', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

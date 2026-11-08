@@ -6,7 +6,7 @@ import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
-import { gameOfPath } from './core/games';
+import { byCategory, gameOfPath } from './core/games';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL, GITHUB_REPO_URL, MAIN_SITE_URL } from './core/links';
 import { ANSWER_STYLES, AnswerWords } from './core/answer-words';
 import { BoardColours } from './core/board-colours';
@@ -47,6 +47,7 @@ export class App {
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = this.availability.visibleGames;
+  protected readonly categories = computed(() => byCategory(this.games()));
   protected readonly features = inject(FeatureFlags);
   /** The game of the page being shown, from the address (known while prerendering and on the first render too) */
   private readonly pageGame = signal(gameOfPath(inject(DOCUMENT).location.pathname));

@@ -203,6 +203,13 @@ export const UK: SiteMessages = {
     },
   },
 
+  categoryIntros: {
+    numbers: 'Рахуй, додавай, вимірюй і підіймайся: ігри, з якими числа цікаві.',
+    letters: 'Голосні, пропущені літери й нові слова.',
+    music: 'Слухай, порівнюй і співай ноти.',
+    puzzles: 'Пересувай, повертай, розкладай і запам’ятовуй малюнки.',
+  },
+
   categories: {
     numbers: 'Числа',
     letters: 'Букви',
@@ -223,6 +230,11 @@ export const UK: SiteMessages = {
     madeByTitle: 'Для дітей, разом із дітьми',
     madeByText:
       'Нові ігри вже в дорозі. Я створюю їх разом із моєю малою Лусією, яка малює картинки.',
+    favoritesTitle: 'Твої улюблені',
+    popularTitle: 'Найпопулярніші',
+    recentTitle: 'Нещодавно додані',
+    categoriesTitle: 'Усі ігри',
+    categoryGames: games => `${games} ${plural(games, 'гра', 'гри', 'ігор')}`,
   },
 
   slidingPuzzle: {
@@ -388,6 +400,8 @@ export const UK: SiteMessages = {
     new: 'Нове',
     popular: 'Популярна',
     hidden: 'Приховано',
+    addFavorite: game => `Додати «${game}» до улюблених`,
+    removeFavorite: game => `Прибрати «${game}» з улюблених`,
     title: 'Математичні ігри',
     lead: 'Скажи, чи правильний результат, введи відповідь сам або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.',
     rule: 'Не помились, бо гра закінчиться!',
@@ -861,7 +875,9 @@ export const UK: SiteMessages = {
     open: 'Відкрито для всіх',
     hidden: 'Приховано від публіки',
     byDefault: open => `типово: ${open ? 'відкрито' : 'приховано'}`,
-    playsPeriod: total => `Останні 30 днів · усього ігор: ${total}`,
+    periodGroup: 'Період',
+    periods: { all: 'За весь час', day: 'Сьогодні', week: 'Останні 7 днів', month: 'Останні 30 днів', year: 'Цього року' },
+    playsTotal: total => `Усього ігор: ${total}`,
     refresh: 'Оновити',
     playsColumns: { game: 'Гра', plays: 'Зіграно', reasons: 'Причини' },
     suggestionStatuses: {
@@ -899,6 +915,9 @@ export const UK: SiteMessages = {
       'rooms-math-games': 'Математика в кімнатах',
       'rooms-measure-it': 'Виміряй у кімнатах',
       'answer-words': 'Відповіді словами (налаштування)',
+      'category-menu': 'Меню категорій',
+      accounts: 'Акаунти гравців',
+      leaderboard: 'Таблиця лідерів',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:

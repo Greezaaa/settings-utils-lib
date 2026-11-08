@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { newGames } from './new-games';
+import { newGames, recentlyAdded } from './new-games';
 import { SiteUpdate } from './site-updates';
 
 const text = (word: string) => ({ en: word, es: word, eu: word, uk: word });
@@ -34,5 +34,9 @@ describe('new games', () => {
   it('stops marking a game after the given days', () => {
     expect(newGames(new Date('2026-01-25T00:00:00Z'), UPDATES)).toEqual(['place-pieces']);
     expect(newGames(new Date('2026-03-01T00:00:00Z'), UPDATES)).toEqual([]);
+  });
+
+  it('lists every added game newest first, however long ago, for "Recently added"', () => {
+    expect(recentlyAdded(UPDATES)).toEqual(['place-pieces', 'turn-picture', 'sliding-puzzle', 'math-games']);
   });
 });

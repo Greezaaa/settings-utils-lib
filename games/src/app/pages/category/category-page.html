@@ -1,0 +1,16 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/">{{ t().page.section }}</a>
+    <span class="tag">{{ t().home.categoryGames(games().length) }}</span>
+  </div>
+  <h1>{{ t().categories[category()] }}</h1>
+  <p class="lead">{{ t().categoryIntros[category()] }}</p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="t().categories[category()]">
+  <div class="games">
+    @for (game of games(); track game; let index = $index) {
+      <app-game-card [game]="game" appReveal [style.--index]="index" />
+    }
+  </div>
+</section>

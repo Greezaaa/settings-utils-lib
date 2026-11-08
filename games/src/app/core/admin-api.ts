@@ -1,9 +1,9 @@
 import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
-import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import { credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FeatureId } from './features';
 import { GameSlug } from './games';
-import { isGameSlug, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
+import { GamePlays, isGameSlug, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
 
 const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'uk'];
 const isLanguage = (value: unknown): value is LanguageId => LANGUAGES.some((language) => language === value);
@@ -32,6 +32,10 @@ export interface WordReport {
 }
 
 /** The super admin manages everything; moderators and testers moderate, and testers also see everything in preview */
+/** Periods the statistics can be shown for (see api/src/shared/period.ts) */
+export const STATS_PERIODS = ['all', 'day', 'week', 'month', 'year'] as const;
+export type StatsPeriod = (typeof STATS_PERIODS)[number];
+
 export type AdminRole = 'super' | 'moderator' | 'tester';
 /** The roles the super admin gives team members */
 export const MEMBER_ROLES = ['moderator', 'tester'] as const;
@@ -153,12 +157,6 @@ function parseInvite(body: unknown): Invite | null {
 
 /** A JSON list from an answer, each item checked by `parse` (which returns no item when it doesn't fit) */
 /** A request with a JSON body */
-const jsonInit = (method: string, body: object): RequestInit => ({
-  method,
-  body: JSON.stringify(body),
-  headers: { 'Content-Type': 'application/json' },
-});
-
 const listOf = <T>(body: unknown, parse: (item: unknown) => T[]): T[] =>
   Array.isArray(body) ? body.flatMap((item: unknown) => parse(item)) : [];
 
@@ -285,8 +283,13 @@ export class AdminApi {
     });
   }
 
-  async feedback(): Promise<GameFeedback[]> {
-    return listOf(await this.read('/admin/feedback'), parseFeedback);
+  async feedback(period: StatsPeriod): Promise<GameFeedback[]> {
+    return listOf(await this.read(`/admin/feedback?period=${period}`), parseFeedback);
+  }
+
+  /** Plays per game in a period */
+  async plays(period: StatsPeriod): Promise<GamePlays[]> {
+    return listOf(await this.read(`/admin/plays?period=${period}`), parseGamePlays);
   }
 
   private async read(path: string): Promise<unknown> {
@@ -311,15 +314,7 @@ export class AdminApi {
   }
 
   /** A request with the session cookie; null when it couldn't reach the API */
-  private async fetch(path: string, init: RequestInit, timeoutMs: number): Promise<Response | null> {
-    try {
-      return await fetch(apiUrl(this.document, path), {
-        ...init,
-        credentials: 'include',
-        signal: AbortSignal.timeout(timeoutMs),
-      });
-    } catch {
-      return null;
-    }
+  private fetch(path: string, init: RequestInit, timeoutMs: number): Promise<Response | null> {
+    return credentialedFetch(this.document, path, init, timeoutMs);
   }
 }

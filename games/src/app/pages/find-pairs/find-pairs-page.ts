@@ -2,6 +2,8 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyR
 import { RouterLink } from '@angular/router';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
+import { PlayerAccount } from '../../core/player-account';
+import { RESULT_GAMES } from '../../core/player-results';
 import { readStored, writeStored } from '../../core/site-storage';
 import { BoardLevelId, getBoardLevel } from '../../games/board';
 import { DEFAULT_PAIRS_LEVEL, dealPairs, isPair, PairCard, PAIRS_LEVELS } from '../../games/find-pairs';
@@ -13,7 +15,7 @@ import { GameFeedback } from '../../shared/game-feedback';
 type Phase = 'playing' | 'done';
 type BestMoves = Partial<Record<BoardLevelId, number>>;
 
-const BEST_STORAGE = 'find-pairs:best';
+const BEST_STORAGE = RESULT_GAMES['find-pairs'].storage;
 /** How long two different cards stay face up before turning back */
 const MISMATCH_MS = 900;
 
@@ -35,6 +37,8 @@ export class FindPairsPage {
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('find-pairs').minAge;
   private readonly api = inject(GamesApi);
+  /** Sends finished games to the player's account, when signed in */
+  private readonly account = inject(PlayerAccount);
   protected readonly clock = new GameClock();
 
   protected readonly levelId = signal<BoardLevelId>(DEFAULT_PAIRS_LEVEL);
@@ -126,6 +130,7 @@ export class FindPairsPage {
   private finish(): void {
     this.clock.stop();
     this.phase.set('done');
+    this.account.record('find-pairs', this.levelId(), this.moves());
     const best = this.best();
     if (best === null || this.moves() < best) {
       this.isNewBest.set(true);

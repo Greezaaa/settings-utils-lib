@@ -16,3 +16,27 @@ export function apiUrl(document: Document, path: string): string {
 export function field(value: unknown, key: string): unknown {
   return typeof value === 'object' && value !== null ? Reflect.get(value, key) : undefined;
 }
+
+/** A request with a JSON body */
+export const jsonInit = (method: string, body: object): RequestInit => ({
+  method,
+  body: JSON.stringify(body),
+  headers: { 'Content-Type': 'application/json' },
+});
+
+/**
+ * A request to the API that carries its HttpOnly cookies (the admin's or the player's session), or null when the API
+ * can't be reached in time
+ */
+export async function credentialedFetch(
+  document: Document,
+  path: string,
+  init: RequestInit,
+  timeoutMs: number,
+): Promise<Response | null> {
+  try {
+    return await fetch(apiUrl(document, path), { ...init, credentials: 'include', signal: AbortSignal.timeout(timeoutMs) });
+  } catch {
+    return null;
+  }
+}

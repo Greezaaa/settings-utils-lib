@@ -1,5 +1,17 @@
+<div class="filters" role="group" [attr.aria-label]="t().admin.periodGroup">
+  @for (option of periods; track option) {
+    <button
+      type="button"
+      class="button button-secondary button-small"
+      [attr.aria-pressed]="option === period()"
+      (click)="choosePeriod(option)"
+    >
+      {{ t().admin.periods[option] }}
+    </button>
+  }
+</div>
 <div class="filters">
-  <p class="muted">{{ t().admin.playsPeriod(totalPlays()) }}</p>
+  <p class="muted">{{ t().admin.playsTotal(totalPlays()) }}</p>
   <button type="button" class="button button-secondary button-small" [disabled]="loading()" (click)="load()">
     {{ t().admin.refresh }}
   </button>

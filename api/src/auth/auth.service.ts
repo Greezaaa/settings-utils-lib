@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Not, Repository } from 'typeorm';
 import { AdminSession } from './admin-session.entity.js';
 import { Admin } from './admin.entity.js';
+import { afterFailure, isLocked, UNLOCKED } from '../security/login-lock.js';
 import {
   hashPassword,
   hashToken,
@@ -12,12 +13,7 @@ import {
 
 /** How long a browser stays signed in */
 export const SESSION_DAYS = 30;
-/** Failed sign-ins in a row before an account locks, and for how long */
-const MAX_FAILED_LOGINS = 5;
-const LOCK_MINUTES = 15;
-
 const DAY_MS = 24 * 60 * 60 * 1000;
-const MINUTE_MS = 60 * 1000;
 
 /** Checked against when the email doesn't exist, so a wrong email takes as long as a wrong password */
 const DUMMY_HASH_PROMISE = hashPassword('not a real password');
@@ -55,27 +51,14 @@ export class AuthService {
       await verifyPassword(password, await DUMMY_HASH_PROMISE);
       return null;
     }
-    if (admin.lockedUntil && admin.lockedUntil > now) {
+    if (isLocked(admin, now)) {
       return null;
     }
     if (!(await verifyPassword(password, admin.passwordHash))) {
-      const failedLogins = admin.failedLogins + 1;
-      const isLocked = failedLogins >= MAX_FAILED_LOGINS;
-      await this.admins.update(
-        { id: admin.id },
-        {
-          failedLogins: isLocked ? 0 : failedLogins,
-          lockedUntil: isLocked
-            ? new Date(now.getTime() + LOCK_MINUTES * MINUTE_MS)
-            : admin.lockedUntil,
-        },
-      );
+      await this.admins.update({ id: admin.id }, afterFailure(admin, now));
       return null;
     }
-    await this.admins.update(
-      { id: admin.id },
-      { failedLogins: 0, lockedUntil: null },
-    );
+    await this.admins.update({ id: admin.id }, UNLOCKED);
     return this.startSession(admin, now);
   }
 

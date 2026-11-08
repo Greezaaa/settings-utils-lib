@@ -7,7 +7,7 @@ import { SignsLevelId } from '../games/find-the-signs';
 import { BoardLevelId } from '../games/board';
 import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
-import { ReportStatus, SuggestionStatus } from '../core/admin-api';
+import { ReportStatus, StatsPeriod, SuggestionStatus } from '../core/admin-api';
 import { RoomError } from '../core/room-view';
 import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
@@ -116,7 +116,16 @@ export interface SiteMessages {
     readonly showFewer: string;
     readonly madeByTitle: string;
     readonly madeByText: string;
+    /** With the categories menu: the player's favourites, the most played and the latest games, then the categories */
+    readonly favoritesTitle: string;
+    readonly popularTitle: string;
+    readonly recentTitle: string;
+    readonly categoriesTitle: string;
+    readonly categoryGames: (games: number) => string;
   };
+
+  /** What each category's page says about its games */
+  readonly categoryIntros: Readonly<Record<GameCategory, string>>;
 
   readonly slidingPuzzle: {
     readonly lead: string;
@@ -226,6 +235,9 @@ export interface SiteMessages {
     readonly popular: string;
     /** Badge the admin sees in preview on games closed to the public */
     readonly hidden: string;
+    /** The heart on a game card, for screen readers */
+    readonly addFavorite: (game: string) => string;
+    readonly removeFavorite: (game: string) => string;
     readonly title: string;
     readonly lead: string;
     /** The one rule, shown on its own line below the lead */
@@ -499,7 +511,9 @@ export interface SiteMessages {
     readonly open: string;
     readonly hidden: string;
     readonly byDefault: (open: boolean) => string;
-    readonly playsPeriod: (total: number) => string;
+    readonly periodGroup: string;
+    readonly periods: Readonly<Record<StatsPeriod, string>>;
+    readonly playsTotal: (total: number) => string;
     readonly refresh: string;
     readonly playsColumns: {
       readonly game: string;

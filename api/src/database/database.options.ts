@@ -1,4 +1,7 @@
 import type { DataSourceOptions } from 'typeorm';
+import { PlayerResult } from '../accounts/player-result.entity.js';
+import { PlayerSession } from '../accounts/player-session.entity.js';
+import { Player } from '../accounts/player.entity.js';
 import { AdminSession } from '../auth/admin-session.entity.js';
 import { Admin } from '../auth/admin.entity.js';
 import { FeatureFlag } from '../feature-flags/feature-flag.entity.js';
@@ -11,6 +14,7 @@ import { Initial1794100000000 } from './migrations/1794100000000-initial.js';
 import { GameSettings1794200000000 } from './migrations/1794200000000-game-settings.js';
 import { Admins1794300000000 } from './migrations/1794300000000-admins.js';
 import { FeatureFlags1794400000000 } from './migrations/1794400000000-feature-flags.js';
+import { Players1794500000000 } from './migrations/1794500000000-players.js';
 
 /**
  * How the API reaches PostgreSQL. The tables are only ever changed by migrations, which run when the API starts;
@@ -26,6 +30,9 @@ export const databaseOptions = (url: string): DataSourceOptions => ({
     Feedback,
     GameSetting,
     PlayCount,
+    Player,
+    PlayerResult,
+    PlayerSession,
     Suggestion,
     WordReport,
   ],
@@ -34,6 +41,7 @@ export const databaseOptions = (url: string): DataSourceOptions => ({
     GameSettings1794200000000,
     Admins1794300000000,
     FeatureFlags1794400000000,
+    Players1794500000000,
   ],
   migrationsRun: true,
   synchronize: false,

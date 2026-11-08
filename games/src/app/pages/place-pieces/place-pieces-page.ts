@@ -6,6 +6,8 @@ import { getPictureLevel, PictureModeId } from '../../games/picture-game';
 import { Arrangement, isPlaced, isSolved, piecesPlaced, shuffle, solvedArrangement, swap } from '../../games/place-pieces';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
+import { PlayerAccount } from '../../core/player-account';
+import { RESULT_GAMES } from '../../core/player-results';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
 import { GameFeedback } from '../../shared/game-feedback';
@@ -27,7 +29,7 @@ interface Drag {
   readonly dy: number;
 }
 
-const BEST_TIMES_STORAGE = 'place-pieces:best-seconds';
+const BEST_TIMES_STORAGE = RESULT_GAMES['place-pieces'].storage;
 
 /** Pointer movement, in pixels, below which a press counts as a tap rather than a drag */
 const DRAG_THRESHOLD = 8;
@@ -54,6 +56,8 @@ export class PlacePiecesPage {
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('place-pieces').minAge;
   private readonly api = inject(GamesApi);
+  /** Sends finished games to the player's account, when signed in */
+  private readonly account = inject(PlayerAccount);
 
   protected readonly modeId = signal<PictureModeId>('look');
   protected readonly levelId = signal<BoardLevelId>('normal');
@@ -222,6 +226,7 @@ export class PlacePiecesPage {
     this.clock.stop();
     this.phase.set('solved');
     const seconds = this.clock.seconds();
+    this.account.record('place-pieces', this.scoreKey(), seconds);
     const best = this.bestTimes()[this.scoreKey()];
     if (best === undefined || seconds < best) {
       this.bestTimes.update((times) => ({ ...times, [this.scoreKey()]: seconds }));

@@ -169,6 +169,13 @@ export const EN: SiteMessages = {
     },
   },
 
+  categoryIntros: {
+    numbers: 'Count, add, measure and climb: games that make numbers fun.',
+    letters: 'Vowels, missing letters and new words.',
+    music: 'Listen, compare and sing notes.',
+    puzzles: 'Slide, turn, place and remember pictures.',
+  },
+
   categories: {
     numbers: 'Numbers',
     letters: 'Letters',
@@ -189,6 +196,11 @@ export const EN: SiteMessages = {
     madeByTitle: 'Made for kids, by kids',
     madeByText:
       'More games are on the way. I make them together with my little one, Lucía, who draws the pictures.',
+    favoritesTitle: 'Your favourites',
+    popularTitle: 'Most popular',
+    recentTitle: 'Recently added',
+    categoriesTitle: 'All games',
+    categoryGames: games => (games === 1 ? '1 game' : `${games} games`),
   },
 
   slidingPuzzle: {
@@ -354,6 +366,8 @@ export const EN: SiteMessages = {
     new: 'New',
     popular: 'Popular',
     hidden: 'Hidden',
+    addFavorite: game => `Add ${game} to favourites`,
+    removeFavorite: game => `Remove ${game} from favourites`,
     title: 'Math games',
     lead: 'Say whether the result is true or false, tap the result yourself, or find the missing signs. With the timer on, answer before the bar runs out.',
     rule: 'Don’t miss one, or the game is over!',
@@ -809,7 +823,9 @@ export const EN: SiteMessages = {
     open: 'Open to everyone',
     hidden: 'Hidden from the public',
     byDefault: open => `default: ${open ? 'open' : 'hidden'}`,
-    playsPeriod: total => `Last 30 days · ${total} plays in all`,
+    periodGroup: 'Period',
+    periods: { all: 'All time', day: 'Today', week: 'Last 7 days', month: 'Last 30 days', year: 'This year' },
+    playsTotal: total => `${total} plays in all`,
     refresh: 'Refresh',
     playsColumns: { game: 'Game', plays: 'Plays', reasons: 'Reasons' },
     suggestionStatuses: { new: 'New', read: 'Read', archived: 'Archived' },
@@ -843,6 +859,9 @@ export const EN: SiteMessages = {
       'rooms-math-games': 'Math games in rooms',
       'rooms-measure-it': 'Measure it in rooms',
       'answer-words': 'Answers in words (setting)',
+      'category-menu': 'Categories menu',
+      accounts: 'Player accounts',
+      leaderboard: 'Leaderboard',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:

@@ -5,6 +5,8 @@ import { createSignsPuzzle, formatSigns, getSignsLevel, SIGNS_LEVELS, SignsPuzzl
 import { ANSWER_STYLE_IDS, AnswerStyleId, createQuestion, formatSolution, getLevel, LEVELS, LevelId, Question, secondsForQuestion, TIMER_IDS, TimerId, Timing } from '../../games/math-games';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
+import { PlayerAccount } from '../../core/player-account';
+import { RESULT_GAMES } from '../../core/player-results';
 import { SiteLanguage } from '../../i18n/site-language';
 import { OptionText } from '../../i18n/site-messages';
 import { Countdown } from '../../shared/countdown';
@@ -29,7 +31,7 @@ type BestScores = Partial<Record<ScoreKey, number>>;
 type LevelOption = OptionText & { readonly id: LevelId };
 
 /** Names of the values the game keeps in this browser */
-const BEST_SCORES_STORAGE = 'math-games:best';
+const BEST_SCORES_STORAGE = RESULT_GAMES['math-games'].storage;
 
 /** Level picked when the chosen one doesn't exist for the new answer style */
 const DEFAULT_LEVEL: LevelId = 'normal';
@@ -57,6 +59,8 @@ export class MathGamesPage {
   /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('math-games').minAge;
   private readonly api = inject(GamesApi);
+  /** Sends finished games to the player's account, when signed in */
+  private readonly account = inject(PlayerAccount);
 
   protected readonly levelId = signal<LevelId>(DEFAULT_LEVEL);
   protected readonly timerId = signal<TimerId>('timer');
@@ -168,6 +172,7 @@ export class MathGamesPage {
 
   private finish(ending: Ending): void {
     this.countdown.stop();
+    this.account.record('math-games', this.scoreKey(), this.score());
     this.ending.set(ending);
     this.phase.set('over');
 

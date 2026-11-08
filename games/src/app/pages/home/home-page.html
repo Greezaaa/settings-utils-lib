@@ -11,15 +11,46 @@
   </p>
 </header>
 
-@for (group of categories(); track group.category) {
-  <section class="container page-section" [attr.aria-labelledby]="'category-' + group.category">
-    <h2 class="section-title" [id]="'category-' + group.category">{{ t().categories[group.category] }}</h2>
+@if (hasCategoryMenu()) {
+  @for (list of [
+    { id: 'favorites', title: t().home.favoritesTitle, games: favorites() },
+    { id: 'popular', title: t().home.popularTitle, games: popular() },
+    { id: 'recent', title: t().home.recentTitle, games: recent() }
+  ]; track list.id) {
+    @if (list.games.length > 0) {
+      <section class="container page-section" [attr.aria-labelledby]="'list-' + list.id">
+        <h2 class="section-title" [id]="'list-' + list.id">{{ list.title }}</h2>
+        <div class="games">
+          @for (game of list.games; track game; let index = $index) {
+            <app-game-card [game]="game" appReveal [style.--index]="index" />
+          }
+        </div>
+      </section>
+    }
+  }
+  <section class="container page-section" aria-labelledby="categories-title">
+    <h2 class="section-title" id="categories-title">{{ t().home.categoriesTitle }}</h2>
     <div class="games">
-      @for (game of group.games; track game; let index = $index) {
-        <app-game-card [game]="game" appReveal [style.--index]="index" />
+      @for (group of categories(); track group.category; let index = $index) {
+        <a class="card category-card" [routerLink]="['/category', group.category]" appReveal [style.--index]="index">
+          <span class="tag">{{ t().home.categoryGames(group.games.length) }}</span>
+          <h3 class="category-name">{{ t().categories[group.category] }}</h3>
+          <p class="muted">{{ t().categoryIntros[group.category] }}</p>
+        </a>
       }
     </div>
   </section>
+} @else {
+  @for (group of categories(); track group.category) {
+    <section class="container page-section" [attr.aria-labelledby]="'category-' + group.category">
+      <h2 class="section-title" [id]="'category-' + group.category">{{ t().categories[group.category] }}</h2>
+      <div class="games">
+        @for (game of group.games; track game; let index = $index) {
+          <app-game-card [game]="game" appReveal [style.--index]="index" />
+        }
+      </div>
+    </section>
+  }
 }
 
 @if (features.canUse('rooms')) {

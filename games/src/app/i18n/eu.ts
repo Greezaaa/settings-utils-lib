@@ -174,6 +174,13 @@ export const EU: SiteMessages = {
     },
   },
 
+  categoryIntros: {
+    numbers: 'Zenbatu, batu, neurtu eta igo: zenbakiak dibertigarri bihurtzen dituzten jokoak.',
+    letters: 'Bokalak, falta diren letrak eta hitz berriak.',
+    music: 'Entzun, alderatu eta abestu notak.',
+    puzzles: 'Irristatu, biratu, kokatu eta gogoratu marrazkiak.',
+  },
+
   categories: {
     numbers: 'Zenbakiak',
     letters: 'Letrak',
@@ -194,6 +201,11 @@ export const EU: SiteMessages = {
     madeByTitle: 'Haurrentzat eginak, haurrek eginak',
     madeByText:
       'Joko gehiago prestatzen ari gara. Nire txikiarekin, Lucíarekin, egiten ditut; berak marrazten ditu irudiak.',
+    favoritesTitle: 'Zure gogokoak',
+    popularTitle: 'Jokatuenak',
+    recentTitle: 'Azken gehitutakoak',
+    categoriesTitle: 'Joko guztiak',
+    categoryGames: games => `${games} joko`,
   },
 
   slidingPuzzle: {
@@ -361,6 +373,8 @@ export const EU: SiteMessages = {
     new: 'Berria',
     popular: 'Ezaguna',
     hidden: 'Ezkutuan',
+    addFavorite: game => `Gehitu ${game} gogokoetara`,
+    removeFavorite: game => `Kendu ${game} gogokoetatik`,
     title: 'Matematika jokoak',
     lead: 'Esan emaitza egia ala gezurra den, sakatu zuk emaitza edo aurkitu falta diren zeinuak. Denborarekin, erantzun barra amaitu baino lehen.',
     rule: 'Ez huts egin, bestela jokoa amaitzen da!',
@@ -831,7 +845,9 @@ export const EU: SiteMessages = {
     open: 'Denentzat irekita',
     hidden: 'Publikoari ezkutatuta',
     byDefault: open => `berez: ${open ? 'irekita' : 'ezkutuan'}`,
-    playsPeriod: total => `Azken 30 egunak · ${total} partida guztira`,
+    periodGroup: 'Epea',
+    periods: { all: 'Beti', day: 'Gaur', week: 'Azken 7 egunak', month: 'Azken 30 egunak', year: 'Aurten' },
+    playsTotal: total => `${total} partida guztira`,
     refresh: 'Freskatu',
     playsColumns: { game: 'Jokoa', plays: 'Partidak', reasons: 'Arrazoiak' },
     suggestionStatuses: {
@@ -869,6 +885,9 @@ export const EU: SiteMessages = {
       'rooms-math-games': 'Matematika geletan',
       'rooms-measure-it': 'Neurtu geletan',
       'answer-words': 'Erantzunak hitzekin (ezarpena)',
+      'category-menu': 'Kategorien menua',
+      accounts: 'Jokalarien kontuak',
+      leaderboard: 'Sailkapena',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
