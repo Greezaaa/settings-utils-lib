@@ -601,7 +601,10 @@ export const ES: SiteMessages = {
     noWords: 'No hay palabras aquí.',
     featuresTitle: 'Funciones',
     featuresHelp: 'Las funciones nuevas empiezan desactivadas: pruébalas en vista previa y luego ábrelas a todos.',
-    featureNames: { rooms: 'Jugar juntos (salas)' },
+    featureNames: { rooms: 'Jugar juntos (salas)', 'rooms-math-games': 'Matemáticas en salas' },
+    multiplayerTitle: 'Juegos multijugador',
+    multiplayerHelp:
+      'Cada juego tiene su propio interruptor para las salas, aparte del de jugar solo: un juego puede estar abierto y seguir cerrado en las salas.',
     addMember: 'Añadir a alguien al equipo',
     roleLabel: 'Rol',
     roleHelp: {
@@ -691,6 +694,7 @@ export const ES: SiteMessages = {
     leave: 'Salir de la sala',
     kick: 'Quitar',
     kicked: 'El anfitrión te ha quitado de la sala.',
+    gameUnavailable: 'Este juego no está abierto en las salas ahora mismo.',
     animals: ANIMALS,
     nickname: (adjective, animal) => `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
   },

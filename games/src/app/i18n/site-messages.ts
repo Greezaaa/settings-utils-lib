@@ -440,6 +440,9 @@ export interface SiteMessages {
     readonly featuresTitle: string;
     readonly featuresHelp: string;
     readonly featureNames: Readonly<Record<FeatureId, string>>;
+    /** Each game's multiplayer switch, apart from its single-player one */
+    readonly multiplayerTitle: string;
+    readonly multiplayerHelp: string;
     /** Team (super admin) */
     readonly addMember: string;
     readonly roleLabel: string;
@@ -520,6 +523,8 @@ export interface SiteMessages {
     readonly leave: string;
     readonly kick: string;
     readonly kicked: string;
+    /** When the room's game is switched off for rooms */
+    readonly gameUnavailable: string;
     /** Animal names by number (the same animal in every language), for nicknames and avatars */
     readonly animals: readonly string[];
     /** A player's nickname from its adjective and animal numbers, e.g. `Brave Fox`, `Zorro valiente` */

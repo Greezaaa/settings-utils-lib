@@ -83,6 +83,9 @@
               {{ me.ready ? t().rooms.notReadyYet : t().rooms.imReady }}
             </button>
           }
+          @if (!canPlayMath()) {
+            <p class="error" role="status">{{ t().rooms.gameUnavailable }}</p>
+          }
           @if (client.isHost()) {
             <button type="button" class="button start" [disabled]="!canStart()" (click)="start()">
               {{ t().rooms.start }}

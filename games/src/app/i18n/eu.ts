@@ -598,7 +598,10 @@ export const EU: SiteMessages = {
     noWords: 'Ez dago hitzik hemen.',
     featuresTitle: 'Funtzioak',
     featuresHelp: 'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
-    featureNames: { rooms: 'Elkarrekin jokatu (gelak)' },
+    featureNames: { rooms: 'Elkarrekin jokatu (gelak)', 'rooms-math-games': 'Matematika geletan' },
+    multiplayerTitle: 'Jokalari anitzeko jokoak',
+    multiplayerHelp:
+      'Joko bakoitzak bere etengailua du geletarako, bakarka jokatzekoaz gain: joko bat irekita egon daiteke eta geletan itxita.',
     addMember: 'Gehitu norbait taldera',
     roleLabel: 'Rola',
     roleHelp: {
@@ -690,6 +693,7 @@ export const EU: SiteMessages = {
     leave: 'Irten gelatik',
     kick: 'Kendu',
     kicked: 'Anfitrioiak gelatik kendu zaitu.',
+    gameUnavailable: 'Joko hau ez dago irekita geletan oraintxe.',
     animals: ANIMALS,
     nickname: (adjective, animal) => `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
   },

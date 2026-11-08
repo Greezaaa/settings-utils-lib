@@ -13,8 +13,11 @@ export const GAME_SLUGS = [
   'place-pieces',
 ] as const;
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'uk'] as const;
-/** Features the admin switches on or off for the public (games/src/app/core/features.ts) */
-export const FEATURE_IDS = ['rooms'] as const;
+/**
+ * Features the admin switches on or off for the public (games/src/app/core/features.ts): rooms, and each game in rooms
+ * on its own (`rooms-<game>`), apart from the game's single-player switch
+ */
+export const FEATURE_IDS = ['rooms', 'rooms-math-games'] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];
 export type LanguageId = (typeof LANGUAGE_IDS)[number];

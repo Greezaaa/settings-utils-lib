@@ -620,7 +620,10 @@ export const UK: SiteMessages = {
     noWords: 'Тут немає слів.',
     featuresTitle: 'Функції',
     featuresHelp: 'Нові функції спершу вимкнені: спробуй їх у режимі перегляду, а потім відкрий для всіх.',
-    featureNames: { rooms: 'Грати разом (кімнати)' },
+    featureNames: { rooms: 'Грати разом (кімнати)', 'rooms-math-games': 'Математика в кімнатах' },
+    multiplayerTitle: 'Ігри для кількох гравців',
+    multiplayerHelp:
+      'Кожна гра має окремий перемикач для кімнат, незалежно від гри наодинці: гра може бути відкрита, але закрита в кімнатах.',
     addMember: 'Додати до команди',
     roleLabel: 'Роль',
     roleHelp: {
@@ -710,6 +713,7 @@ export const UK: SiteMessages = {
     leave: 'Вийти з кімнати',
     kick: 'Видалити',
     kicked: 'Власник видалив тебе з кімнати.',
+    gameUnavailable: 'Ця гра зараз недоступна в кімнатах.',
     animals: ANIMALS,
     nickname: (adjective, animal) =>
       `${(FEMININE_ANIMALS.has(animal) ? ADJECTIVES_FEMININE : ADJECTIVES)[adjective]} ${ANIMALS[animal].toLowerCase()}`,

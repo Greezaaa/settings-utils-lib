@@ -1,6 +1,7 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, DOCUMENT, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { GameAvailability } from '../../core/game-availability';
+import { FeatureFlags } from '../../core/feature-flags';
+import { ROOM_GAME_FEATURES } from '../../core/features';
 import { GamesApi } from '../../core/games-api';
 import { RoomClient } from '../../core/room-client';
 import { MAX_PLAYERS, MIN_PLAYERS_TO_START, ROUND_SECONDS, RoundSeconds } from '../../core/room-view';
@@ -31,7 +32,7 @@ export class RoomPage {
 
   protected readonly client = inject(RoomClient);
   private readonly api = inject(GamesApi);
-  private readonly availability = inject(GameAvailability);
+  private readonly features = inject(FeatureFlags);
   private readonly document = inject(DOCUMENT);
   private readonly router = inject(Router);
   /** Texts in the site's language */
@@ -51,8 +52,8 @@ export class RoomPage {
     return roomMath(settings?.mode ?? '', settings?.level ?? '');
   });
   protected readonly levels = computed(() => levelIdsFor(this.math().style));
-  /** Math is the room game for now; when it's switched off for the public, rooms can't play it either */
-  protected readonly canPlayMath = computed(() => this.availability.canPlay('math-games'));
+  /** Math is the room game for now, with its own multiplayer switch (apart from single-player math) */
+  protected readonly canPlayMath = computed(() => this.features.canUse(ROOM_GAME_FEATURES['math-games']));
   protected readonly canStart = computed(() => {
     const players = (this.room()?.players ?? []).filter(({ connected }) => connected);
     return players.length >= MIN_PLAYERS_TO_START && players.every(({ ready }) => ready) && this.canPlayMath();

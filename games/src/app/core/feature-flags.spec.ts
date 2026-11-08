@@ -50,4 +50,11 @@ describe('FeatureFlags', () => {
     expect(flags.canUse('rooms')).toBe(true);
     expect(flags.isOpen('rooms')).toBe(false);
   });
+
+  it('keeps a game in rooms apart from rooms themselves', async () => {
+    const { flags } = flagsWith([{ feature: 'rooms', enabled: true }]);
+    await flags.ready();
+    expect(flags.canUse('rooms')).toBe(true);
+    expect(flags.canUse('rooms-math-games')).toBe(false);
+  });
 });

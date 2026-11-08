@@ -587,7 +587,10 @@ export const EN: SiteMessages = {
     noWords: 'No words here.',
     featuresTitle: 'Features',
     featuresHelp: 'New features start switched off: try them in preview, then open them to everyone.',
-    featureNames: { rooms: 'Play together (rooms)' },
+    featureNames: { rooms: 'Play together (rooms)', 'rooms-math-games': 'Math games in rooms' },
+    multiplayerTitle: 'Multiplayer games',
+    multiplayerHelp:
+      'Each game has its own switch for rooms, apart from playing alone: a game can be open on its own and still closed in rooms.',
     addMember: 'Add a team member',
     roleLabel: 'Role',
     roleHelp: {
@@ -677,6 +680,7 @@ export const EN: SiteMessages = {
     leave: 'Leave the room',
     kick: 'Remove',
     kicked: 'The host removed you from the room.',
+    gameUnavailable: 'This game isn’t open for rooms right now.',
     animals: ANIMALS,
     nickname: (adjective, animal) => `${ADJECTIVES[adjective]} ${ANIMALS[animal]}`,
   },

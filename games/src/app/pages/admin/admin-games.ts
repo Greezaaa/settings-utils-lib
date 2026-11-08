@@ -19,7 +19,9 @@ export class AdminGames {
   protected readonly admin = inject(AdminApi);
   protected readonly availability = inject(GameAvailability);
   protected readonly flags = inject(FeatureFlags);
-  protected readonly features = FEATURES;
+  /** Site features (like rooms), and each game's multiplayer switch, shown apart */
+  protected readonly features = FEATURES.filter(({ roomGame }) => !roomGame);
+  protected readonly roomGames = FEATURES.filter(({ roomGame }) => roomGame);
   /** Game names in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly games = GAMES;
