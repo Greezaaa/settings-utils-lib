@@ -1,0 +1,87 @@
+// Styles the rooms pages share
+
+.rooms-entry {
+  display: grid;
+  gap: 1rem;
+  max-width: 28rem;
+}
+
+.entry-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.card-title {
+  font-size: 1.125rem;
+}
+
+.code-input,
+.code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.code-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--heading);
+  font-size: 1.5rem;
+  min-height: 3rem;
+  padding: 0.25rem 0.75rem;
+  text-align: center;
+}
+
+.error {
+  color: var(--red-text);
+}
+
+.room {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.share {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.countdown {
+  font-size: 6rem;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  li {
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 4rem 1fr auto;
+    padding: 0.5rem 0;
+    text-align: left;
+  }
+
+  .is-me {
+    font-weight: 700;
+  }
+}
+
+.place {
+  color: var(--heading);
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+}
+
+.leave {
+  justify-self: start;
+}

@@ -1,0 +1,12 @@
+:host {
+  align-items: center;
+  background: var(--avatar-color);
+  border-radius: 50%;
+  color: #1d1d1f;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-weight: 700;
+  height: var(--avatar-size, 2.5rem);
+  justify-content: center;
+  width: var(--avatar-size, 2.5rem);
+}

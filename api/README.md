@@ -39,6 +39,13 @@ DATABASE_URL=postgres://postgres:dev@localhost:55432/postgres ADMIN_TOKEN=$(open
   are dropped afterwards).
 - Tables only change through migrations in `src/database/migrations/`, which run when the API starts.
 
+## Rooms (rooms.su-labs.dev)
+
+Multiplayer rooms run as a separate process from the same code: `node dist/rooms-main.js` (`npm run start:rooms` in
+development). Players connect to `wss://rooms.su-labs.dev/rooms` and send `{ event, data }` messages: `create`,
+`join` (by 6-character code), `rejoin` (after a reload), `settings`, `ready`, `start`, `score`, `again`, `kick`,
+`leave`. Rooms hold at most 4 players, live in memory only and store nothing about them.
+
 ## Admin team
 
 Create the super admin on the server (or give that account a new password, printed once):

@@ -1,10 +1,12 @@
-# api.su-labs.dev on the server: the API and its PostgreSQL database.
+# api.su-labs.dev and rooms.su-labs.dev on the server: the API, its PostgreSQL database, and the rooms service.
 #
 # - `npm run deploy:api` (repo root) uploads this folder to /home/ubuntu/su-labs-api and runs `docker compose up`.
 # - Secrets live in /home/ubuntu/su-labs-api/.env on the server only (see .env.example); never in the repo.
 # - The API listens on 127.0.0.1:3002; the Cloudflare Tunnel forwards api.su-labs.dev there, and nothing else can
 #   reach it, which is why it may trust Cloudflare's visitor address header.
 # - Data lives in two volumes: db-data (the database) and uploads (suggestion pictures). Back both up.
+# - The rooms service (multiplayer, WebSockets) runs from the same image on 127.0.0.1:3003, forwarded from
+#   rooms.su-labs.dev; it keeps rooms in memory only, so a restart ends the rooms in play.
 name: su-labs-api
 
 services:
@@ -38,6 +40,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  rooms:
+    build: .
+    restart: unless-stopped
+    command: ['node', 'dist/rooms-main.js']
+    environment:
+      CORS_ORIGINS: https://games.su-labs.dev
+      TRUST_CLOUDFLARE: 'true'
+    ports:
+      - '127.0.0.1:3003:3000'
 
 volumes:
   db-data:

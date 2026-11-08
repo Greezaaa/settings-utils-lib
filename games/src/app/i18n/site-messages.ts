@@ -7,6 +7,7 @@ import { BoardLevelId } from '../games/board';
 import { PictureModeId } from '../games/picture-game';
 import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
 import { ReportStatus, SuggestionStatus } from '../core/admin-api';
+import { RoomError } from '../core/room-view';
 import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { GameThemeId } from '../core/game-themes';
@@ -465,5 +466,54 @@ export interface SiteMessages {
     readonly inviteLead: (email: string) => string;
     readonly acceptInvite: string;
     readonly inviteInvalid: string;
+  };
+
+  /** Multiplayer rooms: create or join by code, the lobby, rounds and results */
+  readonly rooms: {
+    readonly navLink: string;
+    readonly title: string;
+    readonly lead: string;
+    readonly rule: string;
+    readonly create: string;
+    readonly joinTitle: string;
+    readonly codeLabel: string;
+    readonly join: string;
+    readonly homeTitle: string;
+    readonly homeText: string;
+    readonly errors: Readonly<Record<RoomError, string>>;
+    readonly connecting: string;
+    readonly reconnecting: string;
+    readonly roomCode: string;
+    readonly copyLink: string;
+    readonly copied: string;
+    readonly players: (count: number, max: number) => string;
+    readonly host: string;
+    readonly you: string;
+    readonly ready: string;
+    readonly notReady: string;
+    readonly away: string;
+    readonly imReady: string;
+    readonly notReadyYet: string;
+    readonly start: string;
+    readonly needPlayers: (min: number) => string;
+    readonly waitingForReady: string;
+    readonly waitingForHost: string;
+    readonly settingsTitle: string;
+    readonly roundLength: string;
+    readonly seconds: (seconds: number) => string;
+    readonly getReady: string;
+    readonly timeLeft: (seconds: number) => string;
+    readonly yourScore: (score: number) => string;
+    readonly resultsTitle: string;
+    readonly place: (place: number) => string;
+    readonly points: (points: number) => string;
+    readonly playAgain: string;
+    readonly leave: string;
+    readonly kick: string;
+    readonly kicked: string;
+    /** Animal names by number (the same animal in every language), for nicknames and avatars */
+    readonly animals: readonly string[];
+    /** A player's nickname from its adjective and animal numbers, e.g. `Brave Fox`, `Zorro valiente` */
+    readonly nickname: (adjective: number, animal: number) => string;
   };
 }

@@ -1,0 +1,45 @@
+<header class="container page-head">
+  <h1>{{ t().rooms.title }}</h1>
+  <p class="lead">
+    {{ t().rooms.lead }}
+    <br />
+    {{ t().rooms.rule }}
+  </p>
+</header>
+
+<section class="container page-section rooms-entry">
+  <div class="card entry-card">
+    <button
+      type="button"
+      class="button start"
+      [disabled]="client.connection() === 'connecting'"
+      (click)="create()"
+    >
+      {{ client.connection() === 'connecting' ? t().rooms.connecting : t().rooms.create }}
+    </button>
+  </div>
+
+  <form class="card entry-card" (submit)="join($event, codeInput)">
+    <h2 class="card-title">{{ t().rooms.joinTitle }}</h2>
+    <label class="field">
+      <span>{{ t().rooms.codeLabel }}</span>
+      <input
+        #codeInput
+        class="code-input"
+        type="text"
+        inputmode="text"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        maxlength="6"
+        placeholder="K7MPQ2"
+        required
+      />
+    </label>
+    <button type="submit" class="button">{{ t().rooms.join }}</button>
+  </form>
+
+  @if (client.error(); as error) {
+    <p class="error" role="alert">{{ t().rooms.errors[error] }}</p>
+  }
+</section>

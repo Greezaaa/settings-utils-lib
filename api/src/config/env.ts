@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /** Splits a comma-separated list, e.g. `https://a.dev,https://b.dev` */
-const list = z.string().transform((value) =>
+export const list = z.string().transform((value) =>
   value
     .split(',')
     .map((item) => item.trim())

@@ -3,13 +3,14 @@ import { GameAvailability } from '../../core/game-availability';
 import { byCategory } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameCard } from '../../shared/game-card';
+import { RouterLink } from '@angular/router';
 import { WhatsNew } from './whats-new';
 import { Reveal } from '../../shared/reveal';
 
 /** Home page: the games by category, and what's new */
 @Component({
   selector: 'app-home-page',
-  imports: [GameCard, Reveal, WhatsNew],
+  imports: [GameCard, Reveal, RouterLink, WhatsNew],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-cards.scss', './home-page.scss'],

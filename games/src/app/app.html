@@ -135,6 +135,9 @@
     @for (game of games(); track game) {
       <a [routerLink]="['/', game]" routerLinkActive="active">{{ t().games[game].name }}</a>
     }
+    @if (games().length > 0) {
+      <a routerLink="/rooms" routerLinkActive="active">{{ t().rooms.navLink }}</a>
+    }
   </nav>
 </header>
 

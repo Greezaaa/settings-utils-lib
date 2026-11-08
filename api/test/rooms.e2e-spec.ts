@@ -1,0 +1,190 @@
+import type { INestApplication } from '@nestjs/common';
+import { WsAdapter } from '@nestjs/platform-ws';
+import { Test } from '@nestjs/testing';
+import { WebSocket } from 'ws';
+
+const ORIGIN = 'https://games.su-labs.dev';
+
+/** A player's connection that keeps every message it gets, and can wait for the next one of a kind */
+class Client {
+  readonly socket: WebSocket;
+  private readonly messages: {
+    event: string;
+    data: Record<string, unknown>;
+  }[] = [];
+
+  constructor(url: string, origin = ORIGIN) {
+    this.socket = new WebSocket(url, { origin });
+    this.socket.on('message', (raw) =>
+      this.messages.push(JSON.parse(raw.toString())),
+    );
+  }
+
+  open(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.socket.once('open', () => resolve());
+      this.socket.once('error', reject);
+    });
+  }
+
+  send(event: string, data: object = {}): void {
+    this.socket.send(JSON.stringify({ event, data }));
+  }
+
+  /** The next message of a kind (that matches `test`), waiting up to `timeoutMs` */
+  async next(
+    event: string,
+    test: (data: Record<string, unknown>) => boolean = () => true,
+    timeoutMs = 2000,
+  ) {
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+      const index = this.messages.findIndex(
+        (message) => message.event === event && test(message.data),
+      );
+      if (index !== -1) {
+        return this.messages.splice(index, 1)[0].data;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    throw new Error(`No "${event}" message`);
+  }
+}
+
+const phase = (name: string) => (data: Record<string, unknown>) =>
+  data['phase'] === name;
+const playerCount = (count: number) => (data: Record<string, unknown>) =>
+  Array.isArray(data['players']) && data['players'].length === count;
+
+describe('rooms service (e2e)', () => {
+  let app: INestApplication;
+  let url: string;
+  const clients: Client[] = [];
+
+  const connect = async (origin?: string) => {
+    const client = new Client(url, origin);
+    clients.push(client);
+    await client.open();
+    return client;
+  };
+
+  beforeAll(async () => {
+    Object.assign(process.env, { CORS_ORIGINS: ORIGIN, PORT: '3999' });
+    const { RoomsModule } = await import('../src/rooms/rooms.module.js');
+    const moduleRef = await Test.createTestingModule({
+      imports: [RoomsModule],
+    }).compile();
+    app = moduleRef.createNestApplication();
+    app.useWebSocketAdapter(new WsAdapter(app));
+    await app.listen(0);
+    const address = app.getHttpServer().address();
+    url = `ws://127.0.0.1:${typeof address === 'object' && address ? address.port : 0}/rooms`;
+  });
+
+  afterAll(async () => {
+    clients.forEach((client) => client.socket.close());
+    await app.close();
+  });
+
+  it('refuses connections from other sites', async () => {
+    const stranger = new Client(url, 'https://evil.example');
+    const closed = new Promise<number>((resolve) =>
+      stranger.socket.on('close', (code) => resolve(code)),
+    );
+    expect(await closed).toBe(1008);
+  });
+
+  it('plays a round: create, join by code, settings, ready, start, scores, results', async () => {
+    const host = await connect();
+    host.send('create', { language: 'es' });
+    const joined = await host.next('joined');
+    const code = String(joined['code']);
+    expect(code).toMatch(/^[A-Z2-9]{6}$/);
+
+    const guest = await connect();
+    guest.send('join', { code: code.toLowerCase() });
+    const guestJoined = await guest.next('joined');
+    await host.next('room', playerCount(2));
+
+    // Only the host changes settings; a short round for the test
+    guest.send('settings', {
+      game: 'math-games',
+      mode: 'your-answer',
+      level: 'easy',
+      seconds: 30,
+      language: 'es',
+    });
+    expect(await guest.next('error')).toEqual({ error: 'not-host' });
+    host.send('settings', {
+      game: 'math-games',
+      mode: 'your-answer',
+      level: 'easy',
+      seconds: 30,
+      language: 'es',
+    });
+    await guest.next(
+      'room',
+      (data) => (data['settings'] as { seconds: number }).seconds === 30,
+    );
+
+    // Nobody starts until everyone is ready
+    host.send('start');
+    expect(await host.next('error')).toEqual({ error: 'not-ready' });
+    host.send('ready', { ready: true });
+    guest.send('ready', { ready: true });
+    await host.next('room', (data) =>
+      (data['players'] as { ready: boolean }[]).every(({ ready }) => ready),
+    );
+    host.send('start');
+    const countdown = await guest.next('room', phase('countdown'));
+    const round = countdown['round'] as {
+      seed: number;
+      startsAt: number;
+      endsAt: number;
+    };
+    expect(round.endsAt - round.startsAt).toBe(30_000);
+
+    await guest.next('room', phase('playing'), 5000);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    guest.send('score', { score: 3 });
+    host.send('score', { score: 2 });
+    const scored = await host.next('room', (data) =>
+      (data['players'] as { id: string; score: number }[]).some(
+        ({ id, score }) => id === guestJoined['playerId'] && score === 3,
+      ),
+    );
+    expect(JSON.stringify(scored)).not.toContain(String(joined['token']));
+  }, 15_000);
+
+  it('keeps a seat for a reload, and tells a wrong code apart', async () => {
+    const host = await connect();
+    host.send('create', { language: 'en' });
+    const joined = await host.next('joined');
+    host.socket.close();
+
+    const again = await connect();
+    again.send('rejoin', { code: joined['code'], token: joined['token'] });
+    const rejoined = await again.next('joined');
+    expect(rejoined['playerId']).toBe(joined['playerId']);
+
+    const stranger = await connect();
+    stranger.send('join', { code: 'ZZZZZZ' });
+    expect(await stranger.next('error')).toEqual({ error: 'not-found' });
+    stranger.send('join', { code: 'not a code' });
+    expect(await stranger.next('error')).toEqual({ error: 'invalid' });
+  });
+
+  it('takes at most 4 players', async () => {
+    const host = await connect();
+    host.send('create', { language: 'en' });
+    const code = String((await host.next('joined'))['code']);
+    for (let index = 0; index < 3; index++) {
+      const player = await connect();
+      player.send('join', { code });
+      await player.next('joined');
+    }
+    const fifth = await connect();
+    fifth.send('join', { code });
+    expect(await fifth.next('error')).toEqual({ error: 'full' });
+  });
+});

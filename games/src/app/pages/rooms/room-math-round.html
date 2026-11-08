@@ -1,0 +1,25 @@
+<div class="status">
+  <span class="mono">{{ t().rooms.timeLeft(secondsLeft()) }}</span>
+  <span class="mono">{{ t().rooms.yourScore(score()) }}</span>
+</div>
+<app-timer-bar [share]="share()" />
+
+@if (!isOver()) {
+  @switch (math().style) {
+    @case ('find-the-signs') {
+      @if (puzzleOf(exercise()); as puzzle) {
+        <app-find-the-signs-round [puzzle]="puzzle" [operators]="signsOperators()" (answered)="onAnswered($event)" />
+      }
+    }
+    @case ('your-answer') {
+      @if (questionOf(exercise()); as question) {
+        <app-your-answer-round [question]="question" (answered)="onAnswered($event)" />
+      }
+    }
+    @default {
+      @if (questionOf(exercise()); as question) {
+        <app-true-or-false-round [question]="question" (answered)="onAnswered($event)" />
+      }
+    }
+  }
+}

@@ -1,0 +1,130 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/rooms">{{ t().rooms.title }}</a>
+  </div>
+  <h1>
+    {{ t().rooms.roomCode }} <span class="code">{{ code().toUpperCase() }}</span>
+  </h1>
+</header>
+
+<section class="container page-section room">
+  @if (client.kicked()) {
+    <p class="error" role="alert">{{ t().rooms.kicked }}</p>
+    <a class="button" routerLink="/rooms">{{ t().rooms.title }}</a>
+  } @else if (!room()) {
+    @if (client.error(); as error) {
+      <p class="error" role="alert">{{ t().rooms.errors[error] }}</p>
+      <a class="button" routerLink="/rooms">{{ t().rooms.title }}</a>
+    } @else {
+      <p class="muted">{{ t().rooms.connecting }}</p>
+    }
+  } @else if (room(); as room) {
+    @if (client.connection() === 'reconnecting') {
+      <p class="muted" role="status">{{ t().rooms.reconnecting }}</p>
+    }
+
+    <app-room-players [room]="room" [meId]="client.playerId()" [canKick]="client.isHost()" (kick)="client.kick($event)" />
+
+    <div class="card board" appGameBoard>
+      @switch (room.phase) {
+        @case ('lobby') {
+          <div class="share">
+            <button type="button" class="button button-secondary button-small" (click)="copyLink()">
+              {{ isCopied() ? t().rooms.copied : t().rooms.copyLink }}
+            </button>
+          </div>
+
+          <h2 class="card-title">{{ t().rooms.settingsTitle }} · {{ t().games['math-games'].name }}</h2>
+          <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
+            @for (style of answerStyles; track style) {
+              <button
+                type="button"
+                class="button button-secondary"
+                [attr.aria-pressed]="style === math().style"
+                [disabled]="!client.isHost()"
+                (click)="chooseStyle(style)"
+              >
+                {{ t().settings.answerStyles[style].name }}
+              </button>
+            }
+          </div>
+          <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+            @for (level of levels(); track level) {
+              <button
+                type="button"
+                class="button button-secondary"
+                [attr.aria-pressed]="level === math().levelId"
+                [disabled]="!client.isHost()"
+                (click)="chooseLevel(level)"
+              >
+                {{ levelName(level) }}
+              </button>
+            }
+          </div>
+          <div class="choices" role="group" [attr.aria-label]="t().rooms.roundLength">
+            @for (seconds of roundSeconds; track seconds) {
+              <button
+                type="button"
+                class="button button-secondary"
+                [attr.aria-pressed]="seconds === room.settings.seconds"
+                [disabled]="!client.isHost()"
+                (click)="chooseSeconds(seconds)"
+              >
+                {{ t().rooms.seconds(seconds) }}
+              </button>
+            }
+          </div>
+
+          @if (client.me(); as me) {
+            <button type="button" class="button" [class.button-secondary]="me.ready" (click)="client.setReady(!me.ready)">
+              {{ me.ready ? t().rooms.notReadyYet : t().rooms.imReady }}
+            </button>
+          }
+          @if (client.isHost()) {
+            <button type="button" class="button start" [disabled]="!canStart()" (click)="start()">
+              {{ t().rooms.start }}
+            </button>
+            <p class="muted">
+              {{ room.players.length < minPlayers ? t().rooms.needPlayers(minPlayers) : canStart() ? '' : t().rooms.waitingForReady }}
+            </p>
+          } @else {
+            <p class="muted">{{ t().rooms.waitingForHost }}</p>
+          }
+        }
+        @case ('countdown') {
+          <p class="eyebrow">{{ t().rooms.getReady }}</p>
+          <p class="final-score countdown" aria-live="assertive">{{ countdown() }}</p>
+        }
+        @case ('playing') {
+          @if (room.round; as round) {
+            <app-room-math-round [math]="math()" [round]="round" (scored)="client.reportScore($event)" />
+          }
+        }
+        @case ('results') {
+          <p class="eyebrow">{{ t().rooms.resultsTitle }}</p>
+          <ol class="results">
+            @for (player of room.players; track player.id) {
+              <li [class.is-me]="player.id === client.playerId()" [style.order]="player.place ?? 9">
+                <span class="place">{{ t().rooms.place(player.place ?? 0) }}</span>
+                <span>{{ t().rooms.nickname(player.nickname.adjective, player.nickname.animal) }}</span>
+                <span class="mono">{{ t().rooms.points(player.score) }}</span>
+              </li>
+            }
+          </ol>
+          @if (client.isHost()) {
+            <button type="button" class="button" (click)="client.playAgain()">{{ t().rooms.playAgain }}</button>
+          } @else {
+            <p class="muted">{{ t().rooms.waitingForHost }}</p>
+          }
+        }
+      }
+    </div>
+
+    @if (client.error(); as error) {
+      <p class="error" role="alert">{{ t().rooms.errors[error] }}</p>
+    }
+    <button type="button" class="button button-secondary button-small leave" (click)="client.leave()">
+      {{ t().rooms.leave }}
+    </button>
+  }
+</section>
