@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, linkedSignal, output } from '@angular/core';
-import { aimHint, AimHint, AngleExercise, Fill, fillParts, formatFill, GlassExercise, isAngleRight, isLineRight, isSameFill, LineExercise, lineEnd, MeasureExercise, MeasureModeId, rightValue } from '../../games/measure-it';
+import { aimHint, AimHint, AngleExercise, Fill, fillParts, formatFill, GlassExercise, isAngleRight, isLineRight, isSameFill, LineExercise, MeasureExercise, MeasureModeId, rightValue } from '../../games/measure-it';
 import { SiteLanguage } from '../../i18n/site-language';
 import { AnswerLine } from '../../shared/answer-line';
 import { FractionView } from './fraction-view';
@@ -75,10 +75,6 @@ export class MeasureRound {
   protected readonly angle = computed(() => this.asAngle(this.exercise()));
   protected readonly glass = computed(() => this.asGlass(this.exercise()));
   protected readonly line = computed(() => this.asLine(this.exercise()));
-  protected readonly lineMax = computed(() => {
-    const line = this.line();
-    return line ? lineEnd(line) : 0;
-  });
   /** The slider moves by the level's step: a few degrees, or the line's step */
   protected readonly step = computed(
     () => this.angle()?.level.step ?? this.line()?.step ?? 1

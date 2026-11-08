@@ -264,7 +264,15 @@ export interface LineExercise {
   readonly gaps: number;
   /** The tick with the mark, never an end */
   readonly mark: number;
+  /**
+   * The slider's ends: a random few steps past the line's ends, so its thumb never lines up with the drawing and the
+   * answer has to be worked out, not matched by eye
+   */
+  readonly slider: { readonly min: number; readonly max: number };
 }
+
+/** How many steps past each end of the line the slider may reach */
+const SLIDER_EXTRA_STEPS = { min: 2, max: 8 };
 
 export function lineExercise(
   levelId: MeasureLevelId,
@@ -273,12 +281,19 @@ export function lineExercise(
   const level = LINE_LEVELS[levelId];
   const step = pick(level.steps, random);
   const gaps = between(level.gaps, random);
+  const start = between(level.startSteps, random) * step;
+  // Below zero only on levels whose lines go there
+  const lowest = level.startSteps.min < 0 ? -Infinity : 0;
   return {
     kind: 'line',
     step,
-    start: between(level.startSteps, random) * step,
+    start,
     gaps,
     mark: between({ min: 1, max: gaps - 1 }, random),
+    slider: {
+      min: Math.max(lowest, start - between(SLIDER_EXTRA_STEPS, random) * step),
+      max: start + (gaps + between(SLIDER_EXTRA_STEPS, random)) * step,
+    },
   };
 }
 

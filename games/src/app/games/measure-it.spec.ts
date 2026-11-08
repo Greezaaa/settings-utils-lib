@@ -63,8 +63,19 @@ describe('measure it', () => {
       expect(
         isLineRight(exercise, lineValue(exercise, exercise.mark + 1))
       ).toBe(false);
+      // The slider reaches past both ends, never below zero on this level
+      expect(exercise.slider.min).toBeGreaterThanOrEqual(0);
+      expect(exercise.slider.min).toBeLessThanOrEqual(exercise.start);
+      expect(exercise.slider.max).toBeGreaterThan(lineEnd(exercise));
     }
-    const line = { kind: 'line', start: 1, step: 1, gaps: 6, mark: 3 } as const;
+    const line = {
+      kind: 'line',
+      start: 1,
+      step: 1,
+      gaps: 6,
+      mark: 3,
+      slider: { min: 0, max: 10 },
+    } as const;
     expect(lineEnd(line)).toBe(7);
     expect(lineValue(line, line.mark)).toBe(4);
   });
@@ -86,7 +97,14 @@ describe('measure it', () => {
     expect([rightValue(angle), aimHint(angle, 40), aimHint(angle, 90)]).toEqual(
       [60, 'more', 'less']
     );
-    const line = { kind: 'line', start: 1, step: 1, gaps: 6, mark: 3 } as const;
+    const line = {
+      kind: 'line',
+      start: 1,
+      step: 1,
+      gaps: 6,
+      mark: 3,
+      slider: { min: 0, max: 10 },
+    } as const;
     expect([rightValue(line), aimHint(line, 2), aimHint(line, 6)]).toEqual([
       4,
       'more',
