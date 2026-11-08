@@ -1,6 +1,8 @@
 <div class="status">
   <span class="mono">{{ t().rooms.timeLeft(secondsLeft()) }}</span>
-  <span class="mono">{{ t().rooms.yourScore(score()) }}</span>
+  @if (showScore()) {
+    <span class="mono">{{ t().rooms.yourScore(score()) }}</span>
+  }
 </div>
 <app-timer-bar [share]="share()" />
 

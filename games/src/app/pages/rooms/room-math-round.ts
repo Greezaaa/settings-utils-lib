@@ -32,6 +32,8 @@ const TICK_MS = 100;
 export class RoomMathRound {
   readonly math = input.required<RoomMath>();
   readonly round = input.required<Round>();
+  /** The room's choice: show the player's own score during the round, or only in the results */
+  readonly showScore = input(true);
   readonly scored = output<number>();
 
   private readonly client = inject(RoomClient);

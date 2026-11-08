@@ -16,7 +16,7 @@
             {{ t().rooms.away }}
           } @else if (room().phase === 'lobby') {
             {{ player.ready ? t().rooms.ready : t().rooms.notReady }}
-          } @else {
+          } @else if (room().phase === 'results' || room().settings.showScores) {
             {{ t().rooms.points(player.score) }}
           }
         </small>

@@ -14,6 +14,8 @@ export interface RoomSettings {
   readonly level: string;
   readonly seconds: RoundSeconds;
   readonly language: LanguageId;
+  /** Whether scores show during the round (they always do in the results) */
+  readonly showScores: boolean;
 }
 
 export interface Nickname {
@@ -99,15 +101,21 @@ function parsePlayer(item: unknown): RoomPlayer[] {
 }
 
 function parseSettings(value: unknown): RoomSettings | null {
-  const [game, mode, level, seconds, language] = ['game', 'mode', 'level', 'seconds', 'language'].map((key) =>
-    field(value, key),
-  );
+  const [game, mode, level, seconds, language, showScores] = [
+    'game',
+    'mode',
+    'level',
+    'seconds',
+    'language',
+    'showScores',
+  ].map((key) => field(value, key));
   return game === 'math-games' &&
     typeof mode === 'string' &&
     typeof level === 'string' &&
     oneOf(ROUND_SECONDS)(seconds) &&
     oneOf(LANGUAGES)(language)
-    ? { game, mode, level, seconds, language }
+    ? // An older rooms service sends no showScores: scores show, as they always did
+      { game, mode, level, seconds, language, showScores: showScores !== false }
     : null;
 }
 

@@ -31,6 +31,7 @@ export const settingsSchema = z.object({
   level: gameIdSchema,
   seconds: z.union(ROUND_SECONDS.map((seconds) => z.literal(seconds))),
   language: languageSchema,
+  showScores: z.boolean().default(true),
 });
 export const readySchema = z.object({ ready: z.boolean() });
 export const scoreSchema = z.object({

@@ -154,4 +154,20 @@ describe('rooms', () => {
       room.players[0].token,
     );
   });
+
+  it('hides scores during the round when the host turns them off, and shows them in the results', () => {
+    const room = roomWith(2);
+    setSettings(room, room.hostId, { ...room.settings, showScores: false }, 0);
+    room.players.forEach((player) => setReady(room, player.id, true, 0));
+    startRound(room, room.hostId, 0, 1);
+    const round = room.round;
+    if (!round) {
+      throw new Error('The round should have started');
+    }
+    advance(room, round.startsAt);
+    reportScore(room, room.players[0].id, 3, round.startsAt + 5000);
+    expect(viewOf(room, 0).players.map(({ score }) => score)).toEqual([0, 0]);
+    advance(room, round.endsAt + SCORE_GRACE_MS);
+    expect(viewOf(room, 0).players.map(({ score }) => score)).toEqual([3, 0]);
+  });
 });

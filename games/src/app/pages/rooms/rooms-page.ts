@@ -21,6 +21,8 @@ export class RoomsPage {
   protected readonly t = this.language.messages;
 
   constructor() {
+    // Errors belong to the last attempt, not to this visit of the page
+    this.client.error.set(null);
     // A room just created: go to it
     effect(() => {
       const room = this.client.room();

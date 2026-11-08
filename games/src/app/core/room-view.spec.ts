@@ -30,6 +30,13 @@ describe('parseRoomView', () => {
     expect(view?.round).toBeNull();
   });
 
+  it('shows scores unless the room hides them', () => {
+    expect(parseRoomView(VIEW)?.settings.showScores).toBe(true);
+    expect(parseRoomView({ ...VIEW, settings: { ...VIEW.settings, showScores: false } })?.settings.showScores).toBe(
+      false,
+    );
+  });
+
   it('refuses a room with unknown settings or phase', () => {
     expect(parseRoomView({ ...VIEW, phase: 'party' })).toBeNull();
     expect(parseRoomView({ ...VIEW, settings: { ...VIEW.settings, seconds: 45 } })).toBeNull();

@@ -22,6 +22,11 @@
   text-transform: uppercase;
 }
 
+.code-input::placeholder {
+  color: var(--muted);
+  opacity: 0.35;
+}
+
 .code-input {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -84,4 +89,29 @@
 
 .leave {
   justify-self: start;
+}
+
+// Players and game: side by side on wide screens, the players' strip stuck to the top on phones
+.room-layout {
+  align-items: start;
+  display: grid;
+  gap: 1rem;
+
+  app-room-players {
+    background: var(--bg);
+    padding-block: 0.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  @media (min-width: 56rem) {
+    grid-template-columns: 16rem minmax(0, 1fr);
+
+    app-room-players {
+      background: none;
+      padding-block: 0;
+      top: 1rem;
+    }
+  }
 }

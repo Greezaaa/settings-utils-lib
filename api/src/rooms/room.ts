@@ -40,6 +40,8 @@ export interface RoomSettings {
   readonly seconds: RoundSeconds;
   /** The room's language, for games with words */
   readonly language: LanguageId;
+  /** Whether scores show during the round; some players rush (and slip) when they see them. Results always show them */
+  readonly showScores: boolean;
 }
 
 export interface Nickname {
@@ -87,6 +89,7 @@ export const DEFAULT_SETTINGS: RoomSettings = {
   level: 'normal',
   seconds: 60,
   language: 'es',
+  showScores: true,
 };
 
 /** A whole number from 0 to `max - 1`, from a secure source by default */
@@ -376,6 +379,10 @@ export interface RoomView {
 
 export function viewOf(room: Room, now: number): RoomView {
   const ranking = room.phase === 'results' ? places(room.players) : null;
+  // With scores hidden, nobody gets them before the results, not even by reading the messages
+  const hideScores =
+    !room.settings.showScores &&
+    (room.phase === 'countdown' || room.phase === 'playing');
   return {
     code: room.code,
     hostId: room.hostId,
@@ -389,7 +396,7 @@ export function viewOf(room: Room, now: number): RoomView {
         color,
         ready,
         connected,
-        score,
+        score: hideScores ? 0 : score,
         place: ranking?.get(id) ?? null,
       }),
     ),

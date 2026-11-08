@@ -512,6 +512,10 @@ export interface SiteMessages {
     readonly waitingForHost: string;
     readonly settingsTitle: string;
     readonly roundLength: string;
+    /** Whether scores show during the round */
+    readonly showScores: string;
+    readonly scoresShown: string;
+    readonly scoresHidden: string;
     readonly seconds: (seconds: number) => string;
     readonly getReady: string;
     readonly timeLeft: (seconds: number) => string;

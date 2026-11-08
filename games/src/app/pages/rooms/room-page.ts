@@ -111,6 +111,13 @@ export class RoomPage {
     void this.router.navigateByUrl('/rooms');
   }
 
+  protected chooseShowScores(showScores: boolean): void {
+    const settings = this.room()?.settings;
+    if (settings) {
+      this.client.setSettings({ ...settings, showScores });
+    }
+  }
+
   protected start(): void {
     this.client.start();
     this.api.countPlay('math-games');

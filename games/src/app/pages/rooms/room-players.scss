@@ -3,12 +3,13 @@
   gap: 0.5rem;
 }
 
+// Phones: one compact row that scrolls sideways if needed; wide screens: a column
 .players {
-  display: grid;
+  display: flex;
   gap: 0.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   list-style: none;
   margin: 0;
+  overflow-x: auto;
   padding: 0;
 
   li {
@@ -17,12 +18,25 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-large);
     display: flex;
-    gap: 0.75rem;
-    padding: 0.5rem 0.75rem;
+    flex: 0 0 auto;
+    gap: 0.5rem;
+    padding: 0.375rem 0.625rem;
+    --avatar-size: 2rem;
   }
 
   .is-away {
     opacity: 0.5;
+  }
+
+  @media (min-width: 56rem) {
+    flex-direction: column;
+    overflow-x: visible;
+
+    li {
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      --avatar-size: 2.5rem;
+    }
   }
 }
 
@@ -30,6 +44,8 @@
   display: grid;
   flex: 1;
   gap: 0.125rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
 }
 
 .ready-mark {

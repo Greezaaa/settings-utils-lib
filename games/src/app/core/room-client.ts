@@ -103,6 +103,8 @@ export class RoomClient {
     this.send('leave');
     this.forgetSeat();
     this.close();
+    // The room may close right after (nobody left in it): don't greet the next page with "no room with that code"
+    this.error.set(null);
   }
 
   /** Closes the connection, keeping the seat for a later reload */
