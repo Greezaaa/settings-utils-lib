@@ -167,6 +167,20 @@ export class PlayerAccount {
     return answer;
   }
 
+  /**
+   * Deletes the player's results in the account (plays, bests, leaderboard places) and the bests kept in this browser,
+   * so they aren't sent back on the next sign-in; the account stays
+   */
+  async removeResults(): Promise<AccountAnswer> {
+    const answer = await this.answer(this.fetch('/v1/account/results', { method: 'DELETE' }, SEND_TIMEOUT_MS));
+    if (answer === 'done') {
+      for (const game of RESULT_GAME_SLUGS) {
+        writeStored(RESULT_GAMES[game].storage, {});
+      }
+    }
+    return answer;
+  }
+
   /** A finished game, sent to the account when signed in (the page keeps its own best in this browser either way) */
   record(game: ResultGame, key: string, value: number): void {
     if (this.isSignedIn()) {

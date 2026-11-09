@@ -11,9 +11,6 @@ export const SITE_PREVIEW_IMAGE = {
   type: 'image/png',
 } as const;
 
-/** The main su-labs site, linked from the header and footer */
-export const MAIN_SITE_URL = 'https://su-labs.dev/';
-
 /** How to reach the author */
 export const AUTHOR_EMAIL_URL = 'mailto:yev.alekseyev@gmail.com';
 

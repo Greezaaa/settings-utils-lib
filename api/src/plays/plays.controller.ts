@@ -37,7 +37,7 @@ export class PlaysController {
   }
 }
 
-/** For the admin team: plays per game in a period (all time, today, the last 7 or 30 days, or this year) */
+/** For the admin team: plays per game in a period (all time, today, this week, this month or this year) */
 @Controller('admin/plays')
 @UseGuards(AdminGuard)
 export class PlaysAdminController {

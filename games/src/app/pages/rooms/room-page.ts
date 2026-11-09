@@ -5,15 +5,20 @@ import { ROOM_GAME_FEATURES, ROOM_GAMES, RoomGame } from '../../core/features';
 import { GamesApi } from '../../core/games-api';
 import { RoomClient } from '../../core/room-client';
 import { MAX_PLAYERS, MIN_PLAYERS_TO_START, ROUND_SECONDS, RoundSeconds } from '../../core/room-view';
-import { ANSWER_STYLE_IDS, AnswerStyleId } from '../../games/math-games';
-import { MEASURE_LEVEL_IDS, MEASURE_MODE_IDS, MeasureModeId } from '../../games/measure-it';
+import { ROOM_CHOICES, roomChoice, roomLetters, roomPicture, roomSliding } from '../../games/room-games';
 import { roomMeasure } from '../../games/room-measure';
-import { levelIdsFor, roomMath } from '../../games/room-math';
+import { roomMath } from '../../games/room-math';
 import { SiteLanguage } from '../../i18n/site-language';
+import { OptionText } from '../../i18n/site-messages';
 import { GameBoard } from '../../shared/game-board';
+import { RoomLettersRound } from './room-letters-round';
 import { RoomMathRound } from './room-math-round';
 import { RoomMeasureRound } from './room-measure-round';
+import { roomLevelText, roomModeGroup, roomModeText } from './room-option-text';
+import { RoomPlaceRound } from './room-place-round';
 import { RoomPlayers } from './room-players';
+import { RoomSlidingRound } from './room-sliding-round';
+import { RoomTurnRound } from './room-turn-round';
 
 /** How often the countdown is redrawn */
 const TICK_MS = 100;
@@ -26,9 +31,13 @@ const TICK_MS = 100;
   selector: 'app-room-page',
   imports: [
     GameBoard,
+    RoomLettersRound,
     RoomMathRound,
     RoomMeasureRound,
+    RoomPlaceRound,
     RoomPlayers,
+    RoomSlidingRound,
+    RoomTurnRound,
     RouterLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,9 +63,6 @@ export class RoomPage {
   protected readonly maxPlayers = MAX_PLAYERS;
   protected readonly minPlayers = MIN_PLAYERS_TO_START;
   protected readonly roundSeconds = ROUND_SECONDS;
-  protected readonly answerStyles = ANSWER_STYLE_IDS;
-  protected readonly measureModes = MEASURE_MODE_IDS;
-  protected readonly measureLevels = MEASURE_LEVEL_IDS;
   protected readonly isCopied = signal(false);
   /** The page has started connecting (it does right after the first render) */
   protected readonly hasEntered = signal(false);
@@ -65,16 +71,42 @@ export class RoomPage {
   protected readonly game = computed<RoomGame>(
     () => this.room()?.settings.game ?? 'math-games'
   );
-  /** Each game's settings, read from the room's mode and level ids */
-  protected readonly math = computed(() => {
+  /** The room's mode and level, as ids the game has */
+  protected readonly choice = computed(() => {
     const settings = this.room()?.settings;
-    return roomMath(settings?.mode ?? '', settings?.level ?? '');
+    return roomChoice(this.game(), settings?.mode ?? '', settings?.level ?? '');
   });
-  protected readonly measure = computed(() => {
-    const settings = this.room()?.settings;
-    return roomMeasure(settings?.mode ?? '', settings?.level ?? '');
-  });
-  protected readonly levels = computed(() => levelIdsFor(this.math().style));
+  /** What the host can pick: the game's modes, and the chosen mode's levels */
+  protected readonly modes = computed(() => ROOM_CHOICES[this.game()].modes);
+  protected readonly levels = computed(() =>
+    ROOM_CHOICES[this.game()].levelsOf(this.choice().mode)
+  );
+  /** Each game's settings for its round, read from the room's mode and level ids */
+  protected readonly math = computed(() =>
+    roomMath(this.choice().mode, this.choice().level)
+  );
+  protected readonly measure = computed(() =>
+    roomMeasure(this.choice().mode, this.choice().level)
+  );
+  protected readonly letters = computed(() =>
+    roomLetters(this.choice().mode, this.choice().level)
+  );
+  protected readonly sliding = computed(() =>
+    roomSliding(this.choice().mode, this.choice().level)
+  );
+  protected readonly turnPicture = computed(() =>
+    roomPicture('turn-picture', this.choice().mode, this.choice().level)
+  );
+  protected readonly placePieces = computed(() =>
+    roomPicture('place-pieces', this.choice().mode, this.choice().level)
+  );
+  /** The word builder shows its words beside the letters, so its round needs more room */
+  protected readonly isWide = computed(
+    () =>
+      this.game() === 'letter-games' &&
+      this.choice().mode === 'word-builder' &&
+      this.room()?.phase === 'playing'
+  );
   /** Each game has its own multiplayer switch (apart from its single-player one); the host picks among those open */
   protected readonly openGames = computed(() =>
     ROOM_GAMES.filter(game => this.features.canUse(ROOM_GAME_FEATURES[game]))
@@ -115,51 +147,34 @@ export class RoomPage {
     });
   }
 
-  /** A level's name in the site's language; Find the signs names its levels its own way */
-  protected levelName(level: string): string {
-    const names =
-      this.math().style === 'find-the-signs'
-        ? this.t().settings.signsLevels
-        : this.t().settings.levels;
-    return (
-      Object.entries(names).find(([id]) => id === level)?.[1].name ?? level
-    );
+  protected modeGroup(): string {
+    return roomModeGroup(this.t(), this.game());
   }
 
-  /** Another game, starting from its first mode and level */
+  protected modeText(mode: string): OptionText {
+    return roomModeText(this.t(), this.game(), mode);
+  }
+
+  protected levelText(level: string): OptionText {
+    return roomLevelText(this.t(), this.game(), this.choice().mode, level);
+  }
+
+  /** Another game, starting from its own mode and level */
   protected chooseGame(game: RoomGame): void {
     const settings = this.room()?.settings;
-    if (!settings) {
-      return;
-    }
-    if (game === 'measure-it') {
-      const { mode, levelId } = roomMeasure('', '');
-      this.client.setSettings({ ...settings, game, mode, level: levelId });
-    } else {
-      const { style, levelId } = roomMath('', '');
-      this.client.setSettings({
-        ...settings,
-        game,
-        mode: style,
-        level: levelId,
-      });
-    }
-  }
-
-  protected chooseMeasureMode(mode: MeasureModeId): void {
-    const settings = this.room()?.settings;
     if (settings) {
-      this.client.setSettings({ ...settings, mode });
+      const { mode, level } = roomChoice(game, '', '');
+      this.client.setSettings({ ...settings, game, mode, level });
     }
   }
 
-  protected chooseStyle(style: AnswerStyleId): void {
+  /** Another mode, keeping the level when the mode has it */
+  protected chooseMode(mode: string): void {
     const settings = this.room()?.settings;
     if (settings) {
       this.client.setSettings({
         ...settings,
-        mode: style,
-        level: roomMath(style, settings.level).levelId,
+        ...roomChoice(settings.game, mode, settings.level),
       });
     }
   }

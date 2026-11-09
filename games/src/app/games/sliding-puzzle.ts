@@ -124,6 +124,9 @@ export function isSolved(board: Board, gap: number): boolean {
   return board.every((tile, cell) => (cell === gap ? tile === null : tile === cell));
 }
 
+/** How many tiles sit in their own cell, for a room round's score */
+export const tilesInPlace = (board: Board): number => board.filter((tile, cell) => tile === cell).length;
+
 /** Whether the tile in `cell` can slide, i.e. it sits next to the gap */
 export function canMove(shape: Shape, board: Board, cell: number): boolean {
   return board[cell] !== null && neighbours(shape, cell).some((next) => board[next.cell] === null);

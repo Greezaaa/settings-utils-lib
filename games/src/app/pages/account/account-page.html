@@ -63,6 +63,22 @@
       <button type="submit" class="button" [disabled]="password.isBusy()">{{ t().account.changePassword }}</button>
     </form>
 
+    <div class="card account-card">
+      <h2 class="card-title">{{ t().account.resultsTitle }}</h2>
+      <p class="muted">{{ t().account.resultsLead }}</p>
+      @if (results.error(); as error) {
+        <p class="error" role="alert">{{ error }}</p>
+      }
+      <button
+        type="button"
+        class="button button-secondary danger"
+        [disabled]="results.isBusy()"
+        (click)="removeResults()"
+      >
+        {{ t().account.deleteResults }}
+      </button>
+    </div>
+
     <form class="card account-card" (submit)="$event.preventDefault(); remove(deleteForm)" #deleteForm>
       <h2 class="card-title">{{ t().account.deleteTitle }}</h2>
       <p class="muted">{{ t().account.deleteLead }}</p>

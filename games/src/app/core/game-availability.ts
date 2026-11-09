@@ -76,7 +76,10 @@ export class GameAvailability {
     if (wantsPreview && !previewAllowed) {
       writeStored(PREVIEW_STORAGE, false);
     }
-    this.switches.set(new Map(switches.map(({ game, enabled }) => [game, enabled])));
+    // Without an answer the switches known so far stay (the defaults on a first load)
+    if (switches) {
+      this.switches.set(new Map(switches.map(({ game, enabled }) => [game, enabled])));
+    }
     this.isKnown.set(true);
   }
 

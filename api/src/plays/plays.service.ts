@@ -38,6 +38,11 @@ export class PlaysService {
     return withEveryGame(rows);
   }
 
+  /** Deletes every play counted, so statistics start again from today */
+  async clear(): Promise<void> {
+    await this.counts.clear();
+  }
+
   /** Plays of every game in a period, for the admin page */
   async inPeriod(period: StatsPeriod, now = new Date()): Promise<GamePlays[]> {
     const start = periodStart(period, now);

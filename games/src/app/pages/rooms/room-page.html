@@ -35,7 +35,7 @@
         (kick)="client.kick($event)"
       />
 
-      <div class="card board" appGameBoard>
+      <div class="card board" [class.is-wide]="isWide()" appGameBoard>
         @switch (room.phase) {
           @case ('lobby') {
             <div class="share">
@@ -60,63 +60,34 @@
                 }
               </div>
             }
-            @if (game() === 'measure-it') {
-              <div class="choices" role="group" [attr.aria-label]="t().measureIt.modeGroup">
-                @for (mode of measureModes; track mode) {
-                  <button
-                    type="button"
-                    class="button button-secondary"
-                    [attr.aria-pressed]="mode === measure().mode"
-                    [disabled]="!client.isHost()"
-                    [title]="t().measureIt.modes[mode].summary"
-                    (click)="chooseMeasureMode(mode)"
-                  >
-                    {{ t().measureIt.modes[mode].name }}
-                  </button>
-                }
-              </div>
-              <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
-                @for (level of measureLevels; track level) {
-                  <button
-                    type="button"
-                    class="button button-secondary"
-                    [attr.aria-pressed]="level === measure().levelId"
-                    [disabled]="!client.isHost()"
-                    [title]="t().measureIt.levelSummaries[measure().mode][level]"
-                    (click)="chooseLevel(level)"
-                  >
-                    {{ t().measureIt.levels[level] }}
-                  </button>
-                }
-              </div>
-            } @else {
-              <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
-                @for (style of answerStyles; track style) {
-                  <button
-                    type="button"
-                    class="button button-secondary"
-                    [attr.aria-pressed]="style === math().style"
-                    [disabled]="!client.isHost()"
-                    (click)="chooseStyle(style)"
-                  >
-                    {{ t().settings.answerStyles[style].name }}
-                  </button>
-                }
-              </div>
-              <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
-                @for (level of levels(); track level) {
-                  <button
-                    type="button"
-                    class="button button-secondary"
-                    [attr.aria-pressed]="level === math().levelId"
-                    [disabled]="!client.isHost()"
-                    (click)="chooseLevel(level)"
-                  >
-                    {{ levelName(level) }}
-                  </button>
-                }
-              </div>
-            }
+            <div class="choices" role="group" [attr.aria-label]="modeGroup()">
+              @for (mode of modes(); track mode) {
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  [attr.aria-pressed]="mode === choice().mode"
+                  [disabled]="!client.isHost()"
+                  [title]="modeText(mode).summary"
+                  (click)="chooseMode(mode)"
+                >
+                  {{ modeText(mode).name }}
+                </button>
+              }
+            </div>
+            <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+              @for (level of levels(); track level) {
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  [attr.aria-pressed]="level === choice().level"
+                  [disabled]="!client.isHost()"
+                  [title]="levelText(level).summary"
+                  (click)="chooseLevel(level)"
+                >
+                  {{ levelText(level).name }}
+                </button>
+              }
+            </div>
             <div class="choices" role="group" [attr.aria-label]="t().rooms.roundLength">
               @for (seconds of roundSeconds; track seconds) {
                 <button
@@ -171,20 +142,56 @@
           }
           @case ('playing') {
             @if (room.round; as round) {
-              @if (game() === 'measure-it') {
-                <app-room-measure-round
-                  [measure]="measure()"
-                  [round]="round"
-                  [showScore]="room.settings.showScores"
-                  (scored)="client.reportScore($event)"
-                />
-              } @else {
-                <app-room-math-round
-                  [math]="math()"
-                  [round]="round"
-                  [showScore]="room.settings.showScores"
-                  (scored)="client.reportScore($event)"
-                />
+              @switch (game()) {
+                @case ('measure-it') {
+                  <app-room-measure-round
+                    [measure]="measure()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('letter-games') {
+                  <app-room-letters-round
+                    [letters]="letters()"
+                    [language]="room.settings.language"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('sliding-puzzle') {
+                  <app-room-sliding-round
+                    [sliding]="sliding()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('turn-picture') {
+                  <app-room-turn-round
+                    [picture]="turnPicture()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('place-pieces') {
+                  <app-room-place-round
+                    [picture]="placePieces()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @default {
+                  <app-room-math-round
+                    [math]="math()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
               }
             }
           }

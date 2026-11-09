@@ -41,12 +41,6 @@
   text-decoration: none;
 }
 
-.brand-trail {
-  align-items: center;
-  display: flex;
-  gap: 0.5rem;
-}
-
 .brand-separator {
   color: var(--muted);
   font-family: var(--font-serif);
@@ -55,10 +49,10 @@
 
 .brand-section {
   color: var(--muted);
+}
 
-  &:hover {
-    color: var(--heading);
-  }
+.brand:hover .brand-section {
+  color: var(--heading);
 }
 
 .brand-logo {

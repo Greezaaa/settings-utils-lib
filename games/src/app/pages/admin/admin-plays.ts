@@ -1,10 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { SuNotificationService } from '@su-labs/notifications';
 import { AdminApi, GameFeedback, STATS_PERIODS, StatsPeriod } from '../../core/admin-api';
 import { GAMES } from '../../core/games';
 import { GamePlays } from '../../core/games-api';
 import { SiteLanguage } from '../../i18n/site-language';
+import { saveFailedNotice } from './save-failed-notice';
 
-/** Admin tab: plays per game in a chosen period, with each game's 👍/👎 and the reasons given in it */
+/**
+ * Admin tab: plays per game in a chosen period, with each game's 👍/👎 and the reasons given in it; the super admin can
+ * reset them
+ */
 @Component({
   selector: 'app-admin-plays',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,7 +17,9 @@ import { SiteLanguage } from '../../i18n/site-language';
   styleUrl: './admin.scss',
 })
 export class AdminPlays {
-  private readonly admin = inject(AdminApi);
+  protected readonly admin = inject(AdminApi);
+  private readonly notifications = inject(SuNotificationService);
+  private readonly notifySaveFailed = saveFailedNotice();
   /** Game names and feedback reasons in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
 
@@ -53,6 +60,19 @@ export class AdminPlays {
   protected choosePeriod(period: StatsPeriod): void {
     this.period.set(period);
     void this.load();
+  }
+
+  /** Super admin: deletes every play and vote, after asking, so statistics start again from today */
+  protected async resetStats(): Promise<void> {
+    if (!confirm(this.t().admin.confirmResetStats)) {
+      return;
+    }
+    if (await this.admin.resetStats()) {
+      this.notifications.show({ type: 'success', message: this.t().admin.statsReset });
+      await this.load();
+    } else {
+      this.notifySaveFailed();
+    }
   }
 
   /** A feedback reason in the site's language, or as the API sent it if it's unknown */

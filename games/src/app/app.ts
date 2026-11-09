@@ -8,7 +8,7 @@ import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { PlayerAccount } from './core/player-account';
 import { byCategory, gameOfPath } from './core/games';
-import { ADMIN_PATH, AUTHOR_EMAIL_URL, MAIN_SITE_URL } from './core/links';
+import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
 import { ANSWER_STYLES, AnswerWords } from './core/answer-words';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
@@ -56,7 +56,6 @@ export class App {
   /** A game's page waits, hidden, until it's sure the game is open; then it shows or the visitor goes home */
   protected readonly isCheckingGame = computed(() => this.pageGame() !== null && !this.availability.isKnown());
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
-  protected readonly mainSiteUrl = MAIN_SITE_URL;
   protected readonly adminPath = ADMIN_PATH;
 
   /** Label of the theme the switch moves to next */

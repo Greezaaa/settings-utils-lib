@@ -26,27 +26,14 @@
     </div>
 
     @if (picture(); as picture) {
-      <div
-        class="board"
-        [class.is-solved]="phase() === 'solved'"
-        [class.is-preview]="phase() === 'preview'"
-        [style.--columns]="level().columns"
-        role="group"
-        [attr.aria-label]="t().turnPicture.board"
-      >
-        @for (cell of cells(); track cell) {
-          <button
-            type="button"
-            class="tile"
-            [class.is-right]="showHints() && isTileRight(cell)"
-            [style.transform]="rotation(cell)"
-            [attr.aria-label]="t().turnPicture.tile(cell + 1)"
-            (click)="tap(cell)"
-          >
-            <app-picture-slice [src]="picture.src" [shape]="level()" [cell]="cell" />
-          </button>
-        }
-      </div>
+      <app-turn-board
+        [picture]="picture"
+        [shape]="level()"
+        [turns]="turns()"
+        [phase]="phase()"
+        [showHints]="showHints()"
+        (tapped)="tap($event)"
+      />
 
       @if (phase() === 'solved') {
         <p class="done" role="status">

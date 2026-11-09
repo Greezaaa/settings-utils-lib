@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   HttpCode,
   Param,
   Put,
@@ -21,7 +22,9 @@ type SwitchInput = z.infer<typeof switchSchema>;
 export class GameSettingsController {
   constructor(private readonly settings: GameSettingsService) {}
 
+  /** Never cached: a switch the admin changes counts from the next read */
   @Get()
+  @Header('Cache-Control', 'no-store')
   async list(): Promise<{ games: GameSwitch[] }> {
     return { games: await this.settings.list() };
   }

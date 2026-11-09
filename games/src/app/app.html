@@ -2,9 +2,8 @@
 
 <header class="site-header">
   <div class="container header-bar">
-    <!-- Breadcrumb brand: su-labs goes to the main site, games to this site's home -->
-    <nav class="brand-trail" [attr.aria-label]="t().site.sites">
-      <a [href]="mainSiteUrl" class="brand">
+    <!-- The brand, "su-labs / games", goes to this site's home; the games link to no other site -->
+    <a routerLink="/" class="brand">
         <!-- Same mark as public/favicon.svg, colored by the site theme -->
         <svg class="brand-logo" viewBox="0 0 128 128" aria-hidden="true">
           <rect class="brand-tile" width="128" height="128" rx="28" />
@@ -19,10 +18,9 @@
           <path class="brand-mark" d="M48 64h32" stroke-width="9" stroke-linecap="round" />
         </svg>
         su-labs
-      </a>
-      <span class="brand-separator" aria-hidden="true">/</span>
-      <a routerLink="/" class="brand brand-section">games</a>
-    </nav>
+        <span class="brand-separator" aria-hidden="true">/</span>
+        <span class="brand-section">games</span>
+    </a>
 
     <div class="header-controls">
       <!-- Settings behind the gear button: text size, theme, game colours, answers (when switched on) and language -->
@@ -179,7 +177,6 @@
     <nav class="footer-links" [attr.aria-label]="t().site.projectLinks">
       <a routerLink="/suggestions" routerLinkActive="active">{{ t().site.suggestionsLink }}</a>
       <a routerLink="/privacy" routerLinkActive="active">{{ t().site.privacyLink }}</a>
-      <a [href]="mainSiteUrl">su-labs.dev</a>
       <!-- The admin team's sign-in; small, as it's not for players -->
       <a class="admin-link" [routerLink]="['/', adminPath]" [attr.aria-label]="t().admin.title" [title]="t().admin.title">
         <svg viewBox="0 0 24 24" aria-hidden="true">

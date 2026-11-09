@@ -14,7 +14,7 @@ function adminAs(role?: AdminRole): Pick<AdminApi, 'restore' | 'canPreview'> {
 }
 
 /** The availability service with an API answering `switches`, for a visitor signed in as `role` */
-function availabilityWith(switches: GameSwitch[], role?: AdminRole): GameAvailability {
+function availabilityWith(switches: GameSwitch[] | null, role?: AdminRole): GameAvailability {
   const api: Pick<GamesApi, 'gameSwitches'> = { gameSwitches: vi.fn(async () => switches) };
   const injector = Injector.create({
     providers: [
@@ -42,7 +42,7 @@ describe('GameAvailability', () => {
   });
 
   it('falls back to the defaults when the API gives no switches', async () => {
-    const availability = availabilityWith([]);
+    const availability = availabilityWith(null);
     await availability.ready();
     expect(availability.visibleGames()).toEqual(GAMES.filter((game) => game.openByDefault).map(({ slug }) => slug));
   });

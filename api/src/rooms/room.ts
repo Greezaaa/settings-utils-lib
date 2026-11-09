@@ -6,7 +6,8 @@ import type { LanguageId } from '../shared/catalog.js';
  *
  * A host creates a room and shares its short code; up to 4 players join, each with a generated nickname and avatar
  * (no names typed, nothing stored). The host picks the game and settings, everyone presses Ready, the host starts, and
- * all play the same exercises (one shared random seed) for the same time; most correct answers wins.
+ * all play the same exercises or puzzles (one shared random seed) for the same time; the most points wins (a right
+ * answer, or a piece put in place, scores one).
  */
 
 export const MAX_PLAYERS = 4;
@@ -28,13 +29,20 @@ export const ADJECTIVE_COUNT = 16;
 export const ANIMAL_COUNT = 16;
 export const COLOR_COUNT = 8;
 
-/** Games that can be played in a room, for now */
-export const ROOM_GAMES = ['math-games', 'measure-it'] as const;
+/** Games that can be played in a room; each has its own multiplayer switch on the games site */
+export const ROOM_GAMES = [
+  'math-games',
+  'measure-it',
+  'letter-games',
+  'sliding-puzzle',
+  'turn-picture',
+  'place-pieces',
+] as const;
 export type RoomGame = (typeof ROOM_GAMES)[number];
 
 export interface RoomSettings {
   readonly game: RoomGame;
-  /** The game's own mode and level ids (math: answer style and level; measure it: mode and level), checked by the games site */
+  /** The game's own mode and level ids (e.g. math: answer style and level), checked by the games site */
   readonly mode: string;
   readonly level: string;
   readonly seconds: RoundSeconds;

@@ -10,13 +10,25 @@ export type FeatureId =
   | 'rooms'
   | 'rooms-math-games'
   | 'rooms-measure-it'
+  | 'rooms-letter-games'
+  | 'rooms-sliding-puzzle'
+  | 'rooms-turn-picture'
+  | 'rooms-place-pieces'
   | 'answer-words'
   | 'category-menu'
   | 'accounts'
   | 'leaderboard';
 
 /** Games playable in rooms, each with its multiplayer switch */
-export type RoomGame = Extract<GameSlug, 'math-games' | 'measure-it'>;
+export type RoomGame = Extract<
+  GameSlug,
+  | 'math-games'
+  | 'measure-it'
+  | 'letter-games'
+  | 'sliding-puzzle'
+  | 'turn-picture'
+  | 'place-pieces'
+>;
 
 export interface FeatureInfo {
   readonly id: FeatureId;
@@ -30,6 +42,14 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'rooms', openByDefault: false },
   { id: 'rooms-math-games', openByDefault: false, roomGame: 'math-games' },
   { id: 'rooms-measure-it', openByDefault: false, roomGame: 'measure-it' },
+  { id: 'rooms-letter-games', openByDefault: false, roomGame: 'letter-games' },
+  {
+    id: 'rooms-sliding-puzzle',
+    openByDefault: false,
+    roomGame: 'sliding-puzzle',
+  },
+  { id: 'rooms-turn-picture', openByDefault: false, roomGame: 'turn-picture' },
+  { id: 'rooms-place-pieces', openByDefault: false, roomGame: 'place-pieces' },
   /** The header setting to show answers in words too, not only colours */
   { id: 'answer-words', openByDefault: false },
   /** The header lists the categories (each with its page of games) instead of every game */
@@ -51,4 +71,8 @@ export const ROOM_GAMES: readonly RoomGame[] = FEATURES.flatMap(
 export const ROOM_GAME_FEATURES: Readonly<Record<RoomGame, FeatureId>> = {
   'math-games': 'rooms-math-games',
   'measure-it': 'rooms-measure-it',
+  'letter-games': 'rooms-letter-games',
+  'sliding-puzzle': 'rooms-sliding-puzzle',
+  'turn-picture': 'rooms-turn-picture',
+  'place-pieces': 'rooms-place-pieces',
 };

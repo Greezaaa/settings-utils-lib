@@ -55,7 +55,6 @@ export interface SiteMessages {
   /** Header, settings and footer */
   readonly site: {
     readonly skipToContent: string;
-    readonly sites: string;
     readonly gamesNav: string;
     readonly settings: string;
     readonly textSize: string;
@@ -533,6 +532,10 @@ export interface SiteMessages {
     readonly byDefault: (open: boolean) => string;
     readonly periodGroup: string;
     readonly periods: Readonly<Record<StatsPeriod, string>>;
+    /** The super admin's button to delete every play and vote, so statistics start again */
+    readonly resetStats: string;
+    readonly confirmResetStats: string;
+    readonly statsReset: string;
     readonly playsTotal: (total: number) => string;
     readonly refresh: string;
     readonly playsColumns: {
@@ -712,6 +715,12 @@ export interface SiteMessages {
     readonly newPassword: string;
     readonly changePassword: string;
     readonly passwordChanged: string;
+    /** Deleting only the results, keeping the account */
+    readonly resultsTitle: string;
+    readonly resultsLead: string;
+    readonly deleteResults: string;
+    readonly confirmDeleteResults: string;
+    readonly resultsDeleted: string;
     readonly deleteTitle: string;
     readonly deleteLead: string;
     readonly deleteAccount: string;

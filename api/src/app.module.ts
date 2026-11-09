@@ -13,6 +13,7 @@ import { FeedbackModule } from './feedback/feedback.module.js';
 import { GameSettingsModule } from './game-settings/game-settings.module.js';
 import { HealthController } from './health/health.controller.js';
 import { PlaysModule } from './plays/plays.module.js';
+import { StatsModule } from './stats/stats.module.js';
 import { VisitorThrottlerGuard } from './security/visitor-throttler.guard.js';
 import { SuggestionsModule } from './suggestions/suggestions.module.js';
 import { WordReportsModule } from './word-reports/word-reports.module.js';
@@ -36,6 +37,7 @@ import { WordReportsModule } from './word-reports/word-reports.module.js';
     AccountsModule,
     ErrorLogsModule,
     PlaysModule,
+    StatsModule,
     FeedbackModule,
     FeatureFlagsModule,
     GameSettingsModule,

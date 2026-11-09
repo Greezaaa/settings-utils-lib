@@ -33,6 +33,11 @@ export class FeedbackService {
     });
   }
 
+  /** Deletes every vote, so statistics start again from today */
+  async clear(): Promise<void> {
+    await this.feedback.clear();
+  }
+
   /** Every game's votes and reasons in a period */
   async summary(
     period: StatsPeriod = 'all',

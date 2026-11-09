@@ -33,7 +33,8 @@ export interface WordReport {
 
 /** The super admin manages everything; moderators and testers moderate, and testers also see everything in preview */
 /** Periods the statistics can be shown for (see api/src/shared/period.ts) */
-export const STATS_PERIODS = ['all', 'day', 'week', 'month', 'year'] as const;
+/** Statistics periods, shortest first: today, this week (from Monday), this month, this year, all time */
+export const STATS_PERIODS = ['day', 'week', 'month', 'year', 'all'] as const;
 export type StatsPeriod = (typeof STATS_PERIODS)[number];
 
 export type AdminRole = 'super' | 'moderator' | 'tester';
@@ -341,6 +342,11 @@ export class AdminApi {
 
   async feedback(period: StatsPeriod): Promise<GameFeedback[]> {
     return listOf(await this.read(`/admin/feedback?period=${period}`), parseFeedback);
+  }
+
+  /** Deletes every play and vote counted, so statistics start again from today (super admin) */
+  resetStats(): Promise<boolean> {
+    return this.change('DELETE', '/admin/stats');
   }
 
   /** Plays per game in a period */

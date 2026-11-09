@@ -119,6 +119,28 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(400);
   });
 
+  it('lets the super admin start the statistics again', async () => {
+    await request(app.getHttpServer())
+      .post('/v1/plays')
+      .send({ game: 'find-pairs' })
+      .expect(204);
+    await request(app.getHttpServer()).delete('/admin/stats').expect(401);
+    await request(app.getHttpServer())
+      .delete('/admin/stats')
+      .set(admin)
+      .expect(204);
+    const { body } = await request(app.getHttpServer())
+      .get('/admin/plays?period=all')
+      .set(admin)
+      .expect(200);
+    expect(body).toContainEqual({ game: 'find-pairs', plays: 0 });
+    const { body: votes } = await request(app.getHttpServer())
+      .get('/admin/feedback')
+      .set(admin)
+      .expect(200);
+    expect(votes).toEqual([]);
+  });
+
   it('hides a word after three visitors report it, until a moderator decides', async () => {
     const report = { word: 'rudeword', language: 'en' };
     const hidden = async () =>
@@ -642,6 +664,18 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       await request(app.getHttpServer())
         .get('/v1/leaderboard/find-pairs')
         .expect(401);
+
+      // A player deletes their results and keeps the account
+      await ana.delete('/v1/account/results').expect(204);
+      expect((await ana.get('/v1/account').expect(200)).body.results).toEqual(
+        [],
+      );
+      const { body: after } = await ana
+        .get('/v1/leaderboard/find-pairs')
+        .expect(200);
+      expect(after.boards[0].entries).toEqual([
+        { place: 1, screenName: 'Ben', plays: 1, best: 18, isMe: false },
+      ]);
     });
 
     it('changes the screen name and password, resets a forgotten one, and deletes the account', async () => {

@@ -69,6 +69,11 @@ export class ResultsService {
     }
   }
 
+  /** Deletes a player's results: their plays, bests and places on the leaderboards; the account stays */
+  async clear(playerId: string): Promise<void> {
+    await this.results.delete({ playerId });
+  }
+
   async mine(playerId: string): Promise<MyResult[]> {
     const rows = await this.results.find({
       where: { playerId },

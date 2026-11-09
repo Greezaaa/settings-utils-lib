@@ -1,0 +1,36 @@
+<div class="status">
+  <span class="mono">{{ t().rooms.timeLeft(clock.secondsLeft()) }}</span>
+  @if (showScore()) {
+    <span class="mono">{{ t().rooms.yourScore(run.score()) }}</span>
+  }
+</div>
+<app-timer-bar [share]="clock.share()" />
+
+@if (!clock.isOver()) {
+  <app-place-board
+    [picture]="drawing()"
+    [shape]="settings().level"
+    [arrangement]="arrangement()"
+    [phase]="phase()"
+    [showHints]="settings().mode === 'look' && phase() === 'playing'"
+    (swapped)="swapPieces($event)"
+  />
+  @switch (phase()) {
+    @case ('preview') {
+      <p class="muted">{{ t().pictureGames.memorize }}</p>
+      <button type="button" class="button ready" (click)="ready()">{{ t().pictureGames.ready }}</button>
+    }
+    @case ('playing') {
+      <p class="progress" aria-live="polite">{{ t().pictureGames.inPlace(placed(), arrangement().length) }}</p>
+    }
+    @case ('solved') {
+      <p class="progress" role="status">{{ t().pictureGames.solved }}</p>
+    }
+  }
+  @if (settings().mode === 'look') {
+    <figure class="reference">
+      <img [src]="drawing().src" [alt]="t().pictures[drawing().id]" />
+      <figcaption class="muted">{{ t().pictureGames.picture }}</figcaption>
+    </figure>
+  }
+}

@@ -117,7 +117,8 @@ table {
   }
 }
 
-.error {
+.error,
+.danger {
   color: var(--red-text);
 }
 

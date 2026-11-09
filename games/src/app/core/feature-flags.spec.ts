@@ -9,7 +9,7 @@ import { FeatureSwitch, GamesApi, GameSwitch } from './games-api';
 function flagsWith(features: FeatureSwitch[]): { flags: FeatureFlags; availability: GameAvailability } {
   const api: Pick<GamesApi, 'featureSwitches' | 'gameSwitches'> = {
     featureSwitches: vi.fn(async () => features),
-    gameSwitches: vi.fn(async (): Promise<GameSwitch[]> => []),
+    gameSwitches: vi.fn(async (): Promise<GameSwitch[] | null> => []),
   };
   const injector = Injector.create({
     providers: [

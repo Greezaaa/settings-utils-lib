@@ -47,7 +47,10 @@ export class FeatureFlags {
     // Preview mode is read with the games' switches
     await this.availability.ready();
     const switches = await this.api.featureSwitches();
-    this.switches.set(new Map(switches.map(({ feature, enabled }) => [feature, enabled])));
+    // Without an answer the switches known so far stay (the defaults on a first load)
+    if (switches) {
+      this.switches.set(new Map(switches.map(({ feature, enabled }) => [feature, enabled])));
+    }
     this.isKnown.set(true);
   }
 }

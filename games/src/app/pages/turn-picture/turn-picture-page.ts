@@ -2,8 +2,8 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyR
 import { RouterLink } from '@angular/router';
 import { GamePicture, nextPicture } from '../../core/pictures';
 import { BoardLevelId, cellCount } from '../../games/board';
-import { getPictureLevel, PictureModeId } from '../../games/picture-game';
-import { isRight, isSolved, scramble, tilesRight, turn, Turns } from '../../games/turn-picture';
+import { getPictureLevel, PictureModeId, PicturePhase } from '../../games/picture-game';
+import { isSolved, scramble, tilesRight, turn, Turns } from '../../games/turn-picture';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
 import { PlayerAccount } from '../../core/player-account';
@@ -14,10 +14,7 @@ import { GameFeedback } from '../../shared/game-feedback';
 import { GameClock, formatTime } from '../../shared/game-clock';
 import { BestTimes, pictureScoreKey, readBestTimes, writeBestTimes } from '../../shared/picture-best-times';
 import { PictureSettings } from '../../shared/picture-settings';
-import { PictureSlice } from '../../shared/picture-slice';
-
-/** Memory mode starts with the whole picture on show, until the player presses Ready */
-type Phase = 'preview' | 'playing' | 'solved';
+import { TurnBoard } from './turn-board';
 
 const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
 
@@ -28,7 +25,7 @@ const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
  */
 @Component({
   selector: 'app-turn-picture-page',
-  imports: [GameBoard, GameFeedback, PictureSettings, PictureSlice, RouterLink],
+  imports: [GameBoard, GameFeedback, PictureSettings, RouterLink, TurnBoard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './turn-picture-page.html',
   styleUrls: [
@@ -54,7 +51,7 @@ export class TurnPicturePage {
   /** Chosen in the browser only, so the prerendered page and the first render agree */
   protected readonly picture = signal<GamePicture | null>(null);
   protected readonly turns = signal<Turns>([]);
-  protected readonly phase = signal<Phase>('playing');
+  protected readonly phase = signal<PicturePhase>('playing');
   protected readonly taps = signal(0);
   protected readonly clock = new GameClock();
   protected readonly isNewBest = signal(false);
@@ -111,9 +108,6 @@ export class TurnPicturePage {
   }
 
   protected tap(cell: number): void {
-    if (this.phase() !== 'playing') {
-      return;
-    }
     if (this.taps() === 0) {
       this.clock.start();
       // The first move starts the game: count it as a play
@@ -124,15 +118,6 @@ export class TurnPicturePage {
     if (isSolved(this.turns())) {
       this.finish();
     }
-  }
-
-  protected isTileRight(cell: number): boolean {
-    return isRight(this.turns()[cell] ?? 0);
-  }
-
-  /** CSS rotation of a square: a quarter turn per tap, always clockwise */
-  protected rotation(cell: number): string {
-    return `rotate(${(this.turns()[cell] ?? 0) * 90}deg)`;
   }
 
   private finish(): void {

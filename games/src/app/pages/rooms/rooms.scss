@@ -115,3 +115,14 @@
     }
   }
 }
+
+// Letter games: what to do, above the round
+.instructions {
+  color: var(--heading);
+  font-weight: 600;
+}
+
+// The word builder shows its words beside the letters, so it needs more room
+.board.is-wide {
+  max-width: 48rem;
+}

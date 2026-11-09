@@ -1,0 +1,30 @@
+<div
+  #board
+  class="board"
+  [class.is-solved]="phase() === 'solved'"
+  [class.is-preview]="phase() === 'preview'"
+  [style.--columns]="shape().columns"
+  role="group"
+  [attr.aria-label]="t().placePieces.board"
+>
+  @for (piece of arrangement(); track piece; let cell = $index) {
+    <button
+      type="button"
+      class="tile"
+      [attr.data-cell]="cell"
+      [class.is-right]="showHints() && isPieceRight(cell)"
+      [class.is-picked]="picked() === cell"
+      [class.is-dragging]="drag()?.cell === cell"
+      [style.transform]="dragTransform(cell)"
+      [attr.aria-label]="t().placePieces.piece(piece + 1, picked() === cell)"
+      [attr.aria-pressed]="picked() === cell"
+      (pointerdown)="onPointerDown($event, cell)"
+      (pointermove)="onPointerMove($event)"
+      (pointerup)="onPointerUp($event)"
+      (pointercancel)="cancelDrag()"
+      (click)="onClick($event, cell)"
+    >
+      <app-picture-slice [src]="picture().src" [shape]="shape()" [cell]="piece" />
+    </button>
+  }
+</div>

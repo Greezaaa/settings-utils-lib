@@ -52,10 +52,11 @@ function parsePlays(body: unknown): GamePlays[] {
 }
 
 /** Reads `{ games: [{ game, enabled }] }`, keeping only known games */
-function parseSwitches(body: unknown): GameSwitch[] {
+/** The switches in the API's answer, or null when there's no answer (so the ones known stay) */
+function parseSwitches(body: unknown): GameSwitch[] | null {
   const games = field(body, 'games');
   if (!Array.isArray(games)) {
-    return [];
+    return null;
   }
   return games.flatMap((item: unknown) => {
     const game = field(item, 'game');
@@ -73,10 +74,11 @@ export interface FeatureSwitch {
 const isFeatureId = (value: unknown): value is FeatureId => FEATURE_IDS.some((feature) => feature === value);
 
 /** Reads `{ features: [{ feature, enabled }] }`, keeping only known features */
-function parseFeatureSwitches(body: unknown): FeatureSwitch[] {
+/** The feature switches in the API's answer, or null when there's no answer (so the ones known stay) */
+function parseFeatureSwitches(body: unknown): FeatureSwitch[] | null {
   const features = field(body, 'features');
   if (!Array.isArray(features)) {
-    return [];
+    return null;
   }
   return features.flatMap((item: unknown) => {
     const feature = field(item, 'feature');
@@ -134,18 +136,22 @@ export class GamesApi {
   }
 
   /** The features the admin switched on or off */
-  async featureSwitches(): Promise<FeatureSwitch[]> {
+  async featureSwitches(): Promise<FeatureSwitch[] | null> {
     return parseFeatureSwitches(await this.read('/v1/features'));
   }
 
-  /** The games the admin switched on or off */
-  async gameSwitches(): Promise<GameSwitch[]> {
+  /** The games the admin switched on or off; null when the API can't be reached */
+  async gameSwitches(): Promise<GameSwitch[] | null> {
     return parseSwitches(await this.read('/v1/games'));
   }
 
   private async read(path: string): Promise<unknown> {
     try {
-      const response = await fetch(apiUrl(this.document, path), { signal: AbortSignal.timeout(READ_TIMEOUT_MS) });
+      // Never from the browser's cache: switches and counts must be the API's latest
+      const response = await fetch(apiUrl(this.document, path), {
+        cache: 'no-store',
+        signal: AbortSignal.timeout(READ_TIMEOUT_MS),
+      });
       return response.ok ? await response.json() : null;
     } catch {
       return null;

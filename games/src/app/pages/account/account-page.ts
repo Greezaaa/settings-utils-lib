@@ -11,7 +11,7 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 /**
  * The player's account (behind the `accounts` switch). Signed out: sign in, make an account (login name, screen name,
  * password and, when the API can send emails, an optional email for resets), or ask for a reset link. Signed in:
- * change the screen name or email, change the password, sign out, or delete the account.
+ * change the screen name or email, change the password, sign out, delete the results only, or delete the account.
  */
 @Component({
   selector: 'app-account-page',
@@ -36,6 +36,7 @@ export class AccountPage {
   protected readonly entry = new AccountForm();
   protected readonly details = new AccountForm();
   protected readonly password = new AccountForm();
+  protected readonly results = new AccountForm();
   protected readonly deletion = new AccountForm();
 
   constructor() {
@@ -113,6 +114,12 @@ export class AccountPage {
       this.t().account.passwordChanged,
       () => this.clearPasswords(form),
     );
+  }
+
+  protected removeResults(): void {
+    if (confirm(this.t().account.confirmDeleteResults)) {
+      void this.results.run(() => this.account.removeResults(), this.t().account.resultsDeleted);
+    }
   }
 
   protected remove(form: HTMLFormElement): void {

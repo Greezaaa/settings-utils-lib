@@ -15,7 +15,7 @@
           role="switch"
           [checked]="availability.isOpen(game.slug)"
           [disabled]="saving() !== null || !admin.isSuper()"
-          (change)="toggle(game.slug)"
+          (change)="toggle(game.slug, $event)"
         />
         <span class="track" aria-hidden="true"></span>
       </label>
@@ -41,7 +41,7 @@
           role="switch"
           [checked]="flags.isOpen(feature.id)"
           [disabled]="saving() !== null || !admin.isSuper()"
-          (change)="toggleFeature(feature.id)"
+          (change)="toggleFeature(feature.id, $event)"
         />
         <span class="track" aria-hidden="true"></span>
       </label>
@@ -66,7 +66,7 @@
           role="switch"
           [checked]="flags.isOpen(feature.id)"
           [disabled]="saving() !== null || !admin.isSuper()"
-          (change)="toggleFeature(feature.id)"
+          (change)="toggleFeature(feature.id, $event)"
         />
         <span class="track" aria-hidden="true"></span>
       </label>

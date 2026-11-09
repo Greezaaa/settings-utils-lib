@@ -227,6 +227,15 @@ export class AccountsController {
   }
 
   /** Best results the browser kept before signing in */
+  /** The player deletes their results (plays, bests, leaderboard places) and keeps the account */
+  @Delete('results')
+  @HttpCode(204)
+  @UseGuards(PlayerGuard)
+  @Throttle(FEW_PER_15_MINUTES)
+  async clearResults(@Req() request: PlayerRequest): Promise<void> {
+    await this.results.clear(this.playerOf(request).id);
+  }
+
   @Put('bests')
   @HttpCode(204)
   @UseGuards(PlayerGuard)

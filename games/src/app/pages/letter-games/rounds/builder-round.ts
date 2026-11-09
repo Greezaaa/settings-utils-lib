@@ -31,6 +31,8 @@ export class BuilderRound {
   readonly allFound = output<void>();
   /** The player reported a word from the dictionary as rude */
   readonly reported = output<string>();
+  /** A word was found (a room round scores each one) */
+  readonly wordFound = output<string>();
 
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
@@ -136,6 +138,7 @@ export class BuilderRound {
         this.extras.update((extras) => [...extras, word]);
       }
       this.found.update((found) => [...found, word]);
+      this.wordFound.emit(word);
       if (this.isAllFound()) {
         this.allFound.emit();
       }
