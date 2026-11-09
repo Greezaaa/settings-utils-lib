@@ -11,4 +11,5 @@ export type {
   SuDialogImage,
   SuDialogKind,
   SuDialogOptions,
+  SuDialogSize,
 } from '@su-labs/core/dialog';

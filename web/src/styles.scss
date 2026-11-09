@@ -69,8 +69,9 @@
   --su-dialog-accept-color: var(--button-text);
   --su-dialog-cancel-border: 1px solid var(--border);
   --su-dialog-cancel-color: var(--heading);
-  --su-dialog-danger-background: var(--red-text);
-  --su-dialog-danger-color: var(--red-bg);
+  --su-dialog-danger-background: var(--red-bg);
+  --su-dialog-danger-color: var(--red-text);
+  --su-dialog-danger-border: 1px solid color-mix(in srgb, var(--red-text) 35%, transparent);
 
   color-scheme: light;
 }

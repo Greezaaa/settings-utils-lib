@@ -37,10 +37,21 @@ describe('SuDialogController', () => {
       acceptLabel: 'Aceptar',
       cancelLabel: 'Cancelar',
       width: '30rem',
+      size: 'small',
       height: null,
       backdropColor: 'transparent',
       dismissible: true,
     });
+  });
+
+  it('is small unless a size is chosen, here or in the defaults', () => {
+    const controller = new SuDialogController();
+    void controller.alert({ title: 'A', size: 'large' });
+    expect(controller.current.get()?.size).toBe('large');
+    controller.close(true);
+    controller.configure({ size: 'medium' });
+    void controller.alert({ title: 'B' });
+    expect(controller.current.get()?.size).toBe('medium');
   });
 
   it('closes every dialog as cancelled', async () => {

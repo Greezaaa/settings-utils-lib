@@ -9,6 +9,7 @@ const DEFAULTS: SuDialogConfig = {
   cancelLabel: 'Cancel',
   backdrop: 'dim',
   dismissible: true,
+  size: 'small',
 };
 
 /** A dialog waiting for its answer */
@@ -66,6 +67,7 @@ export class SuDialogController {
       acceptLabel: settings.acceptLabel ?? 'OK',
       cancelLabel: settings.cancelLabel ?? 'Cancel',
       width: settings.width ?? null,
+      size: settings.size ?? 'small',
       height: settings.height ?? null,
       backdrop: settings.backdrop ?? 'dim',
       backdropColor: suDialogBackdropColor(settings),

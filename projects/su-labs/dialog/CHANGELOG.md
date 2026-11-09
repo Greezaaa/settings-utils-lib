@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [22.1.0] - 2026-11-09
+
+### Added
+- `size`: `'small'`, `'medium'` or `'large'` (at least 20%, 50% or 80% of the screen's height, growing with the content; default `'small'`), each adjustable with `--su-dialog-small-height`, `--su-dialog-medium-height` and `--su-dialog-large-height`
+- `--su-dialog-danger-border`
+
+### Changed
+- The danger button is a soft red (a light tint with red text and border) instead of solid red
+- The buttons sit at the bottom of a tall dialog
+
+### Fixed
+- A page's CSS reset (`margin: 0`) no longer stretches the dialog to the full height of the screen
+- Focus opens on a button, never on the dialog itself (no focus ring around the whole dialog)
+- Depends on exactly `@su-labs/core` 1.5.0
+
 ## [22.0.0] - 2026-11-09
 
 ### Added

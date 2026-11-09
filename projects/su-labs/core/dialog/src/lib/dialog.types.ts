@@ -12,6 +12,14 @@ export type SuDialogKind = 'ok' | 'confirm';
  */
 export type SuDialogBackdrop = 'dim' | 'none';
 
+/**
+ * How tall the dialog is at least, growing with its content (up to the screen):
+ * - `small`: 20% of the screen's height
+ * - `medium`: half of it
+ * - `large`: 80% of it
+ */
+export type SuDialogSize = 'small' | 'medium' | 'large';
+
 /** A picture shown above the dialog's text */
 export interface SuDialogImage {
   readonly src: string;
@@ -27,7 +35,9 @@ export interface SuDialogConfig {
   readonly cancelLabel?: string;
   /** Any CSS width, e.g. `28rem` or `90vw`; by default the stylesheet's `--su-dialog-width` (28rem), kept inside the screen */
   readonly width?: string;
-  /** Any CSS height; by default the dialog is as tall as its content */
+  /** How tall the dialog is at least, growing with its content @default 'small' */
+  readonly size?: SuDialogSize;
+  /** Any CSS height, instead of a `size` */
   readonly height?: string;
   /** @default 'dim' */
   readonly backdrop?: SuDialogBackdrop;
@@ -68,6 +78,7 @@ export interface SuDialog {
   readonly cancelLabel: string;
   /** Set only when given, so the stylesheet's variables (and a theme) decide otherwise */
   readonly width: string | null;
+  readonly size: SuDialogSize;
   readonly height: string | null;
   readonly backdrop: SuDialogBackdrop;
   /**

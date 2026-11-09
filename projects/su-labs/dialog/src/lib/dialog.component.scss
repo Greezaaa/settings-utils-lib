@@ -9,15 +9,26 @@
   box-sizing: border-box;
   color: var(--su-dialog-text-color, #333);
   font-family: var(--su-dialog-font-family, inherit);
-  height: var(--su-dialog-height, auto);
+  height: var(--su-dialog-height, fit-content);
+  // Centred on screen by the browser's margin: auto, kept here so a page's CSS reset (margin: 0) can't stretch it
+  margin: auto;
   max-height: var(--su-dialog-max-height, calc(100dvh - 2rem));
   max-width: var(--su-dialog-max-width, calc(100vw - 2rem));
   overflow: auto;
   padding: 0;
   width: var(--su-dialog-width, 28rem);
 
+  // Focus goes to its buttons; the dialog itself never shows a focus ring
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+
+  // Its content fills it, so the buttons sit at the bottom of a tall dialog
   &[open] {
     animation: su-dialog-in var(--su-dialog-duration, 180ms) ease-out;
+    display: flex;
+    flex-direction: column;
   }
 
   // The page behind: dimmed, or clear with `backdrop: 'none'`
@@ -30,15 +41,30 @@
   }
 }
 
+// Sizes: the least height, growing with the content up to the screen
+.su-dialog-small {
+  min-height: var(--su-dialog-small-height, 20dvh);
+}
+
+.su-dialog-medium {
+  min-height: var(--su-dialog-medium-height, 50dvh);
+}
+
+.su-dialog-large {
+  min-height: var(--su-dialog-large-height, 80dvh);
+}
+
 .su-dialog-content {
-  display: grid;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   gap: var(--su-dialog-gap, 1rem);
   padding: var(--su-dialog-padding, 1.5rem);
 }
 
 .su-dialog-image {
   border-radius: var(--su-dialog-image-radius, 8px);
-  justify-self: center;
+  align-self: center;
   max-height: var(--su-dialog-image-max-height, 12rem);
   max-width: 100%;
   object-fit: contain;
@@ -76,6 +102,7 @@
 
 .su-dialog-actions {
   display: flex;
+  margin-top: auto;
   flex-wrap: wrap;
   gap: var(--su-dialog-actions-gap, 0.5rem);
   justify-content: var(--su-dialog-actions-align, flex-end);
@@ -107,10 +134,11 @@
   color: var(--su-dialog-cancel-color, inherit);
 }
 
-// The accept button of something that can't be undone, e.g. deleting
+// The accept button of something that can't be undone, e.g. deleting: a soft red, clear without being alarming
 .is-danger .su-dialog-accept {
-  background: var(--su-dialog-danger-background, #b42318);
-  color: var(--su-dialog-danger-color, #fff);
+  background: var(--su-dialog-danger-background, color-mix(in srgb, #b42318 12%, transparent));
+  border: var(--su-dialog-danger-border, 1px solid color-mix(in srgb, #b42318 35%, transparent));
+  color: var(--su-dialog-danger-color, #b42318);
 }
 
 @keyframes su-dialog-in {

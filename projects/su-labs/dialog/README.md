@@ -18,6 +18,7 @@ with a promise, and styled entirely through CSS variables so they follow your th
 - **A promise for the answer**: `if (await dialog.confirm({ … }))`
 - **Rich text**: the body can be HTML (lists, `<small>`, links, images), sanitized by Angular; plus an optional picture
 - **Backdrop**: dimmed (any colour and opacity) or clear
+- **Sizes**: small, medium or large, growing with the content
 - **Accessible**: native `<dialog>`, focus kept inside, Escape to cancel, title and text announced to screen readers;
   a `danger` dialog starts on Cancel so Enter never confirms it by accident
 - **One at a time**: dialogs opened meanwhile wait their turn
@@ -97,7 +98,8 @@ dialog.configure({ acceptLabel: 'Aceptar', cancelLabel: 'Cancelar', backdropOpac
 | `image` | — | `{ src, alt }`, a picture above the text |
 | `acceptLabel` / `cancelLabel` | `'OK'` / `'Cancel'` | Button labels |
 | `danger` | `false` | Red accept button, focus starts on Cancel |
-| `width` / `height` | `28rem` / content | Any CSS length; always kept inside the screen |
+| `size` | `'small'` | How tall it is at least, growing with its content: `'small'` (20% of the screen), `'medium'` (50%) or `'large'` (80%) |
+| `width` / `height` | `28rem` / from `size` | Any CSS length; always kept inside the screen |
 | `backdrop` | `'dim'` | `'dim'` tints the page behind, `'none'` leaves it clear |
 | `backdropColor` | black | Any CSS colour for the tint |
 | `backdropOpacity` | `0.5` | How much the tint covers, from 0 to 1 |
@@ -119,7 +121,8 @@ Every part reads a CSS variable. Set them on `:root` (your theme), on `su-lib-di
 
 | Variable | Default |
 |----------|---------|
-| `--su-dialog-width` / `--su-dialog-height` | `28rem` / `auto` |
+| `--su-dialog-width` / `--su-dialog-height` | `28rem` / `fit-content` |
+| `--su-dialog-small-height` / `--su-dialog-medium-height` / `--su-dialog-large-height` | `20dvh` / `50dvh` / `80dvh` |
 | `--su-dialog-max-width` / `--su-dialog-max-height` | `calc(100vw - 2rem)` / `calc(100dvh - 2rem)` |
 | `--su-dialog-background` | `#fff` |
 | `--su-dialog-text-color` | `#333` |
@@ -136,7 +139,7 @@ Every part reads a CSS variable. Set them on `:root` (your theme), on `su-lib-di
 | `--su-dialog-button-radius` / `--su-dialog-button-padding` / `--su-dialog-button-weight` | `8px` / `0.5rem 1.25rem` / `600` |
 | `--su-dialog-accept-background` / `--su-dialog-accept-color` / `--su-dialog-accept-border` | `#111` / `#fff` / `1px solid transparent` |
 | `--su-dialog-cancel-background` / `--su-dialog-cancel-color` / `--su-dialog-cancel-border` | `transparent` / `inherit` / `1px solid rgb(0 0 0 / 0.2)` |
-| `--su-dialog-danger-background` / `--su-dialog-danger-color` | `#b42318` / `#fff` |
+| `--su-dialog-danger-background` / `--su-dialog-danger-color` / `--su-dialog-danger-border` | a light red tint / `#b42318` / a soft red line |
 | `--su-dialog-focus-outline` | `2px solid currentColor` |
 | `--su-dialog-duration` | `180ms` (no animation with reduced motion) |
 

@@ -1,6 +1,6 @@
 <dialog
   #element
-  class="su-dialog {{ dialog()?.cssClass ?? '' }}"
+  class="su-dialog su-dialog-{{ dialog()?.size ?? 'small' }} {{ dialog()?.cssClass ?? '' }}"
   [class.is-danger]="dialog()?.danger"
   [style.--su-dialog-width]="dialog()?.width"
   [style.--su-dialog-height]="dialog()?.height"

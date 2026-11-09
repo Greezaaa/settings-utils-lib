@@ -255,6 +255,7 @@ if (await dialogs.confirm({ title: 'Delete your results?', danger: true })) {
 | `image` | — | `{ src, alt }`, a picture above the text |
 | `acceptLabel` / `cancelLabel` | `'OK'` / `'Cancel'` | Button labels |
 | `danger` | `false` | The accept button warns of something that can't be undone |
+| `size` | `'small'` | How tall it is at least, growing with its content: `'small'`, `'medium'` or `'large'` |
 | `width` / `height` | from the stylesheet | Any CSS length |
 | `backdrop` | `'dim'` | `'dim'` tints the page behind, `'none'` leaves it clear |
 | `backdropColor` / `backdropOpacity` | from the stylesheet | The tint's colour and how much it covers (0 to 1); `current.backdropColor` is ready for CSS |
