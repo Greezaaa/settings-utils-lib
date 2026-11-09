@@ -2,6 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyR
 import { Router, RouterLink } from '@angular/router';
 import { FeatureFlags } from '../../core/feature-flags';
 import { ROOM_GAME_FEATURES, ROOM_GAMES, RoomGame } from '../../core/features';
+import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
 import { RoomClient } from '../../core/room-client';
 import { MAX_PLAYERS, MIN_PLAYERS_TO_START, ROUND_SECONDS, RoundSeconds } from '../../core/room-view';
@@ -45,6 +46,7 @@ const TICK_MS = 100;
   styleUrls: [
     '../../shared/utility-page.scss',
     '../../shared/game-settings.scss',
+    '../../shared/switch.scss',
     './rooms.scss',
   ],
 })
@@ -100,12 +102,13 @@ export class RoomPage {
   protected readonly placePieces = computed(() =>
     roomPicture('place-pieces', this.choice().mode, this.choice().level)
   );
-  /** The word builder shows its words beside the letters, so its round needs more room */
+  /** The lobby (games beside their settings) and the word builder (words beside the letters) need more room */
   protected readonly isWide = computed(
     () =>
-      this.game() === 'letter-games' &&
-      this.choice().mode === 'word-builder' &&
-      this.room()?.phase === 'playing'
+      this.room()?.phase === 'lobby' ||
+      (this.game() === 'letter-games' &&
+        this.choice().mode === 'word-builder' &&
+        this.room()?.phase === 'playing')
   );
   /** Each game has its own multiplayer switch (apart from its single-player one); the host picks among those open */
   protected readonly openGames = computed(() =>
@@ -145,6 +148,10 @@ export class RoomPage {
       // Leaving the page keeps the seat for a short while, so coming back (or a reload) returns to the room
       this.client.close();
     });
+  }
+
+  protected iconOf(game: RoomGame): string {
+    return gameInfo(game).icon;
   }
 
   protected modeGroup(): string {

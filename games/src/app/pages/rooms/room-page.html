@@ -44,80 +44,95 @@
               </button>
             </div>
 
-            <h2 class="card-title">{{ t().rooms.settingsTitle }} · {{ t().games[game()].name }}</h2>
-            @if (openGames().length > 1) {
-              <div class="choices" role="group" [attr.aria-label]="t().rooms.gameGroup">
-                @for (option of openGames(); track option) {
-                  <button
-                    type="button"
-                    class="button button-secondary"
-                    [attr.aria-pressed]="option === game()"
+            <!-- The host's choices: the game in the middle, its settings beside it (stacked on phones) -->
+            <div class="lobby">
+              @if (openGames().length > 1) {
+                <div class="lobby-column">
+                  <h2 class="lobby-title" id="room-games">{{ t().rooms.gameGroup }}</h2>
+                  <div class="game-list" role="group" aria-labelledby="room-games">
+                    @for (option of openGames(); track option) {
+                      <button
+                        type="button"
+                        class="game-option"
+                        [attr.aria-pressed]="option === game()"
+                        [disabled]="!client.isHost()"
+                        (click)="chooseGame(option)"
+                      >
+                        <span class="game-icon" aria-hidden="true">{{ iconOf(option) }}</span>
+                        {{ t().games[option].name }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+
+              <div class="lobby-column">
+                <h2 class="lobby-title">{{ t().rooms.settingsTitle }} · {{ t().games[game()].name }}</h2>
+                <div class="setting-row">
+                  <span class="setting-label" id="room-mode">{{ modeGroup() }}</span>
+                  <div class="chips" role="group" aria-labelledby="room-mode">
+                    @for (mode of modes(); track mode) {
+                      <button
+                        type="button"
+                        class="chip"
+                        [attr.aria-pressed]="mode === choice().mode"
+                        [disabled]="!client.isHost()"
+                        [title]="modeText(mode).summary"
+                        (click)="chooseMode(mode)"
+                      >
+                        {{ modeText(mode).name }}
+                      </button>
+                    }
+                  </div>
+                </div>
+                <div class="setting-row">
+                  <span class="setting-label" id="room-level">{{ t().settings.levelGroup }}</span>
+                  <div class="chips" role="group" aria-labelledby="room-level">
+                    @for (level of levels(); track level) {
+                      <button
+                        type="button"
+                        class="chip"
+                        [attr.aria-pressed]="level === choice().level"
+                        [disabled]="!client.isHost()"
+                        [title]="levelText(level).summary"
+                        (click)="chooseLevel(level)"
+                      >
+                        {{ levelText(level).name }}
+                      </button>
+                    }
+                  </div>
+                </div>
+                <div class="setting-row">
+                  <span class="setting-label" id="room-time">{{ t().rooms.roundLength }}</span>
+                  <div class="chips is-one-line" role="group" aria-labelledby="room-time">
+                    @for (seconds of roundSeconds; track seconds) {
+                      <button
+                        type="button"
+                        class="chip"
+                        [attr.aria-pressed]="seconds === room.settings.seconds"
+                        [disabled]="!client.isHost()"
+                        (click)="chooseSeconds(seconds)"
+                      >
+                        {{ t().rooms.seconds(seconds) }}
+                      </button>
+                    }
+                  </div>
+                </div>
+                <label class="switch score-switch">
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    [checked]="room.settings.showScores"
                     [disabled]="!client.isHost()"
-                    (click)="chooseGame(option)"
-                  >
-                    {{ t().games[option].name }}
-                  </button>
-                }
+                    (change)="chooseShowScores(!room.settings.showScores)"
+                  />
+                  <span class="track" aria-hidden="true"></span>
+                  <span>{{ t().rooms.showScores }}</span>
+                </label>
               </div>
-            }
-            <div class="choices" role="group" [attr.aria-label]="modeGroup()">
-              @for (mode of modes(); track mode) {
-                <button
-                  type="button"
-                  class="button button-secondary"
-                  [attr.aria-pressed]="mode === choice().mode"
-                  [disabled]="!client.isHost()"
-                  [title]="modeText(mode).summary"
-                  (click)="chooseMode(mode)"
-                >
-                  {{ modeText(mode).name }}
-                </button>
-              }
-            </div>
-            <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
-              @for (level of levels(); track level) {
-                <button
-                  type="button"
-                  class="button button-secondary"
-                  [attr.aria-pressed]="level === choice().level"
-                  [disabled]="!client.isHost()"
-                  [title]="levelText(level).summary"
-                  (click)="chooseLevel(level)"
-                >
-                  {{ levelText(level).name }}
-                </button>
-              }
-            </div>
-            <div class="choices" role="group" [attr.aria-label]="t().rooms.roundLength">
-              @for (seconds of roundSeconds; track seconds) {
-                <button
-                  type="button"
-                  class="button button-secondary"
-                  [attr.aria-pressed]="seconds === room.settings.seconds"
-                  [disabled]="!client.isHost()"
-                  (click)="chooseSeconds(seconds)"
-                >
-                  {{ t().rooms.seconds(seconds) }}
-                </button>
-              }
             </div>
 
-            <div class="choices" role="group" [attr.aria-label]="t().rooms.showScores">
-            @for (show of [true, false]; track show) {
-              <button
-                type="button"
-                class="button button-secondary"
-                [attr.aria-pressed]="show === room.settings.showScores"
-                [disabled]="!client.isHost()"
-                [title]="show ? t().rooms.scoresShown : t().rooms.scoresHidden"
-                (click)="chooseShowScores(show)"
-              >
-                {{ show ? t().rooms.scoresShown : t().rooms.scoresHidden }}
-              </button>
-            }
-          </div>
-
-          @if (client.me(); as me) {
+            @if (client.me(); as me) {
               <button type="button" class="button" [class.button-secondary]="me.ready" (click)="client.setReady(!me.ready)">
                 {{ me.ready ? t().rooms.notReadyYet : t().rooms.imReady }}
               </button>

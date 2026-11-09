@@ -30,25 +30,82 @@ export interface GameInfo {
    * can't be reached. Add a new game with `false` to try it in preview before opening it.
    */
   readonly openByDefault: boolean;
+  /** A small picture of the game, for lists like the room's choice of game */
+  readonly icon: string;
 }
 
 /** All games, in the order they appear on the site */
 export const GAMES: readonly GameInfo[] = [
-  { slug: 'math-games', category: 'numbers', minAge: 6, openByDefault: true },
-  { slug: 'measure-it', category: 'numbers', minAge: 7, openByDefault: false },
-  { slug: 'climb-tower', category: 'numbers', minAge: 6, openByDefault: false },
-  { slug: 'letter-games', category: 'letters', minAge: 4, openByDefault: true },
-  { slug: 'hit-the-note', category: 'music', minAge: 4, openByDefault: true },
+  {
+    slug: 'math-games',
+    category: 'numbers',
+    minAge: 6,
+    openByDefault: true,
+    icon: '🔢',
+  },
+  {
+    slug: 'measure-it',
+    category: 'numbers',
+    minAge: 7,
+    openByDefault: false,
+    icon: '📐',
+  },
+  {
+    slug: 'climb-tower',
+    category: 'numbers',
+    minAge: 6,
+    openByDefault: false,
+    icon: '🧗',
+  },
+  {
+    slug: 'letter-games',
+    category: 'letters',
+    minAge: 4,
+    openByDefault: true,
+    icon: '🔤',
+  },
+  {
+    slug: 'hit-the-note',
+    category: 'music',
+    minAge: 4,
+    openByDefault: true,
+    icon: '🎵',
+  },
   {
     slug: 'sliding-puzzle',
     category: 'puzzles',
     minAge: 5,
     openByDefault: true,
+    icon: '🧩',
   },
-  { slug: 'turn-picture', category: 'puzzles', minAge: 4, openByDefault: true },
-  { slug: 'place-pieces', category: 'puzzles', minAge: 4, openByDefault: true },
-  { slug: 'find-pairs', category: 'puzzles', minAge: 4, openByDefault: false },
-  { slug: 'how-many', category: 'numbers', minAge: 3, openByDefault: false },
+  {
+    slug: 'turn-picture',
+    category: 'puzzles',
+    minAge: 4,
+    openByDefault: true,
+    icon: '🔄',
+  },
+  {
+    slug: 'place-pieces',
+    category: 'puzzles',
+    minAge: 4,
+    openByDefault: true,
+    icon: '🖼️',
+  },
+  {
+    slug: 'find-pairs',
+    category: 'puzzles',
+    minAge: 4,
+    openByDefault: false,
+    icon: '🃏',
+  },
+  {
+    slug: 'how-many',
+    category: 'numbers',
+    minAge: 3,
+    openByDefault: false,
+    icon: '🖐️',
+  },
 ];
 
 export const GAME_SLUGS: readonly GameSlug[] = GAMES.map(({ slug }) => slug);

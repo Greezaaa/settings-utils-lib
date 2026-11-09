@@ -126,3 +126,116 @@
 .board.is-wide {
   max-width: 48rem;
 }
+
+// The lobby: the game list and its settings side by side on wide screens, one under the other on phones
+.lobby {
+  display: grid;
+  gap: 1.5rem;
+  text-align: left;
+  width: 100%;
+
+  @media (min-width: 40rem) {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+.lobby-column {
+  align-content: start;
+  display: grid;
+  gap: 1rem;
+}
+
+.lobby-title {
+  color: var(--heading);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.game-list {
+  display: grid;
+  gap: 0.375rem;
+}
+
+// One game per line, with its icon; the chosen one inverted
+.game-option {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--heading);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 0.9375rem;
+  gap: 0.625rem;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+
+  &[aria-pressed='true'] {
+    background: var(--button-bg);
+    border-color: var(--button-bg);
+    color: var(--button-text);
+  }
+
+  &:disabled:not([aria-pressed='true']) {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+
+.game-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.setting-row {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.setting-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+// Small choices that wrap; round lengths stay on one line
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+
+  &.is-one-line {
+    flex-wrap: nowrap;
+
+    .chip {
+      flex: 1;
+    }
+  }
+}
+
+.chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  color: var(--heading);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.75rem;
+  white-space: nowrap;
+
+  &[aria-pressed='true'] {
+    background: var(--button-bg);
+    border-color: var(--button-bg);
+    color: var(--button-text);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.score-switch {
+  font-size: 0.875rem;
+}
