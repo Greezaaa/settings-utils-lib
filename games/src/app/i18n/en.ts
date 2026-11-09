@@ -190,6 +190,7 @@ export const EN: SiteMessages = {
     betaText:
       'These games are in beta: this isn’t the final version yet, and things will keep changing. Soon you’ll be able to subscribe by email to hear about new games and updates.',
     whatsNewTitle: 'What’s new',
+    updateKinds: { game: 'Games', language: 'Languages', settings: 'Settings', feature: 'Features', privacy: 'Privacy' },
     showMore: 'Show more updates',
     showFewer: 'Show fewer',
     madeByTitle: 'Made for kids, by kids',
@@ -313,7 +314,7 @@ export const EN: SiteMessages = {
       },
       {
         what: 'Admin sign-in (the admin team only)',
-        where: 'A cookie for api.su-labs.dev',
+        where: 'A cookie for our servers',
         why: 'To keep admins signed in for 30 days; visitors never get it',
       },
       {
@@ -327,7 +328,7 @@ export const EN: SiteMessages = {
       'A cookie is sent to our server with every visit; local storage stays in this browser and is never sent anywhere. We use one cookie, only to share your theme and text size with su-labs.dev, and the server doesn’t read it.',
     sentTitle: 'What the games send',
     sentLead:
-      'To show what’s popular and to improve the games, they send a few things to our server, api.su-labs.dev. None of it says who you are.',
+      'To show what’s popular and to improve the games, they send a few things to our servers. None of it says who you are.',
     sent: [
       'A count of games played, per game and day',
       'Your 👍 or 👎 for a game and its reason, if you choose one',
@@ -335,26 +336,30 @@ export const EN: SiteMessages = {
       'Suggestions you send, with their picture (cleaned of hidden information)',
       'If something breaks: the error’s message and the page it happened on, so we can fix it; nothing about you',
       'Your internet address is only used for a few minutes to stop spam, and is never saved',
-      'In a room: only your moves (ready, settings, score) go to rooms.su-labs.dev, under a made-up name; nothing is kept once the room closes',
+      'In a room: only your moves (ready, settings, score) go to our servers, under a made-up name; nothing is kept once the room closes',
     ],
     neverTitle: 'What we never do',
     never: [
       'No account is needed to play: accounts are optional',
       'No ads and no tracking',
       'Nothing is sold or shared with anyone',
-      'The microphone is only used while you play Sing it, and the sound is never recorded or sent',
     ],
+    microphone:
+      'The microphone is only used while you play Sing it, and the sound is never recorded or sent',
+    inDevelopment: '(in development)',
     accountsTitle: 'Accounts',
     accountsLead:
       'An account is optional. It lets you keep your favourites and best results on any device, and see the leaderboards. It keeps only this:',
     accounts: [
-      'A login name and a password (stored scrambled, never readable), to sign in',
+      'A login name and a password (stored scrambled, never readable), to sign in to your account',
       'A screen name, the only thing other players see, on the leaderboards. It doesn’t have to be your real name',
-      'An email only if you add one, used only to send a link when you forget your password. Without an email, a forgotten password can’t be reset',
       'Your favourite games, and how many times you played each game and your best result',
-      'Deleting the account, on the account page, deletes all of it at once',
+      'Deleting the account, on the account page, deletes all of it straight away: it isn’t kept deactivated, and it can’t be recovered',
       'You can delete only your results (plays, bests and leaderboard places) on the account page, and keep the account',
     ],
+    accountsEmail:
+      'An email only if you add one, used only to send a link when you forget your password. Without an email, a forgotten password can’t be reset',
+    emailUnavailable: 'Temporarily unavailable (in development)',
     choiceTitle: 'Your choice',
     choiceLabel: 'Remember my preferences on this device',
     choiceOn: 'Your preferences are saved on this device.',

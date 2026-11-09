@@ -11,8 +11,8 @@ const LONG_LIST = 15;
 
 /**
  * "What's new" on the home page: the latest changes to the site, newest first, 3 at first and up to 15 on request.
- * Changes since the visitor's last visit get a "New" badge; they count as seen once the visitor leaves the home page,
- * so a reload keeps them. Changes about a game that isn't open aren't listed.
+ * Each change has a tag saying what it's about; changes since the visitor's last visit also get a "New" badge.
+ * They count as seen once the visitor leaves the home page, so a reload keeps them. Changes about a game that isn't open aren't listed.
  */
 @Component({
   selector: 'app-whats-new',
@@ -44,6 +44,7 @@ export class WhatsNew {
       .map(({ change, version, published }) => ({
         key: `${version}:${change.text.en}`,
         text: change.text[language],
+        kind: this.t().home.updateKinds[change.kind],
         game: change.game,
         day: this.inBrowser() ? formatDay(published, language) : null,
         isNew: lastSeen !== null && version > lastSeen,

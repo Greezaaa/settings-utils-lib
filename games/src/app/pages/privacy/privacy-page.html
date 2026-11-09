@@ -63,6 +63,12 @@
       @for (item of t().privacy.accounts; track item) {
         <li>{{ item }}</li>
       }
+      <li>
+        {{ t().privacy.accountsEmail }}
+        @if (!canEmail()) {
+          <strong class="unavailable">{{ t().privacy.emailUnavailable }}</strong>
+        }
+      </li>
     </ul>
   </section>
 }
@@ -73,6 +79,12 @@
     @for (item of t().privacy.never; track item) {
       <li>{{ item }}</li>
     }
+    <li>
+      {{ t().privacy.microphone }}
+      @if (isSingClosed()) {
+        <strong class="unavailable">{{ t().privacy.inDevelopment }}</strong>
+      }
+    </li>
   </ul>
 </section>
 

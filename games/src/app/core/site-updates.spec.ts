@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { formatDay, formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, recentChanges, SITE_UPDATES, SiteUpdate } from './site-updates';
 
-const text = (word: string) => ({ en: word, es: word, eu: word, uk: word });
+const text = (word: string) => ({ en: word, es: word, eu: word, it: word, uk: word });
 const UPDATES: readonly SiteUpdate[] = [
-  { version: 1, published: '2026-01-01T10:00:00Z', privacy: true, changes: [{ text: text('One') }] },
+  { version: 1, published: '2026-01-01T10:00:00Z', privacy: true, changes: [{ kind: 'feature', text: text('One') }] },
   {
     version: 2,
     published: '2026-02-01T10:00:00Z',
-    changes: [{ text: text('Two'), game: 'math-games' }, { text: text('Three') }],
+    changes: [
+      { kind: 'game', text: text('Two'), game: 'math-games' },
+      { kind: 'settings', text: text('Three') },
+    ],
   },
 ];
 

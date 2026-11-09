@@ -187,6 +187,7 @@ export const IT: SiteMessages = {
     betaText:
       'Questi giochi sono in beta: non è ancora la versione finale e le cose continueranno a cambiare. Presto potrai iscriverti via email per sapere dei nuovi giochi e degli aggiornamenti.',
     whatsNewTitle: 'Novità',
+    updateKinds: { game: 'Giochi', language: 'Lingue', settings: 'Impostazioni', feature: 'Funzioni', privacy: 'Privacy' },
     showMore: 'Mostra altri aggiornamenti',
     showFewer: 'Mostra meno',
     madeByTitle: 'Fatto per bambini, da bambini',
@@ -306,7 +307,7 @@ export const IT: SiteMessages = {
       },
       {
         what: 'Accesso degli amministratori (solo il team)',
-        where: 'Un cookie per api.su-labs.dev',
+        where: 'Un cookie per i nostri server',
         why: 'Per tenere connessi gli amministratori per 30 giorni; i visitatori non lo ricevono mai',
       },
       {
@@ -320,7 +321,7 @@ export const IT: SiteMessages = {
       'Un cookie viene inviato al nostro server a ogni visita; l’archivio locale resta in questo browser e non viene mai inviato. Usiamo un solo cookie, solo per condividere il tema e la dimensione del testo con su-labs.dev, e il server non lo legge.',
     sentTitle: 'Cosa inviano i giochi',
     sentLead:
-      'Per mostrare cosa è più giocato e migliorare i giochi, inviano poche cose al nostro server, api.su-labs.dev. Niente di tutto ciò dice chi sei.',
+      'Per mostrare cosa è più giocato e migliorare i giochi, inviano poche cose ai nostri server. Niente di tutto ciò dice chi sei.',
     sent: [
       'Un conteggio delle partite, per gioco e per giorno',
       'Il tuo 👍 o 👎 a un gioco e il motivo, se ne scegli uno',
@@ -328,26 +329,30 @@ export const IT: SiteMessages = {
       'I suggerimenti che invii, con la loro immagine (ripulita dalle informazioni nascoste)',
       'Se qualcosa si rompe: il messaggio dell’errore e la pagina in cui è successo, per poterlo correggere; niente su di te',
       'Il tuo indirizzo internet si usa solo per pochi minuti per fermare lo spam, e non viene mai salvato',
-      'In una stanza: solo le tue mosse (pronto, impostazioni, punteggio) vanno a rooms.su-labs.dev, con un nome inventato; non resta niente quando la stanza si chiude',
+      'In una stanza: solo le tue mosse (pronto, impostazioni, punteggio) vanno ai nostri server, con un nome inventato; non resta niente quando la stanza si chiude',
     ],
     neverTitle: 'Cosa non facciamo mai',
     never: [
       'Per giocare non serve un account: gli account sono facoltativi',
       'Niente pubblicità e niente tracciamento',
       'Non vendiamo né condividiamo niente con nessuno',
-      'Il microfono si usa solo mentre giochi a Cantala, e il suono non viene mai registrato né inviato',
     ],
+    microphone:
+      'Il microfono si usa solo mentre giochi a Cantala, e il suono non viene mai registrato né inviato',
+    inDevelopment: '(in sviluppo)',
     accountsTitle: 'Account',
     accountsLead:
       'Un account è facoltativo. Ti permette di avere i tuoi preferiti e i tuoi record su qualsiasi dispositivo e di vedere le classifiche. Conserva solo questo:',
     accounts: [
-      'Un nome utente e una password (salvata cifrata, mai leggibile), per accedere',
+      'Un nome utente e una password (salvata cifrata, mai leggibile), per accedere al tuo account',
       'Un nome visibile, l’unica cosa che vedono gli altri giocatori, nelle classifiche. Non deve essere il tuo vero nome',
-      'Un’email solo se la aggiungi, usata solo per inviarti un link se dimentichi la password. Senza email, una password dimenticata non si può recuperare',
       'I tuoi giochi preferiti, quante volte hai giocato a ogni gioco e il tuo miglior risultato',
-      'Eliminando l’account, nella pagina dell’account, si elimina tutto in una volta',
+      'Eliminando l’account, nella pagina dell’account, si elimina tutto subito: non resta disattivato e non si può recuperare',
       'Nella pagina dell’account puoi eliminare solo i tuoi risultati (partite, record e posti in classifica) e tenere l’account',
     ],
+    accountsEmail:
+      'Un’email solo se la aggiungi, usata solo per inviarti un link se dimentichi la password. Senza email, una password dimenticata non si può recuperare',
+    emailUnavailable: 'Temporaneamente non disponibile (in sviluppo)',
     choiceTitle: 'La tua scelta',
     choiceLabel: 'Ricorda le mie preferenze su questo dispositivo',
     choiceOn: 'Le tue preferenze sono salvate su questo dispositivo.',

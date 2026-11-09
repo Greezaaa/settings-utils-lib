@@ -5,6 +5,7 @@
         @if (item.isNew) {
           <span class="tag tag-green">{{ t().page.new }}</span>
         }
+        <span class="tag">{{ item.kind }}</span>
         @if (item.day) {
           <time class="muted">{{ item.day }}</time>
         }

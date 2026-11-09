@@ -195,6 +195,7 @@ export const EU: SiteMessages = {
     betaText:
       'Jokoak beta fasean daude: oraindik ez da azken bertsioa, eta aldatzen jarraituko dute. Laster posta elektronikoz harpidetu ahal izango zara joko berrien eta berritasunen berri izateko.',
     whatsNewTitle: 'Berritasunak',
+    updateKinds: { game: 'Jokoak', language: 'Hizkuntzak', settings: 'Ezarpenak', feature: 'Funtzioak', privacy: 'Pribatutasuna' },
     showMore: 'Ikusi berritasun gehiago',
     showFewer: 'Ikusi gutxiago',
     madeByTitle: 'Haurrentzat eginak, haurrek eginak',
@@ -320,7 +321,7 @@ export const EU: SiteMessages = {
       },
       {
         what: 'Administrazio saioa (taldea bakarrik)',
-        where: 'api.su-labs.dev-ren cookie bat',
+        where: 'Gure zerbitzarien cookie bat',
         why: 'Taldeak saioa 30 egunez irekita izan dezan; bisitariek ez dute inoiz jasotzen',
       },
       {
@@ -334,7 +335,7 @@ export const EU: SiteMessages = {
       'Cookie bat gure zerbitzarira bidaltzen da bisita bakoitzean; biltegiratze lokala nabigatzaile honetan geratzen da eta ez da inora bidaltzen. Cookie bakarra erabiltzen dugu, zure gaia eta testuaren tamaina su-labs.dev-ekin partekatzeko, eta zerbitzariak ez du irakurtzen.',
     sentTitle: 'Zer bidaltzen duten jokoek',
     sentLead:
-      'Zer den ezaguna erakusteko eta jokoak hobetzeko, gauza gutxi batzuk bidaltzen dituzte gure zerbitzarira, api.su-labs.dev. Horietako ezerk ez du esaten nor zaren.',
+      'Zer den ezaguna erakusteko eta jokoak hobetzeko, gauza gutxi batzuk bidaltzen dituzte gure zerbitzarietara. Horietako ezerk ez du esaten nor zaren.',
     sent: [
       'Zenbat partida jokatzen diren, joko eta egun bakoitzeko',
       'Joko baten zure 👍 edo 👎 eta arrazoia, bat aukeratzen baduzu',
@@ -342,26 +343,30 @@ export const EU: SiteMessages = {
       'Bidaltzen dituzun proposamenak, beren irudiarekin (ezkutuko informaziorik gabe)',
       'Zerbait hausten bada: errorearen mezua eta gertatu zen orria, konpontzeko; zuri buruzko ezer ez',
       'Zure interneteko helbidea minutu batzuetan bakarrik erabiltzen da spama geldiarazteko, eta ez da inoiz gordetzen',
-      'Gela batean: zure mugimenduak bakarrik (prest, ezarpenak, puntuazioa) doaz rooms.su-labs.dev-era, asmatutako izen batekin; ez da ezer gordetzen gela ixtean',
+      'Gela batean: zure mugimenduak bakarrik (prest, ezarpenak, puntuazioa) doaz gure zerbitzarietara, asmatutako izen batekin; ez da ezer gordetzen gela ixtean',
     ],
     neverTitle: 'Inoiz egiten ez duguna',
     never: [
       'Ez da konturik behar jokatzeko: kontuak hautazkoak dira',
       'Ez iragarkirik, ez jarraipenik',
       'Ez dugu ezer saltzen edo inorekin partekatzen',
-      'Mikrofonoa Abestu moduan jokatzean bakarrik erabiltzen da, eta soinua ez da inoiz grabatzen ezta bidaltzen ere',
     ],
+    microphone:
+      'Mikrofonoa Abestu moduan jokatzean bakarrik erabiltzen da, eta soinua ez da inoiz grabatzen ezta bidaltzen ere',
+    inDevelopment: '(garapenean)',
     accountsTitle: 'Kontuak',
     accountsLead:
       'Kontua hautazkoa da. Zure gogokoak eta emaitza onenak edozein gailutan izateko eta sailkapenak ikusteko balio du. Hau bakarrik gordetzen du:',
     accounts: [
-      'Erabiltzaile-izen bat eta pasahitz bat (zifratuta gordeta, inoiz ez irakurgarri), sartzeko',
+      'Erabiltzaile-izen bat eta pasahitz bat (zifratuta gordeta, inoiz ez irakurgarri), zure kontuan sartzeko',
       'Izen ikusgai bat, beste jokalariek ikusten duten gauza bakarra, sailkapenetan. Ez du zure benetako izena izan behar',
-      'Helbide elektroniko bat, gehitzen baduzu bakarrik; pasahitza ahazten baduzu esteka bat bidaltzeko baino ez da erabiltzen. Helbiderik gabe, ahaztutako pasahitza ezin da berreskuratu',
       'Zure joko gogokoak, eta joko bakoitzean zenbat aldiz jokatu duzun eta zure emaitza onena',
-      'Kontua ezabatzean, kontuaren orrian, dena batera ezabatzen da',
+      'Kontua ezabatzean, kontuaren orrian, dena berehala ezabatzen da: ez da desaktibatuta gordetzen eta ezin da berreskuratu',
       'Kontuaren orrian zure emaitzak bakarrik ezaba ditzakezu (partidak, emaitza onenak eta sailkapenetako postuak), kontua mantenduz',
     ],
+    accountsEmail:
+      'Helbide elektroniko bat, gehitzen baduzu bakarrik; pasahitza ahazten baduzu esteka bat bidaltzeko baino ez da erabiltzen. Helbiderik gabe, ahaztutako pasahitza ezin da berreskuratu',
+    emailUnavailable: 'Aldi baterako ez dago erabilgarri (garapenean)',
     choiceTitle: 'Zure aukera',
     choiceLabel: 'Gogoratu nire hobespenak gailu honetan',
     choiceOn: 'Zure hobespenak gailu honetan gordetzen dira.',

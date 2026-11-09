@@ -42,3 +42,9 @@
   font-size: 0.8125rem;
   padding-bottom: 2rem;
 }
+
+// A part that isn't live yet: email resets, or a game still in development
+.unavailable {
+  color: var(--yellow-text);
+  font-weight: 600;
+}

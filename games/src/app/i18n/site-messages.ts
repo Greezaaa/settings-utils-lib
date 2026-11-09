@@ -16,6 +16,7 @@ import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 import { ClimbModeId } from '../games/climb-tower';
 import { AnswerStyle } from '../core/answer-words';
 import { AccountProblem } from '../core/player-account';
+import { UpdateKind } from '../core/site-updates';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
 
@@ -112,6 +113,8 @@ export interface SiteMessages {
     /** Note below the games: who makes them */
     /** "What's new": the latest changes, and the button to see more or fewer */
     readonly whatsNewTitle: string;
+    /** The tag beside each change in What's new */
+    readonly updateKinds: Readonly<Record<UpdateKind, string>>;
     readonly showMore: string;
     readonly showFewer: string;
     readonly madeByTitle: string;
@@ -204,16 +207,22 @@ export interface SiteMessages {
     }[];
     readonly differenceTitle: string;
     readonly difference: string;
-    /** What the games send to api.su-labs.dev */
+    /** What the games send to our servers (the API and the rooms service) */
     readonly sentTitle: string;
     readonly sentLead: string;
     readonly sent: readonly string[];
     readonly neverTitle: string;
     readonly never: readonly string[];
+    /** The microphone item, last in the "never" list; `inDevelopment` follows it while Hit the note is closed */
+    readonly microphone: string;
+    readonly inDevelopment: string;
     /** Player accounts (shown while accounts are open): what an account keeps and how to delete it */
     readonly accountsTitle: string;
     readonly accountsLead: string;
     readonly accounts: readonly string[];
+    /** The email item, last in the accounts list; `emailUnavailable` follows it while the API can't send emails */
+    readonly accountsEmail: string;
+    readonly emailUnavailable: string;
     readonly choiceTitle: string;
     readonly choiceLabel: string;
     readonly choiceOn: string;

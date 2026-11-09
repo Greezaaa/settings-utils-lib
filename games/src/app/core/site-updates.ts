@@ -7,10 +7,22 @@ import { GameSlug } from './games';
  *
  * Add an entry for changes players would want to know about (a new game, a new setting, a new language),
  * never for small fixes. Give it the next version number and the time it goes live, write each change in
- * every language (with `game` when it is a new game, so the list links to it), and set `privacy: true`
+ * every language with its `kind` (a tag says what it's about, so the text can be short; `game` when it is about a
+ * game, so the list links to it), and set `privacy: true`
  * when the update changes what the site saves, so the privacy notice is shown again.
  */
+/** What a change is about, shown as a tag beside it */
+export const UPDATE_KINDS = [
+  'game',
+  'language',
+  'settings',
+  'feature',
+  'privacy',
+] as const;
+export type UpdateKind = (typeof UPDATE_KINDS)[number];
+
 export interface UpdateChange {
+  readonly kind: UpdateKind;
   readonly text: Readonly<Record<LanguageId, string>>;
   /** The game this change is about, linked from the notice */
   readonly game?: GameSlug;
@@ -34,6 +46,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     changes: [
       {
         game: 'math-games',
+        kind: 'game',
         text: {
           en: 'Math games: true or false, number pad and find the signs',
           es: 'Juegos de matemáticas: verdadero o falso, teclado numérico y encuentra los signos',
@@ -50,6 +63,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     changes: [
       {
         game: 'sliding-puzzle',
+        kind: 'game',
         text: {
           en: 'New game: Sliding puzzle, with lines or a drawing',
           es: 'Nuevo juego: Puzle deslizante, con líneas o con un dibujo',
@@ -60,6 +74,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
       {
         game: 'turn-picture',
+        kind: 'game',
         text: {
           en: 'New game: Turn the picture',
           es: 'Nuevo juego: Gira la imagen',
@@ -70,6 +85,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
       {
         game: 'place-pieces',
+        kind: 'game',
         text: {
           en: 'New game: Place the pieces',
           es: 'Nuevo juego: Coloca las piezas',
@@ -79,6 +95,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
         },
       },
       {
+        kind: 'settings',
         text: {
           en: 'Game colours for every game, in the settings',
           es: 'Colores del juego para todos los juegos, en los ajustes',
@@ -88,6 +105,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
         },
       },
       {
+        kind: 'language',
         text: {
           en: 'Play in English, Spanish or Basque, in the settings',
           es: 'Juega en inglés, español o euskera, en los ajustes',
@@ -104,6 +122,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     privacy: true,
     changes: [
       {
+        kind: 'privacy',
         text: {
           en: 'New Privacy page: choose whether this device remembers your preferences, or delete what is saved',
           es: 'Nueva página de Privacidad: elige si este dispositivo recuerda tus preferencias o borra lo guardado',
@@ -119,6 +138,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     published: '2026-11-07T19:00:00+01:00',
     changes: [
       {
+        kind: 'language',
         text: {
           en: 'The games are now in Ukrainian too, in the settings',
           es: 'Los juegos ya están también en ucraniano, en los ajustes',
@@ -135,6 +155,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     changes: [
       {
         game: 'letter-games',
+        kind: 'game',
         text: {
           en: 'New game: Letter games, with vowels, mixed letters and a word builder',
           es: 'Nuevo juego: Juegos de letras, con vocales, letras mezcladas y forma palabras',
@@ -144,6 +165,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
         },
       },
       {
+        kind: 'feature',
         text: {
           en: 'Games are grouped by category, each with its own recommended age',
           es: 'Los juegos están agrupados por categorías, cada uno con su edad recomendada',
@@ -160,6 +182,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     privacy: true,
     changes: [
       {
+        kind: 'feature',
         text: {
           en: 'Tell us what you think of each game with 👍 or 👎, below the game',
           es: 'Dinos qué te parece cada juego con 👍 o 👎, debajo del juego',
@@ -169,6 +192,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
         },
       },
       {
+        kind: 'feature',
         text: {
           en: 'New page to suggest ideas, with a drawing if you like',
           es: 'Nueva página para sugerir ideas, con un dibujo si quieres',
@@ -179,6 +203,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
       {
         game: 'letter-games',
+        kind: 'game',
         text: {
           en: 'Word builder: any real word counts, and you can report rude ones',
           es: 'Forma palabras: vale cualquier palabra real, y puedes denunciar las groseras',
@@ -195,6 +220,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     changes: [
       {
         game: 'hit-the-note',
+        kind: 'game',
         text: {
           en: 'New game: Hit the note, find, compare and sing notes',
           es: 'Nuevo juego: Dando la nota, encuentra, compara y canta notas',
@@ -210,6 +236,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
     published: '2026-11-08T20:00:00+01:00',
     changes: [
       {
+        kind: 'feature',
         text: {
           en: 'What’s new is now on the home page, so you never miss a change',
           es: 'Las novedades están ahora en la página principal, para que no te pierdas nada',
@@ -222,10 +249,11 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 9,
-    published: '2026-11-09T12:00:00+01:00',
+    published: '2026-11-09T09:00:00+01:00',
     changes: [
       {
         game: 'measure-it',
+        kind: 'game',
         text: {
           en: 'New game: Measure it, with angles, glasses of water and number lines',
           es: 'Nuevo juego: A medir, con ángulos, vasos de agua y rectas numéricas',
@@ -238,10 +266,11 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 10,
-    published: '2026-11-10T12:00:00+01:00',
+    published: '2026-11-09T10:00:00+01:00',
     changes: [
       {
         game: 'climb-tower',
+        kind: 'game',
         text: {
           en: 'New game: Climb the tower, true or false and which one',
           es: 'Nuevo juego: Sube la torre, verdadero o falso y cuál es',
@@ -254,10 +283,11 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 11,
-    published: '2026-11-11T12:00:00+01:00',
+    published: '2026-11-09T10:30:00+01:00',
     changes: [
       {
         game: 'find-pairs',
+        kind: 'game',
         text: {
           en: 'New game: Find the pairs, turn the cards and remember the pictures',
           es: 'Nuevo juego: Encuentra las parejas, gira las cartas y recuerda los dibujos',
@@ -270,15 +300,16 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 12,
-    published: '2026-11-12T12:00:00+01:00',
+    published: '2026-11-09T11:15:00+01:00',
     changes: [
       {
+        kind: 'language',
         text: {
-          en: 'The games are now in Italian too, in the settings',
-          es: 'Los juegos ya están también en italiano, en los ajustes',
-          eu: 'Jokoak italieraz ere badaude, ezarpenetan',
-          it: 'I giochi ora sono anche in italiano, nelle impostazioni',
-          uk: 'Ігри тепер є й італійською, у налаштуваннях',
+          en: 'Italian translation added',
+          es: 'Añadida la traducción al italiano',
+          eu: 'Italierazko itzulpena gehitu da',
+          it: 'Aggiunta la traduzione in italiano',
+          uk: 'Додано італійський переклад',
         },
       },
     ],
