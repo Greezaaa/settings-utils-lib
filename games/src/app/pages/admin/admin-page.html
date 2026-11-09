@@ -20,6 +20,9 @@
         @case ('wrong') {
           <p class="error" role="alert">{{ t().admin.wrongCredentials }}</p>
         }
+        @case ('too-many') {
+          <p class="error" role="alert">{{ t().admin.tooManyTries }}</p>
+        }
         @case ('offline') {
           <p class="error" role="alert">{{ t().admin.offline }}</p>
         }

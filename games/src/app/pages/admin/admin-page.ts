@@ -10,7 +10,7 @@ import { AdminSuggestions } from './admin-suggestions';
 import { AdminTeam } from './admin-team';
 import { AdminWordReports } from './admin-word-reports';
 
-type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'offline';
+type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offline';
 
 const TABS = ['games', 'plays', 'suggestions', 'words', 'errors', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];

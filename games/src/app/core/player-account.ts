@@ -42,6 +42,7 @@ export const ACCOUNT_PROBLEMS = [
   'email-taken',
   'email-unavailable',
   'not-found',
+  'too-many',
   'offline',
 ] as const;
 export type AccountProblem = (typeof ACCOUNT_PROBLEMS)[number];
@@ -246,10 +247,13 @@ export class PlayerAccount {
     return !response ? 'offline' : response.ok ? 'done' : this.reason(response);
   }
 
-  /** The reason in an error answer (e.g. `login-taken`), `not-found` for a bad link, or `invalid` */
+  /** The reason in an error answer (e.g. `login-taken`), `not-found` for a bad link, `too-many` tries, or `invalid` */
   private async reason(response: Response): Promise<AccountProblem> {
     if (response.status === 404) {
       return 'not-found';
+    }
+    if (response.status === 429) {
+      return 'too-many';
     }
     const message: unknown = field(await response.json().catch(() => null), 'message');
     return isAccountProblem(message) ? message : 'invalid';

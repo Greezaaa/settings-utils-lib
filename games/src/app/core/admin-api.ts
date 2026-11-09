@@ -41,6 +41,17 @@ export type AdminRole = 'super' | 'moderator' | 'tester';
 /** The roles the super admin gives team members */
 export const MEMBER_ROLES = ['moderator', 'tester'] as const;
 export type MemberRole = (typeof MEMBER_ROLES)[number];
+/** How a sign-in went: `too-many` when the API refuses more tries for now (5 every 15 minutes) */
+export type SignInAnswer = 'right' | 'wrong' | 'too-many' | 'offline';
+
+/** What a refused sign-in means, from the API's status */
+export function failedSignIn(status: number): Exclude<SignInAnswer, 'right'> {
+  if (status === 429) {
+    return 'too-many';
+  }
+  return status === 400 || status === 401 || status === 404 ? 'wrong' : 'offline';
+}
+
 /** Roles that see games and features switched off for the public */
 export const canPreview = (role: AdminRole | undefined): boolean => role === 'super' || role === 'tester';
 
@@ -230,8 +241,8 @@ export class AdminApi {
     return this.signedIn() ? 'signed-in' : 'signed-out';
   }
 
-  /** Signs in; the answer tells wrong details from an API that can't be reached */
-  async signIn(email: string, password: string): Promise<'right' | 'wrong' | 'offline'> {
+  /** Signs in; the answer tells wrong details, too many tries, and an API that can't be reached apart */
+  async signIn(email: string, password: string): Promise<SignInAnswer> {
     return this.startSession(await this.fetch('/auth/login', jsonInit('POST', { email, password }), READ_TIMEOUT_MS));
   }
 
@@ -364,12 +375,12 @@ export class AdminApi {
   }
 
   /** After a sign-in or an accepted invite: who is signed in now */
-  private async startSession(response: Response | null): Promise<'right' | 'wrong' | 'offline'> {
+  private async startSession(response: Response | null): Promise<SignInAnswer> {
     if (!response) {
       return 'offline';
     }
     if (!response.ok) {
-      return response.status === 401 || response.status === 404 ? 'wrong' : 'offline';
+      return failedSignIn(response.status);
     }
     this.signedIn.set(parseMe(await response.json()));
     return 'right';

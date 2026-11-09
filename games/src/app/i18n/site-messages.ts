@@ -495,6 +495,8 @@ export interface SiteMessages {
     readonly email: string;
     readonly password: string;
     readonly wrongCredentials: string;
+    /** The API refuses more sign-in tries for a while */
+    readonly tooManyTries: string;
     readonly offline: string;
     readonly checking: string;
     readonly signIn: string;
