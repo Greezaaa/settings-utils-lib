@@ -1,0 +1,43 @@
+{
+	"name": "@su-labs/dialog",
+	"version": "22.0.0",
+	"description": "Accessible confirm and message dialogs for Angular, on the native <dialog>: one or two buttons, HTML text, an optional picture, a dimmed or clear backdrop, and every part themeable with CSS variables.",
+	"keywords": [
+		"angular",
+		"dialog",
+		"modal",
+		"confirm",
+		"alert",
+		"popup",
+		"accessible",
+		"signals",
+		"themeable",
+		"css-variables",
+		"ui",
+		"library"
+	],
+	"homepage": "https://su-labs.dev/",
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/dialog"
+	},
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"peerDependencies": {
+		"@angular/common": "^22.0.0",
+		"@angular/core": "^22.0.0"
+	},
+	"dependencies": {
+		"@su-labs/core": "1.4.0",
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

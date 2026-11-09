@@ -56,6 +56,22 @@
   --su-notification-close-btn-hover-background: var(--subtle);
   --su-notification-close-btn-hover-color: var(--heading);
 
+  /* @su-labs/dialog, styled to match the site (and so each theme) */
+  --su-dialog-background: var(--surface);
+  --su-dialog-text-color: var(--text);
+  --su-dialog-title-color: var(--heading);
+  --su-dialog-title-font-family: var(--font-serif);
+  --su-dialog-title-size: 1.375rem;
+  --su-dialog-border: 1px solid var(--border);
+  --su-dialog-radius: var(--radius-large);
+  --su-dialog-button-radius: var(--radius);
+  --su-dialog-accept-background: var(--button-bg);
+  --su-dialog-accept-color: var(--button-text);
+  --su-dialog-cancel-border: 1px solid var(--border);
+  --su-dialog-cancel-color: var(--heading);
+  --su-dialog-danger-background: var(--red-text);
+  --su-dialog-danger-color: var(--red-bg);
+
   color-scheme: light;
 }
 

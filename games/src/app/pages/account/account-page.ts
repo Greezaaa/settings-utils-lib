@@ -1,4 +1,5 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { SuDialogService } from '@su-labs/dialog';
 import { MIN_PASSWORD_LENGTH } from '../../core/passwords';
 import { PlayerAccount } from '../../core/player-account';
 import { SiteLanguage } from '../../i18n/site-language';
@@ -23,6 +24,7 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 })
 export class AccountPage {
   protected readonly account = inject(PlayerAccount);
+  private readonly dialog = inject(SuDialogService);
   /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly minLength = MIN_PASSWORD_LENGTH;
@@ -127,15 +129,29 @@ export class AccountPage {
     }
   }
 
-  protected removeResults(): void {
-    if (confirm(this.t().account.confirmDeleteResults)) {
-      void this.results.run(() => this.account.removeResults(), this.t().account.resultsDeleted);
+  protected async removeResults(): Promise<void> {
+    const { confirmDeleteResults, resultsLead, deleteResults, resultsDeleted } = this.t().account;
+    const accepted = await this.dialog.confirm({
+      title: confirmDeleteResults,
+      body: resultsLead,
+      acceptLabel: deleteResults,
+      danger: true,
+    });
+    if (accepted) {
+      await this.results.run(() => this.account.removeResults(), resultsDeleted);
     }
   }
 
-  protected remove(form: HTMLFormElement): void {
-    if (confirm(this.t().account.confirmDelete)) {
-      void this.deletion.run(() => this.account.remove(formText(form, 'password')), this.t().account.deleted);
+  protected async remove(form: HTMLFormElement): Promise<void> {
+    const { confirmDelete, deleteLead, deleteAccount, deleted } = this.t().account;
+    const accepted = await this.dialog.confirm({
+      title: confirmDelete,
+      body: deleteLead,
+      acceptLabel: deleteAccount,
+      danger: true,
+    });
+    if (accepted) {
+      await this.deletion.run(() => this.account.remove(formText(form, 'password')), deleted);
     }
   }
 

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { SuDialogService } from '@su-labs/dialog';
 import { SuNotificationService } from '@su-labs/notifications';
 import { AdminApi, GameFeedback, STATS_PERIODS, StatsPeriod } from '../../core/admin-api';
 import { GAMES } from '../../core/games';
@@ -19,6 +20,7 @@ import { saveFailedNotice } from './save-failed-notice';
 export class AdminPlays {
   protected readonly admin = inject(AdminApi);
   private readonly notifications = inject(SuNotificationService);
+  private readonly dialog = inject(SuDialogService);
   private readonly notifySaveFailed = saveFailedNotice();
   /** Game names and feedback reasons in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
@@ -64,7 +66,15 @@ export class AdminPlays {
 
   /** Super admin: deletes every play and vote, after asking, so statistics start again from today */
   protected async resetStats(): Promise<void> {
-    if (!confirm(this.t().admin.confirmResetStats)) {
+    const { resetStats, confirmResetStats } = this.t().admin;
+    if (
+      !(await this.dialog.confirm({
+        title: resetStats,
+        body: confirmResetStats,
+        acceptLabel: resetStats,
+        danger: true,
+      }))
+    ) {
       return;
     }
     if (await this.admin.resetStats()) {

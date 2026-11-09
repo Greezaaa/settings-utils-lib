@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { SuDialogService } from '@su-labs/dialog';
 import { AdminApi, AdminSuggestion, SUGGESTION_STATUSES, SuggestionStatus } from '../../core/admin-api';
 import { SiteLanguage } from '../../i18n/site-language';
 
@@ -16,6 +17,7 @@ import { saveFailedNotice } from './save-failed-notice';
 })
 export class AdminSuggestions {
   private readonly admin = inject(AdminApi);
+  private readonly dialog = inject(SuDialogService);
   /** Category names in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
 
@@ -55,7 +57,8 @@ export class AdminSuggestions {
   }
 
   protected async remove(suggestion: AdminSuggestion): Promise<void> {
-    if (confirm(this.t().admin.confirmDelete)) {
+    const { confirmDelete, delete: deleteLabel } = this.t().admin;
+    if (await this.dialog.confirm({ title: confirmDelete, acceptLabel: deleteLabel, danger: true })) {
       await this.afterChange(this.admin.deleteSuggestion(suggestion.id));
     }
   }

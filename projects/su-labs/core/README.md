@@ -16,6 +16,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Theme](#theme)
 - [Font Size](#font-size)
 - [Notifications](#notifications)
+- [Dialog](#dialog)
 - [Scroll Spy](#scroll-spy)
 - [Visit Tracker](#visit-tracker)
 - [Storage](#storage)
@@ -49,6 +50,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/theme` | `SuThemeController` and theme types |
 | `@su-labs/core/font-size` | `SuFontSizeController` and font size types |
 | `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
+| `@su-labs/core/dialog` | `SuDialogController`, `suDialogBackdropColor` and dialog types |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 | `@su-labs/core/visit-tracker` | `SuVisitTrackerController` and visit types |
 
@@ -214,6 +216,50 @@ notifications.dismiss(id);
 | `actions` | — | Buttons under the message: `{ label, onClick, dismiss? }`. Your markup renders them, calls `onClick`, then `dismiss(id)` unless `dismiss` is `false` |
 
 Positions: `'top-right'`, `'top-left'`, `'top-center'`, `'bottom-right'`, `'bottom-left'`, `'bottom-center'`.
+
+## Dialog
+
+Confirm and message dialogs: one on screen at a time (the others wait their turn), each answered with a promise. It holds the state only; your app renders the dialog, ideally with the native `<dialog>` element (Angular: [`@su-labs/dialog`](https://www.npmjs.com/package/@su-labs/dialog)).
+
+```ts
+import { SuDialogController } from '@su-labs/core/dialog';
+
+const dialogs = new SuDialogController();
+dialogs.configure({ acceptLabel: 'Delete', cancelLabel: 'Keep' });
+
+dialogs.current.subscribe((dialog) => render(dialog)); // null when nothing is on screen
+if (await dialogs.confirm({ title: 'Delete your results?', danger: true })) {
+  // …
+}
+// Your markup calls dialogs.close(true) for accept, dialogs.close(false) for cancel, Escape or a click outside
+```
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `confirm(options)` | Accept and cancel buttons; resolves with `true` when accepted |
+| `alert(options)` | One button; resolves when closed |
+| `open(options)` | Either, by `kind` (`'confirm'` or `'ok'`) |
+| `close(accepted)` | Closes the dialog on screen with its answer and shows the next one |
+| `configure(config)` | Defaults for every dialog from now on (any option below but the text) |
+| `current` | Read-only store of the dialog on screen, or `null` |
+| `destroy()` | Closes every dialog as cancelled |
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `title` | — | The heading |
+| `body` | — | Text under it; may be HTML (lists, `<small>`, links, images). Sanitize it when you render it |
+| `image` | — | `{ src, alt }`, a picture above the text |
+| `acceptLabel` / `cancelLabel` | `'OK'` / `'Cancel'` | Button labels |
+| `danger` | `false` | The accept button warns of something that can't be undone |
+| `width` / `height` | from the stylesheet | Any CSS length |
+| `backdrop` | `'dim'` | `'dim'` tints the page behind, `'none'` leaves it clear |
+| `backdropColor` / `backdropOpacity` | from the stylesheet | The tint's colour and how much it covers (0 to 1); `current.backdropColor` is ready for CSS |
+| `dismissible` | `true` | Whether Escape and a click outside close it as cancel |
+| `cssClass` | — | Extra class, to style one dialog its own way |
 
 ## Scroll Spy
 

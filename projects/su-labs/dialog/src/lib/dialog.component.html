@@ -1,0 +1,45 @@
+<dialog
+  #element
+  class="su-dialog {{ dialog()?.cssClass ?? '' }}"
+  [class.is-danger]="dialog()?.danger"
+  [style.--su-dialog-width]="dialog()?.width"
+  [style.--su-dialog-height]="dialog()?.height"
+  [style.--su-dialog-backdrop]="dialog()?.backdropColor"
+  [attr.aria-labelledby]="dialog() ? 'su-dialog-title' : null"
+  [attr.aria-describedby]="dialog()?.body ? 'su-dialog-body' : null"
+  (cancel)="onCancel($event)"
+  (click)="onClick($event)"
+>
+  @if (dialog(); as dialog) {
+    <div class="su-dialog-content">
+      @if (dialog.image; as image) {
+        <img class="su-dialog-image" [src]="image.src" [alt]="image.alt" />
+      }
+      <h2 class="su-dialog-title" id="su-dialog-title">{{ dialog.title }}</h2>
+      @if (dialog.body) {
+        <div class="su-dialog-body" id="su-dialog-body" [innerHTML]="dialog.body"></div>
+      }
+      <div class="su-dialog-actions">
+        @if (dialog.kind === 'confirm') {
+          <!-- A dangerous action starts on Cancel, so Enter never confirms it by accident -->
+          <button
+            type="button"
+            class="su-dialog-button su-dialog-cancel"
+            [attr.autofocus]="dialog.danger ? '' : null"
+            (click)="service.close(false)"
+          >
+            {{ dialog.cancelLabel }}
+          </button>
+        }
+        <button
+          type="button"
+          class="su-dialog-button su-dialog-accept"
+          [attr.autofocus]="dialog.danger && dialog.kind === 'confirm' ? null : ''"
+          (click)="service.close(true)"
+        >
+          {{ dialog.acceptLabel }}
+        </button>
+      </div>
+    </div>
+  }
+</dialog>

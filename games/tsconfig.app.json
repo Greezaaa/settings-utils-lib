@@ -8,6 +8,7 @@
     "paths": {
       "@su-labs/core": ["../projects/su-labs/core/src/public-api.ts"],
       "@su-labs/core/*": ["../projects/su-labs/core/*/src/public-api.ts"],
+      "@su-labs/dialog": ["../projects/su-labs/dialog/src/public-api.ts"],
       "@su-labs/font-size": ["../projects/su-labs/font-size/src/public-api.ts"],
       "@su-labs/notifications": ["../projects/su-labs/notifications/src/public-api.ts"],
       "@su-labs/scroll-spy": ["../projects/su-labs/scroll-spy/src/public-api.ts"],

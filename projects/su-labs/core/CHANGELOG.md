@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-09
+
+### Added
+- `@su-labs/core/dialog`: `SuDialogController` for confirm and message dialogs, one at a time, each answered with a promise (`confirm`, `alert`, `open`, `close`, `configure`), with HTML text, an optional picture, button labels, size, a dimmed or clear backdrop (`backdrop`, `backdropColor`, `backdropOpacity`), `dismissible` and `danger`
+
 ## [1.3.0] - 2026-11-07
 
 ### Added

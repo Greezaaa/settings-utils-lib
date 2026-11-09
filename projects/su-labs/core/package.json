@@ -1,7 +1,7 @@
 {
 	"name": "@su-labs/core",
-	"version": "1.3.0",
-	"description": "Framework-agnostic browser utilities (theme, font size, notifications, scroll spy and visit tracker) with a tiny reactive store. Works with vanilla JS, React, Svelte, Angular or any other framework.",
+	"version": "1.4.0",
+	"description": "Framework-agnostic browser utilities (theme, font size, notifications, dialogs, scroll spy and visit tracker) with a tiny reactive store. Works with vanilla JS, React, Svelte, Angular or any other framework.",
 	"keywords": [
 		"framework-agnostic",
 		"vanilla-js",
@@ -16,6 +16,8 @@
 		"prefers-color-scheme",
 		"notifications",
 		"toast",
+		"dialog",
+		"confirm",
 		"scroll-spy",
 		"intersection-observer"
 	],

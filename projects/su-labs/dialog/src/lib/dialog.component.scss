@@ -1,0 +1,134 @@
+// Every part of the dialog reads a CSS variable, with a default, so a theme (or one dialog's `cssClass`) can restyle
+// it: set them on `:root`, on `su-lib-dialog`, or on `.su-dialog.your-class`.
+
+.su-dialog {
+  background: var(--su-dialog-background, #fff);
+  border: var(--su-dialog-border, 1px solid rgb(0 0 0 / 0.08));
+  border-radius: var(--su-dialog-radius, 12px);
+  box-shadow: var(--su-dialog-shadow, 0 20px 50px rgb(0 0 0 / 0.25));
+  box-sizing: border-box;
+  color: var(--su-dialog-text-color, #333);
+  font-family: var(--su-dialog-font-family, inherit);
+  height: var(--su-dialog-height, auto);
+  max-height: var(--su-dialog-max-height, calc(100dvh - 2rem));
+  max-width: var(--su-dialog-max-width, calc(100vw - 2rem));
+  overflow: auto;
+  padding: 0;
+  width: var(--su-dialog-width, 28rem);
+
+  &[open] {
+    animation: su-dialog-in var(--su-dialog-duration, 180ms) ease-out;
+  }
+
+  // The page behind: dimmed, or clear with `backdrop: 'none'`
+  &::backdrop {
+    background: var(--su-dialog-backdrop, rgb(0 0 0 / 0.5));
+  }
+
+  &[open]::backdrop {
+    animation: su-dialog-fade var(--su-dialog-duration, 180ms) ease-out;
+  }
+}
+
+.su-dialog-content {
+  display: grid;
+  gap: var(--su-dialog-gap, 1rem);
+  padding: var(--su-dialog-padding, 1.5rem);
+}
+
+.su-dialog-image {
+  border-radius: var(--su-dialog-image-radius, 8px);
+  justify-self: center;
+  max-height: var(--su-dialog-image-max-height, 12rem);
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.su-dialog-title {
+  color: var(--su-dialog-title-color, inherit);
+  font-family: var(--su-dialog-title-font-family, inherit);
+  font-size: var(--su-dialog-title-size, 1.25rem);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.su-dialog-body {
+  font-size: var(--su-dialog-body-size, 1rem);
+  line-height: 1.5;
+
+  // Lists, small print and pictures inside the body
+  :where(p, ul, ol) {
+    margin: 0 0 0.5rem;
+  }
+
+  :where(ul, ol) {
+    padding-left: 1.25rem;
+  }
+
+  :where(img) {
+    max-width: 100%;
+  }
+
+  :where(small) {
+    opacity: 0.75;
+  }
+}
+
+.su-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--su-dialog-actions-gap, 0.5rem);
+  justify-content: var(--su-dialog-actions-align, flex-end);
+}
+
+.su-dialog-button {
+  border-radius: var(--su-dialog-button-radius, 8px);
+  cursor: pointer;
+  font: inherit;
+  font-weight: var(--su-dialog-button-weight, 600);
+  min-height: 2.5rem;
+  padding: var(--su-dialog-button-padding, 0.5rem 1.25rem);
+
+  &:focus-visible {
+    outline: var(--su-dialog-focus-outline, 2px solid currentColor);
+    outline-offset: 2px;
+  }
+}
+
+.su-dialog-accept {
+  background: var(--su-dialog-accept-background, #111);
+  border: var(--su-dialog-accept-border, 1px solid transparent);
+  color: var(--su-dialog-accept-color, #fff);
+}
+
+.su-dialog-cancel {
+  background: var(--su-dialog-cancel-background, transparent);
+  border: var(--su-dialog-cancel-border, 1px solid rgb(0 0 0 / 0.2));
+  color: var(--su-dialog-cancel-color, inherit);
+}
+
+// The accept button of something that can't be undone, e.g. deleting
+.is-danger .su-dialog-accept {
+  background: var(--su-dialog-danger-background, #b42318);
+  color: var(--su-dialog-danger-color, #fff);
+}
+
+@keyframes su-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+}
+
+@keyframes su-dialog-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su-dialog[open],
+  .su-dialog[open]::backdrop {
+    animation: none;
+  }
+}

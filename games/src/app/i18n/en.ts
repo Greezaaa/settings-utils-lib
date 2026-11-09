@@ -87,6 +87,7 @@ export const EN: SiteMessages = {
       'We use cookies only to save your preferences, like theme, text size and language. We never sell or share your data with anyone. We love your privacy!',
     lastUpdate: moment => `Last update: ${moment}`,
     noticeOk: 'OK',
+    cancel: 'Cancel',
     privacySettings: 'Privacy settings',
     privacyLink: 'Privacy',
     suggestionsLink: 'Suggestion box',

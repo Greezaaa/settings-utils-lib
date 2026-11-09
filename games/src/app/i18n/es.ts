@@ -90,6 +90,7 @@ export const ES: SiteMessages = {
       'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
     lastUpdate: moment => `Última actualización: ${moment}`,
     noticeOk: 'Vale',
+    cancel: 'Cancelar',
     privacySettings: 'Ajustes de privacidad',
     privacyLink: 'Privacidad',
     suggestionsLink: 'Buzón de sugerencias',

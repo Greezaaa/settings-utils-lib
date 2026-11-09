@@ -1,7 +1,8 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, DOCUMENT, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DOCUMENT, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
+import { SuDialogComponent, SuDialogService } from '@su-labs/dialog';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { FeatureFlags } from './core/feature-flags';
@@ -22,7 +23,7 @@ const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contras
 /** Site shell: header with text size, theme and language settings and the list of games, page outlet and footer */
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, SuNotificationComponent],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, SuDialogComponent, SuNotificationComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -69,6 +70,9 @@ export class App {
   private readonly settings = viewChild.required<ElementRef<HTMLElement>>('settings');
 
   constructor() {
+    // Confirmation dialogs label their buttons in the site's language, unless a dialog names its own
+    const dialog = inject(SuDialogService);
+    effect(() => dialog.configure({ acceptLabel: this.t().site.noticeOk, cancelLabel: this.t().site.cancel }));
     // Which games are open (and whether this is the admin's preview) is known once the API answers
     afterNextRender(() => {
       void this.availability.ready();

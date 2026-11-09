@@ -24,6 +24,9 @@
       "@su-labs/core/*": [
         "./dist/su-labs/core/*"
       ],
+      "@su-labs/dialog": [
+        "./dist/su-labs/dialog"
+      ],
       "@su-labs/font-size": [
         "./dist/su-labs/font-size"
       ],
@@ -61,6 +64,9 @@
     },
     {
       "path": "./projects/su-labs/notifications/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/dialog/tsconfig.lib.json"
     },
     {
       "path": "./projects/su-labs/visit-tracker/tsconfig.lib.json"

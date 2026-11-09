@@ -80,6 +80,8 @@ export interface SiteMessages {
     readonly lastUpdate: (moment: string) => string;
     /** Button in "What's new" that opens a new game */
     readonly noticeOk: string;
+    /** The cancel button of confirmation dialogs */
+    readonly cancel: string;
     readonly privacySettings: string;
     readonly privacyLink: string;
     readonly suggestionsLink: string;

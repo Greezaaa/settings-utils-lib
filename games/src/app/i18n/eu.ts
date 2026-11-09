@@ -91,6 +91,7 @@ export const EU: SiteMessages = {
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
     lastUpdate: moment => `Azken eguneratzea: ${moment}`,
     noticeOk: 'Ados',
+    cancel: 'Utzi',
     privacySettings: 'Pribatutasun-ezarpenak',
     privacyLink: 'Pribatutasuna',
     suggestionsLink: 'Iradokizunen postontzia',
