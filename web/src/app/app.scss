@@ -141,7 +141,7 @@
   gap: 0.125rem;
 
   a {
-    border-radius: 6px;
+    border-left: 4px solid transparent;
     color: var(--muted);
     padding: 0.5rem 0.625rem;
     text-decoration: none;
@@ -151,10 +151,10 @@
       color: var(--heading);
     }
 
-    /* The current page alone gets the bright color, with a bar beside it */
+    /* The current page alone gets the bright color, with a thick bar on its left */
     &.active {
       background: var(--subtle);
-      box-shadow: inset 2px 0 0 var(--heading);
+      border-left-color: var(--heading);
       color: var(--heading);
     }
   }
