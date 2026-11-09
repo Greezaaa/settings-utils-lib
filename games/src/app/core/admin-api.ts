@@ -243,7 +243,8 @@ export class AdminApi {
 
   /** Signs in; the answer tells wrong details, too many tries, and an API that can't be reached apart */
   async signIn(email: string, password: string): Promise<SignInAnswer> {
-    return this.startSession(await this.fetch('/auth/login', jsonInit('POST', { email, password }), READ_TIMEOUT_MS));
+    // Checking a password is slow on purpose (it makes guessing expensive), so sign-in waits as long as a save does
+    return this.startSession(await this.fetch('/auth/login', jsonInit('POST', { email, password }), SEND_TIMEOUT_MS));
   }
 
   async signOut(): Promise<void> {
