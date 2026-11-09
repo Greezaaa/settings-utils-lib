@@ -14,6 +14,7 @@ export const GAME_SLUGS = [
   'turn-picture',
   'place-pieces',
   'find-pairs',
+  'how-many',
 ] as const;
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'it', 'uk'] as const;
 /**

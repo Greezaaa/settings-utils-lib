@@ -166,6 +166,13 @@ export const UK: SiteMessages = {
       subtitle: 'переверни дві картки й знайди однакові картинки',
       intro: 'Гра на пам’ять для дітей.',
     },
+    'how-many': {
+      name: 'Скільки?',
+      summary:
+        'Порахуй дельфінів, каченят чи зірочки й торкнися, скільки їх, від 1 до 5. Торкнися кожного, щоб почути його число.',
+      subtitle: 'лічба від 1 до 5',
+      intro: 'Гра на лічбу для найменших.',
+    },
     'letter-games': {
       name: 'Ігри з буквами',
       summary:
@@ -763,6 +770,26 @@ export const UK: SiteMessages = {
     best: floors => `Рекорд: поверх ${floors}`,
     fell: 'Ти впав!',
     summary: floors => `Поверхів пройдено: ${floors}`,
+  },
+
+  howMany: {
+    lead: 'Порахуй речі на полі, а потім торкнися, скільки їх.',
+    rule: 'Торкнися кожної, щоб порахувати вголос!',
+    board: 'Гра на лічбу',
+    levels: {
+      easy: { name: 'Від 1 до 3', summary: 'До трьох речей' },
+      normal: { name: 'Від 1 до 5', summary: 'До п’яти речей' },
+    },
+    question: 'Скільки їх?',
+    tapHint: 'Торкнися кожного, щоб порахувати',
+    countThis: 'Порахуй цей',
+    great: 'Молодець!',
+    tryAgain: 'Спробуй ще!',
+    done: 'У тебе вийшло!',
+    summary: (stars, total) => `${stars} ${plural(stars, 'зірочка', 'зірочки', 'зірочок')} з ${total}`,
+    progress: (done, total) => `Раунд ${Math.min(done + 1, total)} з ${total}`,
+    soundOn: 'Звук увімкнено: торкнися, щоб вимкнути',
+    soundOff: 'Звук вимкнено: торкнися, щоб чути числа',
   },
 
   findPairs: {

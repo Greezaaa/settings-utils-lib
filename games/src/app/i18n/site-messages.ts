@@ -14,6 +14,7 @@ import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-not
 import { GameThemeId } from '../core/game-themes';
 import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 import { ClimbModeId } from '../games/climb-tower';
+import { HowManyLevelId } from '../games/how-many';
 import { AnswerStyle } from '../core/answer-words';
 import { AccountProblem } from '../core/player-account';
 import { UpdateKind } from '../core/site-updates';
@@ -449,6 +450,25 @@ export interface SiteMessages {
   };
 
   /** Find the pairs: turn the cards two at a time and find every pair */
+  /** How many? Count the things and tap how many there are (for the youngest) */
+  readonly howMany: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    readonly levels: Readonly<Record<HowManyLevelId, OptionText>>;
+    readonly question: string;
+    readonly tapHint: string;
+    /** A thing not counted yet, for screen readers */
+    readonly countThis: string;
+    readonly great: string;
+    readonly tryAgain: string;
+    readonly done: string;
+    readonly summary: (stars: number, total: number) => string;
+    readonly progress: (done: number, total: number) => string;
+    readonly soundOn: string;
+    readonly soundOff: string;
+  };
+
   readonly findPairs: {
     readonly lead: string;
     readonly rule: string;

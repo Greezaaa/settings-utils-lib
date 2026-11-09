@@ -8,7 +8,8 @@ export type GameSlug =
   | 'sliding-puzzle'
   | 'turn-picture'
   | 'place-pieces'
-  | 'find-pairs';
+  | 'find-pairs'
+  | 'how-many';
 
 /** What a game trains; the home page lists the games by category, in this order */
 export type GameCategory = 'numbers' | 'letters' | 'music' | 'puzzles';
@@ -47,6 +48,7 @@ export const GAMES: readonly GameInfo[] = [
   { slug: 'turn-picture', category: 'puzzles', minAge: 4, openByDefault: true },
   { slug: 'place-pieces', category: 'puzzles', minAge: 4, openByDefault: true },
   { slug: 'find-pairs', category: 'puzzles', minAge: 4, openByDefault: false },
+  { slug: 'how-many', category: 'numbers', minAge: 3, openByDefault: false },
 ];
 
 export const GAME_SLUGS: readonly GameSlug[] = GAMES.map(({ slug }) => slug);

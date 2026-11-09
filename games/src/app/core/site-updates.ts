@@ -314,6 +314,23 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 13,
+    published: '2026-11-09T12:00:00+01:00',
+    changes: [
+      {
+        kind: 'game',
+        game: 'how-many',
+        text: {
+          en: 'New game: How many?, count from 1 to 5, for the youngest',
+          es: 'Nuevo juego: ¿Cuántos hay?, contar del 1 al 5, para los más peques',
+          eu: 'Joko berria: Zenbat daude?, 1etik 5era zenbatu, txikienentzat',
+          it: 'Nuovo gioco: Quanti sono?, contare da 1 a 5, per i più piccoli',
+          uk: 'Нова гра: Скільки?, лічба від 1 до 5, для найменших',
+        },
+      },
+    ],
+  },
 ];
 
 /** The site's current version */

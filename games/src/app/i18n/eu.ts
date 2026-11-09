@@ -137,6 +137,13 @@ export const EU: SiteMessages = {
       subtitle: 'biratu bi karta eta aurkitu marrazki berdinak',
       intro: 'Memoria joko bat haurrentzat.',
     },
+    'how-many': {
+      name: 'Zenbat daude?',
+      summary:
+        'Zenbatu izurdeak, ahatetxoak edo izarrak eta sakatu zenbat dauden, 1etik 5era. Sakatu bakoitza bere zenbakia entzuteko.',
+      subtitle: '1etik 5era zenbatu',
+      intro: 'Zenbatzeko joko bat txikienentzat.',
+    },
     'letter-games': {
       name: 'Letra jokoak',
       summary:
@@ -735,6 +742,26 @@ export const EU: SiteMessages = {
     best: floors => `Errekorra: ${floors}. solairua`,
     fell: 'Erori zara!',
     summary: floors => `${floors} solairu igota`,
+  },
+
+  howMany: {
+    lead: 'Zenbatu taulako gauzak eta sakatu zenbat dauden.',
+    rule: 'Sakatu bakoitza ozen zenbatzeko!',
+    board: 'Zenbatzeko jokoa',
+    levels: {
+      easy: { name: '1etik 3ra', summary: 'Hiru gauza arte' },
+      normal: { name: '1etik 5era', summary: 'Bost gauza arte' },
+    },
+    question: 'Zenbat daude?',
+    tapHint: 'Sakatu bakoitza zenbatzeko',
+    countThis: 'Zenbatu hau',
+    great: 'Oso ondo!',
+    tryAgain: 'Saiatu berriro!',
+    done: 'Lortu duzu!',
+    summary: (stars, total) => `${stars} izar, ${total}etik`,
+    progress: (done, total) => `${Math.min(done + 1, total)}. txanda, ${total}etik`,
+    soundOn: 'Soinua piztuta: sakatu isilarazteko',
+    soundOff: 'Soinua itzalita: sakatu zenbakiak entzuteko',
   },
 
   findPairs: {

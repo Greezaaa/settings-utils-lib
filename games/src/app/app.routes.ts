@@ -122,6 +122,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/find-pairs/find-pairs-page').then(m => m.FindPairsPage),
   },
+  {
+    path: 'how-many',
+    ...gameMeta('how-many'),
+    loadComponent: () =>
+      import('./pages/how-many/how-many-page').then(m => m.HowManyPage),
+  },
   ...categoryRoutes,
   {
     path: 'rooms',

@@ -130,6 +130,13 @@ export const IT: SiteMessages = {
       subtitle: 'gira due carte e trova i disegni uguali',
       intro: 'Un gioco di memoria per bambini.',
     },
+    'how-many': {
+      name: 'Quanti sono?',
+      summary:
+        'Conta i delfini, le paperelle o le stelle e tocca quanti sono, da 1 a 5. Tocca ognuno per sentire il suo numero.',
+      subtitle: 'contare da 1 a 5',
+      intro: 'Un gioco per contare per i più piccoli.',
+    },
     'letter-games': {
       name: 'Giochi di lettere',
       summary:
@@ -697,6 +704,26 @@ export const IT: SiteMessages = {
     best: (floors) => `Record: piano ${floors}`,
     fell: 'Sei caduto!',
     summary: (floors) => (floors === 1 ? '1 piano salito' : `${floors} piani saliti`),
+  },
+
+  howMany: {
+    lead: 'Conta le cose sul tabellone, poi tocca quante sono.',
+    rule: 'Tocca ognuna per contarla ad alta voce!',
+    board: 'Gioco per contare',
+    levels: {
+      easy: { name: 'Da 1 a 3', summary: 'Fino a tre cose' },
+      normal: { name: 'Da 1 a 5', summary: 'Fino a cinque cose' },
+    },
+    question: 'Quanti sono?',
+    tapHint: 'Tocca ognuno per contare',
+    countThis: 'Conta questo',
+    great: 'Bravissimo!',
+    tryAgain: 'Riprova!',
+    done: 'Ce l’hai fatta!',
+    summary: (stars, total) => `${stars} ${stars === 1 ? 'stella' : 'stelle'} su ${total}`,
+    progress: (done, total) => `Turno ${Math.min(done + 1, total)} di ${total}`,
+    soundOn: 'Audio attivo: tocca per silenziare',
+    soundOff: 'Audio spento: tocca per sentire i numeri',
   },
 
   findPairs: {

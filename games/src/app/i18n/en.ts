@@ -132,6 +132,13 @@ export const EN: SiteMessages = {
       subtitle: 'turn two cards and find the matching pictures',
       intro: 'A memory game for kids.',
     },
+    'how-many': {
+      name: 'How many?',
+      summary:
+        'Count the dolphins, ducks or stars and tap how many there are, from 1 to 5. Tap each one to hear its number.',
+      subtitle: 'count from 1 to 5',
+      intro: 'A counting game for little ones.',
+    },
     'letter-games': {
       name: 'Letter games',
       summary:
@@ -713,6 +720,26 @@ export const EN: SiteMessages = {
     fell: 'You fell!',
     summary: floors =>
       floors === 1 ? '1 floor climbed' : `${floors} floors climbed`,
+  },
+
+  howMany: {
+    lead: 'Count the things on the board, then tap how many there are.',
+    rule: 'Tap each one to count it out loud!',
+    board: 'Counting game',
+    levels: {
+      easy: { name: '1 to 3', summary: 'Up to three things' },
+      normal: { name: '1 to 5', summary: 'Up to five things' },
+    },
+    question: 'How many are there?',
+    tapHint: 'Tap each one to count',
+    countThis: 'Count this one',
+    great: 'Well done!',
+    tryAgain: 'Try again!',
+    done: 'You did it!',
+    summary: (stars, total) => `${stars} ${stars === 1 ? 'star' : 'stars'} out of ${total}`,
+    progress: (done, total) => `Round ${Math.min(done + 1, total)} of ${total}`,
+    soundOn: 'Sound on: tap to mute',
+    soundOff: 'Sound off: tap to hear the numbers',
   },
 
   findPairs: {
