@@ -64,3 +64,16 @@ preview. Only the super admin switches games and features and manages the team. 
 `compose.yaml` runs the API and PostgreSQL; secrets go in `.env` on the server (see `.env.example`). From the repo
 root, `npm run deploy:api` uploads this folder and rebuilds. The API listens on `127.0.0.1:3002`, reached only
 through the Cloudflare Tunnel route for api.su-labs.dev.
+
+## Logs
+
+The API logs one line per request (`POST /auth/login 401 120ms`): refused requests (4xx) as warnings, failures (5xx)
+as errors. Health checks and CORS checks are left out, and so is anything about the visitor (address, body, query);
+secrets in invite and reset links show as `***`. The rooms service logs rooms opening and closing and every refused
+action with its reason. Watch both live (Ctrl+C stops):
+
+```bash
+ssh -t su-labs-server 'cd /home/ubuntu/su-labs-api && docker compose logs -f --tail 50 api rooms'
+```
+
+Server errors are also kept in the admin page's Errors tab.

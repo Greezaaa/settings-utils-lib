@@ -1,6 +1,6 @@
 import { randomInt } from 'node:crypto';
 import type { IncomingMessage } from 'node:http';
-import { OnModuleDestroy } from '@nestjs/common';
+import { Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ConnectedSocket,
@@ -78,6 +78,7 @@ interface Seat {
 export class RoomsGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnModuleDestroy
 {
+  private readonly logger = new Logger('Rooms');
   private readonly rooms = new Map<string, Room>();
   private readonly seats = new Map<WebSocket, Seat>();
   private readonly tries = new Map<string, number[]>();
@@ -131,7 +132,7 @@ export class RoomsGateway
       return;
     }
     if (this.rooms.size >= MAX_ROOMS) {
-      this.send(client, 'error', { error: 'too-many' });
+      this.refuse(client, 'too-many');
       return;
     }
     this.leaveCurrentRoom(client);
@@ -144,6 +145,7 @@ export class RoomsGateway
       now,
     );
     this.rooms.set(room.code, room);
+    this.logger.log(`room ${room.code} opened (${this.rooms.size} open)`);
     this.seat(client, room, host.id, host.token);
   }
 
@@ -158,7 +160,7 @@ export class RoomsGateway
     }
     const room = this.rooms.get(data.code);
     if (!room) {
-      this.send(client, 'error', { error: 'not-found' });
+      this.refuse(client, 'not-found');
       return;
     }
     // One connection, one seat: joining again (here or elsewhere) gives up the old one, never leaving a ghost behind
@@ -166,7 +168,7 @@ export class RoomsGateway
     const player = newPlayer(room.players);
     const error = join(room, player, Date.now());
     if (error) {
-      this.send(client, 'error', { error });
+      this.refuse(client, error);
       return;
     }
     this.seat(client, room, player.id, player.token);
@@ -185,7 +187,7 @@ export class RoomsGateway
     const room = this.rooms.get(data.code);
     const player = room?.players.find(({ token }) => token === data.token);
     if (!room || !player) {
-      this.send(client, 'error', { error: 'not-found' });
+      this.refuse(client, 'not-found');
       return;
     }
     if (this.seats.get(client)?.playerId !== player.id) {
@@ -309,7 +311,7 @@ export class RoomsGateway
     }
     const error = change(room, seat.playerId, Date.now());
     if (error) {
-      this.send(client, 'error', { error });
+      this.refuse(client, error);
       return;
     }
     this.broadcast(room);
@@ -351,7 +353,7 @@ export class RoomsGateway
         now - room.lastActivity > IDLE_ROOM_MS ||
         (nobodyHere && now - room.lastActivity > EMPTY_ROOM_MS)
       ) {
-        this.rooms.delete(room.code);
+        this.close(room, 'idle');
         continue;
       }
       if (changed) {
@@ -370,8 +372,15 @@ export class RoomsGateway
 
   private closeIfEmpty(room: Room): void {
     if (room.players.length === 0) {
-      this.rooms.delete(room.code);
+      this.close(room, 'empty');
     }
+  }
+
+  private close(room: Room, why: 'idle' | 'empty'): void {
+    this.rooms.delete(room.code);
+    this.logger.log(
+      `room ${room.code} closed, ${why} (${this.rooms.size} open)`,
+    );
   }
 
   /** At most MAX_MESSAGES room messages every MESSAGE_WINDOW_MS per connection; the rest are dropped quietly */
@@ -395,7 +404,7 @@ export class RoomsGateway
       (time) => now - time < 60_000,
     );
     if (recent.length >= MAX_ROOM_TRIES_PER_MINUTE) {
-      this.send(client, 'error', { error: 'too-many' });
+      this.refuse(client, 'too-many');
       return false;
     }
     this.tries.set(ip, [...recent, now]);
@@ -409,7 +418,7 @@ export class RoomsGateway
   ): T | null {
     const result = schema.safeParse(body ?? {});
     if (!result.success) {
-      this.send(client, 'error', { error: 'invalid' });
+      this.refuse(client, 'invalid');
       return null;
     }
     return result.data;
@@ -431,6 +440,16 @@ export class RoomsGateway
         this.send(socket, 'room', view);
       }
     }
+  }
+
+  /** Tells the player why an action was refused, and logs it so problems show in `docker compose logs -f rooms` */
+  private refuse(
+    client: WebSocket,
+    error: RoomError | 'invalid' | 'too-many',
+  ): void {
+    const code = this.seats.get(client)?.code;
+    this.logger.warn(`refused: ${error}${code ? ` (room ${code})` : ''}`);
+    this.send(client, 'error', { error });
   }
 
   private send(client: WebSocket, event: ServerEvent, data: object): void {
