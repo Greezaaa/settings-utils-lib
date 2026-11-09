@@ -2,8 +2,8 @@ import { afterNextRender, ChangeDetectionStrategy, Component, inject, input, sig
 import { Router } from '@angular/router';
 import { AdminApi } from '../../core/admin-api';
 import { ADMIN_PATH } from '../../core/links';
+import { MIN_PASSWORD_LENGTH } from '../../core/passwords';
 import { SiteLanguage } from '../../i18n/site-language';
-import { MIN_PASSWORD_LENGTH } from './admin-account';
 
 type Step = 'checking' | 'ready' | 'invalid' | 'saving' | 'mismatch' | 'failed';
 

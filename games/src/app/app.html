@@ -154,6 +154,13 @@
     @if (features.canUse('rooms')) {
       <a routerLink="/rooms" routerLinkActive="active">{{ t().rooms.navLink }}</a>
     }
+    @if (account.isAvailable()) {
+      @if (features.canUse('leaderboard')) {
+        <a routerLink="/leaderboard" routerLinkActive="active">{{ t().leaderboard.navLink }}</a>
+      }
+      <!-- The player's screen name once signed in -->
+      <a routerLink="/account" routerLinkActive="active">{{ account.account()?.screenName ?? t().account.navLink }}</a>
+    }
   </nav>
 </header>
 

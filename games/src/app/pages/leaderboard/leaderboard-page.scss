@@ -1,0 +1,11 @@
+// A table per game setting; the player's own line stands out
+
+.board-table {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.is-me {
+  background: var(--subtle);
+  font-weight: 600;
+}

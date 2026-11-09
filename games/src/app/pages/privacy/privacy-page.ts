@@ -1,5 +1,6 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { SuNotificationService } from '@su-labs/notifications';
+import { PlayerAccount } from '../../core/player-account';
 import { forgetSharedSettings } from '../../core/shared-settings';
 import { deleteSaved, isSavingAllowed, setSavingAllowed } from '../../core/site-storage';
 import { formatMoment, LATEST_PUBLISHED } from '../../core/site-updates';
@@ -20,6 +21,8 @@ export class PrivacyPage {
   private readonly language = inject(SiteLanguage);
   protected readonly t = this.language.messages;
   private readonly notifications = inject(SuNotificationService);
+  /** What accounts keep is described while accounts are open */
+  protected readonly accountsOpen = inject(PlayerAccount).isAvailable;
 
   /** Read in the browser, where the choice is stored */
   protected readonly savingAllowed = signal(true);

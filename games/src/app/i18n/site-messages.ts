@@ -15,6 +15,7 @@ import { GameThemeId } from '../core/game-themes';
 import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 import { ClimbModeId } from '../games/climb-tower';
 import { AnswerStyle } from '../core/answer-words';
+import { AccountProblem } from '../core/player-account';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
 
@@ -210,6 +211,10 @@ export interface SiteMessages {
     readonly sent: readonly string[];
     readonly neverTitle: string;
     readonly never: readonly string[];
+    /** Player accounts (shown while accounts are open): what an account keeps and how to delete it */
+    readonly accountsTitle: string;
+    readonly accountsLead: string;
+    readonly accounts: readonly string[];
     readonly choiceTitle: string;
     readonly choiceLabel: string;
     readonly choiceOn: string;
@@ -656,5 +661,88 @@ export interface SiteMessages {
     readonly animals: readonly string[];
     /** A player's nickname from its adjective and animal numbers, e.g. `Brave Fox`, `Zorro valiente` */
     readonly nickname: (adjective: number, animal: number) => string;
+  };
+
+  /** The player's account page: sign up, sign in, change details, sign out, delete; and the password-reset page */
+  readonly account: {
+    readonly navLink: string;
+    readonly title: string;
+    readonly lead: string;
+    /** Second line of the lead, the call to action */
+    readonly rule: string;
+    readonly loading: string;
+    readonly signInTab: string;
+    readonly signUpTab: string;
+    readonly forgotTab: string;
+    readonly loginName: string;
+    readonly loginNameHint: string;
+    /** Sign-in takes the login name or the account's email */
+    readonly loginOrEmail: string;
+    readonly password: string;
+    readonly passwordRule: (min: number) => string;
+    readonly repeatPassword: string;
+    readonly passwordsDiffer: string;
+    readonly screenName: string;
+    readonly screenNameHint: string;
+    /** The tooltip next to the screen name: it is shown to others and needn't be a real name */
+    readonly screenNameTip: string;
+    readonly screenNameTipLabel: string;
+    readonly email: string;
+    readonly emailHint: string;
+    /** Shown while no email is given: a forgotten password can't be reset */
+    readonly noEmailWarning: string;
+    readonly signIn: string;
+    readonly signUp: string;
+    /** Favourites and best results on this device join the account */
+    readonly syncNote: string;
+    readonly forgotLead: string;
+    readonly sendLink: string;
+    readonly linkSent: string;
+    readonly sending: string;
+    readonly signedInAs: (screenName: string) => string;
+    readonly loginNameIs: (loginName: string) => string;
+    readonly signOut: string;
+    readonly detailsTitle: string;
+    /** Changing or removing the email needs the password */
+    readonly emailNeedsPassword: string;
+    readonly currentPassword: string;
+    readonly save: string;
+    readonly saved: string;
+    readonly passwordTitle: string;
+    readonly newPassword: string;
+    readonly changePassword: string;
+    readonly passwordChanged: string;
+    readonly deleteTitle: string;
+    readonly deleteLead: string;
+    readonly deleteAccount: string;
+    readonly confirmDelete: string;
+    readonly deleted: string;
+    readonly problems: Readonly<Record<AccountProblem, string>>;
+    readonly resetTitle: string;
+    readonly resetLead: string;
+    readonly resetSave: string;
+    readonly resetDone: string;
+  };
+
+  /** Leaderboards for signed-in players: a table per game setting */
+  readonly leaderboard: {
+    readonly navLink: string;
+    readonly title: string;
+    readonly lead: string;
+    /** Second line of the lead, the call to action */
+    readonly rule: string;
+    readonly signInFirst: string;
+    readonly signInLink: string;
+    readonly gameGroup: string;
+    readonly loading: string;
+    readonly failed: string;
+    readonly empty: string;
+    readonly columns: {
+      readonly place: string;
+      readonly name: string;
+      readonly plays: string;
+      readonly best: string;
+    };
+    readonly you: string;
   };
 }

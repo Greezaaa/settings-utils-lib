@@ -15,6 +15,8 @@ const {
   rooms,
   categories,
   categoryIntros,
+  account,
+  leaderboard,
 } = PREVIEW_MESSAGES;
 
 /** Page title and description of a game, for search results and link previews; the page opens only when the game does */
@@ -137,6 +139,34 @@ export const routes: Routes = [
     canActivate: [featureGuard('rooms')],
     loadComponent: () =>
       import('./pages/rooms/room-page').then(m => m.RoomPage),
+  },
+  {
+    path: 'account',
+    title: `${account.title} · ${SITE_NAME}`,
+    data: { description: account.lead, noIndex: true },
+    canActivate: [featureGuard('accounts')],
+    loadComponent: () =>
+      import('./pages/account/account-page').then(m => m.AccountPage),
+  },
+  {
+    // A password-reset link from an email; built in the browser, as every link is different
+    path: 'account/reset/:secret',
+    title: `${account.resetTitle} · ${SITE_NAME}`,
+    data: { description: account.lead, noIndex: true },
+    canActivate: [featureGuard('accounts')],
+    loadComponent: () =>
+      import('./pages/account/reset-page').then(m => m.ResetPage),
+  },
+  {
+    // Needs accounts too, as only signed-in players see it
+    path: 'leaderboard',
+    title: `${leaderboard.title} · ${SITE_NAME}`,
+    data: { description: leaderboard.lead, noIndex: true },
+    canActivate: [featureGuard('accounts'), featureGuard('leaderboard')],
+    loadComponent: () =>
+      import('./pages/leaderboard/leaderboard-page').then(
+        m => m.LeaderboardPage
+      ),
   },
   {
     path: 'privacy',

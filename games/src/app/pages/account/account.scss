@@ -1,0 +1,77 @@
+// The account pages: their forms, the signed-in bar and the screen-name tooltip (inputs and tabs come from admin.scss)
+
+.account-card {
+  display: grid;
+  gap: 1rem;
+  max-width: 32rem;
+}
+
+.signed-in-bar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  max-width: 32rem;
+}
+
+.warning {
+  background: var(--yellow-bg);
+  border-radius: var(--radius-large);
+  color: var(--yellow-text);
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+}
+
+.danger {
+  color: var(--red-text);
+}
+
+.label-row {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tip {
+  display: inline-flex;
+  position: relative;
+}
+
+.tip-button {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--heading);
+  cursor: help;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  height: 1.5rem;
+  line-height: 1;
+  width: 1.5rem;
+}
+
+.tip-text {
+  background: var(--heading);
+  border-radius: 6px;
+  color: var(--bg);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  left: 50%;
+  line-height: 1.4;
+  opacity: 0;
+  padding: 0.5rem 0.75rem;
+  pointer-events: none;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  transform: translateX(-50%);
+  transition: opacity 150ms ease;
+  width: min(18rem, 80vw);
+  z-index: 10;
+}
+
+.tip:hover .tip-text,
+.tip:focus-within .tip-text {
+  opacity: 1;
+}

@@ -55,6 +55,18 @@
   </ul>
 </section>
 
+@if (accountsOpen()) {
+  <section class="container page-section" aria-labelledby="privacy-accounts">
+    <h2 id="privacy-accounts" class="section-title">{{ t().privacy.accountsTitle }}</h2>
+    <p class="lead">{{ t().privacy.accountsLead }}</p>
+    <ul class="never">
+      @for (item of t().privacy.accounts; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  </section>
+}
+
 <section class="container page-section" aria-labelledby="privacy-never">
   <h2 id="privacy-never" class="section-title">{{ t().privacy.neverTitle }}</h2>
   <ul class="never">

@@ -1,0 +1,74 @@
+<header class="container page-head">
+  <h1>{{ t().leaderboard.title }}</h1>
+  <p class="lead">
+    {{ t().leaderboard.lead }}
+    <br />
+    {{ t().leaderboard.rule }}
+  </p>
+</header>
+
+<section class="container page-section">
+  @if (!account.isRestored()) {
+    <p class="muted">{{ t().leaderboard.loading }}</p>
+  } @else if (!account.isSignedIn()) {
+    <p>{{ t().leaderboard.signInFirst }}</p>
+    <p>
+      <a class="button" routerLink="/account">{{ t().leaderboard.signInLink }}</a>
+    </p>
+  } @else {
+    <div class="tabs" role="group" [attr.aria-label]="t().leaderboard.gameGroup">
+      @for (option of games; track option) {
+        <button
+          type="button"
+          class="button button-secondary button-small"
+          [attr.aria-pressed]="option === game()"
+          (click)="game.set(option)"
+        >
+          {{ t().games[option].name }}
+        </button>
+      }
+    </div>
+
+    @let current = boards();
+    @if (current === 'loading') {
+      <p class="muted" role="status">{{ t().leaderboard.loading }}</p>
+    } @else if (current === 'failed') {
+      <p class="error" role="alert">{{ t().leaderboard.failed }}</p>
+    } @else if (isList(current)) {
+      @for (board of current; track board.key) {
+        <div class="board-table">
+          <h2 class="card-title">{{ boardLabel(t(), game(), board.key) }}</h2>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" class="number">{{ t().leaderboard.columns.place }}</th>
+                  <th scope="col">{{ t().leaderboard.columns.name }}</th>
+                  <th scope="col" class="number">{{ t().leaderboard.columns.plays }}</th>
+                  <th scope="col" class="number">{{ t().leaderboard.columns.best }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (entry of board.entries; track entry.place) {
+                  <tr [class.is-me]="entry.isMe">
+                    <td class="number">{{ entry.place }}</td>
+                    <th scope="row">
+                      {{ entry.screenName }}
+                      @if (entry.isMe) {
+                        <span class="muted">({{ t().leaderboard.you }})</span>
+                      }
+                    </th>
+                    <td class="number">{{ entry.plays }}</td>
+                    <td class="number">{{ bestText(t(), game(), entry.best) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      } @empty {
+        <p class="muted">{{ t().leaderboard.empty }}</p>
+      }
+    }
+  }
+</section>

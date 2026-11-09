@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AdminApi } from '../../core/admin-api';
 import { GameAvailability } from '../../core/game-availability';
+import { MIN_PASSWORD_LENGTH } from '../../core/passwords';
 import { SiteLanguage } from '../../i18n/site-language';
-
-/** Shortest password the API accepts */
-export const MIN_PASSWORD_LENGTH = 10;
 
 type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
 
