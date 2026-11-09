@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { SuDialogComponent } from '@su-labs/dialog';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
@@ -11,16 +13,19 @@ import { SiteTheme } from './core/site-theme';
 /** Order of the header theme switch */
 const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contrast'];
 
-/** Site shell: header with theme and text size controls, page outlet, footer and notifications */
+/**
+ * Site shell: the header (a sticky column with the logo, menu and settings on desktop; a bar with a ☰ menu holding the
+ * same links and settings on tablets and phones), the page, the footer, notifications and dialogs
+ */
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, SuNotificationComponent],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, SuDialogComponent, SuNotificationComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',
   host: {
-    '(document:click)': 'closeSettingsOnOutsideClick($event)',
-    '(document:keydown.escape)': 'settingsOpen.set(false)',
+    '(document:click)': 'closeMenuOnOutsideClick($event)',
+    '(document:keydown.escape)': 'menuOpen.set(false)',
   },
 })
 export class App {
@@ -43,22 +48,33 @@ export class App {
     return THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
   });
 
-  /** Whether the settings panel is open (only used on phones, where it hides behind the gear button) */
-  protected readonly settingsOpen = signal(false);
-  private readonly settings = viewChild.required<ElementRef<HTMLElement>>('settings');
+  /** Whether the ☰ menu is open (tablets and phones; on desktop the menu is always in view) */
+  protected readonly menuOpen = signal(false);
+  private readonly header = viewChild.required<ElementRef<HTMLElement>>('header');
+
+  constructor() {
+    // Following a link closes the menu
+    inject(Router)
+      .events.pipe(takeUntilDestroyed())
+      .subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.menuOpen.set(false);
+        }
+      });
+  }
 
   protected cycleTheme(): void {
     this.theme.set(this.nextTheme());
   }
 
-  protected toggleSettings(): void {
-    this.settingsOpen.update((open) => !open);
+  protected toggleMenu(): void {
+    this.menuOpen.update((open) => !open);
   }
 
-  /** A tap anywhere outside the settings closes them */
-  protected closeSettingsOnOutsideClick(event: MouseEvent): void {
-    if (event.target instanceof Node && !this.settings().nativeElement.contains(event.target)) {
-      this.settingsOpen.set(false);
+  /** A tap anywhere outside the header closes the menu */
+  protected closeMenuOnOutsideClick(event: MouseEvent): void {
+    if (event.target instanceof Node && !this.header().nativeElement.contains(event.target)) {
+      this.menuOpen.set(false);
     }
   }
 }

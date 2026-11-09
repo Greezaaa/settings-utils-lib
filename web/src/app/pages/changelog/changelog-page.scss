@@ -32,7 +32,7 @@
     display: grid;
     gap: 0.5rem;
     position: sticky;
-    top: 7.5rem;
+    top: calc(var(--header-offset) + 1rem);
   }
 
   /* Hover only underlines; the selected package alone gets the bright color and the marker */

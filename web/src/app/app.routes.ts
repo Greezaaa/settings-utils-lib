@@ -40,6 +40,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/notifications/notifications-page').then((m) => m.NotificationsPage),
   },
   {
+    path: 'dialog',
+    title: `Dialog · ${SITE_NAME}`,
+    data: utilityMeta('dialog'),
+    loadComponent: () => import('./pages/dialog/dialog-page').then((m) => m.DialogPage),
+  },
+  {
     path: 'scroll-spy',
     title: `Scroll spy · ${SITE_NAME}`,
     data: utilityMeta('scroll-spy'),

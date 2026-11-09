@@ -1,7 +1,9 @@
 <a class="skip-link" [routerLink]="[]" fragment="main">Skip to content</a>
 
-<header class="site-header">
-  <div class="container header-bar">
+<!-- Desktop: a sticky column on the left (logo, menu, settings). Tablets and phones: a bar on top whose ☰ button
+     opens the same menu and settings -->
+<header class="site-header" #header>
+  <div class="header-bar">
     <a routerLink="/" class="brand" aria-label="su-labs home">
       <!-- Same mark as public/favicon.svg, colored by the site theme -->
       <svg class="brand-logo" viewBox="0 0 128 128" aria-hidden="true">
@@ -19,104 +21,104 @@
       su-labs
     </a>
 
-    <div class="header-controls">
-      <a class="icon-button" [href]="githubUrl" target="_blank" rel="noopener" aria-label="GitHub repository">
+    <button
+      type="button"
+      class="icon-button menu-toggle"
+      aria-controls="site-menu"
+      [attr.aria-expanded]="menuOpen()"
+      [attr.aria-label]="menuOpen() ? 'Close the menu' : 'Open the menu'"
+      (click)="toggleMenu()"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          @if (menuOpen()) {
+            <path d="M6 6l12 12M18 6L6 18" />
+          } @else {
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          }
+        </g>
+      </svg>
+    </button>
+  </div>
+
+  <div id="site-menu" class="site-menu" [class.is-open]="menuOpen()">
+    <nav class="site-nav" aria-label="Utilities">
+      @for (utility of utilities; track utility.slug) {
+        <a [routerLink]="['/', utility.slug]" routerLinkActive="active">{{ utility.name }}</a>
+      }
+      <a routerLink="/one-line-imports" routerLinkActive="active">One-line imports</a>
+      <a [href]="gamesUrl">Smart games</a>
+      <a routerLink="/changelog" routerLinkActive="active">Changelog</a>
+    </nav>
+
+    <div class="site-settings">
+      <div class="setting">
+        <p class="setting-label" id="setting-text-size">Text size</p>
+        <div class="text-size" role="group" aria-labelledby="setting-text-size">
+          <button
+            type="button"
+            class="icon-button"
+            (click)="fontSize.decrease()"
+            [disabled]="fontSize.isMin()"
+            aria-label="Smaller text"
+          >
+            A<span aria-hidden="true">-</span>
+          </button>
+          <button
+            type="button"
+            class="icon-button"
+            (click)="fontSize.increase()"
+            [disabled]="fontSize.isMax()"
+            aria-label="Larger text"
+          >
+            A<span aria-hidden="true">+</span>
+          </button>
+        </div>
+      </div>
+      <div class="setting">
+        <p class="setting-label" id="setting-theme">Theme</p>
+        <button
+          type="button"
+          class="theme-switch"
+          (click)="cycleTheme()"
+          [attr.aria-label]="'Theme: ' + theme.preference() + '. Switch to ' + nextTheme()"
+        >
+          <span class="theme-dot" aria-hidden="true"></span>
+          <span class="mono">{{ theme.preference() }}</span>
+        </button>
+      </div>
+      <a class="icon-button github-link" [href]="githubUrl" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
           <path
             fill="currentColor"
             d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
           />
         </svg>
+        GitHub
       </a>
-
-      <!-- Settings behind the gear button: text size and theme -->
-      <div class="settings" #settings>
-        <button
-          type="button"
-          class="icon-button settings-toggle"
-          aria-label="Settings"
-          aria-controls="site-settings"
-          [attr.aria-expanded]="settingsOpen()"
-          (click)="toggleSettings()"
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-            <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3" />
-              <path
-                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
-              />
-            </g>
-          </svg>
-        </button>
-
-        <div id="site-settings" class="settings-panel" [class.is-open]="settingsOpen()">
-          <div class="setting">
-            <p class="setting-label" id="setting-text-size">Text size</p>
-            <div class="text-size" role="group" aria-labelledby="setting-text-size">
-              <button
-                type="button"
-                class="icon-button"
-                (click)="fontSize.decrease()"
-                [disabled]="fontSize.isMin()"
-                aria-label="Smaller text"
-              >
-                A<span aria-hidden="true">-</span>
-              </button>
-              <button
-                type="button"
-                class="icon-button"
-                (click)="fontSize.increase()"
-                [disabled]="fontSize.isMax()"
-                aria-label="Larger text"
-              >
-                A<span aria-hidden="true">+</span>
-              </button>
-            </div>
-          </div>
-          <div class="setting">
-            <p class="setting-label" id="setting-theme">Theme</p>
-            <button
-              type="button"
-              class="theme-switch"
-              (click)="cycleTheme()"
-              [attr.aria-label]="'Theme: ' + theme.preference() + '. Switch to ' + nextTheme()"
-            >
-              <span class="theme-dot" aria-hidden="true"></span>
-              <span class="mono">{{ theme.preference() }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
-
-  <nav class="container site-nav" aria-label="Utilities">
-    @for (utility of utilities; track utility.slug) {
-      <a [routerLink]="['/', utility.slug]" routerLinkActive="active">{{ utility.name }}</a>
-    }
-    <a routerLink="/one-line-imports" routerLinkActive="active">One-line imports</a>
-    <a [href]="gamesUrl">Smart games</a>
-    <a routerLink="/changelog" routerLinkActive="active">Changelog</a>
-  </nav>
 </header>
 
-<main id="main">
-  <router-outlet />
-</main>
+<div class="page">
+  <main id="main">
+    <router-outlet />
+  </main>
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <p class="muted">
-      Made with ❤️ by <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
-    </p>
-    <nav class="footer-links" aria-label="Project links">
-      <a [href]="guidesUrl" target="_blank" rel="noopener">Guides</a>
-      <a [href]="npmCoreUrl" target="_blank" rel="noopener">npm</a>
-      <a [href]="githubUrl" target="_blank" rel="noopener">GitHub</a>
-      <a routerLink="/privacy" routerLinkActive="active">Privacy</a>
-    </nav>
-  </div>
-</footer>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="muted">
+        Made with ❤️ by <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
+      </p>
+      <nav class="footer-links" aria-label="Project links">
+        <a [href]="guidesUrl" target="_blank" rel="noopener">Guides</a>
+        <a [href]="npmCoreUrl" target="_blank" rel="noopener">npm</a>
+        <a [href]="githubUrl" target="_blank" rel="noopener">GitHub</a>
+        <a routerLink="/privacy" routerLinkActive="active">Privacy</a>
+      </nav>
+    </div>
+  </footer>
+</div>
 
 <su-lib-notifications />
+<su-lib-dialog />

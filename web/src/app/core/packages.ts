@@ -53,6 +53,13 @@ export const UTILITIES: readonly SuUtility[] = [
     summary: 'Toast messages with four types, six positions and automatic closing.',
   },
   {
+    slug: 'dialog',
+    name: 'Dialog',
+    packageName: '@su-labs/dialog',
+    coreEntry: '@su-labs/core/dialog',
+    summary: 'Accessible confirm and message dialogs, answered with a promise and styled with CSS variables.',
+  },
+  {
     slug: 'scroll-spy',
     name: 'Scroll spy',
     packageName: '@su-labs/scroll-spy',

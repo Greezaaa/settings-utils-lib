@@ -1,0 +1,85 @@
+<app-utility-page [utility]="utility" [usage]="usage">
+  <div class="card demo-grid">
+    <div class="demo-controls">
+      <label class="field">
+        <span>Buttons</span>
+        <select [value]="kind()" (change)="choose(kindValues, $event, kind.set)">
+          @for (item of kinds; track item.kind) {
+            <option [value]="item.kind">{{ item.label }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Size</span>
+        <select [value]="size()" (change)="choose(sizes, $event, size.set)">
+          @for (item of sizes; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Backdrop</span>
+        <select [value]="backdrop()" (change)="choose(backdrops, $event, backdrop.set)">
+          @for (item of backdrops; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+
+      @if (backdrop() === 'dim') {
+        <label class="field">
+          <span>Backdrop colour</span>
+          <input type="color" [value]="backdropColor()" (input)="setColor($event)" />
+        </label>
+        <label class="field">
+          <span>Backdrop opacity · {{ backdropOpacity() }}</span>
+          <input type="range" min="0" max="1" step="0.1" [value]="backdropOpacity()" (input)="setOpacity($event)" />
+        </label>
+      }
+
+      <label class="checkbox">
+        <input type="checkbox" [checked]="richBody()" (change)="setFlag(richBody.set, $event)" />
+        HTML text (a list and small print)
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="withImage()" (change)="setFlag(withImage.set, $event)" />
+        A picture
+      </label>
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          [checked]="danger()"
+          [disabled]="kind() === 'ok'"
+          (change)="setFlag(danger.set, $event)"
+        />
+        Danger (starts on Cancel)
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="dismissible()" (change)="setFlag(dismissible.set, $event)" />
+        Escape and a click outside cancel
+      </label>
+
+      <div>
+        <button type="button" class="button button-small" (click)="open()">Open the dialog</button>
+      </div>
+    </div>
+
+    <dl class="state-list">
+      <div>
+        <dt>Last answer</dt>
+        <dd>{{ answer() }}</dd>
+      </div>
+      <div>
+        <dt>Size</dt>
+        <dd>{{ size() }}</dd>
+      </div>
+      <div>
+        <dt>Backdrop</dt>
+        <dd>{{ backdrop() === 'dim' ? backdropColor() + ' · ' + backdropOpacity() : 'none' }}</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="muted">The dialog takes this site’s colours from CSS variables, so it follows the theme you pick.</p>
+</app-utility-page>

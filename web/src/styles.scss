@@ -39,6 +39,9 @@
   --radius-large: 12px;
   --content-width: 64rem;
   --gutter: 1rem;
+  /* Height of the bar on top (tablets and phones); 0 on desktop, where the menu is a column on the left */
+  --header-offset: 3.75rem;
+  --sidebar-width: 15rem;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* @su-labs/notifications, styled to match the site */
@@ -129,6 +132,12 @@
 @media (min-width: 48rem) {
   :root {
     --gutter: 2rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --header-offset: 0rem;
   }
 }
 
