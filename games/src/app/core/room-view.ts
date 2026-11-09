@@ -78,7 +78,7 @@ const PHASES: readonly RoomPhase[] = [
   'playing',
   'results',
 ];
-const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'uk'];
+const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
 
 const isNumber = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value);

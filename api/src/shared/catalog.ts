@@ -15,7 +15,7 @@ export const GAME_SLUGS = [
   'place-pieces',
   'find-pairs',
 ] as const;
-export const LANGUAGE_IDS = ['en', 'es', 'eu', 'uk'] as const;
+export const LANGUAGE_IDS = ['en', 'es', 'eu', 'it', 'uk'] as const;
 /**
  * Features the admin switches on or off for the public (games/src/app/core/features.ts): rooms, and each game in rooms
  * on its own (`rooms-<game>`), apart from the game's single-player switch, and

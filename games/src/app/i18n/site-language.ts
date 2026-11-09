@@ -3,6 +3,7 @@ import { readStored, writeStored } from '../core/site-storage';
 import { EN } from './en';
 import { ES } from './es';
 import { EU } from './eu';
+import { IT } from './it';
 import { UK } from './uk';
 import { LanguageId, SiteMessages } from './site-messages';
 
@@ -10,11 +11,18 @@ const MESSAGES: Readonly<Record<LanguageId, SiteMessages>> = {
   en: EN,
   es: ES,
   eu: EU,
+  it: IT,
   uk: UK,
 };
 
 /** Languages in the order of the picker */
-export const LANGUAGE_IDS: readonly LanguageId[] = ['en', 'es', 'eu', 'uk'];
+export const LANGUAGE_IDS: readonly LanguageId[] = [
+  'en',
+  'es',
+  'eu',
+  'it',
+  'uk',
+];
 
 const LANGUAGE_STORAGE = 'language';
 

@@ -27,6 +27,7 @@ const ALPHABETS: readonly (readonly [LanguageId, RegExp])[] = [
   ['en', /^[a-z]+$/],
   ['es', /^[a-zñ]+$/],
   ['eu', /^[a-zñ]+$/],
+  ['it', /^[a-z]+$/],
   ['uk', /^[абвгґдеєжзиіїйклмнопрстуфхцчшщьюя]+$/],
 ];
 

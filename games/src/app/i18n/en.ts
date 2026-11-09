@@ -106,7 +106,7 @@ export const EN: SiteMessages = {
     'math-games': {
       name: 'Math games',
       summary:
-        'True or false, tap the answer, or find the missing signs. With or without a timer, from sums up to 20 to three-digit division. In English, Spanish, Basque and Ukrainian.',
+        'True or false, tap the answer, or find the missing signs. With or without a timer, from sums up to 20 to three-digit division. In English, Spanish, Basque, Ukrainian and Italian.',
       subtitle: 'true or false, number pad and missing signs',
       intro: 'A math game for kids.',
     },

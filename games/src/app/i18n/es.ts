@@ -110,7 +110,7 @@ export const ES: SiteMessages = {
     'math-games': {
       name: 'Juegos de matemáticas',
       summary:
-        'Verdadero o falso, marca la respuesta o encuentra los signos que faltan. Con o sin tiempo, desde sumas hasta 20 hasta divisiones de tres cifras. En inglés, español, euskera y ucraniano.',
+        'Verdadero o falso, marca la respuesta o encuentra los signos que faltan. Con o sin tiempo, desde sumas hasta 20 hasta divisiones de tres cifras. En inglés, español, euskera, ucraniano e italiano.',
       subtitle: 'verdadero o falso, teclado numérico y signos que faltan',
       intro: 'Un juego de matemáticas para niños.',
     },

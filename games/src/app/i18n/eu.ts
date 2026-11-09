@@ -110,7 +110,7 @@ export const EU: SiteMessages = {
     'math-games': {
       name: 'Matematika jokoak',
       summary:
-        'Egia ala gezurra, sakatu erantzuna edo aurkitu falta diren zeinuak. Denborarekin edo gabe, 20 arteko batuketetatik hiru zifrako zatiketetara. Ingelesez, gaztelaniaz, euskaraz eta ukraineraz.',
+        'Egia ala gezurra, sakatu erantzuna edo aurkitu falta diren zeinuak. Denborarekin edo gabe, 20 arteko batuketetatik hiru zifrako zatiketetara. Ingelesez, gaztelaniaz, euskaraz, ukraineraz eta italieraz.',
       subtitle: 'egia ala gezurra, zenbaki-teklatua eta falta diren zeinuak',
       intro: 'Haurrentzako matematika jokoa.',
     },

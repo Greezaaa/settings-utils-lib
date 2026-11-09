@@ -3,6 +3,7 @@ import { WordBank } from '../letter-games';
 import { EN_WORDS } from './en';
 import { ES_WORDS } from './es';
 import { EU_WORDS } from './eu';
+import { IT_WORDS } from './it';
 import { UK_WORDS } from './uk';
 
 /** The letter games' words in each language of the site */
@@ -10,5 +11,6 @@ export const WORD_BANKS: Readonly<Record<LanguageId, WordBank>> = {
   en: EN_WORDS,
   es: ES_WORDS,
   eu: EU_WORDS,
+  it: IT_WORDS,
   uk: UK_WORDS,
 };

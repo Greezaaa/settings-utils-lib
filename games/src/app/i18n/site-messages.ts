@@ -17,7 +17,7 @@ import { ClimbModeId } from '../games/climb-tower';
 import { AnswerStyle } from '../core/answer-words';
 import { AccountProblem } from '../core/player-account';
 
-export type LanguageId = 'en' | 'es' | 'eu' | 'uk';
+export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
 
 /** A setting's name on its button, and a longer description shown on hover or below it */
 export interface OptionText {

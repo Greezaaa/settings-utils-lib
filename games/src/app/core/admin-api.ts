@@ -5,7 +5,7 @@ import { FeatureId } from './features';
 import { GameSlug } from './games';
 import { GamePlays, isGameSlug, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
 
-const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'uk'];
+const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
 const isLanguage = (value: unknown): value is LanguageId => LANGUAGES.some((language) => language === value);
 
 export const SUGGESTION_STATUSES = ['new', 'read', 'archived'] as const;
