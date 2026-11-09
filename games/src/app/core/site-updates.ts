@@ -31,7 +31,7 @@ export interface UpdateChange {
 export interface SiteUpdate {
   /** Counts up by one per update */
   readonly version: number;
-  /** When it went live, as an ISO date and time with its offset; shown in the visitor's local time */
+  /** When it went live, as an ISO date and time with its offset; the latest one is shown as the last update */
   readonly published: string;
   /** The update changes what the site saves; visitors see the privacy notice again */
   readonly privacy?: boolean;
@@ -352,13 +352,6 @@ export function recentChanges(
     .flatMap(({ version, published, changes }) =>
       changes.map(change => ({ change, version, published }))
     );
-}
-
-/** A day as a short local date in a language, e.g. `7 Nov 2026` */
-export function formatDay(iso: string, language: LanguageId): string {
-  return new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(
-    new Date(iso)
-  );
 }
 
 /** A moment as a short local date and time in a language, e.g. `7 Nov 2026, 16:30` */

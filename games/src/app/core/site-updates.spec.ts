@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDay, formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, recentChanges, SITE_UPDATES, SiteUpdate } from './site-updates';
+import { formatMoment, LATEST_PRIVACY_VERSION, LATEST_PUBLISHED, LATEST_VERSION, recentChanges, SITE_UPDATES, SiteUpdate } from './site-updates';
 
 const text = (word: string) => ({ en: word, es: word, eu: word, it: word, uk: word });
 const UPDATES: readonly SiteUpdate[] = [
@@ -22,10 +22,6 @@ describe('site updates', () => {
       '1:One',
     ]);
     expect(recentChanges(UPDATES)[0].published).toBe('2026-02-01T10:00:00Z');
-  });
-
-  it('formats a day', () => {
-    expect(formatDay('2026-11-07T16:30:00+01:00', 'en')).toMatch(/2026/);
   });
 
   it('formats a moment as a local date and time', () => {

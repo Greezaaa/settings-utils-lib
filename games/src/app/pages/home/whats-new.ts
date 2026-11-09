@@ -2,7 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyR
 import { RouterLink } from '@angular/router';
 import { GameAvailability } from '../../core/game-availability';
 import { readStored, writeStored } from '../../core/site-storage';
-import { formatDay, LAST_SEEN_STORAGE, LATEST_VERSION, recentChanges } from '../../core/site-updates';
+import { LAST_SEEN_STORAGE, LATEST_VERSION, recentChanges } from '../../core/site-updates';
 import { SiteLanguage } from '../../i18n/site-language';
 
 /** Changes shown at first, and with "Show more updates" */
@@ -30,7 +30,7 @@ export class WhatsNew {
   protected readonly isExpanded = signal(false);
   /** The version the visitor saw last, read in the browser; null on a first visit or while prerendering */
   private readonly lastSeen = signal<number | null>(null);
-  /** Dates are shown in the visitor's own time zone, so only in the browser */
+  /** Whether the list has been shown in the browser (not while prerendering), so its versions count as seen */
   private readonly inBrowser = signal(false);
 
   private readonly changes = computed(() =>
@@ -41,12 +41,11 @@ export class WhatsNew {
     const lastSeen = this.lastSeen();
     return this.changes()
       .slice(0, this.isExpanded() ? LONG_LIST : SHORT_LIST)
-      .map(({ change, version, published }) => ({
+      .map(({ change, version }) => ({
         key: `${version}:${change.text.en}`,
         text: change.text[language],
         kind: this.t().home.updateKinds[change.kind],
         game: change.game,
-        day: this.inBrowser() ? formatDay(published, language) : null,
         isNew: lastSeen !== null && version > lastSeen,
       }));
   });

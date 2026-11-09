@@ -1,14 +1,11 @@
 <ul class="changes">
   @for (item of items(); track item.key) {
     <li>
-      <span class="when">
+      <span class="tags">
         @if (item.isNew) {
           <span class="tag tag-green">{{ t().page.new }}</span>
         }
         <span class="tag">{{ item.kind }}</span>
-        @if (item.day) {
-          <time class="muted">{{ item.day }}</time>
-        }
       </span>
       @if (item.game) {
         <a [routerLink]="['/', item.game]">{{ item.text }}</a>
