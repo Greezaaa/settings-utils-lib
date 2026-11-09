@@ -249,7 +249,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 9,
-    published: '2026-11-09T09:00:00+01:00',
+    published: '2026-11-08T21:00:00+01:00',
     changes: [
       {
         game: 'measure-it',
@@ -266,7 +266,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 10,
-    published: '2026-11-09T10:00:00+01:00',
+    published: '2026-11-08T22:00:00+01:00',
     changes: [
       {
         game: 'climb-tower',
@@ -283,7 +283,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 11,
-    published: '2026-11-09T10:30:00+01:00',
+    published: '2026-11-08T22:30:00+01:00',
     changes: [
       {
         game: 'find-pairs',
@@ -300,7 +300,7 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
   {
     version: 12,
-    published: '2026-11-09T11:15:00+01:00',
+    published: '2026-11-08T23:00:00+01:00',
     changes: [
       {
         kind: 'language',
