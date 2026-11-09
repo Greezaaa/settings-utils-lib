@@ -16,6 +16,8 @@ export interface Account {
   readonly loginName: string;
   readonly screenName: string;
   readonly email: string | null;
+  /** Whether the player appears on the leaderboards (they choose; off by default) */
+  readonly showOnLeaderboard: boolean;
 }
 
 /** One line of a leaderboard: only the screen name is shown, never anything else about the player */
@@ -121,7 +123,13 @@ export class PlayerAccount {
     return field(await this.read('/v1/account/options'), 'email') === true;
   }
 
-  register(details: { loginName: string; password: string; screenName: string; email?: string }): Promise<AccountAnswer> {
+  register(details: {
+    loginName: string;
+    password: string;
+    screenName: string;
+    email?: string;
+    showOnLeaderboard: boolean;
+  }): Promise<AccountAnswer> {
     return this.startSession(this.fetch('/v1/account', jsonInit('POST', details), SEND_TIMEOUT_MS));
   }
 
@@ -141,8 +149,13 @@ export class PlayerAccount {
     this.signedIn.set(null);
   }
 
-  /** A new screen name, or an email added, changed or removed (with the password) */
-  async change(changes: { screenName?: string; email?: string | null; password?: string }): Promise<AccountAnswer> {
+  /** A new screen name, an email added, changed or removed (with the password), or showing on the leaderboards or not */
+  async change(changes: {
+    screenName?: string;
+    email?: string | null;
+    password?: string;
+    showOnLeaderboard?: boolean;
+  }): Promise<AccountAnswer> {
     const answer = await this.answer(this.fetch('/v1/account', jsonInit('PATCH', changes), SEND_TIMEOUT_MS));
     if (answer === 'done') {
       await this.restore();
@@ -229,7 +242,12 @@ export class PlayerAccount {
     const accountFavorites = readFavorites(field(body, 'favorites'));
     // Favourites from both, this browser's first
     this.savedFavorites = accountFavorites;
-    this.signedIn.set({ loginName, screenName, email: typeof email === 'string' ? email : null });
+    this.signedIn.set({
+      loginName,
+      screenName,
+      email: typeof email === 'string' ? email : null,
+      showOnLeaderboard: field(body, 'showOnLeaderboard') === true,
+    });
     this.favorites.set([...new Set([...this.favorites.games(), ...accountFavorites])].filter((game) => isGameSlug(game)));
     // Best results: this browser's go to the account, the account's come into this browser
     const local = RESULT_GAME_SLUGS.flatMap((game) => storedBests(game, readStored(RESULT_GAMES[game].storage)));

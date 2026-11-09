@@ -7,7 +7,7 @@ import {
 
 /**
  * A player's account on the games site: a private login name and password, a public screen name for the leaderboard,
- * and optionally an email (only to reset a forgotten password). Holds the player's favourites; their results are in
+ * and optionally an email (only to reset a forgotten password), and whether they appear on the leaderboards. Holds the player's favourites; their results are in
  * player_results.
  */
 @Entity('players')
@@ -52,6 +52,10 @@ export class Player {
 
   @Column({ type: 'timestamptz', name: 'locked_until', nullable: true })
   lockedUntil: Date | null;
+
+  /** Whether the player appears on the leaderboards; off until they choose it */
+  @Column({ type: 'boolean', name: 'show_on_leaderboard', default: false })
+  showOnLeaderboard: boolean;
 
   /** Favourite games, most recent first */
   @Column({ type: 'varchar', length: 40, array: true, default: () => "'{}'" })

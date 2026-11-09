@@ -58,6 +58,8 @@ interface Account {
   readonly loginName: string;
   readonly screenName: string;
   readonly email: string | null;
+  /** Whether the player appears on the leaderboards */
+  readonly showOnLeaderboard: boolean;
   readonly favorites: string[];
   readonly results: MyResult[];
 }
@@ -259,12 +261,14 @@ export class AccountsController {
     loginName,
     screenName,
     email,
+    showOnLeaderboard,
     favorites,
   }: Player): Promise<Account> {
     return {
       loginName,
       screenName,
       email,
+      showOnLeaderboard,
       favorites,
       results: await this.results.mine(id),
     };

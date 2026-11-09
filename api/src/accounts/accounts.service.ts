@@ -65,7 +65,13 @@ export class AccountsService {
   }
 
   async register(
-    { loginName, password, screenName, email }: RegisterInput,
+    {
+      loginName,
+      password,
+      screenName,
+      email,
+      showOnLeaderboard,
+    }: RegisterInput,
     now = new Date(),
   ): Promise<PlayerSignedIn> {
     if (email && !this.canEmail) {
@@ -78,6 +84,7 @@ export class AccountsService {
       screenNameKey: screenName.toLowerCase(),
       passwordHash: await hashPassword(password),
       email: email ?? null,
+      showOnLeaderboard,
     });
     return this.startSession(
       await this.players.findOneByOrFail({ loginName }),
@@ -130,7 +137,7 @@ export class AccountsService {
   /** A new screen name, or an email added, changed or removed (changing it needs the password) */
   async change(
     player: Player,
-    { screenName, email, password }: ChangeInput,
+    { screenName, email, password, showOnLeaderboard }: ChangeInput,
   ): Promise<void> {
     if (email !== undefined) {
       if (email !== null && !this.canEmail) {
@@ -151,6 +158,7 @@ export class AccountsService {
           ? { screenName, screenNameKey: screenName.toLowerCase() }
           : {}),
         ...(email !== undefined ? { email } : {}),
+        ...(showOnLeaderboard !== undefined ? { showOnLeaderboard } : {}),
       },
     );
   }

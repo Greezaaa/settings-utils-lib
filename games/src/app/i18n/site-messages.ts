@@ -701,6 +701,9 @@ export interface SiteMessages {
     /** The tooltip next to the screen name: it is shown to others and needn't be a real name */
     readonly screenNameTip: string;
     readonly screenNameTipLabel: string;
+    /** The player's choice to appear on the leaderboards, at sign-up and in the account */
+    readonly showOnLeaderboard: string;
+    readonly showOnLeaderboardHint: string;
     readonly email: string;
     readonly emailHint: string;
     /** Shown while no email is given: a forgotten password can't be reset */
@@ -764,5 +767,8 @@ export interface SiteMessages {
       readonly best: string;
     };
     readonly you: string;
+    /** For a signed-in player who chose not to appear */
+    readonly youreHidden: string;
+    readonly changeInAccount: string;
   };
 }

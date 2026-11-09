@@ -71,3 +71,21 @@
 .tip:focus-within .tip-text {
   opacity: 1;
 }
+
+// The sign-up choice to show on the leaderboards: a box beside its label and hint
+.check {
+  align-items: start;
+  display: flex;
+  gap: 0.75rem;
+
+  input {
+    height: 1.25rem;
+    margin-top: 0.125rem;
+    width: 1.25rem;
+  }
+
+  span {
+    display: grid;
+    gap: 0.125rem;
+  }
+}

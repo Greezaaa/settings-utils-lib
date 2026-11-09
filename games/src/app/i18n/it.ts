@@ -349,6 +349,7 @@ export const IT: SiteMessages = {
       'I tuoi giochi preferiti, quante volte hai giocato a ogni gioco e il tuo miglior risultato',
       'Eliminando l’account, nella pagina dell’account, si elimina tutto subito: non resta disattivato e non si può recuperare',
       'Nella pagina dell’account puoi eliminare solo i tuoi risultati (partite, record e posti in classifica) e tenere l’account',
+      'Scegli tu se comparire nelle classifiche: non compari finché non lo attivi nel tuo account',
     ],
     accountsEmail:
       'Un’email solo se la aggiungi, usata solo per inviarti un link se dimentichi la password. Senza email, una password dimenticata non si può recuperare',
@@ -1005,6 +1006,9 @@ export const IT: SiteMessages = {
     screenNameTip:
       'Il tuo nome visibile è quello che vedono gli altri giocatori. Non deve essere il tuo vero nome: inventane uno, come «Razzo Blu». Se preferisci, puoi usare il tuo vero nome. Puoi cambiarlo dopo.',
     screenNameTipLabel: 'Sul nome visibile',
+    showOnLeaderboard: 'Mostrami nelle classifiche',
+    showOnLeaderboardHint:
+      'Gli altri giocatori vedono il tuo nome visibile e i tuoi record. Disattivato finché non lo attivi; puoi cambiarlo quando vuoi.',
     email: 'Email (facoltativa)',
     emailHint: 'Si usa solo per inviarti un link se dimentichi la password. Nessun altro la vede.',
     noEmailWarning: 'Senza email, una password dimenticata non si può recuperare: scrivila in un posto sicuro.',
@@ -1070,5 +1074,7 @@ export const IT: SiteMessages = {
     empty: 'Nessuno ha ancora giocato a questo gioco con un account. Sii il primo!',
     columns: { place: 'Posto', name: 'Nome visibile', plays: 'Partite', best: 'Record' },
     you: 'tu',
+    youreHidden: 'Non compari nelle classifiche.',
+    changeInAccount: 'Cambialo nel tuo account',
   },
 };

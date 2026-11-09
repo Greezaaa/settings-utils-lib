@@ -17,6 +17,7 @@ import { Admins1794300000000 } from './migrations/1794300000000-admins.js';
 import { FeatureFlags1794400000000 } from './migrations/1794400000000-feature-flags.js';
 import { Players1794500000000 } from './migrations/1794500000000-players.js';
 import { ErrorLogs1794600000000 } from './migrations/1794600000000-error-logs.js';
+import { LeaderboardChoice1794700000000 } from './migrations/1794700000000-leaderboard-choice.js';
 
 /**
  * How the API reaches PostgreSQL. The tables are only ever changed by migrations, which run when the API starts;
@@ -46,6 +47,7 @@ export const databaseOptions = (url: string): DataSourceOptions => ({
     FeatureFlags1794400000000,
     Players1794500000000,
     ErrorLogs1794600000000,
+    LeaderboardChoice1794700000000,
   ],
   migrationsRun: true,
   synchronize: false,

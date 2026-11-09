@@ -363,6 +363,7 @@ export const ES: SiteMessages = {
       'Tus juegos favoritos, y cuántas veces has jugado a cada juego y tu mejor resultado',
       'Al borrar la cuenta, en la página de la cuenta, se borra todo al instante: no se guarda desactivada y no se puede recuperar',
       'En la página de la cuenta puedes borrar solo tus resultados (partidas, mejores resultados y puestos en las clasificaciones) y mantener la cuenta',
+      'Tú eliges si apareces en las clasificaciones: no apareces hasta que lo activas en tu cuenta',
     ],
     accountsEmail:
       'Un correo solo si lo añades, que solo se usa para enviarte un enlace si olvidas la contraseña. Sin correo, una contraseña olvidada no se puede recuperar',
@@ -1062,6 +1063,9 @@ export const ES: SiteMessages = {
     screenNameTip:
       'Tu nombre visible es lo que ven los demás jugadores. No tiene que ser tu nombre real: invéntate uno, como «Cohete Azul». Si prefieres, puedes usar tu nombre real. Puedes cambiarlo después.',
     screenNameTipLabel: 'Sobre el nombre visible',
+    showOnLeaderboard: 'Mostrarme en las clasificaciones',
+    showOnLeaderboardHint:
+      'Los demás jugadores ven tu nombre visible y tus mejores resultados. Desactivado hasta que lo actives; puedes cambiarlo cuando quieras.',
     email: 'Correo (opcional)',
     emailHint: 'Solo se usa para enviarte un enlace si olvidas la contraseña. Nadie más lo ve.',
     noEmailWarning: 'Sin correo, una contraseña olvidada no se puede recuperar: apúntala en un lugar seguro.',
@@ -1126,5 +1130,7 @@ export const ES: SiteMessages = {
     empty: 'Nadie ha jugado aún a este juego con cuenta. ¡Sé el primero!',
     columns: { place: 'Puesto', name: 'Nombre visible', plays: 'Partidas', best: 'Mejor' },
     you: 'tú',
+    youreHidden: 'No apareces en las clasificaciones.',
+    changeInAccount: 'Cámbialo en tu cuenta',
   },
 };

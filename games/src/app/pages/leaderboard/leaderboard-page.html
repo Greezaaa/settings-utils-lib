@@ -16,6 +16,12 @@
       <a class="button" routerLink="/account">{{ t().leaderboard.signInLink }}</a>
     </p>
   } @else {
+    @if (!account.account()?.showOnLeaderboard) {
+      <p class="muted">
+        {{ t().leaderboard.youreHidden }}
+        <a routerLink="/account">{{ t().leaderboard.changeInAccount }}</a>
+      </p>
+    }
     <div class="tabs" role="group" [attr.aria-label]="t().leaderboard.gameGroup">
       @for (option of games; track option) {
         <button

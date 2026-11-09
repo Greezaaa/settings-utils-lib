@@ -356,6 +356,7 @@ export const EN: SiteMessages = {
       'Your favourite games, and how many times you played each game and your best result',
       'Deleting the account, on the account page, deletes all of it straight away: it isn’t kept deactivated, and it can’t be recovered',
       'You can delete only your results (plays, bests and leaderboard places) on the account page, and keep the account',
+      'You choose whether you appear on the leaderboards: you don’t, until you turn it on in your account',
     ],
     accountsEmail:
       'An email only if you add one, used only to send a link when you forget your password. Without an email, a forgotten password can’t be reset',
@@ -1028,6 +1029,9 @@ export const EN: SiteMessages = {
     screenNameTip:
       'Your screen name is what other players see. It doesn’t have to be your real name: make one up, like “Blue Rocket”. You can use your real name if you prefer. You can change it later.',
     screenNameTipLabel: 'About the screen name',
+    showOnLeaderboard: 'Show me on the leaderboards',
+    showOnLeaderboardHint:
+      'Other players see your screen name and best results. Off until you turn it on; you can change it any time.',
     email: 'Email (optional)',
     emailHint: 'Only used to send you a link if you forget your password. Nobody else sees it.',
     noEmailWarning: 'Without an email, a forgotten password can’t be reset: write it down somewhere safe.',
@@ -1092,5 +1096,7 @@ export const EN: SiteMessages = {
     empty: 'Nobody has played this game with an account yet. Be the first!',
     columns: { place: 'Place', name: 'Screen name', plays: 'Times played', best: 'Best' },
     you: 'you',
+    youreHidden: 'You don’t appear on the leaderboards.',
+    changeInAccount: 'Change it in your account',
   },
 };

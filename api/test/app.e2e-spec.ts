@@ -593,6 +593,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           loginName: 'ana',
           password: 'a long password',
           screenName: 'Ana',
+          showOnLeaderboard: true,
         })
         .expect(201);
       await ben
@@ -601,6 +602,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           loginName: 'ben',
           password: 'a long password',
           screenName: 'Ben',
+          showOnLeaderboard: true,
         })
         .expect(201);
 
@@ -665,6 +667,27 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .get('/v1/leaderboard/find-pairs')
         .expect(401);
 
+      // A player who stops showing on the leaderboards leaves them, and is back when they choose to show again
+      await ben
+        .patch('/v1/account')
+        .send({ showOnLeaderboard: false })
+        .expect(204);
+      expect(
+        (await ben.get('/v1/account').expect(200)).body.showOnLeaderboard,
+      ).toBe(false);
+      const { body: hidden } = await ana
+        .get('/v1/leaderboard/find-pairs')
+        .expect(200);
+      expect(
+        hidden.boards[0].entries.map(
+          ({ screenName }: { screenName: string }) => screenName,
+        ),
+      ).toEqual(['Ana']);
+      await ben
+        .patch('/v1/account')
+        .send({ showOnLeaderboard: true })
+        .expect(204);
+
       // A player deletes their results and keeps the account
       await ana.delete('/v1/account/results').expect(204);
       expect((await ana.get('/v1/account').expect(200)).body.results).toEqual(
@@ -688,6 +711,10 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           screenName: 'Kid',
         })
         .expect(201);
+      // Nobody shows on the leaderboards without choosing it
+      expect(
+        (await kid.get('/v1/account').expect(200)).body.showOnLeaderboard,
+      ).toBe(false);
       await kid
         .patch('/v1/account')
         .send({ screenName: 'Ana' })

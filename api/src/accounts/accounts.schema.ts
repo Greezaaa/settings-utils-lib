@@ -27,6 +27,8 @@ export const registerSchema = z.object({
   password: passwordSchema,
   screenName: screenNameSchema,
   email: emailSchema.optional(),
+  /** Whether the player appears on the leaderboards; off unless they choose it */
+  showOnLeaderboard: z.boolean().default(false),
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
@@ -36,9 +38,13 @@ export const signInSchema = z.object({
 });
 export type SignInInput = z.infer<typeof signInSchema>;
 
-/** Changes to the account: a new screen name, or an email (null removes it; changing it needs the password) */
+/**
+ * Changes to the account: a new screen name, an email (null removes it; changing it needs the password), or whether the
+ * player appears on the leaderboards
+ */
 export const changeSchema = z.object({
   screenName: screenNameSchema.optional(),
+  showOnLeaderboard: z.boolean().optional(),
   email: emailSchema.nullable().optional(),
   password: z.string().min(1).max(200).optional(),
 });

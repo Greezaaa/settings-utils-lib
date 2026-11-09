@@ -41,6 +41,26 @@
       <button type="submit" class="button" [disabled]="details.isBusy()">{{ t().account.save }}</button>
     </form>
 
+    <div class="card account-card">
+      <label class="switch switch-row">
+        <span class="switch-text">
+          <strong>{{ t().account.showOnLeaderboard }}</strong>
+          <small class="muted">{{ t().account.showOnLeaderboardHint }}</small>
+        </span>
+        <input
+          type="checkbox"
+          role="switch"
+          [checked]="player.showOnLeaderboard"
+          [disabled]="visibility.isBusy()"
+          (change)="setShowOnLeaderboard($event)"
+        />
+        <span class="track" aria-hidden="true"></span>
+      </label>
+      @if (visibility.error(); as error) {
+        <p class="error" role="alert">{{ error }}</p>
+      }
+    </div>
+
     <form class="card account-card" (submit)="$event.preventDefault(); changePassword(passwordForm)" #passwordForm>
       <h2 class="card-title">{{ t().account.passwordTitle }}</h2>
       <input type="text" name="username" autocomplete="username" [value]="player.loginName" hidden />
@@ -167,6 +187,13 @@
               <small class="muted">{{ t().account.emailHint }}</small>
             </label>
           }
+          <label class="check">
+            <input name="showOnLeaderboard" type="checkbox" />
+            <span>
+              {{ t().account.showOnLeaderboard }}
+              <small class="muted">{{ t().account.showOnLeaderboardHint }}</small>
+            </span>
+          </label>
           @if (!canEmail() || !newEmail()) {
             <p class="warning" role="note">{{ t().account.noEmailWarning }}</p>
           }

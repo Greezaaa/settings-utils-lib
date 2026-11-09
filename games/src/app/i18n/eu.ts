@@ -363,6 +363,7 @@ export const EU: SiteMessages = {
       'Zure joko gogokoak, eta joko bakoitzean zenbat aldiz jokatu duzun eta zure emaitza onena',
       'Kontua ezabatzean, kontuaren orrian, dena berehala ezabatzen da: ez da desaktibatuta gordetzen eta ezin da berreskuratu',
       'Kontuaren orrian zure emaitzak bakarrik ezaba ditzakezu (partidak, emaitza onenak eta sailkapenetako postuak), kontua mantenduz',
+      'Zuk erabakitzen duzu sailkapenetan agertzen zaren: ez zara agertzen zure kontuan aktibatu arte',
     ],
     accountsEmail:
       'Helbide elektroniko bat, gehitzen baduzu bakarrik; pasahitza ahazten baduzu esteka bat bidaltzeko baino ez da erabiltzen. Helbiderik gabe, ahaztutako pasahitza ezin da berreskuratu',
@@ -1060,6 +1061,9 @@ export const EU: SiteMessages = {
     screenNameTip:
       'Zure izen ikusgaia da beste jokalariek ikusten dutena. Ez du zure benetako izena izan behar: asmatu bat, «Suziri Urdina» bezala. Nahiago baduzu, zure benetako izena erabil dezakezu. Gero alda dezakezu.',
     screenNameTipLabel: 'Izen ikusgaiari buruz',
+    showOnLeaderboard: 'Erakutsi ni sailkapenetan',
+    showOnLeaderboardHint:
+      'Beste jokalariek zure izen ikusgaia eta emaitza onenak ikusten dituzte. Desaktibatuta, zuk aktibatu arte; nahi duzunean alda dezakezu.',
     email: 'Helbide elektronikoa (hautazkoa)',
     emailHint: 'Pasahitza ahazten baduzu esteka bat bidaltzeko baino ez da erabiltzen. Beste inork ez du ikusten.',
     noEmailWarning: 'Helbiderik gabe, ahaztutako pasahitza ezin da berreskuratu: idatzi leku seguru batean.',
@@ -1124,5 +1128,7 @@ export const EU: SiteMessages = {
     empty: 'Inork ez du oraindik joko hau kontu batekin jokatu. Izan zaitez lehena!',
     columns: { place: 'Postua', name: 'Izen ikusgaia', plays: 'Partidak', best: 'Onena' },
     you: 'zu',
+    youreHidden: 'Ez zaude sailkapenetan.',
+    changeInAccount: 'Aldatu zure kontuan',
   },
 };

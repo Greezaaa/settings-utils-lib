@@ -87,7 +87,10 @@ export class ResultsService {
     }));
   }
 
-  /** A game's leaderboards: the best players for each of its settings, the most played settings first */
+  /**
+   * A game's leaderboards: the best players for each of its settings, the most played settings first. Only players
+   * who chose to appear are ranked; the others don't count, not even for their own places.
+   */
   async leaderboards(
     game: ResultGame,
     playerId: string,
@@ -107,7 +110,7 @@ export class ResultsService {
                 ROW_NUMBER() OVER (PARTITION BY r.key ORDER BY r.best ${order}, r.updated ASC) AS place,
                 COUNT(*) OVER (PARTITION BY r.key) AS players
          FROM player_results r JOIN players p ON p.id = r.player_id
-         WHERE r.game = $1
+         WHERE r.game = $1 AND p.show_on_leaderboard
        ) ranked
        WHERE place <= $2
        ORDER BY players DESC, key ASC, place ASC`,

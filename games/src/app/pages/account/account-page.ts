@@ -11,14 +11,15 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 /**
  * The player's account (behind the `accounts` switch). Signed out: sign in, make an account (login name, screen name,
  * password and, when the API can send emails, an optional email for resets), or ask for a reset link. Signed in:
- * change the screen name or email, change the password, sign out, delete the results only, or delete the account.
+ * change the screen name or email, show on the leaderboards or not, change the password, sign out, delete the results only,
+ * or delete the account.
  */
 @Component({
   selector: 'app-account-page',
   imports: [ScreenNameField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../admin/admin.scss', './account.scss'],
+  styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', '../admin/admin.scss', './account.scss'],
 })
 export class AccountPage {
   protected readonly account = inject(PlayerAccount);
@@ -36,6 +37,7 @@ export class AccountPage {
   protected readonly entry = new AccountForm();
   protected readonly details = new AccountForm();
   protected readonly password = new AccountForm();
+  protected readonly visibility = new AccountForm();
   protected readonly results = new AccountForm();
   protected readonly deletion = new AccountForm();
 
@@ -73,6 +75,7 @@ export class AccountPage {
       loginName: formText(form, 'loginName'),
       screenName: formText(form, 'screenName'),
       password,
+      showOnLeaderboard: formText(form, 'showOnLeaderboard') === 'on',
       ...(this.canEmail() && email ? { email } : {}),
     };
     void this.entry.run(() => this.account.register(details), null);
@@ -114,6 +117,14 @@ export class AccountPage {
       this.t().account.passwordChanged,
       () => this.clearPasswords(form),
     );
+  }
+
+  /** Shows or hides the player on the leaderboards straight away */
+  protected setShowOnLeaderboard(event: Event): void {
+    if (event.target instanceof HTMLInputElement) {
+      const showOnLeaderboard = event.target.checked;
+      void this.visibility.run(() => this.account.change({ showOnLeaderboard }), this.t().account.saved);
+    }
   }
 
   protected removeResults(): void {
