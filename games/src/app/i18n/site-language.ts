@@ -1,18 +1,23 @@
 import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, signal } from '@angular/core';
 import { readStored, writeStored } from '../core/site-storage';
+import { PlayerGender } from '../core/player-gender';
 import { EN } from './en';
-import { ES } from './es';
+import { spanish } from './es';
 import { EU } from './eu';
-import { IT } from './it';
-import { UK } from './uk';
+import { italian } from './it';
+import { ukrainian } from './uk';
 import { LanguageId, SiteMessages } from './site-messages';
+import { WordGender } from './word-gender';
 
-const MESSAGES: Readonly<Record<LanguageId, SiteMessages>> = {
-  en: EN,
-  es: ES,
-  eu: EU,
-  it: IT,
-  uk: UK,
+/** Each language's texts, in the boy's or the girl's forms (English and Basque don't change with it) */
+const MESSAGES: Readonly<
+  Record<LanguageId, (gender: WordGender) => SiteMessages>
+> = {
+  en: () => EN,
+  es: spanish,
+  eu: () => EU,
+  it: italian,
+  uk: ukrainian,
 };
 
 /** Languages in the order of the picker */
@@ -38,9 +43,12 @@ const isLanguageId = (value: unknown): value is LanguageId =>
 export class SiteLanguage {
   private readonly document = inject(DOCUMENT);
   private readonly languageId = signal<LanguageId>('en');
+  private readonly gender = inject(PlayerGender);
 
   readonly language = this.languageId.asReadonly();
-  readonly messages = computed(() => MESSAGES[this.languageId()]);
+  readonly messages = computed(() =>
+    MESSAGES[this.languageId()](this.gender.wordGender())
+  );
 
   constructor() {
     afterNextRender(() => this.languageId.set(initialLanguage()));
@@ -58,12 +66,12 @@ export class SiteLanguage {
 
   /** A language's own name, for the picker */
   nameOf(id: LanguageId): string {
-    return MESSAGES[id].languageName;
+    return MESSAGES[id]('boy').languageName;
   }
 
   /** A language's short code, for the picker */
   codeOf(id: LanguageId): string {
-    return MESSAGES[id].languageCode;
+    return MESSAGES[id]('boy').languageCode;
   }
 }
 

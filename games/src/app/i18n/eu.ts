@@ -85,6 +85,8 @@ export const EU: SiteMessages = {
         summary: 'Erantzunak koloretan eta hitzekin ere ikusten dira',
       },
     },
+    wordGender: 'Nola hitz egin?',
+    wordGenders: { boy: 'mutila', girl: 'neska' },
     madeBy: 'Maitasunez ❤️ egina:',
     projectLinks: 'Proiektuaren estekak',
     privacyNotice:
@@ -306,6 +308,11 @@ export const EU: SiteMessages = {
         what: 'Hizkuntza',
         where: 'Nabigatzaile honen biltegiratze lokala',
         why: 'Jokoak zure hizkuntzan ireki daitezen',
+      },
+      {
+        what: 'Mutil edo neska gisa hitz egitea (aukeratzen baduzu bakarrik)',
+        where: 'Nabigatzaile honen biltegi lokala',
+        why: 'Testuek zuk nahi bezala hitz egin dezaten; ez da inoiz gailu honetatik ateratzen',
       },
       {
         what: 'Jokoen koloreak eta ezarpenak',
@@ -947,6 +954,7 @@ export const EU: SiteMessages = {
       'rooms-turn-picture': 'Biratu irudia geletan',
       'rooms-place-pieces': 'Kokatu piezak geletan',
       'answer-words': 'Erantzunak hitzekin (ezarpena)',
+      'word-gender': 'Jokalariari mutil edo neska gisa hitz egin (ezarpena)',
       'category-menu': 'Kategorien menua',
       accounts: 'Jokalarien kontuak',
       leaderboard: 'Sailkapena',

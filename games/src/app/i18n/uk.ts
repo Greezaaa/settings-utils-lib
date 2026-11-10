@@ -1,4 +1,5 @@
 import { SiteMessages } from './site-messages';
+import { forGender, WordGender } from './word-gender';
 
 /** Ukrainian plural: 1, 21… → one; 2–4, 22–24… → few; the rest → many */
 function plural(count: number, one: string, few: string, many: string): string {
@@ -68,7 +69,8 @@ const ANIMALS = [
 /** Animals whose name is feminine: Panda, Owl, Turtle, Koala, Otter, Squirrel */
 const FEMININE_ANIMALS = new Set([2, 5, 9, 10, 11, 13]);
 
-export const UK: SiteMessages = {
+/** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
+export const ukrainian = (gender: WordGender): SiteMessages => ({
   languageName: 'Українська',
   languageCode: 'УКР',
 
@@ -114,6 +116,8 @@ export const UK: SiteMessages = {
         summary: 'Відповіді видно кольором і ще кількома словами',
       },
     },
+    wordGender: 'Звертатися до мене як до',
+    wordGenders: { boy: 'хлопчика', girl: 'дівчинки' },
     madeBy: 'Зроблено з ❤️:',
     projectLinks: 'Посилання проєкту',
     privacyNotice:
@@ -335,6 +339,11 @@ export const UK: SiteMessages = {
         why: 'Щоб ігри відкривалися вашою мовою',
       },
       {
+        what: 'Звертатися до тебе як до хлопчика чи дівчинки (лише якщо ти обереш)',
+        where: 'Локальне сховище цього браузера',
+        why: 'Щоб тексти зверталися до тебе як слід; це ніколи не залишає цей пристрій',
+      },
+      {
         what: 'Кольори та налаштування ігор',
         where: 'Локальне сховище',
         why: 'Щоб ігри пам’ятали ваш вибір',
@@ -395,10 +404,10 @@ export const UK: SiteMessages = {
     accounts: [
       'Логін і пароль (зберігається зашифрованим, його ніхто не може прочитати), щоб увійти у свій обліковий запис',
       'Ім’я в грі — єдине, що бачать інші гравці, у таблицях лідерів. Це не мусить бути твоє справжнє ім’я',
-      'Твої улюблені ігри, а також скільки разів ти грав у кожну гру і твій найкращий результат',
+      forGender(gender, 'Твої улюблені ігри, а також скільки разів ти грав у кожну гру і твій найкращий результат', 'Твої улюблені ігри, а також скільки разів ти грала в кожну гру і твій найкращий результат'),
       'Якщо видалити обліковий запис на його сторінці, усе видаляється одразу: він не зберігається вимкненим, і його не можна відновити',
       'На сторінці облікового запису можна видалити лише свої результати (ігри, найкращі результати й місця в таблицях лідерів), залишивши обліковий запис',
-      'Ти сам вирішуєш, чи бути в таблицях лідерів: тебе там немає, доки ти не ввімкнеш це у своєму обліковому записі',
+      forGender(gender, 'Ти сам вирішуєш, чи бути в таблицях лідерів: тебе там немає, доки ти не ввімкнеш це у своєму обліковому записі', 'Ти сама вирішуєш, чи бути в таблицях лідерів: тебе там немає, доки ти не ввімкнеш це у своєму обліковому записі'),
     ],
     accountsEmail:
       'Електронну пошту, лише якщо ти її додаси; вона потрібна тільки щоб надіслати посилання, якщо ти забудеш пароль. Без пошти забутий пароль не можна відновити',
@@ -428,7 +437,7 @@ export const UK: SiteMessages = {
     addFavorite: game => `Додати «${game}» до улюблених`,
     removeFavorite: game => `Прибрати «${game}» з улюблених`,
     title: 'Математичні ігри',
-    lead: 'Скажи, чи правильний результат, введи відповідь сам або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.',
+    lead: forGender(gender, 'Скажи, чи правильний результат, введи відповідь сам або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.', 'Скажи, чи правильний результат, введи відповідь сама або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.'),
     rule: 'Не помились, бо гра закінчиться!',
     game: 'Гра',
   },
@@ -633,7 +642,7 @@ export const UK: SiteMessages = {
         summary:
           'Після 2 помилок підсвічується наступна буква; після 5 і 10 — перші букви ставляться самі',
       },
-      'no-hints': { name: 'Без підказок', summary: 'Розв’яжи сам' },
+      'no-hints': { name: 'Без підказок', summary: forGender(gender, 'Розв’яжи сам', 'Розв’яжи сама') },
     },
     instructions: {
       'first-vowel': 'З якої голосної починається?',
@@ -768,7 +777,7 @@ export const UK: SiteMessages = {
     answers: 'Відповіді',
     floors: floors => `Поверх ${floors}`,
     best: floors => `Рекорд: поверх ${floors}`,
-    fell: 'Ти впав!',
+    fell: forGender(gender, 'Ти впав!', 'Ти впала!'),
     summary: floors => `Поверхів пройдено: ${floors}`,
   },
 
@@ -977,6 +986,7 @@ export const UK: SiteMessages = {
       'rooms-turn-picture': 'Поверни малюнок у кімнатах',
       'rooms-place-pieces': 'Розклади шматочки в кімнатах',
       'answer-words': 'Відповіді словами (налаштування)',
+      'word-gender': 'Звертатися до гравця як до хлопчика чи дівчинки (налаштування)',
       'category-menu': 'Меню категорій',
       accounts: 'Акаунти гравців',
       leaderboard: 'Таблиця лідерів',
@@ -1065,8 +1075,8 @@ export const UK: SiteMessages = {
     ready: 'Готовий',
     notReady: 'Не готовий',
     away: 'Немає зв’язку',
-    imReady: 'Я готовий',
-    notReadyYet: 'Ще не готовий',
+    imReady: forGender(gender, 'Я готовий', 'Я готова'),
+    notReadyYet: forGender(gender, 'Ще не готовий', 'Ще не готова'),
     start: 'Почати',
     needPlayers: min => `Потрібно щонайменше ${min} гравці.`,
     waitingForReady: 'Чекаємо, доки всі будуть готові…',
@@ -1102,7 +1112,7 @@ export const UK: SiteMessages = {
     loading: 'Завантаження…',
     signInTab: 'Увійти',
     signUpTab: 'Створити обліковий запис',
-    forgotTab: 'Я забув пароль',
+    forgotTab: forGender(gender, 'Я забув пароль', 'Я забула пароль'),
     loginName: 'Логін',
     loginNameHint: 'Від 3 до 30 латинських літер (a–z), цифр, крапок, дефісів або підкреслень. Його бачиш лише ти, щоб увійти.',
     loginOrEmail: 'Логін або електронна пошта',
@@ -1128,7 +1138,7 @@ export const UK: SiteMessages = {
     sendLink: 'Надіслати посилання',
     linkSent: 'Якщо якийсь обліковий запис має цю пошту, посилання вже в дорозі. Воно діє одну годину.',
     sending: 'Надсилання…',
-    signedInAs: screenName => `Ти увійшов як ${screenName}`,
+    signedInAs: screenName => forGender(gender, `Ти увійшов як ${screenName}`, `Ти увійшла як ${screenName}`),
     loginNameIs: loginName => `Логін: ${loginName}`,
     signOut: 'Вийти',
     detailsTitle: 'Твої дані',
@@ -1152,7 +1162,7 @@ export const UK: SiteMessages = {
     confirmDelete: 'Видалити твій обліковий запис назавжди?',
     deleted: 'Твій обліковий запис видалено.',
     problems: {
-      invalid: 'Щось не так: перевір, що ти ввів.',
+      invalid: forGender(gender, 'Щось не так: перевір, що ти ввів.', 'Щось не так: перевір, що ти ввела.'),
       'wrong-login': 'Логін або пароль неправильні.',
       'wrong-password': 'Пароль неправильний.',
       'login-taken': 'Цей логін уже зайнятий: спробуй інший.',
@@ -1166,7 +1176,7 @@ export const UK: SiteMessages = {
     resetTitle: 'Вибери новий пароль',
     resetLead: 'Введи новий пароль двічі. Потім ти ввійдеш у свій обліковий запис.',
     resetSave: 'Зберегти пароль',
-    resetDone: 'Пароль змінено, і ти ввійшов у свій обліковий запис.',
+    resetDone: forGender(gender, 'Пароль змінено, і ти ввійшов у свій обліковий запис.', 'Пароль змінено, і ти ввійшла у свій обліковий запис.'),
   },
 
   leaderboard: {
@@ -1179,10 +1189,13 @@ export const UK: SiteMessages = {
     gameGroup: 'Гра',
     loading: 'Завантаження…',
     failed: 'Зараз не вдається завантажити таблицю лідерів. Спробуй ще раз за мить.',
-    empty: 'Ще ніхто не грав у цю гру з обліковим записом. Будь першим!',
+    empty: forGender(gender, 'Ще ніхто не грав у цю гру з обліковим записом. Будь першим!', 'Ще ніхто не грав у цю гру з обліковим записом. Будь першою!'),
     columns: { place: 'Місце', name: 'Ім’я в грі', plays: 'Ігор', best: 'Найкраще' },
     you: 'ти',
     youreHidden: 'Тебе немає в таблицях лідерів.',
     changeInAccount: 'Зміни це у своєму обліковому записі',
   },
-};
+});
+
+/** The texts until the player chooses: the boy's forms, as always */
+export const UK: SiteMessages = ukrainian('boy');

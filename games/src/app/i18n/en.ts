@@ -81,6 +81,8 @@ export const EN: SiteMessages = {
         summary: 'Answers show in colour, with a few words too',
       },
     },
+    wordGender: 'Talk to me as',
+    wordGenders: { boy: 'a boy', girl: 'a girl' },
     madeBy: 'Made with ❤️ by',
     projectLinks: 'Project links',
     privacyNotice:
@@ -299,6 +301,11 @@ export const EN: SiteMessages = {
         what: 'Language',
         where: 'This browser’s local storage',
         why: 'So the games open in your language',
+      },
+      {
+        what: 'Spoken to as a boy or a girl (only if you choose)',
+        where: 'This browser’s local storage',
+        why: 'So the texts speak to you the right way; it never leaves this device',
       },
       {
         what: 'Game colours and settings',
@@ -921,6 +928,7 @@ export const EN: SiteMessages = {
       'rooms-turn-picture': 'Turn the picture in rooms',
       'rooms-place-pieces': 'Place the pieces in rooms',
       'answer-words': 'Answers in words (setting)',
+      'word-gender': 'Talk to the player as a boy or a girl (setting)',
       'category-menu': 'Categories menu',
       accounts: 'Player accounts',
       leaderboard: 'Leaderboard',

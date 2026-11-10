@@ -1,4 +1,5 @@
 import { SiteMessages } from './site-messages';
+import { forGender, WordGender } from './word-gender';
 
 /** Room nicknames: an adjective and an animal, by number */
 const ADJECTIVES = [
@@ -38,7 +39,8 @@ const ANIMALS = [
   'Jirafa',
 ];
 
-export const ES: SiteMessages = {
+/** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
+export const spanish = (gender: WordGender): SiteMessages => ({
   languageName: 'Español',
   languageCode: 'ES',
 
@@ -84,6 +86,8 @@ export const ES: SiteMessages = {
         summary: 'Las respuestas se ven en color y también con palabras',
       },
     },
+    wordGender: 'Háblame como',
+    wordGenders: { boy: 'chico', girl: 'chica' },
     madeBy: 'Hecho con ❤️ por',
     projectLinks: 'Enlaces del proyecto',
     privacyNotice:
@@ -306,6 +310,11 @@ export const ES: SiteMessages = {
         what: 'Idioma',
         where: 'El almacenamiento local de este navegador',
         why: 'Para que los juegos se abran en tu idioma',
+      },
+      {
+        what: 'Si te hablamos como chico o como chica (solo si lo eliges)',
+        where: 'El almacenamiento local de este navegador',
+        why: 'Para que los textos te hablen como prefieras; nunca sale de este dispositivo',
       },
       {
         what: 'Colores y ajustes de los juegos',
@@ -601,7 +610,7 @@ export const ES: SiteMessages = {
         summary:
           'Tras 2 fallos se ilumina la siguiente letra; tras 5 y 10, se colocan las primeras letras',
       },
-      'no-hints': { name: 'Sin pistas', summary: 'Resuélvelo tú solo' },
+      'no-hints': { name: 'Sin pistas', summary: forGender(gender, 'Resuélvelo tú solo', 'Resuélvelo tú sola') },
     },
     instructions: {
       'first-vowel': '¿Con qué vocal empieza?',
@@ -950,6 +959,7 @@ export const ES: SiteMessages = {
       'rooms-turn-picture': 'Gira la imagen en salas',
       'rooms-place-pieces': 'Coloca las piezas en salas',
       'answer-words': 'Respuestas con palabras (ajuste)',
+      'word-gender': 'Hablar al jugador como chico o chica (ajuste)',
       'category-menu': 'Menú de categorías',
       accounts: 'Cuentas de jugador',
       leaderboard: 'Clasificación',
@@ -1041,8 +1051,8 @@ export const ES: SiteMessages = {
     ready: 'Listo',
     notReady: 'No está listo',
     away: 'Fuera',
-    imReady: 'Estoy listo',
-    notReadyYet: 'Aún no estoy listo',
+    imReady: forGender(gender, 'Estoy listo', 'Estoy lista'),
+    notReadyYet: forGender(gender, 'Aún no estoy listo', 'Aún no estoy lista'),
     start: 'Empezar',
     needPlayers: min => `Hacen falta al menos ${min} jugadores.`,
     waitingForReady: 'Esperando a que todos estén listos…',
@@ -1155,10 +1165,13 @@ export const ES: SiteMessages = {
     gameGroup: 'Juego',
     loading: 'Cargando…',
     failed: 'Ahora no se puede cargar la clasificación. Inténtalo de nuevo en un momento.',
-    empty: 'Nadie ha jugado aún a este juego con cuenta. ¡Sé el primero!',
+    empty: forGender(gender, 'Nadie ha jugado aún a este juego con cuenta. ¡Sé el primero!', 'Nadie ha jugado aún a este juego con cuenta. ¡Sé la primera!'),
     columns: { place: 'Puesto', name: 'Nombre visible', plays: 'Partidas', best: 'Mejor' },
     you: 'tú',
     youreHidden: 'No apareces en las clasificaciones.',
     changeInAccount: 'Cámbialo en tu cuenta',
   },
-};
+});
+
+/** The texts until the player chooses: the boy's forms, as always */
+export const ES: SiteMessages = spanish('boy');

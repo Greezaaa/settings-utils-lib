@@ -1,4 +1,5 @@
 import { SiteMessages } from './site-messages';
+import { forGender, WordGender } from './word-gender';
 
 /** Room nicknames: an animal and an adjective, by number; the adjectives are the same for every gender */
 const ADJECTIVES = [
@@ -38,7 +39,8 @@ const ANIMALS = [
   'Giraffa',
 ];
 
-export const IT: SiteMessages = {
+/** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
+export const italian = (gender: WordGender): SiteMessages => ({
   languageName: 'Italiano',
   languageCode: 'IT',
 
@@ -81,6 +83,8 @@ export const IT: SiteMessages = {
         summary: 'Le risposte si vedono a colori, con qualche parola',
       },
     },
+    wordGender: 'Parlami come',
+    wordGenders: { boy: 'bambino', girl: 'bambina' },
     madeBy: 'Fatto con ❤️ da',
     projectLinks: 'Link del progetto',
     privacyNotice:
@@ -224,7 +228,7 @@ export const IT: SiteMessages = {
     moves: (moves) => `Mosse ${moves}`,
     tile: (number) => `Tessera ${number}`,
     newPuzzle: 'Nuovo puzzle',
-    solved: 'Bravissimo!',
+    solved: forGender(gender, 'Bravissimo!', 'Bravissima!'),
     solvedIn: (moves, time) => `Finito in ${moves} ${moves === 1 ? 'mossa' : 'mosse'} e ${time}`,
     best: (moves) => `Record: ${moves} mosse`,
     newRecord: 'Nuovo record!',
@@ -249,7 +253,7 @@ export const IT: SiteMessages = {
     ready: 'Pronto',
     inPlace: (placed, total) => `${placed} di ${total} al loro posto`,
     newGame: 'Nuova partita',
-    solved: 'Bravissimo!',
+    solved: forGender(gender, 'Bravissimo!', 'Bravissima!'),
     best: (time) => `Record: ${time}`,
     newRecord: 'Nuovo record!',
   },
@@ -292,6 +296,11 @@ export const IT: SiteMessages = {
         what: 'Lingua',
         where: 'L’archivio locale di questo browser',
         why: 'Perché i giochi si aprano nella tua lingua',
+      },
+      {
+        what: 'Se parlarti come a un bambino o a una bambina (solo se lo scegli)',
+        where: 'L’archivio locale di questo browser',
+        why: 'Perché i testi ti parlino come preferisci; non lascia mai questo dispositivo',
       },
       {
         what: 'Colori e impostazioni dei giochi',
@@ -574,7 +583,7 @@ export const IT: SiteMessages = {
         name: 'Con aiuti',
         summary: 'Dopo 2 errori si illumina la lettera successiva; dopo 5 e 10, le prime lettere si mettono da sole',
       },
-      'no-hints': { name: 'Senza aiuti', summary: 'Fai da solo' },
+      'no-hints': { name: 'Senza aiuti', summary: forGender(gender, 'Fai da solo', 'Fai da sola') },
     },
     instructions: {
       'first-vowel': 'Con quale vocale inizia?',
@@ -610,7 +619,7 @@ export const IT: SiteMessages = {
     reportThanks: 'Grazie! Controlleremo questa parola.',
     newLetters: 'Nuove lettere',
     allFound: 'Le hai trovate tutte!',
-    solved: 'Bravissimo!',
+    solved: forGender(gender, 'Bravissimo!', 'Bravissima!'),
     summary: (words, mistakes) => `${words} parole · ${mistakes} ${mistakes === 1 ? 'errore' : 'errori'}`,
   },
 
@@ -702,7 +711,7 @@ export const IT: SiteMessages = {
     answers: 'Risposte',
     floors: (floors) => `Piano ${floors}`,
     best: (floors) => `Record: piano ${floors}`,
-    fell: 'Sei caduto!',
+    fell: forGender(gender, 'Sei caduto!', 'Sei caduta!'),
     summary: (floors) => (floors === 1 ? '1 piano salito' : `${floors} piani saliti`),
   },
 
@@ -717,7 +726,7 @@ export const IT: SiteMessages = {
     question: 'Quanti sono?',
     tapHint: 'Tocca ognuno per contare',
     countThis: 'Conta questo',
-    great: 'Bravissimo!',
+    great: forGender(gender, 'Bravissimo!', 'Bravissima!'),
     tryAgain: 'Riprova!',
     done: 'Ce l’hai fatta!',
     summary: (stars, total) => `${stars} ${stars === 1 ? 'stella' : 'stelle'} su ${total}`,
@@ -810,14 +819,14 @@ export const IT: SiteMessages = {
     micUnavailable: 'Su questo dispositivo non c’è un microfono. Puoi saltare i turni.',
     meter: 'Quanto è vicina la tua voce alla nota',
     singHints: {
-      done: 'Intonata! Bravissimo!',
+      done: forGender(gender, 'Intonata! Bravissimo!', 'Intonata! Bravissima!'),
       silent: 'Canta ora: “aaah”…',
       hold: 'Così, tienila…',
       low: 'Un po’ più alta ⬆',
       high: 'Un po’ più bassa ⬇',
     },
     skip: 'Salta',
-    solved: 'Bravissimo!',
+    solved: forGender(gender, 'Bravissimo!', 'Bravissima!'),
     summary: (right, total) => `${right} giuste al primo tentativo su ${total}`,
   },
 
@@ -908,6 +917,7 @@ export const IT: SiteMessages = {
       'rooms-turn-picture': 'Gira il disegno nelle stanze',
       'rooms-place-pieces': 'Metti a posto i pezzi nelle stanze',
       'answer-words': 'Risposte con parole (impostazione)',
+      'word-gender': 'Parlare al giocatore come bambino o bambina (impostazione)',
       'category-menu': 'Menu delle categorie',
       accounts: 'Account dei giocatori',
       leaderboard: 'Classifica',
@@ -985,8 +995,8 @@ export const IT: SiteMessages = {
     ready: 'Pronto',
     notReady: 'Non pronto',
     away: 'Assente',
-    imReady: 'Sono pronto',
-    notReadyYet: 'Non ancora pronto',
+    imReady: forGender(gender, 'Sono pronto', 'Sono pronta'),
+    notReadyYet: forGender(gender, 'Non ancora pronto', 'Non ancora pronta'),
     start: 'Inizia',
     needPlayers: (min) => `Servono almeno ${min} giocatori.`,
     waitingForReady: 'In attesa che tutti siano pronti…',
@@ -1086,7 +1096,7 @@ export const IT: SiteMessages = {
     resetTitle: 'Scegli una nuova password',
     resetLead: 'Scrivi due volte la nuova password. Poi entrerai nel tuo account.',
     resetSave: 'Salva la password',
-    resetDone: 'La tua password è stata cambiata e sei entrato nel tuo account.',
+    resetDone: forGender(gender, 'La tua password è stata cambiata e sei entrato nel tuo account.', 'La tua password è stata cambiata e sei entrata nel tuo account.'),
   },
 
   leaderboard: {
@@ -1099,10 +1109,13 @@ export const IT: SiteMessages = {
     gameGroup: 'Gioco',
     loading: 'Caricamento…',
     failed: 'Ora non è possibile caricare la classifica. Riprova tra un momento.',
-    empty: 'Nessuno ha ancora giocato a questo gioco con un account. Sii il primo!',
+    empty: forGender(gender, 'Nessuno ha ancora giocato a questo gioco con un account. Sii il primo!', 'Nessuno ha ancora giocato a questo gioco con un account. Sii la prima!'),
     columns: { place: 'Posto', name: 'Nome visibile', plays: 'Partite', best: 'Record' },
     you: 'tu',
     youreHidden: 'Non compari nelle classifiche.',
     changeInAccount: 'Cambialo nel tuo account',
   },
-};
+});
+
+/** The texts until the player chooses: the boy's forms, as always */
+export const IT: SiteMessages = italian('boy');

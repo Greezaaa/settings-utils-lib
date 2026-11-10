@@ -11,6 +11,8 @@ import { PlayerAccount } from './core/player-account';
 import { byCategory, gameOfPath } from './core/games';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
 import { ANSWER_STYLES, AnswerWords } from './core/answer-words';
+import { PlayerGender } from './core/player-gender';
+import { WORD_GENDERS } from './i18n/word-gender';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES } from './core/game-themes';
 import { SiteNotices } from './core/site-notices';
@@ -45,6 +47,8 @@ export class App {
   protected readonly boardColours = inject(BoardColours);
   protected readonly answerWords = inject(AnswerWords);
   protected readonly answerStyles = ANSWER_STYLES;
+  protected readonly playerGender = inject(PlayerGender);
+  protected readonly wordGenders = WORD_GENDERS;
   protected readonly gameThemes = GAME_THEMES;
 
   private readonly availability = inject(GameAvailability);

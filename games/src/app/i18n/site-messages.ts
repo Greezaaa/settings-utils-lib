@@ -16,6 +16,7 @@ import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 import { ClimbModeId } from '../games/climb-tower';
 import { HowManyLevelId } from '../games/how-many';
 import { AnswerStyle } from '../core/answer-words';
+import { WordGender } from './word-gender';
 import { AccountProblem } from '../core/player-account';
 import { UpdateKind } from '../core/site-updates';
 
@@ -72,6 +73,9 @@ export interface SiteMessages {
     /** How games show answers: colours only, or colours and words */
     readonly answerStyle: string;
     readonly answerStyles: Readonly<Record<AnswerStyle, OptionText>>;
+    /** The setting to be spoken to as a boy or a girl */
+    readonly wordGender: string;
+    readonly wordGenders: Readonly<Record<WordGender, string>>;
     readonly madeBy: string;
     readonly projectLinks: string;
     /** Shown once until closed: what the site stores, and that it is never sold or shared */
