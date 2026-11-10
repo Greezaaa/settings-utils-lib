@@ -172,7 +172,8 @@
     </div>
   </div>
 
-  <nav class="container site-nav" [attr.aria-label]="t().site.gamesNav" [appMenuRing]="menuAnimation.isOn()">
+  <nav class="container site-nav" [attr.aria-label]="t().site.gamesNav" [appMenuRing]="menuAnimation.isOn()"
+    appScrollToActive>
     <!-- With the categories menu, a link per category; otherwise a link per game -->
     @if (features.canUse('category-menu')) {
       @for (group of categories(); track group.category) {
