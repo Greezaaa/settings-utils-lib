@@ -13,60 +13,68 @@
 
 <section class="container page-section" [attr.aria-label]="t().placePieces.board">
   <div class="card play" appGameBoard>
-    <app-picture-settings
-      [mode]="modeId()"
-      [level]="levelId()"
-      (modeChange)="chooseMode($event)"
-      (levelChange)="chooseLevel($event)"
-    />
+    <!-- The game on one side, its settings, score and buttons on the other (settings first on phones) -->
+    <div class="play-layout">
+      <div class="play-main">
+        @if (picture(); as picture) {
+          <app-place-board
+            [picture]="picture"
+            [shape]="level()"
+            [arrangement]="arrangement()"
+            [phase]="phase()"
+            [showHints]="showHints()"
+            (swapped)="swapPieces($event)"
+          />
 
-    <div class="status">
-      <span class="mono">{{ t().placePieces.swaps(moves()) }}</span>
-      <span class="mono">{{ clock.time() }}</span>
-    </div>
-
-    @if (picture(); as picture) {
-      <app-place-board
-        [picture]="picture"
-        [shape]="level()"
-        [arrangement]="arrangement()"
-        [phase]="phase()"
-        [showHints]="showHints()"
-        (swapped)="swapPieces($event)"
-      />
-
-      @if (phase() === 'solved') {
-        <p class="done" role="status">
-          {{ t().pictureGames.solved }}
-          <small>{{ t().placePieces.solvedIn(moves(), clock.time()) }}</small>
-          @if (isNewBest()) {
-            <small class="record">{{ t().pictureGames.newRecord }}</small>
+          @if (phase() === 'solved') {
+            <p class="done" role="status">
+              {{ t().pictureGames.solved }}
+              <small>{{ t().placePieces.solvedIn(moves(), clock.time()) }}</small>
+              @if (isNewBest()) {
+                <small class="record">{{ t().pictureGames.newRecord }}</small>
+              }
+            </p>
           }
-        </p>
-      }
 
-      @if (phase() === 'playing') {
-        <p class="progress" aria-live="polite">{{ t().pictureGames.inPlace(placed(), arrangement().length) }}</p>
-      }
+          @if (phase() === 'playing') {
+            <p class="progress" aria-live="polite">{{ t().pictureGames.inPlace(placed(), arrangement().length) }}</p>
+          }
 
-      @if (phase() === 'preview') {
-        <p class="muted">{{ t().pictureGames.memorize }}</p>
-        <button type="button" class="button ready" (click)="ready()">{{ t().pictureGames.ready }}</button>
-      }
+          @if (phase() === 'preview') {
+            <p class="muted">{{ t().pictureGames.memorize }}</p>
+            <button type="button" class="button ready" (click)="ready()">{{ t().pictureGames.ready }}</button>
+          }
+        }
+      </div>
+      <div class="play-side">
+        <app-picture-settings
+          [mode]="modeId()"
+          [level]="levelId()"
+          (modeChange)="chooseMode($event)"
+          (levelChange)="chooseLevel($event)"
+        />
 
-      @if (modeId() === 'look') {
-        <figure class="reference">
-          <img [src]="picture.src" [alt]="t().pictures[picture.id]" />
-          <figcaption class="muted">{{ t().pictureGames.picture }}</figcaption>
-        </figure>
-      }
-    }
-
-    <div class="actions">
-      <button type="button" class="button button-secondary" (click)="newGame()">{{ t().pictureGames.newGame }}</button>
-      @if (best(); as best) {
-        <p class="muted best">{{ t().pictureGames.best(best) }}</p>
-      }
+        <div class="status">
+          <span class="mono">{{ t().placePieces.swaps(moves()) }}</span>
+          <span class="mono">{{ clock.time() }}</span>
+        </div>
+        @if (picture(); as picture) {
+          @if (modeId() === 'look') {
+            <figure class="reference">
+              <img [src]="picture.src" [alt]="t().pictures[picture.id]" />
+              <figcaption class="muted">{{ t().pictureGames.picture }}</figcaption>
+            </figure>
+          }
+        }
+        <div class="actions">
+          <button type="button" class="button button-secondary" (click)="newGame()">
+            {{ t().pictureGames.newGame }}
+          </button>
+          @if (best(); as best) {
+            <p class="muted best">{{ t().pictureGames.best(best) }}</p>
+          }
+        </div>
+      </div>
     </div>
   </div>
   <app-game-feedback game="place-pieces" />

@@ -1,0 +1,41 @@
+// A game's board on one side and everything else (settings, score, goal, buttons) on the other, on boards wide
+// enough; stacked on phones with the settings first, as before. Each settings group shows its name, from its aria-label.
+.card.play:has(> .play-layout) {
+  max-width: 58rem;
+}
+
+.play-layout {
+  align-items: start;
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+
+  @media (min-width: 52rem) {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
+  }
+}
+
+.play-main {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+}
+
+.play-side {
+  align-content: start;
+  display: grid;
+  gap: 1rem;
+  order: -1;
+
+  @media (min-width: 52rem) {
+    order: 0;
+  }
+
+  [role='group']::before {
+    color: var(--muted);
+    content: attr(aria-label);
+    font-size: 0.75rem;
+    font-weight: 500;
+    grid-column: 1 / -1;
+  }
+}

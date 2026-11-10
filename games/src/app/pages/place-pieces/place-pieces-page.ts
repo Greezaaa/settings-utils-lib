@@ -31,6 +31,7 @@ const BEST_TIMES_STORAGE = RESULT_GAMES['place-pieces'].storage;
     '../../shared/utility-page.scss',
     '../../shared/picture-board.scss',
     '../../shared/game-done.scss',
+    '../../shared/play-layout.scss',
     './place-pieces-page.scss',
   ],
 })

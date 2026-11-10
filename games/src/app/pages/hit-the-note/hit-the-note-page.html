@@ -15,8 +15,23 @@
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
-        <!-- Settings: the short choices on the left, the described list on the right (stacked on phones) -->
+        <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
+          <div class="settings-column">
+            <div class="levels" role="group" [attr.aria-label]="t().hitTheNote.modeGroup">
+              @for (mode of modes; track mode) {
+                <button
+                  type="button"
+                  class="button button-secondary level"
+                  [attr.aria-pressed]="mode === modeId()"
+                  (click)="modeId.set(mode)"
+                >
+                  <span class="level-name">{{ t().hitTheNote.modes[mode].name }}</span>
+                  <span class="level-summary">{{ t().hitTheNote.modes[mode].summary }}</span>
+                </button>
+              }
+            </div>
+          </div>
           <div class="settings-column">
             <div class="choices" role="group" [attr.aria-label]="t().hitTheNote.levelGroup">
               @for (level of levels; track level.id) {
@@ -32,21 +47,6 @@
               }
             </div>
             <p class="muted level-help">{{ t().hitTheNote.levels[levelId()].summary }}</p>
-          </div>
-          <div class="settings-column">
-            <div class="levels" role="group" [attr.aria-label]="t().hitTheNote.modeGroup">
-              @for (mode of modes; track mode) {
-                <button
-                  type="button"
-                  class="button button-secondary level"
-                  [attr.aria-pressed]="mode === modeId()"
-                  (click)="modeId.set(mode)"
-                >
-                  <span class="level-name">{{ t().hitTheNote.modes[mode].name }}</span>
-                  <span class="level-summary">{{ t().hitTheNote.modes[mode].summary }}</span>
-                </button>
-              }
-            </div>
           </div>
         </div>
         <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>

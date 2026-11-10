@@ -32,7 +32,12 @@ const DEFAULT_LEVEL: BoardLevelId = 'normal';
   imports: [GameBoard, GameFeedback, PuzzleTile, RouterLink, SlidingBoard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sliding-puzzle-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-done.scss', './sliding-puzzle-page.scss'],
+  styleUrls: [
+    '../../shared/utility-page.scss',
+    '../../shared/game-done.scss',
+    '../../shared/play-layout.scss',
+    './sliding-puzzle-page.scss',
+  ],
 })
 export class SlidingPuzzlePage {
   /** Texts in the site's language */

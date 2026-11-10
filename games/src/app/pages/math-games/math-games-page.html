@@ -15,22 +15,24 @@
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
-        <!-- Settings: the short choices on the left, the described list on the right (stacked on phones) -->
+        <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
           <div class="settings-column">
-            <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
+            <div class="levels" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
               @for (style of answerStyles; track style) {
                 <button
                   type="button"
-                  class="button button-secondary"
+                  class="button button-secondary level"
                   [attr.aria-pressed]="style === answerStyleId()"
-                  [title]="t().settings.answerStyles[style].summary"
                   (click)="chooseAnswerStyle(style)"
                 >
-                  {{ t().settings.answerStyles[style].name }}
+                  <span class="level-name">{{ t().settings.answerStyles[style].name }}</span>
+                  <span class="level-summary">{{ t().settings.answerStyles[style].summary }}</span>
                 </button>
               }
             </div>
+          </div>
+          <div class="settings-column">
             <div class="choices" role="group" [attr.aria-label]="t().settings.timerGroup">
               @for (timer of timers; track timer) {
                 <button
@@ -44,8 +46,6 @@
                 </button>
               }
             </div>
-          </div>
-          <div class="settings-column">
             <div class="levels" role="group" [attr.aria-label]="t().settings.levelGroup">
               @for (level of levels(); track level.id) {
                 <button

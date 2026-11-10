@@ -66,8 +66,8 @@
   color: var(--green-text);
 }
 
-// Settings screens: the short choices in one column, the described list (levels or modes) in the other, on boards
-// wide enough; stacked on phones. Each group shows its name above it, from its aria-label.
+// Settings screens: the game first, then its settings, side by side on boards wide enough; stacked on phones. Each
+// group shows its name above it, from its aria-label.
 .board:has(.settings-layout) {
   max-width: 46rem;
 }
@@ -81,7 +81,7 @@
   @media (min-width: 44rem) {
     align-items: start;
     gap: 1.5rem;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   [role='group']::before {

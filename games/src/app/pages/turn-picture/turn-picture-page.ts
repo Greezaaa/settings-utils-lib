@@ -32,6 +32,7 @@ const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
     '../../shared/utility-page.scss',
     '../../shared/picture-board.scss',
     '../../shared/game-done.scss',
+    '../../shared/play-layout.scss',
     './turn-picture-page.scss',
   ],
 })

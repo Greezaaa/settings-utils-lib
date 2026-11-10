@@ -13,127 +13,133 @@
 
 <section class="container page-section" [attr.aria-label]="t().howMany.board">
   <div class="card play" appGameBoard>
-    <div class="top-row">
-      <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
-        @for (option of levels; track option.id) {
-          <button
-            type="button"
-            class="button button-secondary"
-            [attr.aria-pressed]="option.id === levelId()"
-            [title]="t().howMany.levels[option.id].summary"
-            (click)="chooseLevel(option.id)"
-          >
-            {{ t().howMany.levels[option.id].name }}
-          </button>
-        }
-      </div>
-      <button
-        type="button"
-        class="button button-secondary sound"
-        [attr.aria-pressed]="voice.isOn()"
-        [attr.aria-label]="voice.isOn() ? t().howMany.soundOn : t().howMany.soundOff"
-        [title]="voice.isOn() ? t().howMany.soundOn : t().howMany.soundOff"
-        (click)="voice.toggle()"
-      >
-        <span aria-hidden="true">{{ voice.isOn() ? '🔊' : '🔇' }}</span>
-      </button>
-    </div>
-
-    <!-- A star for each round right at the first try, a dot for the others -->
-    <ol class="progress-stars" [attr.aria-label]="t().howMany.progress(results().length, rounds().length)">
-      @for (round of rounds(); track $index; let roundIndex = $index) {
-        <li
-          [class.is-star]="results()[roundIndex] === true"
-          [class.is-done]="results()[roundIndex] === false"
-          [class.is-now]="roundIndex === index() && phase() === 'playing'"
-        >
-          {{ results()[roundIndex] === true ? '⭐' : '' }}
-        </li>
-      }
-    </ol>
-
-    @switch (phase()) {
-      @case ('playing') {
-        @if (round(); as round) {
-          <p class="question">{{ t().howMany.question }}</p>
-          <div
-            class="field"
-            [class.is-celebrating]="isCelebrating()"
-            role="group"
-            [attr.aria-label]="t().howMany.tapHint"
-          >
-            @for (place of places(); track $index; let thing = $index) {
-              <button
-                type="button"
-                class="thing"
-                [class.is-counted]="numberOf(thing) !== null"
-                [style.--rotate]="place.rotate + 'deg'"
-                [style.--lift]="place.lift + 'px'"
-                [style.--delay]="place.delayMs + 'ms'"
-                [attr.aria-label]="numberOf(thing) ?? t().howMany.countThis"
-                (click)="count(thing)"
+    <!-- The game on one side, its settings, score and buttons on the other (settings first on phones) -->
+    <div class="play-layout">
+      <div class="play-main">
+        @switch (phase()) {
+          @case ('playing') {
+            @if (round(); as round) {
+              <p class="question">{{ t().howMany.question }}</p>
+              <div
+                class="field"
+                [class.is-celebrating]="isCelebrating()"
+                role="group"
+                [attr.aria-label]="t().howMany.tapHint"
               >
-                <span class="emoji" aria-hidden="true">{{ round.thing }}</span>
-                @if (numberOf(thing); as number) {
-                  <span class="badge" aria-hidden="true">{{ number }}</span>
+                @for (place of places(); track $index; let thing = $index) {
+                  <button
+                    type="button"
+                    class="thing"
+                    [class.is-counted]="numberOf(thing) !== null"
+                    [style.--rotate]="place.rotate + 'deg'"
+                    [style.--lift]="place.lift + 'px'"
+                    [style.--delay]="place.delayMs + 'ms'"
+                    [attr.aria-label]="numberOf(thing) ?? t().howMany.countThis"
+                    (click)="count(thing)"
+                  >
+                    <span class="emoji" aria-hidden="true">{{ round.thing }}</span>
+                    @if (numberOf(thing); as number) {
+                      <span class="badge" aria-hidden="true">{{ number }}</span>
+                    }
+                  </button>
                 }
-              </button>
+                @if (isCelebrating()) {
+                  <div class="confetti" aria-hidden="true">
+                    @for (piece of confetti; track $index) {
+                      <span [style.--angle]="piece.angle + 'deg'">{{ piece.piece }}</span>
+                    }
+                  </div>
+                }
+              </div>
+              <p class="hint muted">{{ t().howMany.tapHint }}</p>
+
+              <div class="answers" role="group" [attr.aria-label]="t().howMany.question">
+                @for (value of answers(); track value) {
+                  <button
+                    type="button"
+                    class="answer"
+                    [class.is-right]="isCelebrating() && value === round.count"
+                    [class.is-wrong]="feedback.isWrong() && wrongPick() === value"
+                    [disabled]="isCelebrating()"
+                    (click)="answer(value)"
+                  >
+                    <span class="number">{{ value }}</span>
+                    <span class="dots" aria-hidden="true">
+                      @for (dot of dots(value); track dot) {
+                        <span></span>
+                      }
+                    </span>
+                  </button>
+                }
+              </div>
+
+              <p class="message" aria-live="polite">
+                @if (isCelebrating()) {
+                  <strong class="great">{{ t().howMany.great }}</strong>
+                } @else if (feedback.isWrong()) {
+                  <span class="try-again"
+                    >{{ answerWords.isOn() ? t().answers.wrong + ' · ' : '' }}{{ t().howMany.tryAgain }}</span
+                  >
+                }
+              </p>
             }
-            @if (isCelebrating()) {
-              <div class="confetti" aria-hidden="true">
+          }
+          @case ('done') {
+            <div class="finish">
+              <div class="confetti is-big" aria-hidden="true">
                 @for (piece of confetti; track $index) {
                   <span [style.--angle]="piece.angle + 'deg'">{{ piece.piece }}</span>
                 }
               </div>
-            }
-          </div>
-          <p class="hint muted">{{ t().howMany.tapHint }}</p>
-
-          <div class="answers" role="group" [attr.aria-label]="t().howMany.question">
-            @for (value of answers(); track value) {
+              <p class="trophy" aria-hidden="true">🏆</p>
+              <p class="final-score">{{ t().howMany.done }}</p>
+              <p class="muted">{{ t().howMany.summary(stars(), results().length) }}</p>
+              <button type="button" class="button start" (click)="newGame()">{{ t().over.playAgain }}</button>
+            </div>
+          }
+        }
+      </div>
+      <div class="play-side">
+        <div class="top-row">
+          <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+            @for (option of levels; track option.id) {
               <button
                 type="button"
-                class="answer"
-                [class.is-right]="isCelebrating() && value === round.count"
-                [class.is-wrong]="feedback.isWrong() && wrongPick() === value"
-                [disabled]="isCelebrating()"
-                (click)="answer(value)"
+                class="button button-secondary"
+                [attr.aria-pressed]="option.id === levelId()"
+                [title]="t().howMany.levels[option.id].summary"
+                (click)="chooseLevel(option.id)"
               >
-                <span class="number">{{ value }}</span>
-                <span class="dots" aria-hidden="true">
-                  @for (dot of dots(value); track dot) {
-                    <span></span>
-                  }
-                </span>
+                {{ t().howMany.levels[option.id].name }}
               </button>
             }
           </div>
-
-          <p class="message" aria-live="polite">
-            @if (isCelebrating()) {
-              <strong class="great">{{ t().howMany.great }}</strong>
-            } @else if (feedback.isWrong()) {
-              <span class="try-again"
-                >{{ answerWords.isOn() ? t().answers.wrong + ' · ' : '' }}{{ t().howMany.tryAgain }}</span
-              >
-            }
-          </p>
-        }
-      }
-      @case ('done') {
-        <div class="finish">
-          <div class="confetti is-big" aria-hidden="true">
-            @for (piece of confetti; track $index) {
-              <span [style.--angle]="piece.angle + 'deg'">{{ piece.piece }}</span>
-            }
-          </div>
-          <p class="trophy" aria-hidden="true">🏆</p>
-          <p class="final-score">{{ t().howMany.done }}</p>
-          <p class="muted">{{ t().howMany.summary(stars(), results().length) }}</p>
-          <button type="button" class="button start" (click)="newGame()">{{ t().over.playAgain }}</button>
+          <button
+            type="button"
+            class="button button-secondary sound"
+            [attr.aria-pressed]="voice.isOn()"
+            [attr.aria-label]="voice.isOn() ? t().howMany.soundOn : t().howMany.soundOff"
+            [title]="voice.isOn() ? t().howMany.soundOn : t().howMany.soundOff"
+            (click)="voice.toggle()"
+          >
+            <span aria-hidden="true">{{ voice.isOn() ? '🔊' : '🔇' }}</span>
+          </button>
         </div>
-      }
-    }
+
+        <!-- A star for each round right at the first try, a dot for the others -->
+        <ol class="progress-stars" [attr.aria-label]="t().howMany.progress(results().length, rounds().length)">
+          @for (round of rounds(); track $index; let roundIndex = $index) {
+            <li
+              [class.is-star]="results()[roundIndex] === true"
+              [class.is-done]="results()[roundIndex] === false"
+              [class.is-now]="roundIndex === index() && phase() === 'playing'"
+            >
+              {{ results()[roundIndex] === true ? '⭐' : '' }}
+            </li>
+          }
+        </ol>
+      </div>
+    </div>
   </div>
   <app-game-feedback game="how-many" />
 </section>

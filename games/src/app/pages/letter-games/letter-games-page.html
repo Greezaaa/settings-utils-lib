@@ -15,8 +15,23 @@
   <div class="card board" [class.is-wide]="isBuilder() && phase() === 'playing'" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
-        <!-- Settings: the short choices on the left, the described list on the right (stacked on phones) -->
+        <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
+          <div class="settings-column">
+            <div class="levels" role="group" [attr.aria-label]="t().letterGames.modeGroup">
+              @for (mode of modes; track mode) {
+                <button
+                  type="button"
+                  class="button button-secondary level"
+                  [attr.aria-pressed]="mode === modeId()"
+                  (click)="modeId.set(mode)"
+                >
+                  <span class="level-name">{{ t().letterGames.modes[mode].name }}</span>
+                  <span class="level-summary">{{ t().letterGames.modes[mode].summary }}</span>
+                </button>
+              }
+            </div>
+          </div>
           <div class="settings-column">
             @if (isBuilder()) {
               <div class="choices" role="group" [attr.aria-label]="t().letterGames.levelGroup">
@@ -58,21 +73,6 @@
                   (click)="timerId.set(timer)"
                 >
                   {{ t().settings.timers[timer].name }}
-                </button>
-              }
-            </div>
-          </div>
-          <div class="settings-column">
-            <div class="levels" role="group" [attr.aria-label]="t().letterGames.modeGroup">
-              @for (mode of modes; track mode) {
-                <button
-                  type="button"
-                  class="button button-secondary level"
-                  [attr.aria-pressed]="mode === modeId()"
-                  (click)="modeId.set(mode)"
-                >
-                  <span class="level-name">{{ t().letterGames.modes[mode].name }}</span>
-                  <span class="level-summary">{{ t().letterGames.modes[mode].summary }}</span>
                 </button>
               }
             </div>

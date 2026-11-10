@@ -28,7 +28,12 @@ const MISMATCH_MS = 900;
   imports: [GameBoard, GameFeedback, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './find-pairs-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './find-pairs-page.scss'],
+  styleUrls: [
+    '../../shared/utility-page.scss',
+    '../../shared/game-settings.scss',
+    '../../shared/play-layout.scss',
+    './find-pairs-page.scss',
+  ],
 })
 export class FindPairsPage {
   protected readonly levels = PAIRS_LEVELS;

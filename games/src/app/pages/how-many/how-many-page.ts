@@ -29,7 +29,12 @@ const CONFETTI = ['🎉', '⭐', '✨', '🌟', '🎊', '💫', '⭐', '✨'];
   imports: [GameBoard, GameFeedback, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './how-many-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './how-many-page.scss'],
+  styleUrls: [
+    '../../shared/utility-page.scss',
+    '../../shared/game-settings.scss',
+    '../../shared/play-layout.scss',
+    './how-many-page.scss',
+  ],
 })
 export class HowManyPage {
   private readonly language = inject(SiteLanguage);
