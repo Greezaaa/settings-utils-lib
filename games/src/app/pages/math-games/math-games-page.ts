@@ -140,7 +140,9 @@ export class MathGamesPage {
     this.nextQuestion();
   }
 
+  /** Back to the settings, from the end or in the middle of a game (its timer stops, so nothing ends it later) */
   protected backToSettings(): void {
+    this.countdown.stop();
     this.phase.set('ready');
   }
 

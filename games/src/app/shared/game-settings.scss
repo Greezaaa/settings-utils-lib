@@ -65,3 +65,63 @@
 .record {
   color: var(--green-text);
 }
+
+// Settings screens: the short choices in one column, the described list (levels or modes) in the other, on boards
+// wide enough; stacked on phones. Each group shows its name above it, from its aria-label.
+.board:has(.settings-layout) {
+  max-width: 46rem;
+}
+
+.settings-layout {
+  display: grid;
+  gap: 1rem;
+  text-align: left;
+  width: 100%;
+
+  @media (min-width: 44rem) {
+    align-items: start;
+    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  }
+
+  [role='group']::before {
+    color: var(--muted);
+    content: attr(aria-label);
+    font-size: 0.75rem;
+    font-weight: 500;
+    grid-column: 1 / -1;
+  }
+
+  // Smaller buttons and cards than a game's own, so the whole screen fits without scrolling
+  .choices {
+    gap: 0.375rem;
+    grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  }
+
+  .choices .button {
+    font-size: 0.875rem;
+    min-height: 2.5rem;
+    padding: 0.375rem 0.625rem;
+  }
+
+  .levels {
+    gap: 0.375rem;
+  }
+
+  .level {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .level-name {
+    font-size: 0.9375rem;
+  }
+
+  .level-summary {
+    font-size: 0.75rem;
+  }
+}
+
+.settings-column {
+  display: grid;
+  gap: 1rem;
+}

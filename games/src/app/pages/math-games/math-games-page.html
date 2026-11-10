@@ -15,44 +15,51 @@
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
-        <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
-          @for (style of answerStyles; track style) {
-            <button
-              type="button"
-              class="button button-secondary"
-              [attr.aria-pressed]="style === answerStyleId()"
-              [title]="t().settings.answerStyles[style].summary"
-              (click)="chooseAnswerStyle(style)"
-            >
-              {{ t().settings.answerStyles[style].name }}
-            </button>
-          }
-        </div>
-        <div class="choices" role="group" [attr.aria-label]="t().settings.timerGroup">
-          @for (timer of timers; track timer) {
-            <button
-              type="button"
-              class="button button-secondary"
-              [attr.aria-pressed]="timer === timerId()"
-              [title]="t().settings.timers[timer].summary"
-              (click)="chooseTimer(timer)"
-            >
-              {{ t().settings.timers[timer].name }}
-            </button>
-          }
-        </div>
-        <div class="levels" role="group" [attr.aria-label]="t().settings.levelGroup">
-          @for (level of levels(); track level.id) {
-            <button
-              type="button"
-              class="button button-secondary level"
-              [attr.aria-pressed]="level.id === levelId()"
-              (click)="chooseLevel(level.id)"
-            >
-              <span class="level-name">{{ level.name }}</span>
-              <span class="level-summary">{{ level.summary }}</span>
-            </button>
-          }
+        <!-- Settings: the short choices on the left, the described list on the right (stacked on phones) -->
+        <div class="settings-layout">
+          <div class="settings-column">
+            <div class="choices" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
+              @for (style of answerStyles; track style) {
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  [attr.aria-pressed]="style === answerStyleId()"
+                  [title]="t().settings.answerStyles[style].summary"
+                  (click)="chooseAnswerStyle(style)"
+                >
+                  {{ t().settings.answerStyles[style].name }}
+                </button>
+              }
+            </div>
+            <div class="choices" role="group" [attr.aria-label]="t().settings.timerGroup">
+              @for (timer of timers; track timer) {
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  [attr.aria-pressed]="timer === timerId()"
+                  [title]="t().settings.timers[timer].summary"
+                  (click)="chooseTimer(timer)"
+                >
+                  {{ t().settings.timers[timer].name }}
+                </button>
+              }
+            </div>
+          </div>
+          <div class="settings-column">
+            <div class="levels" role="group" [attr.aria-label]="t().settings.levelGroup">
+              @for (level of levels(); track level.id) {
+                <button
+                  type="button"
+                  class="button button-secondary level"
+                  [attr.aria-pressed]="level.id === levelId()"
+                  (click)="chooseLevel(level.id)"
+                >
+                  <span class="level-name">{{ level.name }}</span>
+                  <span class="level-summary">{{ level.summary }}</span>
+                </button>
+              }
+            </div>
+          </div>
         </div>
         <p class="muted">{{ t().settings.bestScore(best()) }}</p>
         <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>
@@ -89,6 +96,9 @@
             }
           }
         }
+        <button type="button" class="button button-secondary button-small" (click)="backToSettings()">
+          {{ t().over.changeSettings }}
+        </button>
       }
 
       @case ('over') {
