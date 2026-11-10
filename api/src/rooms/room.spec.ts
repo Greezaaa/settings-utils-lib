@@ -36,6 +36,37 @@ function roomWith(players: number): Room {
   return room;
 }
 
+describe('a player’s choice to be spoken to as a boy or a girl', () => {
+  it('gives a girl an animal whose name is feminine, a boy a masculine one, while one is free', () => {
+    const girl = newPlayer([], counter(), 'girl');
+    expect([9, 11, 13, 15]).toContain(girl.nickname.animal);
+    expect(girl.gender).toBe('girl');
+    const boy = newPlayer([], counter(), 'boy');
+    expect([9, 11, 13, 15]).not.toContain(boy.nickname.animal);
+    expect(newPlayer([]).gender).toBeNull();
+  });
+
+  it('falls back to any free animal when every fitting one is taken', () => {
+    const girls = [0, 1, 2, 3].map(() => newPlayer([], counter(), 'girl'));
+    const taken = [9, 11, 13, 15].map((animal, index) => ({
+      ...girls[index],
+      nickname: { ...girls[index].nickname, animal },
+    }));
+    const fifth = newPlayer(taken, counter(), 'girl');
+    expect([9, 11, 13, 15]).not.toContain(fifth.nickname.animal);
+  });
+
+  it('shows each player’s choice in the room’s view', () => {
+    const room = createRoom(
+      'ABCDEF',
+      newPlayer([], counter(), 'girl'),
+      'es',
+      0,
+    );
+    expect(viewOf(room, 0).players[0].gender).toBe('girl');
+  });
+});
+
 describe('rooms', () => {
   it('makes short codes from letters and digits that are hard to mix up, never twice', () => {
     const code = newCode(new Set());

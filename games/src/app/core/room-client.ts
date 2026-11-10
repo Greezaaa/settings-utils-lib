@@ -1,6 +1,8 @@
 import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
+import { WordGender } from '../i18n/word-gender';
 import { field } from './api-url';
+import { PlayerGender } from './player-gender';
 import { isRoomError, parseRoomView, RoomError, RoomSettings, RoomView } from './room-view';
 
 /** The rooms service (api/src/rooms/); the local one while the site runs on localhost */
@@ -32,6 +34,7 @@ type Intent =
 @Injectable({ providedIn: 'root' })
 export class RoomClient {
   private readonly document = inject(DOCUMENT);
+  private readonly gender = inject(PlayerGender);
   private socket: WebSocket | null = null;
   private seat: Seat | null = null;
   private intent: Intent | null = null;
@@ -138,9 +141,9 @@ export class RoomClient {
       if (this.seat) {
         this.send('rejoin', { code: this.seat.code, token: this.seat.token });
       } else if (this.intent?.event === 'create') {
-        this.send('create', { language: this.intent.language });
+        this.send('create', { language: this.intent.language, gender: this.chosenGender() });
       } else if (this.intent?.event === 'join') {
-        this.send('join', { code: this.intent.code });
+        this.send('join', { code: this.intent.code, gender: this.chosenGender() });
       }
     };
     socket.onmessage = (message) => this.receive(message.data);
@@ -197,6 +200,11 @@ export class RoomClient {
       this.forgetSeat();
       this.close();
     }
+  }
+
+  /** The player's choice to be spoken to as a boy or a girl, while that setting is open; the room fits their animal to it */
+  private chosenGender(): WordGender | null {
+    return this.gender.isAvailable() ? this.gender.choice() : null;
   }
 
   private send(event: string, data: object = {}): void {

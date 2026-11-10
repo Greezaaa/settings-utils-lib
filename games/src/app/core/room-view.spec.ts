@@ -37,6 +37,14 @@ describe('parseRoomView', () => {
     );
   });
 
+  it('reads each player’s choice to be spoken to as a boy or a girl, or none', () => {
+    const withChoice = (gender: unknown) =>
+      parseRoomView({ ...VIEW, players: [{ ...VIEW.players[0], gender }] })?.players[0].gender;
+    expect(withChoice('girl')).toBe('girl');
+    expect(withChoice(null)).toBeNull();
+    expect(withChoice('dragon')).toBeNull();
+  });
+
   it('refuses a room with unknown settings or phase', () => {
     expect(parseRoomView({ ...VIEW, phase: 'party' })).toBeNull();
     expect(parseRoomView({ ...VIEW, settings: { ...VIEW.settings, seconds: 45 } })).toBeNull();

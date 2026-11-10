@@ -19,8 +19,10 @@ describe('word gender', () => {
     expect(ukrainian('boy').account.forgotTab).toBe('Я забув пароль');
   });
 
-  it('keeps what other players see as it was', () => {
-    // A room's player list shows everyone's status, whoever is looking
-    expect(spanish('girl').rooms.ready).toBe(spanish('boy').rooms.ready);
+  it('writes each player’s status in a room to match that player, whoever is looking', () => {
+    expect(spanish('boy').rooms.ready('girl')).toBe('Lista');
+    expect(spanish('girl').rooms.host('boy')).toBe('Anfitrión');
+    expect(spanish('girl').rooms.notReady(null)).toBe('No está listo');
+    expect(italian('girl').pictureGames.ready).toBe('Pronta');
   });
 });

@@ -263,8 +263,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       expert: { name: 'Experto', summary: '5 × 5 · 25 cuadrados' },
     },
     picture: 'El dibujo',
-    memorize: 'Fíjate bien y pulsa Listo.',
-    ready: 'Listo',
+    memorize: forGender(gender, 'Fíjate bien y pulsa Listo.', 'Fíjate bien y pulsa Lista.'),
+    ready: forGender(gender, 'Listo', 'Lista'),
     inPlace: (placed, total) => `${placed} de ${total} en su sitio`,
     newGame: 'Nueva partida',
     solved: '¡Muy bien!',
@@ -274,7 +274,11 @@ export const spanish = (gender: WordGender): SiteMessages => ({
 
   turnPicture: {
     lead: 'Toca un cuadrado para girarlo un cuarto de vuelta. Gira todos hasta que el dibujo esté bien.',
-    rule: 'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+    rule: forGender(
+      gender,
+      'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+      'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Lista!',
+    ),
     board: 'Imagen',
     tile: number => `Cuadrado ${number}`,
     turns: turns => `Giros ${turns}`,
@@ -284,7 +288,11 @@ export const spanish = (gender: WordGender): SiteMessages => ({
 
   placePieces: {
     lead: 'Arrastra una pieza sobre otra para cambiarlas de sitio, o toca dos piezas. Coloca todas para terminar el dibujo.',
-    rule: 'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+    rule: forGender(
+      gender,
+      'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Listo!',
+      'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Lista!',
+    ),
     board: 'Imagen',
     piece: (number, picked) => `Pieza ${number}${picked ? ', elegida' : ''}`,
     swaps: swaps => `Movimientos ${swaps}`,
@@ -1048,10 +1056,10 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     copyLink: 'Copiar enlace',
     copied: 'Copiado',
     players: (count, max) => `Jugadores ${count}/${max}`,
-    host: 'Anfitrión',
+    host: (player) => forGender(player ?? 'boy', 'Anfitrión', 'Anfitriona'),
     you: 'Tú',
-    ready: 'Listo',
-    notReady: 'No está listo',
+    ready: (player) => forGender(player ?? 'boy', 'Listo', 'Lista'),
+    notReady: (player) => forGender(player ?? 'boy', 'No está listo', 'No está lista'),
     away: 'Fuera',
     imReady: forGender(gender, 'Estoy listo', 'Estoy lista'),
     notReadyYet: forGender(gender, 'Aún no estoy listo', 'Aún no estoy lista'),

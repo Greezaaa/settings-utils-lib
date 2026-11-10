@@ -1,4 +1,5 @@
 import { LanguageId } from '../i18n/site-messages';
+import { WORD_GENDERS, WordGender } from '../i18n/word-gender';
 import { field } from './api-url';
 import { ROOM_GAMES, RoomGame } from './features';
 
@@ -28,6 +29,8 @@ export interface RoomPlayer {
   readonly id: string;
   readonly nickname: Nickname;
   readonly color: number;
+  /** Whether they chose to be spoken to as a boy or a girl */
+  readonly gender: WordGender | null;
   readonly ready: boolean;
   readonly connected: boolean;
   readonly score: number;
@@ -89,6 +92,10 @@ const oneOf =
 
 export const isRoomError = oneOf(ROOM_ERRORS);
 
+/** A player's choice from the rooms service, or null for none (or anything unknown) */
+const genderOf = (value: unknown): WordGender | null =>
+  WORD_GENDERS.find(gender => gender === value) ?? null;
+
 function parsePlayer(item: unknown): RoomPlayer[] {
   const nickname = field(item, 'nickname');
   const [id, color, ready, connected, score, place] = [
@@ -116,6 +123,7 @@ function parsePlayer(item: unknown): RoomPlayer[] {
           id,
           nickname: { adjective, animal },
           color,
+          gender: genderOf(field(item, 'gender')),
           ready,
           connected,
           score,

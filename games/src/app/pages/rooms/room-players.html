@@ -10,12 +10,12 @@
             {{ t().rooms.you }} ·
           }
           @if (player.id === room().hostId) {
-            {{ t().rooms.host }} ·
+            {{ t().rooms.host(player.gender) }} ·
           }
           @if (!player.connected) {
             {{ t().rooms.away }}
           } @else if (room().phase === 'lobby') {
-            {{ player.ready ? t().rooms.ready : t().rooms.notReady }}
+            {{ player.ready ? t().rooms.ready(player.gender) : t().rooms.notReady(player.gender) }}
           } @else if (room().phase === 'results' || room().settings.showScores) {
             {{ t().rooms.points(player.score) }}
           }

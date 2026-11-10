@@ -251,8 +251,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
       expert: { name: 'Esperto', summary: '5 × 5 · 25 quadrati' },
     },
     picture: 'Il disegno',
-    memorize: 'Guarda bene, poi premi Pronto.',
-    ready: 'Pronto',
+    memorize: forGender(gender, 'Guarda bene, poi premi Pronto.', 'Guarda bene, poi premi Pronta.'),
+    ready: forGender(gender, 'Pronto', 'Pronta'),
     inPlace: (placed, total) => `${placed} di ${total} al loro posto`,
     newGame: 'Nuova partita',
     solved: forGender(gender, 'Bravissimo!', 'Bravissima!'),
@@ -262,7 +262,11 @@ export const italian = (gender: WordGender): SiteMessages => ({
 
   turnPicture: {
     lead: 'Tocca un quadrato per girarlo di un quarto. Gira ogni quadrato finché il disegno non è giusto.',
-    rule: 'In modalità Memoria guarda bene: il disegno si nasconde quando premi Pronto!',
+    rule: forGender(
+      gender,
+      'In modalità Memoria guarda bene: il disegno si nasconde quando premi Pronto!',
+      'In modalità Memoria guarda bene: il disegno si nasconde quando premi Pronta!',
+    ),
     board: 'Disegno',
     tile: (number) => `Quadrato ${number}`,
     turns: (turns) => `Giri ${turns}`,
@@ -271,7 +275,11 @@ export const italian = (gender: WordGender): SiteMessages => ({
 
   placePieces: {
     lead: 'Trascina un pezzo su un altro per scambiarli, o tocca due pezzi. Metti ogni pezzo al suo posto per finire il disegno.',
-    rule: 'In modalità Memoria guarda bene: il disegno si nasconde quando premi Pronto!',
+    rule: forGender(
+      gender,
+      'In modalità Memoria guarda bene: il disegno si nasconde quando premi Pronto!',
+      'In modalità Memoria guarda bene: il disegno si nasconde quando premi Pronta!',
+    ),
     board: 'Disegno',
     piece: (number, picked) => `Pezzo ${number}${picked ? ', preso' : ''}`,
     swaps: (swaps) => `Mosse ${swaps}`,
@@ -992,10 +1000,10 @@ export const italian = (gender: WordGender): SiteMessages => ({
     copyLink: 'Copia il link',
     copied: 'Copiato',
     players: (count, max) => `Giocatori ${count}/${max}`,
-    host: 'Organizzatore',
+    host: (player) => forGender(player ?? 'boy', 'Organizzatore', 'Organizzatrice'),
     you: 'Tu',
-    ready: 'Pronto',
-    notReady: 'Non pronto',
+    ready: (player) => forGender(player ?? 'boy', 'Pronto', 'Pronta'),
+    notReady: (player) => forGender(player ?? 'boy', 'Non pronto', 'Non pronta'),
     away: 'Assente',
     imReady: forGender(gender, 'Sono pronto', 'Sono pronta'),
     notReadyYet: forGender(gender, 'Non ancora pronto', 'Non ancora pronta'),

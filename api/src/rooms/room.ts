@@ -29,6 +29,24 @@ export const ADJECTIVE_COUNT = 16;
 export const ANIMAL_COUNT = 16;
 export const COLOR_COUNT = 8;
 
+/**
+ * Whether a player chose to be spoken to as a boy or a girl on the games site; each screen then writes their status
+ * ("ready", "host") to match, and their animal fits: a girl gets one whose name is feminine (turtle, otter, squirrel,
+ * giraffe), a boy one whose name is masculine, as far as the free animals allow
+ */
+export const PLAYER_GENDERS = ['boy', 'girl'] as const;
+export type PlayerGender = (typeof PLAYER_GENDERS)[number];
+const GIRL_ANIMALS: readonly number[] = [9, 11, 13, 15];
+const animalsFor = (gender: PlayerGender | null): readonly number[] => {
+  const all = Array.from({ length: ANIMAL_COUNT }, (_, index) => index);
+  if (gender === 'girl') {
+    return GIRL_ANIMALS;
+  }
+  return gender === 'boy'
+    ? all.filter((animal) => !GIRL_ANIMALS.includes(animal))
+    : all;
+};
+
 /** Games that can be played in a room; each has its own multiplayer switch on the games site */
 export const ROOM_GAMES = [
   'math-games',
@@ -63,6 +81,7 @@ export interface Player {
   readonly token: string;
   readonly nickname: Nickname;
   readonly color: number;
+  readonly gender: PlayerGender | null;
   ready: boolean;
   connected: boolean;
   /** When the connection dropped, to give up on the seat after a while */
@@ -120,22 +139,26 @@ export function newCode(
   }
 }
 
-/** A random pick among the numbers below `count` that `used` doesn't hold */
+/** A random pick among the numbers below `count` that `used` doesn't hold, from `preferred` while one is free */
 function freeNumber(
   count: number,
   used: readonly number[],
   random: RandomInt,
+  preferred?: readonly number[],
 ): number {
   const free = Array.from({ length: count }, (_, index) => index).filter(
     (index) => !used.includes(index),
   );
-  return free[random(free.length)];
+  const freePreferred = free.filter((index) => preferred?.includes(index));
+  const choices = freePreferred.length > 0 ? freePreferred : free;
+  return choices[random(choices.length)];
 }
 
-/** A new player with a nickname and colour nobody else in the room has */
+/** A new player with a nickname and colour nobody else in the room has, the animal fitting their choice */
 export function newPlayer(
   others: readonly Player[],
   random: RandomInt = secureInt,
+  gender: PlayerGender | null = null,
 ): Player {
   const id = Array.from({ length: 12 }, () => random(36).toString(36)).join('');
   const token = Array.from({ length: 32 }, () => random(36).toString(36)).join(
@@ -154,6 +177,7 @@ export function newPlayer(
         ANIMAL_COUNT,
         others.map(({ nickname }) => nickname.animal),
         random,
+        animalsFor(gender),
       ),
     },
     color: freeNumber(
@@ -161,6 +185,7 @@ export function newPlayer(
       others.map(({ color }) => color),
       random,
     ),
+    gender,
     ready: false,
     connected: true,
     disconnectedAt: null,
@@ -376,6 +401,7 @@ export interface RoomView {
     readonly id: string;
     readonly nickname: Nickname;
     readonly color: number;
+    readonly gender: PlayerGender | null;
     readonly ready: boolean;
     readonly connected: boolean;
     readonly score: number;
@@ -398,10 +424,11 @@ export function viewOf(room: Room, now: number): RoomView {
     settings: room.settings,
     round: room.round,
     players: room.players.map(
-      ({ id, nickname, color, ready, connected, score }) => ({
+      ({ id, nickname, color, gender, ready, connected, score }) => ({
         id,
         nickname,
         color,
+        gender,
         ready,
         connected,
         score: hideScores ? 0 : score,

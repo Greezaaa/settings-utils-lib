@@ -137,7 +137,7 @@ export class RoomsGateway
     }
     this.leaveCurrentRoom(client);
     const now = Date.now();
-    const host = newPlayer([]);
+    const host = newPlayer([], undefined, data.gender);
     const room = createRoom(
       newCode(new Set(this.rooms.keys())),
       host,
@@ -165,7 +165,7 @@ export class RoomsGateway
     }
     // One connection, one seat: joining again (here or elsewhere) gives up the old one, never leaving a ghost behind
     this.leaveCurrentRoom(client);
-    const player = newPlayer(room.players);
+    const player = newPlayer(room.players, undefined, data.gender);
     const error = join(room, player, Date.now());
     if (error) {
       this.refuse(client, error);

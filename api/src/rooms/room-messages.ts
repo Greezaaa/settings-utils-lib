@@ -3,6 +3,7 @@ import { languageSchema } from '../shared/catalog.js';
 import {
   CODE_ALPHABET,
   CODE_LENGTH,
+  PLAYER_GENDERS,
   ROOM_GAMES,
   ROUND_SECONDS,
 } from './room.js';
@@ -19,8 +20,14 @@ const codeSchema = z
 /** A game's own ids (math: answer style and level); the games site checks them against its games */
 const gameIdSchema = z.string().regex(/^[a-z-]{1,30}$/);
 
-export const createSchema = z.object({ language: languageSchema });
-export const joinSchema = z.object({ code: codeSchema });
+/** The player's choice to be spoken to as a boy or a girl, when they made one */
+const genderSchema = z.enum(PLAYER_GENDERS).nullable().default(null);
+
+export const createSchema = z.object({
+  language: languageSchema,
+  gender: genderSchema,
+});
+export const joinSchema = z.object({ code: codeSchema, gender: genderSchema });
 export const rejoinSchema = z.object({
   code: codeSchema,
   token: z.string().regex(/^[a-z0-9]{32}$/),

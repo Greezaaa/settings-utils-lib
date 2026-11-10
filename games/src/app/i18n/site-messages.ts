@@ -668,10 +668,11 @@ export interface SiteMessages {
     readonly copyLink: string;
     readonly copied: string;
     readonly players: (count: number, max: number) => string;
-    readonly host: string;
+    /** A player's role and status, written to match that player's own choice (boy, girl, or not chosen) */
+    readonly host: (player: WordGender | null) => string;
     readonly you: string;
-    readonly ready: string;
-    readonly notReady: string;
+    readonly ready: (player: WordGender | null) => string;
+    readonly notReady: (player: WordGender | null) => string;
     readonly away: string;
     readonly imReady: string;
     readonly notReadyYet: string;
