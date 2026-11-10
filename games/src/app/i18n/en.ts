@@ -931,6 +931,7 @@ export const EN: SiteMessages = {
       'rooms-place-pieces': 'Place the pieces in rooms',
       'answer-words': 'Answers in words (setting)',
       'word-gender': 'Talk to the player as a boy or a girl (setting)',
+      'menu-ring': 'Menu ring that follows the pointer',
       'category-menu': 'Categories menu',
       accounts: 'Player accounts',
       leaderboard: 'Leaderboard',

@@ -957,6 +957,7 @@ export const EU: SiteMessages = {
       'rooms-place-pieces': 'Kokatu piezak geletan',
       'answer-words': 'Erantzunak hitzekin (ezarpena)',
       'word-gender': 'Jokalariari mutil edo neska gisa hitz egin (ezarpena)',
+      'menu-ring': 'Erakuslea jarraitzen duen eraztuna menuan',
       'category-menu': 'Kategorien menua',
       accounts: 'Jokalarien kontuak',
       leaderboard: 'Sailkapena',

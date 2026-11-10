@@ -18,6 +18,7 @@ import { GAME_THEMES } from './core/game-themes';
 import { SiteNotices } from './core/site-notices';
 import { SiteTheme } from './core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
+import { MenuRing } from './shared/menu-ring';
 
 /** Order of the header theme switch */
 const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contrast'];
@@ -25,7 +26,7 @@ const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contras
 /** Site shell: header with text size, theme and language settings and the list of games, page outlet and footer */
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, SuDialogComponent, SuNotificationComponent],
+  imports: [MenuRing, RouterLink, RouterLinkActive, RouterOutlet, SuDialogComponent, SuNotificationComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.scss',

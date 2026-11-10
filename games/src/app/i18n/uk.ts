@@ -989,6 +989,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'rooms-place-pieces': 'Розклади шматочки в кімнатах',
       'answer-words': 'Відповіді словами (налаштування)',
       'word-gender': 'Звертатися до гравця як до хлопчика чи дівчинки (налаштування)',
+      'menu-ring': 'Кільце в меню, що стежить за вказівником',
       'category-menu': 'Меню категорій',
       accounts: 'Акаунти гравців',
       leaderboard: 'Таблиця лідерів',

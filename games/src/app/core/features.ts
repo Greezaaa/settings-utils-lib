@@ -16,6 +16,7 @@ export type FeatureId =
   | 'rooms-place-pieces'
   | 'answer-words'
   | 'word-gender'
+  | 'menu-ring'
   | 'category-menu'
   | 'accounts'
   | 'leaderboard';
@@ -55,6 +56,8 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'answer-words', openByDefault: false },
   /** The header setting to be spoken to as a boy or a girl, for the languages whose words change with it */
   { id: 'word-gender', openByDefault: false },
+  /** A playful ring in the header menu that drifts after the pointer and frames the link it reaches */
+  { id: 'menu-ring', openByDefault: false },
   /** The header lists the categories (each with its page of games) instead of every game */
   { id: 'category-menu', openByDefault: false },
   /** Player accounts: sign in on any device, keeping favourites and best results */

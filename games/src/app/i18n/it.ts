@@ -928,6 +928,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'rooms-place-pieces': 'Metti a posto i pezzi nelle stanze',
       'answer-words': 'Risposte con parole (impostazione)',
       'word-gender': 'Parlare al giocatore come bambino o bambina (impostazione)',
+      'menu-ring': 'Anello nel menu che segue il puntatore',
       'category-menu': 'Menu delle categorie',
       accounts: 'Account dei giocatori',
       leaderboard: 'Classifica',

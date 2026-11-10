@@ -32,6 +32,7 @@ export const FEATURE_IDS = [
   'rooms-place-pieces',
   'answer-words',
   'word-gender',
+  'menu-ring',
   'category-menu',
   'accounts',
   'leaderboard',

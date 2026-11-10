@@ -970,6 +970,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'rooms-place-pieces': 'Coloca las piezas en salas',
       'answer-words': 'Respuestas con palabras (ajuste)',
       'word-gender': 'Hablar al jugador como chico o chica (ajuste)',
+      'menu-ring': 'Anillo en el menú que sigue al puntero',
       'category-menu': 'Menú de categorías',
       accounts: 'Cuentas de jugador',
       leaderboard: 'Clasificación',
