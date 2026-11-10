@@ -244,7 +244,9 @@
   transition: color 150ms ease;
   z-index: 1;
 
-  &:hover {
+  // The pill marks the current page, and shows where the pointer is: no underlines
+  &:hover,
+  &.active {
     text-decoration: none;
   }
 
