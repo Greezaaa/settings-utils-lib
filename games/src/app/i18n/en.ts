@@ -81,6 +81,8 @@ export const EN: SiteMessages = {
         summary: 'Answers show in colour, with a few words too',
       },
     },
+    menuAnimation: 'Animated menu',
+    menuAnimationChoices: { on: 'Yes', off: 'No' },
     wordGender: 'Talk to me as',
     wordGenders: { boy: 'a boy', girl: 'a girl' },
     wordGenderQuestion: 'How should we talk to you? You can change it any time in the settings.',

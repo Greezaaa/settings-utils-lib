@@ -86,6 +86,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
         summary: 'Las respuestas se ven en color y también con palabras',
       },
     },
+    menuAnimation: 'Menú animado',
+    menuAnimationChoices: { on: 'Sí', off: 'No' },
     wordGender: 'Háblame como',
     wordGenders: { boy: 'chico', girl: 'chica' },
     wordGenderQuestion: '¿Cómo quieres que te hablemos? Puedes cambiarlo cuando quieras en los ajustes.',

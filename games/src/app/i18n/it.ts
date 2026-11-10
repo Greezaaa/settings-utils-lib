@@ -83,6 +83,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
         summary: 'Le risposte si vedono a colori, con qualche parola',
       },
     },
+    menuAnimation: 'Menu animato',
+    menuAnimationChoices: { on: 'Sì', off: 'No' },
     wordGender: 'Parlami come',
     wordGenders: { boy: 'bambino', girl: 'bambina' },
     wordGenderQuestion: 'Come vuoi che ti parliamo? Puoi cambiarlo quando vuoi nelle impostazioni.',

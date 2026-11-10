@@ -2,16 +2,19 @@ import { afterNextRender, DestroyRef, Directive, DOCUMENT, ElementRef, inject, i
 
 /** How much of the way to its target the ring moves each frame: small, so it drifts after the pointer */
 const FOLLOW = 0.08;
-/** The ring's size while following the pointer, and the room it leaves around a link it wraps */
+/** How close (in pixels) the pill must be to its link to count as covering it */
+const COVERED = 2;
+/** The shape's size while following the pointer, and the room it leaves around a link it covers */
 const DOT = 18;
 const WRAP_X = 10;
 const WRAP_Y = 6;
 
 /**
- * A playful ring for a menu: while the pointer is over the menu it drifts after it and, on reaching a link, stretches
- * around it like a frame; it fades out when the pointer leaves, so it never follows the pointer anywhere else.
- * Keyboard focus on a link moves it there too. Only for a mouse or trackpad, and never for visitors whose device asks
- * for less motion. Turn it on with `[appMenuRing]="true"`; its look is `.menu-ring` in styles.scss.
+ * A playful shape for a menu: while the pointer is over the menu it drifts after it and, on reaching a link, grows
+ * into a filled pill behind it; once the pill covers the link, the link's text turns light (`is-covered`). It fades
+ * out when the pointer leaves, so it never follows the pointer anywhere else. Keyboard focus on a link moves it there
+ * too. Only for a mouse or trackpad, and never for visitors whose device asks for less motion. Turn it on with
+ * `[appMenuRing]="true"`; its look is `.menu-ring` in styles.scss.
  */
 @Directive({
   selector: '[appMenuRing]',
@@ -36,6 +39,9 @@ export class MenuRing {
   private current = { x: 0, y: 0, width: DOT, height: DOT };
   private goal = { x: 0, y: 0, width: DOT, height: DOT };
   private isVisible = false;
+  /** The link the shape is heading for, and the one it covers now */
+  private target: Element | null = null;
+  private covered: Element | null = null;
 
   protected isOn(): boolean {
     return this.enabled() && this.suits();
@@ -63,6 +69,7 @@ export class MenuRing {
     if (link && this.host.contains(link)) {
       this.wrap(link);
     } else {
+      this.target = null;
       const box = this.host.getBoundingClientRect();
       this.goal = {
         x: event.clientX - box.left + this.host.scrollLeft,
@@ -83,11 +90,14 @@ export class MenuRing {
 
   protected hide(): void {
     this.isVisible = false;
+    this.target = null;
+    this.cover(null);
     this.ring?.classList.remove('is-visible');
   }
 
   /** Heads for a frame around the link */
   private wrap(link: Element): void {
+    this.target = link;
     const box = this.host.getBoundingClientRect();
     const around = link.getBoundingClientRect();
     this.goal = {
@@ -106,6 +116,15 @@ export class MenuRing {
       this.isVisible = true;
       ring.classList.add('is-visible');
       this.frame = this.window?.requestAnimationFrame(() => this.move()) ?? 0;
+    }
+  }
+
+  /** Marks the link the pill covers, so its text turns light, and unmarks the one it left */
+  private cover(link: Element | null): void {
+    if (link !== this.covered) {
+      this.covered?.classList.remove('is-covered');
+      link?.classList.add('is-covered');
+      this.covered = link;
     }
   }
 
@@ -130,6 +149,11 @@ export class MenuRing {
       height: step(this.current.height, this.goal.height),
     };
     const { x, y, width, height } = this.current;
+    const arrived =
+      Math.abs(x - this.goal.x) < COVERED &&
+      Math.abs(y - this.goal.y) < COVERED &&
+      Math.abs(width - this.goal.width) < COVERED;
+    this.cover(arrived ? this.target : null);
     this.ring.style.width = `${width}px`;
     this.ring.style.height = `${height}px`;
     this.ring.style.transform = `translate(${x - width / 2}px, ${y - height / 2}px)`;

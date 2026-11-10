@@ -116,6 +116,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
         summary: 'Відповіді видно кольором і ще кількома словами',
       },
     },
+    menuAnimation: 'Анімоване меню',
+    menuAnimationChoices: { on: 'Так', off: 'Ні' },
     wordGender: 'Звертатися до мене як до',
     wordGenders: { boy: 'хлопчика', girl: 'дівчинки' },
     wordGenderQuestion: 'Як до тебе звертатися? Це можна будь-коли змінити в налаштуваннях.',

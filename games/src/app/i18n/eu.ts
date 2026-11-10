@@ -85,6 +85,8 @@ export const EU: SiteMessages = {
         summary: 'Erantzunak koloretan eta hitzekin ere ikusten dira',
       },
     },
+    menuAnimation: 'Menu animatua',
+    menuAnimationChoices: { on: 'Bai', off: 'Ez' },
     wordGender: 'Nola hitz egin?',
     wordGenders: { boy: 'mutila', girl: 'neska' },
     wordGenderQuestion: 'Nola hitz egitea nahi duzu? Nahi duzunean alda dezakezu ezarpenetan.',

@@ -237,6 +237,23 @@
   }
 }
 
+// The animated menu (the appMenuRing directive): links sit above the shape, never underline on hover (the shape
+// shows where the pointer is), and turn white once the shape covers them
+.site-nav.has-menu-ring a {
+  position: relative;
+  transition: color 150ms ease;
+  z-index: 1;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &.is-covered {
+    color: #fff;
+    text-decoration-color: #fff;
+  }
+}
+
 // Header, page and footer in a column at least one screen tall: the page takes the free space,
 // so the footer sits at the bottom of short pages whatever its height (it grows with the text size setting)
 :host {

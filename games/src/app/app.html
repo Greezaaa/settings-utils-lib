@@ -114,6 +114,23 @@
               </div>
             </div>
           }
+          @if (menuAnimation.isAvailable()) {
+            <div class="setting">
+              <p class="setting-label" id="setting-menu-animation">{{ t().site.menuAnimation }}</p>
+              <div class="languages" role="group" aria-labelledby="setting-menu-animation">
+                @for (choice of menuAnimationChoices; track choice) {
+                  <button
+                    type="button"
+                    class="icon-button"
+                    [attr.aria-pressed]="choice === menuAnimation.choice()"
+                    (click)="menuAnimation.set(choice)"
+                  >
+                    {{ t().site.menuAnimationChoices[choice] }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
           @if (playerGender.isAvailable()) {
             <div class="setting">
               <p class="setting-label" id="setting-word-gender">{{ t().site.wordGender }}</p>
@@ -155,7 +172,7 @@
     </div>
   </div>
 
-  <nav class="container site-nav" [attr.aria-label]="t().site.gamesNav" [appMenuRing]="features.canUse('menu-ring')">
+  <nav class="container site-nav" [attr.aria-label]="t().site.gamesNav" [appMenuRing]="menuAnimation.isOn()">
     <!-- With the categories menu, a link per category; otherwise a link per game -->
     @if (features.canUse('category-menu')) {
       @for (group of categories(); track group.category) {
