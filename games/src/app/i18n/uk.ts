@@ -118,6 +118,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     },
     wordGender: 'Звертатися до мене як до',
     wordGenders: { boy: 'хлопчика', girl: 'дівчинки' },
+    wordGenderQuestion: 'Як до тебе звертатися? Це можна будь-коли змінити в налаштуваннях.',
+    wordGenderAnswers: { boy: 'Як до хлопчика', girl: 'Як до дівчинки' },
     madeBy: 'Зроблено з ❤️:',
     projectLinks: 'Посилання проєкту',
     privacyNotice:

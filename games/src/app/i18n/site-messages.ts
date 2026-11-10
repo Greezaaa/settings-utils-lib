@@ -76,6 +76,9 @@ export interface SiteMessages {
     /** The setting to be spoken to as a boy or a girl */
     readonly wordGender: string;
     readonly wordGenders: Readonly<Record<WordGender, string>>;
+    /** The question asked once, as a notice, and its two answers */
+    readonly wordGenderQuestion: string;
+    readonly wordGenderAnswers: Readonly<Record<WordGender, string>>;
     readonly madeBy: string;
     readonly projectLinks: string;
     /** Shown once until closed: what the site stores, and that it is never sold or shared */

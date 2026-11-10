@@ -88,6 +88,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     },
     wordGender: 'Háblame como',
     wordGenders: { boy: 'chico', girl: 'chica' },
+    wordGenderQuestion: '¿Cómo quieres que te hablemos? Puedes cambiarlo cuando quieras en los ajustes.',
+    wordGenderAnswers: { boy: 'Como chico', girl: 'Como chica' },
     madeBy: 'Hecho con ❤️ por',
     projectLinks: 'Enlaces del proyecto',
     privacyNotice:

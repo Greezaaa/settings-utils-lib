@@ -83,6 +83,8 @@ export const EN: SiteMessages = {
     },
     wordGender: 'Talk to me as',
     wordGenders: { boy: 'a boy', girl: 'a girl' },
+    wordGenderQuestion: 'How should we talk to you? You can change it any time in the settings.',
+    wordGenderAnswers: { boy: 'As a boy', girl: 'As a girl' },
     madeBy: 'Made with ❤️ by',
     projectLinks: 'Project links',
     privacyNotice:

@@ -85,6 +85,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     },
     wordGender: 'Parlami come',
     wordGenders: { boy: 'bambino', girl: 'bambina' },
+    wordGenderQuestion: 'Come vuoi che ti parliamo? Puoi cambiarlo quando vuoi nelle impostazioni.',
+    wordGenderAnswers: { boy: 'Come bambino', girl: 'Come bambina' },
     madeBy: 'Fatto con ❤️ da',
     projectLinks: 'Link del progetto',
     privacyNotice:

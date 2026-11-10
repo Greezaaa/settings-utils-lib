@@ -2,6 +2,9 @@ import { afterNextRender, computed, effect, inject, Injectable, Injector, Signal
 import { Router } from '@angular/router';
 import { SuNotificationAction, SuNotificationService } from '@su-labs/notifications';
 import { SiteLanguage } from '../i18n/site-language';
+import { WORD_GENDERS } from '../i18n/word-gender';
+import { FeatureFlags } from './feature-flags';
+import { PlayerGender } from './player-gender';
 import { readStored, writeStored } from './site-storage';
 import { LATEST_PRIVACY_VERSION, LATEST_VERSION } from './site-updates';
 
@@ -9,6 +12,8 @@ import { LATEST_PRIVACY_VERSION, LATEST_VERSION } from './site-updates';
 const PRIVACY_SEEN_STORAGE = 'privacy-notice-version';
 /** Before versions, closing the privacy notice was saved as `true`: that visitor has seen version 1 */
 const OLD_PRIVACY_STORAGE = 'privacy-notice-dismissed';
+/** The visitor was asked how to be spoken to (whether or not they chose), so they aren't asked again */
+const GENDER_ASKED_STORAGE = 'word-gender-asked';
 
 /** What a notice shows; it is rebuilt when the language changes */
 interface NoticeContent {
@@ -26,9 +31,12 @@ const signature = ({ message, actions }: NoticeContent): string =>
   [message, ...actions.map(({ label }) => label)].join('\n');
 
 /**
- * The privacy notice, with @su-labs/notifications: shown on a first visit and again whenever an update changes what
- * the site saves, with "OK" and a button to the privacy page, until it is closed. It follows the site language while
- * it is open. (What's new is listed on the home page instead, where it never covers the screen.)
+ * The site's notices, with @su-labs/notifications, one at a time, each following the site language while it is open:
+ * - privacy: on a first visit and again whenever an update changes what the site saves, with "OK" and a button to the
+ *   privacy page, until it is closed
+ * - then, while the `word-gender` switch is on, a single question: be spoken to as a boy or a girl. Closing it without
+ *   choosing counts as asked; the choice can always change in the header settings.
+ * (What's new is listed on the home page instead, where it never covers the screen.)
  */
 @Injectable({ providedIn: 'root' })
 export class SiteNotices {
@@ -36,6 +44,8 @@ export class SiteNotices {
   private readonly language = inject(SiteLanguage);
   private readonly router = inject(Router);
   private readonly injector = inject(Injector);
+  private readonly features = inject(FeatureFlags);
+  private readonly gender = inject(PlayerGender);
 
   constructor() {
     // After the first render, once the saved language has been applied
@@ -46,6 +56,7 @@ export class SiteNotices {
     const oldDismissed = readStored(OLD_PRIVACY_STORAGE) === true;
     const privacySeen = readVersion(PRIVACY_SEEN_STORAGE) ?? (oldDismissed ? 1 : 0);
     if (privacySeen >= LATEST_PRIVACY_VERSION) {
+      void this.askGender();
       return;
     }
     this.open(
@@ -59,7 +70,31 @@ export class SiteNotices {
           ],
         };
       }),
-      () => writeStored(PRIVACY_SEEN_STORAGE, LATEST_VERSION),
+      () => {
+        writeStored(PRIVACY_SEEN_STORAGE, LATEST_VERSION);
+        void this.askGender();
+      },
+    );
+  }
+
+  /** Asks once, when the setting is open and nothing is chosen yet, how the texts should speak to the visitor */
+  private async askGender(): Promise<void> {
+    await this.features.ready();
+    if (!this.gender.isAvailable() || this.gender.choice() !== null || readStored(GENDER_ASKED_STORAGE) === true) {
+      return;
+    }
+    this.open(
+      computed(() => {
+        const { site } = this.language.messages();
+        return {
+          message: site.wordGenderQuestion,
+          actions: WORD_GENDERS.map((gender) => ({
+            label: site.wordGenderAnswers[gender],
+            onClick: () => this.gender.set(gender),
+          })),
+        };
+      }),
+      () => writeStored(GENDER_ASKED_STORAGE, true),
     );
   }
 

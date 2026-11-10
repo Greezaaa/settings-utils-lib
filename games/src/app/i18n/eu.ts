@@ -87,6 +87,8 @@ export const EU: SiteMessages = {
     },
     wordGender: 'Nola hitz egin?',
     wordGenders: { boy: 'mutila', girl: 'neska' },
+    wordGenderQuestion: 'Nola hitz egitea nahi duzu? Nahi duzunean alda dezakezu ezarpenetan.',
+    wordGenderAnswers: { boy: 'Mutil gisa', girl: 'Neska gisa' },
     madeBy: 'Maitasunez ❤️ egina:',
     projectLinks: 'Proiektuaren estekak',
     privacyNotice:
