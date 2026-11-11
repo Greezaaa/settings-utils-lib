@@ -1035,13 +1035,15 @@ export const EU: SiteMessages = {
     title: 'Elkarrekin jokatu',
     lead: 'Jokatu joko bera aldi berean, 4 jokalari arte, bakoitza bere gailuan.',
     rule: 'Sortu gela bat eta partekatu bere kodea, edo sartu batean kode batekin.',
-    create: 'Sortu gela bat',
+    create: 'Sortu',
+    createTitle: 'Sortu zure gela',
     joinTitle: 'Sartu gela batean',
     codeLabel: 'Gelaren kodea',
     join: 'Sartu',
     homeTitle: 'Elkarrekin jokatu',
     homeText:
       '4 jokalari arte, ariketa berak aldi berean. Nork asmatzen du gehien?',
+    homeLink: 'Ikusi gelak',
     errors: {
       'not-found':
         'Ez dago gelarik kode horrekin. Begiratu edo eskatu berri bat.',

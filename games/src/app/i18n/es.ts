@@ -1047,13 +1047,15 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     title: 'Jugar juntos',
     lead: 'Jugad al mismo juego a la vez, hasta 4 jugadores, cada uno en su dispositivo.',
     rule: 'Crea una sala y comparte su código, o entra en una con un código.',
-    create: 'Crear una sala',
+    create: 'Crear',
+    createTitle: 'Crea tu propia sala',
     joinTitle: 'Entrar en una sala',
     codeLabel: 'Código de la sala',
     join: 'Entrar',
     homeTitle: 'Jugar juntos',
     homeText:
       'Hasta 4 jugadores, los mismos ejercicios a la vez. ¿Quién acierta más?',
+    homeLink: 'Ver las salas',
     errors: {
       'not-found':
         'No hay ninguna sala con ese código. Revísalo o pide uno nuevo.',

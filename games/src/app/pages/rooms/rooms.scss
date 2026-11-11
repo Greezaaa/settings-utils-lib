@@ -1,14 +1,33 @@
 // Styles the rooms pages share
 
+// Create a room and join one: stacked on phones, side by side on wide screens
 .rooms-entry {
   display: grid;
   gap: 1rem;
+  // minmax(0, …): the code field never pushes the cards wider than a phone
+  grid-template-columns: minmax(0, 1fr);
   max-width: 28rem;
+
+  @media (min-width: 48rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 52rem;
+  }
 }
 
+// Both cards take the row's height (the grid stretches them), their content centred in it
 .entry-card {
+  align-content: center;
   display: grid;
   gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+
+  .field {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 48rem) {
+    text-align: center;
+  }
 }
 
 .card-title {

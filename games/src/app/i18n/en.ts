@@ -1004,13 +1004,15 @@ export const EN: SiteMessages = {
     title: 'Play together',
     lead: 'Play the same game at the same time with up to 3 friends, each on their own device.',
     rule: 'Create a room and share its code, or join one with a code.',
-    create: 'Create a room',
+    create: 'Create',
+    createTitle: 'Create your own room',
     joinTitle: 'Join a room',
     codeLabel: 'Room code',
     join: 'Join',
     homeTitle: 'Play together',
     homeText:
       'Up to 4 players, the same exercises at the same time. Who gets the most right?',
+    homeLink: 'See rooms',
     errors: {
       'not-found':
         'There’s no room with that code. Check it, or ask for a new one.',

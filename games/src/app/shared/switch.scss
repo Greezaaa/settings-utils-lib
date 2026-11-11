@@ -27,6 +27,8 @@
 
   &::after {
     background: var(--surface);
+    border: 1px solid var(--border);
+    box-sizing: border-box;
     border-radius: 50%;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     content: '';
@@ -40,7 +42,7 @@
 }
 
 .switch input:checked + .track {
-  background: var(--green-text);
+  background: var(--button-bg);
 
   &::after {
     translate: 1.25rem 0;

@@ -664,11 +664,14 @@ export interface SiteMessages {
     readonly lead: string;
     readonly rule: string;
     readonly create: string;
+    readonly createTitle: string;
     readonly joinTitle: string;
     readonly codeLabel: string;
     readonly join: string;
     readonly homeTitle: string;
     readonly homeText: string;
+    /** The home page's button to the rooms page, where a room is created or joined */
+    readonly homeLink: string;
     readonly errors: Readonly<Record<RoomError, string>>;
     readonly connecting: string;
     readonly reconnecting: string;

@@ -7,8 +7,11 @@
   </p>
 </header>
 
-<section class="container page-section rooms-entry">
+<section class="container page-section">
+  <div class="rooms-entry">
   <div class="card entry-card">
+    <h2 class="card-title">{{ 'rooms.createTitle' | translate }}</h2>
+    <p class="muted">{{ 'rooms.homeText' | translate }}</p>
     <button
       type="button"
       class="button start"
@@ -51,6 +54,8 @@
     }
     <button type="submit" class="button">{{ 'rooms.join' | translate }}</button>
   </form>
+
+  </div>
 
   @if (client.error(); as error) {
     <p class="error" role="alert">{{ ('rooms.errors' | translate)[error] }}</p>

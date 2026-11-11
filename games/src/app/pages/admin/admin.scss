@@ -3,7 +3,32 @@
 .admin-card {
   display: grid;
   gap: 1rem;
-  max-width: 48rem;
+  max-width: 40rem;
+
+  @media (min-width: 48rem) {
+    padding: 1.25rem 1.5rem;
+  }
+}
+
+// The switches' groups (games, features, multiplayer): one column, two on wide screens
+.admin-groups {
+  align-items: start;
+  display: grid;
+  gap: 2.5rem 2rem;
+
+  @media (min-width: 64rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.admin-group {
+  align-content: start;
+  display: grid;
+  gap: 1rem;
+
+  .section-title {
+    font-size: 1.375rem;
+  }
 }
 
 input[type='password'] {
@@ -87,7 +112,23 @@ input[type='text'] {
 }
 
 .switch-text {
+  font-size: 0.9375rem;
   font-weight: 400;
+}
+
+// Smaller switches than on the players' pages, as the admin goes through many of them
+.switch-row .track {
+  height: 1.25rem;
+  width: 2.125rem;
+
+  &::after {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+}
+
+.switch-row input:checked + .track::after {
+  translate: 0.875rem 0;
 }
 
 .plain-list {

@@ -21,106 +21,109 @@
       </button>
     </div>
 
-    <form class="card account-card" (submit)="$event.preventDefault(); saveDetails(detailsForm)" #detailsForm>
-      <h2 class="card-title">{{ 'account.detailsTitle' | translate }}</h2>
-      <app-screen-name-field [value]="player.screenName" />
-      @if (canEmail()) {
-        <label class="field">
-          <span>{{ 'account.email' | translate }}</span>
-          <input name="email" type="email" autocomplete="email" maxlength="254" [value]="player.email ?? ''" />
-          <small class="muted">{{ 'account.emailNeedsPassword' | translate }}</small>
+    <!-- The signed-in player's cards: one column, two on wide screens -->
+    <div class="account-grid">
+      <form class="card account-card" (submit)="$event.preventDefault(); saveDetails(detailsForm)" #detailsForm>
+        <h2 class="card-title">{{ 'account.detailsTitle' | translate }}</h2>
+        <app-screen-name-field [value]="player.screenName" />
+        @if (canEmail()) {
+          <label class="field">
+            <span>{{ 'account.email' | translate }}</span>
+            <input name="email" type="email" autocomplete="email" maxlength="254" [value]="player.email ?? ''" />
+            <small class="muted">{{ 'account.emailNeedsPassword' | translate }}</small>
+          </label>
+          <label class="field">
+            <span>{{ 'account.currentPassword' | translate }}</span>
+            <input name="password" type="password" autocomplete="current-password" />
+          </label>
+        }
+        @if (details.error(); as error) {
+          <p class="error" role="alert">{{ error }}</p>
+        }
+        <button type="submit" class="button" [disabled]="details.isBusy()">{{ 'account.save' | translate }}</button>
+      </form>
+
+      <div class="card account-card">
+        <label class="switch switch-row">
+          <span class="switch-text">
+            <strong>{{ 'account.showOnLeaderboard' | translate }}</strong>
+            <small class="muted">{{ 'account.showOnLeaderboardHint' | translate }}</small>
+          </span>
+          <input
+            type="checkbox"
+            role="switch"
+            [checked]="player.showOnLeaderboard"
+            [disabled]="visibility.isBusy()"
+            (change)="setShowOnLeaderboard($event)"
+          />
+          <span class="track" aria-hidden="true"></span>
         </label>
+        @if (visibility.error(); as error) {
+          <p class="error" role="alert">{{ error }}</p>
+        }
+      </div>
+
+      <form class="card account-card" (submit)="$event.preventDefault(); changePassword(passwordForm)" #passwordForm>
+        <h2 class="card-title">{{ 'account.passwordTitle' | translate }}</h2>
+        <input type="text" name="username" autocomplete="username" [value]="player.loginName" hidden />
         <label class="field">
           <span>{{ 'account.currentPassword' | translate }}</span>
-          <input name="password" type="password" autocomplete="current-password" />
+          <input name="current" type="password" autocomplete="current-password" required />
         </label>
-      }
-      @if (details.error(); as error) {
-        <p class="error" role="alert">{{ error }}</p>
-      }
-      <button type="submit" class="button" [disabled]="details.isBusy()">{{ 'account.save' | translate }}</button>
-    </form>
-
-    <div class="card account-card">
-      <label class="switch switch-row">
-        <span class="switch-text">
-          <strong>{{ 'account.showOnLeaderboard' | translate }}</strong>
-          <small class="muted">{{ 'account.showOnLeaderboardHint' | translate }}</small>
-        </span>
-        <input
-          type="checkbox"
-          role="switch"
-          [checked]="player.showOnLeaderboard"
-          [disabled]="visibility.isBusy()"
-          (change)="setShowOnLeaderboard($event)"
-        />
-        <span class="track" aria-hidden="true"></span>
-      </label>
-      @if (visibility.error(); as error) {
-        <p class="error" role="alert">{{ error }}</p>
-      }
-    </div>
-
-    <form class="card account-card" (submit)="$event.preventDefault(); changePassword(passwordForm)" #passwordForm>
-      <h2 class="card-title">{{ 'account.passwordTitle' | translate }}</h2>
-      <input type="text" name="username" autocomplete="username" [value]="player.loginName" hidden />
-      <label class="field">
-        <span>{{ 'account.currentPassword' | translate }}</span>
-        <input name="current" type="password" autocomplete="current-password" required />
-      </label>
-      <label class="field">
-        <span>{{ 'account.newPassword' | translate }}</span>
-        <input #next name="next" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
-        @if (hasLivelyFields()) {
-          <su-lib-strength-meter
-          [field]="next"
-          [label]="'account.strengthLabel' | translate"
-          [levelNames]="'account.strength' | translate"
-          [minLength]="minLength"
-        />
+        <label class="field">
+          <span>{{ 'account.newPassword' | translate }}</span>
+          <input #next name="next" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+          @if (hasLivelyFields()) {
+            <su-lib-strength-meter
+            [field]="next"
+            [label]="'account.strengthLabel' | translate"
+            [levelNames]="'account.strength' | translate"
+            [minLength]="minLength"
+          />
+          }
+          <small class="muted">{{ 'account.passwordRule' | translate: minLength }}</small>
+        </label>
+        <label class="field">
+          <span>{{ 'account.repeatPassword' | translate }}</span>
+          <input name="repeat" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+        </label>
+        @if (password.error(); as error) {
+          <p class="error" role="alert">{{ error }}</p>
         }
-        <small class="muted">{{ 'account.passwordRule' | translate: minLength }}</small>
-      </label>
-      <label class="field">
-        <span>{{ 'account.repeatPassword' | translate }}</span>
-        <input name="repeat" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
-      </label>
-      @if (password.error(); as error) {
-        <p class="error" role="alert">{{ error }}</p>
-      }
-      <button type="submit" class="button" [disabled]="password.isBusy()">{{ 'account.changePassword' | translate }}</button>
-    </form>
+        <button type="submit" class="button" [disabled]="password.isBusy()">{{ 'account.changePassword' | translate }}</button>
+      </form>
 
-    <div class="card account-card">
-      <h2 class="card-title">{{ 'account.resultsTitle' | translate }}</h2>
-      <p class="muted">{{ 'account.resultsLead' | translate }}</p>
-      @if (results.error(); as error) {
-        <p class="error" role="alert">{{ error }}</p>
-      }
-      <button
-        type="button"
-        class="button button-secondary danger"
-        [disabled]="results.isBusy()"
-        (click)="removeResults()"
-      >
-        {{ 'account.deleteResults' | translate }}
-      </button>
+      <div class="card account-card">
+        <h2 class="card-title">{{ 'account.resultsTitle' | translate }}</h2>
+        <p class="muted">{{ 'account.resultsLead' | translate }}</p>
+        @if (results.error(); as error) {
+          <p class="error" role="alert">{{ error }}</p>
+        }
+        <button
+          type="button"
+          class="button button-secondary danger"
+          [disabled]="results.isBusy()"
+          (click)="removeResults()"
+        >
+          {{ 'account.deleteResults' | translate }}
+        </button>
+      </div>
+
+      <form class="card account-card" (submit)="$event.preventDefault(); remove(deleteForm)" #deleteForm>
+        <h2 class="card-title">{{ 'account.deleteTitle' | translate }}</h2>
+        <p class="muted">{{ 'account.deleteLead' | translate }}</p>
+        <label class="field">
+          <span>{{ 'account.currentPassword' | translate }}</span>
+          <input name="password" type="password" autocomplete="current-password" required />
+        </label>
+        @if (deletion.error(); as error) {
+          <p class="error" role="alert">{{ error }}</p>
+        }
+        <button type="submit" class="button button-secondary danger" [disabled]="deletion.isBusy()">
+          {{ 'account.deleteAccount' | translate }}
+        </button>
+      </form>
     </div>
-
-    <form class="card account-card" (submit)="$event.preventDefault(); remove(deleteForm)" #deleteForm>
-      <h2 class="card-title">{{ 'account.deleteTitle' | translate }}</h2>
-      <p class="muted">{{ 'account.deleteLead' | translate }}</p>
-      <label class="field">
-        <span>{{ 'account.currentPassword' | translate }}</span>
-        <input name="password" type="password" autocomplete="current-password" required />
-      </label>
-      @if (deletion.error(); as error) {
-        <p class="error" role="alert">{{ error }}</p>
-      }
-      <button type="submit" class="button button-secondary danger" [disabled]="deletion.isBusy()">
-        {{ 'account.deleteAccount' | translate }}
-      </button>
-    </form>
   } @else {
     <div class="tabs" role="group" [attr.aria-label]="'account.title' | translate">
       @for (option of views; track option) {
