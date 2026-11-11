@@ -74,23 +74,16 @@ A project's own `.vscode/settings.json` wins over your user settings. If a proje
 
 ## Sorting and Removing Unused Imports
 
-To remove unused imports every time the extension formats, turn it on in your user settings:
+Both are off by default. Turn on either or both in your user settings:
 
 ```jsonc
 {
+  "tsOneLineImports.sortImports": true,
   "tsOneLineImports.removeUnusedImports": true
 }
 ```
 
-It uses VS Code's own TypeScript support, the same as the **Remove Unused Imports** command, so the project's `tsconfig.json` is respected. Side-effect imports such as `import './polyfills';` are kept. Files in `.prettierignore` are left untouched.
-
-To sort imports too, VS Code's organize imports can run on save, before formatting:
-
-```jsonc
-{
-  "editor.codeActionsOnSave": { "source.organizeImports": "explicit" }
-}
-```
+They run every time the extension formats, before the imports are put on one line. They use VS Code's own TypeScript support, the same as its **Sort Imports**, **Remove Unused Imports** and **Organize Imports** commands, so the project's `tsconfig.json` is respected. Side-effect imports such as `import './polyfills';` are kept. Files in `.prettierignore` are left untouched.
 
 ## Teams and CI
 

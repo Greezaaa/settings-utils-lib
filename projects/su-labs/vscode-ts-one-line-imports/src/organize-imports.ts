@@ -1,26 +1,29 @@
 import * as vscode from 'vscode';
 import { applyReplacements } from './apply-replacements.ts';
-
-/** The "Remove Unused Imports" source action of VS Code's TypeScript and JavaScript support */
-const REMOVE_UNUSED_IMPORTS = vscode.CodeActionKind.Source.append('removeUnusedImports');
+import { importActionKind } from './import-action-kind.ts';
+import type { ImportSettings } from './import-action-kind.ts';
 
 /** Resolve the action's edit too, which VS Code may otherwise compute only when the action is applied */
 const RESOLVE_FIRST_ACTION = 1;
 
 /**
- * The document's text without its unused imports, as VS Code's "Remove Unused Imports" command would leave it.
+ * The document's text with its imports sorted and/or unused ones removed, as VS Code's own
+ * **Sort Imports**, **Remove Unused Imports** or **Organize Imports** command would leave it.
  * Uses VS Code's built-in TypeScript language service, so the project's `tsconfig.json` is respected.
  *
- * @returns the new text; the same text when nothing is unused or the language service isn't ready
+ * @returns the new text; the same text when nothing changes or the language service isn't ready
  */
-export async function removeUnusedImports(document: vscode.TextDocument): Promise<string> {
+export async function organizeImports(document: vscode.TextDocument, settings: ImportSettings): Promise<string> {
   const text = document.getText();
+  const kind = importActionKind(settings);
+  if (!kind) return text;
+
   const wholeDocument = new vscode.Range(document.positionAt(0), document.positionAt(text.length));
   const actions = await vscode.commands.executeCommand<vscode.CodeAction[] | undefined>(
     'vscode.executeCodeActionProvider',
     document.uri,
     wholeDocument,
-    REMOVE_UNUSED_IMPORTS.value,
+    kind,
     RESOLVE_FIRST_ACTION
   );
   const edits = actions?.find((action) => action.edit)?.edit?.get(document.uri) ?? [];

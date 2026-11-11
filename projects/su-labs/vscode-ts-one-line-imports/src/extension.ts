@@ -2,7 +2,8 @@ import * as vscode from 'vscode';
 import { formatDocument } from './format-document.ts';
 import type { ParserName } from './parser-name.ts';
 import { clearProjectPrettierCache } from './project-prettier.ts';
-import { removeUnusedImports } from './remove-unused-imports.ts';
+import type { ImportSettings } from './import-action-kind.ts';
+import { organizeImports } from './organize-imports.ts';
 
 /** Section of this extension's settings */
 const SETTINGS_SECTION = 'tsOneLineImports';
@@ -22,9 +23,14 @@ const CONFIG_FILES = '**/{.prettierrc,.prettierrc.*,prettier.config.*,.prettieri
 const replaceAll = (document: vscode.TextDocument, text: string): vscode.TextEdit =>
   vscode.TextEdit.replace(new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length)), text);
 
-/** Whether the user turned on removing unused imports for this document */
-const shouldRemoveUnusedImports = (document: vscode.TextDocument): boolean =>
-  vscode.workspace.getConfiguration(SETTINGS_SECTION, document).get<boolean>('removeUnusedImports', false);
+/** The user's import settings for this document */
+function importSettings(document: vscode.TextDocument): ImportSettings {
+  const settings = vscode.workspace.getConfiguration(SETTINGS_SECTION, document);
+  return {
+    sortImports: settings.get<boolean>('sortImports', false),
+    removeUnusedImports: settings.get<boolean>('removeUnusedImports', false),
+  };
+}
 
 /** Creates the formatter, which logs what it did to an output channel */
 function createFormatter(output: vscode.LogOutputChannel): vscode.DocumentFormattingEditProvider {
@@ -35,11 +41,11 @@ function createFormatter(output: vscode.LogOutputChannel): vscode.DocumentFormat
       const filePath = document.uri.scheme === 'file' ? document.uri.fsPath : undefined;
       try {
         const original = document.getText();
-        const text = shouldRemoveUnusedImports(document) ? await removeUnusedImports(document) : original;
+        const text = await organizeImports(document, importSettings(document));
         const result = await formatDocument({ text, parser, filePath });
         if (result.warning) output.warn(result.warning);
         output.info(`${result.mode}: ${filePath ?? document.uri.toString()}`);
-        // A file in .prettierignore isn't touched at all, unused imports included
+        // A file in .prettierignore isn't touched at all, its imports included
         if (result.mode === 'ignored') return [];
         const formatted = result.text ?? text;
         return formatted === original ? [] : [replaceAll(document, formatted)];
