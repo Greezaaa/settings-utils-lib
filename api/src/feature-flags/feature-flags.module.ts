@@ -11,5 +11,6 @@ import { FeatureFlagsService } from './feature-flags.service.js';
   imports: [TypeOrmModule.forFeature([FeatureFlag])],
   controllers: [FeatureFlagsController, FeatureFlagsAdminController],
   providers: [FeatureFlagsService],
+  exports: [FeatureFlagsService],
 })
 export class FeatureFlagsModule {}

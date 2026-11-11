@@ -20,10 +20,14 @@ export interface Account {
   readonly showOnLeaderboard: boolean;
 }
 
+/** Players shown per leaderboard; keep in sync with LEADERBOARD_SIZE in api/src/accounts/results.service.ts */
+export const LEADERBOARD_SIZE = 10;
+
 /** One line of a leaderboard: only the screen name is shown, never anything else about the player */
 export interface LeaderboardEntry {
   readonly place: number;
-  readonly screenName: string;
+  /** null for a player who chose not to appear, ranked under a mystery name */
+  readonly screenName: string | null;
   readonly plays: number;
   readonly best: number;
   readonly isMe: boolean;
@@ -31,7 +35,12 @@ export interface LeaderboardEntry {
 
 export interface Leaderboard {
   readonly key: string;
+  /** Everyone ranked on the board, and the games they finished */
+  readonly players: number;
+  readonly plays: number;
   readonly entries: readonly LeaderboardEntry[];
+  /** The signed-in player, when they're ranked below the best players */
+  readonly me: LeaderboardEntry | null;
 }
 
 /** Why the API refused an account request; each has its message on the account page */
@@ -66,16 +75,20 @@ function parseEntry(item: unknown): LeaderboardEntry[] {
   const [place, screenName, plays, best, isMe] = ['place', 'screenName', 'plays', 'best', 'isMe'].map((name) =>
     field(item, name),
   );
-  return isNumber(place) && typeof screenName === 'string' && isNumber(plays) && isNumber(best) && typeof isMe === 'boolean'
+  return isNumber(place) &&
+    (typeof screenName === 'string' || screenName === null) &&
+    isNumber(plays) &&
+    isNumber(best) &&
+    typeof isMe === 'boolean'
     ? [{ place, screenName, plays, best, isMe }]
     : [];
 }
 
 function parseBoard(item: unknown): Leaderboard[] {
-  const key = field(item, 'key');
-  const entries = field(item, 'entries');
-  return typeof key === 'string' && Array.isArray(entries)
-    ? [{ key, entries: entries.flatMap((entry: unknown) => parseEntry(entry)) }]
+  const [key, players, plays, entries] = ['key', 'players', 'plays', 'entries'].map((name) => field(item, name));
+  const [me] = parseEntry(field(item, 'me'));
+  return typeof key === 'string' && isNumber(players) && isNumber(plays) && Array.isArray(entries)
+    ? [{ key, players, plays, entries: entries.flatMap((entry: unknown) => parseEntry(entry)), me: me ?? null }]
     : [];
 }
 
@@ -202,7 +215,7 @@ export class PlayerAccount {
     }
   }
 
-  /** A game's leaderboards, for signed-in players */
+  /** A game's leaderboards: for signed-in players, or for anyone once they're public */
   async leaderboards(game: ResultGame): Promise<Leaderboard[] | null> {
     const boards = field(await this.read(`/v1/leaderboard/${game}`), 'boards');
     return Array.isArray(boards) ? boards.flatMap((board: unknown) => parseBoard(board)) : null;

@@ -649,10 +649,13 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       expect(pairs.boards).toEqual([
         {
           key: 'normal',
+          players: 2,
+          plays: 3,
           entries: [
             { place: 1, screenName: 'Ana', plays: 2, best: 16, isMe: true },
             { place: 2, screenName: 'Ben', plays: 1, best: 18, isMe: false },
           ],
+          me: null,
         },
       ]);
       const { body: tower } = await ana
@@ -683,6 +686,28 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           ({ screenName }: { screenName: string }) => screenName,
         ),
       ).toEqual(['Ana']);
+
+      // Public leaderboards: anyone may look, and a player who chose not to show is ranked under no name
+      await request(app.getHttpServer())
+        .put('/admin/features/public-leaderboard')
+        .set(admin)
+        .send({ enabled: true })
+        .expect(204);
+      const { body: open } = await request(app.getHttpServer())
+        .get('/v1/leaderboard/find-pairs')
+        .expect(200);
+      expect(open.boards[0]).toMatchObject({ players: 2, plays: 3 });
+      expect(
+        open.boards[0].entries.map(
+          ({ screenName }: { screenName: string | null }) => screenName,
+        ),
+      ).toEqual(['Ana', null]);
+      await request(app.getHttpServer())
+        .put('/admin/features/public-leaderboard')
+        .set(admin)
+        .send({ enabled: false })
+        .expect(204);
+
       await ben
         .patch('/v1/account')
         .send({ showOnLeaderboard: true })
@@ -699,6 +724,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       expect(after.boards[0].entries).toEqual([
         { place: 1, screenName: 'Ben', plays: 1, best: 18, isMe: false },
       ]);
+      expect(after.boards[0].me).toBeNull();
     });
 
     it('changes the screen name and password, resets a forgotten one, and deletes the account', async () => {

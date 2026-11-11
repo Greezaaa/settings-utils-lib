@@ -979,6 +979,7 @@ export const EU: SiteMessages = {
       'lively-fields': 'Formulario-eremu animatuak',
       'colours-page': 'Jokoaren kolore guztien orria',
       'room-rename': 'Izen berriaren botoia geletan',
+      'public-leaderboard': 'Sailkapena guztientzat (konturik gabe ere)',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1125,7 +1126,7 @@ export const EU: SiteMessages = {
     screenNameTipLabel: 'Izen ikusgaiari buruz',
     showOnLeaderboard: 'Erakutsi ni sailkapenetan',
     showOnLeaderboardHint:
-      'Beste jokalariek zure izen ikusgaia eta emaitza onenak ikusten dituzte. Desaktibatuta, zuk aktibatu arte; nahi duzunean alda dezakezu.',
+      'Sailkapenak irekitzen dituen edonork ikusten ditu zure izen ikusgaia eta emaitza onenak. Desaktibatuta, zuk aktibatu arte; bitartean, zure emaitzak izen misteriotsu batekin zenbatzen dira. Nahi duzunean alda dezakezu.',
     email: 'Helbide elektronikoa (hautazkoa)',
     emailHint: 'Pasahitza ahazten baduzu esteka bat bidaltzeko baino ez da erabiltzen. Beste inork ez du ikusten.',
     noEmailWarning: 'Helbiderik gabe, ahaztutako pasahitza ezin da berreskuratu: idatzi leku seguru batean.',
@@ -1199,5 +1200,11 @@ export const EU: SiteMessages = {
     you: 'zu',
     youreHidden: 'Ez zaude sailkapenetan.',
     changeInAccount: 'Aldatu zure kontuan',
+    mysteryPlayer: 'Jokalari misteriotsua',
+    totals: (players, plays) => `${players} jokalari · ${plays} partida`,
+    yourBest: (best) => `Zure emaitzarik onena: ${best}`,
+    wouldBePlace: (place) => `${place}. postuan egongo zinateke`,
+    yourPlace: (place) => `${place}. postuan zaude`,
+    joinText: 'Zure izena tauletan agertzea nahi duzu? Sortu kontu bat.',
   },
 };

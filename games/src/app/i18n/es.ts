@@ -992,6 +992,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'lively-fields': 'Campos de formulario animados',
       'colours-page': 'Página con todos los colores del juego',
       'room-rename': 'Botón de nombre nuevo en las salas',
+      'public-leaderboard': 'Clasificación para todos (también sin cuenta)',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:
@@ -1137,7 +1138,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     screenNameTipLabel: 'Sobre el nombre visible',
     showOnLeaderboard: 'Mostrarme en las clasificaciones',
     showOnLeaderboardHint:
-      'Los demás jugadores ven tu nombre visible y tus mejores resultados. Desactivado hasta que lo actives; puedes cambiarlo cuando quieras.',
+      'Todos los que abren las clasificaciones ven tu nombre visible y tus mejores resultados. Desactivado hasta que lo actives; mientras tanto, tus resultados cuentan con un nombre misterioso. Puedes cambiarlo cuando quieras.',
     email: 'Correo (opcional)',
     emailHint: 'Solo se usa para enviarte un enlace si olvidas la contraseña. Nadie más lo ve.',
     noEmailWarning: 'Sin correo, una contraseña olvidada no se puede recuperar: apúntala en un lugar seguro.',
@@ -1211,6 +1212,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     you: 'tú',
     youreHidden: 'No apareces en las clasificaciones.',
     changeInAccount: 'Cámbialo en tu cuenta',
+    mysteryPlayer: 'Jugador misterioso',
+    totals: (players, plays) => `${players} ${players === 1 ? 'jugador' : 'jugadores'} · ${plays} ${plays === 1 ? 'partida' : 'partidas'}`,
+    yourBest: (best) => `Tu mejor resultado: ${best}`,
+    wouldBePlace: (place) => `estarías en el puesto ${place}`,
+    yourPlace: (place) => `estás en el puesto ${place}`,
+    joinText: '¿Quieres salir con tu nombre en las tablas? Crea una cuenta.',
   },
 });
 

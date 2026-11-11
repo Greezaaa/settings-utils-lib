@@ -950,6 +950,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'lively-fields': 'Campi dei moduli animati',
       'colours-page': 'Pagina con tutti i colori del gioco',
       'room-rename': 'Pulsante nuovo nome nelle stanze',
+      'public-leaderboard': 'Classifica per tutti (anche senza account)',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:
@@ -1080,7 +1081,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
     screenNameTipLabel: 'Sul nome visibile',
     showOnLeaderboard: 'Mostrami nelle classifiche',
     showOnLeaderboardHint:
-      'Gli altri giocatori vedono il tuo nome visibile e i tuoi record. Disattivato finché non lo attivi; puoi cambiarlo quando vuoi.',
+      'Chiunque apra le classifiche vede il tuo nome visibile e i tuoi record. Disattivato finché non lo attivi; intanto i tuoi risultati contano con un nome misterioso. Puoi cambiarlo quando vuoi.',
     email: 'Email (facoltativa)',
     emailHint: 'Si usa solo per inviarti un link se dimentichi la password. Nessun altro la vede.',
     noEmailWarning: 'Senza email, una password dimenticata non si può recuperare: scrivila in un posto sicuro.',
@@ -1155,6 +1156,12 @@ export const italian = (gender: WordGender): SiteMessages => ({
     you: 'tu',
     youreHidden: 'Non compari nelle classifiche.',
     changeInAccount: 'Cambialo nel tuo account',
+    mysteryPlayer: 'Giocatore misterioso',
+    totals: (players, plays) => `${players} ${players === 1 ? 'giocatore' : 'giocatori'} · ${plays} ${plays === 1 ? 'partita' : 'partite'}`,
+    yourBest: (best) => `Il tuo miglior risultato: ${best}`,
+    wouldBePlace: (place) => `saresti al ${place}° posto`,
+    yourPlace: (place) => `sei al ${place}° posto`,
+    joinText: 'Vuoi il tuo nome nelle classifiche? Crea un account.',
   },
 });
 

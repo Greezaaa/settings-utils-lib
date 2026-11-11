@@ -19,7 +19,8 @@ export interface MyResult {
 
 export interface LeaderboardEntry {
   readonly place: number;
-  readonly screenName: string;
+  /** null for a player who chose not to show: ranked, but under no name */
+  readonly screenName: string | null;
   readonly plays: number;
   readonly best: number;
   readonly isMe: boolean;
@@ -27,7 +28,13 @@ export interface LeaderboardEntry {
 
 export interface Leaderboard {
   readonly key: string;
+  /** Everyone ranked on this board, and the games they finished, so visitors see how much it's played */
+  readonly players: number;
+  readonly plays: number;
+  /** The best players */
   readonly entries: LeaderboardEntry[];
+  /** The player asking, when they're ranked below the best players */
+  readonly me: LeaderboardEntry | null;
 }
 
 /** SQL keeping the better of the stored best and a new value; directions come from the catalog, never a request */
@@ -125,48 +132,62 @@ export class ResultsService {
   }
 
   /**
-   * A game's leaderboards: the best players for each of its settings, the most played settings first. Only players
-   * who chose to appear are ranked; the others don't count, not even for their own places.
+   * A game's leaderboards: the best players for each of its settings, the most played settings first, and the asking
+   * player's own place below them. Only players who chose to appear are ranked, unless `withHidden` (the public
+   * leaderboards): then everyone is, those who chose not to appear under no name.
    */
   async leaderboards(
     game: ResultGame,
-    playerId: string,
+    playerId: string | null,
+    withHidden: boolean,
   ): Promise<Leaderboard[]> {
     const order = RESULT_DIRECTIONS[game] === 'higher' ? 'DESC' : 'ASC';
     const rows: {
       key: string;
       place: string;
       screen_name: string;
+      shown: boolean;
       plays: number;
       best: number;
       player_id: string;
       players: string;
+      total_plays: string;
     }[] = await this.results.query(
       `SELECT * FROM (
-         SELECT r.key, r.plays, r.best, r.player_id, p.screen_name,
+         SELECT r.key, r.plays, r.best, r.player_id, p.screen_name, p.show_on_leaderboard AS shown,
                 ROW_NUMBER() OVER (PARTITION BY r.key ORDER BY r.best ${order}, r.updated ASC) AS place,
-                COUNT(*) OVER (PARTITION BY r.key) AS players
+                COUNT(*) OVER (PARTITION BY r.key) AS players,
+                SUM(r.plays) OVER (PARTITION BY r.key) AS total_plays
          FROM player_results r JOIN players p ON p.id = r.player_id
-         WHERE r.game = $1 AND p.show_on_leaderboard
+         WHERE r.game = $1 AND ($3 OR p.show_on_leaderboard)
        ) ranked
-       WHERE place <= $2
+       WHERE place <= $2 OR player_id = $4
        ORDER BY players DESC, key ASC, place ASC`,
-      [game, LEADERBOARD_SIZE],
+      [game, LEADERBOARD_SIZE, withHidden, playerId],
     );
-    const boards = new Map<string, LeaderboardEntry[]>();
+    const boards = new Map<string, Leaderboard>();
     for (const row of rows) {
-      const entries = boards.get(row.key) ?? [];
-      entries.push({
+      const board = boards.get(row.key) ?? {
+        key: row.key,
+        players: Number(row.players),
+        plays: Number(row.total_plays),
+        entries: [],
+        me: null,
+      };
+      const entry: LeaderboardEntry = {
         place: Number(row.place),
-        screenName: row.screen_name,
+        screenName: row.shown ? row.screen_name : null,
         plays: row.plays,
         best: row.best,
         isMe: row.player_id === playerId,
-      });
-      boards.set(row.key, entries);
+      };
+      boards.set(
+        row.key,
+        entry.place <= LEADERBOARD_SIZE
+          ? { ...board, entries: [...board.entries, entry] }
+          : { ...board, me: entry },
+      );
     }
-    return [...boards]
-      .slice(0, MAX_BOARDS)
-      .map(([key, entries]) => ({ key, entries }));
+    return [...boards.values()].slice(0, MAX_BOARDS);
   }
 }

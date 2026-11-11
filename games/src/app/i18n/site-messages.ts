@@ -826,5 +826,15 @@ export interface SiteMessages {
     /** For a signed-in player who chose not to appear */
     readonly youreHidden: string;
     readonly changeInAccount: string;
+    /** In place of the name of a player who chose not to appear (public leaderboards) */
+    readonly mysteryPlayer: string;
+    /** Everyone ranked on a board and the games they finished, e.g. `12 players · 40 games played` */
+    readonly totals: (players: number, plays: number) => string;
+    /** The visitor's own best on a board, never added to it; with the place it would have or has */
+    readonly yourBest: (best: string) => string;
+    readonly wouldBePlace: (place: number) => string;
+    readonly yourPlace: (place: number) => string;
+    /** For signed-out visitors of the public leaderboards */
+    readonly joinText: string;
   };
 }

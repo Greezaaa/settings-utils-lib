@@ -10,13 +10,18 @@
 <section class="container page-section">
   @if (!account.isRestored()) {
     <p class="muted">{{ 'leaderboard.loading' | translate }}</p>
-  } @else if (!account.isSignedIn()) {
+  } @else if (!canSee()) {
     <p>{{ 'leaderboard.signInFirst' | translate }}</p>
     <p>
       <a class="button" routerLink="/account">{{ 'leaderboard.signInLink' | translate }}</a>
     </p>
   } @else {
-    @if (!account.account()?.showOnLeaderboard) {
+    @if (!account.isSignedIn()) {
+      <p class="join">
+        {{ 'leaderboard.joinText' | translate }}
+        <a class="button button-small" routerLink="/account">{{ 'leaderboard.signInLink' | translate }}</a>
+      </p>
+    } @else if (!account.account()?.showOnLeaderboard) {
       <p class="muted">
         {{ 'leaderboard.youreHidden' | translate }}
         <a routerLink="/account">{{ 'leaderboard.changeInAccount' | translate }}</a>
@@ -43,7 +48,10 @@
     } @else if (isList(current)) {
       @for (board of current; track board.key) {
         <div class="board-table">
-          <h2 class="card-title">{{ boardLabel(messages(), game(), board.key) }}</h2>
+          <div class="board-head">
+            <h2 class="card-title">{{ boardLabel(messages(), game(), board.key) }}</h2>
+            <small class="muted">{{ 'leaderboard.totals' | translate: board.players : board.plays }}</small>
+          </div>
           <div class="table-scroll">
             <table>
               <thead>
@@ -59,7 +67,11 @@
                   <tr [class.is-me]="entry.isMe">
                     <td class="number">{{ entry.place }}</td>
                     <th scope="row">
-                      {{ entry.screenName }}
+                      @if (entry.screenName; as name) {
+                        {{ name }}
+                      } @else {
+                        <span class="mystery"><span aria-hidden="true">🎭</span> {{ 'leaderboard.mysteryPlayer' | translate }}</span>
+                      }
                       @if (entry.isMe) {
                         <span class="muted">({{ 'leaderboard.you' | translate }})</span>
                       }
@@ -71,6 +83,15 @@
               </tbody>
             </table>
           </div>
+          @if (yourScores().get(board.key); as mine) {
+            <p class="your-score">
+              {{ 'leaderboard.yourBest' | translate: bestText(messages(), game(), mine.best) }}
+              @if (mine.place) {
+                ·
+                {{ mine.isRanked ? ('leaderboard.yourPlace' | translate: mine.place) : ('leaderboard.wouldBePlace' | translate: mine.place) }}
+              }
+            </p>
+          }
         </div>
       } @empty {
         <p class="muted">{{ 'leaderboard.empty' | translate }}</p>

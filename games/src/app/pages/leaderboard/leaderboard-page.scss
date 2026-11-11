@@ -9,3 +9,32 @@
   background: var(--subtle);
   font-weight: 600;
 }
+
+.board-head {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.mystery {
+  color: var(--muted);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+// The visitor's own best, under the table and never in it
+.your-score {
+  background: var(--green-bg);
+  border-radius: var(--radius);
+  color: var(--green-text);
+  font-size: 0.875rem;
+  justify-self: start;
+  padding: 0.375rem 0.75rem;
+}
+
+// Signed-out visitors: an invitation to get their name on the tables
+.join {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

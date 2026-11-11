@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { FeatureFlagsModule } from '../feature-flags/feature-flags.module.js';
 import {
   AccountsController,
   LeaderboardController,
@@ -14,7 +15,10 @@ import { ResultsService } from './results.service.js';
 
 /** Player accounts, their results and the leaderboards */
 @Module({
-  imports: [TypeOrmModule.forFeature([Player, PlayerSession, PlayerResult])],
+  imports: [
+    TypeOrmModule.forFeature([Player, PlayerSession, PlayerResult]),
+    FeatureFlagsModule,
+  ],
   controllers: [AccountsController, LeaderboardController],
   providers: [AccountsService, ResultsService, Mailer, PlayerGuard],
 })

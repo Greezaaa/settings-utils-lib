@@ -1011,6 +1011,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'lively-fields': 'Анімовані поля форм',
       'colours-page': 'Сторінка з усіма кольорами гри',
       'room-rename': 'Кнопка нового імені в кімнатах',
+      'public-leaderboard': 'Таблиця лідерів для всіх (і без облікового запису)',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:
@@ -1153,7 +1154,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     screenNameTipLabel: 'Про ім’я в грі',
     showOnLeaderboard: 'Показувати мене в таблицях лідерів',
     showOnLeaderboardHint:
-      'Інші гравці бачать твоє ім’я в грі та найкращі результати. Вимкнено, доки ти не ввімкнеш; змінити можна будь-коли.',
+      'Усі, хто відкриває таблиці лідерів, бачать твоє ім’я в грі та найкращі результати. Вимкнено, доки ти не ввімкнеш; тим часом твої результати рахуються під таємним ім’ям. Змінити можна будь-коли.',
     email: 'Електронна пошта (необов’язково)',
     emailHint: 'Потрібна лише щоб надіслати тобі посилання, якщо забудеш пароль. Її ніхто інший не бачить.',
     noEmailWarning: 'Без пошти забутий пароль не можна відновити: запиши його в надійному місці.',
@@ -1227,6 +1228,12 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     you: 'ти',
     youreHidden: 'Тебе немає в таблицях лідерів.',
     changeInAccount: 'Зміни це у своєму обліковому записі',
+    mysteryPlayer: 'Таємний гравець',
+    totals: (players, plays) => `Гравців: ${players} · Ігор: ${plays}`,
+    yourBest: (best) => `Твій найкращий результат: ${best}`,
+    wouldBePlace: (place) => `твоє місце було б ${place}`,
+    yourPlace: (place) => `твоє місце: ${place}`,
+    joinText: 'Хочеш, щоб твоє ім’я було в таблицях? Створи обліковий запис.',
   },
 });
 

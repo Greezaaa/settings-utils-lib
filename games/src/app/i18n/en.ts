@@ -953,6 +953,7 @@ export const EN: SiteMessages = {
       'lively-fields': 'Animated form fields',
       'colours-page': 'Page with every game colour',
       'room-rename': 'New name button in rooms',
+      'public-leaderboard': 'Leaderboard for everyone (also signed out)',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:
@@ -1093,7 +1094,7 @@ export const EN: SiteMessages = {
     screenNameTipLabel: 'About the screen name',
     showOnLeaderboard: 'Show me on the leaderboards',
     showOnLeaderboardHint:
-      'Other players see your screen name and best results. Off until you turn it on; you can change it any time.',
+      'Everyone who opens the leaderboards sees your screen name and best results. Off until you turn it on; while it’s off, your results still count under a mystery name. You can change it any time.',
     email: 'Email (optional)',
     emailHint: 'Only used to send you a link if you forget your password. Nobody else sees it.',
     noEmailWarning: 'Without an email, a forgotten password can’t be reset: write it down somewhere safe.',
@@ -1167,5 +1168,11 @@ export const EN: SiteMessages = {
     you: 'you',
     youreHidden: 'You don’t appear on the leaderboards.',
     changeInAccount: 'Change it in your account',
+    mysteryPlayer: 'Mystery player',
+    totals: (players, plays) => `${players} ${players === 1 ? 'player' : 'players'} · ${plays} ${plays === 1 ? 'game' : 'games'} played`,
+    yourBest: (best) => `Your best: ${best}`,
+    wouldBePlace: (place) => `you’d be number ${place}`,
+    yourPlace: (place) => `you’re number ${place}`,
+    joinText: 'Want your name on the tables? Make an account.',
   },
 };

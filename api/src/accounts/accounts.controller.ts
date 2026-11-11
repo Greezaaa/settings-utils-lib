@@ -16,14 +16,17 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import { z } from 'zod';
 import {
   clearSessionCookie,
   PLAYER_COOKIE,
   readCookie,
+  sessionToken,
   setSessionCookie,
 } from '../auth/session-cookie.js';
+import { AuthService } from '../auth/auth.service.js';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service.js';
 import type { Env } from '../config/env.js';
 import type { ResultGame } from '../shared/catalog.js';
 import { resultGameSchema } from '../shared/catalog.js';
@@ -289,17 +292,42 @@ export class AccountsController {
   }
 }
 
-/** The leaderboards, for signed-in players only: screen names, games finished and best results; nothing else */
+/**
+ * The leaderboards: screen names of the players who chose to show, games finished and best results; nothing else.
+ * Signed-in players only, until the admin opens `public-leaderboard` (or previews it): then anyone may look, and players
+ * who chose not to show are ranked too, under no name.
+ */
 @Controller('v1/leaderboard')
-@UseGuards(PlayerGuard)
 export class LeaderboardController {
-  constructor(private readonly results: ResultsService) {}
+  constructor(
+    private readonly results: ResultsService,
+    private readonly accounts: AccountsService,
+    private readonly flags: FeatureFlagsService,
+    private readonly auth: AuthService,
+  ) {}
 
   @Get(':game')
   async boards(
-    @Req() { player }: PlayerRequest,
+    @Req() request: Request,
     @Param('game', { schema: resultGameSchema }) game: ResultGame,
   ): Promise<{ boards: Leaderboard[] }> {
-    return { boards: await this.results.leaderboards(game, player?.id ?? '') };
+    const token = readCookie(request, PLAYER_COOKIE);
+    const player = token ? await this.accounts.playerForToken(token) : null;
+    const isPublic = await this.isPublic(request);
+    if (!player && !isPublic) {
+      throw new UnauthorizedException();
+    }
+    return {
+      boards: await this.results.leaderboards(game, player?.id ?? null, isPublic),
+    };
+  }
+
+  /** Open to everyone: switched on, or the admin trying it in preview */
+  private async isPublic(request: Request): Promise<boolean> {
+    if (await this.flags.isOn('public-leaderboard')) {
+      return true;
+    }
+    const adminToken = sessionToken(request);
+    return adminToken !== null && (await this.auth.adminForToken(adminToken)) !== null;
   }
 }

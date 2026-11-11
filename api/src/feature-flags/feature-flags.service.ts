@@ -23,6 +23,11 @@ export class FeatureFlagsService {
     return rows.map(({ feature, enabled }) => ({ feature, enabled }));
   }
 
+  /** Whether the admin opened a feature; one never switched counts as closed, as every new feature starts closed */
+  async isOn(feature: FeatureId): Promise<boolean> {
+    return (await this.flags.findOneBy({ feature }))?.enabled ?? false;
+  }
+
   async set(
     feature: FeatureId,
     enabled: boolean,

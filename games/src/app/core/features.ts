@@ -22,7 +22,8 @@ export type FeatureId =
   | 'leaderboard'
   | 'lively-fields'
   | 'colours-page'
-  | 'room-rename';
+  | 'room-rename'
+  | 'public-leaderboard';
 
 /** Games playable in rooms, each with its multiplayer switch */
 export type RoomGame = Extract<
@@ -73,6 +74,8 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'colours-page', openByDefault: false },
   /** A button on a player's own avatar in a room that asks for another random nickname */
   { id: 'room-rename', openByDefault: false },
+  /** Leaderboards anyone can see, signed in or not; players who chose not to appear are ranked under a mystery name */
+  { id: 'public-leaderboard', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);
