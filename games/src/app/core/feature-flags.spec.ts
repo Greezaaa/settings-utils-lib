@@ -32,19 +32,15 @@ function flagsWith(features: FeatureSwitch[]): { flags: FeatureFlags; availabili
 describe('FeatureFlags', () => {
   afterEach(() => localStorage.clear());
 
-  it('keeps new features closed until the admin opens them, and hides everything until known', async () => {
-    const closed = flagsWith([]);
-    expect(closed.flags.canUse('rooms')).toBe(false);
+  it('shows the defaults until the switches arrive, then the admin\'s choice', async () => {
+    const closed = flagsWith([{ feature: 'rooms', enabled: false }]);
+    expect(closed.flags.canUse('rooms')).toBe(true);
     await closed.flags.ready();
     expect(closed.flags.canUse('rooms')).toBe(false);
-
-    const opened = flagsWith([{ feature: 'rooms', enabled: true }]);
-    await opened.flags.ready();
-    expect(opened.flags.canUse('rooms')).toBe(true);
   });
 
   it('lets testers and the super admin use closed features in preview', async () => {
-    const { flags, availability } = flagsWith([]);
+    const { flags, availability } = flagsWith([{ feature: 'rooms', enabled: false }]);
     await flags.ready();
     availability.setPreview(true);
     expect(flags.canUse('rooms')).toBe(true);
@@ -52,7 +48,7 @@ describe('FeatureFlags', () => {
   });
 
   it('keeps a game in rooms apart from rooms themselves', async () => {
-    const { flags } = flagsWith([{ feature: 'rooms', enabled: true }]);
+    const { flags } = flagsWith([{ feature: 'rooms-math-games', enabled: false }]);
     await flags.ready();
     expect(flags.canUse('rooms')).toBe(true);
     expect(flags.canUse('rooms-math-games')).toBe(false);

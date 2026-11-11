@@ -31,18 +31,27 @@ export const LANGUAGE_IDS: readonly LanguageId[] = [
 
 const LANGUAGE_STORAGE = 'language';
 
+/**
+ * The language prerendered pages are built in, matching their titles and descriptions for search engines; most players
+ * are Spanish kids. In the browser the site then switches to the visitor's language.
+ */
+export const PRERENDER_LANGUAGE: LanguageId = 'es';
+
+/** A language's texts in the forms used until the player chooses (the boy's) */
+export const messagesIn = (id: LanguageId): SiteMessages => MESSAGES[id]('boy');
+
 const isLanguageId = (value: unknown): value is LanguageId =>
   LANGUAGE_IDS.some(id => id === value);
 
 /**
  * The language the whole games site is shown in: header, footer and every page.
- * Starts in English, so prerendered HTML is English, then switches to the visitor's saved choice
+ * Starts in PRERENDER_LANGUAGE, like the prerendered HTML, then switches to the visitor's saved choice
  * or, on a first visit, to the browser's language when it is one of ours.
  */
 @Injectable({ providedIn: 'root' })
 export class SiteLanguage {
   private readonly document = inject(DOCUMENT);
-  private readonly languageId = signal<LanguageId>('en');
+  private readonly languageId = signal<LanguageId>(PRERENDER_LANGUAGE);
   private readonly gender = inject(PlayerGender);
 
   readonly language = this.languageId.asReadonly();
@@ -64,11 +73,11 @@ export class SiteLanguage {
   }
 
   nameOf(id: LanguageId): string {
-    return MESSAGES[id]('boy').languageName;
+    return messagesIn(id).languageName;
   }
 
   codeOf(id: LanguageId): string {
-    return MESSAGES[id]('boy').languageCode;
+    return messagesIn(id).languageCode;
   }
 }
 

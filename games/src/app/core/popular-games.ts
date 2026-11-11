@@ -24,6 +24,14 @@ export function popularGames(
 export const MOST_PLAYED_LIMIT = 4;
 
 /**
+ * Always `count` games when there are enough: the most played first, then the rest in site order. The section keeps
+ * its size from the prerendered page on, so the page doesn't jump when the play counts arrive.
+ */
+export function toppedUp(mostPlayed: readonly GameSlug[], all: readonly GameSlug[], count = MOST_PLAYED_LIMIT): GameSlug[] {
+  return [...new Set([...mostPlayed, ...all])].slice(0, count);
+}
+
+/**
  * From the API's play counts: the games to mark "Popular", and the most played ones for the home page; none when the
  * API can't be reached
  */

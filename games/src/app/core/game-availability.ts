@@ -12,9 +12,9 @@ const PREVIEW_STORAGE = 'admin-preview';
  * off from the admin page, stored in the API. Hidden games leave the lists and their pages send visitors home,
  * except in preview mode: the super admin's and testers' way to try them.
  *
- * Until the switches are known no game shows, so a game the admin switched off never flashes on screen (prerendered
- * pages list none either). When the API can't be reached, the defaults apply once it gives up. The site shell starts
- * loading after its first render; game pages wait for it.
+ * Until the switches are known the games open by default show, so prerendered pages list them and nothing jumps when
+ * the switches arrive; keep the defaults in step with the live switches, so the lists rarely change then. When the API
+ * can't be reached, the defaults stay. The site shell starts loading after its first render.
  */
 @Injectable({ providedIn: 'root' })
 export class GameAvailability {
@@ -24,20 +24,17 @@ export class GameAvailability {
   private loading: Promise<void> | null = null;
 
   readonly isPreview = signal(false);
-  /** Whether the switches are known (or the API gave up and the defaults apply); until then no game shows */
+  /** Whether the switches are known (or the API gave up and the defaults apply) */
   readonly isKnown = signal(false);
 
   readonly openGames = computed<readonly GameSlug[]>(() =>
     GAMES.filter(({ slug, openByDefault }) => this.switches().get(slug) ?? openByDefault).map(({ slug }) => slug),
   );
 
-  /** Games this visitor sees: none until the switches are known, then the open ones, or all of them in preview */
-  readonly visibleGames = computed<readonly GameSlug[]>(() => {
-    if (!this.isKnown()) {
-      return [];
-    }
-    return this.isPreview() ? GAMES.map(({ slug }) => slug) : this.openGames();
-  });
+  /** Games this visitor sees: the open ones (the defaults until the switches are known), or all of them in preview */
+  readonly visibleGames = computed<readonly GameSlug[]>(() =>
+    this.isPreview() ? GAMES.map(({ slug }) => slug) : this.openGames(),
+  );
 
   isOpen(game: GameSlug): boolean {
     return this.openGames().includes(game);

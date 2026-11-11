@@ -4,7 +4,7 @@ import { GameAvailability } from '../../core/game-availability';
 import { FavoriteGames } from '../../core/favorite-games';
 import { byCategory, GameSlug } from '../../core/games';
 import { recentlyAdded } from '../../core/new-games';
-import { PopularGames } from '../../core/popular-games';
+import { PopularGames, toppedUp } from '../../core/popular-games';
 import { GameCard } from '../../shared/game-card/game-card';
 import { RouterLink } from '@angular/router';
 import { WhatsNew } from './whats-new/whats-new';
@@ -34,7 +34,9 @@ export class HomePage {
   private readonly favoriteGames = inject(FavoriteGames).games;
   private readonly mostPlayed = inject(PopularGames).mostPlayed;
   protected readonly favorites = computed(() => this.visible(this.favoriteGames()));
-  protected readonly popular = computed(() => this.visible(this.mostPlayed()));
+  protected readonly popular = computed(() =>
+    toppedUp(this.visible(this.mostPlayed()), this.availability.visibleGames()),
+  );
   protected readonly recent = computed(() => this.visible(recentlyAdded()).slice(0, RECENT_LIMIT));
 
   /** The games of a list that are open (or all of them, in preview) */

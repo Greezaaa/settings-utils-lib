@@ -1,4 +1,4 @@
-/** Public address of the games site, without a trailing slash (also used in index.html and robots.txt) */
+/** Public address of the games site, without a trailing slash (also used in robots.txt) */
 export const SITE_URL = 'https://games.su-labs.dev';
 
 /** Image shown when a page is shared (1200x630, in games/public) */
@@ -11,6 +11,8 @@ export const SITE_PREVIEW_IMAGE = {
   type: 'image/png',
 } as const;
 
+/** Named as the author of every game in the structured data */
+export const AUTHOR_NAME = 'Yevheniy Alekseyev';
 export const AUTHOR_EMAIL_URL = 'mailto:yev.alekseyev@gmail.com';
 
 /**

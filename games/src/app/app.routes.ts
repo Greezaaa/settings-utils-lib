@@ -1,7 +1,7 @@
 import { Route, Routes } from '@angular/router';
 import { featureGuard } from './core/feature-guard';
 import { gameAvailableGuard } from './core/game-guard';
-import { GAME_CATEGORIES, GameSlug } from './core/games';
+import { GAME_CATEGORIES, gameInfo, GameSlug } from './core/games';
 import { ADMIN_INVITE_PATH, ADMIN_PATH } from './core/links';
 import { PREVIEW_MESSAGES, SITE_META, SITE_NAME } from './core/page-meta';
 
@@ -19,14 +19,17 @@ const {
   leaderboard,
 } = PREVIEW_MESSAGES;
 
-/** Page title and description of a game, for search results and link previews; the page opens only when the game does */
+/**
+ * Page title and description of a game, for search results and link previews; the page opens only when the game does.
+ * A game closed by default stays out of search results, as its page sends visitors home.
+ */
 function gameMeta(
   slug: GameSlug
 ): Pick<Route, 'title' | 'data' | 'canActivate'> {
   const { name, subtitle, intro, summary } = games[slug];
   return {
     title: `${name}: ${subtitle} · ${SITE_NAME}`,
-    data: { description: `${intro} ${summary}` },
+    data: { description: `${intro} ${summary}`, game: slug, noIndex: !gameInfo(slug).openByDefault },
     canActivate: [gameAvailableGuard(slug)],
   };
 }

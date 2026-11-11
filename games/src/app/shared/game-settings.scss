@@ -47,6 +47,14 @@
 
 .start {
   min-width: 10rem;
+
+  // Phones: the settings are taller than the screen, so Start waits at its bottom edge while they scroll by
+  @media (max-width: 47.99rem) {
+    bottom: 1rem;
+    box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 35%);
+    position: sticky;
+    z-index: 1;
+  }
 }
 
 .status {

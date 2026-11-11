@@ -30,14 +30,14 @@ describe('GameAvailability', () => {
   afterEach(() => localStorage.clear());
 
   it('opens the games open by default until the admin switches them', async () => {
-    const availability = availabilityWith([{ game: 'hit-the-note', enabled: false }]);
-    // Nothing shows until the switches are known, so a closed game never flashes on screen
-    expect(availability.visibleGames()).toEqual([]);
-    expect(availability.canPlay('math-games')).toBe(false);
+    const availability = availabilityWith([{ game: 'sliding-puzzle', enabled: false }]);
+    // Before the switches arrive the defaults show, so prerendered pages list the usual games
+    expect(availability.canPlay('sliding-puzzle')).toBe(true);
+    expect(availability.canPlay('how-many')).toBe(false);
     await availability.ready();
     expect(availability.canPlay('math-games')).toBe(true);
-    expect(availability.isOpen('hit-the-note')).toBe(false);
-    expect(availability.canPlay('hit-the-note')).toBe(false);
+    expect(availability.isOpen('sliding-puzzle')).toBe(false);
+    expect(availability.canPlay('sliding-puzzle')).toBe(false);
     expect(availability.visibleGames()).toHaveLength(GAMES.filter((game) => game.openByDefault).length - 1);
   });
 
@@ -48,11 +48,11 @@ describe('GameAvailability', () => {
   });
 
   it('shows every game in preview to testers, and remembers it for them', async () => {
-    const availability = availabilityWith([{ game: 'hit-the-note', enabled: false }], 'tester');
+    const availability = availabilityWith([{ game: 'sliding-puzzle', enabled: false }], 'tester');
     await availability.ready();
     availability.setPreview(true);
-    expect(availability.canPlay('hit-the-note')).toBe(true);
-    expect(availability.isOpen('hit-the-note')).toBe(false);
+    expect(availability.canPlay('sliding-puzzle')).toBe(true);
+    expect(availability.isOpen('sliding-puzzle')).toBe(false);
 
     const later = availabilityWith([], 'tester');
     await later.ready();

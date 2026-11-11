@@ -1,25 +1,29 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, TitleStrategy } from '@angular/router';
-import { ES } from '../i18n/es';
+import { messagesIn, PRERENDER_LANGUAGE } from '../i18n/site-language';
 import { SiteMessages } from '../i18n/site-messages';
+import { GameSlug } from './games';
+import { isGameSlug } from './games-api';
 import { SITE_PREVIEW_IMAGE, SITE_PREVIEW_IMAGE_URL, SITE_URL } from './links';
+import { structuredData } from './structured-data';
 
 /** Search and link-preview data of a page, set as route `data` */
 export interface PageMeta {
   readonly description: string;
   /** Keep the page out of search results, e.g. the not-found page */
   readonly noIndex?: boolean;
+  /** A game's own page */
+  readonly game?: GameSlug;
 }
 
 export const SITE_NAME = 'su-labs games';
 
 /**
- * Language of search results and link previews (page titles, descriptions, preview image text).
- * Spanish for now, as most players are Spanish kids; the site itself still opens in each visitor's language.
- * The preview image (public/og-image.png) is drawn in this language too.
+ * Language of search results and link previews (page titles, descriptions, preview image text): the prerendered
+ * pages' language. The preview image (public/og-image.png) is drawn in this language too.
  */
-export const PREVIEW_MESSAGES: SiteMessages = ES;
+export const PREVIEW_MESSAGES: SiteMessages = messagesIn(PRERENDER_LANGUAGE);
 
 const SITE_DESCRIPTION = PREVIEW_MESSAGES.seo.siteDescription;
 
@@ -38,7 +42,7 @@ export class PageMetaStrategy extends TitleStrategy {
 
   override updateTitle(snapshot: RouterStateSnapshot): void {
     const title = this.buildTitle(snapshot) ?? SITE_NAME;
-    const { description, noIndex } = deepestMeta(snapshot.root);
+    const { description, noIndex, game } = deepestMeta(snapshot.root);
     const url = canonicalUrl(snapshot.url);
 
     this.title.setTitle(title);
@@ -73,6 +77,17 @@ export class PageMetaStrategy extends TitleStrategy {
       const attribute = key.startsWith('og:') ? 'property' : 'name';
       this.meta.updateTag({ [attribute]: key, content }, `${attribute}="${key}"`);
     }
+    this.setStructuredData(structuredData(PREVIEW_MESSAGES, SITE_NAME, game));
+  }
+
+  private setStructuredData(data: object): void {
+    let script = this.document.head.querySelector<HTMLScriptElement>('script[type="application/ld+json"]');
+    if (!script) {
+      script = this.document.createElement('script');
+      script.type = 'application/ld+json';
+      this.document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(data);
   }
 
   private setCanonical(url: string): void {
@@ -91,8 +106,13 @@ function deepestMeta(route: ActivatedRouteSnapshot): PageMeta {
   let meta: PageMeta = SITE_META;
   for (let current: ActivatedRouteSnapshot | null = route; current; current = current.firstChild) {
     const description: unknown = current.data['description'];
+    const game: unknown = current.data['game'];
     if (typeof description === 'string') {
-      meta = { description, noIndex: current.data['noIndex'] === true };
+      meta = {
+        description,
+        noIndex: current.data['noIndex'] === true,
+        game: typeof game === 'string' && isGameSlug(game) ? game : undefined,
+      };
     }
   }
   return meta;

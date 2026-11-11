@@ -8,7 +8,7 @@ import { SuThemeName } from '@su-labs/theme';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { PlayerAccount } from './core/player-account';
-import { byCategory, gameOfPath } from './core/games';
+import { byCategory, gameInfo, gameOfPath } from './core/games';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
 import { ANSWER_STYLES, AnswerWords } from './core/answer-words';
 import { MENU_ANIMATION_CHOICES, MenuAnimation } from './core/menu-animation';
@@ -71,8 +71,11 @@ export class App {
   protected readonly account = inject(PlayerAccount);
   /** The game of the page being shown, from the address (known while prerendering and on the first render too) */
   private readonly pageGame = signal(gameOfPath(inject(DOCUMENT).location.pathname));
-  /** A game's page waits, hidden, until it's sure the game is open; then it shows or the visitor goes home */
-  protected readonly isCheckingGame = computed(() => this.pageGame() !== null && !this.availability.isKnown());
+  /** A game closed by default waits, hidden, until it's sure the game is open; then it shows or the visitor goes home */
+  protected readonly isCheckingGame = computed(() => {
+    const game = this.pageGame();
+    return game !== null && !this.availability.isKnown() && !gameInfo(game).openByDefault;
+  });
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
 

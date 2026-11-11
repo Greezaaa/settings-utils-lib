@@ -2,7 +2,7 @@ import { GameSlug } from './games';
 
 /**
  * Features the admin switches on or off for the public from the admin page, like the games. Every new feature gets a
- * switch here, off by default (`openByDefault: false`), so it can be built and tried in preview before anyone sees it.
+ * switch here, off by default (`openByDefault: true`), so it can be built and tried in preview before anyone sees it.
  * Each game playable in rooms has its own multiplayer switch (`rooms-<game>`), apart from its single-player one.
  * Keep in sync with FEATURE_IDS in api/src/shared/catalog.ts (its tests check).
  */
@@ -41,29 +41,29 @@ export interface FeatureInfo {
 }
 
 export const FEATURES: readonly FeatureInfo[] = [
-  { id: 'rooms', openByDefault: false },
-  { id: 'rooms-math-games', openByDefault: false, roomGame: 'math-games' },
-  { id: 'rooms-measure-it', openByDefault: false, roomGame: 'measure-it' },
-  { id: 'rooms-letter-games', openByDefault: false, roomGame: 'letter-games' },
+  { id: 'rooms', openByDefault: true },
+  { id: 'rooms-math-games', openByDefault: true, roomGame: 'math-games' },
+  { id: 'rooms-measure-it', openByDefault: true, roomGame: 'measure-it' },
+  { id: 'rooms-letter-games', openByDefault: true, roomGame: 'letter-games' },
   {
     id: 'rooms-sliding-puzzle',
-    openByDefault: false,
+    openByDefault: true,
     roomGame: 'sliding-puzzle',
   },
-  { id: 'rooms-turn-picture', openByDefault: false, roomGame: 'turn-picture' },
-  { id: 'rooms-place-pieces', openByDefault: false, roomGame: 'place-pieces' },
+  { id: 'rooms-turn-picture', openByDefault: true, roomGame: 'turn-picture' },
+  { id: 'rooms-place-pieces', openByDefault: true, roomGame: 'place-pieces' },
   /** The header setting to show answers in words too, not only colours */
-  { id: 'answer-words', openByDefault: false },
+  { id: 'answer-words', openByDefault: true },
   /** The header setting to be spoken to as a boy or a girl, for the languages whose words change with it */
-  { id: 'word-gender', openByDefault: false },
+  { id: 'word-gender', openByDefault: true },
   /** A playful ring in the header menu that drifts after the pointer and frames the link it reaches */
-  { id: 'menu-ring', openByDefault: false },
+  { id: 'menu-ring', openByDefault: true },
   /** The header lists the categories (each with its page of games) instead of every game */
-  { id: 'category-menu', openByDefault: false },
+  { id: 'category-menu', openByDefault: true },
   /** Player accounts: sign in on any device, keeping favourites and best results */
-  { id: 'accounts', openByDefault: false },
+  { id: 'accounts', openByDefault: true },
   /** Leaderboards for signed-in players (needs accounts) */
-  { id: 'leaderboard', openByDefault: false },
+  { id: 'leaderboard', openByDefault: true },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

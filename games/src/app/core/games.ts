@@ -27,7 +27,8 @@ export interface GameInfo {
   readonly minAge: number;
   /**
    * Whether the game is open to the public until the admin switches it (see GameAvailability), and whenever the API
-   * can't be reached. Add a new game with `false` to try it in preview before opening it.
+   * can't be reached. Add a new game with `false` to try it in preview before opening it; once it's open to the public,
+   * set `true`, so prerendered pages (which list the defaults) match what visitors get.
    */
   readonly openByDefault: boolean;
   /** A small picture of the game, for lists like the room's choice of game */
@@ -47,14 +48,14 @@ export const GAMES: readonly GameInfo[] = [
     slug: 'measure-it',
     category: 'numbers',
     minAge: 7,
-    openByDefault: false,
+    openByDefault: true,
     icon: '📐',
   },
   {
     slug: 'climb-tower',
     category: 'numbers',
     minAge: 6,
-    openByDefault: false,
+    openByDefault: true,
     icon: '🧗',
   },
   {
@@ -68,7 +69,7 @@ export const GAMES: readonly GameInfo[] = [
     slug: 'hit-the-note',
     category: 'music',
     minAge: 4,
-    openByDefault: true,
+    openByDefault: false,
     icon: '🎵',
   },
   {
@@ -96,7 +97,7 @@ export const GAMES: readonly GameInfo[] = [
     slug: 'find-pairs',
     category: 'puzzles',
     minAge: 4,
-    openByDefault: false,
+    openByDefault: true,
     icon: '🃏',
   },
   {
