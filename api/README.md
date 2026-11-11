@@ -5,15 +5,15 @@ suggestions. No accounts and no personal data; visitor addresses are only held i
 
 ## Endpoints
 
-| Method | Path | What |
-| --- | --- | --- |
-| GET | `/health` | API and database are up |
-| POST | `/v1/plays` | `{ game }`: one more play today |
-| GET | `/v1/plays` | Plays per game in the last 30 days |
-| POST | `/v1/feedback` | `{ game, vote: up\|down, reason?, language }`, preset reasons only |
-| POST | `/v1/word-reports` | `{ word, language }`: report a rude word |
-| GET | `/v1/word-reports/hidden?language=` | Words that don't count (approved, or reported 3+ times and pending) |
-| POST | `/v1/suggestions` | Multipart: `category`, `text`, `language`, `turnstileToken?`, `image?` |
+| Method | Path                                | What                                                                   |
+| ------ | ----------------------------------- | ---------------------------------------------------------------------- |
+| GET    | `/health`                           | API and database are up                                                |
+| POST   | `/v1/plays`                         | `{ game }`: one more play today                                        |
+| GET    | `/v1/plays`                         | Plays per game in the last 30 days                                     |
+| POST   | `/v1/feedback`                      | `{ game, vote: up\|down, reason?, language }`, preset reasons only     |
+| POST   | `/v1/word-reports`                  | `{ word, language }`: report a rude word                               |
+| GET    | `/v1/word-reports/hidden?language=` | Words that don't count (approved, or reported 3+ times and pending)    |
+| POST   | `/v1/suggestions`                   | Multipart: `category`, `text`, `language`, `turnstileToken?`, `image?` |
 
 Admin sign-in (a 30-day HttpOnly session cookie): `POST /auth/login` (`{ email, password }`), `GET /auth/me`,
 `POST /auth/logout`, `POST /auth/password` (`{ current, next }`), `GET`/`POST /auth/invite/:secret` (accept an invite
@@ -35,8 +35,7 @@ DATABASE_URL=postgres://postgres:dev@localhost:55432/postgres ADMIN_TOKEN=$(open
   CORS_ORIGINS=http://localhost:4310 UPLOADS_DIR=./uploads COOKIE_SECURE=false npm run start:dev
 ```
 
-- `npm test`: unit tests. `TEST_DATABASE_URL=… npm run test:e2e`: the whole API against a real database (its tables
-  are dropped afterwards).
+- `npm test`: unit tests. `TEST_DATABASE_URL=… npm run test:e2e`: the whole API against a real database (its tables are dropped afterwards).
 - Tables only change through migrations in `src/database/migrations/`, which run when the API starts.
 
 ## Rooms (rooms.su-labs.dev)
@@ -44,8 +43,8 @@ DATABASE_URL=postgres://postgres:dev@localhost:55432/postgres ADMIN_TOKEN=$(open
 Multiplayer rooms run as a separate process from the same code: `node dist/rooms-main.js` (`npm run start:rooms` in
 development). Players connect to `wss://rooms.su-labs.dev/rooms` and send `{ event, data }` messages: `create`,
 `join` (by 6-character code), `rejoin` (after a reload), `settings`, `ready`, `rename` (another random nickname, in
-the lobby), `start`, `score`, `again`, `kick`, `leave`. Rooms hold at most 4 players, live in memory only and store
-nothing about them.
+the lobby), `react` (a hand-drawn sticker passed on to the room, at most one every 1.5 s), `start`, `score`, `again`,
+`kick`, `leave`. Rooms hold at most 4 players, live in memory only and store nothing about them.
 
 ## Admin team
 

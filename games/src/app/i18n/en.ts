@@ -95,6 +95,8 @@ export const EN: SiteMessages = {
     },
     menuAnimation: 'Animated menu',
     menuAnimationChoices: { on: 'Yes', off: 'No' },
+    reactionSide: 'Stickers in rooms',
+    reactionSides: { left: 'Left', right: 'Right' },
     wordGender: 'Talk to me as',
     wordGenders: { boy: 'a boy', girl: 'a girl' },
     wordGenderQuestion: 'How should we talk to you? You can change it any time in the settings.',
@@ -957,6 +959,7 @@ export const EN: SiteMessages = {
       'room-rename': 'New name button in rooms',
       'public-leaderboard': 'Leaderboard for everyone (also signed out)',
       'how-many-sound': 'Numbers out loud in How many?',
+      'room-reactions': 'Stickers in rooms',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:
@@ -1065,6 +1068,10 @@ export const EN: SiteMessages = {
     leave: 'Leave the room',
     kick: 'Remove',
     newName: 'Get a new name',
+    reactions: {
+      title: 'Stickers',
+      names: { shy: 'Shy', happy: 'Happy', love: 'Love', angry: 'Angry', laugh: 'Ha ha ha', confused: 'Confused', cry: 'Sad' },
+    },
     kicked: 'The host removed you from the room.',
     gameUnavailable: 'This game isn’t open for rooms right now.',
     animals: ANIMALS,

@@ -1,0 +1,13 @@
+<div class="stickers" role="group" [attr.aria-label]="'rooms.reactions.title' | translate">
+  @for (reaction of all; track reaction) {
+    <button
+      type="button"
+      class="sticker"
+      [disabled]="isResting()"
+      [title]="('rooms.reactions.names' | translate)[reaction]"
+      (click)="send(reaction)"
+    >
+      <img [src]="pictureOf(reaction)" [alt]="('rooms.reactions.names' | translate)[reaction]" width="80" height="80" />
+    </button>
+  }
+</div>

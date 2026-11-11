@@ -33,6 +33,7 @@
         [meId]="client.playerId()"
         [canKick]="client.isHost()"
         [canRename]="canRename()"
+        [reactions]="reactions.isAvailable() ? client.reactions() : []"
         (kick)="client.kick($event)"
         (rename)="client.rename()"
       />
@@ -232,6 +233,10 @@
         }
       </div>
     </div>
+
+    @if (reactions.isAvailable()) {
+      <app-room-reactions (react)="client.react($event)" />
+    }
 
     @if (client.error(); as error) {
       <p class="error" role="alert">{{ ('rooms.errors' | translate)[error] }}</p>

@@ -4,6 +4,7 @@ import { FeatureFlags } from '../../../core/feature-flags';
 import { ROOM_GAME_FEATURES, ROOM_GAMES, RoomGame } from '../../../core/features';
 import { gameInfo } from '../../../core/games';
 import { GamesApi } from '../../../core/games-api';
+import { Reactions } from '../../../core/reactions';
 import { RoomClient } from '../../../core/room-client';
 import { MAX_PLAYERS, MIN_PLAYERS_TO_START, ROUND_SECONDS, RoundSeconds } from '../../../core/room-view';
 import { ROOM_CHOICES, roomChoice, roomLetters, roomPicture, roomSliding } from '../../../games/room-games';
@@ -18,6 +19,7 @@ import { RoomMeasureRound } from '../room-measure-round/room-measure-round';
 import { roomLevelText, roomModeGroup, roomModeText } from '../room-option-text';
 import { RoomPlaceRound } from '../room-place-round/room-place-round';
 import { RoomPlayers } from '../room-players/room-players';
+import { RoomReactions } from '../room-reactions/room-reactions';
 import { RoomSlidingRound } from '../room-sliding-round/room-sliding-round';
 import { RoomTurnRound } from '../room-turn-round/room-turn-round';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
@@ -39,6 +41,7 @@ const TICK_MS = 100;
     RoomMeasureRound,
     RoomPlaceRound,
     RoomPlayers,
+    RoomReactions,
     RoomSlidingRound,
     RoomTurnRound,
     RouterLink,
@@ -57,6 +60,7 @@ export class RoomPage {
   readonly code = input.required<string>();
 
   protected readonly client = inject(RoomClient);
+  protected readonly reactions = inject(Reactions);
   private readonly api = inject(GamesApi);
   private readonly features = inject(FeatureFlags);
   private readonly document = inject(DOCUMENT);

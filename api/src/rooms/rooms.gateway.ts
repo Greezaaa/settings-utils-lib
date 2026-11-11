@@ -16,6 +16,7 @@ import {
   createSchema,
   joinSchema,
   kickSchema,
+  reactSchema,
   readySchema,
   rejoinSchema,
   scoreSchema,
@@ -29,6 +30,7 @@ import {
   newCode,
   newPlayer,
   playAgain,
+  REACTION_GAP_MS,
   removePlayer,
   reportScore,
   Room,
@@ -68,6 +70,8 @@ interface Seat {
   readonly ip: string;
   /** When its recent room messages came, for the message limit */
   messages: number[];
+  /** When it last sent a sticker, for the gap between stickers */
+  reactedAt: number;
 }
 
 /**
@@ -107,7 +111,13 @@ export class RoomsGateway
       this.trustCloudflare && typeof cloudflareIp === 'string'
         ? cloudflareIp
         : (request.socket.remoteAddress ?? '');
-    this.seats.set(client, { code: null, playerId: null, ip, messages: [] });
+    this.seats.set(client, {
+      code: null,
+      playerId: null,
+      ip,
+      messages: [],
+      reactedAt: 0,
+    });
   }
 
   /** A dropped player keeps their seat for a while (see tick) */
@@ -229,6 +239,38 @@ export class RoomsGateway
     );
   }
 
+  /**
+   * A sticker for everyone in the room, in any phase; it changes nothing in the room, so it's passed on as is. One
+   * every REACTION_GAP_MS per player; quicker ones are dropped quietly.
+   */
+  @SubscribeMessage('react')
+  react(
+    @ConnectedSocket() client: WebSocket,
+    @MessageBody() body: unknown,
+  ): void {
+    const data = this.parse(client, reactSchema, body);
+    const seat = this.seats.get(client);
+    const now = Date.now();
+    if (
+      !data ||
+      !seat?.code ||
+      !seat.playerId ||
+      now - seat.reactedAt < REACTION_GAP_MS ||
+      !this.allowMessage(seat)
+    ) {
+      return;
+    }
+    seat.reactedAt = now;
+    for (const [socket, other] of this.seats) {
+      if (other.code === seat.code) {
+        this.send(socket, 'reaction', {
+          playerId: seat.playerId,
+          reaction: data.reaction,
+        });
+      }
+    }
+  }
+
   @SubscribeMessage('start')
   start(@ConnectedSocket() client: WebSocket): void {
     this.act(client, {}, (room, playerId, now) =>
@@ -336,6 +378,7 @@ export class RoomsGateway
       playerId,
       ip: this.seats.get(client)?.ip ?? '',
       messages: this.seats.get(client)?.messages ?? [],
+      reactedAt: this.seats.get(client)?.reactedAt ?? 0,
     });
     this.send(client, 'joined', { code: room.code, playerId, token });
     this.broadcast(room);

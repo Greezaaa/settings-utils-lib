@@ -130,6 +130,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     },
     menuAnimation: 'Анімоване меню',
     menuAnimationChoices: { on: 'Так', off: 'Ні' },
+    reactionSide: 'Наліпки в кімнатах',
+    reactionSides: { left: 'Ліворуч', right: 'Праворуч' },
     wordGender: 'Звертатися до мене як до',
     wordGenders: { boy: 'хлопчика', girl: 'дівчинки' },
     wordGenderQuestion: 'Як до тебе звертатися? Це можна будь-коли змінити в налаштуваннях.',
@@ -1015,6 +1017,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'room-rename': 'Кнопка нового імені в кімнатах',
       'public-leaderboard': 'Таблиця лідерів для всіх (і без облікового запису)',
       'how-many-sound': 'Числа вголос у грі «Скільки?»',
+      'room-reactions': 'Наліпки в кімнатах',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:
@@ -1125,6 +1128,10 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     leave: 'Вийти з кімнати',
     kick: 'Видалити',
     newName: 'Змінити ім’я',
+    reactions: {
+      title: 'Наліпки',
+      names: { shy: 'Соромно', happy: 'Радісно', love: 'Люблю', angry: 'Сердито', laugh: 'Ха-ха-ха', confused: 'Що?', cry: 'Сумно' },
+    },
     kicked: 'Власник видалив тебе з кімнати.',
     gameUnavailable: 'Ця гра зараз недоступна в кімнатах.',
     animals: ANIMALS,

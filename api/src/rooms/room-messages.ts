@@ -4,6 +4,7 @@ import {
   CODE_ALPHABET,
   CODE_LENGTH,
   PLAYER_GENDERS,
+  REACTIONS,
   ROOM_GAMES,
   ROUND_SECONDS,
 } from './room.js';
@@ -44,9 +45,16 @@ export const readySchema = z.object({ ready: z.boolean() });
 export const scoreSchema = z.object({
   score: z.number().int().min(0).max(10_000),
 });
+export const reactSchema = z.object({ reaction: z.enum(REACTIONS) });
 export const kickSchema = z.object({
   playerId: z.string().regex(/^[a-z0-9]{12}$/),
 });
 
 /** What the rooms service sends back */
-export type ServerEvent = 'joined' | 'room' | 'error' | 'kicked' | 'left';
+export type ServerEvent =
+  | 'joined'
+  | 'room'
+  | 'error'
+  | 'kicked'
+  | 'left'
+  | 'reaction';

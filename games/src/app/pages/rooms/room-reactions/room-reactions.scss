@@ -1,0 +1,49 @@
+// A column stuck to the middle of the right edge (left when chosen), small enough to leave the game in view
+:host {
+  position: fixed;
+  right: 0.5rem;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 20;
+}
+
+:host(.is-left) {
+  left: 0.5rem;
+  right: auto;
+}
+
+.stickers {
+  display: grid;
+  gap: 0.375rem;
+}
+
+// Round white stickers in every theme, as the drawings have dark lines on paper
+.sticker {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
+  cursor: pointer;
+  display: grid;
+  height: 2.5rem;
+  padding: 0.125rem;
+  place-items: center;
+  touch-action: manipulation;
+  transition: scale 150ms ease;
+  width: 2.5rem;
+
+  img {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  &:hover:not(:disabled) {
+    scale: 1.1;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+}

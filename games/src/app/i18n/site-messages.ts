@@ -7,6 +7,7 @@ import { GameThemeId } from '../core/game-themes';
 import { GameCategory, GameSlug } from '../core/games';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { MenuAnimationChoice } from '../core/menu-animation';
+import { Reaction, ReactionSide } from '../core/reactions';
 import { PictureId } from '../core/pictures';
 import { AccountProblem } from '../core/player-account';
 import { RoomError } from '../core/room-view';
@@ -82,6 +83,9 @@ export interface SiteMessages {
     readonly menuAnimationChoices: Readonly<
       Record<MenuAnimationChoice, string>
     >;
+    /** The setting for the side of the screen the room stickers stick to */
+    readonly reactionSide: string;
+    readonly reactionSides: Readonly<Record<ReactionSide, string>>;
     /** The setting to be spoken to as a boy or a girl */
     readonly wordGender: string;
     readonly wordGenders: Readonly<Record<WordGender, string>>;
@@ -711,6 +715,11 @@ export interface SiteMessages {
     readonly kick: string;
     /** The button on a player's own avatar that asks for another random nickname */
     readonly newName: string;
+    /** The hand-drawn stickers players send each other: the bar's name and each sticker's name */
+    readonly reactions: {
+      readonly title: string;
+      readonly names: Readonly<Record<Reaction, string>>;
+    };
     readonly kicked: string;
     /** When the room's game is switched off for rooms */
     readonly gameUnavailable: string;

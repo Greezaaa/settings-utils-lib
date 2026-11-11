@@ -204,4 +204,25 @@ describe('rooms service (e2e)', () => {
       await other.next('joined');
     }
   });
+
+  it('passes a sticker on to everyone in the room, one every 1.5 s, and only known ones', async () => {
+    const host = await connect();
+    host.send('create', { language: 'en' });
+    const joined = await host.next('joined');
+    const guest = await connect();
+    guest.send('join', { code: joined['code'] });
+    await guest.next('joined');
+
+    host.send('react', { reaction: 'love' });
+    const sticker = { playerId: joined['playerId'], reaction: 'love' };
+    expect(await guest.next('reaction')).toEqual(sticker);
+    expect(await host.next('reaction')).toEqual(sticker);
+
+    // Too soon after the last one: dropped
+    host.send('react', { reaction: 'laugh' });
+    await expect(guest.next('reaction', () => true, 300)).rejects.toThrow();
+
+    guest.send('react', { reaction: 'kiss' });
+    expect(await guest.next('error')).toEqual({ error: 'invalid' });
+  });
 });

@@ -13,6 +13,7 @@ import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
 import { ANSWER_STYLES, AnswerWords } from './core/answer-words';
 import { MENU_ANIMATION_CHOICES, MenuAnimation } from './core/menu-animation';
 import { PlayerGender } from './core/player-gender';
+import { REACTION_SIDES, Reactions } from './core/reactions';
 import { WORD_GENDERS } from './i18n/word-gender';
 import { BoardColours } from './core/board-colours';
 import { GAME_THEMES, getGameTheme, isGameThemeId } from './core/game-themes';
@@ -59,6 +60,8 @@ export class App {
   protected readonly answerWords = inject(AnswerWords);
   protected readonly answerStyles = ANSWER_STYLES;
   protected readonly playerGender = inject(PlayerGender);
+  protected readonly reactions = inject(Reactions);
+  protected readonly reactionSides = REACTION_SIDES;
   protected readonly menuAnimation = inject(MenuAnimation);
   protected readonly menuAnimationChoices = MENU_ANIMATION_CHOICES;
   protected readonly wordGenders = WORD_GENDERS;

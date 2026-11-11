@@ -3,6 +3,7 @@ import { LanguageId } from '../i18n/site-messages';
 import { WordGender } from '../i18n/word-gender';
 import { field } from './api-url';
 import { PlayerGender } from './player-gender';
+import { isReaction, Reaction, REACTION_SHOW_MS } from './reactions';
 import { isRoomError, parseRoomView, RoomError, RoomSettings, RoomView } from './room-view';
 
 /** The rooms service (api/src/rooms/); the local one while the site runs on localhost */
@@ -17,6 +18,13 @@ interface Seat {
   readonly code: string;
   readonly playerId: string;
   readonly token: string;
+}
+
+/** A sticker a player sent, shown on their card for a moment; `key` tells two of the same apart */
+export interface PlayerReaction {
+  readonly key: number;
+  readonly playerId: string;
+  readonly reaction: Reaction;
 }
 
 export type RoomConnection = 'closed' | 'connecting' | 'open' | 'reconnecting';
@@ -42,12 +50,15 @@ export class RoomClient {
   private reconnectTimer?: ReturnType<typeof setTimeout>;
   /** Difference between the server's clock and this device's */
   private clockOffset = 0;
+  private reactionKey = 0;
 
   readonly connection = signal<RoomConnection>('closed');
   readonly room = signal<RoomView | null>(null);
   readonly error = signal<RoomError | null>(null);
   readonly kicked = signal(false);
   readonly playerId = signal<string | null>(null);
+  /** Stickers sent in the last few seconds, own ones included */
+  readonly reactions = signal<readonly PlayerReaction[]>([]);
 
   readonly me = computed(() => this.room()?.players.find(({ id }) => id === this.playerId()) ?? null);
   readonly isHost = computed(() => this.room()?.hostId === this.playerId());
@@ -101,6 +112,11 @@ export class RoomClient {
     this.send('rename');
   }
 
+  /** Sends a sticker to everyone in the room */
+  react(reaction: Reaction): void {
+    this.send('react', { reaction });
+  }
+
   kick(playerId: string): void {
     this.send('kick', { playerId });
   }
@@ -123,6 +139,7 @@ export class RoomClient {
     socket?.close();
     this.connection.set('closed');
     this.room.set(null);
+    this.reactions.set([]);
   }
 
   private open(intent: Intent | null): void {
@@ -192,6 +209,11 @@ export class RoomClient {
         this.room.set(view);
         this.error.set(null);
       }
+    } else if (event === 'reaction') {
+      const [playerId, reaction] = ['playerId', 'reaction'].map((key) => field(data, key));
+      if (typeof playerId === 'string' && isReaction(reaction)) {
+        this.showReaction({ key: this.reactionKey++, playerId, reaction });
+      }
     } else if (event === 'error') {
       const error = field(data, 'error');
       this.error.set(isRoomError(error) ? error : 'invalid');
@@ -204,6 +226,14 @@ export class RoomClient {
       this.forgetSeat();
       this.close();
     }
+  }
+
+  private showReaction(shown: PlayerReaction): void {
+    this.reactions.update((reactions) => [...reactions, shown]);
+    setTimeout(
+      () => this.reactions.update((reactions) => reactions.filter(({ key }) => key !== shown.key)),
+      REACTION_SHOW_MS
+    );
   }
 
   /** The player's choice to be spoken to as a boy or a girl, while that setting is open; the room fits their animal to it */

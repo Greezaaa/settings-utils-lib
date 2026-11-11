@@ -7,6 +7,15 @@
       [class.is-open]="player.id === openId()"
     >
       <!-- Tapping a player shows their name when the bar only has room for avatars -->
+      @for (shown of latestReactions().get(player.id) ?? []; track shown.key) {
+        <img
+          class="reaction"
+          [src]="pictureOf(shown.reaction)"
+          [alt]="('rooms.reactions.names' | translate)[shown.reaction]"
+          width="80"
+          height="80"
+        />
+      }
       <button type="button" class="player" [attr.aria-expanded]="player.id === openId()" (click)="toggle(player.id)">
         <app-player-avatar [nickname]="player.nickname" [color]="player.color" />
         <span class="who">

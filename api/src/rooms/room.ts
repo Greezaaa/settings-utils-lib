@@ -36,6 +36,20 @@ export const COLOR_COUNT = 8;
  */
 export const PLAYER_GENDERS = ['boy', 'girl'] as const;
 export type PlayerGender = (typeof PLAYER_GENDERS)[number];
+
+/** The hand-drawn stickers players can send each other in a room (the games site has their pictures) */
+export const REACTIONS = [
+  'shy',
+  'happy',
+  'love',
+  'angry',
+  'laugh',
+  'confused',
+  'cry',
+] as const;
+export type Reaction = (typeof REACTIONS)[number];
+/** Least time between two stickers from the same player, so nobody can flood the others' screens */
+export const REACTION_GAP_MS = 1500;
 const GIRL_ANIMALS: readonly number[] = [9, 11, 13, 15];
 const animalsFor = (gender: PlayerGender | null): readonly number[] => {
   const all = Array.from({ length: ANIMAL_COUNT }, (_, index) => index);

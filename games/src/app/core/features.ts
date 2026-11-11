@@ -24,7 +24,8 @@ export type FeatureId =
   | 'colours-page'
   | 'room-rename'
   | 'public-leaderboard'
-  | 'how-many-sound';
+  | 'how-many-sound'
+  | 'room-reactions';
 
 /** Games playable in rooms, each with its multiplayer switch */
 export type RoomGame = Extract<
@@ -79,6 +80,8 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'public-leaderboard', openByDefault: false },
   /** How many? says the numbers out loud with the browser's voice, which lags in some languages */
   { id: 'how-many-sound', openByDefault: false },
+  /** Hand-drawn stickers players send each other in a room, with the side they stick to in the settings */
+  { id: 'room-reactions', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

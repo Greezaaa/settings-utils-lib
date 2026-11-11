@@ -99,6 +99,8 @@ export const EU: SiteMessages = {
     },
     menuAnimation: 'Menu animatua',
     menuAnimationChoices: { on: 'Bai', off: 'Ez' },
+    reactionSide: 'Pegatinak geletan',
+    reactionSides: { left: 'Ezkerrean', right: 'Eskuinean' },
     wordGender: 'Nola hitz egin?',
     wordGenders: { boy: 'mutila', girl: 'neska' },
     wordGenderQuestion: 'Nola hitz egitea nahi duzu? Nahi duzunean alda dezakezu ezarpenetan.',
@@ -983,6 +985,7 @@ export const EU: SiteMessages = {
       'room-rename': 'Izen berriaren botoia geletan',
       'public-leaderboard': 'Sailkapena guztientzat (konturik gabe ere)',
       'how-many-sound': 'Zenbakiak ozen «Zenbat daude?» jokoan',
+      'room-reactions': 'Pegatinak geletan',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1097,6 +1100,10 @@ export const EU: SiteMessages = {
     leave: 'Irten gelatik',
     kick: 'Kendu',
     newName: 'Izena aldatu',
+    reactions: {
+      title: 'Pegatinak',
+      names: { shy: 'Lotsa', happy: 'Pozik', love: 'Maite zaitut', angry: 'Haserre', laugh: 'Jajaja', confused: 'Zer?', cry: 'Triste' },
+    },
     kicked: 'Anfitrioiak gelatik kendu zaitu.',
     gameUnavailable: 'Joko hau ez dago irekita geletan oraintxe.',
     animals: ANIMALS,

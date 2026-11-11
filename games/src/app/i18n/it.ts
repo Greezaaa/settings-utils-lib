@@ -97,6 +97,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     },
     menuAnimation: 'Menu animato',
     menuAnimationChoices: { on: 'Sì', off: 'No' },
+    reactionSide: 'Adesivi nelle stanze',
+    reactionSides: { left: 'Sinistra', right: 'Destra' },
     wordGender: 'Parlami come',
     wordGenders: { boy: 'bambino', girl: 'bambina' },
     wordGenderQuestion: 'Come vuoi che ti parliamo? Puoi cambiarlo quando vuoi nelle impostazioni.',
@@ -954,6 +956,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'room-rename': 'Pulsante nuovo nome nelle stanze',
       'public-leaderboard': 'Classifica per tutti (anche senza account)',
       'how-many-sound': 'Numeri ad alta voce in Quanti sono?',
+      'room-reactions': 'Adesivi nelle stanze',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:
@@ -1053,6 +1056,10 @@ export const italian = (gender: WordGender): SiteMessages => ({
     leave: 'Esci dalla stanza',
     kick: 'Togli',
     newName: 'Cambia nome',
+    reactions: {
+      title: 'Adesivi',
+      names: { shy: 'Vergogna', happy: 'Felice', love: 'Ti voglio bene', angry: 'Arrabbiato', laugh: 'Ahahah', confused: 'Eh?', cry: 'Triste' },
+    },
     kicked: 'L’organizzatore ti ha tolto dalla stanza.',
     gameUnavailable: 'Questo gioco ora non è aperto per le stanze.',
     animals: ANIMALS,

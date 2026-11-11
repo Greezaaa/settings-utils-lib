@@ -100,6 +100,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     },
     menuAnimation: 'Menú animado',
     menuAnimationChoices: { on: 'Sí', off: 'No' },
+    reactionSide: 'Pegatinas en las salas',
+    reactionSides: { left: 'Izquierda', right: 'Derecha' },
     wordGender: 'Háblame como',
     wordGenders: { boy: 'chico', girl: 'chica' },
     wordGenderQuestion: '¿Cómo quieres que te hablemos? Puedes cambiarlo cuando quieras en los ajustes.',
@@ -996,6 +998,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'room-rename': 'Botón de nombre nuevo en las salas',
       'public-leaderboard': 'Clasificación para todos (también sin cuenta)',
       'how-many-sound': 'Números en voz alta en ¿Cuántos hay?',
+      'room-reactions': 'Pegatinas en las salas',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:
@@ -1109,6 +1112,10 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     leave: 'Salir de la sala',
     kick: 'Quitar',
     newName: 'Cambiar de nombre',
+    reactions: {
+      title: 'Pegatinas',
+      names: { shy: 'Vergüenza', happy: 'Contento', love: 'Te quiero', angry: 'Enfadado', laugh: 'Jajaja', confused: '¿Qué?', cry: 'Triste' },
+    },
     kicked: 'El anfitrión te ha quitado de la sala.',
     gameUnavailable: 'Este juego no está abierto en las salas ahora mismo.',
     animals: ANIMALS,

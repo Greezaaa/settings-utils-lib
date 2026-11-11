@@ -143,3 +143,62 @@ $full-width: 10rem;
     }
   }
 }
+
+// A sticker the player just sent, over their avatar: pops in, beats like a heart, then fades
+.reaction {
+  animation:
+    sticker-beat 1200ms ease-in-out 2,
+    sticker-fade 3000ms ease-in both;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  height: calc(var(--avatar-size) + 0.25rem);
+  left: 0.125rem;
+  padding: 0.125rem;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: calc(var(--avatar-size) + 0.25rem);
+  z-index: 1;
+
+  // Over the avatar, which sits further in on wide screens
+  @media (min-width: 56rem) {
+    left: 0.625rem;
+  }
+}
+
+@keyframes sticker-beat {
+  0%,
+  100% {
+    scale: 1;
+  }
+  15% {
+    scale: 1.2;
+  }
+  30% {
+    scale: 0.95;
+  }
+  45% {
+    scale: 1.15;
+  }
+  60% {
+    scale: 1;
+  }
+}
+
+@keyframes sticker-fade {
+  0%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reaction {
+    animation: sticker-fade 3000ms ease-in both;
+  }
+}
