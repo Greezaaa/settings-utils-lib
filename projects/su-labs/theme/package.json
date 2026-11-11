@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/theme",
-	"version": "22.2.0",
+	"version": "22.3.0",
 	"keywords": [
 		"angular",
 		"theme",
@@ -37,7 +37,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
-		"@su-labs/core": "^1.1.0",
+		"@su-labs/core": "1.6.0",
 		"tslib": "^2.3.0"
 	},
 	"sideEffects": false,

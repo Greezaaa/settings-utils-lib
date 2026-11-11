@@ -24,6 +24,7 @@
 		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
 		"directory": "projects/su-labs/fields"
 	},
+	"homepage": "https://su-labs.dev/fields/",
 	"bugs": {
 		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
 	},

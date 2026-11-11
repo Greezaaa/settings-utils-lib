@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [22.0.0] - 2026-11-11
+
 ### Added
 - `SuCodeBoxesComponent` (`su-lib-code-boxes`): a short code typed into boxes that fill one by one and turn green in a wave once complete; one real text field underneath, so pasting, phone keyboards and screen readers work
 - `SuStrengthMeterComponent` (`su-lib-strength-meter`): four bars under a new password that fill and change colour as it gets stronger, with its word per step; a `meter` for screen readers

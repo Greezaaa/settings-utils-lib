@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-11
+
 ### Added
 - Ready-made palettes in `@su-labs/core/theme`: `SU_THEME_PALETTES` (11, listed in `SU_PALETTE_NAMES`), each light or dark (`SuThemeScheme`) with its `--su-theme-*` variables, including `button-text` for text on the accent; checked for readable text and button text
 - `palettes` theme option: the palettes a site offers as themes, none by default; only those can be set or restored from storage, so sites sharing one saved choice can offer different sets

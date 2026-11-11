@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [22.3.0] - 2026-11-11
+
 ### Added
 - Ready-made palettes as optional themes: list them in the new `palettes` option (none by default), e.g. `palettes: ['solar', 'neon']`; `SU_THEME_PALETTES`, `SU_PALETTE_NAMES` and their types are re-exported from `@su-labs/core/theme`
 - `availableThemes()` and `isAvailable()` on `SuThemeService`
 - A `data-theme-scheme` attribute (`light` or `dark`) beside `data-theme`
+
+### Changed
+- Requires `@su-labs/core` 1.6.0 exactly
 
 ## [22.2.0] - 2026-11-07
 
