@@ -73,8 +73,9 @@ const SETUP: readonly CodeTab[] = [
   "[javascript]": { "editor.defaultFormatter": "${VSCODE_EXTENSION.packageName}" },
   "[javascriptreact]": { "editor.defaultFormatter": "${VSCODE_EXTENSION.packageName}" },
   "editor.formatOnSave": true,
-  // Sort imports and remove unused ones before formatting
-  "editor.codeActionsOnSave": { "source.organizeImports": "explicit" }
+  // Optional: sort imports and remove unused ones when formatting
+  "tsOneLineImports.sortImports": true,
+  "tsOneLineImports.removeUnusedImports": true
 }`,
   },
   {
