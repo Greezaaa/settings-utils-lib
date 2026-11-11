@@ -1,6 +1,6 @@
 <a class="skip-link" [routerLink]="[]" fragment="main">{{ 'site.skipToContent' | translate }}</a>
 
-<header class="site-header">
+<header class="site-header" #siteHeader>
   <div class="container header-bar">
     <!-- The brand, "su-labs / games", goes to this site's home; the games link to no other site -->
     <a routerLink="/" class="brand">
@@ -80,21 +80,25 @@
             </button>
           </div>
           <div class="setting">
-            <p class="setting-label" id="setting-game-colours">{{ 'site.boardColours' | translate }}</p>
-            <div class="board-colours" role="group" aria-labelledby="setting-game-colours">
-              @for (theme of gameThemes; track theme.id) {
-                <button
-                  type="button"
-                  class="swatch"
-                  [style.--swatch-background]="theme.palette.background"
-                  [style.--swatch-accent]="theme.palette['main-accent']"
-                  [attr.aria-label]="('site.boardThemes' | translate)[theme.id].name"
-                  [attr.aria-pressed]="theme.id === boardColours.selected()"
-                  [title]="('site.boardThemes' | translate)[theme.id].name + ' · ' + ('site.boardThemes' | translate)[theme.id].summary"
-                  (click)="boardColours.set(theme.id)"
-                ></button>
-              }
+            <label class="setting-label" for="setting-game-colours">{{ 'site.boardColours' | translate }}</label>
+            <div class="board-colours">
+              <span
+                class="swatch"
+                aria-hidden="true"
+                [style.--swatch-background]="selectedBoardTheme().palette.background"
+                [style.--swatch-accent]="selectedBoardTheme().palette['main-accent']"
+              ></span>
+              <select id="setting-game-colours" (change)="chooseBoardColours($event)">
+                @for (theme of gameThemes; track theme.id) {
+                  <option [value]="theme.id" [selected]="theme.id === boardColours.selected()">
+                    {{ ('site.boardThemes' | translate)[theme.id].name }}
+                  </option>
+                }
+              </select>
             </div>
+            @if (features.canUse('colours-page')) {
+              <a class="all-colours" routerLink="/colours" (click)="settingsOpen.set(false)">{{ 'site.allColours' | translate }}</a>
+            }
           </div>
           @if (answerWords.isAvailable()) {
             <div class="setting">

@@ -1,31 +1,46 @@
 <p class="muted count">{{ 'rooms.players' | translate: room().players.length : maxPlayers }}</p>
-<ul class="players">
+<ul class="players" [attr.data-count]="room().players.length">
   @for (player of room().players; track player.id) {
-    <li [class.is-away]="!player.connected">
-      <app-player-avatar [nickname]="player.nickname" [color]="player.color" />
-      <span class="who">
-        <strong>{{ 'rooms.nickname' | translate: player.nickname.adjective : player.nickname.animal }}</strong>
-        <small class="muted">
-          @if (player.id === meId()) {
-            {{ 'rooms.you' | translate }} ·
-          }
-          @if (player.id === room().hostId) {
-            {{ 'rooms.host' | translate: player.gender }} ·
-          }
-          @if (!player.connected) {
-            {{ 'rooms.away' | translate }}
-          } @else if (room().phase === 'lobby') {
-            {{ player.ready ? ('rooms.ready' | translate: player.gender) : ('rooms.notReady' | translate: player.gender) }}
-          } @else if (room().phase === 'results' || room().settings.showScores) {
-            {{ 'rooms.points' | translate: player.score }}
-          }
-        </small>
-      </span>
-      @if (room().phase === 'lobby' && player.ready && player.connected) {
-        <span class="ready-mark" aria-hidden="true">✓</span>
+    <li
+      [class.is-away]="!player.connected"
+      [class.is-ready]="room().phase === 'lobby' && player.ready && player.connected"
+      [class.is-open]="player.id === openId()"
+    >
+      <!-- Tapping a player shows their name when the bar only has room for avatars -->
+      <button type="button" class="player" [attr.aria-expanded]="player.id === openId()" (click)="toggle(player.id)">
+        <app-player-avatar [nickname]="player.nickname" [color]="player.color" />
+        <span class="who">
+          <strong class="name">{{ 'rooms.nickname' | translate: player.nickname.adjective : player.nickname.animal }}</strong>
+          <small class="muted">
+            @if (player.id === meId()) {
+              {{ 'rooms.you' | translate }} ·
+            }
+            @if (player.id === room().hostId) {
+              {{ 'rooms.host' | translate: player.gender }} ·
+            }
+            @if (!player.connected) {
+              {{ 'rooms.away' | translate }}
+            } @else if (room().phase === 'lobby') {
+              {{ player.ready ? ('rooms.ready' | translate: player.gender) : ('rooms.notReady' | translate: player.gender) }}
+            } @else if (room().phase === 'results' || room().settings.showScores) {
+              {{ 'rooms.points' | translate: player.score }}
+            }
+          </small>
+        </span>
+      </button>
+      @if (canRename() && player.id === meId() && room().phase === 'lobby') {
+        <button
+          type="button"
+          class="rename"
+          [attr.aria-label]="'rooms.newName' | translate"
+          [title]="'rooms.newName' | translate"
+          (click)="rename.emit()"
+        >
+          <span aria-hidden="true">🎲</span>
+        </button>
       }
       @if (canKick() && player.id !== meId() && room().phase === 'lobby') {
-        <button type="button" class="button button-secondary button-small" (click)="kick.emit(player.id)">
+        <button type="button" class="button button-secondary button-small kick" (click)="kick.emit(player.id)">
           {{ 'rooms.kick' | translate }}
         </button>
       }

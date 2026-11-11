@@ -98,6 +98,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     themeSwitch: (current, next) => `Тема: ${current}. Змінити на: ${next}`,
     language: 'Мова',
     boardColours: 'Кольори гри',
+    allColours: 'Усі кольори',
     boardThemes: {
       light: { name: 'Світла', summary: 'Світлі кольори сайту' },
       dark: { name: 'Темна', summary: 'Темні кольори сайту' },
@@ -447,7 +448,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     section: 'Розумні ігри',
     ages: age => `Від ${age} ${age === 1 ? 'року' : 'років'}`,
     new: 'Нове',
-    popular: 'Популярна',
+    popular: 'Найпопулярніша',
     hidden: 'Приховано',
     addFavorite: game => `Додати «${game}» до улюблених`,
     removeFavorite: game => `Прибрати «${game}» з улюблених`,
@@ -1008,6 +1009,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       accounts: 'Акаунти гравців',
       leaderboard: 'Таблиця лідерів',
       'lively-fields': 'Анімовані поля форм',
+      'colours-page': 'Сторінка з усіма кольорами гри',
+      'room-rename': 'Кнопка нового імені в кімнатах',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:
@@ -1115,6 +1118,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     playAgain: 'Грати ще',
     leave: 'Вийти з кімнати',
     kick: 'Видалити',
+    newName: 'Змінити ім’я',
     kicked: 'Власник видалив тебе з кімнати.',
     gameUnavailable: 'Ця гра зараз недоступна в кімнатах.',
     animals: ANIMALS,
@@ -1199,6 +1203,13 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     resetDone: forGender(gender, 'Пароль змінено, і ти ввійшов у свій обліковий запис.', 'Пароль змінено, і ти ввійшла у свій обліковий запис.'),
   },
 
+  colours: {
+    title: 'Кольори гри',
+    lead: 'Усі набори кольорів для ігрового поля, кожен на маленькому полі.',
+    rule: 'Торкнися «Вибрати», щоб грати з ними.',
+    use: 'Вибрати',
+    inUse: 'Вибрано',
+  },
   leaderboard: {
     navLink: 'Лідери',
     title: 'Таблиця лідерів',

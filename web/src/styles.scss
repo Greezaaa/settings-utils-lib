@@ -34,6 +34,8 @@
   --green-text: #346538;
   --yellow-bg: #fbf3db;
   --yellow-text: #956400;
+  --purple-bg: #f1ebf8;
+  --purple-text: #6b3f9e;
 
   --radius: 8px;
   --radius-large: 12px;
@@ -104,6 +106,8 @@
   --green-text: #a7cfa3;
   --yellow-bg: #362e1a;
   --yellow-text: #e3c278;
+  --purple-bg: #2f2538;
+  --purple-text: #cdb4ec;
 
   color-scheme: dark;
 }
@@ -400,6 +404,11 @@ a.card {
 .tag-yellow {
   background: var(--yellow-bg);
   color: var(--yellow-text);
+}
+
+.tag-purple {
+  background: var(--purple-bg);
+  color: var(--purple-text);
 }
 
 .field {

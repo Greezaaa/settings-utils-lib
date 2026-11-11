@@ -33,6 +33,7 @@ import {
   reportScore,
   Room,
   RoomError,
+  renamePlayer,
   setReady,
   setSettings,
   startRound,
@@ -218,6 +219,13 @@ export class RoomsGateway
     const data = this.parse(client, readySchema, body);
     this.act(client, data, (room, playerId, now) =>
       data ? setReady(room, playerId, data.ready, now) : null,
+    );
+  }
+
+  @SubscribeMessage('rename')
+  rename(@ConnectedSocket() client: WebSocket): void {
+    this.act(client, {}, (room, playerId, now) =>
+      renamePlayer(room, playerId, now),
     );
   }
 

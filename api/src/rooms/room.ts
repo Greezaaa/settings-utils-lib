@@ -79,7 +79,8 @@ export interface Player {
   readonly id: string;
   /** Secret that lets this player come back after a reload; never shown to others */
   readonly token: string;
-  readonly nickname: Nickname;
+  /** Changes only when the player asks for another one, in the lobby */
+  nickname: Nickname;
   readonly color: number;
   readonly gender: PlayerGender | null;
   ready: boolean;
@@ -154,6 +155,27 @@ function freeNumber(
   return choices[random(choices.length)];
 }
 
+/** A nickname whose adjective and animal none of `taken` has, the animal fitting the player's choice */
+function freeNickname(
+  taken: readonly Player[],
+  random: RandomInt,
+  gender: PlayerGender | null,
+): Nickname {
+  return {
+    adjective: freeNumber(
+      ADJECTIVE_COUNT,
+      taken.map(({ nickname }) => nickname.adjective),
+      random,
+    ),
+    animal: freeNumber(
+      ANIMAL_COUNT,
+      taken.map(({ nickname }) => nickname.animal),
+      random,
+      animalsFor(gender),
+    ),
+  };
+}
+
 /** A new player with a nickname and colour nobody else in the room has, the animal fitting their choice */
 export function newPlayer(
   others: readonly Player[],
@@ -167,19 +189,7 @@ export function newPlayer(
   return {
     id,
     token,
-    nickname: {
-      adjective: freeNumber(
-        ADJECTIVE_COUNT,
-        others.map(({ nickname }) => nickname.adjective),
-        random,
-      ),
-      animal: freeNumber(
-        ANIMAL_COUNT,
-        others.map(({ nickname }) => nickname.animal),
-        random,
-        animalsFor(gender),
-      ),
-    },
+    nickname: freeNickname(others, random, gender),
     color: freeNumber(
       COLOR_COUNT,
       others.map(({ color }) => color),
@@ -268,6 +278,22 @@ export function setReady(
     return 'wrong-phase';
   }
   player.ready = ready;
+  room.lastActivity = now;
+  return null;
+}
+
+/** In the lobby, gives a player another random nickname, unlike their own and everyone else's */
+export function renamePlayer(
+  room: Room,
+  playerId: string,
+  now: number,
+  random: RandomInt = secureInt,
+): RoomError | null {
+  const player = room.players.find(({ id }) => id === playerId);
+  if (!player || room.phase !== 'lobby') {
+    return 'wrong-phase';
+  }
+  player.nickname = freeNickname(room.players, random, player.gender);
   room.lastActivity = now;
   return null;
 }

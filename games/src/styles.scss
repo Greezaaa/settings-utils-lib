@@ -8,6 +8,18 @@
 
 @use '../../web/src/styles';
 
+// Cards a step lighter than the page and neutral tags a step darker, so both stand out on the games' background
+:root {
+  --subtle: #ecebe8;
+}
+
+:root[data-theme='dark'],
+:root[data-theme-scheme='dark'] {
+  --surface: #242424;
+  --subtle: #2e2e2e;
+  --border: #333333;
+}
+
 // Game boards (the appGameBoard directive) take the board colours chosen in the header settings.
 // @su-labs/theme sets data-theme and --su-theme-* on the board; like the site's custom theme,
 // every other colour is mixed from text, background and accent.

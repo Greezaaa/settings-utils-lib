@@ -96,6 +96,11 @@ export class RoomClient {
     this.send('again');
   }
 
+  /** Asks for another random nickname, in the lobby */
+  rename(): void {
+    this.send('rename');
+  }
+
   kick(playerId: string): void {
     this.send('kick', { playerId });
   }

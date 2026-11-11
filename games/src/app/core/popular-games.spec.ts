@@ -8,9 +8,10 @@ describe('popular games', () => {
       { game: 'letter-games', plays: 90 },
       { game: 'sliding-puzzle', plays: 25 },
       { game: 'turn-picture', plays: 5 },
+      { game: 'place-pieces', plays: 4 },
     ] as const;
-    expect(popularGames(plays)).toEqual(['letter-games', 'math-games']);
-    expect(popularGames(plays, 5)).toEqual(['letter-games', 'math-games', 'sliding-puzzle']);
+    expect(popularGames(plays)).toEqual(['letter-games', 'math-games', 'sliding-puzzle']);
+    expect(popularGames(plays, 5)).toEqual(['letter-games', 'math-games', 'sliding-puzzle', 'turn-picture']);
     expect(popularGames(plays, 2, 100)).toEqual([]);
   });
 

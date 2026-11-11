@@ -97,11 +97,12 @@
   display: grid;
   gap: 1rem;
 
+  // Just below the sticky site header
   app-room-players {
     background: var(--bg);
     padding-block: 0.5rem;
     position: sticky;
-    top: 0;
+    top: var(--site-header-height, 0);
     z-index: 4;
   }
 
@@ -111,7 +112,7 @@
     app-room-players {
       background: none;
       padding-block: 0;
-      top: 1rem;
+      top: calc(var(--site-header-height, 0px) + 1rem);
     }
   }
 }

@@ -1,0 +1,32 @@
+<header class="container page-head">
+  <h1>{{ 'colours.title' | translate }}</h1>
+  <p class="lead">
+    {{ 'colours.lead' | translate }}
+    <br />
+    {{ 'colours.rule' | translate }}
+  </p>
+</header>
+
+<section class="container page-section">
+  <ul class="themes">
+    @for (theme of themes; track theme.id) {
+      <li class="card theme" [appGameBoard]="theme.id">
+        <h2 class="theme-name">{{ ('site.boardThemes' | translate)[theme.id].name }}</h2>
+        <p class="muted">{{ ('site.boardThemes' | translate)[theme.id].summary }}</p>
+        <div class="sample" aria-hidden="true">
+          @for (answer of sampleAnswers; track answer) {
+            <span class="sample-answer" [class.is-chosen]="answer === sampleChosen">{{ answer }}</span>
+          }
+        </div>
+        <button
+          type="button"
+          class="button"
+          [attr.aria-pressed]="theme.id === boardColours.selected()"
+          (click)="boardColours.set(theme.id)"
+        >
+          {{ theme.id === boardColours.selected() ? ('colours.inUse' | translate) : ('colours.use' | translate) }}
+        </button>
+      </li>
+    }
+  </ul>
+</section>

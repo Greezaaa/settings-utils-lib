@@ -1,8 +1,8 @@
-import { DestroyRef, Directive, effect, ElementRef, inject } from '@angular/core';
+import { DestroyRef, Directive, effect, ElementRef, inject, input } from '@angular/core';
 import { SuStorage } from '@su-labs/core';
 import { SuThemeController } from '@su-labs/core/theme';
 import { BoardColours } from '../core/board-colours';
-import { getGameTheme } from '../core/game-themes';
+import { GameThemeId, getGameTheme } from '../core/game-themes';
 
 /** The board's theme controller saves nothing: BoardColours keeps the choice for every board */
 const UNSAVED: SuStorage = { getItem: () => null, setItem: () => undefined, removeItem: () => undefined };
@@ -10,7 +10,8 @@ const UNSAVED: SuStorage = { getItem: () => null, setItem: () => undefined, remo
 /**
  * Marks a game's board: it takes the board colours chosen in the header settings, applied to this element
  * only with @su-labs/theme's `target` option. The colour rules are `.game-board` in styles.scss, so a game
- * only needs this attribute on its board.
+ * only needs this attribute on its board. Given a theme (`[appGameBoard]="id"`), it shows that one instead, as the
+ * colours page does.
  */
 @Directive({
   selector: '[appGameBoard]',
@@ -19,11 +20,16 @@ const UNSAVED: SuStorage = { getItem: () => null, setItem: () => undefined, remo
 export class GameBoard {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly controller = new SuThemeController();
+  /** A theme to show instead of the visitor's choice */
+  readonly theme = input<GameThemeId | null, GameThemeId | ''>(null, {
+    alias: 'appGameBoard',
+    transform: (value) => value || null,
+  });
 
   constructor() {
     const colours = inject(BoardColours);
     effect(() => {
-      const id = colours.chosen();
+      const id = this.theme() ?? colours.chosen();
       if (id) {
         this.controller.init({
           target: this.element,

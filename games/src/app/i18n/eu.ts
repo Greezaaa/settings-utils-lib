@@ -67,6 +67,7 @@ export const EU: SiteMessages = {
       `Gaia: ${current}. Aldatu honetara: ${next}`,
     language: 'Hizkuntza',
     boardColours: 'Jokoaren koloreak',
+    allColours: 'Ikusi kolore guztiak',
     boardThemes: {
       light: { name: 'Argia', summary: 'Webgunearen kolore argiak' },
       dark: { name: 'Iluna', summary: 'Webgunearen kolore ilunak' },
@@ -418,7 +419,7 @@ export const EU: SiteMessages = {
     section: 'Joko adimentsuak',
     ages: age => `${age} urtetik aurrera`,
     new: 'Berria',
-    popular: 'Ezaguna',
+    popular: 'Jokatuena',
     hidden: 'Ezkutuan',
     addFavorite: game => `Gehitu ${game} gogokoetara`,
     removeFavorite: game => `Kendu ${game} gogokoetatik`,
@@ -976,6 +977,8 @@ export const EU: SiteMessages = {
       accounts: 'Jokalarien kontuak',
       leaderboard: 'Sailkapena',
       'lively-fields': 'Formulario-eremu animatuak',
+      'colours-page': 'Jokoaren kolore guztien orria',
+      'room-rename': 'Izen berriaren botoia geletan',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1087,6 +1090,7 @@ export const EU: SiteMessages = {
     playAgain: 'Jokatu berriro',
     leave: 'Irten gelatik',
     kick: 'Kendu',
+    newName: 'Izena aldatu',
     kicked: 'Anfitrioiak gelatik kendu zaitu.',
     gameUnavailable: 'Joko hau ez dago irekita geletan oraintxe.',
     animals: ANIMALS,
@@ -1171,6 +1175,13 @@ export const EU: SiteMessages = {
     resetDone: 'Zure pasahitza aldatu da eta zure kontuan sartu zara.',
   },
 
+  colours: {
+    title: 'Jokoaren koloreak',
+    lead: 'Joko-tauletarako kolore guztiak, bakoitza taula txiki batean.',
+    rule: 'Sakatu Erabili haiekin jolasteko.',
+    use: 'Erabili',
+    inUse: 'Erabiltzen',
+  },
   leaderboard: {
     navLink: 'Sailkapena',
     title: 'Sailkapena',

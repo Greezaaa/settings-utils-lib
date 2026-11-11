@@ -2,7 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyR
 import { RouterLink } from '@angular/router';
 import { GameAvailability } from '../../../core/game-availability';
 import { readStored, writeStored } from '../../../core/site-storage';
-import { LAST_SEEN_STORAGE, LATEST_VERSION, recentChanges } from '../../../core/site-updates';
+import { LAST_SEEN_STORAGE, LATEST_VERSION, recentChanges, UPDATE_KIND_TAGS } from '../../../core/site-updates';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
@@ -45,6 +45,7 @@ export class WhatsNew {
         key: `${version}:${change.text.en}`,
         text: change.text[language],
         kind: this.t().home.updateKinds[change.kind],
+        kindTag: UPDATE_KIND_TAGS[change.kind],
         game: change.game,
         isNew: lastSeen !== null && version > lastSeen,
       }));

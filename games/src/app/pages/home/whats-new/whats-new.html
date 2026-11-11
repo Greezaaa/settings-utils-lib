@@ -5,7 +5,7 @@
         @if (item.isNew) {
           <span class="tag tag-green">{{ 'page.new' | translate }}</span>
         }
-        <span class="tag">{{ item.kind }}</span>
+        <span [class]="'tag ' + item.kindTag">{{ item.kind }}</span>
       </span>
       @if (item.game) {
         <a [routerLink]="['/', item.game]">{{ item.text }}</a>

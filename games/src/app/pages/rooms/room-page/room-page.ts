@@ -103,6 +103,8 @@ export class RoomPage {
   protected readonly placePieces = computed(() =>
     roomPicture('place-pieces', this.choice().mode, this.choice().level)
   );
+  /** The 🎲 on the player's own avatar for another nickname */
+  protected readonly canRename = computed(() => this.features.canUse('room-rename'));
   /** The lobby (games beside their settings) and the word builder (words beside the letters) need more room */
   protected readonly isWide = computed(
     () =>

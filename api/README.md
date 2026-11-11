@@ -43,8 +43,9 @@ DATABASE_URL=postgres://postgres:dev@localhost:55432/postgres ADMIN_TOKEN=$(open
 
 Multiplayer rooms run as a separate process from the same code: `node dist/rooms-main.js` (`npm run start:rooms` in
 development). Players connect to `wss://rooms.su-labs.dev/rooms` and send `{ event, data }` messages: `create`,
-`join` (by 6-character code), `rejoin` (after a reload), `settings`, `ready`, `start`, `score`, `again`, `kick`,
-`leave`. Rooms hold at most 4 players, live in memory only and store nothing about them.
+`join` (by 6-character code), `rejoin` (after a reload), `settings`, `ready`, `rename` (another random nickname, in
+the lobby), `start`, `score`, `again`, `kick`, `leave`. Rooms hold at most 4 players, live in memory only and store
+nothing about them.
 
 ## Admin team
 

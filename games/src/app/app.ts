@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, DOCUMENT, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, DOCUMENT, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FontSizeService } from '@su-labs/font-size';
@@ -15,7 +15,7 @@ import { MENU_ANIMATION_CHOICES, MenuAnimation } from './core/menu-animation';
 import { PlayerGender } from './core/player-gender';
 import { WORD_GENDERS } from './i18n/word-gender';
 import { BoardColours } from './core/board-colours';
-import { GAME_THEMES } from './core/game-themes';
+import { GAME_THEMES, getGameTheme, isGameThemeId } from './core/game-themes';
 import { SiteNotices } from './core/site-notices';
 import { SiteTheme } from './core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
@@ -63,6 +63,7 @@ export class App {
   protected readonly menuAnimationChoices = MENU_ANIMATION_CHOICES;
   protected readonly wordGenders = WORD_GENDERS;
   protected readonly gameThemes = GAME_THEMES;
+  protected readonly selectedBoardTheme = computed(() => getGameTheme(this.boardColours.selected()));
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = this.availability.visibleGames;
@@ -87,6 +88,9 @@ export class App {
   /** Whether the settings panel is open (only used on phones, where it hides behind the gear button) */
   protected readonly settingsOpen = signal(false);
   private readonly settings = viewChild.required<ElementRef<HTMLElement>>('settings');
+  private readonly siteHeader = viewChild.required<ElementRef<HTMLElement>>('siteHeader');
+  private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     // Confirmation dialogs label their buttons in the site's language, unless a dialog names its own
@@ -96,6 +100,7 @@ export class App {
     afterNextRender(() => {
       void this.availability.ready();
       void this.features.ready();
+      this.shareHeaderHeight();
     });
     const router = inject(Router);
     router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
@@ -107,6 +112,21 @@ export class App {
 
   protected cycleTheme(): void {
     this.theme.set(this.nextTheme());
+  }
+
+  /** Keeps --site-header-height on the root up to date, so bars stuck to the top sit just below the sticky header */
+  private shareHeaderHeight(): void {
+    const header = this.siteHeader().nativeElement;
+    const root = this.document.documentElement;
+    const observer = new ResizeObserver(() => root.style.setProperty('--site-header-height', `${header.offsetHeight}px`));
+    observer.observe(header);
+    this.destroyRef.onDestroy(() => observer.disconnect());
+  }
+
+  protected chooseBoardColours(event: Event): void {
+    if (event.target instanceof HTMLSelectElement && isGameThemeId(event.target.value)) {
+      this.boardColours.set(event.target.value);
+    }
   }
 
   protected toggleSettings(): void {

@@ -2,10 +2,10 @@ import { afterNextRender, computed, inject, Injectable, signal } from '@angular/
 import { GameSlug } from './games';
 import { GamePlays, GamesApi } from './games-api';
 
-/** At most this many games are marked "Popular", the most played ones */
-export const POPULAR_GAMES_LIMIT = 2;
-/** Plays in the last 30 days a game needs before it can be marked popular, so a handful of plays mean nothing */
-export const MIN_POPULAR_PLAYS = 20;
+/** At most this many games are marked "Most played", the most played ones */
+export const POPULAR_GAMES_LIMIT = 3;
+/** Plays in the last 30 days a game needs before it can be marked "Most played", so a couple of plays mean nothing */
+export const MIN_POPULAR_PLAYS = 5;
 
 /** The most played games, most played first, among those with enough plays */
 export function popularGames(
@@ -32,7 +32,7 @@ export function toppedUp(mostPlayed: readonly GameSlug[], all: readonly GameSlug
 }
 
 /**
- * From the API's play counts: the games to mark "Popular", and the most played ones for the home page; none when the
+ * From the API's play counts: the games to mark "Most played", and the most played ones for the home page; none when the
  * API can't be reached
  */
 @Injectable({ providedIn: 'root' })

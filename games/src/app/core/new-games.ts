@@ -1,4 +1,5 @@
-import { afterNextRender, Injectable, signal } from '@angular/core';
+import { afterNextRender, computed, inject, Injectable, signal } from '@angular/core';
+import { GameAvailability } from './game-availability';
 import { GameSlug } from './games';
 import { SITE_UPDATES, SiteUpdate } from './site-updates';
 
@@ -10,7 +11,8 @@ export const NEW_GAMES_LIMIT = 2;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
- * The games added in the last `days` days, newest first, at most `limit`.
+ * The games added in the last `days` days, newest first, at most `limit`, among those `isPublic` lets through
+ * (a game hidden from the public is never the newest one).
  * A game is added by the first update that mentions it (site-updates.ts); within one update, later changes count
  * as newer.
  */
@@ -19,10 +21,11 @@ export function newGames(
   updates: readonly SiteUpdate[] = SITE_UPDATES,
   days = NEW_GAME_DAYS,
   limit = NEW_GAMES_LIMIT,
+  isPublic: (game: GameSlug) => boolean = () => true,
 ): GameSlug[] {
   const added = addedTimes(updates);
   return recentlyAdded(updates)
-    .filter((game) => now.getTime() - (added.get(game) ?? 0) < days * DAY_MS)
+    .filter((game) => isPublic(game) && now.getTime() - (added.get(game) ?? 0) < days * DAY_MS)
     .slice(0, limit);
 }
 
@@ -46,16 +49,23 @@ export function recentlyAdded(updates: readonly SiteUpdate[] = SITE_UPDATES): Ga
 }
 
 /**
- * The games to mark "New". Worked out in the browser after the first render, from the visitor's clock, so the
- * prerendered pages never go stale and hydration matches.
+ * The games to mark "New": the newest ones open to the public. Worked out in the browser after the first render,
+ * from the visitor's clock, so the prerendered pages never go stale and hydration matches.
  */
 @Injectable({ providedIn: 'root' })
 export class NewGames {
-  private readonly slugs = signal<readonly GameSlug[]>([]);
+  private readonly availability = inject(GameAvailability);
+  /** The visitor's clock, read in the browser */
+  private readonly now = signal<Date | null>(null);
 
-  readonly games = this.slugs.asReadonly();
+  readonly games = computed<readonly GameSlug[]>(() => {
+    const now = this.now();
+    return now
+      ? newGames(now, SITE_UPDATES, NEW_GAME_DAYS, NEW_GAMES_LIMIT, (game) => this.availability.isOpen(game))
+      : [];
+  });
 
   constructor() {
-    afterNextRender(() => this.slugs.set(newGames(new Date())));
+    afterNextRender(() => this.now.set(new Date()));
   }
 }

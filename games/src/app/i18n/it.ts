@@ -68,6 +68,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
     themeSwitch: (current, next) => `Tema: ${current}. Passa a ${next}`,
     language: 'Lingua',
     boardColours: 'Colori del gioco',
+    allColours: 'Vedi tutti i colori',
     boardThemes: {
       light: { name: 'Chiaro', summary: 'I colori chiari del sito' },
       dark: { name: 'Scuro', summary: 'I colori scuri del sito' },
@@ -414,7 +415,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
     section: 'Giochi intelligenti',
     ages: (age) => `Dai ${age} anni`,
     new: 'Nuovo',
-    popular: 'Popolare',
+    popular: 'Più giocato',
     hidden: 'Nascosto',
     addFavorite: (game) => `Aggiungi ${game} ai preferiti`,
     removeFavorite: (game) => `Togli ${game} dai preferiti`,
@@ -947,6 +948,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
       accounts: 'Account dei giocatori',
       leaderboard: 'Classifica',
       'lively-fields': 'Campi dei moduli animati',
+      'colours-page': 'Pagina con tutti i colori del gioco',
+      'room-rename': 'Pulsante nuovo nome nelle stanze',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:
@@ -1043,6 +1046,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
     playAgain: 'Gioca ancora',
     leave: 'Esci dalla stanza',
     kick: 'Togli',
+    newName: 'Cambia nome',
     kicked: 'L’organizzatore ti ha tolto dalla stanza.',
     gameUnavailable: 'Questo gioco ora non è aperto per le stanze.',
     animals: ANIMALS,
@@ -1127,6 +1131,13 @@ export const italian = (gender: WordGender): SiteMessages => ({
     resetDone: forGender(gender, 'La tua password è stata cambiata e sei entrato nel tuo account.', 'La tua password è stata cambiata e sei entrata nel tuo account.'),
   },
 
+  colours: {
+    title: 'Colori del gioco',
+    lead: 'Tutti i colori per i tabelloni di gioco, ognuno su un piccolo tabellone.',
+    rule: 'Tocca Usa per giocare con questi.',
+    use: 'Usa',
+    inUse: 'In uso',
+  },
   leaderboard: {
     navLink: 'Classifica',
     title: 'Classifica',

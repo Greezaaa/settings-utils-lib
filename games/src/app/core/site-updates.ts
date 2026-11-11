@@ -21,6 +21,15 @@ export const UPDATE_KINDS = [
 ] as const;
 export type UpdateKind = (typeof UPDATE_KINDS)[number];
 
+/** The colour of each kind's tag (a `.tag-*` class), so the kinds are told apart at a glance */
+export const UPDATE_KIND_TAGS: Readonly<Record<UpdateKind, string>> = {
+  game: 'tag-blue',
+  language: 'tag-yellow',
+  settings: 'tag-purple',
+  feature: 'tag-green',
+  privacy: 'tag-red',
+};
+
 export interface UpdateChange {
   readonly kind: UpdateKind;
   readonly text: Readonly<Record<LanguageId, string>>;

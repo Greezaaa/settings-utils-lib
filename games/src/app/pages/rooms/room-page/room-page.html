@@ -32,7 +32,9 @@
         [room]="room"
         [meId]="client.playerId()"
         [canKick]="client.isHost()"
+        [canRename]="canRename()"
         (kick)="client.kick($event)"
+        (rename)="client.rename()"
       />
 
       <div class="card board" [class.is-wide]="isWide()" appGameBoard>

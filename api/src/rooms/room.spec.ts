@@ -11,6 +11,7 @@ import {
   places,
   playAgain,
   removePlayer,
+  renamePlayer,
   reportScore,
   Room,
   SCORE_GRACE_MS,
@@ -108,6 +109,19 @@ describe('rooms', () => {
     ).toBeNull();
     expect(room.settings.seconds).toBe(30);
     expect(guest.ready).toBe(false);
+  });
+
+  it('gives a player another nickname, unlike anyone else’s, only in the lobby', () => {
+    const room = roomWith(3);
+    const [host, guest, third] = room.players;
+    const before = guest.nickname;
+    expect(renamePlayer(room, guest.id, 0)).toBeNull();
+    for (const nickname of [before, host.nickname, third.nickname]) {
+      expect(guest.nickname.adjective).not.toBe(nickname.adjective);
+      expect(guest.nickname.animal).not.toBe(nickname.animal);
+    }
+    room.phase = 'playing';
+    expect(renamePlayer(room, guest.id, 0)).toBe('wrong-phase');
   });
 
   it('starts only when at least 2 connected players are all ready', () => {

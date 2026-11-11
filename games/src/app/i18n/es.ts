@@ -68,6 +68,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     themeSwitch: (current, next) => `Tema: ${current}. Cambiar a ${next}`,
     language: 'Idioma',
     boardColours: 'Colores del juego',
+    allColours: 'Ver todos los colores',
     boardThemes: {
       light: { name: 'Claro', summary: 'Los colores claros de la web' },
       dark: { name: 'Oscuro', summary: 'Los colores oscuros de la web' },
@@ -429,7 +430,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     section: 'Juegos inteligentes',
     ages: age => `Desde ${age} años`,
     new: 'Nuevo',
-    popular: 'Popular',
+    popular: 'Más jugado',
     hidden: 'Oculto',
     addFavorite: game => `Añadir ${game} a favoritos`,
     removeFavorite: game => `Quitar ${game} de favoritos`,
@@ -989,6 +990,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       accounts: 'Cuentas de jugador',
       leaderboard: 'Clasificación',
       'lively-fields': 'Campos de formulario animados',
+      'colours-page': 'Página con todos los colores del juego',
+      'room-rename': 'Botón de nombre nuevo en las salas',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:
@@ -1099,6 +1102,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     playAgain: 'Jugar otra vez',
     leave: 'Salir de la sala',
     kick: 'Quitar',
+    newName: 'Cambiar de nombre',
     kicked: 'El anfitrión te ha quitado de la sala.',
     gameUnavailable: 'Este juego no está abierto en las salas ahora mismo.',
     animals: ANIMALS,
@@ -1183,6 +1187,13 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     resetDone: 'Tu contraseña se ha cambiado y has entrado en tu cuenta.',
   },
 
+  colours: {
+    title: 'Colores del juego',
+    lead: 'Todos los colores para los tableros de juego, cada uno en un tablero pequeño.',
+    rule: 'Toca Usar para jugar con ellos.',
+    use: 'Usar',
+    inUse: 'En uso',
+  },
   leaderboard: {
     navLink: 'Clasificación',
     title: 'Clasificación',

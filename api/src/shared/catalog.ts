@@ -37,6 +37,8 @@ export const FEATURE_IDS = [
   'accounts',
   'leaderboard',
   'lively-fields',
+  'colours-page',
+  'room-rename',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

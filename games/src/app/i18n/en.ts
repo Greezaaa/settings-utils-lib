@@ -66,6 +66,7 @@ export const EN: SiteMessages = {
     themeSwitch: (current, next) => `Theme: ${current}. Switch to ${next}`,
     language: 'Language',
     boardColours: 'Game colours',
+    allColours: 'See all colours',
     boardThemes: {
       light: { name: 'Light', summary: 'The site’s light colours' },
       dark: { name: 'Dark', summary: 'The site’s dark colours' },
@@ -411,7 +412,7 @@ export const EN: SiteMessages = {
     section: 'Smart games',
     ages: age => `Ages ${age}+`,
     new: 'New',
-    popular: 'Popular',
+    popular: 'Most played',
     hidden: 'Hidden',
     addFavorite: game => `Add ${game} to favourites`,
     removeFavorite: game => `Remove ${game} from favourites`,
@@ -950,6 +951,8 @@ export const EN: SiteMessages = {
       accounts: 'Player accounts',
       leaderboard: 'Leaderboard',
       'lively-fields': 'Animated form fields',
+      'colours-page': 'Page with every game colour',
+      'room-rename': 'New name button in rooms',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:
@@ -1055,6 +1058,7 @@ export const EN: SiteMessages = {
     playAgain: 'Play again',
     leave: 'Leave the room',
     kick: 'Remove',
+    newName: 'Get a new name',
     kicked: 'The host removed you from the room.',
     gameUnavailable: 'This game isn’t open for rooms right now.',
     animals: ANIMALS,
@@ -1139,6 +1143,13 @@ export const EN: SiteMessages = {
     resetDone: 'Your password is changed and you’re signed in.',
   },
 
+  colours: {
+    title: 'Game colours',
+    lead: 'Every set of colours for the game boards, each on a small board.',
+    rule: 'Tap Use to play with it.',
+    use: 'Use',
+    inUse: 'In use',
+  },
   leaderboard: {
     navLink: 'Leaderboard',
     title: 'Leaderboard',

@@ -178,9 +178,15 @@
   color: var(--button-text);
 }
 
-// Game colours: a round swatch per theme, its background with its accent in the middle
+// Game colours: a list of the themes, with a round swatch of the chosen one (its background, its accent in the middle)
 .board-colours {
-  justify-content: space-between;
+  align-items: center;
+
+  select {
+    flex: 1;
+    font-size: 0.875rem;
+    min-height: 2.25rem;
+  }
 }
 
 .swatch {
@@ -188,16 +194,13 @@
   border: 4px solid var(--swatch-background);
   border-radius: 50%;
   box-shadow: 0 0 0 1px var(--border);
-  cursor: pointer;
+  flex: none;
   height: 1.75rem;
-  padding: 0;
   width: 1.75rem;
+}
 
-  &[aria-pressed='true'] {
-    box-shadow:
-      0 0 0 2px var(--surface),
-      0 0 0 4px var(--heading);
-  }
+.all-colours {
+  font-size: 0.8125rem;
 }
 
 .theme-dot {

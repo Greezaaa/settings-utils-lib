@@ -1,26 +1,26 @@
-import { SuBaseThemeName } from '@su-labs/theme';
-import { GameCategory, GameSlug } from '../core/games';
-import { FeatureId } from '../core/features';
-import { FeedbackReason, SuggestionCategory } from '../core/games-api';
-import { PictureId } from '../core/pictures';
-import { SignsLevelId } from '../games/find-the-signs';
-import { BoardLevelId } from '../games/board';
-import { PictureModeId } from '../games/picture-game';
-import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
-import { ErrorSource, ReportStatus, StatsPeriod, SuggestionStatus } from '../core/admin-api';
-import { RoomError } from '../core/room-view';
-import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
-import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
-import { GameThemeId } from '../core/game-themes';
-import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
-import { ClimbModeId } from '../games/climb-tower';
-import { HowManyLevelId } from '../games/how-many';
-import { AnswerStyle } from '../core/answer-words';
-import { MenuAnimationChoice } from '../core/menu-animation';
-import { WordGender } from './word-gender';
-import { AccountProblem } from '../core/player-account';
 import { SuStrengthLevel } from '@su-labs/fields';
+import { SuBaseThemeName } from '@su-labs/theme';
+import { ErrorSource, ReportStatus, StatsPeriod, SuggestionStatus } from '../core/admin-api';
+import { AnswerStyle } from '../core/answer-words';
+import { FeatureId } from '../core/features';
+import { GameThemeId } from '../core/game-themes';
+import { GameCategory, GameSlug } from '../core/games';
+import { FeedbackReason, SuggestionCategory } from '../core/games-api';
+import { MenuAnimationChoice } from '../core/menu-animation';
+import { PictureId } from '../core/pictures';
+import { AccountProblem } from '../core/player-account';
+import { RoomError } from '../core/room-view';
 import { UpdateKind } from '../core/site-updates';
+import { BoardLevelId } from '../games/board';
+import { ClimbModeId } from '../games/climb-tower';
+import { SignsLevelId } from '../games/find-the-signs';
+import { HowManyLevelId } from '../games/how-many';
+import { BuilderLevelId, HintsId, LetterModeId, WordCheck } from '../games/letter-games';
+import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
+import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
+import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
+import { PictureModeId } from '../games/picture-game';
+import { WordGender } from './word-gender';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
 
@@ -72,6 +72,8 @@ export interface SiteMessages {
     readonly language: string;
     readonly boardColours: string;
     readonly boardThemes: Readonly<Record<GameThemeId, OptionText>>;
+    /** Link from the settings to the page with every set of game colours */
+    readonly allColours: string;
     /** How games show answers: colours only, or colours and words */
     readonly answerStyle: string;
     readonly answerStyles: Readonly<Record<AnswerStyle, OptionText>>;
@@ -704,6 +706,8 @@ export interface SiteMessages {
     readonly playAgain: string;
     readonly leave: string;
     readonly kick: string;
+    /** The button on a player's own avatar that asks for another random nickname */
+    readonly newName: string;
     readonly kicked: string;
     /** When the room's game is switched off for rooms */
     readonly gameUnavailable: string;
@@ -784,6 +788,16 @@ export interface SiteMessages {
     readonly resetLead: string;
     readonly resetSave: string;
     readonly resetDone: string;
+  };
+
+  /** Every set of game colours, each on a small sample board, to pick one */
+  readonly colours: {
+    readonly title: string;
+    readonly lead: string;
+    /** Second line of the lead, the call to action */
+    readonly rule: string;
+    readonly use: string;
+    readonly inUse: string;
   };
 
   /** Leaderboards for signed-in players: a table per game setting */

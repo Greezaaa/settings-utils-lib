@@ -6,7 +6,7 @@ import { SHARED_SETTINGS } from './shared-settings';
 export const SITE_THEMES = {
   light: {
     color: '#2f3437',
-    background: '#fbfbfa',
+    background: '#f6f6f4',
     'main-accent': '#111111',
     'second-accent': '#787774',
     'third-accent': '#346538',

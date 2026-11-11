@@ -8,7 +8,7 @@ import { NewGames } from '../../core/new-games';
 import { PopularGames } from '../../core/popular-games';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-/** A card that links to a game: its recommended age, "New" and "Popular" badges, name, summary and favourite heart */
+/** A card that links to a game: its recommended age, "New" and "Most played" badges, name, summary and favourite heart */
 @Component({
   selector: 'app-game-card',
   imports: [TranslatePipe, RouterLink],

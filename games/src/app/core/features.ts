@@ -20,7 +20,9 @@ export type FeatureId =
   | 'category-menu'
   | 'accounts'
   | 'leaderboard'
-  | 'lively-fields';
+  | 'lively-fields'
+  | 'colours-page'
+  | 'room-rename';
 
 /** Games playable in rooms, each with its multiplayer switch */
 export type RoomGame = Extract<
@@ -67,6 +69,10 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'leaderboard', openByDefault: true },
   /** Animated form fields: room-code boxes, a password strength meter and a suggestion box that grows */
   { id: 'lively-fields', openByDefault: false },
+  /** A page with every set of game colours on a sample board, linked from the settings */
+  { id: 'colours-page', openByDefault: false },
+  /** A button on a player's own avatar in a room that asks for another random nickname */
+  { id: 'room-rename', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

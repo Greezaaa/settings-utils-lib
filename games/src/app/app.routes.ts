@@ -17,6 +17,7 @@ const {
   categoryIntros,
   account,
   leaderboard,
+  colours,
 } = PREVIEW_MESSAGES;
 
 /**
@@ -176,6 +177,14 @@ export const routes: Routes = [
       import('./pages/leaderboard/leaderboard-page').then(
         m => m.LeaderboardPage
       ),
+  },
+  {
+    path: 'colours',
+    title: `${colours.title} · ${SITE_NAME}`,
+    data: { description: colours.lead },
+    canActivate: [featureGuard('colours-page')],
+    loadComponent: () =>
+      import('./pages/colours/colours-page').then(m => m.ColoursPage),
   },
   {
     path: 'privacy',

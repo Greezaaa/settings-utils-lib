@@ -1,0 +1,64 @@
+.themes {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr));
+
+  @media (min-width: 48rem) {
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  }
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// Each card is a small board in its own colours
+.theme {
+  align-content: start;
+  background: var(--surface);
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  padding: 1rem;
+
+  p {
+    font-size: 0.8125rem;
+  }
+}
+
+.theme-name {
+  color: var(--heading);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.sample {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.sample-answer {
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--heading);
+  display: inline-flex;
+  font-size: 1.125rem;
+  font-weight: 600;
+  height: 2.25rem;
+  justify-content: center;
+  width: 2.25rem;
+
+  &.is-chosen {
+    background: var(--button-bg);
+    border-color: var(--button-bg);
+    color: var(--button-text);
+  }
+}
+
+// The theme in use: a ring around its button
+.button[aria-pressed='true'] {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--heading);
+}
