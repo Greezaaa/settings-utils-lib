@@ -1,7 +1,9 @@
 <header class="container page-head">
   <div class="page-meta">
     <span class="tag">{{ utility().packageName }}</span>
-    <span class="tag">{{ utility().coreEntry }}</span>
+    @if (utility().coreEntry; as coreEntry) {
+      <span class="tag">{{ coreEntry }}</span>
+    }
     @if (changelog.latest(); as release) {
       <span class="tag tag-green">v{{ release.version }}</span>
     }

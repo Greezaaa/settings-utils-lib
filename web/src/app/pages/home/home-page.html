@@ -26,7 +26,12 @@
       <a class="card utility-card" [routerLink]="['/', utility.slug]" appReveal [style.--index]="index">
         <h3>{{ utility.name }}</h3>
         <p class="muted">{{ utility.summary }}</p>
-        <p class="utility-packages mono">{{ utility.packageName }}<br />{{ utility.coreEntry }}</p>
+        <p class="utility-packages mono">
+          {{ utility.packageName }}
+          @if (utility.coreEntry; as coreEntry) {
+            <br />{{ coreEntry }}
+          }
+        </p>
       </a>
     }
   </div>

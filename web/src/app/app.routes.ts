@@ -58,6 +58,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/visit-tracker/visit-tracker-page').then((m) => m.VisitTrackerPage),
   },
   {
+    path: 'fields',
+    title: `Fields · ${SITE_NAME}`,
+    data: utilityMeta('fields'),
+    loadComponent: () => import('./pages/fields/fields-page').then((m) => m.FieldsPage),
+  },
+  {
     path: 'one-line-imports',
     title: `One-line imports · ${SITE_NAME}`,
     data: {

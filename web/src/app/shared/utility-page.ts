@@ -37,8 +37,9 @@ export class UtilityPage {
     };
   });
 
-  protected readonly install = computed<CodeTab[]>(() => [
-    { label: 'Angular', code: `npm install ${this.utility().packageName}` },
-    { label: 'Any framework', code: 'npm install @su-labs/core' },
-  ]);
+  protected readonly install = computed<CodeTab[]>(() => {
+    const { packageName, coreEntry } = this.utility();
+    const angular = { label: 'Angular', code: `npm install ${packageName}` };
+    return coreEntry ? [angular, { label: 'Any framework', code: 'npm install @su-labs/core' }] : [angular];
+  });
 }

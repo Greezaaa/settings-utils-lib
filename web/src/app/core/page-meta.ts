@@ -23,7 +23,9 @@ export const SITE_META: PageMeta = { description: SITE_DESCRIPTION };
 export function utilityMeta(slug: string): PageMeta {
   const utility = getUtility(slug);
   return {
-    description: `${utility.summary} For Angular (${utility.packageName}) and any framework (${utility.coreEntry}).`,
+    description: utility.coreEntry
+      ? `${utility.summary} For Angular (${utility.packageName}) and any framework (${utility.coreEntry}).`
+      : `${utility.summary} For Angular (${utility.packageName}).`,
   };
 }
 

@@ -436,6 +436,21 @@ input[type='checkbox'] {
   accent-color: var(--accent);
 }
 
+/* @su-labs/fields in the site's colours; set on the root, which also carries data-theme */
+:root {
+  --su-field-surface: var(--surface);
+  --su-field-border: var(--border);
+  --su-field-filled-border: var(--muted);
+  --su-field-text: var(--heading);
+  --su-field-accent: var(--button-bg);
+  --su-field-success: var(--green-text);
+  --su-field-success-bg: var(--green-bg);
+  --su-field-warning: var(--yellow-text);
+  --su-field-danger: var(--red-text);
+  --su-field-track: var(--subtle);
+  --su-field-font-mono: var(--font-mono);
+}
+
 /* Key-value list used by the demos to show live state */
 .state-list {
   align-content: start;

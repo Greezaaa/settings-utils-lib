@@ -1,0 +1,14 @@
+.text-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--heading);
+  font: inherit;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+}
+
+textarea.text-input {
+  resize: none;
+}

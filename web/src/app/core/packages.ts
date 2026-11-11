@@ -15,10 +15,10 @@ export interface SuPackage {
   readonly registry?: SuRegistry;
 }
 
-/** A utility that ships both as an Angular package and as a `@su-labs/core` entry point */
+/** A utility with an Angular package, and usually a `@su-labs/core` entry point too */
 export interface SuUtility extends SuPackage {
-  /** Entry point in `@su-labs/core`, e.g. `@su-labs/core/theme` */
-  readonly coreEntry: string;
+  /** Entry point in `@su-labs/core`, e.g. `@su-labs/core/theme`; none for Angular-only packages */
+  readonly coreEntry?: string;
 }
 
 /** The framework-agnostic package every utility is built on */
@@ -72,6 +72,12 @@ export const UTILITIES: readonly SuUtility[] = [
     packageName: '@su-labs/visit-tracker',
     coreEntry: '@su-labs/core/visit-tracker',
     summary: 'Count returning visits, remember the last one and celebrate milestones.',
+  },
+  {
+    slug: 'fields',
+    name: 'Fields',
+    packageName: '@su-labs/fields',
+    summary: 'Animated form fields: code boxes, a password strength meter and a text box that grows as you type.',
   },
 ];
 

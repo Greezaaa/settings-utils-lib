@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Re-exports `SU_THEME_PALETTES` and `SuPaletteName` from `@su-labs/core/theme`: three ready-made dark palettes
+- Re-exports `SU_THEME_PALETTES`, `SU_PALETTE_NAMES` and `SuPaletteName` from `@su-labs/core/theme`: three ready-made dark palettes
 
 ## [22.2.0] - 2026-11-07
 

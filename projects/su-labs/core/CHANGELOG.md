@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `SU_THEME_PALETTES` in `@su-labs/core/theme`: three ready-made dark palettes (`sunset`, `candy`, `copper`), checked for readable text and accent contrast
+- `SU_THEME_PALETTES` in `@su-labs/core/theme`: three ready-made dark palettes (`sunset`, `candy`, `copper`, listed in `SU_PALETTE_NAMES`), checked for readable text and accent contrast
 
 ## [1.5.0] - 2026-11-09
 

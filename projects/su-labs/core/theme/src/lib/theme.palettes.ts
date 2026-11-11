@@ -1,7 +1,8 @@
 import { ThemeCssVariables } from './theme.types';
 
 /** Ready-made dark palettes, each a text colour, a background and an accent */
-export type SuPaletteName = 'sunset' | 'candy' | 'copper';
+export const SU_PALETTE_NAMES = ['sunset', 'candy', 'copper'] as const;
+export type SuPaletteName = (typeof SU_PALETTE_NAMES)[number];
 
 /**
  * Picked for contrast on their own background: text at least 8:1, and the accent at least 4.5:1, so it works as a

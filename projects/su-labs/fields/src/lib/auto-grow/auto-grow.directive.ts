@@ -1,4 +1,4 @@
-import { afterNextRender, DestroyRef, Directive, ElementRef, inject, input } from '@angular/core';
+import { afterNextRender, booleanAttribute, DestroyRef, Directive, ElementRef, inject, input } from '@angular/core';
 
 /** A soft spring that overshoots a little, as the box settles on its new height */
 const SPRING = 'height 240ms cubic-bezier(0.34, 1.56, 0.64, 1)';
@@ -12,7 +12,7 @@ const SPRING = 'height 240ms cubic-bezier(0.34, 1.56, 0.64, 1)';
   host: { '(input)': 'fit()' },
 })
 export class SuAutoGrowDirective {
-  readonly isOn = input(true, { alias: 'suAutoGrow' });
+  readonly isOn = input(true, { alias: 'suAutoGrow', transform: booleanAttribute });
 
   private readonly box: HTMLTextAreaElement = inject(ElementRef).nativeElement;
 

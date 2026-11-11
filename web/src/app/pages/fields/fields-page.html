@@ -1,0 +1,38 @@
+<app-utility-page [utility]="utility" [usage]="usage">
+  <div class="card demo-grid">
+    <div class="demo-controls">
+      <div class="field">
+        <span aria-hidden="true">Enter the code we sent (any 6 letters or digits)</span>
+        <su-lib-code-boxes
+          [(value)]="code"
+          [length]="codeLength"
+          label="Enter the code we sent"
+          [complete]="isCodeComplete()"
+        />
+      </div>
+
+      <label class="field">
+        <span>New password</span>
+        <input #password class="text-input" type="password" autocomplete="new-password" />
+        <su-lib-strength-meter [field]="password" label="Password strength" [levelNames]="levelNames" [minLength]="10" />
+      </label>
+
+      <label class="field">
+        <span>A note that grows as you type</span>
+        <textarea class="text-input" suAutoGrow rows="2" placeholder="Add a note…"></textarea>
+      </label>
+    </div>
+
+    <dl class="state-list">
+      <div>
+        <dt>value()</dt>
+        <dd>'{{ code() }}'</dd>
+      </div>
+      <div>
+        <dt>complete</dt>
+        <dd>{{ isCodeComplete() }}</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="muted">Every animation stops when your device asks for less motion.</p>
+</app-utility-page>

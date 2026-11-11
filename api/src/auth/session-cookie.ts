@@ -5,12 +5,16 @@ export const SESSION_COOKIE = 'su_labs_admin';
 /** The cookie that keeps a player signed in to their account */
 export const PLAYER_COOKIE = 'su_labs_player';
 
-/** A cookie's value from a request, if any */
+/** A cookie's value from a request, if any; a badly encoded one counts as none, so it can't turn a 401 into a 500 */
 export function readCookie(request: Request, name: string): string | null {
   for (const part of (request.headers.cookie ?? '').split(';')) {
     const [key, ...value] = part.trim().split('=');
     if (key === name && value.length > 0) {
-      return decodeURIComponent(value.join('='));
+      try {
+        return decodeURIComponent(value.join('='));
+      } catch {
+        return null;
+      }
     }
   }
   return null;
