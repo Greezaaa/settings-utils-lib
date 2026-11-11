@@ -50,7 +50,12 @@
         <div class="board-table">
           <div class="board-head">
             <h2 class="card-title">{{ boardLabel(messages(), game(), board.key) }}</h2>
-            <small class="muted">{{ 'leaderboard.totals' | translate: board.players : board.plays }}</small>
+            <small class="muted">
+              {{ 'leaderboard.totals' | translate: board.players : board.plays }}
+              @if (yourPlays().get(board.key); as plays) {
+                · {{ 'leaderboard.yourPlays' | translate: plays }}
+              }
+            </small>
           </div>
           <div class="table-scroll">
             <table>

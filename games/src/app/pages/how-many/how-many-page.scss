@@ -134,11 +134,13 @@
   margin: 0;
 }
 
+// Rows of equal buttons, at most 5 to a row (1 to 10 makes two rows of 5)
 .answers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(var(--answer-columns), minmax(0, 4.5rem));
   justify-content: center;
+  width: 100%;
 }
 
 // Big number buttons, with dots under each number like on a dice
@@ -154,8 +156,7 @@
   gap: 0.375rem;
   justify-items: center;
   min-height: 5.5rem;
-  min-width: 4.5rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.25rem;
   touch-action: manipulation;
 
   &:hover:not(:disabled) {

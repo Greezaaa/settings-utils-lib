@@ -153,8 +153,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     'how-many': {
       name: 'Quanti sono?',
       summary:
-        'Conta i delfini, le paperelle o le stelle e tocca quanti sono, da 1 a 5. Tocca ognuno per sentire il suo numero.',
-      subtitle: 'contare da 1 a 5',
+        'Conta i delfini, le paperelle o le stelle e tocca quanti sono, da 1 a 10. Tocca ognuno per dargli il suo numero.',
+      subtitle: 'contare da 1 a 10',
       intro: 'Un gioco per contare per i più piccoli.',
     },
     'letter-games': {
@@ -741,11 +741,13 @@ export const italian = (gender: WordGender): SiteMessages => ({
 
   howMany: {
     lead: 'Conta le cose sul tabellone, poi tocca quante sono.',
-    rule: 'Tocca ognuna per contarla ad alta voce!',
+    rule: 'Tocca ognuna per contarla!',
     board: 'Gioco per contare',
     levels: {
       easy: { name: 'Da 1 a 3', summary: 'Fino a tre cose' },
       normal: { name: 'Da 1 a 5', summary: 'Fino a cinque cose' },
+      hard: { name: 'Da 1 a 7', summary: 'Fino a sette cose' },
+      expert: { name: 'Da 1 a 10', summary: 'Fino a dieci cose' },
     },
     question: 'Quanti sono?',
     tapHint: 'Tocca ognuno per contare',
@@ -907,7 +909,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
     statsReset: 'Le statistiche ripartono da oggi.',
     playsTotal: (total) => `${total} partite in tutto`,
     refresh: 'Aggiorna',
-    playsColumns: { game: 'Gioco', plays: 'Partite', reasons: 'Motivi' },
+    playsColumns: { game: 'Gioco', plays: 'Partite giocate', reasons: 'Motivi' },
     suggestionStatuses: { new: 'Nuovi', read: 'Letti', archived: 'Archiviati' },
     showPicture: 'Mostra l’immagine',
     pictureAlt: 'Immagine inviata con il suggerimento',
@@ -951,6 +953,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'colours-page': 'Pagina con tutti i colori del gioco',
       'room-rename': 'Pulsante nuovo nome nelle stanze',
       'public-leaderboard': 'Classifica per tutti (anche senza account)',
+      'how-many-sound': 'Numeri ad alta voce in Quanti sono?',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:
@@ -1157,7 +1160,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     youreHidden: 'Non compari nelle classifiche.',
     changeInAccount: 'Cambialo nel tuo account',
     mysteryPlayer: 'Giocatore misterioso',
-    totals: (players, plays) => `${players} ${players === 1 ? 'giocatore' : 'giocatori'} · ${plays} ${plays === 1 ? 'partita' : 'partite'}`,
+    totals: (players, plays) => `${players} ${players === 1 ? 'giocatore' : 'giocatori'} · ${plays} ${plays === 1 ? 'partita giocata' : 'partite giocate'}`,
+    yourPlays: (plays) => `${plays} ${plays === 1 ? 'giocata' : 'giocate'} da te`,
     yourBest: (best) => `Il tuo miglior risultato: ${best}`,
     wouldBePlace: (place) => `saresti al ${place}° posto`,
     yourPlace: (place) => `sei al ${place}° posto`,

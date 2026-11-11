@@ -830,6 +830,8 @@ export interface SiteMessages {
     readonly mysteryPlayer: string;
     /** Everyone ranked on a board and the games they finished, e.g. `12 players · 40 games played` */
     readonly totals: (players: number, plays: number) => string;
+    /** The games the signed-in player finished on a board, after the totals */
+    readonly yourPlays: (plays: number) => string;
     /** The visitor's own best on a board, never added to it; with the place it would have or has */
     readonly yourBest: (best: string) => string;
     readonly wouldBePlace: (place: number) => string;

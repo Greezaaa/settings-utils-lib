@@ -8,13 +8,29 @@
   grid-template-columns: minmax(0, 1fr);
   max-width: 28rem;
 
+  // Wide screens: the cards share three rows (title, what's in the middle, button), so titles and buttons line up
   @media (min-width: 48rem) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto 1fr auto;
     max-width: 52rem;
+
+    .entry-card {
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+
+      > :nth-child(2) {
+        align-self: center;
+      }
+
+      // The code boxes are only as wide as their boxes: centred, like the rest of the card
+      su-lib-code-boxes {
+        margin-inline: auto;
+      }
+    }
   }
 }
 
-// Both cards take the row's height (the grid stretches them), their content centred in it
+// Both cards take the row's height (the grid stretches them)
 .entry-card {
   align-content: center;
   display: grid;

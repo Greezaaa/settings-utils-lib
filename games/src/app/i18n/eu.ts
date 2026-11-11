@@ -158,8 +158,8 @@ export const EU: SiteMessages = {
     'how-many': {
       name: 'Zenbat daude?',
       summary:
-        'Zenbatu izurdeak, ahatetxoak edo izarrak eta sakatu zenbat dauden, 1etik 5era. Sakatu bakoitza bere zenbakia entzuteko.',
-      subtitle: '1etik 5era zenbatu',
+        'Zenbatu izurdeak, ahatetxoak edo izarrak eta sakatu zenbat dauden, 1etik 10era. Sakatu bakoitza bere zenbakia jartzeko.',
+      subtitle: '1etik 10era zenbatu',
       intro: 'Zenbatzeko joko bat txikienentzat.',
     },
     'letter-games': {
@@ -769,11 +769,13 @@ export const EU: SiteMessages = {
 
   howMany: {
     lead: 'Zenbatu taulako gauzak eta sakatu zenbat dauden.',
-    rule: 'Sakatu bakoitza ozen zenbatzeko!',
+    rule: 'Sakatu bakoitza zenbatzeko!',
     board: 'Zenbatzeko jokoa',
     levels: {
       easy: { name: '1etik 3ra', summary: 'Hiru gauza arte' },
       normal: { name: '1etik 5era', summary: 'Bost gauza arte' },
+      hard: { name: '1etik 7ra', summary: 'Zazpi gauza arte' },
+      expert: { name: '1etik 10era', summary: 'Hamar gauza arte' },
     },
     question: 'Zenbat daude?',
     tapHint: 'Sakatu bakoitza zenbatzeko',
@@ -930,7 +932,7 @@ export const EU: SiteMessages = {
     statsReset: 'Estatistikak gaurtik hasten dira berriro.',
     playsTotal: total => `${total} partida guztira`,
     refresh: 'Freskatu',
-    playsColumns: { game: 'Jokoa', plays: 'Partidak', reasons: 'Arrazoiak' },
+    playsColumns: { game: 'Jokoa', plays: 'Jokatutako partidak', reasons: 'Arrazoiak' },
     suggestionStatuses: {
       new: 'Berriak',
       read: 'Irakurriak',
@@ -980,6 +982,7 @@ export const EU: SiteMessages = {
       'colours-page': 'Jokoaren kolore guztien orria',
       'room-rename': 'Izen berriaren botoia geletan',
       'public-leaderboard': 'Sailkapena guztientzat (konturik gabe ere)',
+      'how-many-sound': 'Zenbakiak ozen «Zenbat daude?» jokoan',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1201,7 +1204,8 @@ export const EU: SiteMessages = {
     youreHidden: 'Ez zaude sailkapenetan.',
     changeInAccount: 'Aldatu zure kontuan',
     mysteryPlayer: 'Jokalari misteriotsua',
-    totals: (players, plays) => `${players} jokalari · ${plays} partida`,
+    totals: (players, plays) => `${players} jokalari · ${plays} partida jokatuta`,
+    yourPlays: (plays) => `${plays} zuk jokatuta`,
     yourBest: (best) => `Zure emaitzarik onena: ${best}`,
     wouldBePlace: (place) => `${place}. postuan egongo zinateke`,
     yourPlace: (place) => `${place}. postuan zaude`,

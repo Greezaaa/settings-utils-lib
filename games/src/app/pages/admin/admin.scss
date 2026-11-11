@@ -127,7 +127,8 @@ input[type='text'] {
   }
 }
 
-.switch-row input:checked + .track::after {
+// .switch with it: stronger than switch.scss, which loads after these styles
+.switch.switch-row input:checked + .track::after {
   translate: 0.875rem 0;
 }
 
@@ -137,6 +138,12 @@ input[type='text'] {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+// A list drawn as a card keeps the card's padding
+.card.plain-list {
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
 }
 
 .table-scroll {

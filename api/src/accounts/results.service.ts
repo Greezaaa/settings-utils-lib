@@ -134,7 +134,8 @@ export class ResultsService {
   /**
    * A game's leaderboards: the best players for each of its settings, the most played settings first, and the asking
    * player's own place below them. Only players who chose to appear are ranked, unless `withHidden` (the public
-   * leaderboards): then everyone is, those who chose not to appear under no name.
+   * leaderboards): then everyone is, those who chose not to appear under no name. A best kept from before the account
+   * (merged with no plays counted) still counts as one game played.
    */
   async leaderboards(
     game: ResultGame,
@@ -154,10 +155,11 @@ export class ResultsService {
       total_plays: string;
     }[] = await this.results.query(
       `SELECT * FROM (
-         SELECT r.key, r.plays, r.best, r.player_id, p.screen_name, p.show_on_leaderboard AS shown,
+         SELECT r.key, GREATEST(r.plays, 1) AS plays, r.best, r.player_id, p.screen_name,
+                p.show_on_leaderboard AS shown,
                 ROW_NUMBER() OVER (PARTITION BY r.key ORDER BY r.best ${order}, r.updated ASC) AS place,
                 COUNT(*) OVER (PARTITION BY r.key) AS players,
-                SUM(r.plays) OVER (PARTITION BY r.key) AS total_plays
+                SUM(GREATEST(r.plays, 1)) OVER (PARTITION BY r.key) AS total_plays
          FROM player_results r JOIN players p ON p.id = r.player_id
          WHERE r.game = $1 AND ($3 OR p.show_on_leaderboard)
        ) ranked

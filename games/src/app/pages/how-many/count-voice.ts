@@ -1,4 +1,5 @@
-import { DOCUMENT, inject, Injectable, signal } from '@angular/core';
+import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
+import { FeatureFlags } from '../../core/feature-flags';
 import { readStored, writeStored } from '../../core/site-storage';
 import { LanguageId } from '../../i18n/site-messages';
 
@@ -16,14 +17,18 @@ const VOICE_LANGUAGES: Readonly<Record<LanguageId, string>> = {
 
 /**
  * Says numbers out loud with the browser's own voice, for kids who can't read them yet. Nothing is recorded or sent;
- * it's silent where the browser has no voice, or when the player turned the sound off (remembered in this browser).
+ * it's silent where the browser has no voice, while the admin keeps the `how-many-sound` switch off, or when the player
+ * turned the sound off (remembered in this browser).
  */
 @Injectable({ providedIn: 'root' })
 export class CountVoice {
   private readonly window = inject(DOCUMENT).defaultView;
+  private readonly features = inject(FeatureFlags);
   private readonly soundOn = signal(readStored(SOUND_STORAGE) !== false);
 
-  readonly isOn = this.soundOn.asReadonly();
+  /** Whether the admin opened the sound; until then the game is silent and has no sound button */
+  readonly isAvailable = computed(() => this.features.canUse('how-many-sound'));
+  readonly isOn = computed(() => this.isAvailable() && this.soundOn());
 
   toggle(): void {
     this.soundOn.update((on) => !on);
@@ -33,7 +38,7 @@ export class CountVoice {
 
   say(text: string, language: LanguageId): void {
     const speech = this.window?.speechSynthesis;
-    if (!this.soundOn() || !speech) {
+    if (!this.isOn() || !speech) {
       return;
     }
     speech.cancel();

@@ -53,7 +53,12 @@
               </div>
               <p class="hint muted">{{ 'howMany.tapHint' | translate }}</p>
 
-              <div class="answers" role="group" [attr.aria-label]="'howMany.question' | translate">
+              <div
+                class="answers"
+                role="group"
+                [style.--answer-columns]="answerColumns()"
+                [attr.aria-label]="'howMany.question' | translate"
+              >
                 @for (value of answers(); track value) {
                   <button
                     type="button"
@@ -114,16 +119,18 @@
               </button>
             }
           </div>
-          <button
-            type="button"
-            class="button button-secondary sound"
-            [attr.aria-pressed]="voice.isOn()"
-            [attr.aria-label]="voice.isOn() ? ('howMany.soundOn' | translate) : ('howMany.soundOff' | translate)"
-            [title]="voice.isOn() ? ('howMany.soundOn' | translate) : ('howMany.soundOff' | translate)"
-            (click)="voice.toggle()"
-          >
-            <span aria-hidden="true">{{ voice.isOn() ? '🔊' : '🔇' }}</span>
-          </button>
+          @if (voice.isAvailable()) {
+            <button
+              type="button"
+              class="button button-secondary sound"
+              [attr.aria-pressed]="voice.isOn()"
+              [attr.aria-label]="voice.isOn() ? ('howMany.soundOn' | translate) : ('howMany.soundOff' | translate)"
+              [title]="voice.isOn() ? ('howMany.soundOn' | translate) : ('howMany.soundOff' | translate)"
+              (click)="voice.toggle()"
+            >
+              <span aria-hidden="true">{{ voice.isOn() ? '🔊' : '🔇' }}</span>
+            </button>
+          }
         </div>
 
         <!-- A star for each round right at the first try, a dot for the others -->

@@ -51,7 +51,7 @@ export class LeaderboardPage {
   protected readonly yourScores = computed(() => {
     const boards = this.boards();
     const scores = new Map<string, YourScore>();
-    if (!Array.isArray(boards)) {
+    if (!this.isList(boards)) {
       return scores;
     }
     for (const board of boards) {
@@ -61,6 +61,21 @@ export class LeaderboardPage {
       }
     }
     return scores;
+  });
+
+  /** The games the signed-in player finished, per board they're ranked on */
+  protected readonly yourPlays = computed(() => {
+    const boards = this.boards();
+    const plays = new Map<string, number>();
+    if (this.isList(boards)) {
+      for (const board of boards) {
+        const mine = board.entries.find(({ isMe }) => isMe) ?? board.me;
+        if (mine) {
+          plays.set(board.key, mine.plays);
+        }
+      }
+    }
+    return plays;
   });
 
   constructor() {

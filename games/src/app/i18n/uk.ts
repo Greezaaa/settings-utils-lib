@@ -189,8 +189,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     'how-many': {
       name: 'Скільки?',
       summary:
-        'Порахуй дельфінів, каченят чи зірочки й торкнися, скільки їх, від 1 до 5. Торкнися кожного, щоб почути його число.',
-      subtitle: 'лічба від 1 до 5',
+        'Порахуй дельфінів, каченят чи зірочки й торкнися, скільки їх, від 1 до 10. Торкнися кожного, щоб дати йому число.',
+      subtitle: 'лічба від 1 до 10',
       intro: 'Гра на лічбу для найменших.',
     },
     'letter-games': {
@@ -799,11 +799,13 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
 
   howMany: {
     lead: 'Порахуй речі на полі, а потім торкнися, скільки їх.',
-    rule: 'Торкнися кожної, щоб порахувати вголос!',
+    rule: 'Торкнися кожної, щоб порахувати!',
     board: 'Гра на лічбу',
     levels: {
       easy: { name: 'Від 1 до 3', summary: 'До трьох речей' },
       normal: { name: 'Від 1 до 5', summary: 'До п’яти речей' },
+      hard: { name: 'Від 1 до 7', summary: 'До семи речей' },
+      expert: { name: 'Від 1 до 10', summary: 'До десяти речей' },
     },
     question: 'Скільки їх?',
     tapHint: 'Торкнися кожного, щоб порахувати',
@@ -1012,6 +1014,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'colours-page': 'Сторінка з усіма кольорами гри',
       'room-rename': 'Кнопка нового імені в кімнатах',
       'public-leaderboard': 'Таблиця лідерів для всіх (і без облікового запису)',
+      'how-many-sound': 'Числа вголос у грі «Скільки?»',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:
@@ -1224,12 +1227,13 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     loading: 'Завантаження…',
     failed: 'Зараз не вдається завантажити таблицю лідерів. Спробуй ще раз за мить.',
     empty: forGender(gender, 'Ще ніхто не грав у цю гру з обліковим записом. Будь першим!', 'Ще ніхто не грав у цю гру з обліковим записом. Будь першою!'),
-    columns: { place: 'Місце', name: 'Ім’я в грі', plays: 'Ігор', best: 'Найкраще' },
+    columns: { place: 'Місце', name: 'Ім’я в грі', plays: 'Зіграно ігор', best: 'Найкраще' },
     you: 'ти',
     youreHidden: 'Тебе немає в таблицях лідерів.',
     changeInAccount: 'Зміни це у своєму обліковому записі',
     mysteryPlayer: 'Таємний гравець',
-    totals: (players, plays) => `Гравців: ${players} · Ігор: ${plays}`,
+    totals: (players, plays) => `Гравців: ${players} · Зіграно ігор: ${plays}`,
+    yourPlays: (plays) => `Твоїх: ${plays}`,
     yourBest: (best) => `Твій найкращий результат: ${best}`,
     wouldBePlace: (place) => `твоє місце було б ${place}`,
     yourPlace: (place) => `твоє місце: ${place}`,

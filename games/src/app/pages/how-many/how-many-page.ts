@@ -14,6 +14,8 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'playing' | 'done';
 
+/** At most this many answer buttons to a row */
+const MAX_ANSWER_COLUMNS = 5;
 /** How long the round celebrates a right answer before the next one */
 const CELEBRATE_MS = 1600;
 /** Confetti pieces in a celebration, spread around a circle */
@@ -21,7 +23,8 @@ const CONFETTI = ['🎉', '⭐', '✨', '🌟', '🎊', '💫', '⭐', '✨'];
 
 /**
  * How many? A counting game for the youngest (from 3): a few things pop in, the child counts them (tapping each one
- * numbers it, and the browser says the number out loud) and taps how many there are, from 1 to 3 or 1 to 5. A right
+ * numbers it, and the browser says the number out loud once the admin opens the sound) and taps how many there are,
+ * from 1 to 3 up to 1 to 10. A right
  * answer makes everything dance; a wrong one just shakes, and the child tries again. Ten rounds, a star for each one
  * right at the first try.
  */
@@ -50,6 +53,8 @@ export class HowManyPage {
 
   protected readonly levelId = signal<HowManyLevelId>('easy');
   protected readonly answers = computed(() => answersFor(getHowManyLevel(this.levelId())));
+  /** Answer buttons per row: all of them, up to 5 */
+  protected readonly answerColumns = computed(() => Math.min(this.answers().length, MAX_ANSWER_COLUMNS));
   protected readonly phase = signal<Phase>('playing');
   protected readonly rounds = signal<readonly HowManyRound[]>([]);
   protected readonly index = signal(0);

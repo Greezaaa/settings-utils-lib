@@ -6,6 +6,8 @@ describe('how many', () => {
   it('asks numbers from 1 to the level’s most', () => {
     expect(answersFor(getHowManyLevel('easy'))).toEqual([1, 2, 3]);
     expect(answersFor(getHowManyLevel('normal'))).toEqual([1, 2, 3, 4, 5]);
+    expect(answersFor(getHowManyLevel('hard'))).toHaveLength(7);
+    expect(answersFor(getHowManyLevel('expert'))).toHaveLength(10);
   });
 
   it('never repeats the count or the thing of the round before', () => {

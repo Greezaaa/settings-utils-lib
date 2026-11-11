@@ -40,6 +40,7 @@ export const FEATURE_IDS = [
   'colours-page',
   'room-rename',
   'public-leaderboard',
+  'how-many-sound',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

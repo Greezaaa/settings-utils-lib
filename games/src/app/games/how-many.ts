@@ -1,7 +1,7 @@
 import { pick, Random } from './random';
 
-/** How many things a round can have at most: up to 3 for a start, up to 5 once counting is easy */
-export type HowManyLevelId = 'easy' | 'normal';
+/** How many things a round can have at most: up to 3 for a start, then 5, 7 and 10 as counting gets easy */
+export type HowManyLevelId = 'easy' | 'normal' | 'hard' | 'expert';
 
 export interface HowManyLevel {
   readonly id: HowManyLevelId;
@@ -11,6 +11,8 @@ export interface HowManyLevel {
 export const HOW_MANY_LEVELS: readonly HowManyLevel[] = [
   { id: 'easy', max: 3 },
   { id: 'normal', max: 5 },
+  { id: 'hard', max: 7 },
+  { id: 'expert', max: 10 },
 ];
 
 export const getHowManyLevel = (id: HowManyLevelId): HowManyLevel =>

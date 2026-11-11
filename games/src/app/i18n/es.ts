@@ -159,8 +159,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     'how-many': {
       name: '¿Cuántos hay?',
       summary:
-        'Cuenta los delfines, patitos o estrellas y toca cuántos hay, del 1 al 5. Toca cada uno para oír su número.',
-      subtitle: 'contar del 1 al 5',
+        'Cuenta los delfines, patitos o estrellas y toca cuántos hay, del 1 al 10. Toca cada uno para ponerle su número.',
+      subtitle: 'contar del 1 al 10',
       intro: 'Un juego para contar para los más peques.',
     },
     'letter-games': {
@@ -778,11 +778,13 @@ export const spanish = (gender: WordGender): SiteMessages => ({
 
   howMany: {
     lead: 'Cuenta las cosas del tablero y toca cuántas hay.',
-    rule: '¡Toca cada una para contarla en voz alta!',
+    rule: '¡Toca cada una para contarla!',
     board: 'Juego de contar',
     levels: {
       easy: { name: 'Del 1 al 3', summary: 'Hasta tres cosas' },
       normal: { name: 'Del 1 al 5', summary: 'Hasta cinco cosas' },
+      hard: { name: 'Del 1 al 7', summary: 'Hasta siete cosas' },
+      expert: { name: 'Del 1 al 10', summary: 'Hasta diez cosas' },
     },
     question: '¿Cuántos hay?',
     tapHint: 'Toca cada uno para contar',
@@ -943,7 +945,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     statsReset: 'Las estadísticas empiezan de nuevo desde hoy.',
     playsTotal: total => `${total} partidas en total`,
     refresh: 'Actualizar',
-    playsColumns: { game: 'Juego', plays: 'Partidas', reasons: 'Motivos' },
+    playsColumns: { game: 'Juego', plays: 'Partidas jugadas', reasons: 'Motivos' },
     suggestionStatuses: {
       new: 'Nuevas',
       read: 'Leídas',
@@ -993,6 +995,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'colours-page': 'Página con todos los colores del juego',
       'room-rename': 'Botón de nombre nuevo en las salas',
       'public-leaderboard': 'Clasificación para todos (también sin cuenta)',
+      'how-many-sound': 'Números en voz alta en ¿Cuántos hay?',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:
@@ -1213,7 +1216,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     youreHidden: 'No apareces en las clasificaciones.',
     changeInAccount: 'Cámbialo en tu cuenta',
     mysteryPlayer: 'Jugador misterioso',
-    totals: (players, plays) => `${players} ${players === 1 ? 'jugador' : 'jugadores'} · ${plays} ${plays === 1 ? 'partida' : 'partidas'}`,
+    totals: (players, plays) => `${players} ${players === 1 ? 'jugador' : 'jugadores'} · ${plays} ${plays === 1 ? 'partida jugada' : 'partidas jugadas'}`,
+    yourPlays: (plays) => `${plays} ${plays === 1 ? 'jugada' : 'jugadas'} por ti`,
     yourBest: (best) => `Tu mejor resultado: ${best}`,
     wouldBePlace: (place) => `estarías en el puesto ${place}`,
     yourPlace: (place) => `estás en el puesto ${place}`,

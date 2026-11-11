@@ -153,8 +153,8 @@ export const EN: SiteMessages = {
     'how-many': {
       name: 'How many?',
       summary:
-        'Count the dolphins, ducks or stars and tap how many there are, from 1 to 5. Tap each one to hear its number.',
-      subtitle: 'count from 1 to 5',
+        'Count the dolphins, ducks or stars and tap how many there are, from 1 to 10. Tap each one to give it its number.',
+      subtitle: 'count from 1 to 10',
       intro: 'A counting game for little ones.',
     },
     'letter-games': {
@@ -747,11 +747,13 @@ export const EN: SiteMessages = {
 
   howMany: {
     lead: 'Count the things on the board, then tap how many there are.',
-    rule: 'Tap each one to count it out loud!',
+    rule: 'Tap each one to count it!',
     board: 'Counting game',
     levels: {
       easy: { name: '1 to 3', summary: 'Up to three things' },
       normal: { name: '1 to 5', summary: 'Up to five things' },
+      hard: { name: '1 to 7', summary: 'Up to seven things' },
+      expert: { name: '1 to 10', summary: 'Up to ten things' },
     },
     question: 'How many are there?',
     tapHint: 'Tap each one to count',
@@ -954,6 +956,7 @@ export const EN: SiteMessages = {
       'colours-page': 'Page with every game colour',
       'room-rename': 'New name button in rooms',
       'public-leaderboard': 'Leaderboard for everyone (also signed out)',
+      'how-many-sound': 'Numbers out loud in How many?',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:
@@ -1164,12 +1167,13 @@ export const EN: SiteMessages = {
     loading: 'Loading…',
     failed: 'The leaderboard can’t be loaded right now. Try again in a moment.',
     empty: 'Nobody has played this game with an account yet. Be the first!',
-    columns: { place: 'Place', name: 'Screen name', plays: 'Times played', best: 'Best' },
+    columns: { place: 'Place', name: 'Screen name', plays: 'Games played', best: 'Best' },
     you: 'you',
     youreHidden: 'You don’t appear on the leaderboards.',
     changeInAccount: 'Change it in your account',
     mysteryPlayer: 'Mystery player',
     totals: (players, plays) => `${players} ${players === 1 ? 'player' : 'players'} · ${plays} ${plays === 1 ? 'game' : 'games'} played`,
+    yourPlays: (plays) => `${plays} played by you`,
     yourBest: (best) => `Your best: ${best}`,
     wouldBePlace: (place) => `you’d be number ${place}`,
     yourPlace: (place) => `you’re number ${place}`,
