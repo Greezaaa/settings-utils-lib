@@ -1,13 +1,13 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().home.categoryGames(games().length) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'home.categoryGames' | translate: games().length }}</span>
   </div>
-  <h1>{{ t().categories[category()] }}</h1>
-  <p class="lead">{{ t().categoryIntros[category()] }}</p>
+  <h1>{{ ('categories' | translate)[category()] }}</h1>
+  <p class="lead">{{ ('categoryIntros' | translate)[category()] }}</p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().categories[category()]">
+<section class="container page-section" [attr.aria-label]="('categories' | translate)[category()]">
   <div class="games">
     @for (game of games(); track game; let index = $index) {
       <app-game-card [game]="game" appReveal [style.--index]="index" />

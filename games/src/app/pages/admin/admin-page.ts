@@ -1,14 +1,14 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { AdminApi } from '../../core/admin-api';
 import { GameAvailability } from '../../core/game-availability';
-import { SiteLanguage } from '../../i18n/site-language';
-import { AdminAccount } from './admin-account';
-import { AdminErrors } from './admin-errors';
-import { AdminGames } from './admin-games';
-import { AdminPlays } from './admin-plays';
-import { AdminSuggestions } from './admin-suggestions';
-import { AdminTeam } from './admin-team';
-import { AdminWordReports } from './admin-word-reports';
+import { AdminAccount } from './admin-account/admin-account';
+import { AdminErrors } from './admin-errors/admin-errors';
+import { AdminGames } from './admin-games/admin-games';
+import { AdminPlays } from './admin-plays/admin-plays';
+import { AdminSuggestions } from './admin-suggestions/admin-suggestions';
+import { AdminTeam } from './admin-team/admin-team';
+import { AdminWordReports } from './admin-word-reports/admin-word-reports';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offline';
 
@@ -25,7 +25,7 @@ const SUPER_TABS: readonly Tab[] = ['games', 'errors', 'team'];
  */
 @Component({
   selector: 'app-admin-page',
-  imports: [AdminAccount, AdminErrors, AdminGames, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
+  imports: [TranslatePipe, AdminAccount, AdminErrors, AdminGames, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],
@@ -33,8 +33,6 @@ const SUPER_TABS: readonly Tab[] = ['games', 'errors', 'team'];
 export class AdminPage {
   protected readonly admin = inject(AdminApi);
   private readonly availability = inject(GameAvailability);
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
 
   protected readonly signIn = signal<SignIn>('restoring');
   protected readonly tab = signal<Tab>('plays');

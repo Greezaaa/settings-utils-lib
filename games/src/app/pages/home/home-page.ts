@@ -5,11 +5,11 @@ import { FavoriteGames } from '../../core/favorite-games';
 import { byCategory, GameSlug } from '../../core/games';
 import { recentlyAdded } from '../../core/new-games';
 import { PopularGames } from '../../core/popular-games';
-import { SiteLanguage } from '../../i18n/site-language';
-import { GameCard } from '../../shared/game-card';
+import { GameCard } from '../../shared/game-card/game-card';
 import { RouterLink } from '@angular/router';
-import { WhatsNew } from './whats-new';
+import { WhatsNew } from './whats-new/whats-new';
 import { Reveal } from '../../shared/reveal';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 /** Games in the home page's "Recently added" section */
 const RECENT_LIMIT = 4;
@@ -20,14 +20,12 @@ const RECENT_LIMIT = 4;
  */
 @Component({
   selector: 'app-home-page',
-  imports: [GameCard, Reveal, RouterLink, WhatsNew],
+  imports: [TranslatePipe, GameCard, Reveal, RouterLink, WhatsNew],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-cards.scss', './home-page.scss'],
 })
 export class HomePage {
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
   private readonly availability = inject(GameAvailability);
   protected readonly features = inject(FeatureFlags);
   protected readonly categories = computed(() => byCategory(this.availability.visibleGames()));

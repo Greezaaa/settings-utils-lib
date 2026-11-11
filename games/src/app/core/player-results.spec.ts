@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isBetter, mergedBests, storedBests } from './player-results';
+import { bestsToSend, isBetter, mergedBests, storedBests } from './player-results';
 
 describe('player results', () => {
   it('knows which way each game is better', () => {
@@ -23,5 +23,19 @@ describe('player results', () => {
       { game: 'climb-tower', key: 'normal', value: 2 },
     ]);
     expect(merged).toEqual({ normal: 14, easy: 9, hard: 30 });
+  });
+
+  it('sends only the bests the account lacks or has worse', () => {
+    const account = [
+      { game: 'climb-tower' as const, key: 'a', value: 10 },
+      { game: 'find-pairs' as const, key: 'a', value: 20 },
+    ];
+    const local = [
+      { game: 'climb-tower' as const, key: 'a', value: 8 },
+      { game: 'find-pairs' as const, key: 'a', value: 15 },
+      { game: 'find-pairs' as const, key: 'b', value: 30 },
+    ];
+    expect(bestsToSend(local, account)).toEqual(local.slice(1));
+    expect(bestsToSend(account, account)).toEqual([]);
   });
 });

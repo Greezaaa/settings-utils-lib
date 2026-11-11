@@ -769,4 +769,28 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .expect(401);
     });
   });
+
+  it("sends the moderators' lists a page at a time", async () => {
+    await app.get(DataSource).query(
+      `INSERT INTO word_reports (language, word, reports, "firstReported")
+         SELECT 'es', 'page' || i, 1, '2026-01-01' FROM generate_series(1, 5) i`,
+    );
+    const page = (offset: number) =>
+      request(app.getHttpServer())
+        .get(`/admin/word-reports?status=pending&offset=${offset}&limit=2`)
+        .set(admin)
+        .expect(200);
+    const words = [
+      ...(await page(0)).body,
+      ...(await page(2)).body,
+      ...(await page(4)).body,
+    ]
+      .map(({ word }: { word: string }) => word)
+      .filter((word: string) => word.startsWith('page'));
+    expect(words).toEqual(['page1', 'page2', 'page3', 'page4', 'page5']);
+    await request(app.getHttpServer())
+      .get('/admin/word-reports?limit=201')
+      .set(admin)
+      .expect(400);
+  });
 });

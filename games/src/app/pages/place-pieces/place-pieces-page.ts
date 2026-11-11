@@ -8,13 +8,13 @@ import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
 import { PlayerAccount } from '../../core/player-account';
 import { RESULT_GAMES } from '../../core/player-results';
-import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { formatTime, GameClock } from '../../shared/game-clock';
 import { BestTimes, pictureScoreKey, readBestTimes, writeBestTimes } from '../../shared/picture-best-times';
-import { PictureSettings } from '../../shared/picture-settings';
-import { PieceSwap, PlaceBoard } from './place-board';
+import { PictureSettings } from '../../shared/picture-settings/picture-settings';
+import { PieceSwap, PlaceBoard } from './place-board/place-board';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 const BEST_TIMES_STORAGE = RESULT_GAMES['place-pieces'].storage;
 
@@ -24,7 +24,7 @@ const BEST_TIMES_STORAGE = RESULT_GAMES['place-pieces'].storage;
  */
 @Component({
   selector: 'app-place-pieces-page',
-  imports: [GameBoard, GameFeedback, PictureSettings, PlaceBoard, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, PlaceBoard, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './place-pieces-page.html',
   styleUrls: [
@@ -36,12 +36,8 @@ const BEST_TIMES_STORAGE = RESULT_GAMES['place-pieces'].storage;
   ],
 })
 export class PlacePiecesPage {
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('place-pieces').minAge;
   private readonly api = inject(GamesApi);
-  /** Sends finished games to the player's account, when signed in */
   private readonly account = inject(PlayerAccount);
 
   protected readonly modeId = signal<PictureModeId>('look');

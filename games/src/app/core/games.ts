@@ -110,7 +110,6 @@ export const GAMES: readonly GameInfo[] = [
 
 export const GAME_SLUGS: readonly GameSlug[] = GAMES.map(({ slug }) => slug);
 
-/** A game's details */
 export function gameInfo(slug: GameSlug): GameInfo {
   const game = GAMES.find(info => info.slug === slug);
   if (!game) {

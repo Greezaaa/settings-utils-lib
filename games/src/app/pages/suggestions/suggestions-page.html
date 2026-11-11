@@ -1,17 +1,17 @@
 <header class="container page-head">
-  <h1>{{ t().suggestions.title }}</h1>
+  <h1>{{ 'suggestions.title' | translate }}</h1>
   <p class="lead">
-    {{ t().suggestions.lead }}
+    {{ 'suggestions.lead' | translate }}
     <br />
-    {{ t().suggestions.rule }}
+    {{ 'suggestions.rule' | translate }}
   </p>
 </header>
 
 <section class="container page-section">
   <form class="card suggestion" (submit)="$event.preventDefault(); send(form)" #form>
-    <p class="warning" role="note">{{ t().suggestions.noPersonalData }}</p>
+    <p class="warning" role="note">{{ 'suggestions.noPersonalData' | translate }}</p>
 
-    <div class="choices" role="radiogroup" [attr.aria-label]="t().suggestions.categoryLabel">
+    <div class="choices" role="radiogroup" [attr.aria-label]="'suggestions.categoryLabel' | translate">
       @for (option of categories; track option) {
         <button
           type="button"
@@ -21,24 +21,24 @@
           [attr.aria-pressed]="option === category()"
           (click)="category.set(option)"
         >
-          {{ t().suggestions.categories[option] }}
+          {{ ('suggestions.categories' | translate)[option] }}
         </button>
       }
     </div>
 
     <label class="field">
-      <span>{{ t().suggestions.textLabel }}</span>
+      <span>{{ 'suggestions.textLabel' | translate }}</span>
       <textarea rows="5" [attr.maxlength]="maxLength" required (input)="onText($event)"></textarea>
       <small class="muted counter">{{ text().length }} / {{ maxLength }}</small>
     </label>
 
     <div class="field">
-      <span>{{ t().suggestions.imageLabel }}</span>
+      <span>{{ 'suggestions.imageLabel' | translate }}</span>
       @if (preview(); as preview) {
         <div class="preview">
-          <img [src]="preview" [alt]="t().suggestions.imageAlt" />
+          <img [src]="preview" [alt]="'suggestions.imageAlt' | translate" />
           <button type="button" class="button button-secondary button-small" (click)="removeImage()">
-            {{ t().suggestions.removeImage }}
+            {{ 'suggestions.removeImage' | translate }}
           </button>
         </div>
       } @else {
@@ -58,21 +58,21 @@
             <path d="M7 11H4.5L3 16.5V20a1.5 1.5 0 0 0 1.5 1.5h15A1.5 1.5 0 0 0 21 20v-3.5L19.5 11H17" />
             <path d="M3 16.5h4.5l1.5 2h6l1.5-2H21" />
           </svg>
-          <strong>{{ isDragging() ? t().suggestions.dropHere : t().suggestions.chooseImage }}</strong>
-          <small class="muted">{{ t().suggestions.imageTypes }}</small>
+          <strong>{{ isDragging() ? ('suggestions.dropHere' | translate) : ('suggestions.chooseImage' | translate) }}</strong>
+          <small class="muted">{{ 'suggestions.imageTypes' | translate }}</small>
         </label>
       }
-      <small class="muted">{{ t().suggestions.imageHint }}</small>
+      <small class="muted">{{ 'suggestions.imageHint' | translate }}</small>
       @if (imageError()) {
-        <small class="error">{{ t().suggestions.imageError }}</small>
+        <small class="error">{{ 'suggestions.imageError' | translate }}</small>
       }
     </div>
 
     @if (sending() === 'failed') {
-      <p class="error" role="alert">{{ t().suggestions.failed }}</p>
+      <p class="error" role="alert">{{ 'suggestions.failed' | translate }}</p>
     }
     <button type="submit" class="button start" [disabled]="!canSend()">
-      {{ sending() === 'sending' ? t().suggestions.sending : t().suggestions.send }}
+      {{ sending() === 'sending' ? ('suggestions.sending' | translate) : ('suggestions.send' | translate) }}
     </button>
   </form>
 </section>

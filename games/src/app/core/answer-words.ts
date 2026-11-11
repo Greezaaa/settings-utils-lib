@@ -4,7 +4,6 @@ import { readStored, writeStored } from './site-storage';
 
 const STORAGE = 'answer-words';
 
-/** How games show whether an answer was right: in colours only, or in colours and words */
 export type AnswerStyle = 'colours' | 'words';
 export const ANSWER_STYLES: readonly AnswerStyle[] = ['colours', 'words'];
 

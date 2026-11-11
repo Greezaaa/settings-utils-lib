@@ -46,7 +46,6 @@ export class RoomClient {
   readonly connection = signal<RoomConnection>('closed');
   readonly room = signal<RoomView | null>(null);
   readonly error = signal<RoomError | null>(null);
-  /** The player removed by the host */
   readonly kicked = signal(false);
   readonly playerId = signal<string | null>(null);
 

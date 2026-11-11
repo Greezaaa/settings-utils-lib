@@ -1,0 +1,33 @@
+@if (step(); as step) {
+  <aside class="feedback" [attr.aria-label]="'feedback.question' | translate" aria-live="polite">
+    @switch (step) {
+      @case ('ask') {
+        <p class="question">{{ 'feedback.question' | translate }}</p>
+        <div class="votes">
+          <button type="button" class="button button-secondary vote" [attr.aria-label]="'feedback.votes.up' | translate" (click)="choose('up')">👍</button>
+          <button type="button" class="button button-secondary vote" [attr.aria-label]="'feedback.votes.down' | translate" (click)="choose('down')">👎</button>
+        </div>
+      }
+      @case ('reason') {
+        <p class="question">{{ 'feedback.why' | translate }}</p>
+        <div class="reasons">
+          @for (reason of reasons[vote()]; track reason) {
+            <button type="button" class="button button-secondary button-small" (click)="send(reason)">
+              {{ ('feedback.reasons' | translate)[reason] }}
+            </button>
+          }
+          <button type="button" class="button button-small" (click)="send()">{{ 'feedback.justSend' | translate }}</button>
+        </div>
+      }
+      @case ('sending') {
+        <p class="muted">{{ 'feedback.sending' | translate }}</p>
+      }
+      @case ('thanks') {
+        <p class="question">{{ 'feedback.thanks' | translate }}</p>
+      }
+      @case ('failed') {
+        <p class="muted">{{ 'feedback.failed' | translate }}</p>
+      }
+    }
+  </aside>
+}

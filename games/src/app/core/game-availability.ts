@@ -23,12 +23,10 @@ export class GameAvailability {
   private readonly switches = signal<ReadonlyMap<GameSlug, boolean>>(new Map());
   private loading: Promise<void> | null = null;
 
-  /** Whether this browser is in the admin's preview mode */
   readonly isPreview = signal(false);
   /** Whether the switches are known (or the API gave up and the defaults apply); until then no game shows */
   readonly isKnown = signal(false);
 
-  /** Games open to the public */
   readonly openGames = computed<readonly GameSlug[]>(() =>
     GAMES.filter(({ slug, openByDefault }) => this.switches().get(slug) ?? openByDefault).map(({ slug }) => slug),
   );

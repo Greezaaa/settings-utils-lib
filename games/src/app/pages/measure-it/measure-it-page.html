@@ -1,17 +1,17 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['measure-it'].name }}</h1>
+  <h1>{{ 'games.measure-it.name' | translate }}</h1>
   <p class="lead">
-    {{ t().measureIt.lead }}
+    {{ 'measureIt.lead' | translate }}
     <br />
-    {{ t().measureIt.rule }}
+    {{ 'measureIt.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().measureIt.board">
+<section class="container page-section" [attr.aria-label]="'measureIt.board' | translate">
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
@@ -21,7 +21,7 @@
             <div
               class="levels"
               role="group"
-              [attr.aria-label]="t().measureIt.modeGroup">
+              [attr.aria-label]="'measureIt.modeGroup' | translate">
               @for (mode of modes; track mode) {
                 <button
                   type="button"
@@ -29,10 +29,10 @@
                   [attr.aria-pressed]="mode === modeId()"
                   (click)="modeId.set(mode)">
                   <span class="level-name">{{
-                    t().measureIt.modes[mode].name
+                    ('measureIt.modes' | translate)[mode].name
                   }}</span>
                   <span class="level-summary">{{
-                    t().measureIt.modes[mode].summary
+                    ('measureIt.modes' | translate)[mode].summary
                   }}</span>
                 </button>
               }
@@ -42,7 +42,7 @@
             <div
               class="levels"
               role="group"
-              [attr.aria-label]="t().settings.levelGroup">
+              [attr.aria-label]="'settings.levelGroup' | translate">
               @for (level of levels; track level) {
                 <button
                   type="button"
@@ -50,10 +50,10 @@
                   [attr.aria-pressed]="level === levelId()"
                   (click)="levelId.set(level)">
                   <span class="level-name">{{
-                    t().measureIt.levels[level]
+                    ('measureIt.levels' | translate)[level]
                   }}</span>
                   <span class="level-summary">{{
-                    t().measureIt.levelSummaries[modeId()][level]
+                    ('measureIt.levelSummaries' | translate)[modeId()][level]
                   }}</span>
                 </button>
               }
@@ -61,31 +61,29 @@
             <div
               class="choices"
               role="group"
-              [attr.aria-label]="t().measureIt.hintsGroup">
+              [attr.aria-label]="'measureIt.hintsGroup' | translate">
               @for (option of hintOptions; track option) {
                 <button
                   type="button"
                   class="button button-secondary"
                   [attr.aria-pressed]="option === hintsId()"
-                  [title]="t().measureIt.hintOptions[option].summary"
+                  [title]="('measureIt.hintOptions' | translate)[option].summary"
                   (click)="hintsId.set(option)">
-                  {{ t().measureIt.hintOptions[option].name }}
+                  {{ ('measureIt.hintOptions' | translate)[option].name }}
                 </button>
               }
             </div>
           </div>
         </div>
         <button type="button" class="button start" (click)="start()">
-          {{ t().settings.start }}
+          {{ 'settings.start' | translate }}
         </button>
       }
 
       @case ('playing') {
         <div class="status">
-          <span class="mono">{{
-            t().measureIt.progress(index() + 1, total())
-          }}</span>
-          <span class="mono">{{ t().playing.score(score()) }}</span>
+          <span class="mono">{{ 'measureIt.progress' | translate: index() + 1 : total() }}</span>
+          <span class="mono">{{ 'playing.score' | translate: score() }}</span>
         </div>
         @if (exercise(); as exercise) {
           <app-measure-round
@@ -98,23 +96,23 @@
           type="button"
           class="button button-secondary"
           (click)="backToSettings()">
-          {{ t().over.changeSettings }}
+          {{ 'over.changeSettings' | translate }}
         </button>
       }
 
       @case ('done') {
-        <p class="eyebrow">{{ t().measureIt.done }}</p>
+        <p class="eyebrow">{{ 'measureIt.done' | translate }}</p>
         <p class="final-score">{{ score() }}</p>
-        <p class="muted">{{ t().measureIt.summary(score(), total()) }}</p>
+        <p class="muted">{{ 'measureIt.summary' | translate: score() : total() }}</p>
         <div class="button-row">
           <button type="button" class="button" (click)="start()">
-            {{ t().over.playAgain }}
+            {{ 'over.playAgain' | translate }}
           </button>
           <button
             type="button"
             class="button button-secondary"
             (click)="backToSettings()">
-            {{ t().over.changeSettings }}
+            {{ 'over.changeSettings' | translate }}
           </button>
         </div>
       }

@@ -7,9 +7,10 @@ import { answersFor, getHowManyLevel, HOW_MANY_LEVELS, HowManyLevelId, HowManyRo
 import { seededRandom } from '../../games/random';
 import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { roundFeedback } from '../../shared/round-feedback';
 import { CountVoice } from './count-voice';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'playing' | 'done';
 
@@ -26,7 +27,7 @@ const CONFETTI = ['🎉', '⭐', '✨', '🌟', '🎊', '💫', '⭐', '✨'];
  */
 @Component({
   selector: 'app-how-many-page',
-  imports: [GameBoard, GameFeedback, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './how-many-page.html',
   styleUrls: [
@@ -42,9 +43,7 @@ export class HowManyPage {
   protected readonly voice = inject(CountVoice);
   protected readonly answerWords = inject(AnswerWords);
   protected readonly feedback = roundFeedback();
-  /** Texts in the site's language */
   protected readonly t = this.language.messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('how-many').minAge;
   protected readonly levels = HOW_MANY_LEVELS;
   protected readonly confetti = CONFETTI.map((piece, index) => ({ piece, angle: (360 / CONFETTI.length) * index }));

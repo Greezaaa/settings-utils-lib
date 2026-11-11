@@ -47,6 +47,19 @@
 		"onLanguage:javascript",
 		"onLanguage:javascriptreact"
 	],
+	"contributes": {
+		"configuration": {
+			"title": "TS One-Line Imports",
+			"properties": {
+				"tsOneLineImports.removeUnusedImports": {
+					"type": "boolean",
+					"default": false,
+					"scope": "resource",
+					"markdownDescription": "Remove unused imports when formatting, like VS Code's **Remove Unused Imports** command. Side-effect imports such as `import './polyfills';` are kept."
+				}
+			}
+		}
+	},
 	"capabilities": {
 		"untrustedWorkspaces": {
 			"supported": false,

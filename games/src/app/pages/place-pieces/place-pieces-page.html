@@ -1,17 +1,17 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['place-pieces'].name }}</h1>
+  <h1>{{ 'games.place-pieces.name' | translate }}</h1>
   <p class="lead">
-    {{ t().placePieces.lead }}
+    {{ 'placePieces.lead' | translate }}
     <br />
-    {{ t().placePieces.rule }}
+    {{ 'placePieces.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().placePieces.board">
+<section class="container page-section" [attr.aria-label]="'placePieces.board' | translate">
   <div class="card play" appGameBoard>
     <!-- The game on one side, its settings, score and buttons on the other (settings first on phones) -->
     <div class="play-layout">
@@ -28,21 +28,21 @@
 
           @if (phase() === 'solved') {
             <p class="done" role="status">
-              {{ t().pictureGames.solved }}
-              <small>{{ t().placePieces.solvedIn(moves(), clock.time()) }}</small>
+              {{ 'pictureGames.solved' | translate }}
+              <small>{{ 'placePieces.solvedIn' | translate: moves() : clock.time() }}</small>
               @if (isNewBest()) {
-                <small class="record">{{ t().pictureGames.newRecord }}</small>
+                <small class="record">{{ 'pictureGames.newRecord' | translate }}</small>
               }
             </p>
           }
 
           @if (phase() === 'playing') {
-            <p class="progress" aria-live="polite">{{ t().pictureGames.inPlace(placed(), arrangement().length) }}</p>
+            <p class="progress" aria-live="polite">{{ 'pictureGames.inPlace' | translate: placed() : arrangement().length }}</p>
           }
 
           @if (phase() === 'preview') {
-            <p class="muted">{{ t().pictureGames.memorize }}</p>
-            <button type="button" class="button ready" (click)="ready()">{{ t().pictureGames.ready }}</button>
+            <p class="muted">{{ 'pictureGames.memorize' | translate }}</p>
+            <button type="button" class="button ready" (click)="ready()">{{ 'pictureGames.ready' | translate }}</button>
           }
         }
       </div>
@@ -55,23 +55,23 @@
         />
 
         <div class="status">
-          <span class="mono">{{ t().placePieces.swaps(moves()) }}</span>
+          <span class="mono">{{ 'placePieces.swaps' | translate: moves() }}</span>
           <span class="mono">{{ clock.time() }}</span>
         </div>
         @if (picture(); as picture) {
           @if (modeId() === 'look') {
             <figure class="reference">
-              <img [src]="picture.src" [alt]="t().pictures[picture.id]" />
-              <figcaption class="muted">{{ t().pictureGames.picture }}</figcaption>
+              <img [src]="picture.src" [alt]="('pictures' | translate)[picture.id]" />
+              <figcaption class="muted">{{ 'pictureGames.picture' | translate }}</figcaption>
             </figure>
           }
         }
         <div class="actions">
           <button type="button" class="button button-secondary" (click)="newGame()">
-            {{ t().pictureGames.newGame }}
+            {{ 'pictureGames.newGame' | translate }}
           </button>
           @if (best(); as best) {
-            <p class="muted best">{{ t().pictureGames.best(best) }}</p>
+            <p class="muted best">{{ 'pictureGames.best' | translate: best }}</p>
           }
         </div>
       </div>

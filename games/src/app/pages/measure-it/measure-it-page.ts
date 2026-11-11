@@ -4,10 +4,10 @@ import { gameInfo } from '../../core/games';
 import { HINTS_IDS, HintsId } from '../../games/letter-games';
 import { GamesApi } from '../../core/games-api';
 import { MEASURE_LEVEL_IDS, MEASURE_MODE_IDS, MeasureExercise, measureExercises, MeasureLevelId, MeasureModeId } from '../../games/measure-it';
-import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
-import { MeasureRound } from './measure-round';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { MeasureRound } from './measure-round/measure-round';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'done';
 
@@ -17,7 +17,7 @@ type Phase = 'ready' | 'playing' | 'done';
  */
 @Component({
   selector: 'app-measure-it-page',
-  imports: [GameBoard, GameFeedback, MeasureRound, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, MeasureRound, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './measure-it-page.html',
   styleUrls: [
@@ -29,9 +29,6 @@ export class MeasureItPage {
   protected readonly modes = MEASURE_MODE_IDS;
   protected readonly levels = MEASURE_LEVEL_IDS;
   protected readonly hintOptions = HINTS_IDS;
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('measure-it').minAge;
   private readonly api = inject(GamesApi);
 

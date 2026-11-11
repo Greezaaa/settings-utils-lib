@@ -22,7 +22,6 @@ export function scramble(shape: Shape, random: Random = Math.random): Turns {
   return Array.from({ length: cellCount(shape) }, () => between({ min: 1, max: FULL_TURN - 1 }, random));
 }
 
-/** The turns after one more quarter turn of the tile in `cell` */
 export function turn(turns: Turns, cell: number): Turns {
   return turns.map((count, index) => (index === cell ? count + 1 : count));
 }

@@ -64,12 +64,10 @@ export const BUILDER_LEVELS: readonly BuilderLevel[] = [
 const SECONDS_TO_LOOK = 4;
 const SECONDS_PER_LETTER = 2;
 
-/** Time to fill the gaps of a picture word */
 export function secondsForGapWord({ gaps }: GapWord): number {
   return SECONDS_TO_LOOK + SECONDS_PER_LETTER * gaps.length;
 }
 
-/** Time to put a mixed word in order */
 export function secondsForMixedWord(word: string): number {
   return SECONDS_TO_LOOK + SECONDS_PER_LETTER * lettersOf(word).length;
 }

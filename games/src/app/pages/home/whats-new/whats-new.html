@@ -1,0 +1,22 @@
+<ul class="changes">
+  @for (item of items(); track item.key) {
+    <li>
+      <span class="tags">
+        @if (item.isNew) {
+          <span class="tag tag-green">{{ 'page.new' | translate }}</span>
+        }
+        <span class="tag">{{ item.kind }}</span>
+      </span>
+      @if (item.game) {
+        <a [routerLink]="['/', item.game]">{{ item.text }}</a>
+      } @else {
+        <span>{{ item.text }}</span>
+      }
+    </li>
+  }
+</ul>
+@if (hasMore()) {
+  <button type="button" class="button button-secondary button-small" (click)="isExpanded.set(!isExpanded())">
+    {{ isExpanded() ? ('home.showFewer' | translate) : ('home.showMore' | translate) }}
+  </button>
+}

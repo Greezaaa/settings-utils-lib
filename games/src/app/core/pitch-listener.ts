@@ -59,7 +59,6 @@ export class PitchListener {
     listen();
   }
 
-  /** Turns the microphone off */
   stop(): void {
     cancelAnimationFrame(this.frame);
     this.source?.disconnect();

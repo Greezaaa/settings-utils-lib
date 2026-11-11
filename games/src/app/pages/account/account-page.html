@@ -1,51 +1,51 @@
 <header class="container page-head">
-  <h1>{{ t().account.title }}</h1>
+  <h1>{{ 'account.title' | translate }}</h1>
   <p class="lead">
-    {{ t().account.lead }}
+    {{ 'account.lead' | translate }}
     <br />
-    {{ t().account.rule }}
+    {{ 'account.rule' | translate }}
   </p>
 </header>
 
 <section class="container page-section">
   @if (!account.isRestored()) {
-    <p class="muted">{{ t().account.loading }}</p>
+    <p class="muted">{{ 'account.loading' | translate }}</p>
   } @else if (account.account(); as player) {
     <div class="signed-in-bar">
       <div>
-        <p class="card-title">{{ t().account.signedInAs(player.screenName) }}</p>
-        <p class="muted">{{ t().account.loginNameIs(player.loginName) }}</p>
+        <p class="card-title">{{ 'account.signedInAs' | translate: player.screenName }}</p>
+        <p class="muted">{{ 'account.loginNameIs' | translate: player.loginName }}</p>
       </div>
       <button type="button" class="button button-secondary" (click)="account.signOut()">
-        {{ t().account.signOut }}
+        {{ 'account.signOut' | translate }}
       </button>
     </div>
 
     <form class="card account-card" (submit)="$event.preventDefault(); saveDetails(detailsForm)" #detailsForm>
-      <h2 class="card-title">{{ t().account.detailsTitle }}</h2>
+      <h2 class="card-title">{{ 'account.detailsTitle' | translate }}</h2>
       <app-screen-name-field [value]="player.screenName" />
       @if (canEmail()) {
         <label class="field">
-          <span>{{ t().account.email }}</span>
+          <span>{{ 'account.email' | translate }}</span>
           <input name="email" type="email" autocomplete="email" maxlength="254" [value]="player.email ?? ''" />
-          <small class="muted">{{ t().account.emailNeedsPassword }}</small>
+          <small class="muted">{{ 'account.emailNeedsPassword' | translate }}</small>
         </label>
         <label class="field">
-          <span>{{ t().account.currentPassword }}</span>
+          <span>{{ 'account.currentPassword' | translate }}</span>
           <input name="password" type="password" autocomplete="current-password" />
         </label>
       }
       @if (details.error(); as error) {
         <p class="error" role="alert">{{ error }}</p>
       }
-      <button type="submit" class="button" [disabled]="details.isBusy()">{{ t().account.save }}</button>
+      <button type="submit" class="button" [disabled]="details.isBusy()">{{ 'account.save' | translate }}</button>
     </form>
 
     <div class="card account-card">
       <label class="switch switch-row">
         <span class="switch-text">
-          <strong>{{ t().account.showOnLeaderboard }}</strong>
-          <small class="muted">{{ t().account.showOnLeaderboardHint }}</small>
+          <strong>{{ 'account.showOnLeaderboard' | translate }}</strong>
+          <small class="muted">{{ 'account.showOnLeaderboardHint' | translate }}</small>
         </span>
         <input
           type="checkbox"
@@ -62,30 +62,30 @@
     </div>
 
     <form class="card account-card" (submit)="$event.preventDefault(); changePassword(passwordForm)" #passwordForm>
-      <h2 class="card-title">{{ t().account.passwordTitle }}</h2>
+      <h2 class="card-title">{{ 'account.passwordTitle' | translate }}</h2>
       <input type="text" name="username" autocomplete="username" [value]="player.loginName" hidden />
       <label class="field">
-        <span>{{ t().account.currentPassword }}</span>
+        <span>{{ 'account.currentPassword' | translate }}</span>
         <input name="current" type="password" autocomplete="current-password" required />
       </label>
       <label class="field">
-        <span>{{ t().account.newPassword }}</span>
+        <span>{{ 'account.newPassword' | translate }}</span>
         <input name="next" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
-        <small class="muted">{{ t().account.passwordRule(minLength) }}</small>
+        <small class="muted">{{ 'account.passwordRule' | translate: minLength }}</small>
       </label>
       <label class="field">
-        <span>{{ t().account.repeatPassword }}</span>
+        <span>{{ 'account.repeatPassword' | translate }}</span>
         <input name="repeat" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
       </label>
       @if (password.error(); as error) {
         <p class="error" role="alert">{{ error }}</p>
       }
-      <button type="submit" class="button" [disabled]="password.isBusy()">{{ t().account.changePassword }}</button>
+      <button type="submit" class="button" [disabled]="password.isBusy()">{{ 'account.changePassword' | translate }}</button>
     </form>
 
     <div class="card account-card">
-      <h2 class="card-title">{{ t().account.resultsTitle }}</h2>
-      <p class="muted">{{ t().account.resultsLead }}</p>
+      <h2 class="card-title">{{ 'account.resultsTitle' | translate }}</h2>
+      <p class="muted">{{ 'account.resultsLead' | translate }}</p>
       @if (results.error(); as error) {
         <p class="error" role="alert">{{ error }}</p>
       }
@@ -95,26 +95,26 @@
         [disabled]="results.isBusy()"
         (click)="removeResults()"
       >
-        {{ t().account.deleteResults }}
+        {{ 'account.deleteResults' | translate }}
       </button>
     </div>
 
     <form class="card account-card" (submit)="$event.preventDefault(); remove(deleteForm)" #deleteForm>
-      <h2 class="card-title">{{ t().account.deleteTitle }}</h2>
-      <p class="muted">{{ t().account.deleteLead }}</p>
+      <h2 class="card-title">{{ 'account.deleteTitle' | translate }}</h2>
+      <p class="muted">{{ 'account.deleteLead' | translate }}</p>
       <label class="field">
-        <span>{{ t().account.currentPassword }}</span>
+        <span>{{ 'account.currentPassword' | translate }}</span>
         <input name="password" type="password" autocomplete="current-password" required />
       </label>
       @if (deletion.error(); as error) {
         <p class="error" role="alert">{{ error }}</p>
       }
       <button type="submit" class="button button-secondary danger" [disabled]="deletion.isBusy()">
-        {{ t().account.deleteAccount }}
+        {{ 'account.deleteAccount' | translate }}
       </button>
     </form>
   } @else {
-    <div class="tabs" role="group" [attr.aria-label]="t().account.title">
+    <div class="tabs" role="group" [attr.aria-label]="'account.title' | translate">
       @for (option of views; track option) {
         @if (option !== 'forgot' || canEmail()) {
           <button
@@ -133,7 +133,7 @@
       @case ('sign-in') {
         <form class="card account-card" (submit)="$event.preventDefault(); signIn(signInForm)" #signInForm>
           <label class="field">
-            <span>{{ canEmail() ? t().account.loginOrEmail : t().account.loginName }}</span>
+            <span>{{ canEmail() ? ('account.loginOrEmail' | translate) : ('account.loginName' | translate) }}</span>
             <input
               name="loginName"
               type="text"
@@ -144,20 +144,20 @@
             />
           </label>
           <label class="field">
-            <span>{{ t().account.password }}</span>
+            <span>{{ 'account.password' | translate }}</span>
             <input name="password" type="password" autocomplete="current-password" required />
           </label>
-          <p class="muted">{{ t().account.syncNote }}</p>
+          <p class="muted">{{ 'account.syncNote' | translate }}</p>
           @if (entry.error(); as error) {
             <p class="error" role="alert">{{ error }}</p>
           }
-          <button type="submit" class="button" [disabled]="entry.isBusy()">{{ t().account.signIn }}</button>
+          <button type="submit" class="button" [disabled]="entry.isBusy()">{{ 'account.signIn' | translate }}</button>
         </form>
       }
       @case ('sign-up') {
         <form class="card account-card" (submit)="$event.preventDefault(); signUp(signUpForm)" #signUpForm>
           <label class="field">
-            <span>{{ t().account.loginName }}</span>
+            <span>{{ 'account.loginName' | translate }}</span>
             <input
               name="loginName"
               type="text"
@@ -168,54 +168,54 @@
               pattern="[A-Za-z0-9._\-]+"
               required
             />
-            <small class="muted">{{ t().account.loginNameHint }}</small>
+            <small class="muted">{{ 'account.loginNameHint' | translate }}</small>
           </label>
           <app-screen-name-field />
           <label class="field">
-            <span>{{ t().account.password }}</span>
+            <span>{{ 'account.password' | translate }}</span>
             <input name="password" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
-            <small class="muted">{{ t().account.passwordRule(minLength) }}</small>
+            <small class="muted">{{ 'account.passwordRule' | translate: minLength }}</small>
           </label>
           <label class="field">
-            <span>{{ t().account.repeatPassword }}</span>
+            <span>{{ 'account.repeatPassword' | translate }}</span>
             <input name="repeat" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
           </label>
           @if (canEmail()) {
             <label class="field">
-              <span>{{ t().account.email }}</span>
+              <span>{{ 'account.email' | translate }}</span>
               <input name="email" type="email" autocomplete="email" maxlength="254" (input)="onEmail($event)" />
-              <small class="muted">{{ t().account.emailHint }}</small>
+              <small class="muted">{{ 'account.emailHint' | translate }}</small>
             </label>
           }
           <label class="check">
             <input name="showOnLeaderboard" type="checkbox" />
             <span>
-              {{ t().account.showOnLeaderboard }}
-              <small class="muted">{{ t().account.showOnLeaderboardHint }}</small>
+              {{ 'account.showOnLeaderboard' | translate }}
+              <small class="muted">{{ 'account.showOnLeaderboardHint' | translate }}</small>
             </span>
           </label>
           @if (!canEmail() || !newEmail()) {
-            <p class="warning" role="note">{{ t().account.noEmailWarning }}</p>
+            <p class="warning" role="note">{{ 'account.noEmailWarning' | translate }}</p>
           }
-          <p class="muted">{{ t().account.syncNote }}</p>
+          <p class="muted">{{ 'account.syncNote' | translate }}</p>
           @if (entry.error(); as error) {
             <p class="error" role="alert">{{ error }}</p>
           }
-          <button type="submit" class="button" [disabled]="entry.isBusy()">{{ t().account.signUp }}</button>
+          <button type="submit" class="button" [disabled]="entry.isBusy()">{{ 'account.signUp' | translate }}</button>
         </form>
       }
       @case ('forgot') {
         <form class="card account-card" (submit)="$event.preventDefault(); forgot(forgotForm)" #forgotForm>
-          <p class="muted">{{ t().account.forgotLead }}</p>
+          <p class="muted">{{ 'account.forgotLead' | translate }}</p>
           <label class="field">
-            <span>{{ t().account.email }}</span>
+            <span>{{ 'account.email' | translate }}</span>
             <input name="email" type="email" autocomplete="email" maxlength="254" required />
           </label>
           @if (entry.error(); as error) {
             <p class="error" role="alert">{{ error }}</p>
           }
           <button type="submit" class="button" [disabled]="entry.isBusy()">
-            {{ entry.isBusy() ? t().account.sending : t().account.sendLink }}
+            {{ entry.isBusy() ? ('account.sending' | translate) : ('account.sendLink' | translate) }}
           </button>
         </form>
       }

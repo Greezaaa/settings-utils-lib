@@ -1,9 +1,9 @@
 <header class="container page-head">
-  <h1>{{ t().rooms.title }}</h1>
+  <h1>{{ 'rooms.title' | translate }}</h1>
   <p class="lead">
-    {{ t().rooms.lead }}
+    {{ 'rooms.lead' | translate }}
     <br />
-    {{ t().rooms.rule }}
+    {{ 'rooms.rule' | translate }}
   </p>
 </header>
 
@@ -15,14 +15,14 @@
       [disabled]="client.connection() === 'connecting'"
       (click)="create()"
     >
-      {{ client.connection() === 'connecting' ? t().rooms.connecting : t().rooms.create }}
+      {{ client.connection() === 'connecting' ? ('rooms.connecting' | translate) : ('rooms.create' | translate) }}
     </button>
   </div>
 
   <form class="card entry-card" (submit)="join($event, codeInput)">
-    <h2 class="card-title">{{ t().rooms.joinTitle }}</h2>
+    <h2 class="card-title">{{ 'rooms.joinTitle' | translate }}</h2>
     <label class="field">
-      <span>{{ t().rooms.codeLabel }}</span>
+      <span>{{ 'rooms.codeLabel' | translate }}</span>
       <input
         #codeInput
         class="code-input"
@@ -36,10 +36,10 @@
         required
       />
     </label>
-    <button type="submit" class="button">{{ t().rooms.join }}</button>
+    <button type="submit" class="button">{{ 'rooms.join' | translate }}</button>
   </form>
 
   @if (client.error(); as error) {
-    <p class="error" role="alert">{{ t().rooms.errors[error] }}</p>
+    <p class="error" role="alert">{{ ('rooms.errors' | translate)[error] }}</p>
   }
 </section>

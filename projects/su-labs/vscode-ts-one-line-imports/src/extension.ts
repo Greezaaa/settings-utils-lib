@@ -2,6 +2,10 @@ import * as vscode from 'vscode';
 import { formatDocument } from './format-document.ts';
 import type { ParserName } from './parser-name.ts';
 import { clearProjectPrettierCache } from './project-prettier.ts';
+import { removeUnusedImports } from './remove-unused-imports.ts';
+
+/** Section of this extension's settings */
+const SETTINGS_SECTION = 'tsOneLineImports';
 
 /** Languages this extension formats, with the Prettier parser for each */
 const LANGUAGE_PARSERS: Readonly<Record<string, ParserName>> = {
@@ -18,6 +22,10 @@ const CONFIG_FILES = '**/{.prettierrc,.prettierrc.*,prettier.config.*,.prettieri
 const replaceAll = (document: vscode.TextDocument, text: string): vscode.TextEdit =>
   vscode.TextEdit.replace(new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length)), text);
 
+/** Whether the user turned on removing unused imports for this document */
+const shouldRemoveUnusedImports = (document: vscode.TextDocument): boolean =>
+  vscode.workspace.getConfiguration(SETTINGS_SECTION, document).get<boolean>('removeUnusedImports', false);
+
 /** Creates the formatter, which logs what it did to an output channel */
 function createFormatter(output: vscode.LogOutputChannel): vscode.DocumentFormattingEditProvider {
   return {
@@ -26,10 +34,15 @@ function createFormatter(output: vscode.LogOutputChannel): vscode.DocumentFormat
       if (!parser) return [];
       const filePath = document.uri.scheme === 'file' ? document.uri.fsPath : undefined;
       try {
-        const result = await formatDocument({ text: document.getText(), parser, filePath });
+        const original = document.getText();
+        const text = shouldRemoveUnusedImports(document) ? await removeUnusedImports(document) : original;
+        const result = await formatDocument({ text, parser, filePath });
         if (result.warning) output.warn(result.warning);
         output.info(`${result.mode}: ${filePath ?? document.uri.toString()}`);
-        return result.text === null ? [] : [replaceAll(document, result.text)];
+        // A file in .prettierignore isn't touched at all, unused imports included
+        if (result.mode === 'ignored') return [];
+        const formatted = result.text ?? text;
+        return formatted === original ? [] : [replaceAll(document, formatted)];
       } catch (error) {
         // Usually a syntax error while typing: leave the file as it is
         output.error(`${filePath ?? document.uri.toString()}: ${error instanceof Error ? error.message : String(error)}`);

@@ -4,12 +4,12 @@ import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
 import { NotePlayer } from '../../core/note-player';
 import { findTheNoteRounds, getMusicLevel, higherOrLowerRound, HigherOrLowerRound, MUSIC_LEVELS, MUSIC_MODE_IDS, MusicLevelId, MusicModeId, Note, ROUNDS_PER_GAME, singItRounds } from '../../games/music-notes';
-import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
-import { FindNoteRound } from './rounds/find-note-round';
-import { HigherLowerRound } from './rounds/higher-lower-round';
-import { SingRound } from './rounds/sing-round';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { FindNoteRound } from './rounds/find-note-round/find-note-round';
+import { HigherLowerRound } from './rounds/higher-lower-round/higher-lower-round';
+import { SingRound } from './rounds/sing-round/sing-round';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'done';
 
@@ -22,7 +22,7 @@ const NEXT_ROUND_MS = 1200;
  */
 @Component({
   selector: 'app-hit-the-note-page',
-  imports: [FindNoteRound, GameBoard, GameFeedback, HigherLowerRound, RouterLink, SingRound],
+  imports: [TranslatePipe, FindNoteRound, GameBoard, GameFeedback, HigherLowerRound, RouterLink, SingRound],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './hit-the-note-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './hit-the-note-page.scss'],
@@ -30,9 +30,6 @@ const NEXT_ROUND_MS = 1200;
 export class HitTheNotePage {
   protected readonly modes = MUSIC_MODE_IDS;
   protected readonly levels = MUSIC_LEVELS;
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('hit-the-note').minAge;
   private readonly api = inject(GamesApi);
   private readonly player = inject(NotePlayer);

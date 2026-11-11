@@ -1,0 +1,54 @@
+<div class="filters" role="group" [attr.aria-label]="'admin.tabs.suggestions' | translate">
+  @for (option of statuses; track option) {
+    <button
+      type="button"
+      class="button button-secondary button-small"
+      [attr.aria-pressed]="option === status()"
+      (click)="show(option)"
+    >
+      {{ ('admin.suggestionStatuses' | translate)[option] }}
+    </button>
+  }
+</div>
+
+@if (list.isLoading()) {
+  <p class="muted">{{ 'admin.loading' | translate }}</p>
+} @else {
+  <ul class="plain-list">
+    @for (suggestion of list.items(); track suggestion.id) {
+      <li class="card suggestion">
+        <p class="meta muted">
+          <strong>{{ ('suggestions.categories' | translate)[suggestion.category] }}</strong>
+          · {{ suggestion.language.toUpperCase() }} · {{ suggestion.created.toLocaleString() }}
+        </p>
+        <p class="text">{{ suggestion.text }}</p>
+        @if (suggestion.hasImage) {
+          @if (images().get(suggestion.id); as image) {
+            <img [src]="image" [alt]="'admin.pictureAlt' | translate" />
+          } @else {
+            <button type="button" class="button button-secondary button-small" (click)="showImage(suggestion.id)">
+              {{ 'admin.showPicture' | translate }}
+            </button>
+          }
+        }
+        <div class="actions">
+          @for (other of otherStatuses(suggestion.status); track other) {
+            <button type="button" class="button button-secondary button-small" (click)="move(suggestion, other)">
+              {{ 'admin.moveTo' | translate: ('admin.suggestionStatuses' | translate)[other] }}
+            </button>
+          }
+          <button type="button" class="button button-secondary button-small danger" (click)="remove(suggestion)">
+            {{ 'admin.delete' | translate }}
+          </button>
+        </div>
+      </li>
+    } @empty {
+      <p class="muted">{{ 'admin.noSuggestions' | translate }}</p>
+    }
+  </ul>
+  @if (list.hasMore()) {
+    <button type="button" class="button button-secondary load-more" (click)="list.loadMore()">
+      {{ 'admin.loadMore' | translate }}
+    </button>
+  }
+}

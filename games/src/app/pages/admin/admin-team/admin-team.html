@@ -1,0 +1,75 @@
+<form class="card admin-card" (submit)="add($event, form, emailInput, passwordInput)" #form>
+  <h2 class="card-title">{{ 'admin.addMember' | translate }}</h2>
+  <label class="field">
+    <span>{{ 'admin.email' | translate }}</span>
+    <input #emailInput type="email" autocomplete="off" required />
+  </label>
+  <div class="field">
+    <span>{{ 'admin.roleLabel' | translate }}</span>
+    <div class="filters" role="radiogroup" [attr.aria-label]="'admin.roleLabel' | translate">
+      @for (role of roles; track role) {
+        <button
+          type="button"
+          role="radio"
+          class="button button-secondary button-small"
+          [attr.aria-checked]="role === newRole()"
+          [attr.aria-pressed]="role === newRole()"
+          (click)="newRole.set(role)"
+        >
+          {{ ('admin.roles' | translate)[role] }}
+        </button>
+      }
+    </div>
+    <small class="muted">{{ ('admin.roleHelp' | translate)[newRole()] }}</small>
+  </div>
+  <label class="field">
+    <span>{{ 'admin.startingPassword' | translate }}</span>
+    <input #passwordInput type="text" autocomplete="off" minlength="10" spellcheck="false" />
+    <small class="muted">{{ 'admin.startingPasswordHelp' | translate }}</small>
+  </label>
+  @if (isAlreadyOnTeam()) {
+    <p class="error" role="alert">{{ 'admin.alreadyOnTeam' | translate }}</p>
+  }
+  <button type="submit" class="button" [disabled]="isSaving()">{{ 'admin.add' | translate }}</button>
+</form>
+
+@if (invite(); as shown) {
+  <div class="card admin-card invite" role="status">
+    <p>{{ 'admin.inviteFor' | translate: shown.email }}</p>
+    <div class="copy-row">
+      <input type="text" readonly [value]="shown.url" (focus)="selectAll($event)" />
+      <button type="button" class="button button-small" (click)="copy(shown.url)">
+        {{ isCopied() ? ('admin.copied' | translate) : ('admin.copy' | translate) }}
+      </button>
+    </div>
+    <small class="muted">{{ 'admin.inviteExpires' | translate: shown.expires.toLocaleDateString() }}</small>
+  </div>
+}
+
+<h2 class="section-title">{{ 'admin.tabs.team' | translate }}</h2>
+<ul class="card admin-card plain-list">
+  @for (member of members(); track member.id) {
+    <li class="switch-row">
+      <span>
+        <strong>{{ member.email }}</strong>
+        <small class="muted">
+          {{ ('admin.roles' | translate)[member.role] }}
+          · {{ member.invited ? ('admin.invited' | translate) : member.active ? ('admin.active' | translate) : ('admin.inactive' | translate) }}
+        </small>
+      </span>
+      @if (member.role !== 'super') {
+        <span class="actions">
+          <button type="button" class="button button-secondary button-small" (click)="switchRole(member)">
+            {{ member.role === 'tester' ? ('admin.makeModerator' | translate) : ('admin.makeTester' | translate) }}
+          </button>
+          <button type="button" class="button button-secondary button-small" (click)="reinvite(member)">
+            {{ 'admin.newLink' | translate }}
+          </button>
+          <button type="button" class="button button-secondary button-small" (click)="toggle(member)">
+            {{ member.active ? ('admin.deactivate' | translate) : ('admin.activate' | translate) }}
+          </button>
+        </span>
+      }
+    </li>
+  }
+</ul>

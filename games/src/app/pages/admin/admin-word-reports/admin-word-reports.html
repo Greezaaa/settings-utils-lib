@@ -1,0 +1,62 @@
+<div class="filters" role="group" [attr.aria-label]="'admin.tabs.words' | translate">
+  @for (option of statuses; track option) {
+    <button
+      type="button"
+      class="button button-secondary button-small"
+      [attr.aria-pressed]="option === status()"
+      (click)="show(option)"
+    >
+      {{ ('admin.reportStatuses' | translate)[option] }}
+    </button>
+  }
+</div>
+<p class="muted">{{ 'admin.reportsHelp' | translate }}</p>
+
+@if (list.isLoading()) {
+  <p class="muted">{{ 'admin.loading' | translate }}</p>
+} @else if (list.items().length === 0) {
+  <p class="muted">{{ 'admin.noWords' | translate }}</p>
+} @else {
+  <div class="card table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'admin.reportColumns.word' | translate }}</th>
+          <th scope="col">{{ 'admin.reportColumns.language' | translate }}</th>
+          <th scope="col" class="number">{{ 'admin.reportColumns.reports' | translate }}</th>
+          <th scope="col">{{ 'admin.reportColumns.firstReported' | translate }}</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (report of list.items(); track report.language + report.word) {
+          <tr>
+            <th scope="row" [attr.lang]="report.language">{{ report.word }}</th>
+            <td>{{ report.language.toUpperCase() }}</td>
+            <td class="number">{{ report.reports }}</td>
+            <td>{{ report.firstReported }}</td>
+            <td>
+              <div class="actions">
+                @if (report.status !== 'approved') {
+                  <button type="button" class="button button-secondary button-small" (click)="decide(report, 'approved')">
+                    {{ 'admin.keepOut' | translate }}
+                  </button>
+                }
+                @if (report.status !== 'rejected') {
+                  <button type="button" class="button button-secondary button-small" (click)="decide(report, 'rejected')">
+                    {{ 'admin.letCount' | translate }}
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (list.hasMore()) {
+    <button type="button" class="button button-secondary load-more" (click)="list.loadMore()">
+      {{ 'admin.loadMore' | translate }}
+    </button>
+  }
+}

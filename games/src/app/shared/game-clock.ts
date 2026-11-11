@@ -11,7 +11,6 @@ export function formatTime(seconds: number): string {
  */
 export class GameClock {
   readonly seconds = signal(0);
-  /** The time as `m:ss` */
   readonly time = computed(() => formatTime(this.seconds()));
 
   private timer?: ReturnType<typeof setInterval>;

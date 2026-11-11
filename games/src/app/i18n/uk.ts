@@ -978,6 +978,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     keepOut: 'Заблокувати',
     letCount: 'Дозволити',
     noWords: 'Тут немає слів.',
+    loadMore: 'Завантажити ще',
     featuresTitle: 'Функції',
     featuresHelp:
       'Нові функції спершу вимкнені: спробуй їх у режимі перегляду, а потім відкрий для всіх.',

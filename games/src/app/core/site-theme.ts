@@ -53,7 +53,6 @@ export class SiteTheme {
     this.preferenceSignal.set(this.themeService.getUserPreference());
   }
 
-  /** Switch and remember a theme */
   set(theme: SuThemeName): void {
     this.themeService.setTheme(theme);
     this.preferenceSignal.set(theme);

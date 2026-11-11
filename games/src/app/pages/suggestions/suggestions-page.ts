@@ -3,6 +3,7 @@ import { SuNotificationService } from '@su-labs/notifications';
 import { GamesApi, SUGGESTION_CATEGORIES, SuggestionCategory } from '../../core/games-api';
 import { shrinkImage } from '../../core/shrink-image';
 import { SiteLanguage } from '../../i18n/site-language';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 /** Longest text the API accepts */
 export const MAX_SUGGESTION_LENGTH = 500;
@@ -16,6 +17,7 @@ type Sending = 'idle' | 'sending' | 'failed';
  */
 @Component({
   selector: 'app-suggestions-page',
+  imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './suggestions-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './suggestions-page.scss'],
@@ -24,7 +26,6 @@ export class SuggestionsPage {
   private readonly api = inject(GamesApi);
   private readonly language = inject(SiteLanguage);
   private readonly notifications = inject(SuNotificationService);
-  /** Texts in the site's language */
   protected readonly t = this.language.messages;
 
   protected readonly categories = SUGGESTION_CATEGORIES;

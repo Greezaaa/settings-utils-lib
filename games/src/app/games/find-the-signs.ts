@@ -134,7 +134,6 @@ export function evaluate(numbers: readonly number[], operators: readonly Operato
   return total;
 }
 
-/** Whether the player's signs make the equation true */
 export function solves(puzzle: SignsPuzzle, signs: readonly Operator[]): boolean {
   return signs.length === puzzle.operators.length && evaluate(puzzle.numbers, signs) === puzzle.result;
 }

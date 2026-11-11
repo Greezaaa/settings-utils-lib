@@ -27,7 +27,6 @@ export function roomMath(mode: string, level: string): RoomMath {
 /** The level rules for Find the signs (roomMath only gives it levels Find the signs has) */
 export const signsLevelOf = ({ levelId }: RoomMath): SignsLevel => getSignsLevel(levelId);
 
-/** The level rules for True or false and Your answer */
 export const questionLevelOf = ({ levelId }: RoomMath): Level => getLevel(levelId);
 
 /** One exercise of a room round: a question, or a Find the signs puzzle */

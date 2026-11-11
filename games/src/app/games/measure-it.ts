@@ -297,13 +297,11 @@ export function lineExercise(
   };
 }
 
-/** The number at a tick of a line */
 export const lineValue = (
   { start, step }: LineExercise,
   tick: number
 ): number => start + step * tick;
 
-/** The line's last number */
 export const lineEnd = (exercise: LineExercise): number =>
   lineValue(exercise, exercise.gaps);
 
@@ -314,7 +312,6 @@ export const isLineRight = (exercise: LineExercise, answer: number): boolean =>
 
 export type MeasureExercise = AngleExercise | GlassExercise | LineExercise;
 
-/** One exercise of a mode and level */
 export function measureExercise(
   mode: MeasureModeId,
   level: MeasureLevelId,

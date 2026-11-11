@@ -22,7 +22,6 @@ export interface Note {
 
 /** The octave the games play in, comfortable for children's voices */
 export const PLAY_OCTAVE = 4;
-/** Rounds in one game */
 export const ROUNDS_PER_GAME = 10;
 
 export type MusicLevelId = 'easy' | 'normal' | 'hard' | 'expert';
@@ -79,7 +78,6 @@ export function higherOrLowerRound(level: MusicLevel, random: Random): HigherOrL
   return { first: noteOfMidi(first), second: noteOfMidi(second), answer: goesUp ? 'higher' : 'lower' };
 }
 
-/** The note with a MIDI number */
 export function noteOfMidi(midi: number): Note {
   return { id: NOTE_IDS[((midi % 12) + 12) % 12], octave: Math.floor(midi / 12) - 1 };
 }

@@ -1,0 +1,22 @@
+<header class="container page-head">
+  <h1>{{ 'account.resetTitle' | translate }}</h1>
+  <p class="lead">{{ 'account.resetLead' | translate }}</p>
+</header>
+
+<section class="container page-section">
+  <form class="card account-card" (submit)="$event.preventDefault(); save(resetForm)" #resetForm>
+    <label class="field">
+      <span>{{ 'account.newPassword' | translate }}</span>
+      <input name="password" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+      <small class="muted">{{ 'account.passwordRule' | translate: minLength }}</small>
+    </label>
+    <label class="field">
+      <span>{{ 'account.repeatPassword' | translate }}</span>
+      <input name="repeat" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+    </label>
+    @if (form.error(); as error) {
+      <p class="error" role="alert">{{ error }}</p>
+    }
+    <button type="submit" class="button" [disabled]="form.isBusy()">{{ 'account.resetSave' | translate }}</button>
+  </form>
+</section>

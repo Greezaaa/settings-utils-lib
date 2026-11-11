@@ -1,34 +1,34 @@
 <header class="container page-head">
-  <h1>{{ t().admin.title }}</h1>
-  <p class="lead">{{ t().admin.lead }}</p>
+  <h1>{{ 'admin.title' | translate }}</h1>
+  <p class="lead">{{ 'admin.lead' | translate }}</p>
 </header>
 
 <section class="container page-section">
   @if (signIn() === 'restoring') {
-    <p class="muted">{{ t().admin.loading }}</p>
+    <p class="muted">{{ 'admin.loading' | translate }}</p>
   } @else if (!admin.isSignedIn()) {
     <form class="card admin-card" (submit)="submit($event, emailInput, passwordInput)">
       <label class="field">
-        <span>{{ t().admin.email }}</span>
+        <span>{{ 'admin.email' | translate }}</span>
         <input #emailInput type="email" autocomplete="username" required />
       </label>
       <label class="field">
-        <span>{{ t().admin.password }}</span>
+        <span>{{ 'admin.password' | translate }}</span>
         <input #passwordInput type="password" autocomplete="current-password" required />
       </label>
       @switch (signIn()) {
         @case ('wrong') {
-          <p class="error" role="alert">{{ t().admin.wrongCredentials }}</p>
+          <p class="error" role="alert">{{ 'admin.wrongCredentials' | translate }}</p>
         }
         @case ('too-many') {
-          <p class="error" role="alert">{{ t().admin.tooManyTries }}</p>
+          <p class="error" role="alert">{{ 'admin.tooManyTries' | translate }}</p>
         }
         @case ('offline') {
-          <p class="error" role="alert">{{ t().admin.offline }}</p>
+          <p class="error" role="alert">{{ 'admin.offline' | translate }}</p>
         }
       }
       <button type="submit" class="button" [disabled]="signIn() === 'checking'">
-        {{ signIn() === 'checking' ? t().admin.checking : t().admin.signIn }}
+        {{ signIn() === 'checking' ? ('admin.checking' | translate) : ('admin.signIn' | translate) }}
       </button>
     </form>
   } @else {
@@ -42,12 +42,12 @@
           [attr.aria-pressed]="option === tab()"
           (click)="tab.set(option)"
         >
-          {{ t().admin.tabs[option] }}
+          {{ ('admin.tabs' | translate)[option] }}
         </button>
       }
       <span class="signed-in muted">{{ admin.me()?.email }}</span>
       <button type="button" class="button button-secondary button-small" (click)="signOut()">
-        {{ t().admin.signOut }}
+        {{ 'admin.signOut' | translate }}
       </button>
     </div>
 

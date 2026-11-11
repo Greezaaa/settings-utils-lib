@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import type { Env } from '../config/env.js';
+import type { Page } from '../shared/page.js';
 import { cleanImage } from './clean-image.js';
 import { Suggestion } from './suggestion.entity.js';
 import {
@@ -51,10 +52,16 @@ export class SuggestionsService implements OnModuleInit {
     });
   }
 
-  list(status: SuggestionStatus): Promise<Suggestion[]> {
+  /** Latest first; the id keeps the order stable between pages */
+  list(
+    status: SuggestionStatus,
+    { offset, limit }: Page,
+  ): Promise<Suggestion[]> {
     return this.suggestions.find({
       where: { status },
-      order: { created: 'DESC' },
+      order: { created: 'DESC', id: 'ASC' },
+      skip: offset,
+      take: limit,
     });
   }
 

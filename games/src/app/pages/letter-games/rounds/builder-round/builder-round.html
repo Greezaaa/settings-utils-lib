@@ -1,0 +1,81 @@
+<!-- The words to find, beside the letters on wide screens and above them on phones -->
+<aside class="found-list">
+  @switch (dictionaryStatus()) {
+    @case ('loading') {
+      <p class="dictionary" role="status" [title]="'letterGames.dictionary.why' | translate">
+        <span class="spinner" aria-hidden="true"></span>
+        {{ 'letterGames.dictionary.loading' | translate }}
+      </p>
+    }
+    @case ('failed') {
+      <p class="dictionary" role="status">{{ 'letterGames.dictionary.failed' | translate }}</p>
+    }
+  }
+  <p class="mono">{{ 'letterGames.found' | translate: foundCount() : answers().length }}</p>
+  <ul class="answers">
+    @for (item of answers(); track item.answer) {
+      <li class="word small" [class.is-done]="item.isFound" [class.is-missed]="item.isShown && !item.isFound">
+        @for (letter of item.letters; track $index) {
+          <span class="letter" [class.gap]="!item.isShown">{{ item.isShown ? letter : '' }}</span>
+        }
+        @if (item.isShown && item.canReport) {
+          <button
+            type="button"
+            class="report"
+            [title]="'letterGames.report' | translate"
+            [attr.aria-label]="('letterGames.report' | translate) + ': ' + item.answer"
+            (click)="report(item.answer)"
+          >
+            ⚑
+          </button>
+        }
+      </li>
+    }
+  </ul>
+  @if (hasReported()) {
+    <p class="dictionary" role="status">{{ 'letterGames.reportThanks' | translate }}</p>
+  }
+</aside>
+
+<div class="play">
+  @if (isAllFound()) {
+    <p class="feedback is-good">{{ 'letterGames.allFound' | translate }}</p>
+  } @else if (isTimeUp()) {
+    <p class="feedback">{{ 'over.outOfTime' | translate }}</p>
+  } @else if (isRevealed()) {
+    <p class="feedback">{{ 'letterGames.wordsShown' | translate }}</p>
+  } @else {
+    <p class="word" [class.is-wrong]="feedback.isWrong()" role="group" [attr.aria-label]="'letterGames.answer' | translate">
+      @for (id of picked(); track id) {
+        <span class="letter">{{ set().letters[id] }}</span>
+      } @empty {
+        <span class="letter gap is-next" role="img" [attr.aria-label]="'letterGames.gap' | translate"></span>
+      }
+    </p>
+    <p class="feedback" [class.is-good]="lastCheck() === 'found'" aria-live="polite">
+      @if (lastCheck(); as check) {
+        {{ ('letterGames.checks' | translate)[check] }}
+      }
+    </p>
+    <div class="tiles" role="group" [attr.aria-label]="'letterGames.letters' | translate">
+      @for (tile of tiles(); track tile.id) {
+        <button type="button" class="tile" [disabled]="picked().includes(tile.id)" (click)="pick(tile.id)">
+          {{ tile.letter }}
+        </button>
+      }
+    </div>
+    <div class="button-row">
+      <button type="button" class="button button-secondary" [disabled]="picked().length === 0" (click)="deleteLast()">
+        {{ 'letterGames.delete' | translate }}
+      </button>
+      <button type="button" class="button" [disabled]="picked().length === 0" (click)="check()">
+        {{ 'letterGames.check' | translate }}
+      </button>
+    </div>
+    <p class="keys-hint">{{ 'letterGames.builderKeys' | translate }}</p>
+    <button type="button" class="button button-secondary button-small" (click)="showWords()">
+      {{ 'letterGames.showWords' | translate }}
+    </button>
+  }
+  <button type="button" class="button button-secondary" (click)="newLetters.emit()">{{ 'letterGames.newLetters' | translate }}</button>
+</div>

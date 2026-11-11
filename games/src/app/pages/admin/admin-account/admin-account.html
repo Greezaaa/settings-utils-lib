@@ -1,0 +1,45 @@
+@if (admin.canPreview()) {
+  <div class="card admin-card">
+    <label class="switch switch-row">
+      <span class="switch-text">
+        <strong>{{ 'admin.previewTitle' | translate }}</strong>
+        <small class="muted">{{ 'admin.previewHelp' | translate: ('page.hidden' | translate) }}</small>
+      </span>
+      <input type="checkbox" role="switch" [checked]="availability.isPreview()" (change)="togglePreview()" />
+      <span class="track" aria-hidden="true"></span>
+    </label>
+  </div>
+}
+
+<form class="card admin-card" (submit)="change($event, form, current, next, repeat)" #form>
+  <h2 class="card-title">{{ 'admin.changePassword' | translate }}</h2>
+  <p class="muted">{{ admin.me()?.email }}</p>
+  <label class="field">
+    <span>{{ 'admin.currentPassword' | translate }}</span>
+    <input #current type="password" autocomplete="current-password" required />
+  </label>
+  <label class="field">
+    <span>{{ 'admin.newPassword' | translate }}</span>
+    <input #next type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+    <small class="muted">{{ 'admin.passwordRule' | translate: minLength }}</small>
+  </label>
+  <label class="field">
+    <span>{{ 'admin.repeatPassword' | translate }}</span>
+    <input #repeat type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+  </label>
+  @switch (saving()) {
+    @case ('saved') {
+      <p class="success" role="status">{{ 'admin.passwordChanged' | translate }}</p>
+    }
+    @case ('wrong') {
+      <p class="error" role="alert">{{ 'admin.wrongPassword' | translate }}</p>
+    }
+    @case ('mismatch') {
+      <p class="error" role="alert">{{ 'admin.passwordsDiffer' | translate }}</p>
+    }
+    @case ('offline') {
+      <p class="error" role="alert">{{ 'admin.offline' | translate }}</p>
+    }
+  }
+  <button type="submit" class="button" [disabled]="saving() === 'saving'">{{ 'admin.changePassword' | translate }}</button>
+</form>

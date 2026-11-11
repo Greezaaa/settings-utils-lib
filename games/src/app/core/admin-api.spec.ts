@@ -1,6 +1,6 @@
 import { DOCUMENT, Injector, runInInjectionContext } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { AdminApi, failedSignIn } from './admin-api';
+import { ADMIN_PAGE_SIZE, AdminApi, failedSignIn } from './admin-api';
 
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
 const offline = vi.fn(async () => {
@@ -65,6 +65,15 @@ describe('AdminApi', () => {
     expect(await api.addMember('new@su-labs.dev', 'moderator', 'a starting password')).toBe('exists');
   });
 
+  it('asks for one page of a moderated list, starting after the rows already shown', async () => {
+    const fetchMock = vi.fn(async (..._args: Parameters<typeof fetch>) => json([]));
+    vi.stubGlobal('fetch', fetchMock);
+    await api.suggestions('read', 50);
+    expect(String(fetchMock.mock.calls[0][0])).toContain(
+      `/admin/suggestions?status=read&offset=50&limit=${ADMIN_PAGE_SIZE}`,
+    );
+  });
+
   it('keeps only well-formed answers', async () => {
     vi.stubGlobal(
       'fetch',
@@ -75,7 +84,7 @@ describe('AdminApi', () => {
         ]),
       ),
     );
-    expect(await api.wordReports('pending')).toEqual([
+    expect(await api.wordReports('pending', 0)).toEqual([
       { word: 'rude', language: 'en', reports: 3, status: 'pending', firstReported: '2026-11-08' },
     ]);
     vi.stubGlobal(

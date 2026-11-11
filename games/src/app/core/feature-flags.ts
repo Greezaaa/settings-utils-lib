@@ -17,7 +17,6 @@ export class FeatureFlags {
 
   readonly isKnown = signal(false);
 
-  /** Features open to the public */
   readonly openFeatures = computed<readonly FeatureId[]>(() =>
     FEATURES.filter(({ id, openByDefault }) => this.switches().get(id) ?? openByDefault).map(({ id }) => id),
   );
@@ -44,9 +43,8 @@ export class FeatureFlags {
   }
 
   private async load(): Promise<void> {
-    // Preview mode is read with the games' switches
-    await this.availability.ready();
-    const switches = await this.api.featureSwitches();
+    // Preview mode comes with the games' switches: both are asked at once, and the flags count once both are known
+    const [switches] = await Promise.all([this.api.featureSwitches(), this.availability.ready()]);
     // Without an answer the switches known so far stay (the defaults on a first load)
     if (switches) {
       this.switches.set(new Map(switches.map(({ feature, enabled }) => [feature, enabled])));

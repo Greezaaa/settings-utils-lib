@@ -11,12 +11,13 @@ import { SiteLanguage } from '../../i18n/site-language';
 import { OptionText } from '../../i18n/site-messages';
 import { Countdown } from '../../shared/countdown';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
-import { TimerBar } from '../../shared/timer-bar';
-import { FindTheSignsRound } from './rounds/find-the-signs-round';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { TimerBar } from '../../shared/timer-bar/timer-bar';
+import { FindTheSignsRound } from './rounds/find-the-signs-round/find-the-signs-round';
 import { RoundResult } from './rounds/round-result';
-import { TrueOrFalseRound } from './rounds/true-or-false-round';
-import { YourAnswerRound } from './rounds/your-answer-round';
+import { TrueOrFalseRound } from './rounds/true-or-false-round/true-or-false-round';
+import { YourAnswerRound } from './rounds/your-answer-round/your-answer-round';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'over';
 
@@ -30,7 +31,6 @@ type BestScores = Partial<Record<ScoreKey, number>>;
 /** A level button: its id and its translated text */
 type LevelOption = OptionText & { readonly id: LevelId };
 
-/** Names of the values the game keeps in this browser */
 const BEST_SCORES_STORAGE = RESULT_GAMES['math-games'].storage;
 
 /** Level picked when the chosen one doesn't exist for the new answer style */
@@ -43,7 +43,7 @@ const DEFAULT_LEVEL: LevelId = 'normal';
  */
 @Component({
   selector: 'app-math-games-page',
-  imports: [FindTheSignsRound, GameBoard, GameFeedback, RouterLink, TimerBar, TrueOrFalseRound, YourAnswerRound],
+  imports: [TranslatePipe, FindTheSignsRound, GameBoard, GameFeedback, RouterLink, TimerBar, TrueOrFalseRound, YourAnswerRound],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './math-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './math-games-page.scss'],
@@ -54,12 +54,9 @@ export class MathGamesPage {
   protected readonly timers = TIMER_IDS;
   protected readonly answerStyles = ANSWER_STYLE_IDS;
 
-  /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('math-games').minAge;
   private readonly api = inject(GamesApi);
-  /** Sends finished games to the player's account, when signed in */
   private readonly account = inject(PlayerAccount);
 
   protected readonly levelId = signal<LevelId>(DEFAULT_LEVEL);

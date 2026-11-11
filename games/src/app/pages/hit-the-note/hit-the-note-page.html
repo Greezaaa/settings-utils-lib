@@ -1,24 +1,24 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['hit-the-note'].name }}</h1>
+  <h1>{{ 'games.hit-the-note.name' | translate }}</h1>
   <p class="lead">
-    {{ t().hitTheNote.lead }}
+    {{ 'hitTheNote.lead' | translate }}
     <br />
-    {{ t().hitTheNote.rule }}
+    {{ 'hitTheNote.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().hitTheNote.board">
+<section class="container page-section" [attr.aria-label]="'hitTheNote.board' | translate">
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
         <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
           <div class="settings-column">
-            <div class="levels" role="group" [attr.aria-label]="t().hitTheNote.modeGroup">
+            <div class="levels" role="group" [attr.aria-label]="'hitTheNote.modeGroup' | translate">
               @for (mode of modes; track mode) {
                 <button
                   type="button"
@@ -26,37 +26,37 @@
                   [attr.aria-pressed]="mode === modeId()"
                   (click)="modeId.set(mode)"
                 >
-                  <span class="level-name">{{ t().hitTheNote.modes[mode].name }}</span>
-                  <span class="level-summary">{{ t().hitTheNote.modes[mode].summary }}</span>
+                  <span class="level-name">{{ ('hitTheNote.modes' | translate)[mode].name }}</span>
+                  <span class="level-summary">{{ ('hitTheNote.modes' | translate)[mode].summary }}</span>
                 </button>
               }
             </div>
           </div>
           <div class="settings-column">
-            <div class="choices" role="group" [attr.aria-label]="t().hitTheNote.levelGroup">
+            <div class="choices" role="group" [attr.aria-label]="'hitTheNote.levelGroup' | translate">
               @for (level of levels; track level.id) {
                 <button
                   type="button"
                   class="button button-secondary"
                   [attr.aria-pressed]="level.id === levelId()"
-                  [title]="t().hitTheNote.levels[level.id].summary"
+                  [title]="('hitTheNote.levels' | translate)[level.id].summary"
                   (click)="levelId.set(level.id)"
                 >
-                  {{ t().hitTheNote.levels[level.id].name }}
+                  {{ ('hitTheNote.levels' | translate)[level.id].name }}
                 </button>
               }
             </div>
-            <p class="muted level-help">{{ t().hitTheNote.levels[levelId()].summary }}</p>
+            <p class="muted level-help">{{ ('hitTheNote.levels' | translate)[levelId()].summary }}</p>
           </div>
         </div>
-        <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>
+        <button type="button" class="button start" (click)="start()">{{ 'settings.start' | translate }}</button>
       }
 
       @case ('playing') {
-        <p class="instructions">{{ t().hitTheNote.instructions[modeId()] }}</p>
+        <p class="instructions">{{ ('hitTheNote.instructions' | translate)[modeId()] }}</p>
         <div class="status">
-          <span class="mono">{{ t().hitTheNote.progress(index() + 1, total) }}</span>
-          <span class="mono">{{ t().hitTheNote.mistakes(mistakes()) }}</span>
+          <span class="mono">{{ 'hitTheNote.progress' | translate: index() + 1 : total }}</span>
+          <span class="mono">{{ 'hitTheNote.mistakes' | translate: mistakes() }}</span>
         </div>
 
         @switch (modeId()) {
@@ -87,18 +87,18 @@
           }
         }
         <button type="button" class="button button-secondary" (click)="backToSettings()">
-          {{ t().over.changeSettings }}
+          {{ 'over.changeSettings' | translate }}
         </button>
       }
 
       @case ('done') {
-        <p class="eyebrow">{{ t().hitTheNote.solved }}</p>
+        <p class="eyebrow">{{ 'hitTheNote.solved' | translate }}</p>
         <p class="final-score">{{ firstTries() }}</p>
-        <p class="muted">{{ t().hitTheNote.summary(firstTries(), total) }}</p>
+        <p class="muted">{{ 'hitTheNote.summary' | translate: firstTries() : total }}</p>
         <div class="button-row">
-          <button type="button" class="button" (click)="start()">{{ t().over.playAgain }}</button>
+          <button type="button" class="button" (click)="start()">{{ 'over.playAgain' | translate }}</button>
           <button type="button" class="button button-secondary" (click)="backToSettings()">
-            {{ t().over.changeSettings }}
+            {{ 'over.changeSettings' | translate }}
           </button>
         </div>
       }

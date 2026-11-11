@@ -31,20 +31,17 @@ export interface WordReport {
   readonly firstReported: string;
 }
 
-/** The super admin manages everything; moderators and testers moderate, and testers also see everything in preview */
-/** Periods the statistics can be shown for (see api/src/shared/period.ts) */
 /** Statistics periods, shortest first: today, this week (from Monday), this month, this year, all time */
 export const STATS_PERIODS = ['day', 'week', 'month', 'year', 'all'] as const;
 export type StatsPeriod = (typeof STATS_PERIODS)[number];
 
+/** The super admin manages everything; moderators and testers moderate, and testers also see everything in preview */
 export type AdminRole = 'super' | 'moderator' | 'tester';
-/** The roles the super admin gives team members */
 export const MEMBER_ROLES = ['moderator', 'tester'] as const;
 export type MemberRole = (typeof MEMBER_ROLES)[number];
 /** How a sign-in went: `too-many` when the API refuses more tries for now (5 every 15 minutes) */
 export type SignInAnswer = 'right' | 'wrong' | 'too-many' | 'offline';
 
-/** What a refused sign-in means, from the API's status */
 export function failedSignIn(status: number): Exclude<SignInAnswer, 'right'> {
   if (status === 429) {
     return 'too-many';
@@ -55,7 +52,6 @@ export function failedSignIn(status: number): Exclude<SignInAnswer, 'right'> {
 /** Roles that see games and features switched off for the public */
 export const canPreview = (role: AdminRole | undefined): boolean => role === 'super' || role === 'tester';
 
-/** Who is signed in */
 export interface Me {
   readonly email: string;
   readonly role: AdminRole;
@@ -210,7 +206,12 @@ function parseInvite(body: unknown): Invite | null {
 }
 
 /** A JSON list from an answer, each item checked by `parse` (which returns no item when it doesn't fit) */
-/** A request with a JSON body */
+/** Rows a moderated list loads at once; the API sends at most this many unless asked */
+export const ADMIN_PAGE_SIZE = 50;
+
+const pageQuery = (status: string, offset: number): string =>
+  `status=${status}&offset=${offset}&limit=${ADMIN_PAGE_SIZE}`;
+
 const listOf = <T>(body: unknown, parse: (item: unknown) => T[]): T[] =>
   Array.isArray(body) ? body.flatMap((item: unknown) => parse(item)) : [];
 
@@ -224,7 +225,6 @@ export class AdminApi {
   private readonly document = inject(DOCUMENT);
   private readonly signedIn = signal<Me | null>(null);
 
-  /** Who is signed in, or null */
   readonly me = this.signedIn.asReadonly();
   readonly isSignedIn = computed(() => this.signedIn() !== null);
   readonly isSuper = computed(() => this.signedIn()?.role === 'super');
@@ -309,8 +309,8 @@ export class AdminApi {
     return this.change('PUT', `/admin/games/${game}`, { enabled });
   }
 
-  async suggestions(status: SuggestionStatus): Promise<AdminSuggestion[]> {
-    return listOf(await this.read(`/admin/suggestions?status=${status}`), parseSuggestion);
+  async suggestions(status: SuggestionStatus, offset: number): Promise<AdminSuggestion[]> {
+    return listOf(await this.read(`/admin/suggestions?${pageQuery(status, offset)}`), parseSuggestion);
   }
 
   /** A suggestion's picture, to show with an object URL */
@@ -332,7 +332,6 @@ export class AdminApi {
     return listOf(await this.read('/admin/errors'), parseError);
   }
 
-  /** Removes one error from the log, once it's fixed */
   deleteError(id: string): Promise<boolean> {
     return this.change('DELETE', `/admin/errors/${id}`);
   }
@@ -341,8 +340,8 @@ export class AdminApi {
     return this.change('DELETE', '/admin/errors');
   }
 
-  async wordReports(status: ReportStatus): Promise<WordReport[]> {
-    return listOf(await this.read(`/admin/word-reports?status=${status}`), parseReport);
+  async wordReports(status: ReportStatus, offset: number): Promise<WordReport[]> {
+    return listOf(await this.read(`/admin/word-reports?${pageQuery(status, offset)}`), parseReport);
   }
 
   /** Approved keeps the word out of the word builder; rejected lets it count again */
@@ -361,7 +360,6 @@ export class AdminApi {
     return this.change('DELETE', '/admin/stats');
   }
 
-  /** Plays per game in a period */
   async plays(period: StatsPeriod): Promise<GamePlays[]> {
     return listOf(await this.read(`/admin/plays?period=${period}`), parseGamePlays);
   }

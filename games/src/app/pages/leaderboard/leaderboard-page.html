@@ -1,28 +1,28 @@
 <header class="container page-head">
-  <h1>{{ t().leaderboard.title }}</h1>
+  <h1>{{ 'leaderboard.title' | translate }}</h1>
   <p class="lead">
-    {{ t().leaderboard.lead }}
+    {{ 'leaderboard.lead' | translate }}
     <br />
-    {{ t().leaderboard.rule }}
+    {{ 'leaderboard.rule' | translate }}
   </p>
 </header>
 
 <section class="container page-section">
   @if (!account.isRestored()) {
-    <p class="muted">{{ t().leaderboard.loading }}</p>
+    <p class="muted">{{ 'leaderboard.loading' | translate }}</p>
   } @else if (!account.isSignedIn()) {
-    <p>{{ t().leaderboard.signInFirst }}</p>
+    <p>{{ 'leaderboard.signInFirst' | translate }}</p>
     <p>
-      <a class="button" routerLink="/account">{{ t().leaderboard.signInLink }}</a>
+      <a class="button" routerLink="/account">{{ 'leaderboard.signInLink' | translate }}</a>
     </p>
   } @else {
     @if (!account.account()?.showOnLeaderboard) {
       <p class="muted">
-        {{ t().leaderboard.youreHidden }}
-        <a routerLink="/account">{{ t().leaderboard.changeInAccount }}</a>
+        {{ 'leaderboard.youreHidden' | translate }}
+        <a routerLink="/account">{{ 'leaderboard.changeInAccount' | translate }}</a>
       </p>
     }
-    <div class="tabs" role="group" [attr.aria-label]="t().leaderboard.gameGroup">
+    <div class="tabs" role="group" [attr.aria-label]="'leaderboard.gameGroup' | translate">
       @for (option of games; track option) {
         <button
           type="button"
@@ -30,28 +30,28 @@
           [attr.aria-pressed]="option === game()"
           (click)="game.set(option)"
         >
-          {{ t().games[option].name }}
+          {{ ('games' | translate)[option].name }}
         </button>
       }
     </div>
 
     @let current = boards();
     @if (current === 'loading') {
-      <p class="muted" role="status">{{ t().leaderboard.loading }}</p>
+      <p class="muted" role="status">{{ 'leaderboard.loading' | translate }}</p>
     } @else if (current === 'failed') {
-      <p class="error" role="alert">{{ t().leaderboard.failed }}</p>
+      <p class="error" role="alert">{{ 'leaderboard.failed' | translate }}</p>
     } @else if (isList(current)) {
       @for (board of current; track board.key) {
         <div class="board-table">
-          <h2 class="card-title">{{ boardLabel(t(), game(), board.key) }}</h2>
+          <h2 class="card-title">{{ boardLabel(messages(), game(), board.key) }}</h2>
           <div class="table-scroll">
             <table>
               <thead>
                 <tr>
-                  <th scope="col" class="number">{{ t().leaderboard.columns.place }}</th>
-                  <th scope="col">{{ t().leaderboard.columns.name }}</th>
-                  <th scope="col" class="number">{{ t().leaderboard.columns.plays }}</th>
-                  <th scope="col" class="number">{{ t().leaderboard.columns.best }}</th>
+                  <th scope="col" class="number">{{ 'leaderboard.columns.place' | translate }}</th>
+                  <th scope="col">{{ 'leaderboard.columns.name' | translate }}</th>
+                  <th scope="col" class="number">{{ 'leaderboard.columns.plays' | translate }}</th>
+                  <th scope="col" class="number">{{ 'leaderboard.columns.best' | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -61,11 +61,11 @@
                     <th scope="row">
                       {{ entry.screenName }}
                       @if (entry.isMe) {
-                        <span class="muted">({{ t().leaderboard.you }})</span>
+                        <span class="muted">({{ 'leaderboard.you' | translate }})</span>
                       }
                     </th>
                     <td class="number">{{ entry.plays }}</td>
-                    <td class="number">{{ bestText(t(), game(), entry.best) }}</td>
+                    <td class="number">{{ bestText(messages(), game(), entry.best) }}</td>
                   </tr>
                 }
               </tbody>
@@ -73,7 +73,7 @@
           </div>
         </div>
       } @empty {
-        <p class="muted">{{ t().leaderboard.empty }}</p>
+        <p class="muted">{{ 'leaderboard.empty' | translate }}</p>
       }
     }
   }

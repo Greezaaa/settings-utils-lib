@@ -111,7 +111,6 @@ const TYPING_TIME_FACTOR = 1.5;
 /** Typical slips: off by one or two, or a forgotten carry */
 const NEAR_MISSES = [1, 2, 10] as const;
 
-/** One equation to judge */
 export interface Question {
   readonly left: number;
   readonly operator: Operator;

@@ -18,6 +18,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Throttle } from '@nestjs/throttler';
 import { z } from 'zod';
 import { AdminGuard } from '../security/admin.guard.js';
+import { limitSchema, offsetSchema } from '../shared/page.js';
 import { IMAGE_MAX_BYTES } from './clean-image.js';
 import { Suggestion } from './suggestion.entity.js';
 import type {
@@ -77,8 +78,10 @@ export class SuggestionsAdminController {
   list(
     @Query('status', { schema: z.enum(SUGGESTION_STATUSES).default('new') })
     status: SuggestionStatus,
+    @Query('offset', { schema: offsetSchema }) offset: number,
+    @Query('limit', { schema: limitSchema }) limit: number,
   ): Promise<Suggestion[]> {
-    return this.suggestions.list(status);
+    return this.suggestions.list(status, { offset, limit });
   }
 
   @Get(':id/image')

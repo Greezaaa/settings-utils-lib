@@ -45,7 +45,6 @@ export class WordDictionaries {
     return this.statuses()[language];
   }
 
-  /** A language's words, once downloaded */
   wordsOf(language: LanguageId): ReadonlySet<string> | undefined {
     return this.words()[language];
   }

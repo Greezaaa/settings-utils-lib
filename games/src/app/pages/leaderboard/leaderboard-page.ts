@@ -4,6 +4,7 @@ import { bestText, boardLabel } from '../../core/board-labels';
 import { Leaderboard, PlayerAccount } from '../../core/player-account';
 import { RESULT_GAME_SLUGS, ResultGame } from '../../core/player-results';
 import { SiteLanguage } from '../../i18n/site-language';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 /** A game's leaderboards: loading, loaded, or out of reach */
 type Boards = 'loading' | 'failed' | readonly Leaderboard[];
@@ -14,15 +15,14 @@ type Boards = 'loading' | 'failed' | readonly Leaderboard[];
  */
 @Component({
   selector: 'app-leaderboard-page',
-  imports: [RouterLink],
+  imports: [TranslatePipe, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './leaderboard-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../admin/admin.scss', './leaderboard-page.scss'],
 })
 export class LeaderboardPage {
   protected readonly account = inject(PlayerAccount);
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
+  protected readonly messages = inject(SiteLanguage).messages;
   protected readonly games = RESULT_GAME_SLUGS;
   protected readonly game = signal<ResultGame>(RESULT_GAME_SLUGS[0]);
   protected readonly boards = signal<Boards>('loading');

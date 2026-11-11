@@ -7,10 +7,10 @@ import { RESULT_GAMES } from '../../core/player-results';
 import { readStored, writeStored } from '../../core/site-storage';
 import { BoardLevelId, getBoardLevel } from '../../games/board';
 import { DEFAULT_PAIRS_LEVEL, dealPairs, isPair, PairCard, PAIRS_LEVELS } from '../../games/find-pairs';
-import { SiteLanguage } from '../../i18n/site-language';
 import { GameClock } from '../../shared/game-clock';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'playing' | 'done';
 type BestMoves = Partial<Record<BoardLevelId, number>>;
@@ -25,7 +25,7 @@ const MISMATCH_MS = 900;
  */
 @Component({
   selector: 'app-find-pairs-page',
-  imports: [GameBoard, GameFeedback, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './find-pairs-page.html',
   styleUrls: [
@@ -37,12 +37,8 @@ const MISMATCH_MS = 900;
 })
 export class FindPairsPage {
   protected readonly levels = PAIRS_LEVELS;
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('find-pairs').minAge;
   private readonly api = inject(GamesApi);
-  /** Sends finished games to the player's account, when signed in */
   private readonly account = inject(PlayerAccount);
   protected readonly clock = new GameClock();
 

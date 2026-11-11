@@ -58,18 +58,15 @@ export class SiteLanguage {
     );
   }
 
-  /** Switch language and remember it in this browser */
   set(id: LanguageId): void {
     this.languageId.set(id);
     writeStored(LANGUAGE_STORAGE, id);
   }
 
-  /** A language's own name, for the picker */
   nameOf(id: LanguageId): string {
     return MESSAGES[id]('boy').languageName;
   }
 
-  /** A language's short code, for the picker */
   codeOf(id: LanguageId): string {
     return MESSAGES[id]('boy').languageCode;
   }

@@ -1,0 +1,14 @@
+<p
+  class="equation"
+  [class.is-right]="flash.result() === true"
+  [class.is-wrong]="flash.result() === false"
+  aria-live="polite"
+>
+  {{ equation() }}
+</p>
+<div class="pad">
+  <button type="button" class="key key-false" (click)="answer(false)">{{ 'trueOrFalse.false' | translate }}</button>
+  <button type="button" class="key key-true" (click)="answer(true)">{{ 'trueOrFalse.true' | translate }}</button>
+</div>
+<app-answer-line [result]="flash.result()" [answer]="solution()" />
+<p class="keys">{{ 'trueOrFalse.keys' | translate }}</p>

@@ -1,21 +1,21 @@
 <header class="container page-head">
-  <h1>{{ t().home.title }}</h1>
+  <h1>{{ 'home.title' | translate }}</h1>
   <p class="lead">
-    {{ t().home.lead }}
+    {{ 'home.lead' | translate }}
     <br />
-    {{ t().home.rule }}
+    {{ 'home.rule' | translate }}
   </p>
   <p class="beta" role="note">
-    <span class="beta-label">{{ t().home.betaLabel }}</span>
-    {{ t().home.betaText }}
+    <span class="beta-label">{{ 'home.betaLabel' | translate }}</span>
+    {{ 'home.betaText' | translate }}
   </p>
 </header>
 
 @if (hasCategoryMenu()) {
   @for (list of [
-    { id: 'favorites', title: t().home.favoritesTitle, games: favorites() },
-    { id: 'popular', title: t().home.popularTitle, games: popular() },
-    { id: 'recent', title: t().home.recentTitle, games: recent() }
+    { id: 'favorites', title: ('home.favoritesTitle' | translate), games: favorites() },
+    { id: 'popular', title: ('home.popularTitle' | translate), games: popular() },
+    { id: 'recent', title: ('home.recentTitle' | translate), games: recent() }
   ]; track list.id) {
     @if (list.games.length > 0) {
       <section class="container page-section" [attr.aria-labelledby]="'list-' + list.id">
@@ -29,13 +29,13 @@
     }
   }
   <section class="container page-section" aria-labelledby="categories-title">
-    <h2 class="section-title" id="categories-title">{{ t().home.categoriesTitle }}</h2>
+    <h2 class="section-title" id="categories-title">{{ 'home.categoriesTitle' | translate }}</h2>
     <div class="games">
       @for (group of categories(); track group.category; let index = $index) {
         <a class="card category-card" [routerLink]="['/category', group.category]" appReveal [style.--index]="index">
-          <span class="tag">{{ t().home.categoryGames(group.games.length) }}</span>
-          <h3 class="category-name">{{ t().categories[group.category] }}</h3>
-          <p class="muted">{{ t().categoryIntros[group.category] }}</p>
+          <span class="tag">{{ 'home.categoryGames' | translate: group.games.length }}</span>
+          <h3 class="category-name">{{ ('categories' | translate)[group.category] }}</h3>
+          <p class="muted">{{ ('categoryIntros' | translate)[group.category] }}</p>
         </a>
       }
     </div>
@@ -43,7 +43,7 @@
 } @else {
   @for (group of categories(); track group.category) {
     <section class="container page-section" [attr.aria-labelledby]="'category-' + group.category">
-      <h2 class="section-title" [id]="'category-' + group.category">{{ t().categories[group.category] }}</h2>
+      <h2 class="section-title" [id]="'category-' + group.category">{{ ('categories' | translate)[group.category] }}</h2>
       <div class="games">
         @for (game of group.games; track game; let index = $index) {
           <app-game-card [game]="game" appReveal [style.--index]="index" />
@@ -55,18 +55,18 @@
 
 @if (features.canUse('rooms')) {
   <section class="container page-section play-together" aria-labelledby="play-together-title">
-    <h2 id="play-together-title" class="section-title">{{ t().rooms.homeTitle }}</h2>
-    <p class="lead">{{ t().rooms.homeText }}</p>
-    <a class="button" routerLink="/rooms">{{ t().rooms.create }}</a>
+    <h2 id="play-together-title" class="section-title">{{ 'rooms.homeTitle' | translate }}</h2>
+    <p class="lead">{{ 'rooms.homeText' | translate }}</p>
+    <a class="button" routerLink="/rooms">{{ 'rooms.create' | translate }}</a>
   </section>
 }
 
 <section class="container page-section" aria-labelledby="whats-new-title">
-  <h2 id="whats-new-title" class="section-title">{{ t().home.whatsNewTitle }}</h2>
+  <h2 id="whats-new-title" class="section-title">{{ 'home.whatsNewTitle' | translate }}</h2>
   <app-whats-new />
 </section>
 
 <section class="container page-section made-by" aria-labelledby="made-by-title">
-  <h2 id="made-by-title" class="section-title">{{ t().home.madeByTitle }}</h2>
-  <p class="lead">{{ t().home.madeByText }}</p>
+  <h2 id="made-by-title" class="section-title">{{ 'home.madeByTitle' | translate }}</h2>
+  <p class="lead">{{ 'home.madeByText' | translate }}</p>
 </section>

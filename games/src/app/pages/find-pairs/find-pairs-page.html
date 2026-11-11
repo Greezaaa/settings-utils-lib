@@ -1,29 +1,29 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['find-pairs'].name }}</h1>
+  <h1>{{ 'games.find-pairs.name' | translate }}</h1>
   <p class="lead">
-    {{ t().findPairs.lead }}
+    {{ 'findPairs.lead' | translate }}
     <br />
-    {{ t().findPairs.rule }}
+    {{ 'findPairs.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().findPairs.board">
+<section class="container page-section" [attr.aria-label]="'findPairs.board' | translate">
   <div class="card play" appGameBoard>
     <!-- The game on one side, its settings, score and buttons on the other (settings first on phones) -->
     <div class="play-layout">
       <div class="play-main">
-        <div class="cards" [style.--columns]="level().columns" role="group" [attr.aria-label]="t().findPairs.board">
+        <div class="cards" [style.--columns]="level().columns" role="group" [attr.aria-label]="'findPairs.board' | translate">
           @for (card of cards(); track card.id) {
             <button
               type="button"
               class="pair-card"
               [class.is-up]="isFaceUp(card)"
               [class.is-matched]="isMatched(card)"
-              [attr.aria-label]="isFaceUp(card) ? card.picture : t().findPairs.card(card.id + 1)"
+              [attr.aria-label]="isFaceUp(card) ? card.picture : ('findPairs.card' | translate: card.id + 1)"
               (click)="flip(card)"
             >
               <span class="inner" aria-hidden="true">
@@ -36,38 +36,38 @@
 
         @if (phase() === 'done') {
           <p class="done" role="status">
-            {{ t().findPairs.done }}
-            <small>{{ t().findPairs.summary(moves(), clock.time()) }}</small>
+            {{ 'findPairs.done' | translate }}
+            <small>{{ 'findPairs.summary' | translate: moves() : clock.time() }}</small>
             @if (isNewBest()) {
-              <small class="record">{{ t().over.newRecord }}</small>
+              <small class="record">{{ 'over.newRecord' | translate }}</small>
             }
           </p>
         }
       </div>
       <div class="play-side">
-        <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+        <div class="choices" role="group" [attr.aria-label]="'settings.levelGroup' | translate">
           @for (option of levels; track option.id) {
             <button
               type="button"
               class="button button-secondary"
               [attr.aria-pressed]="option.id === levelId()"
-              [title]="t().findPairs.levels[option.id].summary"
+              [title]="('findPairs.levels' | translate)[option.id].summary"
               (click)="chooseLevel(option.id)"
             >
-              {{ t().findPairs.levels[option.id].name }}
+              {{ ('findPairs.levels' | translate)[option.id].name }}
             </button>
           }
         </div>
 
         <div class="status">
-          <span class="mono">{{ t().findPairs.moves(moves()) }}</span>
-          <span class="mono" aria-live="polite">{{ t().findPairs.pairs(pairsFound(), pairsTotal()) }}</span>
+          <span class="mono">{{ 'findPairs.moves' | translate: moves() }}</span>
+          <span class="mono" aria-live="polite">{{ 'findPairs.pairs' | translate: pairsFound() : pairsTotal() }}</span>
           <span class="mono">{{ clock.time() }}</span>
         </div>
         <div class="actions">
-          <button type="button" class="button button-secondary" (click)="newGame()">{{ t().findPairs.newGame }}</button>
+          <button type="button" class="button button-secondary" (click)="newGame()">{{ 'findPairs.newGame' | translate }}</button>
           @if (best(); as best) {
-            <span class="muted">{{ t().findPairs.best(best) }}</span>
+            <span class="muted">{{ 'findPairs.best' | translate: best }}</span>
           }
         </div>
       </div>

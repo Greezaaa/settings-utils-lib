@@ -21,14 +21,15 @@ import { SiteTheme } from './core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
 import { MenuRing } from './shared/menu-ring';
 import { ScrollToActive } from './shared/scroll-to-active';
+import { TranslatePipe } from './i18n/translate-pipe';
 
-/** Order of the header theme switch */
 const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contrast'];
 
 /** Site shell: header with text size, theme and language settings and the list of games, page outlet and footer */
 @Component({
   selector: 'app-root',
   imports: [
+    TranslatePipe,
     MenuRing,
     RouterLink,
     RouterLinkActive,
@@ -52,7 +53,6 @@ export class App {
   protected readonly siteLanguage = inject(SiteLanguage);
   /** Started with the shell, so the privacy and "what's new" notices show on whichever page the visitor lands */
   private readonly notices = inject(SiteNotices);
-  /** Texts in the site's language */
   protected readonly t = this.siteLanguage.messages;
   protected readonly languages = LANGUAGE_IDS;
   protected readonly boardColours = inject(BoardColours);
@@ -76,7 +76,6 @@ export class App {
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
 
-  /** Label of the theme the switch moves to next */
   protected readonly nextTheme = computed(() => {
     const index = THEME_CYCLE.indexOf(this.theme.preference());
     return THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
@@ -111,7 +110,6 @@ export class App {
     this.settingsOpen.update((open) => !open);
   }
 
-  /** A tap anywhere outside the settings closes them */
   protected closeSettingsOnOutsideClick(event: MouseEvent): void {
     if (event.target instanceof Node && !this.settings().nativeElement.contains(event.target)) {
       this.settingsOpen.set(false);

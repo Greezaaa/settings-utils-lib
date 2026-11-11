@@ -17,9 +17,7 @@ export class PlayerGender {
   private readonly chosen = signal<WordGender | null>(null);
 
   readonly isAvailable = computed(() => this.features.canUse('word-gender'));
-  /** What the player chose, or null */
   readonly choice = this.chosen.asReadonly();
-  /** The forms the texts use */
   readonly wordGender = computed<WordGender>(() => (this.isAvailable() && this.chosen() === 'girl' ? 'girl' : 'boy'));
 
   constructor() {

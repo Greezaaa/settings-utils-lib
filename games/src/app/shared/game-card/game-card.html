@@ -1,0 +1,32 @@
+<!-- The whole card is the link (its ::after covers the card); the heart sits on top of it, as a button can't go inside a link -->
+<article class="card game-card">
+  <span class="tags">
+    <span class="tag">{{ 'page.ages' | translate: minAge() }}</span>
+    @if (isNew()) {
+      <span class="tag tag-green">{{ 'page.new' | translate }}</span>
+    }
+    @if (isHidden()) {
+      <span class="tag tag-red">{{ 'page.hidden' | translate }}</span>
+    }
+    @if (isPopular()) {
+      <span class="tag tag-yellow">{{ 'page.popular' | translate }}</span>
+    }
+  </span>
+  <h3 class="game-name">
+    <a class="game-link" [routerLink]="['/', game()]">{{ ('games' | translate)[game()].name }}</a>
+  </h3>
+  <p class="muted">{{ ('games' | translate)[game()].summary }}</p>
+  @if (canFavorite()) {
+    <button
+      type="button"
+      class="favorite"
+      [attr.aria-pressed]="isFavorite()"
+      [attr.aria-label]="
+        isFavorite() ? ('page.removeFavorite' | translate: ('games' | translate)[game()].name) : ('page.addFavorite' | translate: ('games' | translate)[game()].name)
+      "
+      (click)="favorites.toggle(game())"
+    >
+      {{ isFavorite() ? '♥' : '♡' }}
+    </button>
+  }
+</article>

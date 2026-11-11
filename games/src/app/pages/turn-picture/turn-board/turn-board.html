@@ -1,0 +1,21 @@
+<div
+  class="board"
+  [class.is-solved]="phase() === 'solved'"
+  [class.is-preview]="phase() === 'preview'"
+  [style.--columns]="shape().columns"
+  role="group"
+  [attr.aria-label]="'turnPicture.board' | translate"
+>
+  @for (turn of turns(); track $index; let cell = $index) {
+    <button
+      type="button"
+      class="tile"
+      [class.is-right]="showHints() && isTileRight(cell)"
+      [style.transform]="rotation(cell)"
+      [attr.aria-label]="'turnPicture.tile' | translate: cell + 1"
+      (click)="tap(cell)"
+    >
+      <app-picture-slice [src]="picture().src" [shape]="shape()" [cell]="cell" />
+    </button>
+  }
+</div>

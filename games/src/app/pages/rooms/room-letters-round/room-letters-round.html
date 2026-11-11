@@ -1,0 +1,34 @@
+<div class="status">
+  <span class="mono">{{ 'rooms.timeLeft' | translate: clock.secondsLeft() }}</span>
+  @if (showScore()) {
+    <span class="mono">{{ 'rooms.yourScore' | translate: score() }}</span>
+  }
+</div>
+<app-timer-bar [share]="clock.share()" />
+
+@if (!clock.isOver()) {
+  <p class="instructions">{{ ('letterGames.instructions' | translate)[settings().mode] }}</p>
+  @switch (settings().mode) {
+    @case ('word-builder') {
+      <app-builder-round
+        [set]="letterSet()"
+        [dictionary]="dictionary()"
+        [commonWords]="commonWords()"
+        [dictionaryStatus]="dictionaryStatus()"
+        (newLetters)="nextLetters()"
+        (wordFound)="onWordFound()"
+        (reported)="onReported($event)"
+      />
+    }
+    @case ('mixed-letters') {
+      @if (mixedWord(); as word) {
+        <app-mixed-round [word]="word" [hints]="settings().hints" (solved)="onSolved()" />
+      }
+    }
+    @default {
+      @if (gapWord(); as word) {
+        <app-gap-round [word]="word" [vowels]="vowels()" [hints]="settings().hints" (solved)="onSolved()" />
+      }
+    }
+  }
+}

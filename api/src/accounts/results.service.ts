@@ -34,6 +34,31 @@ export interface Leaderboard {
 const betterOf = (game: ResultGame): string =>
   RESULT_DIRECTIONS[game] === 'higher' ? 'GREATEST' : 'LEAST';
 
+/** Games where a higher result is better; the others keep the lower one */
+const HIGHER_GAMES = Object.entries(RESULT_DIRECTIONS)
+  .filter(([, direction]) => direction === 'higher')
+  .map(([game]) => game);
+
+/**
+ * One result per game and settings, the better one when a list repeats a key: a single insert can't change the same
+ * row twice
+ */
+export function betterPerKey(bests: readonly ResultInput[]): ResultInput[] {
+  const byKey = new Map<string, ResultInput>();
+  for (const best of bests) {
+    const id = `${best.game}\n${best.key}`;
+    const other = byKey.get(id);
+    const isHigher = RESULT_DIRECTIONS[best.game] === 'higher';
+    if (
+      !other ||
+      (isHigher ? best.value > other.value : best.value < other.value)
+    ) {
+      byKey.set(id, best);
+    }
+  }
+  return [...byKey.values()];
+}
+
 /** Players' results per game and settings: finished games counted, best results kept, and the leaderboards */
 @Injectable()
 export class ResultsService {
@@ -55,18 +80,30 @@ export class ResultsService {
     );
   }
 
-  /** Best results from before signing in: kept when better, without counting plays */
+  /** Best results from before signing in: kept when better, without counting plays; one query for all of them */
   async mergeBests(
     playerId: string,
     bests: readonly ResultInput[],
   ): Promise<void> {
-    for (const { game, key, value } of bests) {
-      await this.results.query(
-        `INSERT INTO player_results (player_id, game, key, plays, best) VALUES ($1, $2, $3, 0, $4)
-         ON CONFLICT (player_id, game, key) DO UPDATE SET best = ${betterOf(game)}(player_results.best, $4)`,
-        [playerId, game, key, value],
-      );
+    const merged = betterPerKey(bests);
+    if (merged.length === 0) {
+      return;
     }
+    await this.results.query(
+      `INSERT INTO player_results (player_id, game, key, plays, best)
+       SELECT $1, game, key, 0, best FROM unnest($2::varchar[], $3::varchar[], $4::int[]) AS b(game, key, best)
+       ON CONFLICT (player_id, game, key) DO UPDATE SET best = CASE
+         WHEN player_results.game = ANY($5::varchar[]) THEN GREATEST(player_results.best, EXCLUDED.best)
+         ELSE LEAST(player_results.best, EXCLUDED.best)
+       END`,
+      [
+        playerId,
+        merged.map(({ game }) => game),
+        merged.map(({ key }) => key),
+        merged.map(({ value }) => value),
+        HIGHER_GAMES,
+      ],
+    );
   }
 
   /** Deletes a player's results: their plays, bests and places on the leaderboards; the account stays */

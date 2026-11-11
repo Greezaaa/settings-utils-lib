@@ -9,11 +9,12 @@ import { WORD_BANKS } from '../../games/words';
 import { SiteLanguage } from '../../i18n/site-language';
 import { Countdown } from '../../shared/countdown';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
-import { TimerBar } from '../../shared/timer-bar';
-import { BuilderRound } from './rounds/builder-round';
-import { GapRound } from './rounds/gap-round';
-import { MixedRound } from './rounds/mixed-round';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { TimerBar } from '../../shared/timer-bar/timer-bar';
+import { BuilderRound } from './rounds/builder-round/builder-round';
+import { GapRound } from './rounds/gap-round/gap-round';
+import { MixedRound } from './rounds/mixed-round/mixed-round';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'done';
 
@@ -27,7 +28,7 @@ const SOLVED_MS = 700;
  */
 @Component({
   selector: 'app-letter-games-page',
-  imports: [BuilderRound, GameBoard, GameFeedback, GapRound, MixedRound, RouterLink, TimerBar],
+  imports: [TranslatePipe, BuilderRound, GameBoard, GameFeedback, GapRound, MixedRound, RouterLink, TimerBar],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './letter-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './letter-games-page.scss'],
@@ -40,9 +41,6 @@ export class LetterGamesPage {
   protected readonly builderLevels = BUILDER_LEVELS;
   protected readonly timers = TIMER_IDS;
   protected readonly hintOptions = HINTS_IDS;
-  /** Texts in the site's language */
-  protected readonly t = this.language.messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('letter-games').minAge;
   private readonly api = inject(GamesApi);
 

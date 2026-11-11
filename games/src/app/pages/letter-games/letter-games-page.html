@@ -1,24 +1,24 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['letter-games'].name }}</h1>
+  <h1>{{ 'games.letter-games.name' | translate }}</h1>
   <p class="lead">
-    {{ t().letterGames.lead }}
+    {{ 'letterGames.lead' | translate }}
     <br />
-    {{ t().letterGames.rule }}
+    {{ 'letterGames.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().letterGames.board">
+<section class="container page-section" [attr.aria-label]="'letterGames.board' | translate">
   <div class="card board" [class.is-wide]="isBuilder() && phase() === 'playing'" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
         <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
           <div class="settings-column">
-            <div class="levels" role="group" [attr.aria-label]="t().letterGames.modeGroup">
+            <div class="levels" role="group" [attr.aria-label]="'letterGames.modeGroup' | translate">
               @for (mode of modes; track mode) {
                 <button
                   type="button"
@@ -26,67 +26,67 @@
                   [attr.aria-pressed]="mode === modeId()"
                   (click)="modeId.set(mode)"
                 >
-                  <span class="level-name">{{ t().letterGames.modes[mode].name }}</span>
-                  <span class="level-summary">{{ t().letterGames.modes[mode].summary }}</span>
+                  <span class="level-name">{{ ('letterGames.modes' | translate)[mode].name }}</span>
+                  <span class="level-summary">{{ ('letterGames.modes' | translate)[mode].summary }}</span>
                 </button>
               }
             </div>
           </div>
           <div class="settings-column">
             @if (isBuilder()) {
-              <div class="choices" role="group" [attr.aria-label]="t().letterGames.levelGroup">
+              <div class="choices" role="group" [attr.aria-label]="'letterGames.levelGroup' | translate">
                 @for (level of builderLevels; track level.id) {
                   <button
                     type="button"
                     class="button button-secondary"
                     [attr.aria-pressed]="level.id === builderLevelId()"
-                    [title]="t().letterGames.builderLevels[level.id].summary"
+                    [title]="('letterGames.builderLevels' | translate)[level.id].summary"
                     (click)="builderLevelId.set(level.id)"
                   >
-                    {{ t().letterGames.builderLevels[level.id].name }} · {{ level.letters }}
+                    {{ ('letterGames.builderLevels' | translate)[level.id].name }} · {{ level.letters }}
                   </button>
                 }
               </div>
             }
             @if (!isBuilder()) {
-              <div class="choices" role="group" [attr.aria-label]="t().letterGames.hintsGroup">
+              <div class="choices" role="group" [attr.aria-label]="'letterGames.hintsGroup' | translate">
                 @for (option of hintOptions; track option) {
                   <button
                     type="button"
                     class="button button-secondary"
                     [attr.aria-pressed]="option === hintsId()"
-                    [title]="t().letterGames.hints[option].summary"
+                    [title]="('letterGames.hints' | translate)[option].summary"
                     (click)="hintsId.set(option)"
                   >
-                    {{ t().letterGames.hints[option].name }}
+                    {{ ('letterGames.hints' | translate)[option].name }}
                   </button>
                 }
               </div>
             }
-            <div class="choices" role="group" [attr.aria-label]="t().settings.timerGroup">
+            <div class="choices" role="group" [attr.aria-label]="'settings.timerGroup' | translate">
               @for (timer of timers; track timer) {
                 <button
                   type="button"
                   class="button button-secondary"
                   [attr.aria-pressed]="timer === timerId()"
-                  [title]="t().letterGames.timers[timer]"
+                  [title]="('letterGames.timers' | translate)[timer]"
                   (click)="timerId.set(timer)"
                 >
-                  {{ t().settings.timers[timer].name }}
+                  {{ ('settings.timers' | translate)[timer].name }}
                 </button>
               }
             </div>
           </div>
         </div>
-        <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>
+        <button type="button" class="button start" (click)="start()">{{ 'settings.start' | translate }}</button>
       }
 
       @case ('playing') {
-        <p class="instructions">{{ t().letterGames.instructions[modeId()] }}</p>
+        <p class="instructions">{{ ('letterGames.instructions' | translate)[modeId()] }}</p>
         @if (!isBuilder()) {
           <div class="status">
-            <span class="mono">{{ t().letterGames.progress(index() + 1, total()) }}</span>
-            <span class="mono">{{ t().letterGames.mistakes(mistakes()) }}</span>
+            <span class="mono">{{ 'letterGames.progress' | translate: index() + 1 : total() }}</span>
+            <span class="mono">{{ 'letterGames.mistakes' | translate: mistakes() }}</span>
           </div>
         }
         @if (isTimed()) {
@@ -120,23 +120,23 @@
           }
         }
         <button type="button" class="button button-secondary" (click)="backToSettings()">
-          {{ t().over.changeSettings }}
+          {{ 'over.changeSettings' | translate }}
         </button>
       }
 
       @case ('done') {
-        <p class="eyebrow">{{ isTimeUp() ? t().over.outOfTime : t().letterGames.solved }}</p>
+        <p class="eyebrow">{{ isTimeUp() ? ('over.outOfTime' | translate) : ('letterGames.solved' | translate) }}</p>
         <p class="final-score">{{ wordsDone() }}</p>
-        <p class="muted">{{ t().letterGames.summary(wordsDone(), mistakes()) }}</p>
+        <p class="muted">{{ 'letterGames.summary' | translate: wordsDone() : mistakes() }}</p>
         <div class="button-row">
-          <button type="button" class="button" (click)="start()">{{ t().over.playAgain }}</button>
+          <button type="button" class="button" (click)="start()">{{ 'over.playAgain' | translate }}</button>
           <button type="button" class="button button-secondary" (click)="backToSettings()">
-            {{ t().over.changeSettings }}
+            {{ 'over.changeSettings' | translate }}
           </button>
         </div>
       }
     }
   </div>
-  <p class="credit">{{ t().letterGames.dictionary.credit }}</p>
+  <p class="credit">{{ 'letterGames.dictionary.credit' | translate }}</p>
   <app-game-feedback game="letter-games" />
 </section>

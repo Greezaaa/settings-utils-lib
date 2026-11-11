@@ -11,7 +11,6 @@ export const SITE_PREVIEW_IMAGE = {
   type: 'image/png',
 } as const;
 
-/** How to reach the author */
 export const AUTHOR_EMAIL_URL = 'mailto:yev.alekseyev@gmail.com';
 
 /**

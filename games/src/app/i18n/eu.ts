@@ -946,6 +946,7 @@ export const EU: SiteMessages = {
     keepOut: 'Blokeatu',
     letCount: 'Baimendu',
     noWords: 'Ez dago hitzik hemen.',
+    loadMore: 'Gehiago kargatu',
     featuresTitle: 'Funtzioak',
     featuresHelp:
       'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',

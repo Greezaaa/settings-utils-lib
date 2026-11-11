@@ -920,6 +920,7 @@ export const EN: SiteMessages = {
     keepOut: 'Keep out',
     letCount: 'Let it count',
     noWords: 'No words here.',
+    loadMore: 'Load more',
     featuresTitle: 'Features',
     featuresHelp:
       'New features start switched off: try them in preview, then open them to everyone.',

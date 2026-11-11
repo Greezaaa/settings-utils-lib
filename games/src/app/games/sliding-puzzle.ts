@@ -115,7 +115,6 @@ function drawLine(shape: Shape, gap: number, random: Random): Picture {
   return lines;
 }
 
-/** The finished board: every tile in its own cell, and the gap */
 export function solvedBoard(shape: Shape, gap: number): Board {
   return Array.from({ length: cellCount(shape) }, (_, cell) => (cell === gap ? null : cell));
 }

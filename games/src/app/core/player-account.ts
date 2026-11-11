@@ -4,7 +4,7 @@ import { FavoriteGames, readFavorites } from './favorite-games';
 import { FeatureFlags } from './feature-flags';
 import { GameSlug } from './games';
 import { isGameSlug } from './games-api';
-import { BestResult, isResultGame, mergedBests, RESULT_GAME_SLUGS, RESULT_GAMES, ResultGame, storedBests } from './player-results';
+import { BestResult, bestsToSend, isResultGame, mergedBests, RESULT_GAME_SLUGS, RESULT_GAMES, ResultGame, storedBests } from './player-results';
 import { readStored, writeStored } from './site-storage';
 
 /** A player's results in one game and settings, as their account keeps them */
@@ -251,8 +251,9 @@ export class PlayerAccount {
     this.favorites.set([...new Set([...this.favorites.games(), ...accountFavorites])].filter((game) => isGameSlug(game)));
     // Best results: this browser's go to the account, the account's come into this browser
     const local = RESULT_GAME_SLUGS.flatMap((game) => storedBests(game, readStored(RESULT_GAMES[game].storage)));
-    if (local.length > 0) {
-      await this.fetch('/v1/account/bests', jsonInit('PUT', { bests: local }), SEND_TIMEOUT_MS);
+    const bests = bestsToSend(local, accountResults);
+    if (bests.length > 0) {
+      await this.fetch('/v1/account/bests', jsonInit('PUT', { bests }), SEND_TIMEOUT_MS);
     }
     for (const game of RESULT_GAME_SLUGS) {
       const { storage } = RESULT_GAMES[game];

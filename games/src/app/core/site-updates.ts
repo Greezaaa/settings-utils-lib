@@ -333,12 +333,10 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
   },
 ];
 
-/** The site's current version */
 export const LATEST_VERSION = Math.max(
   ...SITE_UPDATES.map(({ version }) => version)
 );
 
-/** When the current version went live */
 export const LATEST_PUBLISHED = SITE_UPDATES.reduce((latest, update) =>
   update.version > latest.version ? update : latest
 ).published;
@@ -352,7 +350,6 @@ export const LATEST_PRIVACY_VERSION = Math.max(
   ...SITE_UPDATES.filter(({ privacy }) => privacy).map(({ version }) => version)
 );
 
-/** A change with the update it came in */
 export interface DatedChange {
   readonly change: UpdateChange;
   readonly version: number;

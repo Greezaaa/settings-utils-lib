@@ -144,7 +144,7 @@ export const routes: Routes = [
     data: { description: rooms.lead, noIndex: true },
     canActivate: [featureGuard('rooms')],
     loadComponent: () =>
-      import('./pages/rooms/room-page').then(m => m.RoomPage),
+      import('./pages/rooms/room-page/room-page').then(m => m.RoomPage),
   },
   {
     path: 'account',
@@ -161,7 +161,7 @@ export const routes: Routes = [
     data: { description: account.lead, noIndex: true },
     canActivate: [featureGuard('accounts')],
     loadComponent: () =>
-      import('./pages/account/reset-page').then(m => m.ResetPage),
+      import('./pages/account/reset-page/reset-page').then(m => m.ResetPage),
   },
   {
     // Needs accounts too, as only signed-in players see it
@@ -204,7 +204,7 @@ export const routes: Routes = [
     title: `${admin.inviteTitle} · ${SITE_NAME}`,
     data: { description: admin.lead, noIndex: true },
     loadComponent: () =>
-      import('./pages/admin/admin-invite-page').then(m => m.AdminInvitePage),
+      import('./pages/admin/admin-invite-page/admin-invite-page').then(m => m.AdminInvitePage),
   },
   { path: '404', ...notFound },
   { path: '**', ...notFound },

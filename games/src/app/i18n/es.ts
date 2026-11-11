@@ -959,6 +959,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     keepOut: 'Bloquear',
     letCount: 'Permitir',
     noWords: 'No hay palabras aquí.',
+    loadMore: 'Cargar más',
     featuresTitle: 'Funciones',
     featuresHelp:
       'Las funciones nuevas empiezan desactivadas: pruébalas en vista previa y luego ábrelas a todos.',

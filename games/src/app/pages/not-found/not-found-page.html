@@ -1,14 +1,14 @@
 <header class="container page-head">
   <p class="error-code" aria-hidden="true"><span class="brace">&#123;</span>404<span class="brace">&#125;</span></p>
-  <h1 class="not-found-title">{{ t().notFound.title }}</h1>
-  <p class="lead">{{ t().notFound.lead }}</p>
+  <h1 class="not-found-title">{{ 'notFound.title' | translate }}</h1>
+  <p class="lead">{{ 'notFound.lead' | translate }}</p>
   <div class="button-row">
-    <a class="button" routerLink="/">{{ t().notFound.back }}</a>
+    <a class="button" routerLink="/">{{ 'notFound.back' | translate }}</a>
   </div>
 </header>
 
 <section class="container page-section" aria-labelledby="not-found-games">
-  <h2 id="not-found-games" class="section-title">{{ t().notFound.playInstead }}</h2>
+  <h2 id="not-found-games" class="section-title">{{ 'notFound.playInstead' | translate }}</h2>
   <div class="games">
     @for (game of games(); track game) {
       <app-game-card [game]="game" />

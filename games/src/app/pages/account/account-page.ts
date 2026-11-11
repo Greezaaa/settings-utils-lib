@@ -4,7 +4,8 @@ import { MIN_PASSWORD_LENGTH } from '../../core/passwords';
 import { PlayerAccount } from '../../core/player-account';
 import { SiteLanguage } from '../../i18n/site-language';
 import { AccountForm, formText } from './account-form';
-import { ScreenNameField } from './screen-name-field';
+import { ScreenNameField } from './screen-name-field/screen-name-field';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 /** The forms shown while signed out */
 type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
@@ -17,7 +18,7 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
  */
 @Component({
   selector: 'app-account-page',
-  imports: [ScreenNameField],
+  imports: [TranslatePipe, ScreenNameField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', '../admin/admin.scss', './account.scss'],
@@ -25,7 +26,6 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 export class AccountPage {
   protected readonly account = inject(PlayerAccount);
   private readonly dialog = inject(SuDialogService);
-  /** Texts in the site's language */
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly minLength = MIN_PASSWORD_LENGTH;
   protected readonly views: readonly SignedOutView[] = ['sign-in', 'sign-up', 'forgot'];
@@ -155,7 +155,6 @@ export class AccountPage {
     }
   }
 
-  /** Empties a form's password fields after it's saved */
   private clearPasswords(form: HTMLFormElement): void {
     for (const input of form.querySelectorAll('input[type="password"]')) {
       if (input instanceof HTMLInputElement) {

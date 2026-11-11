@@ -1,4 +1,4 @@
-<a class="skip-link" [routerLink]="[]" fragment="main">{{ t().site.skipToContent }}</a>
+<a class="skip-link" [routerLink]="[]" fragment="main">{{ 'site.skipToContent' | translate }}</a>
 
 <header class="site-header">
   <div class="container header-bar">
@@ -28,7 +28,7 @@
         <button
           type="button"
           class="icon-button settings-toggle"
-          [attr.aria-label]="t().site.settings"
+          [attr.aria-label]="'site.settings' | translate"
           aria-controls="site-settings"
           [attr.aria-expanded]="settingsOpen()"
           (click)="toggleSettings()"
@@ -45,14 +45,14 @@
 
         <div id="site-settings" class="settings-panel" [class.is-open]="settingsOpen()">
           <div class="setting">
-            <p class="setting-label" id="setting-text-size">{{ t().site.textSize }}</p>
+            <p class="setting-label" id="setting-text-size">{{ 'site.textSize' | translate }}</p>
             <div class="text-size" role="group" aria-labelledby="setting-text-size">
               <button
                 type="button"
                 class="icon-button"
                 (click)="fontSize.decrease()"
                 [disabled]="fontSize.isMin()"
-                [attr.aria-label]="t().site.smallerText"
+                [attr.aria-label]="'site.smallerText' | translate"
               >
                 A<span aria-hidden="true">-</span>
               </button>
@@ -61,26 +61,26 @@
                 class="icon-button"
                 (click)="fontSize.increase()"
                 [disabled]="fontSize.isMax()"
-                [attr.aria-label]="t().site.largerText"
+                [attr.aria-label]="'site.largerText' | translate"
               >
                 A<span aria-hidden="true">+</span>
               </button>
             </div>
           </div>
           <div class="setting">
-            <p class="setting-label" id="setting-theme">{{ t().site.theme }}</p>
+            <p class="setting-label" id="setting-theme">{{ 'site.theme' | translate }}</p>
             <button
               type="button"
               class="theme-switch"
               (click)="cycleTheme()"
-              [attr.aria-label]="t().site.themeSwitch(t().site.themeNames[theme.preference()], t().site.themeNames[nextTheme()])"
+              [attr.aria-label]="'site.themeSwitch' | translate: ('site.themeNames' | translate)[theme.preference()] : ('site.themeNames' | translate)[nextTheme()]"
             >
               <span class="theme-dot" aria-hidden="true"></span>
-              <span class="mono">{{ t().site.themeNames[theme.preference()] }}</span>
+              <span class="mono">{{ ('site.themeNames' | translate)[theme.preference()] }}</span>
             </button>
           </div>
           <div class="setting">
-            <p class="setting-label" id="setting-game-colours">{{ t().site.boardColours }}</p>
+            <p class="setting-label" id="setting-game-colours">{{ 'site.boardColours' | translate }}</p>
             <div class="board-colours" role="group" aria-labelledby="setting-game-colours">
               @for (theme of gameThemes; track theme.id) {
                 <button
@@ -88,9 +88,9 @@
                   class="swatch"
                   [style.--swatch-background]="theme.palette.background"
                   [style.--swatch-accent]="theme.palette['main-accent']"
-                  [attr.aria-label]="t().site.boardThemes[theme.id].name"
+                  [attr.aria-label]="('site.boardThemes' | translate)[theme.id].name"
                   [attr.aria-pressed]="theme.id === boardColours.selected()"
-                  [title]="t().site.boardThemes[theme.id].name + ' · ' + t().site.boardThemes[theme.id].summary"
+                  [title]="('site.boardThemes' | translate)[theme.id].name + ' · ' + ('site.boardThemes' | translate)[theme.id].summary"
                   (click)="boardColours.set(theme.id)"
                 ></button>
               }
@@ -98,17 +98,17 @@
           </div>
           @if (answerWords.isAvailable()) {
             <div class="setting">
-              <p class="setting-label" id="setting-answers">{{ t().site.answerStyle }}</p>
+              <p class="setting-label" id="setting-answers">{{ 'site.answerStyle' | translate }}</p>
               <div class="languages" role="group" aria-labelledby="setting-answers">
                 @for (style of answerStyles; track style) {
                   <button
                     type="button"
                     class="icon-button"
                     [attr.aria-pressed]="style === answerWords.style()"
-                    [title]="t().site.answerStyles[style].summary"
+                    [title]="('site.answerStyles' | translate)[style].summary"
                     (click)="answerWords.set(style)"
                   >
-                    {{ t().site.answerStyles[style].name }}
+                    {{ ('site.answerStyles' | translate)[style].name }}
                   </button>
                 }
               </div>
@@ -116,7 +116,7 @@
           }
           @if (menuAnimation.isAvailable()) {
             <div class="setting">
-              <p class="setting-label" id="setting-menu-animation">{{ t().site.menuAnimation }}</p>
+              <p class="setting-label" id="setting-menu-animation">{{ 'site.menuAnimation' | translate }}</p>
               <div class="languages" role="group" aria-labelledby="setting-menu-animation">
                 @for (choice of menuAnimationChoices; track choice) {
                   <button
@@ -125,7 +125,7 @@
                     [attr.aria-pressed]="choice === menuAnimation.choice()"
                     (click)="menuAnimation.set(choice)"
                   >
-                    {{ t().site.menuAnimationChoices[choice] }}
+                    {{ ('site.menuAnimationChoices' | translate)[choice] }}
                   </button>
                 }
               </div>
@@ -133,7 +133,7 @@
           }
           @if (playerGender.isAvailable()) {
             <div class="setting">
-              <p class="setting-label" id="setting-word-gender">{{ t().site.wordGender }}</p>
+              <p class="setting-label" id="setting-word-gender">{{ 'site.wordGender' | translate }}</p>
               <div class="languages" role="group" aria-labelledby="setting-word-gender">
                 @for (gender of wordGenders; track gender) {
                   <button
@@ -142,14 +142,14 @@
                     [attr.aria-pressed]="gender === playerGender.choice()"
                     (click)="playerGender.set(gender)"
                   >
-                    {{ t().site.wordGenders[gender] }}
+                    {{ ('site.wordGenders' | translate)[gender] }}
                   </button>
                 }
               </div>
             </div>
           }
           <div class="setting">
-            <p class="setting-label" id="setting-language">{{ t().site.language }}</p>
+            <p class="setting-label" id="setting-language">{{ 'site.language' | translate }}</p>
             <div class="languages" role="group" aria-labelledby="setting-language">
               @for (language of languages; track language) {
                 <button
@@ -172,33 +172,32 @@
     </div>
   </div>
 
-  <nav class="container site-nav" [attr.aria-label]="t().site.gamesNav" [appMenuRing]="menuAnimation.isOn()"
+  <nav class="container site-nav" [attr.aria-label]="'site.gamesNav' | translate" [appMenuRing]="menuAnimation.isOn()"
     appScrollToActive>
     <!-- With the categories menu, a link per category; otherwise a link per game -->
     @if (features.canUse('category-menu')) {
       @for (group of categories(); track group.category) {
-        <a [routerLink]="['/category', group.category]" routerLinkActive="active">{{ t().categories[group.category] }}</a>
+        <a [routerLink]="['/category', group.category]" routerLinkActive="active">{{ ('categories' | translate)[group.category] }}</a>
       }
     } @else {
       @for (game of games(); track game) {
-        <a [routerLink]="['/', game]" routerLinkActive="active">{{ t().games[game].name }}</a>
+        <a [routerLink]="['/', game]" routerLinkActive="active">{{ ('games' | translate)[game].name }}</a>
       }
     }
     @if (features.canUse('rooms')) {
-      <a routerLink="/rooms" routerLinkActive="active">{{ t().rooms.navLink }}</a>
+      <a routerLink="/rooms" routerLinkActive="active">{{ 'rooms.navLink' | translate }}</a>
     }
     @if (account.isAvailable()) {
       @if (features.canUse('leaderboard')) {
-        <a routerLink="/leaderboard" routerLinkActive="active">{{ t().leaderboard.navLink }}</a>
+        <a routerLink="/leaderboard" routerLinkActive="active">{{ 'leaderboard.navLink' | translate }}</a>
       }
-      <!-- The player's screen name once signed in -->
-      <a routerLink="/account" routerLinkActive="active">{{ account.account()?.screenName ?? t().account.navLink }}</a>
+      <a routerLink="/account" routerLinkActive="active">{{ account.account()?.screenName ?? ('account.navLink' | translate) }}</a>
     }
   </nav>
 </header>
 
 @if (isCheckingGame()) {
-  <p class="container muted page-loading" role="status">{{ t().site.loading }}</p>
+  <p class="container muted page-loading" role="status">{{ 'site.loading' | translate }}</p>
 }
 <main id="main" [hidden]="isCheckingGame()">
   <router-outlet />
@@ -207,13 +206,13 @@
 <footer class="site-footer">
   <div class="container footer-inner">
     <p class="muted">
-      {{ t().site.madeBy }} <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
+      {{ 'site.madeBy' | translate }} <a [href]="authorEmailUrl">Yevheniy Alekseyev</a>
     </p>
-    <nav class="footer-links" [attr.aria-label]="t().site.projectLinks">
-      <a routerLink="/suggestions" routerLinkActive="active">{{ t().site.suggestionsLink }}</a>
-      <a routerLink="/privacy" routerLinkActive="active">{{ t().site.privacyLink }}</a>
+    <nav class="footer-links" [attr.aria-label]="'site.projectLinks' | translate">
+      <a routerLink="/suggestions" routerLinkActive="active">{{ 'site.suggestionsLink' | translate }}</a>
+      <a routerLink="/privacy" routerLinkActive="active">{{ 'site.privacyLink' | translate }}</a>
       <!-- The admin team's sign-in; small, as it's not for players -->
-      <a class="admin-link" [routerLink]="['/', adminPath]" [attr.aria-label]="t().admin.title" [title]="t().admin.title">
+      <a class="admin-link" [routerLink]="['/', adminPath]" [attr.aria-label]="'admin.title' | translate" [title]="'admin.title' | translate">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="5" y="11" width="14" height="10" rx="2" />
           <path d="M8 11V8a4 4 0 0 1 8 0v3" />

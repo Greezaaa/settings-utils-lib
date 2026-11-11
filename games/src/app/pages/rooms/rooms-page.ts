@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/cor
 import { Router } from '@angular/router';
 import { RoomClient } from '../../core/room-client';
 import { SiteLanguage } from '../../i18n/site-language';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 /** Room codes: letters and digits without the easily mixed-up ones (0/O, 1/I/L), like the rooms service */
 const CODE_PATTERN = /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/;
@@ -9,6 +10,7 @@ const CODE_PATTERN = /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/;
 /** "Play together": create a room, or join one by typing its code */
 @Component({
   selector: 'app-rooms-page',
+  imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './rooms-page.html',
   styleUrls: ['../../shared/utility-page.scss', './rooms.scss'],
@@ -17,8 +19,6 @@ export class RoomsPage {
   protected readonly client = inject(RoomClient);
   private readonly language = inject(SiteLanguage);
   private readonly router = inject(Router);
-  /** Texts in the site's language */
-  protected readonly t = this.language.messages;
 
   constructor() {
     // Errors belong to the last attempt, not to this visit of the page

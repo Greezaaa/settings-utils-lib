@@ -1,0 +1,27 @@
+<div class="choices" role="group" [attr.aria-label]="'pictureGames.modeGroup' | translate">
+  @for (option of modes; track option) {
+    <button
+      type="button"
+      class="button button-secondary"
+      [attr.aria-pressed]="option === mode()"
+      [title]="('pictureGames.modes' | translate)[option].summary"
+      (click)="modeChange.emit(option)"
+    >
+      {{ ('pictureGames.modes' | translate)[option].name }}
+    </button>
+  }
+</div>
+
+<div class="levels" role="group" [attr.aria-label]="'pictureGames.levelGroup' | translate">
+  @for (option of levels; track option.id) {
+    <button
+      type="button"
+      class="button button-secondary level"
+      [attr.aria-pressed]="option.id === level()"
+      (click)="levelChange.emit(option.id)"
+    >
+      <span class="level-name">{{ ('pictureGames.levels' | translate)[option.id].name }}</span>
+      <span class="level-summary">{{ ('pictureGames.levels' | translate)[option.id].summary }}</span>
+    </button>
+  }
+</div>

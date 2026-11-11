@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LanguageId } from '../shared/catalog.js';
 import { today } from '../shared/day.js';
+import type { Page } from '../shared/page.js';
 import { RecentReports } from './recent-reports.js';
 import { WordReport } from './word-report.entity.js';
 import {
@@ -56,10 +57,12 @@ export class WordReportsService {
   }
 
   /** Reports for moderators, most reported first */
-  list(status: ReportStatus): Promise<WordReport[]> {
+  list(status: ReportStatus, { offset, limit }: Page): Promise<WordReport[]> {
     return this.reports.find({
       where: { status },
-      order: { reports: 'DESC', word: 'ASC' },
+      order: { reports: 'DESC', word: 'ASC', language: 'ASC' },
+      skip: offset,
+      take: limit,
     });
   }
 

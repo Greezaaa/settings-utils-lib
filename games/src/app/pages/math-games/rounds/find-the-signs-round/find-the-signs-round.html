@@ -1,0 +1,39 @@
+<p class="equation signs-equation" [class.is-right]="flash.result() === true" [class.is-wrong]="flash.result() === false">
+  @for (number of puzzle().numbers; track $index; let index = $index) {
+    @if (index > 0) {
+      <button
+        type="button"
+        class="gap"
+        [class.is-selected]="selected() === index - 1"
+        [class.is-empty]="!signs()[index - 1]"
+        [attr.aria-label]="'findTheSigns.gap' | translate: index : signs()[index - 1]"
+        (click)="select(index - 1)"
+      >
+        {{ signs()[index - 1] ?? '?' }}
+      </button>
+    }
+    <span>{{ number }}</span>
+  }
+  <span>= {{ puzzle().result }}</span>
+</p>
+
+<div class="pad" [style.--columns]="operators().length" role="group" [attr.aria-label]="'findTheSigns.signs' | translate">
+  @for (operator of operators(); track operator) {
+    <button type="button" class="key sign-key" (click)="choose(operator)">{{ operator }}</button>
+  }
+</div>
+<div class="pad">
+  <button type="button" class="key key-muted" [attr.aria-label]="'findTheSigns.deleteSign' | translate" (click)="erase()">⌫</button>
+  <button type="button" class="key key-true check" [class.is-ready]="isComplete()" (click)="check()">{{ 'findTheSigns.check' | translate }}</button>
+</div>
+
+<app-answer-line [result]="flash.result()" [answer]="solution()" />
+@if (showHint()) {
+  <p class="hint" role="alert">{{ 'findTheSigns.fillEveryGap' | translate }}</p>
+}
+<p class="keys">
+  {{ 'findTheSigns.tapGapToChange' | translate }}
+  @if (hasPrecedence()) {
+    {{ 'findTheSigns.precedence' | translate }}
+  }
+</p>

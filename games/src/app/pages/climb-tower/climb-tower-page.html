@@ -1,24 +1,24 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['climb-tower'].name }}</h1>
+  <h1>{{ 'games.climb-tower.name' | translate }}</h1>
   <p class="lead">
-    {{ t().climbTower.lead }}
+    {{ 'climbTower.lead' | translate }}
     <br />
-    {{ t().climbTower.rule }}
+    {{ 'climbTower.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().climbTower.board">
+<section class="container page-section" [attr.aria-label]="'climbTower.board' | translate">
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
         <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
           <div class="settings-column">
-            <div class="levels" role="group" [attr.aria-label]="t().climbTower.modeGroup">
+            <div class="levels" role="group" [attr.aria-label]="'climbTower.modeGroup' | translate">
               @for (mode of modes; track mode) {
                 <button
                   type="button"
@@ -26,36 +26,36 @@
                   [attr.aria-pressed]="mode === modeId()"
                   (click)="modeId.set(mode)"
                 >
-                  <span class="level-name">{{ t().climbTower.modes[mode].name }}</span>
-                  <span class="level-summary">{{ t().climbTower.modes[mode].summary }}</span>
+                  <span class="level-name">{{ ('climbTower.modes' | translate)[mode].name }}</span>
+                  <span class="level-summary">{{ ('climbTower.modes' | translate)[mode].summary }}</span>
                 </button>
               }
             </div>
           </div>
           <div class="settings-column">
-            <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+            <div class="choices" role="group" [attr.aria-label]="'settings.levelGroup' | translate">
               @for (level of levels; track level) {
                 <button
                   type="button"
                   class="button button-secondary"
                   [attr.aria-pressed]="level === levelId()"
-                  [title]="t().settings.levels[level].summary"
+                  [title]="('settings.levels' | translate)[level].summary"
                   (click)="levelId.set(level)"
                 >
-                  {{ t().settings.levels[level].name }}
+                  {{ ('settings.levels' | translate)[level].name }}
                 </button>
               }
             </div>
           </div>
         </div>
-        <p class="muted">{{ t().climbTower.best(best()) }}</p>
-        <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>
+        <p class="muted">{{ 'climbTower.best' | translate: best() }}</p>
+        <button type="button" class="button start" (click)="start()">{{ 'settings.start' | translate }}</button>
       }
 
       @case ('playing') {
         <div class="status">
-          <span class="mono">{{ t().climbTower.floors(floor()) }}</span>
-          <span class="mono">{{ t().climbTower.best(best()) }}</span>
+          <span class="mono">{{ 'climbTower.floors' | translate: floor() }}</span>
+          <span class="mono">{{ 'climbTower.best' | translate: best() }}</span>
         </div>
         <p class="sign mono" aria-live="polite">
           @if (step(); as step) {
@@ -65,7 +65,7 @@
         <app-tower-view [floor]="floor()" [platforms]="platforms()" [climberX]="climberX()" [isFalling]="isFalling()" />
 
         @if (step(); as step) {
-          <div class="pad" role="group" [attr.aria-label]="t().climbTower.answers">
+          <div class="pad" role="group" [attr.aria-label]="'climbTower.answers' | translate">
             @if (step.kind === 'pick') {
               @for (side of sides; track side) {
                 <button type="button" class="key" (click)="answer(side)">
@@ -73,8 +73,8 @@
                 </button>
               }
             } @else {
-              <button type="button" class="key key-false" (click)="judge(false)">{{ t().trueOrFalse.false }}</button>
-              <button type="button" class="key key-true" (click)="judge(true)">{{ t().trueOrFalse.true }}</button>
+              <button type="button" class="key key-false" (click)="judge(false)">{{ 'trueOrFalse.false' | translate }}</button>
+              <button type="button" class="key key-true" (click)="judge(true)">{{ 'trueOrFalse.true' | translate }}</button>
             }
           </div>
         } @else {
@@ -82,29 +82,29 @@
           <div class="pad-space" aria-hidden="true"></div>
         }
         <button type="button" class="button button-secondary button-small" (click)="backToSettings()">
-          {{ t().over.changeSettings }}
+          {{ 'over.changeSettings' | translate }}
         </button>
       }
 
       @case ('over') {
-        <p class="eyebrow">{{ t().climbTower.fell }}</p>
+        <p class="eyebrow">{{ 'climbTower.fell' | translate }}</p>
         <p class="final-score">{{ floor() }}</p>
         <p class="muted">
-          {{ t().climbTower.summary(floor()) }}
+          {{ 'climbTower.summary' | translate: floor() }}
           @if (isNewBest() && floor() > 0) {
-            · <strong class="record">{{ t().over.newRecord }}</strong>
+            · <strong class="record">{{ 'over.newRecord' | translate }}</strong>
           } @else {
-            · {{ t().over.best(best()) }}
+            · {{ 'over.best' | translate: best() }}
           }
         </p>
         <p class="solution">
-          <span class="muted">{{ t().over.rightAnswer }}</span>
+          <span class="muted">{{ 'over.rightAnswer' | translate }}</span>
           <span class="mono">{{ solution() }}</span>
         </p>
         <div class="button-row">
-          <button type="button" class="button" (click)="start()">{{ t().over.playAgain }}</button>
+          <button type="button" class="button" (click)="start()">{{ 'over.playAgain' | translate }}</button>
           <button type="button" class="button button-secondary" (click)="backToSettings()">
-            {{ t().over.changeSettings }}
+            {{ 'over.changeSettings' | translate }}
           </button>
         </div>
       }

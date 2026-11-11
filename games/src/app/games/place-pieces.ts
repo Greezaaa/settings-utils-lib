@@ -11,7 +11,6 @@ import { Random } from './random';
 /** The piece shown in each cell; piece `n` belongs in cell `n` */
 export type Arrangement = readonly number[];
 
-/** Every piece in its place */
 export function solvedArrangement(shape: Shape): Arrangement {
   return Array.from({ length: cellCount(shape) }, (_, cell) => cell);
 }
@@ -24,7 +23,6 @@ export const isSolved = (arrangement: Arrangement): boolean => arrangement.every
 export const piecesPlaced = (arrangement: Arrangement): number =>
   arrangement.filter((piece, cell) => piece === cell).length;
 
-/** The arrangement after swapping the pieces in two cells */
 export function swap(arrangement: Arrangement, first: number, second: number): Arrangement {
   return arrangement.map((piece, cell) =>
     cell === first ? arrangement[second] : cell === second ? arrangement[first] : piece,

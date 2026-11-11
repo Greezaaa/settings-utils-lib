@@ -8,13 +8,13 @@ import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
 import { PlayerAccount } from '../../core/player-account';
 import { RESULT_GAMES } from '../../core/player-results';
-import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { GameClock, formatTime } from '../../shared/game-clock';
 import { BestTimes, pictureScoreKey, readBestTimes, writeBestTimes } from '../../shared/picture-best-times';
-import { PictureSettings } from '../../shared/picture-settings';
-import { TurnBoard } from './turn-board';
+import { PictureSettings } from '../../shared/picture-settings/picture-settings';
+import { TurnBoard } from './turn-board/turn-board';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
 
@@ -25,7 +25,7 @@ const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
  */
 @Component({
   selector: 'app-turn-picture-page',
-  imports: [GameBoard, GameFeedback, PictureSettings, RouterLink, TurnBoard],
+  imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, RouterLink, TurnBoard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './turn-picture-page.html',
   styleUrls: [
@@ -37,12 +37,8 @@ const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
   ],
 })
 export class TurnPicturePage {
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('turn-picture').minAge;
   private readonly api = inject(GamesApi);
-  /** Sends finished games to the player's account, when signed in */
   private readonly account = inject(PlayerAccount);
 
   protected readonly modeId = signal<PictureModeId>('look');

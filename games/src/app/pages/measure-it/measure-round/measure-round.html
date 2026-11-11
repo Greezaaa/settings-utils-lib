@@ -1,0 +1,92 @@
+@if (angle(); as angle) {
+  @if (mode() === 'set-angle') {
+    <p class="question">{{ 'measureIt.makeAngle' | translate: angle.angle }}</p>
+    <app-protractor-view
+      [angle]="value()"
+      [marksEvery]="angle.level.marksEvery"
+      [labels]="angle.level.markLabels"
+      [checked]="checkedRay()" />
+  } @else {
+    <p class="question">{{ 'measureIt.whichAngle' | translate }}</p>
+    <app-protractor-view
+      [angle]="angle.angle"
+      [marksEvery]="angle.level.marksEvery"
+      [labels]="angle.level.markLabels"
+      [checked]="checkedRay()" />
+  }
+  <label class="slider">
+    <!-- Making the angle, the drawing is the answer: a number would give it away -->
+    @if (mode() === 'read-angle') {
+      <span class="value mono">{{ value() }}°</span>
+    }
+    <input
+      type="range"
+      min="0"
+      max="180"
+      [step]="step()"
+      [value]="value()"
+      [disabled]="isDone()"
+      [attr.aria-label]="'measureIt.yourAnswer' | translate"
+      (input)="slide($event)" />
+  </label>
+}
+
+@if (glass(); as glass) {
+  <p class="question">{{ 'measureIt.howFull' | translate }}</p>
+  <app-glass-view [fill]="glass.fill" />
+  <div
+    class="choices-row"
+    role="group"
+    [attr.aria-label]="'measureIt.yourAnswer' | translate">
+    @for (choice of glass.choices; track formatFill(choice, false)) {
+      <button
+        type="button"
+        class="key"
+        [attr.aria-label]="formatFill(choice, glass.improper)"
+        [class.is-right]="isRightChoice(choice)"
+        [class.is-wrong]="isWrongChoice(choice)"
+        [disabled]="isDone() || isWrongChoice(choice)"
+        (click)="choose(choice)">
+        <app-fraction-view [parts]="fillParts(choice, glass.improper)" />
+      </button>
+    }
+  </div>
+}
+
+@if (line(); as line) {
+  <p class="question">{{ 'measureIt.whichNumber' | translate }}</p>
+  <app-number-line-view [line]="line" [answer]="lineAnswer()" />
+  <label class="slider">
+    <span class="value mono">x = {{ formatNumber(value()) }}</span>
+    <input
+      type="range"
+      [min]="line.slider.min"
+      [max]="line.slider.max"
+      [step]="step()"
+      [value]="value()"
+      [disabled]="isDone()"
+      [attr.aria-label]="'measureIt.yourAnswer' | translate"
+      (input)="slide($event)" />
+  </label>
+}
+
+@if (!glass()) {
+  <button
+    type="button"
+    class="button check"
+    [class.is-right]="isRight() === true"
+    [class.is-wrong]="isRight() === false"
+    [disabled]="isDone()"
+    (click)="check()">
+    {{ 'measureIt.check' | translate }}
+  </button>
+}
+
+<p class="hint" aria-live="polite">
+  @if (hint(); as hint) {
+    @if (!isDone()) {
+      {{ ('measureIt.aim' | translate)[hint] }}
+    }
+  }
+</p>
+<app-answer-line [result]="isRight()" [answer]="rightText()" />

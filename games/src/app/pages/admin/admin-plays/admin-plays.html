@@ -1,0 +1,59 @@
+<div class="filters" role="group" [attr.aria-label]="'admin.periodGroup' | translate">
+  @for (option of periods; track option) {
+    <button
+      type="button"
+      class="button button-secondary button-small"
+      [attr.aria-pressed]="option === period()"
+      (click)="choosePeriod(option)"
+    >
+      {{ ('admin.periods' | translate)[option] }}
+    </button>
+  }
+</div>
+<div class="filters">
+  <p class="muted">{{ 'admin.playsTotal' | translate: totalPlays() }}</p>
+  <button type="button" class="button button-secondary button-small" [disabled]="loading()" (click)="load()">
+    {{ 'admin.refresh' | translate }}
+  </button>
+  @if (admin.isSuper()) {
+    <button
+      type="button"
+      class="button button-secondary button-small danger"
+      [disabled]="loading()"
+      (click)="resetStats()"
+    >
+      {{ 'admin.resetStats' | translate }}
+    </button>
+  }
+</div>
+
+<div class="card table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">{{ 'admin.playsColumns.game' | translate }}</th>
+        <th scope="col" class="number">{{ 'admin.playsColumns.plays' | translate }}</th>
+        <th scope="col" class="number">👍</th>
+        <th scope="col" class="number">👎</th>
+        <th scope="col">{{ 'admin.playsColumns.reasons' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.game) {
+        <tr>
+          <th scope="row">{{ ('games' | translate)[row.game].name }}</th>
+          <td class="number">{{ row.plays }}</td>
+          <td class="number">{{ row.up }}</td>
+          <td class="number">{{ row.down }}</td>
+          <td class="muted">
+            @for (reason of row.reasons; track reason[0]; let last = $last) {
+              {{ reasonName(reason[0]) }} ({{ reason[1] }}){{ last ? '' : ', ' }}
+            } @empty {
+              —
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -7,17 +7,14 @@ export interface NumberRange {
   readonly max: number;
 }
 
-/** A whole number within the range */
 export function between({ min, max }: NumberRange, random: Random): number {
   return min + Math.floor(random() * (max - min + 1));
 }
 
-/** One item of a list, chosen at random */
 export function pick<T>(items: readonly T[], random: Random): T {
   return items[Math.floor(random() * items.length)];
 }
 
-/** A shuffled copy of a list */
 export function shuffled<T>(items: readonly T[], random: Random): T[] {
   const copy = [...items];
   for (let index = copy.length - 1; index > 0; index--) {

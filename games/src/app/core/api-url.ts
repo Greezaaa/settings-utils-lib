@@ -17,7 +17,6 @@ export function field(value: unknown, key: string): unknown {
   return typeof value === 'object' && value !== null ? Reflect.get(value, key) : undefined;
 }
 
-/** A request with a JSON body */
 export const jsonInit = (method: string, body: object): RequestInit => ({
   method,
   body: JSON.stringify(body),

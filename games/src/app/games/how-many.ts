@@ -36,7 +36,6 @@ export const COUNT_THINGS: readonly string[] = [
   '🌸',
 ];
 
-/** Rounds in one game */
 export const HOW_MANY_ROUNDS = 10;
 
 /** One round: a thing shown `count` times */

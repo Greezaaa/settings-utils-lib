@@ -918,6 +918,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
     keepOut: 'Escludi',
     letCount: 'Lasciala valere',
     noWords: 'Nessuna parola qui.',
+    loadMore: 'Carica altri',
     featuresTitle: 'Funzioni',
     featuresHelp: 'Le nuove funzioni partono disattivate: provale in anteprima, poi aprile a tutti.',
     featureNames: {

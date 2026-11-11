@@ -1,17 +1,17 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['how-many'].name }}</h1>
+  <h1>{{ 'games.how-many.name' | translate }}</h1>
   <p class="lead">
-    {{ t().howMany.lead }}
+    {{ 'howMany.lead' | translate }}
     <br />
-    {{ t().howMany.rule }}
+    {{ 'howMany.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().howMany.board">
+<section class="container page-section" [attr.aria-label]="'howMany.board' | translate">
   <div class="card play" appGameBoard>
     <!-- The game on one side, its settings, score and buttons on the other (settings first on phones) -->
     <div class="play-layout">
@@ -19,12 +19,12 @@
         @switch (phase()) {
           @case ('playing') {
             @if (round(); as round) {
-              <p class="question">{{ t().howMany.question }}</p>
+              <p class="question">{{ 'howMany.question' | translate }}</p>
               <div
                 class="field"
                 [class.is-celebrating]="isCelebrating()"
                 role="group"
-                [attr.aria-label]="t().howMany.tapHint"
+                [attr.aria-label]="'howMany.tapHint' | translate"
               >
                 @for (place of places(); track $index; let thing = $index) {
                   <button
@@ -34,7 +34,7 @@
                     [style.--rotate]="place.rotate + 'deg'"
                     [style.--lift]="place.lift + 'px'"
                     [style.--delay]="place.delayMs + 'ms'"
-                    [attr.aria-label]="numberOf(thing) ?? t().howMany.countThis"
+                    [attr.aria-label]="numberOf(thing) ?? ('howMany.countThis' | translate)"
                     (click)="count(thing)"
                   >
                     <span class="emoji" aria-hidden="true">{{ round.thing }}</span>
@@ -51,9 +51,9 @@
                   </div>
                 }
               </div>
-              <p class="hint muted">{{ t().howMany.tapHint }}</p>
+              <p class="hint muted">{{ 'howMany.tapHint' | translate }}</p>
 
-              <div class="answers" role="group" [attr.aria-label]="t().howMany.question">
+              <div class="answers" role="group" [attr.aria-label]="'howMany.question' | translate">
                 @for (value of answers(); track value) {
                   <button
                     type="button"
@@ -75,10 +75,10 @@
 
               <p class="message" aria-live="polite">
                 @if (isCelebrating()) {
-                  <strong class="great">{{ t().howMany.great }}</strong>
+                  <strong class="great">{{ 'howMany.great' | translate }}</strong>
                 } @else if (feedback.isWrong()) {
                   <span class="try-again"
-                    >{{ answerWords.isOn() ? t().answers.wrong + ' · ' : '' }}{{ t().howMany.tryAgain }}</span
+                    >{{ answerWords.isOn() ? ('answers.wrong' | translate) + ' · ' : '' }}{{ 'howMany.tryAgain' | translate }}</span
                   >
                 }
               </p>
@@ -92,25 +92,25 @@
                 }
               </div>
               <p class="trophy" aria-hidden="true">🏆</p>
-              <p class="final-score">{{ t().howMany.done }}</p>
-              <p class="muted">{{ t().howMany.summary(stars(), results().length) }}</p>
-              <button type="button" class="button start" (click)="newGame()">{{ t().over.playAgain }}</button>
+              <p class="final-score">{{ 'howMany.done' | translate }}</p>
+              <p class="muted">{{ 'howMany.summary' | translate: stars() : results().length }}</p>
+              <button type="button" class="button start" (click)="newGame()">{{ 'over.playAgain' | translate }}</button>
             </div>
           }
         }
       </div>
       <div class="play-side">
         <div class="top-row">
-          <div class="choices" role="group" [attr.aria-label]="t().settings.levelGroup">
+          <div class="choices" role="group" [attr.aria-label]="'settings.levelGroup' | translate">
             @for (option of levels; track option.id) {
               <button
                 type="button"
                 class="button button-secondary"
                 [attr.aria-pressed]="option.id === levelId()"
-                [title]="t().howMany.levels[option.id].summary"
+                [title]="('howMany.levels' | translate)[option.id].summary"
                 (click)="chooseLevel(option.id)"
               >
-                {{ t().howMany.levels[option.id].name }}
+                {{ ('howMany.levels' | translate)[option.id].name }}
               </button>
             }
           </div>
@@ -118,8 +118,8 @@
             type="button"
             class="button button-secondary sound"
             [attr.aria-pressed]="voice.isOn()"
-            [attr.aria-label]="voice.isOn() ? t().howMany.soundOn : t().howMany.soundOff"
-            [title]="voice.isOn() ? t().howMany.soundOn : t().howMany.soundOff"
+            [attr.aria-label]="voice.isOn() ? ('howMany.soundOn' | translate) : ('howMany.soundOff' | translate)"
+            [title]="voice.isOn() ? ('howMany.soundOn' | translate) : ('howMany.soundOff' | translate)"
             (click)="voice.toggle()"
           >
             <span aria-hidden="true">{{ voice.isOn() ? '🔊' : '🔇' }}</span>
@@ -127,7 +127,7 @@
         </div>
 
         <!-- A star for each round right at the first try, a dot for the others -->
-        <ol class="progress-stars" [attr.aria-label]="t().howMany.progress(results().length, rounds().length)">
+        <ol class="progress-stars" [attr.aria-label]="'howMany.progress' | translate: results().length : rounds().length">
           @for (round of rounds(); track $index; let roundIndex = $index) {
             <li
               [class.is-star]="results()[roundIndex] === true"

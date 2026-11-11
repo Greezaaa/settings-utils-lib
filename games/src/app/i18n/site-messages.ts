@@ -89,7 +89,6 @@ export interface SiteMessages {
     readonly projectLinks: string;
     /** Shown once until closed: what the site stores, and that it is never sold or shared */
     readonly privacyNotice: string;
-    /** Heads the list of big changes since the visitor's last visit */
     /** When the site was last updated, in the visitor's local time */
     readonly lastUpdate: (moment: string) => string;
     /** Button in "What's new" that opens a new game */
@@ -126,7 +125,6 @@ export interface SiteMessages {
     /** Notice that the site is still in beta, shown above the games */
     readonly betaLabel: string;
     readonly betaText: string;
-    /** Note below the games: who makes them */
     /** "What's new": the latest changes, and the button to see more or fewer */
     readonly whatsNewTitle: string;
     /** The tag beside each change in What's new */
@@ -462,7 +460,6 @@ export interface SiteMessages {
     readonly summary: (floors: number) => string;
   };
 
-  /** Find the pairs: turn the cards two at a time and find every pair */
   /** How many? Count the things and tap how many there are (for the youngest) */
   readonly howMany: {
     readonly lead: string;
@@ -607,6 +604,8 @@ export interface SiteMessages {
     readonly keepOut: string;
     readonly letCount: string;
     readonly noWords: string;
+    /** Under a long list: the next rows */
+    readonly loadMore: string;
     /** Feature switches, like rooms; every new feature gets one */
     readonly featuresTitle: string;
     readonly featuresHelp: string;

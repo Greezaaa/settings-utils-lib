@@ -8,13 +8,13 @@ import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
 import { PlayerAccount } from '../../core/player-account';
 import { RESULT_GAMES } from '../../core/player-results';
-import { SiteLanguage } from '../../i18n/site-language';
 import { PuzzlePictureMode } from '../../i18n/site-messages';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { GameClock } from '../../shared/game-clock';
-import { PuzzleTile } from './puzzle-tile';
-import { SlidingBoard } from './sliding-board';
+import { PuzzleTile } from './puzzle-tile/puzzle-tile';
+import { SlidingBoard } from './sliding-board/sliding-board';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 /** Fewest moves per level, saved in this browser */
 const BEST_MOVES_STORAGE = RESULT_GAMES['sliding-puzzle'].storage;
@@ -29,7 +29,7 @@ const DEFAULT_LEVEL: BoardLevelId = 'normal';
  */
 @Component({
   selector: 'app-sliding-puzzle-page',
-  imports: [GameBoard, GameFeedback, PuzzleTile, RouterLink, SlidingBoard],
+  imports: [TranslatePipe, GameBoard, GameFeedback, PuzzleTile, RouterLink, SlidingBoard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sliding-puzzle-page.html',
   styleUrls: [
@@ -40,12 +40,8 @@ const DEFAULT_LEVEL: BoardLevelId = 'normal';
   ],
 })
 export class SlidingPuzzlePage {
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('sliding-puzzle').minAge;
   private readonly api = inject(GamesApi);
-  /** Sends finished games to the player's account, when signed in */
   private readonly account = inject(PlayerAccount);
 
   protected readonly levels = PUZZLE_LEVELS;

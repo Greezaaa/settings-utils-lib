@@ -66,7 +66,6 @@ export function pickStep(level: Level, random: Random): PickStep {
   };
 }
 
-/** The next floor's exercise */
 export function climbStep(mode: ClimbModeId, level: Level, random: Random): ClimbStep {
   return mode === 'which-one' ? pickStep(level, random) : { kind: 'judge', question: createQuestion(level, random) };
 }

@@ -1,24 +1,24 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" [routerLink]="gamesPath">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" [routerLink]="gamesPath">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().page.title }}</h1>
+  <h1>{{ 'page.title' | translate }}</h1>
   <p class="lead">
-    {{ t().page.lead }}
+    {{ 'page.lead' | translate }}
     <br />
-    {{ t().page.rule }}
+    {{ 'page.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().page.game">
+<section class="container page-section" [attr.aria-label]="'page.game' | translate">
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
         <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
           <div class="settings-column">
-            <div class="levels" role="group" [attr.aria-label]="t().settings.answerStyleGroup">
+            <div class="levels" role="group" [attr.aria-label]="'settings.answerStyleGroup' | translate">
               @for (style of answerStyles; track style) {
                 <button
                   type="button"
@@ -26,27 +26,27 @@
                   [attr.aria-pressed]="style === answerStyleId()"
                   (click)="chooseAnswerStyle(style)"
                 >
-                  <span class="level-name">{{ t().settings.answerStyles[style].name }}</span>
-                  <span class="level-summary">{{ t().settings.answerStyles[style].summary }}</span>
+                  <span class="level-name">{{ ('settings.answerStyles' | translate)[style].name }}</span>
+                  <span class="level-summary">{{ ('settings.answerStyles' | translate)[style].summary }}</span>
                 </button>
               }
             </div>
           </div>
           <div class="settings-column">
-            <div class="choices" role="group" [attr.aria-label]="t().settings.timerGroup">
+            <div class="choices" role="group" [attr.aria-label]="'settings.timerGroup' | translate">
               @for (timer of timers; track timer) {
                 <button
                   type="button"
                   class="button button-secondary"
                   [attr.aria-pressed]="timer === timerId()"
-                  [title]="t().settings.timers[timer].summary"
+                  [title]="('settings.timers' | translate)[timer].summary"
                   (click)="chooseTimer(timer)"
                 >
-                  {{ t().settings.timers[timer].name }}
+                  {{ ('settings.timers' | translate)[timer].name }}
                 </button>
               }
             </div>
-            <div class="levels" role="group" [attr.aria-label]="t().settings.levelGroup">
+            <div class="levels" role="group" [attr.aria-label]="'settings.levelGroup' | translate">
               @for (level of levels(); track level.id) {
                 <button
                   type="button"
@@ -61,14 +61,14 @@
             </div>
           </div>
         </div>
-        <p class="muted">{{ t().settings.bestScore(best()) }}</p>
-        <button type="button" class="button start" (click)="start()">{{ t().settings.start }}</button>
+        <p class="muted">{{ 'settings.bestScore' | translate: best() }}</p>
+        <button type="button" class="button start" (click)="start()">{{ 'settings.start' | translate }}</button>
       }
 
       @case ('playing') {
         <div class="status">
-          <span class="mono">{{ isTimed() ? t().playing.seconds(countdown.secondsLeft()) : t().playing.noTimer }}</span>
-          <span class="mono">{{ t().playing.score(score()) }}</span>
+          <span class="mono">{{ isTimed() ? ('playing.seconds' | translate: countdown.secondsLeft()) : ('playing.noTimer' | translate) }}</span>
+          <span class="mono">{{ 'playing.score' | translate: score() }}</span>
         </div>
         @if (isTimed()) {
           <app-timer-bar [share]="countdown.share()" />
@@ -97,34 +97,34 @@
           }
         }
         <button type="button" class="button button-secondary button-small" (click)="backToSettings()">
-          {{ t().over.changeSettings }}
+          {{ 'over.changeSettings' | translate }}
         </button>
       }
 
       @case ('over') {
-        <p class="eyebrow">{{ ending() === 'timeout' ? t().over.outOfTime : t().over.notQuite }}</p>
+        <p class="eyebrow">{{ ending() === 'timeout' ? ('over.outOfTime' | translate) : ('over.notQuite' | translate) }}</p>
         <p class="final-score">{{ score() }}</p>
         <p class="muted">
-          {{ t().over.correctAnswers(score()) }}
+          {{ 'over.correctAnswers' | translate: score() }}
           @if (isNewBest() && score() > 0) {
-            · <strong class="record">{{ t().over.newRecord }}</strong>
+            · <strong class="record">{{ 'over.newRecord' | translate }}</strong>
           } @else {
-            · {{ t().over.best(best()) }}
+            · {{ 'over.best' | translate: best() }}
           }
         </p>
         <p class="muted settings-label">{{ settingsLabel() }}</p>
         <p class="solution">
           @if (ending() === 'wrong') {
-            <span class="muted">{{ t().over.youAnswered }}</span>
+            <span class="muted">{{ 'over.youAnswered' | translate }}</span>
             <span class="mono given">{{ given() }}</span>
           }
-          <span class="muted">{{ t().over.rightAnswer }}</span>
+          <span class="muted">{{ 'over.rightAnswer' | translate }}</span>
           <span class="mono">{{ solution() }}</span>
         </p>
         <div class="button-row">
-          <button type="button" class="button" (click)="start()">{{ t().over.playAgain }}</button>
+          <button type="button" class="button" (click)="start()">{{ 'over.playAgain' | translate }}</button>
           <button type="button" class="button button-secondary" (click)="backToSettings()">
-            {{ t().over.changeSettings }}
+            {{ 'over.changeSettings' | translate }}
           </button>
         </div>
       }

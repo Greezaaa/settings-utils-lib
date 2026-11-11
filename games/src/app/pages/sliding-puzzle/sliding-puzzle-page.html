@@ -1,17 +1,17 @@
 <header class="container page-head">
   <div class="page-meta">
-    <a class="tag" routerLink="/">{{ t().page.section }}</a>
-    <span class="tag">{{ t().page.ages(minAge) }}</span>
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
   </div>
-  <h1>{{ t().games['sliding-puzzle'].name }}</h1>
+  <h1>{{ 'games.sliding-puzzle.name' | translate }}</h1>
   <p class="lead">
-    {{ t().slidingPuzzle.lead }}
+    {{ 'slidingPuzzle.lead' | translate }}
     <br />
-    {{ t().slidingPuzzle.rule }}
+    {{ 'slidingPuzzle.rule' | translate }}
   </p>
 </header>
 
-<section class="container page-section" [attr.aria-label]="t().slidingPuzzle.board">
+<section class="container page-section" [attr.aria-label]="'slidingPuzzle.board' | translate">
   <div class="card play" appGameBoard>
     <!-- The game on one side, its settings, score and buttons on the other (settings first on phones) -->
     <div class="play-layout">
@@ -27,16 +27,16 @@
 
         @if (isSolved()) {
           <p class="done" role="status">
-            {{ t().slidingPuzzle.solved }}
-            <small>{{ t().slidingPuzzle.solvedIn(moves(), clock.time()) }}</small>
+            {{ 'slidingPuzzle.solved' | translate }}
+            <small>{{ 'slidingPuzzle.solvedIn' | translate: moves() : clock.time() }}</small>
             @if (isNewBest()) {
-              <small class="record">{{ t().slidingPuzzle.newRecord }}</small>
+              <small class="record">{{ 'slidingPuzzle.newRecord' | translate }}</small>
             }
           </p>
         }
       </div>
       <div class="play-side">
-        <div class="choices" role="group" [attr.aria-label]="t().slidingPuzzle.pictureGroup">
+        <div class="choices" role="group" [attr.aria-label]="'slidingPuzzle.pictureGroup' | translate">
           @for (mode of pictureModes; track mode) {
             <button
               type="button"
@@ -44,12 +44,12 @@
               [attr.aria-pressed]="mode === pictureMode()"
               (click)="choosePictureMode(mode)"
             >
-              {{ t().slidingPuzzle.pictureModes[mode] }}
+              {{ ('slidingPuzzle.pictureModes' | translate)[mode] }}
             </button>
           }
         </div>
 
-        <div class="levels" role="group" [attr.aria-label]="t().slidingPuzzle.levelGroup">
+        <div class="levels" role="group" [attr.aria-label]="'slidingPuzzle.levelGroup' | translate">
           @for (level of levels; track level.id) {
             <button
               type="button"
@@ -57,14 +57,14 @@
               [attr.aria-pressed]="level.id === levelId()"
               (click)="chooseLevel(level.id)"
             >
-              <span class="level-name">{{ t().slidingPuzzle.levels[level.id].name }}</span>
-              <span class="level-summary">{{ t().slidingPuzzle.levels[level.id].summary }}</span>
+              <span class="level-name">{{ ('slidingPuzzle.levels' | translate)[level.id].name }}</span>
+              <span class="level-summary">{{ ('slidingPuzzle.levels' | translate)[level.id].summary }}</span>
             </button>
           }
         </div>
 
         <div class="status">
-          <span class="mono">{{ t().slidingPuzzle.moves(moves()) }}</span>
+          <span class="mono">{{ 'slidingPuzzle.moves' | translate: moves() }}</span>
           <span class="mono">{{ clock.time() }}</span>
         </div>
         <div class="footer-row">
@@ -74,7 +74,7 @@
                 <img
                   class="goal-board goal-drawing"
                   [src]="drawing.src"
-                  [alt]="t().pictures[drawing.id]"
+                  [alt]="('pictures' | translate)[drawing.id]"
                   [style.--rows]="puzzle.shape.rows"
                   [style.--columns]="puzzle.shape.columns"
                 />
@@ -90,18 +90,18 @@
                   }
                 </div>
               }
-              <figcaption class="muted">{{ t().slidingPuzzle.goal }}</figcaption>
+              <figcaption class="muted">{{ 'slidingPuzzle.goal' | translate }}</figcaption>
             </figure>
           }
           <div class="actions">
-            <button type="button" class="button" (click)="newPuzzle()">{{ t().slidingPuzzle.newPuzzle }}</button>
+            <button type="button" class="button" (click)="newPuzzle()">{{ 'slidingPuzzle.newPuzzle' | translate }}</button>
             @if (bestMoves(); as best) {
-              <p class="muted best">{{ t().slidingPuzzle.best(best) }}</p>
+              <p class="muted best">{{ 'slidingPuzzle.best' | translate: best }}</p>
             }
           </div>
         </div>
 
-        <p class="muted keys">{{ t().slidingPuzzle.keys }}</p>
+        <p class="muted keys">{{ 'slidingPuzzle.keys' | translate }}</p>
       </div>
     </div>
   </div>

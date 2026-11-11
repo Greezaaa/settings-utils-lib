@@ -1,0 +1,241 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/rooms">{{ 'rooms.title' | translate }}</a>
+  </div>
+  <h1>
+    {{ 'rooms.roomCode' | translate }} <span class="code">{{ code().toUpperCase() }}</span>
+  </h1>
+</header>
+
+<section class="container page-section room">
+  @if (client.kicked()) {
+    <p class="error" role="alert">{{ 'rooms.kicked' | translate }}</p>
+    <a class="button" routerLink="/rooms">{{ 'rooms.title' | translate }}</a>
+  } @else if (!room()) {
+    @if (client.error(); as error) {
+      <p class="error" role="alert">{{ ('rooms.errors' | translate)[error] }}</p>
+      <a class="button" routerLink="/rooms">{{ 'rooms.title' | translate }}</a>
+    } @else if (hasEntered() && client.connection() === 'closed') {
+      <!-- Not connected and not trying: never leave the player waiting on "Connecting…" -->
+      <a class="button" routerLink="/rooms">{{ 'rooms.title' | translate }}</a>
+    } @else {
+      <p class="muted">{{ 'rooms.connecting' | translate }}</p>
+    }
+  } @else if (room(); as room) {
+    @if (client.connection() === 'reconnecting') {
+      <p class="muted" role="status">{{ 'rooms.reconnecting' | translate }}</p>
+    }
+
+    <!-- Players beside the game on wide screens, a strip stuck to the top on phones: their status is always in view -->
+    <div class="room-layout">
+      <app-room-players
+        [room]="room"
+        [meId]="client.playerId()"
+        [canKick]="client.isHost()"
+        (kick)="client.kick($event)"
+      />
+
+      <div class="card board" [class.is-wide]="isWide()" appGameBoard>
+        @switch (room.phase) {
+          @case ('lobby') {
+            <div class="share">
+              <button type="button" class="button button-secondary button-small" (click)="copyLink()">
+                {{ isCopied() ? ('rooms.copied' | translate) : ('rooms.copyLink' | translate) }}
+              </button>
+            </div>
+
+            <!-- The host's choices: the game in the middle, its settings beside it (stacked on phones) -->
+            <div class="lobby">
+              @if (openGames().length > 1) {
+                <div class="lobby-column">
+                  <h2 class="lobby-title" id="room-games">{{ 'rooms.gameGroup' | translate }}</h2>
+                  <div class="game-list" role="group" aria-labelledby="room-games">
+                    @for (option of openGames(); track option) {
+                      <button
+                        type="button"
+                        class="game-option"
+                        [attr.aria-pressed]="option === game()"
+                        [disabled]="!client.isHost()"
+                        (click)="chooseGame(option)"
+                      >
+                        <span class="game-icon" aria-hidden="true">{{ iconOf(option) }}</span>
+                        {{ ('games' | translate)[option].name }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+
+              <div class="lobby-column">
+                <h2 class="lobby-title">{{ 'rooms.settingsTitle' | translate }} · {{ ('games' | translate)[game()].name }}</h2>
+                <div class="setting-row">
+                  <span class="setting-label" id="room-mode">{{ modeGroup() }}</span>
+                  <div class="chips" role="group" aria-labelledby="room-mode">
+                    @for (mode of modes(); track mode) {
+                      <button
+                        type="button"
+                        class="chip"
+                        [attr.aria-pressed]="mode === choice().mode"
+                        [disabled]="!client.isHost()"
+                        [title]="modeText(mode).summary"
+                        (click)="chooseMode(mode)"
+                      >
+                        {{ modeText(mode).name }}
+                      </button>
+                    }
+                  </div>
+                </div>
+                <div class="setting-row">
+                  <span class="setting-label" id="room-level">{{ 'settings.levelGroup' | translate }}</span>
+                  <div class="chips" role="group" aria-labelledby="room-level">
+                    @for (level of levels(); track level) {
+                      <button
+                        type="button"
+                        class="chip"
+                        [attr.aria-pressed]="level === choice().level"
+                        [disabled]="!client.isHost()"
+                        [title]="levelText(level).summary"
+                        (click)="chooseLevel(level)"
+                      >
+                        {{ levelText(level).name }}
+                      </button>
+                    }
+                  </div>
+                </div>
+                <div class="setting-row">
+                  <span class="setting-label" id="room-time">{{ 'rooms.roundLength' | translate }}</span>
+                  <div class="chips is-one-line" role="group" aria-labelledby="room-time">
+                    @for (seconds of roundSeconds; track seconds) {
+                      <button
+                        type="button"
+                        class="chip"
+                        [attr.aria-pressed]="seconds === room.settings.seconds"
+                        [disabled]="!client.isHost()"
+                        (click)="chooseSeconds(seconds)"
+                      >
+                        {{ 'rooms.seconds' | translate: seconds }}
+                      </button>
+                    }
+                  </div>
+                </div>
+                <label class="switch score-switch">
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    [checked]="room.settings.showScores"
+                    [disabled]="!client.isHost()"
+                    (change)="chooseShowScores(!room.settings.showScores)"
+                  />
+                  <span class="track" aria-hidden="true"></span>
+                  <span>{{ 'rooms.showScores' | translate }}</span>
+                </label>
+              </div>
+            </div>
+
+            @if (client.me(); as me) {
+              <button type="button" class="button" [class.button-secondary]="me.ready" (click)="client.setReady(!me.ready)">
+                {{ me.ready ? ('rooms.notReadyYet' | translate) : ('rooms.imReady' | translate) }}
+              </button>
+            }
+            @if (!canPlayGame()) {
+              <p class="error" role="status">{{ 'rooms.gameUnavailable' | translate }}</p>
+            }
+            @if (client.isHost()) {
+              <button type="button" class="button start" [disabled]="!canStart()" (click)="start()">
+                {{ 'rooms.start' | translate }}
+              </button>
+              <p class="muted">
+                {{ room.players.length < minPlayers ? ('rooms.needPlayers' | translate: minPlayers) : canStart() ? '' : ('rooms.waitingForReady' | translate) }}
+              </p>
+            } @else {
+              <p class="muted">{{ 'rooms.waitingForHost' | translate }}</p>
+            }
+          }
+          @case ('countdown') {
+            <p class="eyebrow">{{ 'rooms.getReady' | translate }}</p>
+            <p class="final-score countdown" aria-live="assertive">{{ countdown() }}</p>
+          }
+          @case ('playing') {
+            @if (room.round; as round) {
+              @switch (game()) {
+                @case ('measure-it') {
+                  <app-room-measure-round
+                    [measure]="measure()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('letter-games') {
+                  <app-room-letters-round
+                    [letters]="letters()"
+                    [language]="room.settings.language"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('sliding-puzzle') {
+                  <app-room-sliding-round
+                    [sliding]="sliding()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('turn-picture') {
+                  <app-room-turn-round
+                    [picture]="turnPicture()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @case ('place-pieces') {
+                  <app-room-place-round
+                    [picture]="placePieces()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+                @default {
+                  <app-room-math-round
+                    [math]="math()"
+                    [round]="round"
+                    [showScore]="room.settings.showScores"
+                    (scored)="client.reportScore($event)"
+                  />
+                }
+              }
+            }
+          }
+          @case ('results') {
+            <p class="eyebrow">{{ 'rooms.resultsTitle' | translate }}</p>
+            <ol class="results">
+              @for (player of room.players; track player.id) {
+                <li [class.is-me]="player.id === client.playerId()" [style.order]="player.place ?? 9">
+                  <span class="place">{{ 'rooms.place' | translate: (player.place ?? 0) }}</span>
+                  <span>{{ 'rooms.nickname' | translate: player.nickname.adjective : player.nickname.animal }}</span>
+                  <span class="mono">{{ 'rooms.points' | translate: player.score }}</span>
+                </li>
+              }
+            </ol>
+            @if (client.isHost()) {
+              <button type="button" class="button" (click)="client.playAgain()">{{ 'rooms.playAgain' | translate }}</button>
+            } @else {
+              <p class="muted">{{ 'rooms.waitingForHost' | translate }}</p>
+            }
+          }
+        }
+      </div>
+    </div>
+
+    @if (client.error(); as error) {
+      <p class="error" role="alert">{{ ('rooms.errors' | translate)[error] }}</p>
+    }
+    <button type="button" class="button button-secondary button-small leave" (click)="leave()">
+      {{ 'rooms.leave' | translate }}
+    </button>
+  }
+</section>

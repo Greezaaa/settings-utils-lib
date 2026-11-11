@@ -1,0 +1,12 @@
+<p
+  class="answer-line"
+  [class.visually-hidden]="!words.isOn()"
+  [class.is-right]="result() === true"
+  [class.is-wrong]="result() === false"
+  aria-live="polite"
+>
+  @let isRight = result();
+  @if (isRight !== null) {
+    {{ isRight ? ('answers.right' | translate) : answer() ? ('answers.wrongWith' | translate: answer()) : ('answers.wrong' | translate) }}
+  }
+</p>

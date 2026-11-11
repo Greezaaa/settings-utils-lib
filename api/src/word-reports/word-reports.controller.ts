@@ -20,6 +20,7 @@ import {
 } from '../security/visitor-throttler.guard.js';
 import type { LanguageId } from '../shared/catalog.js';
 import { languageSchema } from '../shared/catalog.js';
+import { limitSchema, offsetSchema } from '../shared/page.js';
 import { WordReport } from './word-report.entity.js';
 import type {
   DecisionInput,
@@ -69,8 +70,10 @@ export class WordReportsAdminController {
   list(
     @Query('status', { schema: z.enum(REPORT_STATUSES).default('pending') })
     status: ReportStatus,
+    @Query('offset', { schema: offsetSchema }) offset: number,
+    @Query('limit', { schema: limitSchema }) limit: number,
   ): Promise<WordReport[]> {
-    return this.reports.list(status);
+    return this.reports.list(status, { offset, limit });
   }
 
   @Patch(':language/:word')

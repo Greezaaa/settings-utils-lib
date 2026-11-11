@@ -7,10 +7,10 @@ import { RESULT_GAMES } from '../../core/player-results';
 import { readStored, writeStored } from '../../core/site-storage';
 import { CLIMB_MODE_IDS, ClimbModeId, ClimbStep, climbStep, Side, SIDES } from '../../games/climb-tower';
 import { formatExpression, formatQuestion, formatSolution, getLevel, isTrue, LEVELS, LevelId } from '../../games/math-games';
-import { SiteLanguage } from '../../i18n/site-language';
 import { GameBoard } from '../../shared/game-board';
-import { GameFeedback } from '../../shared/game-feedback';
-import { TowerPlatform, TowerView } from './tower-view';
+import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { TowerPlatform, TowerView } from './tower-view/tower-view';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'over';
 
@@ -40,7 +40,7 @@ const ANSWER_KEYS: Readonly<Record<string, Side>> = { ArrowLeft: 'left', ArrowRi
  */
 @Component({
   selector: 'app-climb-tower-page',
-  imports: [GameBoard, GameFeedback, RouterLink, TowerView],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, TowerView],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './climb-tower-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './climb-tower-page.scss'],
@@ -50,12 +50,8 @@ export class ClimbTowerPage {
   protected readonly modes = CLIMB_MODE_IDS;
   protected readonly levels = LEVELS.map(({ id }) => id);
   protected readonly sides = SIDES;
-  /** Texts in the site's language */
-  protected readonly t = inject(SiteLanguage).messages;
-  /** The youngest recommended age, shown under the title */
   protected readonly minAge = gameInfo('climb-tower').minAge;
   private readonly api = inject(GamesApi);
-  /** Sends finished games to the player's account, when signed in */
   private readonly account = inject(PlayerAccount);
   protected readonly formatExpression = formatExpression;
 

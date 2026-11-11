@@ -1,0 +1,28 @@
+<div class="field">
+  <span class="label-row">
+    <label for="screen-name">{{ 'account.screenName' | translate }}</label>
+    <!-- Shown on hover and on focus, so a tap on a phone opens it too -->
+    <span class="tip">
+      <button
+        type="button"
+        class="tip-button"
+        [attr.aria-label]="'account.screenNameTipLabel' | translate"
+        aria-describedby="screen-name-tip"
+      >
+        ?
+      </button>
+      <span class="tip-text" id="screen-name-tip" role="tooltip">{{ 'account.screenNameTip' | translate }}</span>
+    </span>
+  </span>
+  <input
+    id="screen-name"
+    name="screenName"
+    type="text"
+    autocomplete="nickname"
+    minlength="3"
+    maxlength="20"
+    required
+    [value]="value()"
+  />
+  <small class="muted">{{ 'account.screenNameHint' | translate }}</small>
+</div>

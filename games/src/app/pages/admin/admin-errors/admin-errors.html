@@ -1,0 +1,56 @@
+<div class="filters">
+  <p class="muted">{{ 'admin.errorsHelp' | translate }}</p>
+  <button type="button" class="button button-secondary button-small" [disabled]="loading()" (click)="load()">
+    {{ 'admin.refresh' | translate }}
+  </button>
+  @if (errors().length > 0) {
+    <button type="button" class="button button-secondary button-small" (click)="clear()">
+      {{ 'admin.clearErrors' | translate }}
+    </button>
+  }
+</div>
+
+@if (!loading() && errors().length === 0) {
+  <p class="muted">{{ 'admin.noErrors' | translate }}</p>
+} @else {
+  <div class="card table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'admin.errorColumns.when' | translate }}</th>
+          <th scope="col">{{ 'admin.errorColumns.code' | translate }}</th>
+          <th scope="col">{{ 'admin.errorColumns.title' | translate }}</th>
+          <th scope="col">{{ 'admin.errorColumns.problem' | translate }}</th>
+          <th scope="col">{{ 'admin.errorColumns.page' | translate }}</th>
+          <th scope="col" class="number">{{ 'admin.errorColumns.count' | translate }}</th>
+          <th scope="col">
+            <span class="visually-hidden">{{ 'admin.errorColumns.actions' | translate }}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (error of errors(); track error.id) {
+          <tr>
+            <td>
+              {{ when(error.lastSeen) }}
+              @if (error.count > 1) {
+                <br />
+                <small class="muted">{{ 'admin.firstSeen' | translate: when(error.firstSeen) }}</small>
+              }
+            </td>
+            <td class="mono">{{ ('admin.errorSources' | translate)[error.source] }} · {{ error.code }}</td>
+            <td>{{ error.title }}</td>
+            <td class="mono problem">{{ error.problem }}</td>
+            <td class="mono">{{ error.path }}</td>
+            <td class="number">{{ error.count }}</td>
+            <td>
+              <button type="button" class="button button-secondary button-small" (click)="remove(error)">
+                {{ 'admin.resolveError' | translate }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

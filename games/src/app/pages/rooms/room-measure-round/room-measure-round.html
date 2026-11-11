@@ -1,0 +1,11 @@
+<div class="status">
+  <span class="mono">{{ 'rooms.timeLeft' | translate: clock.secondsLeft() }}</span>
+  @if (showScore()) {
+    <span class="mono">{{ 'rooms.yourScore' | translate: score() }}</span>
+  }
+</div>
+<app-timer-bar [share]="clock.share()" />
+
+@if (!clock.isOver()) {
+  <app-measure-round [exercise]="exercise()" [mode]="settings().mode" (answered)="onAnswered($event)" />
+}

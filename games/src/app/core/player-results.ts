@@ -69,3 +69,9 @@ export function mergedBests(
   }
   return merged;
 }
+
+/** This browser's bests that beat the account's, so a sign-in or a visit sends only what the account lacks */
+export function bestsToSend(local: readonly BestResult[], account: readonly BestResult[]): BestResult[] {
+  const accountBest = new Map(account.map(({ game, key, value }) => [`${game}\n${key}`, value]));
+  return local.filter(({ game, key, value }) => isBetter(game, value, accountBest.get(`${game}\n${key}`)));
+}

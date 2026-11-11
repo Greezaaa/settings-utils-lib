@@ -6,6 +6,7 @@ import { forgetSharedSettings } from '../../core/shared-settings';
 import { deleteSaved, isSavingAllowed, setSavingAllowed } from '../../core/site-storage';
 import { formatMoment, LATEST_PUBLISHED } from '../../core/site-updates';
 import { SiteLanguage } from '../../i18n/site-language';
+import { TranslatePipe } from '../../i18n/translate-pipe';
 
 /**
  * Privacy: what the games site saves, where and why, and a switch to stop saving anything.
@@ -13,12 +14,12 @@ import { SiteLanguage } from '../../i18n/site-language';
  */
 @Component({
   selector: 'app-privacy-page',
+  imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './privacy-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', './privacy-page.scss'],
 })
 export class PrivacyPage {
-  /** Texts in the site's language */
   private readonly language = inject(SiteLanguage);
   protected readonly t = this.language.messages;
   private readonly notifications = inject(SuNotificationService);
