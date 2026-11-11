@@ -11,6 +11,22 @@
 // Game boards (the appGameBoard directive) take the board colours chosen in the header settings.
 // @su-labs/theme sets data-theme and --su-theme-* on the board; like the site's custom theme,
 // every other colour is mixed from text, background and accent.
+// @su-labs/fields (code boxes, strength meter) in the site's colours, in every site and board theme
+:root,
+.game-board[data-theme] {
+  --su-field-surface: var(--surface);
+  --su-field-border: var(--border);
+  --su-field-filled-border: var(--muted);
+  --su-field-text: var(--heading);
+  --su-field-accent: var(--button-bg);
+  --su-field-success: var(--green-text);
+  --su-field-success-bg: var(--green-bg);
+  --su-field-warning: var(--yellow-text);
+  --su-field-danger: var(--red-text);
+  --su-field-track: var(--subtle);
+  --su-field-font-mono: var(--font-mono);
+}
+
 .game-board[data-theme] {
   --text: var(--su-theme-color);
   --heading: var(--su-theme-color);

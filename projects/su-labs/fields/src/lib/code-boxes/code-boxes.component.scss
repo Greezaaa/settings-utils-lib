@@ -1,0 +1,85 @@
+// The real field covers the boxes, invisible, so a tap anywhere on them focuses it
+:host {
+  display: block;
+  position: relative;
+  width: fit-content;
+}
+
+.field {
+  background: transparent;
+  border: 0;
+  caret-color: transparent;
+  color: transparent;
+  cursor: text;
+  font-size: 1rem;
+  inset: 0;
+  opacity: 0.01;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+.boxes {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.box {
+  align-items: center;
+  background: var(--su-field-surface, transparent);
+  border: 1px solid var(--su-field-border, rgb(127 127 127 / 40%));
+  border-radius: 0.5rem;
+  color: var(--su-field-text, currentColor);
+  display: flex;
+  font-family: var(--su-field-font-mono, monospace);
+  font-size: 1.375rem;
+  height: 3rem;
+  justify-content: center;
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+  width: 2.5rem;
+
+  &.is-filled {
+    animation: box-pop 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-color: var(--su-field-filled-border, currentColor);
+  }
+}
+
+// Where the next letter goes, while the field has focus
+.field:focus-visible + .boxes .box.is-current,
+.field:focus + .boxes .box.is-current {
+  border-color: var(--su-field-accent, #3b82f6);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--su-field-accent, #3b82f6) 25%, transparent);
+}
+
+// The whole code: green, box after box
+.boxes.is-complete .box {
+  animation: box-done 360ms ease calc(var(--index) * 60ms) both;
+  background: var(--su-field-success-bg, #e6f4ea);
+  border-color: var(--su-field-success, #2e8b57);
+  color: var(--su-field-success, #2e8b57);
+  transition-delay: calc(var(--index) * 60ms);
+}
+
+@keyframes box-pop {
+  from {
+    transform: scale(0.85);
+  }
+}
+
+@keyframes box-done {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .boxes.is-complete .box {
+    animation: none;
+    transition: none;
+  }
+}

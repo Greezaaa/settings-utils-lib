@@ -19,6 +19,7 @@ import { AnswerStyle } from '../core/answer-words';
 import { MenuAnimationChoice } from '../core/menu-animation';
 import { WordGender } from './word-gender';
 import { AccountProblem } from '../core/player-account';
+import { SuStrengthLevel } from '@su-labs/fields';
 import { UpdateKind } from '../core/site-updates';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
@@ -714,6 +715,9 @@ export interface SiteMessages {
 
   /** The player's account page: sign up, sign in, change details, sign out, delete; and the password-reset page */
   readonly account: {
+    /** The strength meter under a new password: its name for screen readers, and its word per step */
+    readonly strengthLabel: string;
+    readonly strength: Readonly<Record<SuStrengthLevel, string>>;
     readonly navLink: string;
     readonly title: string;
     readonly lead: string;

@@ -3,4 +3,10 @@
  */
 
 export * from './lib/theme.service';
-export type { SuThemeConfig, SuThemeName, ThemeCssVariables } from '@su-labs/core/theme';
+export type {
+  SuPaletteName,
+  SuThemeConfig,
+  SuThemeName,
+  ThemeCssVariables,
+} from '@su-labs/core/theme';
+export { SU_THEME_PALETTES } from '@su-labs/core/theme';

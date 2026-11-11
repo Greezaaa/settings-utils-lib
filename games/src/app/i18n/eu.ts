@@ -73,6 +73,9 @@ export const EU: SiteMessages = {
       ocean: { name: 'Ozeanoa', summary: 'Itsas urdina eta eguzki horia' },
       party: { name: 'Festa', summary: 'More iluna, zuria eta horia' },
       night: { name: 'Gaua', summary: 'Itsas urdina, menda eta arrosa' },
+      sunset: { name: 'Ilunabarra', summary: 'Gau-urdina, krema eta laranja' },
+      candy: { name: 'Goxokia', summary: 'Beltza eta zuria arrosarekin' },
+      copper: { name: 'Kobrea', summary: 'Turkesa beltzaren gainean, kobrearekin' },
     },
     answerStyle: 'Erantzunak',
     answerStyles: {
@@ -964,6 +967,7 @@ export const EU: SiteMessages = {
       'category-menu': 'Kategorien menua',
       accounts: 'Jokalarien kontuak',
       leaderboard: 'Sailkapena',
+      'lively-fields': 'Formulario-eremu animatuak',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1083,6 +1087,8 @@ export const EU: SiteMessages = {
   },
 
   account: {
+    strengthLabel: 'Pasahitzaren sendotasuna',
+    strength: { weak: 'Ahula', fair: 'Erdipurdikoa', good: 'Ona', strong: 'Sendoa' },
     navLink: 'Kontua',
     title: 'Zure kontua',
     lead: 'Kontu batekin, zure gogokoak eta emaitza onenak edozein gailutara doaz zurekin, eta sailkapenak ikus ditzakezu.',

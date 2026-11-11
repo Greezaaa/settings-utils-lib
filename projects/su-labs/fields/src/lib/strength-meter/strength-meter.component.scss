@@ -1,0 +1,59 @@
+:host {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.bars {
+  display: grid;
+  gap: 0.375rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+// Each bar fills from the left, one after another, and every filled bar takes the colour of the current step
+.bar {
+  background: var(--su-field-track, rgb(127 127 127 / 20%));
+  border-radius: 9999px;
+  height: 0.3125rem;
+  overflow: hidden;
+  position: relative;
+
+  &::after {
+    background: var(--meter-colour, var(--su-field-danger, #c0392b));
+    border-radius: inherit;
+    content: '';
+    inset: 0;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition:
+      transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1)
+        calc(var(--index) * 40ms),
+      background-color 260ms ease;
+  }
+
+  &.is-filled::after {
+    transform: scaleX(1);
+  }
+}
+
+:host:has(.level[data-level='fair']) {
+  --meter-colour: var(--su-field-warning, #c98a00);
+}
+
+:host:has(.level[data-level='good']),
+:host:has(.level[data-level='strong']) {
+  --meter-colour: var(--su-field-success, #2e8b57);
+}
+
+.level {
+  color: var(--meter-colour, var(--su-field-danger, #c0392b));
+  font-size: 0.75rem;
+  font-weight: 600;
+  justify-self: end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar::after {
+    transition: none;
+  }
+}

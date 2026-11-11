@@ -1,0 +1,16 @@
+<div
+  class="bars"
+  role="meter"
+  [attr.aria-label]="label()"
+  aria-valuemin="0"
+  [attr.aria-valuemax]="steps.length"
+  [attr.aria-valuenow]="bars()"
+  [attr.aria-valuetext]="levelName()"
+>
+  @for (step of steps; track step; let index = $index) {
+    <span class="bar" [class.is-filled]="index < bars()" [style.--index]="index"></span>
+  }
+</div>
+@if (levelName(); as name) {
+  <small class="level" [attr.data-level]="level()" aria-hidden="true">{{ name }}</small>
+}

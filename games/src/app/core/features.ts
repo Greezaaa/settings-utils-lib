@@ -19,7 +19,8 @@ export type FeatureId =
   | 'menu-ring'
   | 'category-menu'
   | 'accounts'
-  | 'leaderboard';
+  | 'leaderboard'
+  | 'lively-fields';
 
 /** Games playable in rooms, each with its multiplayer switch */
 export type RoomGame = Extract<
@@ -64,6 +65,8 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'accounts', openByDefault: true },
   /** Leaderboards for signed-in players (needs accounts) */
   { id: 'leaderboard', openByDefault: true },
+  /** Animated form fields: room-code boxes, a password strength meter and a suggestion box that grows */
+  { id: 'lively-fields', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

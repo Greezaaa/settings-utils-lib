@@ -1,0 +1,39 @@
+{
+	"name": "@su-labs/fields",
+	"version": "22.0.0",
+	"description": "Animated Angular form fields: code boxes that fill one by one, a password strength meter, and a text box that grows as you type.",
+	"keywords": [
+		"angular",
+		"form",
+		"input",
+		"otp",
+		"code-input",
+		"password-strength",
+		"textarea",
+		"auto-grow",
+		"animation",
+		"ui"
+	],
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/fields"
+	},
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"peerDependencies": {
+		"@angular/common": "^22.0.0",
+		"@angular/core": "^22.0.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

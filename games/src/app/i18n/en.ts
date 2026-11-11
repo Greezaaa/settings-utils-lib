@@ -72,6 +72,9 @@ export const EN: SiteMessages = {
       ocean: { name: 'Ocean', summary: 'Deep blue with sunny yellow' },
       party: { name: 'Party', summary: 'Deep purple with white and yellow' },
       night: { name: 'Night', summary: 'Deep blue, mint and pink' },
+      sunset: { name: 'Sunset', summary: 'Midnight blue, cream and orange' },
+      candy: { name: 'Candy', summary: 'Black and white with pink' },
+      copper: { name: 'Copper', summary: 'Teal on black with copper' },
     },
     answerStyle: 'Answers',
     answerStyles: {
@@ -938,6 +941,7 @@ export const EN: SiteMessages = {
       'category-menu': 'Categories menu',
       accounts: 'Player accounts',
       leaderboard: 'Leaderboard',
+      'lively-fields': 'Animated form fields',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:
@@ -1051,6 +1055,8 @@ export const EN: SiteMessages = {
   },
 
   account: {
+    strengthLabel: 'Password strength',
+    strength: { weak: 'Weak', fair: 'Fair', good: 'Good', strong: 'Strong' },
     navLink: 'Account',
     title: 'Your account',
     lead: 'With an account your favourites and best results come with you to any device, and you can see the leaderboards.',

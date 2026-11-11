@@ -74,6 +74,9 @@ export const italian = (gender: WordGender): SiteMessages => ({
       ocean: { name: 'Oceano', summary: 'Blu profondo con giallo sole' },
       party: { name: 'Festa', summary: 'Viola intenso con bianco e giallo' },
       night: { name: 'Notte', summary: 'Blu profondo, menta e rosa' },
+      sunset: { name: 'Tramonto', summary: 'Blu notte, crema e arancione' },
+      candy: { name: 'Caramella', summary: 'Nero e bianco con rosa' },
+      copper: { name: 'Rame', summary: 'Verde acqua sul nero, con rame' },
     },
     answerStyle: 'Risposte',
     answerStyles: {
@@ -935,6 +938,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'category-menu': 'Menu delle categorie',
       accounts: 'Account dei giocatori',
       leaderboard: 'Classifica',
+      'lively-fields': 'Campi dei moduli animati',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:
@@ -1038,6 +1042,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
   },
 
   account: {
+    strengthLabel: 'Sicurezza della password',
+    strength: { weak: 'Debole', fair: 'Discreta', good: 'Buona', strong: 'Forte' },
     navLink: 'Account',
     title: 'Il tuo account',
     lead: 'Con un account i tuoi preferiti e i tuoi record ti seguono su qualsiasi dispositivo, e puoi vedere le classifiche.',

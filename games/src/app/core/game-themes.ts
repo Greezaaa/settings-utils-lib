@@ -1,7 +1,7 @@
-import { ThemeCssVariables } from '@su-labs/theme';
+import { SU_THEME_PALETTES, ThemeCssVariables } from '@su-labs/theme';
 import { SITE_THEMES } from './site-theme';
 
-export type GameThemeId = 'light' | 'dark' | 'ocean' | 'party' | 'night';
+export type GameThemeId = 'light' | 'dark' | 'ocean' | 'party' | 'night' | 'sunset' | 'candy' | 'copper';
 
 /**
  * Colours of the game boards, a site-wide setting (see BoardColours). They apply to each board only, with
@@ -25,6 +25,9 @@ export const GAME_THEMES: readonly GameTheme[] = [
   { id: 'ocean', palette: OCEAN },
   { id: 'party', palette: PARTY },
   { id: 'night', palette: NIGHT },
+  { id: 'sunset', palette: SU_THEME_PALETTES.sunset },
+  { id: 'candy', palette: SU_THEME_PALETTES.candy },
+  { id: 'copper', palette: SU_THEME_PALETTES.copper },
 ];
 
 export const isGameThemeId = (value: unknown): value is GameThemeId => GAME_THEMES.some(({ id }) => id === value);

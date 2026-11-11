@@ -36,6 +36,9 @@
       "@su-labs/scroll-spy": [
         "./dist/su-labs/scroll-spy"
       ],
+      "@su-labs/fields": [
+        "./dist/su-labs/fields"
+      ],
       "@su-labs/theme": [
         "./dist/su-labs/theme"
       ],
@@ -61,6 +64,9 @@
     },
     {
       "path": "./projects/su-labs/scroll-spy/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/fields/tsconfig.lib.json"
     },
     {
       "path": "./projects/su-labs/notifications/tsconfig.lib.json"

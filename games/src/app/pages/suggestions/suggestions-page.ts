@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { SuNotificationService } from '@su-labs/notifications';
+import { FeatureFlags } from '../../core/feature-flags';
 import { GamesApi, SUGGESTION_CATEGORIES, SuggestionCategory } from '../../core/games-api';
 import { shrinkImage } from '../../core/shrink-image';
 import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { SuAutoGrowDirective } from '@su-labs/fields';
 
 /** Longest text the API accepts */
 export const MAX_SUGGESTION_LENGTH = 500;
@@ -17,7 +19,7 @@ type Sending = 'idle' | 'sending' | 'failed';
  */
 @Component({
   selector: 'app-suggestions-page',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, SuAutoGrowDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './suggestions-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './suggestions-page.scss'],
@@ -27,6 +29,8 @@ export class SuggestionsPage {
   private readonly language = inject(SiteLanguage);
   private readonly notifications = inject(SuNotificationService);
   protected readonly t = this.language.messages;
+  private readonly features = inject(FeatureFlags);
+  protected readonly hasLivelyFields = computed(() => this.features.canUse('lively-fields'));
 
   protected readonly categories = SUGGESTION_CATEGORIES;
   protected readonly maxLength = MAX_SUGGESTION_LENGTH;

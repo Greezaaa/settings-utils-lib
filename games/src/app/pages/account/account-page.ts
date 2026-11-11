@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { SuDialogService } from '@su-labs/dialog';
 import { MIN_PASSWORD_LENGTH } from '../../core/passwords';
 import { PlayerAccount } from '../../core/player-account';
@@ -6,6 +6,8 @@ import { SiteLanguage } from '../../i18n/site-language';
 import { AccountForm, formText } from './account-form';
 import { ScreenNameField } from './screen-name-field/screen-name-field';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { FeatureFlags } from '../../core/feature-flags';
+import { SuStrengthMeterComponent } from '@su-labs/fields';
 
 /** The forms shown while signed out */
 type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
@@ -18,7 +20,7 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
  */
 @Component({
   selector: 'app-account-page',
-  imports: [TranslatePipe, ScreenNameField],
+  imports: [TranslatePipe, SuStrengthMeterComponent, ScreenNameField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', '../admin/admin.scss', './account.scss'],
@@ -28,6 +30,8 @@ export class AccountPage {
   private readonly dialog = inject(SuDialogService);
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly minLength = MIN_PASSWORD_LENGTH;
+  private readonly features = inject(FeatureFlags);
+  protected readonly hasLivelyFields = computed(() => this.features.canUse('lively-fields'));
   protected readonly views: readonly SignedOutView[] = ['sign-in', 'sign-up', 'forgot'];
   protected readonly view = signal<SignedOutView>('sign-in');
   /** Whether the API can send emails, so accounts may have one */
@@ -159,6 +163,8 @@ export class AccountPage {
     for (const input of form.querySelectorAll('input[type="password"]')) {
       if (input instanceof HTMLInputElement) {
         input.value = '';
+        // Fields that follow the typing, like the strength meter, see it emptied
+        input.dispatchEvent(new Event('input'));
       }
     }
   }

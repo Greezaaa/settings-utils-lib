@@ -28,7 +28,13 @@
 
     <label class="field">
       <span>{{ 'suggestions.textLabel' | translate }}</span>
-      <textarea rows="5" [attr.maxlength]="maxLength" required (input)="onText($event)"></textarea>
+      <textarea
+        [suAutoGrow]="hasLivelyFields()"
+        [attr.rows]="hasLivelyFields() ? 2 : 5"
+        [attr.maxlength]="maxLength"
+        required
+        (input)="onText($event)"
+      ></textarea>
       <small class="muted counter">{{ text().length }} / {{ maxLength }}</small>
     </label>
 

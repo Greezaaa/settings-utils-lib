@@ -1,0 +1,25 @@
+<input
+  #field
+  class="field"
+  type="text"
+  inputmode="text"
+  autocomplete="off"
+  autocapitalize="characters"
+  spellcheck="false"
+  required
+  [attr.maxlength]="length()"
+  [attr.aria-label]="label()"
+  [value]="value()"
+  (input)="onInput(field)"
+/>
+<span class="boxes" [class.is-complete]="complete()" aria-hidden="true">
+  @for (index of boxes(); track index) {
+    <span
+      class="box"
+      [class.is-filled]="index < value().length"
+      [class.is-current]="index === value().length"
+      [style.--index]="index"
+      >{{ value()[index] }}</span
+    >
+  }
+</span>

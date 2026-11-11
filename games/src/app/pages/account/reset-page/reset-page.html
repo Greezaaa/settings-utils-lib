@@ -7,7 +7,15 @@
   <form class="card account-card" (submit)="$event.preventDefault(); save(resetForm)" #resetForm>
     <label class="field">
       <span>{{ 'account.newPassword' | translate }}</span>
-      <input name="password" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+      <input #newPassword name="password" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
+      @if (hasLivelyFields()) {
+        <su-lib-strength-meter
+          [field]="newPassword"
+          [label]="'account.strengthLabel' | translate"
+          [levelNames]="'account.strength' | translate"
+          [minLength]="minLength"
+        />
+      }
       <small class="muted">{{ 'account.passwordRule' | translate: minLength }}</small>
     </label>
     <label class="field">

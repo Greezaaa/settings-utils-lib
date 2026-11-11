@@ -36,6 +36,7 @@ export const FEATURE_IDS = [
   'category-menu',
   'accounts',
   'leaderboard',
+  'lively-fields',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

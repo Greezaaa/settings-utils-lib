@@ -104,6 +104,9 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       ocean: { name: 'Океан', summary: 'Темно-синій із сонячно-жовтим' },
       party: { name: 'Свято', summary: 'Темно-фіолетовий із білим і жовтим' },
       night: { name: 'Ніч', summary: 'Темно-синій, м’ятний і рожевий' },
+      sunset: { name: 'Захід сонця', summary: 'Нічний синій, кремовий і помаранчевий' },
+      candy: { name: 'Цукерка', summary: 'Чорний і білий з рожевим' },
+      copper: { name: 'Мідь', summary: 'Бірюза на чорному з міддю' },
     },
     answerStyle: 'Відповіді',
     answerStyles: {
@@ -996,6 +999,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'category-menu': 'Меню категорій',
       accounts: 'Акаунти гравців',
       leaderboard: 'Таблиця лідерів',
+      'lively-fields': 'Анімовані поля форм',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:
@@ -1111,6 +1115,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
   },
 
   account: {
+    strengthLabel: 'Надійність пароля',
+    strength: { weak: 'Слабкий', fair: 'Середній', good: 'Добрий', strong: 'Надійний' },
     navLink: 'Обліковий запис',
     title: 'Твій обліковий запис',
     lead: 'З обліковим записом твої улюблені ігри й найкращі результати будуть з тобою на будь-якому пристрої, а ще ти зможеш бачити таблиці лідерів.',

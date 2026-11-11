@@ -19,23 +19,36 @@
     </button>
   </div>
 
-  <form class="card entry-card" (submit)="join($event, codeInput)">
+  <form class="card entry-card" (submit)="join($event)">
     <h2 class="card-title">{{ 'rooms.joinTitle' | translate }}</h2>
-    <label class="field">
-      <span>{{ 'rooms.codeLabel' | translate }}</span>
-      <input
-        #codeInput
-        class="code-input"
-        type="text"
-        inputmode="text"
-        autocomplete="off"
-        autocapitalize="characters"
-        spellcheck="false"
-        maxlength="6"
-        placeholder="K7MPQ2"
-        required
-      />
-    </label>
+    @if (hasLivelyFields()) {
+      <div class="field">
+        <span aria-hidden="true">{{ 'rooms.codeLabel' | translate }}</span>
+        <su-lib-code-boxes
+          [(value)]="code"
+          [length]="codeLength"
+          [label]="'rooms.codeLabel' | translate"
+          [complete]="isCodeComplete()"
+        />
+      </div>
+    } @else {
+      <label class="field">
+        <span>{{ 'rooms.codeLabel' | translate }}</span>
+        <input
+          #codeInput
+          class="code-input"
+          type="text"
+          inputmode="text"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          [attr.maxlength]="codeLength"
+          placeholder="K7MPQ2"
+          required
+          (input)="typeCode(codeInput.value)"
+        />
+      </label>
+    }
     <button type="submit" class="button">{{ 'rooms.join' | translate }}</button>
   </form>
 
