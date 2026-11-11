@@ -31,6 +31,11 @@ export const envSchema = z.object({
     .enum(['true', 'false'])
     .default('true')
     .transform((value) => value === 'true'),
+  /**
+   * The site the session cookies are for, e.g. `su-labs.dev`: auth.su-labs.dev signs people in, and the cookie must
+   * reach api.su-labs.dev too. Unset for the local services, where cookies on localhost reach every port anyway
+   */
+  COOKIE_DOMAIN: z.string().min(1).optional(),
   /** Folder where suggestion images are kept (a Docker volume on the server) */
   UPLOADS_DIR: z.string().default('/data/uploads'),
   /** Cloudflare Turnstile secret key; when set, suggestions need a Turnstile token */

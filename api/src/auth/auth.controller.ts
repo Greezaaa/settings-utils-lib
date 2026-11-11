@@ -23,6 +23,8 @@ import { AuthService, SignedIn } from './auth.service.js';
 import { MIN_PASSWORD_LENGTH } from './passwords.js';
 import {
   clearSessionCookie,
+  CookieSettings,
+  cookieSettings,
   sessionToken,
   setSessionCookie,
 } from './session-cookie.js';
@@ -51,13 +53,13 @@ interface Me {
 /** Sign-in for the admin page with email and password: a session cookie that keeps the browser signed in for 30 days */
 @Controller('auth')
 export class AuthController {
-  private readonly secureCookie: boolean;
+  private readonly cookies: CookieSettings;
 
   constructor(
     private readonly auth: AuthService,
     config: ConfigService<Env, true>,
   ) {
-    this.secureCookie = config.get('COOKIE_SECURE', { infer: true });
+    this.cookies = cookieSettings(config);
   }
 
   /** At most 5 tries every 15 minutes from one address; the account itself locks after 5 failures in a row */
@@ -87,7 +89,7 @@ export class AuthController {
     if (token) {
       await this.auth.signOut(token);
     }
-    clearSessionCookie(response, this.secureCookie);
+    clearSessionCookie(response, this.cookies);
   }
 
   @Post('password')
@@ -145,7 +147,7 @@ export class AuthController {
       response,
       signedIn.token,
       signedIn.expires,
-      this.secureCookie,
+      this.cookies,
     );
     return { email: signedIn.admin.email, role: signedIn.admin.role };
   }

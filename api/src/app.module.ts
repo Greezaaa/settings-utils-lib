@@ -1,50 +1,14 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccountsModule } from './accounts/accounts.module.js';
-import { AuthModule } from './auth/auth.module.js';
-import { Env, validateEnv } from './config/env.js';
-import { ErrorLogsModule } from './error-logs/error-logs.module.js';
-import { databaseOptions } from './database/database.options.js';
-import { FeatureFlagsModule } from './feature-flags/feature-flags.module.js';
-import { FeedbackModule } from './feedback/feedback.module.js';
-import { GameSettingsModule } from './game-settings/game-settings.module.js';
-import { HealthController } from './health/health.controller.js';
-import { PlaysModule } from './plays/plays.module.js';
-import { StatsModule } from './stats/stats.module.js';
-import { VisitorThrottlerGuard } from './security/visitor-throttler.guard.js';
-import { SuggestionsModule } from './suggestions/suggestions.module.js';
-import { WordReportsModule } from './word-reports/word-reports.module.js';
+import { ApiModule } from './api.module.js';
+import { CoreModule } from './core.module.js';
 
 /**
  * api.su-labs.dev: anonymous play counts, feedback, word reports, suggestions and game switches for games.su-labs.dev,
- * and optional player accounts (a login name, a screen name, an optional email, favourites and best results).
- * Visitor addresses are only held in memory by the rate limits.
+ * the admin team's moderation, and the data of optional player accounts (favourites, best results, leaderboards).
+ * Signing in is on auth.su-labs.dev (AuthAppModule); both share the database and the session cookies. Visitor
+ * addresses are only held in memory by the rate limits.
  */
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService<Env, true>) =>
-        databaseOptions(config.get('DATABASE_URL', { infer: true })),
-    }),
-    // Every endpoint: at most 60 requests a minute per visitor; endpoints that write have tighter limits
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
-    AuthModule,
-    AccountsModule,
-    ErrorLogsModule,
-    PlaysModule,
-    StatsModule,
-    FeedbackModule,
-    FeatureFlagsModule,
-    GameSettingsModule,
-    WordReportsModule,
-    SuggestionsModule,
-  ],
-  controllers: [HealthController],
-  providers: [{ provide: APP_GUARD, useClass: VisitorThrottlerGuard }],
+  imports: [CoreModule.forRoot({ runMigrations: true }), ApiModule],
 })
 export class AppModule {}

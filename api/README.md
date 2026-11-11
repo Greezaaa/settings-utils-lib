@@ -15,11 +15,19 @@ suggestions. No accounts and no personal data; visitor addresses are only held i
 | GET    | `/v1/word-reports/hidden?language=` | Words that don't count (approved, or reported 3+ times and pending)    |
 | POST   | `/v1/suggestions`                   | Multipart: `category`, `text`, `language`, `turnstileToken?`, `image?` |
 
+Signing in is on **auth.su-labs.dev**, a separate process from the same code (`node dist/auth-main.js`, `npm run
+start:auth` in development, port 3333) sharing the database. It sets the session cookies for all of su-labs.dev
+(`COOKIE_DOMAIN`), so the API knows who is signed in; the paths below keep their names on that host.
+
 Admin sign-in (a 30-day HttpOnly session cookie): `POST /auth/login` (`{ email, password }`), `GET /auth/me`,
 `POST /auth/logout`, `POST /auth/password` (`{ current, next }`), `GET`/`POST /auth/invite/:secret` (accept an invite
 with `{ password }`). The super admin manages the team: `GET /admin/team`, `POST /admin/team` (`{ email, role: moderator|tester, password? }`;
 without a password the answer has an invite link secret), `POST /admin/team/:id/invite`, `PATCH /admin/team/:id`
-(`{ active?, role? }`), and switches games (`PUT /admin/games/:game`).
+(`{ active?, role? }`). Players sign in there too: `GET /v1/account/options`, `POST /v1/account` (sign up),
+`POST /v1/account/login`, `POST /v1/account/logout`, `POST /v1/account/password`, `POST /v1/account/forgot`,
+`POST /v1/account/reset/:secret` and `DELETE /v1/account`. Everything else, including the account's data
+(`GET`/`PATCH /v1/account`, favourites, results, leaderboards) and switching games (`PUT /admin/games/:game`), is on
+api.su-labs.dev.
 
 Moderation, signed in or with the backup key `Authorization: Bearer <ADMIN_TOKEN>`:
 `GET /admin/feedback`, `GET /admin/word-reports?status=`, `PATCH /admin/word-reports/:language/:word`
@@ -33,6 +41,8 @@ npm install
 docker run --rm -d --name su-labs-db -p 55432:5432 -e POSTGRES_PASSWORD=dev postgres:17-alpine
 DATABASE_URL=postgres://postgres:dev@localhost:55432/postgres ADMIN_TOKEN=$(openssl rand -hex 32) \
   CORS_ORIGINS=http://localhost:4310 UPLOADS_DIR=./uploads COOKIE_SECURE=false npm run start:dev
+# The auth service beside it, with the same variables (and no COOKIE_DOMAIN: on localhost cookies reach every port)
+PORT=3333 DATABASE_URL=… ADMIN_TOKEN=… CORS_ORIGINS=http://localhost:4310 COOKIE_SECURE=false npm run start:auth
 ```
 
 - `npm test`: unit tests. `TEST_DATABASE_URL=… npm run test:e2e`: the whole API against a real database (its tables are dropped afterwards).

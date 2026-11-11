@@ -20,7 +20,8 @@
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "create-admin": "node dist/cli/create-admin.js",
-    "start:rooms": "nest start --watch --entryFile rooms-main"
+    "start:rooms": "nest start --watch --entryFile rooms-main",
+    "start:auth": "nest start --watch --entryFile auth-main"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",

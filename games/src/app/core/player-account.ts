@@ -1,5 +1,5 @@
 import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, signal, untracked } from '@angular/core';
-import { credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FavoriteGames, readFavorites } from './favorite-games';
 import { FeatureFlags } from './feature-flags';
 import { GameSlug } from './games';
@@ -133,7 +133,7 @@ export class PlayerAccount {
 
   /** Whether the API offers email for password resets */
   async canEmail(): Promise<boolean> {
-    return field(await this.read('/v1/account/options'), 'email') === true;
+    return field(await this.read('/v1/account/options', 'auth'), 'email') === true;
   }
 
   register(details: {
@@ -143,22 +143,22 @@ export class PlayerAccount {
     email?: string;
     showOnLeaderboard: boolean;
   }): Promise<AccountAnswer> {
-    return this.startSession(this.fetch('/v1/account', jsonInit('POST', details), SEND_TIMEOUT_MS));
+    return this.startSession(this.fetch('/v1/account', jsonInit('POST', details), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Signs in with the login name or the account's email */
   signIn(loginName: string, password: string): Promise<AccountAnswer> {
-    return this.startSession(this.fetch('/v1/account/login', jsonInit('POST', { loginName, password }), SEND_TIMEOUT_MS));
+    return this.startSession(this.fetch('/v1/account/login', jsonInit('POST', { loginName, password }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Sets a new password from a reset link, and signs in */
   reset(secret: string, password: string): Promise<AccountAnswer> {
     const path = `/v1/account/reset/${encodeURIComponent(secret)}`;
-    return this.startSession(this.fetch(path, jsonInit('POST', { password }), SEND_TIMEOUT_MS));
+    return this.startSession(this.fetch(path, jsonInit('POST', { password }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   async signOut(): Promise<void> {
-    await this.fetch('/v1/account/logout', { method: 'POST' }, READ_TIMEOUT_MS);
+    await this.fetch('/v1/account/logout', { method: 'POST' }, READ_TIMEOUT_MS, 'auth');
     this.signedIn.set(null);
   }
 
@@ -177,17 +177,17 @@ export class PlayerAccount {
   }
 
   changePassword(current: string, next: string): Promise<AccountAnswer> {
-    return this.answer(this.fetch('/v1/account/password', jsonInit('POST', { current, next }), SEND_TIMEOUT_MS));
+    return this.answer(this.fetch('/v1/account/password', jsonInit('POST', { current, next }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Asks for a reset link by email; the API answers the same whether or not an account has it */
   forgot(email: string): Promise<AccountAnswer> {
-    return this.answer(this.fetch('/v1/account/forgot', jsonInit('POST', { email }), SEND_TIMEOUT_MS));
+    return this.answer(this.fetch('/v1/account/forgot', jsonInit('POST', { email }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Deletes the account and everything in it */
   async remove(password: string): Promise<AccountAnswer> {
-    const answer = await this.answer(this.fetch('/v1/account', jsonInit('DELETE', { password }), SEND_TIMEOUT_MS));
+    const answer = await this.answer(this.fetch('/v1/account', jsonInit('DELETE', { password }), SEND_TIMEOUT_MS, 'auth'));
     if (answer === 'done') {
       this.signedIn.set(null);
     }
@@ -291,12 +291,13 @@ export class PlayerAccount {
     return isAccountProblem(message) ? message : 'invalid';
   }
 
-  private async read(path: string): Promise<unknown> {
-    const response = await this.fetch(path, {}, READ_TIMEOUT_MS);
+  private async read(path: string, service: ApiService = 'api'): Promise<unknown> {
+    const response = await this.fetch(path, {}, READ_TIMEOUT_MS, service);
     return response?.ok ? response.json() : null;
   }
 
-  private fetch(path: string, init: RequestInit, timeoutMs: number): Promise<Response | null> {
-    return credentialedFetch(this.document, path, init, timeoutMs);
+  /** A request with the player's cookie, to the API or the auth service (signing in, out and passwords) */
+  private fetch(path: string, init: RequestInit, timeoutMs: number, service: ApiService = 'api'): Promise<Response | null> {
+    return credentialedFetch(this.document, path, init, timeoutMs, service);
   }
 }

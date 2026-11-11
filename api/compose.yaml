@@ -1,4 +1,5 @@
-# api.su-labs.dev and rooms.su-labs.dev on the server: the API, its PostgreSQL database, and the rooms service.
+# api.su-labs.dev, auth.su-labs.dev and rooms.su-labs.dev on the server: the API, its PostgreSQL database, the auth
+# service and the rooms service.
 #
 # - `npm run deploy:api` (repo root) uploads this folder to /home/ubuntu/su-labs-api and runs `docker compose up`.
 # - Secrets live in /home/ubuntu/su-labs-api/.env on the server only (see .env.example); never in the repo.
@@ -7,6 +8,9 @@
 # - Data lives in two volumes: db-data (the database) and uploads (suggestion pictures). Back both up.
 # - The rooms service (multiplayer, WebSockets) runs from the same image on 127.0.0.1:3003, forwarded from
 #   rooms.su-labs.dev; it keeps rooms in memory only, so a restart ends the rooms in play.
+# - The auth service (signing in for the admin team and players) runs from the same image on 127.0.0.1:3333, forwarded
+#   from auth.su-labs.dev. It shares the database (the API runs the migrations, so it starts once the API is healthy)
+#   and sets the session cookies for all of su-labs.dev, so the API sees who is signed in.
 name: su-labs-api
 
 services:
@@ -39,6 +43,21 @@ services:
       - uploads:/data/uploads
     depends_on:
       db:
+        condition: service_healthy
+
+  auth:
+    build: .
+    restart: unless-stopped
+    command: ['node', 'dist/auth-main.js']
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://su_labs:${POSTGRES_PASSWORD}@db:5432/su_labs
+      TRUST_CLOUDFLARE: 'true'
+      COOKIE_DOMAIN: su-labs.dev
+    ports:
+      - '127.0.0.1:3333:3000'
+    depends_on:
+      api:
         condition: service_healthy
 
   rooms:

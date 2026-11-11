@@ -20,4 +20,13 @@ describe('readCookie', () => {
       readCookie(requestWith(`${SESSION_COOKIE}=%E0%A4%A`), SESSION_COOKIE),
     ).toBeNull();
   });
+
+  it('takes the newest of two cookies with the same name (sent last)', () => {
+    expect(
+      readCookie(
+        requestWith(`${SESSION_COOKIE}=old; ${SESSION_COOKIE}=new`),
+        SESSION_COOKIE,
+      ),
+    ).toBe('new');
+  });
 });

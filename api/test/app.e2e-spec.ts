@@ -31,10 +31,18 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       // Tests that sign in a lot pass their own visitor address, like Cloudflare does, to stay under the sign-in limit
       TRUST_CLOUDFLARE: 'true',
     });
-    // Imported only now: the configuration reads the environment as soon as the module loads
-    const { AppModule } = await import('../src/app.module.js');
+    // Imported only now: the configuration reads the environment as soon as the module loads. The API and the auth
+    // service (two processes in production, sharing the database and cookies) run here as one app, so a test can sign
+    // in and then use the API like a browser does
+    const { CoreModule } = await import('../src/core.module.js');
+    const { ApiModule } = await import('../src/api.module.js');
+    const { SignInModule } = await import('../src/auth/sign-in.module.js');
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        CoreModule.forRoot({ runMigrations: true }),
+        ApiModule,
+        SignInModule,
+      ],
     }).compile();
     app = moduleRef.createNestApplication<NestExpressApplication>({
       bodyParser: false,
@@ -47,6 +55,27 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     await app.get(DataSource).dropDatabase();
     await app.close();
     await rm(uploadsDir, { recursive: true, force: true });
+  });
+
+  it('keeps signing in on the auth service and everything else on the API', async () => {
+    const { AppModule } = await import('../src/app.module.js');
+    const { AuthAppModule } = await import('../src/auth-app.module.js');
+    for (const [root, served, missing] of [
+      [AppModule, '/v1/plays', '/auth/login'],
+      [AuthAppModule, '/auth/login', '/v1/plays'],
+    ] as const) {
+      const service = (
+        await Test.createTestingModule({ imports: [root] }).compile()
+      ).createNestApplication<NestExpressApplication>({ bodyParser: false });
+      setUpApp(service);
+      await service.init();
+      const server = service.getHttpServer();
+      expect((await request(server).post(served).send({})).status).not.toBe(
+        404,
+      );
+      await request(server).post(missing).send({}).expect(404);
+      await service.close();
+    }
   });
 
   it('is healthy once migrated', async () => {

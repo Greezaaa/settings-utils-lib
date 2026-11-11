@@ -1,6 +1,6 @@
 import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
-import { credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FeatureId } from './features';
 import { GameSlug } from './games';
 import { GamePlays, isGameSlug, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
@@ -233,7 +233,7 @@ export class AdminApi {
 
   /** Asks the API whether this browser is still signed in (the cookie lasts 30 days) */
   async restore(): Promise<'signed-in' | 'signed-out' | 'offline'> {
-    const response = await this.fetch('/auth/me', {}, READ_TIMEOUT_MS);
+    const response = await this.fetch('/auth/me', {}, READ_TIMEOUT_MS, 'auth');
     if (!response) {
       return 'offline';
     }
@@ -244,22 +244,22 @@ export class AdminApi {
   /** Signs in; the answer tells wrong details, too many tries, and an API that can't be reached apart */
   async signIn(email: string, password: string): Promise<SignInAnswer> {
     // Checking a password is slow on purpose (it makes guessing expensive), so sign-in waits as long as a save does
-    return this.startSession(await this.fetch('/auth/login', jsonInit('POST', { email, password }), SEND_TIMEOUT_MS));
+    return this.startSession(await this.fetch('/auth/login', jsonInit('POST', { email, password }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   async signOut(): Promise<void> {
-    await this.fetch('/auth/logout', { method: 'POST' }, READ_TIMEOUT_MS);
+    await this.fetch('/auth/logout', { method: 'POST' }, READ_TIMEOUT_MS, 'auth');
     this.signedIn.set(null);
   }
 
   async changePassword(current: string, next: string): Promise<'saved' | 'wrong' | 'offline'> {
-    const response = await this.fetch('/auth/password', jsonInit('POST', { current, next }), SEND_TIMEOUT_MS);
+    const response = await this.fetch('/auth/password', jsonInit('POST', { current, next }), SEND_TIMEOUT_MS, 'auth');
     return !response ? 'offline' : response.ok ? 'saved' : response.status === 401 ? 'wrong' : 'offline';
   }
 
   /** The email an invite link is for, or null when it's wrong, used or expired */
   async inviteEmail(secret: string): Promise<string | null> {
-    const email = field(await this.read(`/auth/invite/${encodeURIComponent(secret)}`), 'email');
+    const email = field(await this.read(`/auth/invite/${encodeURIComponent(secret)}`, 'auth'), 'email');
     return typeof email === 'string' ? email : null;
   }
 
@@ -267,12 +267,12 @@ export class AdminApi {
   async acceptInvite(secret: string, password: string): Promise<boolean> {
     const path = `/auth/invite/${encodeURIComponent(secret)}`;
     return (
-      (await this.startSession(await this.fetch(path, jsonInit('POST', { password }), SEND_TIMEOUT_MS))) === 'right'
+      (await this.startSession(await this.fetch(path, jsonInit('POST', { password }), SEND_TIMEOUT_MS, 'auth'))) === 'right'
     );
   }
 
   async team(): Promise<TeamMember[]> {
-    return listOf(await this.read('/admin/team'), parseMember);
+    return listOf(await this.read('/admin/team', 'auth'), parseMember);
   }
 
   /** Adds a moderator or tester with a starting password, or with an invite link when there is none */
@@ -281,7 +281,7 @@ export class AdminApi {
     role: MemberRole,
     password?: string,
   ): Promise<{ invite: Invite | null } | 'exists' | 'failed'> {
-    const response = await this.fetch('/admin/team', jsonInit('POST', { email, role, password }), SEND_TIMEOUT_MS);
+    const response = await this.fetch('/admin/team', jsonInit('POST', { email, role, password }), SEND_TIMEOUT_MS, 'auth');
     if (response?.status === 409) {
       return 'exists';
     }
@@ -289,16 +289,16 @@ export class AdminApi {
   }
 
   async reinvite(id: string): Promise<Invite | null> {
-    const response = await this.fetch(`/admin/team/${id}/invite`, { method: 'POST' }, SEND_TIMEOUT_MS);
+    const response = await this.fetch(`/admin/team/${id}/invite`, { method: 'POST' }, SEND_TIMEOUT_MS, 'auth');
     return response?.ok ? parseInvite(await response.json()) : null;
   }
 
   setRole(id: string, role: MemberRole): Promise<boolean> {
-    return this.change('PATCH', `/admin/team/${id}`, { role });
+    return this.change('PATCH', `/admin/team/${id}`, { role }, 'auth');
   }
 
   setActive(id: string, active: boolean): Promise<boolean> {
-    return this.change('PATCH', `/admin/team/${id}`, { active });
+    return this.change('PATCH', `/admin/team/${id}`, { active }, 'auth');
   }
 
   setFeatureEnabled(feature: FeatureId, enabled: boolean): Promise<boolean> {
@@ -364,13 +364,18 @@ export class AdminApi {
     return listOf(await this.read(`/admin/plays?period=${period}`), parseGamePlays);
   }
 
-  private async read(path: string): Promise<unknown> {
-    const response = await this.fetch(path, {}, READ_TIMEOUT_MS);
+  private async read(path: string, service: ApiService = 'api'): Promise<unknown> {
+    const response = await this.fetch(path, {}, READ_TIMEOUT_MS, service);
     return response?.ok ? response.json() : null;
   }
 
-  private async change(method: 'PUT' | 'PATCH' | 'DELETE', path: string, body?: object): Promise<boolean> {
-    return (await this.fetch(path, body ? jsonInit(method, body) : { method }, SEND_TIMEOUT_MS))?.ok ?? false;
+  private async change(
+    method: 'PUT' | 'PATCH' | 'DELETE',
+    path: string,
+    body?: object,
+    service: ApiService = 'api',
+  ): Promise<boolean> {
+    return (await this.fetch(path, body ? jsonInit(method, body) : { method }, SEND_TIMEOUT_MS, service))?.ok ?? false;
   }
 
   /** After a sign-in or an accepted invite: who is signed in now */
@@ -385,8 +390,8 @@ export class AdminApi {
     return 'right';
   }
 
-  /** A request with the session cookie; null when it couldn't reach the API */
-  private fetch(path: string, init: RequestInit, timeoutMs: number): Promise<Response | null> {
-    return credentialedFetch(this.document, path, init, timeoutMs);
+  /** A request with the session cookie, to the API or the auth service; null when it couldn't reach it */
+  private fetch(path: string, init: RequestInit, timeoutMs: number, service: ApiService = 'api'): Promise<Response | null> {
+    return credentialedFetch(this.document, path, init, timeoutMs, service);
   }
 }

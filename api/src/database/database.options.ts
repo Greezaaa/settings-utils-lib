@@ -18,12 +18,17 @@ import { FeatureFlags1794400000000 } from './migrations/1794400000000-feature-fl
 import { Players1794500000000 } from './migrations/1794500000000-players.js';
 import { ErrorLogs1794600000000 } from './migrations/1794600000000-error-logs.js';
 import { LeaderboardChoice1794700000000 } from './migrations/1794700000000-leaderboard-choice.js';
+import { SignInMoved1794800000000 } from './migrations/1794800000000-sign-in-moved.js';
 
 /**
- * How the API reaches PostgreSQL. The tables are only ever changed by migrations, which run when the API starts;
- * `synchronize` stays off so a code change can never drop data.
+ * How the API and the auth service reach PostgreSQL. The tables are only ever changed by migrations, which run when the
+ * API starts (`runMigrations`; the auth service shares the tables and leaves them alone); `synchronize` stays off so a
+ * code change can never drop data.
  */
-export const databaseOptions = (url: string): DataSourceOptions => ({
+export const databaseOptions = (
+  url: string,
+  runMigrations: boolean,
+): DataSourceOptions => ({
   type: 'postgres',
   url,
   entities: [
@@ -48,7 +53,8 @@ export const databaseOptions = (url: string): DataSourceOptions => ({
     Players1794500000000,
     ErrorLogs1794600000000,
     LeaderboardChoice1794700000000,
+    SignInMoved1794800000000,
   ],
-  migrationsRun: true,
+  migrationsRun: runMigrations,
   synchronize: false,
 });

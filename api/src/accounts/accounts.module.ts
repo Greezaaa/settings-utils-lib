@@ -1,10 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FeatureFlagsModule } from '../feature-flags/feature-flags.module.js';
-import {
-  AccountsController,
-  LeaderboardController,
-} from './accounts.controller.js';
 import { AccountsService } from './accounts.service.js';
 import { Mailer } from './mailer.js';
 import { PlayerResult } from './player-result.entity.js';
@@ -13,13 +8,13 @@ import { Player } from './player.entity.js';
 import { PlayerGuard } from './player.guard.js';
 import { ResultsService } from './results.service.js';
 
-/** Player accounts, their results and the leaderboards */
+/**
+ * Player accounts, their sessions and results, for both processes: signing in on auth.su-labs.dev (SignInModule), the
+ * account's data and the leaderboards on api.su-labs.dev (AccountsApiModule)
+ */
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Player, PlayerSession, PlayerResult]),
-    FeatureFlagsModule,
-  ],
-  controllers: [AccountsController, LeaderboardController],
+  imports: [TypeOrmModule.forFeature([Player, PlayerSession, PlayerResult])],
   providers: [AccountsService, ResultsService, Mailer, PlayerGuard],
+  exports: [AccountsService, ResultsService, PlayerGuard],
 })
 export class AccountsModule {}
