@@ -1,7 +1,11 @@
 import { SuStorage } from '@su-labs/core';
+import type { SuPaletteName } from './theme.palettes';
 
-/** Available theme names */
-export type SuThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
+/** Themes every site has */
+export type SuBaseThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
+
+/** Available theme names: the base themes, and the ready-made palettes a site offers (see `palettes`) */
+export type SuThemeName = SuBaseThemeName | SuPaletteName;
 
 /** Theme configuration */
 export interface SuThemeConfig {
@@ -28,6 +32,12 @@ export interface SuThemeConfig {
 
   /** Optional CSS variable overrides for specific themes */
   themes?: Partial<Record<SuThemeName, ThemeCssVariables>>;
+
+  /**
+   * Ready-made palettes (`SU_THEME_PALETTES`) this site offers as themes, e.g. `['solar', 'neon']`; none by default.
+   * Only these can be set or restored from storage, so sites sharing one saved choice can offer different sets.
+   */
+  palettes?: readonly SuPaletteName[];
 }
 
 /** Available CSS variables for theming */

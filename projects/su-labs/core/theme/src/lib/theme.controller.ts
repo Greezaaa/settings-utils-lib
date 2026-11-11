@@ -1,11 +1,28 @@
 import { createSuStore, getSuLocalStorage, isBrowser, SuReadableStore, SuStorage } from '@su-labs/core';
-import { SuThemeConfig, SuThemeName, ThemeCssVariables } from './theme.types';
+import { SU_PALETTE_NAMES, SU_THEME_PALETTES, SuPaletteName, SuThemeScheme } from './theme.palettes';
+import { SuBaseThemeName, SuThemeConfig, SuThemeName, ThemeCssVariables } from './theme.types';
+
+/** Themes every site has */
+export const SU_BASE_THEME_NAMES: readonly SuBaseThemeName[] = ['light', 'dark', 'contrast', 'custom', 'system'];
+
+/** Whether a theme name is one of the base themes, e.g. to narrow a preference on a site that offers no palettes */
+export const isSuBaseThemeName = (theme: string): theme is SuBaseThemeName =>
+  SU_BASE_THEME_NAMES.some((name) => name === theme);
+
+/** Light or dark, for the `data-theme-scheme` attribute; a custom palette has none, as it can be either */
+const BASE_SCHEMES: Readonly<Partial<Record<SuBaseThemeName, SuThemeScheme>>> = {
+  light: 'light',
+  dark: 'dark',
+  contrast: 'light',
+};
+
+const isPaletteName = (theme: string): theme is SuPaletteName => SU_PALETTE_NAMES.some((name) => name === theme);
 
 /** Media query used to detect the operating system's dark mode */
 const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
 
 /** Default CSS variables applied for each theme unless overridden in the config */
-const DEFAULT_THEMES: Record<SuThemeName, ThemeCssVariables> = {
+const DEFAULT_THEMES: Record<SuBaseThemeName, ThemeCssVariables> = {
   light: {
     color: '#333',
     background: '#fff',
@@ -33,9 +50,9 @@ const DEFAULT_THEMES: Record<SuThemeName, ThemeCssVariables> = {
  * Framework-agnostic theme manager.
  *
  * Resolves the active theme (including 'system'), applies it to the document (or a configured
- * `target` element) as a `data-theme` attribute and CSS variables, persists the user's choice (in localStorage unless
- * another `storage` is configured),
- * and exposes the resolved theme as a reactive store.
+ * `target` element) as a `data-theme` attribute (plus `data-theme-scheme`, light or dark, when known) and CSS
+ * variables, persists the user's choice (in localStorage unless another `storage` is configured),
+ * and exposes the resolved theme as a reactive store. Ready-made palettes are themes too, for sites that list them.
  * Safe to import in Node: browser-only work is skipped when there is no DOM.
  */
 export class SuThemeController {
@@ -63,6 +80,9 @@ export class SuThemeController {
   /** MediaQueryList instance for system theme changes */
   private mediaQuery?: MediaQueryList;
 
+  /** Variables the last theme set, so a theme without one of them doesn't keep the old value */
+  private appliedVariables: readonly string[] = [];
+
   /**
    * Initialize with optional configuration and apply the saved or default theme.
    * @param config Optional configuration object.
@@ -72,8 +92,9 @@ export class SuThemeController {
     this.cssVarPrefix = this.config.cssVarPrefix ?? this.cssVarPrefix;
     this.storageKey = this.config.storageKey ?? this.storageKey;
 
-    const savedPreference = this.storage()?.getItem(this.storageKey) as SuThemeName | null | undefined;
-    this.userPreference = savedPreference ?? this.config.defaultTheme ?? 'system';
+    const saved = this.storage()?.getItem(this.storageKey);
+    const fallback = this.config.defaultTheme ?? 'system';
+    this.userPreference = saved && this.isAvailable(saved) ? saved : fallback;
 
     this.setTheme(this.userPreference, false);
   }
@@ -95,11 +116,30 @@ export class SuThemeController {
   }
 
   /**
-   * Set a new theme.
-   * @param theme The theme to set ('light', 'dark', 'contrast', 'custom', 'system').
+   * Whether a theme can be set here: a base theme, or a palette listed in the config's `palettes`.
+   * @param theme Any theme name, e.g. one read back from storage.
+   */
+  public isAvailable(theme: string): theme is SuThemeName {
+    return (
+      isSuBaseThemeName(theme) ||
+      (isPaletteName(theme) && (this.config.palettes ?? []).includes(theme))
+    );
+  }
+
+  /** The themes this site offers: the base themes, then its palettes */
+  public availableThemes(): SuThemeName[] {
+    return [...SU_BASE_THEME_NAMES, ...(this.config.palettes ?? [])];
+  }
+
+  /**
+   * Set a new theme. A palette the config doesn't list is ignored.
+   * @param theme The theme to set ('light', 'dark', 'contrast', 'custom', 'system', or a listed palette).
    * @param persist Whether to save the preference in the configured storage (default: true).
    */
   public setTheme(theme: SuThemeName, persist: boolean = true): void {
+    if (!this.isAvailable(theme)) {
+      return;
+    }
     if (theme !== 'system') {
       this.stopListeningToSystemChanges();
     }
@@ -144,6 +184,12 @@ export class SuThemeController {
     }
 
     target.setAttribute('data-theme', theme);
+    const scheme = isPaletteName(theme) ? SU_THEME_PALETTES[theme].scheme : BASE_SCHEMES[theme];
+    if (scheme) {
+      target.setAttribute('data-theme-scheme', scheme);
+    } else {
+      target.removeAttribute('data-theme-scheme');
+    }
     this.applyThemeVariables(target, theme);
   }
 
@@ -189,14 +235,20 @@ export class SuThemeController {
    */
   private applyThemeVariables(target: HTMLElement, theme: SuThemeName): void {
     const variablesToApply = {
-      ...DEFAULT_THEMES[theme],
+      ...(isPaletteName(theme) ? SU_THEME_PALETTES[theme].variables : DEFAULT_THEMES[theme]),
       ...(this.config.themes?.[theme] ?? {}),
     };
 
+    for (const key of this.appliedVariables) {
+      if (!variablesToApply[key]) {
+        target.style.removeProperty(`${this.cssVarPrefix}${key}`);
+      }
+    }
     for (const [key, value] of Object.entries(variablesToApply)) {
       if (value) {
         target.style.setProperty(`${this.cssVarPrefix}${key}`, value);
       }
     }
+    this.appliedVariables = Object.keys(variablesToApply);
   }
 }

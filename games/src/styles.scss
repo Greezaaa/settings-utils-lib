@@ -19,7 +19,8 @@
   --subtle: color-mix(in srgb, var(--su-theme-color) 10%, var(--su-theme-background));
   --border: color-mix(in srgb, var(--su-theme-color) 18%, var(--su-theme-background));
   --button-bg: var(--su-theme-main-accent);
-  --button-text: var(--su-theme-background);
+  // A palette's own text on its accent (dark on bright accents), else the background
+  --button-text: var(--su-theme-button-text, var(--su-theme-background));
   --button-hover: color-mix(in srgb, var(--su-theme-main-accent) 85%, var(--su-theme-background));
   color: var(--text);
   // @su-labs/fields in the board's colours: the root's mapping (web styles) is resolved with the page's colours

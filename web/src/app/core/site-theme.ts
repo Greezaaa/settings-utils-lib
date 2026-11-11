@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { SuThemeConfig, SuThemeName, SuThemeService, ThemeCssVariables } from '@su-labs/theme';
+import { SU_PALETTE_NAMES, SuThemeConfig, SuThemeName, SuThemeService, ThemeCssVariables } from '@su-labs/theme';
 import { SHARED_SETTINGS } from './shared-settings';
 
 /** Theme colors of the site, applied by @su-labs/theme as --su-theme-* variables */
@@ -44,7 +44,7 @@ export class SiteTheme {
   /** Key of the saved preference, shared with the other su-labs site (also read by the inline script in index.html) */
   readonly storageKey = SHARED_SETTINGS.themeKey;
 
-  /** The theme actually shown ('light', 'dark' or 'contrast') */
+  /** The theme actually shown ('light', 'dark', 'contrast', 'custom' or a palette) */
   readonly resolved = this.themeService.theme;
 
   /** Apply the saved theme, or follow the operating system */
@@ -71,6 +71,13 @@ export class SiteTheme {
   }
 
   private config(themes: SuThemeConfig['themes']): SuThemeConfig {
-    return { defaultTheme: 'system', storage: SHARED_SETTINGS.storage, storageKey: this.storageKey, themes };
+    return {
+      defaultTheme: 'system',
+      storage: SHARED_SETTINGS.storage,
+      storageKey: this.storageKey,
+      themes,
+      // This site shows every ready-made palette; games.su-labs.dev, sharing the saved choice, offers none
+      palettes: SU_PALETTE_NAMES,
+    };
   }
 }

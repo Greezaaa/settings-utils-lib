@@ -8,7 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `SU_THEME_PALETTES` in `@su-labs/core/theme`: three ready-made dark palettes (`sunset`, `candy`, `copper`, listed in `SU_PALETTE_NAMES`), checked for readable text and accent contrast
+- Ready-made palettes in `@su-labs/core/theme`: `SU_THEME_PALETTES` (11, listed in `SU_PALETTE_NAMES`), each light or dark (`SuThemeScheme`) with its `--su-theme-*` variables, including `button-text` for text on the accent; checked for readable text and button text
+- `palettes` theme option: the palettes a site offers as themes, none by default; only those can be set or restored from storage, so sites sharing one saved choice can offer different sets
+- `availableThemes()` and `isAvailable()` on `SuThemeController`; `SU_BASE_THEME_NAMES` and `isSuBaseThemeName()`
+- A `data-theme-scheme` attribute (`light` or `dark`) beside `data-theme`, so a site's own colours can follow any theme
+
+### Fixed
+- Switching themes no longer keeps a CSS variable the new theme doesn't set
 
 ## [1.5.0] - 2026-11-09
 

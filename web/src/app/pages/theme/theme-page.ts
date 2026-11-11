@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { SuThemeName } from '@su-labs/theme';
+import { SU_PALETTE_NAMES, SuThemeName } from '@su-labs/theme';
 import { getUtility } from '../../core/packages';
 import { SiteTheme } from '../../core/site-theme';
 import { CodeTab } from '../../shared/code-tabs';
@@ -61,6 +61,7 @@ export class ThemePage {
   protected readonly utility = getUtility('theme');
   protected readonly usage = USAGE;
   protected readonly options = THEME_OPTIONS;
+  protected readonly palettes = SU_PALETTE_NAMES;
   protected readonly variables = THEME_VARIABLES;
   protected readonly theme = inject(SiteTheme);
 }

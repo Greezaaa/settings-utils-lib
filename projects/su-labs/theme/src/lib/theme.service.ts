@@ -48,9 +48,22 @@ export class SuThemeService implements OnDestroy {
     return this.controller.getUserPreference();
   }
 
+  /** The themes this site offers: the base themes, then the palettes listed in the config's `palettes` */
+  public availableThemes(): SuThemeName[] {
+    return this.controller.availableThemes();
+  }
+
   /**
-   * Set a new theme.
-   * @param theme The theme to set ('light', 'dark', 'contrast', 'custom', 'system').
+   * Whether a theme can be set here: a base theme, or a listed palette.
+   * @param theme Any theme name.
+   */
+  public isAvailable(theme: string): theme is SuThemeName {
+    return this.controller.isAvailable(theme);
+  }
+
+  /**
+   * Set a new theme. A palette the config doesn't list is ignored.
+   * @param theme The theme to set ('light', 'dark', 'contrast', 'custom', 'system', or a listed palette).
    * @param persist Whether to store the preference in localStorage (default: true).
    */
   public setTheme(theme: SuThemeName, persist: boolean = true): void {

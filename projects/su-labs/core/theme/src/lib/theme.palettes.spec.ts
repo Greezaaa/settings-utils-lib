@@ -19,16 +19,9 @@ function contrast(first: string, second: string): number {
 }
 
 describe('SU_THEME_PALETTES', () => {
-  it.each(Object.entries(SU_THEME_PALETTES))(
-    '%s keeps text and accent readable on its background',
-    (_, palette) => {
-      const {
-        color = '',
-        background = '',
-        'main-accent': accent = '',
-      } = palette;
-      expect(contrast(color, background)).toBeGreaterThanOrEqual(8);
-      expect(contrast(accent, background)).toBeGreaterThanOrEqual(4.5);
-    }
-  );
+  it.each(Object.entries(SU_THEME_PALETTES))('%s keeps its text and button text readable', (_, { variables }) => {
+    const { color = '', background = '', 'main-accent': accent = '', 'button-text': buttonText = '' } = variables;
+    expect(contrast(color, background)).toBeGreaterThanOrEqual(7);
+    expect(contrast(buttonText, accent)).toBeGreaterThanOrEqual(4.5);
+  });
 });

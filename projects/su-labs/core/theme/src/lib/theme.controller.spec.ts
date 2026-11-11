@@ -185,4 +185,41 @@ describe('SuThemeController', () => {
     service.destroy();
     expect(removeSpy).toHaveBeenCalled();
   });
+
+  describe('palettes', () => {
+    const root = document.documentElement;
+
+    it('offers no palette unless the config lists it', () => {
+      service.init({ defaultTheme: 'light' });
+      service.setTheme('solar');
+      expect(service.getTheme()).toBe('light');
+      expect(service.availableThemes()).not.toContain('solar');
+    });
+
+    it('applies a listed palette with its variables and scheme', () => {
+      service.init({ defaultTheme: 'light', palettes: ['neon', 'solar'] });
+      service.setTheme('neon');
+      expect(service.getTheme()).toBe('neon');
+      expect(root.getAttribute('data-theme')).toBe('neon');
+      expect(root.getAttribute('data-theme-scheme')).toBe('dark');
+      expect(root.style.getPropertyValue('--su-theme-background')).toBe('#232326');
+      expect(service.availableThemes()).toEqual(['light', 'dark', 'contrast', 'custom', 'system', 'neon', 'solar']);
+    });
+
+    it('drops a palette variable the next theme does not set', () => {
+      service.init({ palettes: ['solar'] });
+      service.setTheme('solar');
+      expect(root.style.getPropertyValue('--su-theme-button-text')).toBe('#1b2440');
+      service.setTheme('light');
+      expect(root.style.getPropertyValue('--su-theme-button-text')).toBe('');
+      expect(root.getAttribute('data-theme-scheme')).toBe('light');
+    });
+
+    it('falls back to the default when the saved palette is not offered here, keeping the saved choice', () => {
+      const storage = memoryStorage({ 'su:theme': 'ember' });
+      service.init({ storage, defaultTheme: 'dark' });
+      expect(service.getTheme()).toBe('dark');
+      expect(storage.values.get('su:theme')).toBe('ember');
+    });
+  });
 });

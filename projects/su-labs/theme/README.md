@@ -63,6 +63,38 @@ The service currently supports the following theme names by default:
 
 You can provide custom variables for any of these themes via the `themes` property in `SuThemeConfig`.
 
+### Ready-made palettes (optional)
+
+Eleven palettes ship with the library, none of them shown unless you list them in `palettes`:
+
+| Name | Scheme | Look |
+|------|--------|------|
+| `sunset` | dark | Midnight blue, cream and amber |
+| `candy` | dark | Near black, white and pink |
+| `copper` | dark | Black, teal and copper |
+| `solar` | light | Porcelain, midnight navy and solar orange |
+| `neon` | dark | Graphite, silver mist and hyper pink |
+| `sunflower` | dark | Midnight navy, powder blue and sunflower yellow |
+| `tomato` | light | Oat milk, forest green and tomato red |
+| `blossom` | light | Butter cream, forest green and hot pink |
+| `ember` | dark | Midnight black, electric blue and sunset orange |
+| `storm` | dark | Storm grey, near black and safety orange |
+| `racing` | light | Polar white, glacier blue and racing red |
+
+```typescript
+theme.init({ palettes: ['solar', 'neon', 'racing'] });
+theme.setTheme('neon');
+theme.availableThemes(); // ['light', 'dark', 'contrast', 'custom', 'system', 'solar', 'neon', 'racing']
+```
+
+Each palette sets `--su-theme-color`, `--su-theme-background`, `--su-theme-main-accent`, `--su-theme-second-accent`
+and `--su-theme-button-text` (text on the accent). Text is at least 7:1 on the background and button text at least
+4.5:1 on the accent. Besides `data-theme`, the element gets `data-theme-scheme="light"` or `"dark"`, so your own
+colours can follow: `[data-theme-scheme='dark'] { --shadow: none; }`.
+
+A saved palette your site doesn't list falls back to `defaultTheme` without overwriting the saved choice, so sites
+that share one saved theme (see `storage`) can offer different sets.
+
 ## Installation
 
 You can install this library via npm:
@@ -213,11 +245,14 @@ This correctly shows how to use your service's public API to switch between them
 | `init(config?)` | `SuThemeConfig` | Initialize with custom configuration |
 | `setTheme(theme, persist?)` | `SuThemeName, boolean` | Change theme (persist defaults to true) |
 | `getTheme()` | - | Returns current theme name |
+| `availableThemes()` | - | The base themes, then the palettes listed in `palettes` |
+| `isAvailable(theme)` | `string` | Whether a theme can be set here |
 
 ### Types
 
 ```typescript
-type SuThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
+type SuBaseThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
+type SuThemeName = SuBaseThemeName | SuPaletteName; // SuPaletteName: 'sunset' | 'candy' | … | 'racing'
 
 interface SuThemeConfig {
   storageKey?: string;      // Default: 'su:theme'
@@ -228,6 +263,7 @@ interface SuThemeConfig {
   themes?: {
     [key in SuThemeName]?: Record<string, string>;
   };
+  palettes?: SuPaletteName[]; // Default: none
 }
 ```
 
@@ -243,6 +279,7 @@ The service can be configured to fit your application's needs.
 | `cssVarPrefix`     | The prefix for all CSS variables managed by the service.      | `'--su-theme-'`  |
 | `defaultTheme`     | The theme to use if no preference is saved in `localStorage`. | `'system'`       |
 | `themes`           | An object with custom CSS variable overrides for each theme.  | `undefined`      |
+| `palettes`         | Ready-made palettes this site offers as themes, e.g. `['solar', 'neon']`. | none |
 
 ## Browser Compatibility
 

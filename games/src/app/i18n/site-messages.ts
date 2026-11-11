@@ -1,4 +1,4 @@
-import { SuThemeName } from '@su-labs/theme';
+import { SuBaseThemeName } from '@su-labs/theme';
 import { GameCategory, GameSlug } from '../core/games';
 import { FeatureId } from '../core/features';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
@@ -66,7 +66,7 @@ export interface SiteMessages {
     readonly theme: string;
     readonly smallerText: string;
     readonly largerText: string;
-    readonly themeNames: Readonly<Record<SuThemeName, string>>;
+    readonly themeNames: Readonly<Record<SuBaseThemeName, string>>;
     /** Label of the theme switch, e.g. `Theme: dark. Switch to contrast` */
     readonly themeSwitch: (current: string, next: string) => string;
     readonly language: string;

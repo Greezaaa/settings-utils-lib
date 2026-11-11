@@ -57,7 +57,8 @@
       }
       try {
         var theme = readSetting('su-labs:theme');
-        if (!theme || theme === 'system') {
+        // A palette's colours only arrive with the app, so until then it shows like the system theme
+        if (theme !== 'light' && theme !== 'dark' && theme !== 'contrast') {
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         root.setAttribute('data-theme', theme);

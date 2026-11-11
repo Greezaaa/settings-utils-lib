@@ -4,7 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { FontSizeService } from '@su-labs/font-size';
 import { SuDialogComponent, SuDialogService } from '@su-labs/dialog';
 import { SuNotificationComponent } from '@su-labs/notifications';
-import { SuThemeName } from '@su-labs/theme';
+import { SuBaseThemeName } from '@su-labs/theme';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { PlayerAccount } from './core/player-account';
@@ -23,7 +23,7 @@ import { MenuRing } from './shared/menu-ring';
 import { ScrollToActive } from './shared/scroll-to-active';
 import { TranslatePipe } from './i18n/translate-pipe';
 
-const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contrast'];
+const THEME_CYCLE: readonly SuBaseThemeName[] = ['system', 'light', 'dark', 'contrast'];
 
 /** Site shell: header with text size, theme and language settings and the list of games, page outlet and footer */
 @Component({

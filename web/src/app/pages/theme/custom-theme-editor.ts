@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { SuNotificationService } from '@su-labs/notifications';
-import { SU_PALETTE_NAMES, SU_THEME_PALETTES, SuPaletteName } from '@su-labs/theme';
 import { SiteTheme } from '../../core/site-theme';
 import { CodeBlock } from '../../shared/code-block';
 import { MAX_CUSTOM_THEME_LENGTH, parseCustomTheme, SAMPLE_CUSTOM_THEME } from './custom-theme';
@@ -35,7 +34,6 @@ export class CustomThemeEditor {
   protected readonly draft = signal(SAMPLE_JSON);
   protected readonly error = signal<string | null>(null);
   protected readonly usage = CUSTOM_THEME_USAGE;
-  protected readonly palettes = SU_PALETTE_NAMES;
 
   protected edit(event: Event): void {
     if (event.target instanceof HTMLTextAreaElement) {
@@ -54,12 +52,6 @@ export class CustomThemeEditor {
     this.error.set(null);
     this.theme.applyCustom(result.variables);
     this.notifications.show({ type: 'success', message: 'Custom theme applied. Reload to go back.', duration: 3000 });
-  }
-
-  /** Fill the editor with one of the library's ready-made palettes and show it */
-  protected usePalette(name: SuPaletteName): void {
-    this.draft.set(JSON.stringify(SU_THEME_PALETTES[name], null, 2));
-    this.apply();
   }
 
   protected resetDraft(): void {

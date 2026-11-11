@@ -79,7 +79,9 @@
   color-scheme: light;
 }
 
-:root[data-theme='dark'] {
+/* Dark tokens for the dark theme and for every dark palette (data-theme-scheme comes from @su-labs/theme) */
+:root[data-theme='dark'],
+:root[data-theme-scheme='dark'] {
   /* Fallbacks until @su-labs/theme sets --su-theme-* (see the inline script in index.html) */
   --bg: var(--su-theme-background, #191919);
   --text: var(--su-theme-color, #e3e2e0);
@@ -117,15 +119,16 @@
   --button-hover: #000000;
 }
 
-/* A visitor's own palette: every other color is mixed from its text and background */
-:root[data-theme='custom'] {
+/* A visitor's own palette, or a ready-made one: every other color is mixed from its text and background */
+:root[data-theme='custom'],
+:root[data-theme-scheme]:not([data-theme='light'], [data-theme='dark'], [data-theme='contrast']) {
   --heading: var(--su-theme-color);
   --muted: color-mix(in srgb, var(--su-theme-color) 65%, var(--su-theme-background));
   --surface: color-mix(in srgb, var(--su-theme-color) 3%, var(--su-theme-background));
   --subtle: color-mix(in srgb, var(--su-theme-color) 7%, var(--su-theme-background));
   --border: color-mix(in srgb, var(--su-theme-color) 14%, var(--su-theme-background));
   --button-bg: var(--su-theme-main-accent, var(--su-theme-color));
-  --button-text: var(--su-theme-background);
+  --button-text: var(--su-theme-button-text, var(--su-theme-background));
   --button-hover: color-mix(in srgb, var(--button-bg) 85%, var(--su-theme-background));
 }
 

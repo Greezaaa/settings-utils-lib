@@ -31,16 +31,6 @@
         <button type="button" class="button button-secondary" (click)="resetDraft()">Restore sample</button>
       </div>
 
-      <div class="field">
-        <span id="palettes-label">Or start from a ready-made palette (<code>SU_THEME_PALETTES</code>)</span>
-        <div class="button-row" role="group" aria-labelledby="palettes-label">
-          @for (name of palettes; track name) {
-            <button type="button" class="button button-secondary button-small" (click)="usePalette(name)">
-              {{ name }}
-            </button>
-          }
-        </div>
-      </div>
     </div>
 
     <div class="editor-usage">

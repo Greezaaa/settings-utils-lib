@@ -18,6 +18,22 @@
       </div>
 
       <div class="field">
+        <span id="palette-label">Ready-made palettes (opt-in with the <code>palettes</code> option)</span>
+        <div class="button-row" role="group" aria-labelledby="palette-label">
+          @for (palette of palettes; track palette) {
+            <button
+              type="button"
+              class="button button-secondary button-small"
+              [attr.aria-pressed]="theme.preference() === palette"
+              (click)="theme.set(palette)"
+            >
+              {{ palette }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="field">
         <span>CSS variables on &lt;html&gt;</span>
         <ul class="swatches">
           @for (name of variables; track name) {

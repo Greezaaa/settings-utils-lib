@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { SuThemeConfig, SuThemeName, SuThemeService } from '@su-labs/theme';
+import { isSuBaseThemeName, SuBaseThemeName, SuThemeConfig, SuThemeService } from '@su-labs/theme';
 import { SHARED_SETTINGS } from './shared-settings';
 
 /** Theme colors of the site, applied by @su-labs/theme as --su-theme-* variables */
@@ -36,7 +36,7 @@ export const SITE_THEMES = {
 @Injectable({ providedIn: 'root' })
 export class SiteTheme {
   private readonly themeService = inject(SuThemeService);
-  private readonly preferenceSignal = signal<SuThemeName>('system');
+  private readonly preferenceSignal = signal<SuBaseThemeName>('system');
 
   /** The option the visitor picked, may be 'system' */
   readonly preference = this.preferenceSignal.asReadonly();
@@ -50,10 +50,12 @@ export class SiteTheme {
   /** Apply the saved theme, or follow the operating system */
   init(): void {
     this.themeService.init(this.config(SITE_THEMES));
-    this.preferenceSignal.set(this.themeService.getUserPreference());
+    // This site offers no palettes, so a saved one (from su-labs.dev) has already fallen back to a base theme
+    const preference = this.themeService.getUserPreference();
+    this.preferenceSignal.set(isSuBaseThemeName(preference) ? preference : 'system');
   }
 
-  set(theme: SuThemeName): void {
+  set(theme: SuBaseThemeName): void {
     this.themeService.setTheme(theme);
     this.preferenceSignal.set(theme);
   }
