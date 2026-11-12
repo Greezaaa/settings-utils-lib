@@ -105,14 +105,16 @@
 }
 
 // The same shape on every group of choice buttons while the animated menu is on (ChoiceRing): it carries the chosen
-// colour behind the buttons, which go see-through, and the button it covers takes the chosen text colour. The buttons
-// keep their borders, so the gaps between them stay. !important: each page styles its chosen button its own way, and
-// this has to win over all of them while it's on
+// colour behind the buttons, which go see-through (outlines too, so none cut across the shape as it passes, like the
+// menu's plain links; only the chosen one keeps its outline), and the button it covers takes the chosen text colour. !important: each page styles its chosen
+// button its own way, and this has to win over all of them while it's on
 .has-choice-ring {
   position: relative;
 
   button[aria-pressed] {
     background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
     color: var(--choice-ring-plain) !important;
     position: relative;
     transition: color 150ms ease;
@@ -120,6 +122,11 @@
 
     &.is-covered {
       color: var(--choice-ring-text) !important;
+    }
+
+    // The chosen one keeps an outline in the chosen colour, so it still shows while the shape follows the pointer
+    &[aria-pressed='true'] {
+      border-color: var(--choice-ring-colour) !important;
     }
   }
 }
