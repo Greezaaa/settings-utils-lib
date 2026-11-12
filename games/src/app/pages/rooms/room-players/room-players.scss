@@ -34,7 +34,11 @@ $full-width: 10rem;
 
   // Ready: a green gradient fills the player's background
   .is-ready {
-    background: linear-gradient(90deg, var(--green-bg), color-mix(in srgb, var(--green-text) 35%, var(--green-bg)));
+    background: linear-gradient(
+      90deg,
+      var(--green-bg),
+      color-mix(in srgb, var(--green-text) 35%, var(--green-bg))
+    );
     border-color: color-mix(in srgb, var(--green-text) 45%, transparent);
   }
 
@@ -189,11 +193,13 @@ $full-width: 10rem;
 
 @keyframes sticker-fade {
   0%,
-  85% {
+  70% {
     opacity: 1;
+    scale: 1;
   }
   100% {
     opacity: 0;
+    scale: 2; /* Crece un 200% al desvanecerse */
   }
 }
 
