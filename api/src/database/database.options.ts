@@ -21,6 +21,7 @@ import { LeaderboardChoice1794700000000 } from './migrations/1794700000000-leade
 import { SignInMoved1794800000000 } from './migrations/1794800000000-sign-in-moved.js';
 import { PlayerApps1794900000000 } from './migrations/1794900000000-player-apps.js';
 import { BoardModeration1795000000000 } from './migrations/1795000000000-board-moderation.js';
+import { NameApproval1795100000000 } from './migrations/1795100000000-name-approval.js';
 
 /**
  * How the API and the auth service reach PostgreSQL. The tables are only ever changed by migrations, which run when the
@@ -58,6 +59,7 @@ export const databaseOptions = (
     SignInMoved1794800000000,
     PlayerApps1794900000000,
     BoardModeration1795000000000,
+    NameApproval1795100000000,
   ],
   migrationsRun: runMigrations,
   synchronize: false,

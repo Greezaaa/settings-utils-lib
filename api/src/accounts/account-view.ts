@@ -9,13 +9,23 @@ export interface Account {
   readonly email: string | null;
   /** Whether the player appears on the leaderboards */
   readonly showOnLeaderboard: boolean;
+  /** Whether a moderator approved the screen name, so it may show in rooms */
+  readonly nameApproved: boolean;
   readonly favorites: string[];
   readonly results: MyResult[];
 }
 
 /** A player's account with their results, as both auth.su-labs.dev and api.su-labs.dev answer it */
 export async function accountView(
-  { id, loginName, screenName, email, showOnLeaderboard, favorites }: Player,
+  {
+    id,
+    loginName,
+    screenName,
+    email,
+    showOnLeaderboard,
+    nameApproved,
+    favorites,
+  }: Player,
   results: ResultsService,
 ): Promise<Account> {
   return {
@@ -23,6 +33,7 @@ export async function accountView(
     screenName,
     email,
     showOnLeaderboard,
+    nameApproved,
     favorites,
     results: await results.mine(id),
   };

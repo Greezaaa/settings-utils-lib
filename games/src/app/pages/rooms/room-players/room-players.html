@@ -19,7 +19,7 @@
       <button type="button" class="player" [attr.aria-expanded]="player.id === openId()" (click)="toggle(player.id)">
         <app-player-avatar [nickname]="player.nickname" [color]="player.color" />
         <span class="who">
-          <strong class="name">{{ 'rooms.nickname' | translate: player.nickname.adjective : player.nickname.animal }}</strong>
+          <strong class="name">{{ player.name ?? ('rooms.nickname' | translate: player.nickname.adjective : player.nickname.animal) }}</strong>
           <small class="muted">
             @if (player.id === meId()) {
               {{ 'rooms.you' | translate }} ·
@@ -46,6 +46,11 @@
           (click)="rename.emit()"
         >
           <span aria-hidden="true">🎲</span>
+        </button>
+      }
+      @if (player.name && player.id !== meId()) {
+        <button type="button" class="button button-secondary button-small report-name" (click)="reportName.emit(player)">
+          {{ 'rooms.reportName' | translate }}
         </button>
       }
       @if (canKick() && player.id !== meId() && room().phase === 'lobby') {

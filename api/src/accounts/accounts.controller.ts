@@ -7,16 +7,32 @@ import { readCookie, sessionToken } from '../auth/session-cookie.js';
 import { FeatureFlagsService } from '../feature-flags/feature-flags.service.js';
 import { AdminGuard } from '../security/admin.guard.js';
 import { API_APP, playerCookie } from '../shared/apps.js';
+import type { FeatureId } from '../shared/catalog.js';
 import type { ResultGame } from '../shared/catalog.js';
 import { resultGameSchema } from '../shared/catalog.js';
 import { limitSchema, offsetSchema } from '../shared/page.js';
 import { Account, accountView, FEW_PER_15_MINUTES, playerOf } from './account-view.js';
 import type { ChangeInput, ResultInput } from './accounts.schema.js';
 import { bestsSchema, changeSchema, favoritesSchema, leaderboardChoiceSchema, resultSchema } from './accounts.schema.js';
-import { AccountsService, ModeratedPlayer } from './accounts.service.js';
+import { AccountsService, ModeratedPlayer, PendingName } from './accounts.service.js';
 import type { PlayerRequest } from './player.guard.js';
 import { PlayerGuard } from './player.guard.js';
+import { screenNameSchema } from './screen-name.js';
 import { Leaderboard, ResultsService } from './results.service.js';
+
+/** A feature switched on for everyone, or a signed-in admin trying it in preview */
+async function isOpenOrPreviewed(
+  feature: FeatureId,
+  request: Request,
+  flags: FeatureFlagsService,
+  auth: AuthService,
+): Promise<boolean> {
+  if (await flags.isOn(feature)) {
+    return true;
+  }
+  const adminToken = sessionToken(request);
+  return adminToken !== null && (await auth.adminForToken(adminToken)) !== null;
+}
 
 /**
  * A signed-in player's account on games.su-labs.dev: their details, favourites and best results. Signing up, in and
@@ -27,6 +43,8 @@ export class AccountsController {
   constructor(
     private readonly accounts: AccountsService,
     private readonly results: ResultsService,
+    private readonly flags: FeatureFlagsService,
+    private readonly auth: AuthService,
   ) {}
 
   @Get()
@@ -60,6 +78,26 @@ export class AccountsController {
     { show }: z.infer<typeof leaderboardChoiceSchema>,
   ): Promise<void> {
     await this.accounts.setShowOnLeaderboard(playerOf(request), show);
+  }
+
+  /**
+   * A short-lived pass for the rooms service to show the player's screen name, while `room-names` is on: null until a
+   * moderator approves the name (or when it can't show in rooms)
+   */
+  @Get('room-name')
+  @UseGuards(PlayerGuard)
+  async roomName(
+    @Req() request: PlayerRequest,
+  ): Promise<{ pass: string | null }> {
+    const isOpen = await isOpenOrPreviewed(
+      'room-names',
+      request,
+      this.flags,
+      this.auth,
+    );
+    return {
+      pass: isOpen ? this.accounts.roomNamePass(playerOf(request)) : null,
+    };
   }
 
   @Put('favorites')
@@ -144,15 +182,31 @@ export class LeaderboardController {
   }
 
   /** Open to everyone: switched on, or the admin trying it in preview */
-  private async isPublic(request: Request): Promise<boolean> {
-    if (await this.flags.isOn('public-leaderboard')) {
-      return true;
-    }
-    const adminToken = sessionToken(request);
-    return (
-      adminToken !== null &&
-      (await this.auth.adminForToken(adminToken)) !== null
+  private isPublic(request: Request): Promise<boolean> {
+    return isOpenOrPreviewed(
+      'public-leaderboard',
+      request,
+      this.flags,
+      this.auth,
     );
+  }
+}
+
+const nameReportSchema = z.object({ screenName: screenNameSchema });
+
+/** Players report a screen name they found rude in a room; it stops showing in rooms until a moderator looks again */
+@Controller('v1/name-reports')
+export class NameReportsController {
+  constructor(private readonly accounts: AccountsService) {}
+
+  @Post()
+  @HttpCode(204)
+  @Throttle({ default: { limit: 10, ttl: 3_600_000 } })
+  async report(
+    @Body({ schema: nameReportSchema })
+    { screenName }: z.infer<typeof nameReportSchema>,
+  ): Promise<void> {
+    await this.accounts.reportName(API_APP, screenName);
   }
 }
 
@@ -174,6 +228,26 @@ export class PlayersAdminController {
     @Query('limit', { schema: limitSchema }) limit: number,
   ): Promise<ModeratedPlayer[]> {
     return this.accounts.moderationList({ offset, limit });
+  }
+
+  /** Screen names waiting to be allowed in rooms, reported ones first */
+  @Get('names')
+  pendingNames(
+    @Query('offset', { schema: offsetSchema }) offset: number,
+    @Query('limit', { schema: limitSchema }) limit: number,
+  ): Promise<PendingName[]> {
+    return this.accounts.pendingNames({ offset, limit });
+  }
+
+  /** Lets a screen name show in rooms; a rude one gets a plain new name instead (rename) */
+  @Post(':id/approve-name')
+  @HttpCode(204)
+  async approveName(
+    @Param('id', { schema: playerIdSchema }) id: string,
+  ): Promise<void> {
+    if (!(await this.accounts.approveName(id))) {
+      throw new NotFoundException();
+    }
   }
 
   @Post(':id/rename')

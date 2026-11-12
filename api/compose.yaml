@@ -67,6 +67,8 @@ services:
     environment:
       CORS_ORIGINS: https://games.su-labs.dev
       TRUST_CLOUDFLARE: 'true'
+      # Same as the API's (from .env): checks the passes for players' approved names
+      ROOM_NAME_SECRET: ${ROOM_NAME_SECRET:-}
     ports:
       - '127.0.0.1:3003:3000'
 

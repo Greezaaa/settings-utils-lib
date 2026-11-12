@@ -60,6 +60,17 @@ export class Player {
   @Column({ type: 'boolean', name: 'removed_from_boards', default: false })
   removedFromBoards: boolean;
 
+  /**
+   * Whether a moderator approved the screen name, so it may show in rooms (where hosts can turn players' own names
+   * on). Every new or changed name waits; a report from another player sends it back to wait.
+   */
+  @Column({ type: 'boolean', name: 'name_approved', default: false })
+  nameApproved: boolean;
+
+  /** How many times players reported the name as rude, to put those first for the moderators */
+  @Column({ type: 'integer', name: 'name_reports', default: 0 })
+  nameReports: number;
+
   /** Favourite games, most recent first */
   @Column({ type: 'varchar', length: 40, array: true, default: () => "'{}'" })
   favorites: string[];

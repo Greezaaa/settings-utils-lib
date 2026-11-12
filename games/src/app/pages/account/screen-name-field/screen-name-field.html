@@ -20,7 +20,8 @@
     type="text"
     autocomplete="nickname"
     minlength="3"
-    maxlength="20"
+    maxlength="12"
+    pattern="\p{L}{3,12}"
     required
     [value]="value()"
   />

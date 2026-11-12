@@ -9,10 +9,13 @@ import { afterFailure, isLocked, UNLOCKED } from '../security/login-lock.js';
 import type { AppId } from '../shared/apps.js';
 import type { Page } from '../shared/page.js';
 import type { GameSlug } from '../shared/catalog.js';
+import { signNamePass } from '../shared/name-pass.js';
+import { WordReport } from '../word-reports/word-report.entity.js';
 import type { ChangeInput, RegisterInput } from './accounts.schema.js';
 import { Mailer } from './mailer.js';
 import { PlayerSession } from './player-session.entity.js';
 import { Player } from './player.entity.js';
+import { isRudeName, SCREEN_NAME_PATTERN } from './screen-name.js';
 
 /** How long a browser stays signed in to a player's account */
 export const PLAYER_SESSION_DAYS = 90;
@@ -41,6 +44,18 @@ export interface ModeratedPlayer {
 }
 
 /** Why a sign-up or change was refused, as the games site shows it */
+/** A screen name waiting for a moderator, reported ones first */
+export interface PendingName {
+  readonly id: string;
+  readonly app: AppId;
+  readonly screenName: string;
+  readonly reports: number;
+  readonly created: Date;
+}
+
+/** What a new or changed screen name resets: it waits for a moderator again, with no reports */
+const NEW_NAME = { nameApproved: false, nameReports: 0 } as const;
+
 export type AccountConflict =
   | 'login-taken'
   | 'screen-name-taken'
@@ -55,15 +70,20 @@ export type AccountConflict =
 export class AccountsService {
   /** Each app's site, for the links in its emails */
   private readonly appUrls: Readonly<Record<AppId, string>>;
+  /** Signs the passes that let an approved screen name show in rooms; none, and rooms only show nicknames */
+  private readonly roomNameSecret: string | undefined;
 
   constructor(
     @InjectRepository(Player) private readonly players: Repository<Player>,
     @InjectRepository(PlayerSession)
     private readonly sessions: Repository<PlayerSession>,
+    @InjectRepository(WordReport)
+    private readonly wordReports: Repository<WordReport>,
     private readonly mailer: Mailer,
     config: ConfigService<Env, true>,
   ) {
     this.appUrls = { games: config.get('GAMES_URL', { infer: true }) };
+    this.roomNameSecret = config.get('ROOM_NAME_SECRET', { infer: true });
   }
 
   /** Whether accounts may have an email (only when emails can be sent) */
@@ -85,6 +105,7 @@ export class AccountsService {
     if (email && !this.canEmail) {
       throw new BadRequestException('email-unavailable');
     }
+    await this.refuseRudeName(screenName);
     await this.refuseTaken(app, { loginName, screenName, email });
     await this.players.insert({
       app,
@@ -94,6 +115,7 @@ export class AccountsService {
       passwordHash: await hashPassword(password),
       email: email ?? null,
       showOnLeaderboard,
+      ...NEW_NAME,
     });
     return this.startSession(
       await this.players.findOneByOrFail({ app, loginName }),
@@ -158,6 +180,9 @@ export class AccountsService {
         throw new BadRequestException('wrong-password');
       }
     }
+    if (screenName) {
+      await this.refuseRudeName(screenName);
+    }
     await this.refuseTaken(
       player.app,
       { screenName, email: email ?? undefined },
@@ -167,7 +192,7 @@ export class AccountsService {
       { id: player.id },
       {
         ...(screenName
-          ? { screenName, screenNameKey: screenName.toLowerCase() }
+          ? { screenName, screenNameKey: screenName.toLowerCase(), ...NEW_NAME }
           : {}),
         ...(email !== undefined ? { email } : {}),
       },
@@ -318,11 +343,92 @@ export class AccountsService {
         screenNameKey: screenName.toLowerCase(),
       })
     );
+    // The moderator's own plain name needs no check; it never shows in rooms, as it isn't one word of letters
     await this.players.update(
       { id },
-      { screenName, screenNameKey: screenName.toLowerCase() },
+      {
+        screenName,
+        screenNameKey: screenName.toLowerCase(),
+        nameApproved: true,
+      },
     );
     return screenName;
+  }
+
+  /** Screen names waiting for a moderator: the most reported first, then the oldest */
+  async pendingNames({ offset, limit }: Page): Promise<PendingName[]> {
+    const players = await this.players.find({
+      where: { nameApproved: false },
+      order: { nameReports: 'DESC', created: 'ASC' },
+      skip: offset,
+      take: limit,
+    });
+    return players.map(({ id, app, screenName, nameReports, created }) => ({
+      id,
+      app,
+      screenName,
+      reports: nameReports,
+      created,
+    }));
+  }
+
+  /** A moderator lets a screen name show in rooms; false if no such player */
+  async approveName(id: string): Promise<boolean> {
+    const { affected } = await this.players.update(
+      { id },
+      { nameApproved: true, nameReports: 0 },
+    );
+    return (affected ?? 0) > 0;
+  }
+
+  /**
+   * A pass for the rooms service to show the player's screen name: only for an approved name that follows today's
+   * rule (one word of letters) and a player still allowed on the leaderboards; null otherwise
+   */
+  roomNamePass({
+    screenName,
+    nameApproved,
+    removedFromBoards,
+  }: Player): string | null {
+    const allowed =
+      nameApproved &&
+      !removedFromBoards &&
+      SCREEN_NAME_PATTERN.test(screenName);
+    return allowed && this.roomNameSecret
+      ? signNamePass(screenName, this.roomNameSecret)
+      : null;
+  }
+
+  /**
+   * Another player reports a screen name they saw in a room: it stops showing in rooms until a moderator looks again.
+   * Says nothing about whether the name exists.
+   */
+  async reportName(app: AppId, screenName: string): Promise<void> {
+    await this.players
+      .createQueryBuilder()
+      .update()
+      .set({ nameApproved: false, nameReports: () => 'name_reports + 1' })
+      .where('app = :app AND screen_name_key = :key', {
+        app,
+        key: screenName.toLowerCase(),
+      })
+      .execute();
+  }
+
+  /** Refuses a screen name that is a known rude word: one moderators approved as rude in the word builder, any language */
+  private async refuseRudeName(screenName: string): Promise<void> {
+    const rows = await this.wordReports.find({
+      select: { word: true },
+      where: { status: 'approved' },
+    });
+    if (
+      isRudeName(
+        screenName,
+        rows.map(({ word }) => word),
+      )
+    ) {
+      throw new BadRequestException('rude-name');
+    }
   }
 
   /** A moderator takes a player off the leaderboards, or puts them back; false if no such player */

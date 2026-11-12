@@ -12,6 +12,13 @@ export const list = z.string().transform((value) =>
  * Every setting the API reads from its environment (the server's .env file; see .env.example), checked when it
  * starts so a missing or wrong value stops it straight away instead of failing later.
  */
+/** A secret of at least 32 characters, or none: an empty line in .env counts as none */
+export const optionalSecret = z
+  .string()
+  .optional()
+  .transform((value) => value || undefined)
+  .pipe(z.string().min(32).optional());
+
 export const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   /** e.g. postgres://su_labs:secret@db:5432/su_labs */
@@ -36,6 +43,11 @@ export const envSchema = z.object({
    * reach api.su-labs.dev too. Unset for the local services, where cookies on localhost reach every port anyway
    */
   COOKIE_DOMAIN: z.string().min(1).optional(),
+  /**
+   * Shared with the rooms service: signs the passes that let a player's approved screen name show in rooms. Unset,
+   * rooms only ever show the animal nicknames
+   */
+  ROOM_NAME_SECRET: optionalSecret,
   /** Folder where suggestion images are kept (a Docker volume on the server) */
   UPLOADS_DIR: z.string().default('/data/uploads'),
   /** Cloudflare Turnstile secret key; when set, suggestions need a Turnstile token */

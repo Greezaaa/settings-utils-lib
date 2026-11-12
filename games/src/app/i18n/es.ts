@@ -978,6 +978,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     noWords: 'No hay palabras aquí.',
     playersHelp: 'Jugadores en las clasificaciones, los más nuevos primero. Cambia un nombre visible grosero por uno neutro, o saca de las clasificaciones a quien tenga puntuaciones inventadas; no podrá deshacerlo.',
     noPlayers: 'Todavía no hay jugadores en las clasificaciones.',
+    namesTitle: 'Nombres por revisar',
+    namesHelp:
+      'Nombres visibles que esperan para mostrarse en las salas; primero los denunciados. Permite un nombre o cambia uno grosero por uno sencillo.',
+    noNames: 'No hay nombres esperando.',
+    nameReports: count => `Denunciado ${count} ${count === 1 ? 'vez' : 'veces'}`,
+    allowName: 'Permitir',
     playerColumns: { name: 'Nombre visible', boards: 'Clasificaciones', joined: 'Alta' },
     playerShown: 'Visible',
     playerRemoved: 'Fuera',
@@ -1008,6 +1014,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'public-leaderboard': 'Clasificación para todos (también sin cuenta)',
       'how-many-sound': 'Números en voz alta en ¿Cuántos hay?',
       'room-reactions': 'Pegatinas en las salas',
+      'room-names': 'Nombres de los jugadores en las salas',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:
@@ -1108,6 +1115,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     gameGroup: 'Juego',
     roundLength: 'Duración de la ronda',
     showScores: 'Puntuación durante la ronda',
+    ownNames: 'Nombres de los jugadores',
+    reportName: 'Denunciar nombre',
     scoresShown: 'Ver la puntuación',
     scoresHidden: 'Puntuación solo al final',
     seconds: seconds => `${seconds} s`,
@@ -1151,10 +1160,13 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     repeatPassword: 'Repite la contraseña',
     passwordsDiffer: 'Las contraseñas no son iguales.',
     screenName: 'Nombre visible',
-    screenNameHint: 'De 3 a 20 letras, números o espacios. Los demás jugadores lo ven en las clasificaciones.',
+    screenNameHint:
+      'Una sola palabra de 3 a 12 letras: sin números, espacios ni símbolos. Los demás jugadores lo ven en las clasificaciones y en las salas.',
     screenNameTip:
       'Tu nombre visible es lo que ven los demás jugadores. No tiene que ser tu nombre real: invéntate uno, como «Cohete Azul». Si prefieres, puedes usar tu nombre real. Puedes cambiarlo después.',
     screenNameTipLabel: 'Sobre el nombre visible',
+    nameWaiting:
+      'Tu nombre visible se mostrará en las salas cuando lo revise un moderador. Hasta entonces, las salas muestran tu apodo de animal.',
     showOnLeaderboard: 'Mostrarme en las clasificaciones',
     showOnLeaderboardHint:
       'Todos los que abren las clasificaciones ven tu nombre visible y tus mejores resultados. Desactivado hasta que lo actives; mientras tanto, tus resultados cuentan con un nombre misterioso. Puedes cambiarlo cuando quieras.',
@@ -1197,6 +1209,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'wrong-password': 'La contraseña no es correcta.',
       'login-taken': 'Este nombre de usuario ya existe: prueba otro.',
       'screen-name-taken': 'Este nombre visible ya existe: prueba otro.',
+      'rude-name': 'Este nombre visible no está permitido: elige otro.',
       'email-taken': 'Otra cuenta tiene este correo.',
       'email-unavailable': 'Ahora no se pueden enviar correos, así que la cuenta aún no puede tener uno.',
       'not-found': 'Este enlace ya no funciona: pide uno nuevo.',

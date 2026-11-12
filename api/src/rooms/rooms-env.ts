@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { list } from '../config/env.js';
+import { list, optionalSecret } from '../config/env.js';
 
 /**
  * Settings of the rooms service (rooms.su-labs.dev), from the same .env as the API: it needs no database or secrets,
@@ -9,6 +9,8 @@ export const roomsEnvSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   /** Sites allowed to open a room connection from a browser */
   CORS_ORIGINS: list.default(['https://games.su-labs.dev']),
+  /** Checks the API's name passes (see the API's ROOM_NAME_SECRET); unset, rooms only show animal nicknames */
+  ROOM_NAME_SECRET: optionalSecret,
   /** Requests come through the Cloudflare Tunnel; trust its visitor address header (see the API's env.ts) */
   TRUST_CLOUDFLARE: z
     .enum(['true', 'false'])

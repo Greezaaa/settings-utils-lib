@@ -116,6 +116,11 @@ export class GamesApi {
     return this.send('/v1/word-reports', { word, language });
   }
 
+  /** A screen name a player found rude in a room: it stops showing in rooms until a moderator looks again */
+  reportName(screenName: string): Promise<boolean> {
+    return this.send('/v1/name-reports', { screenName });
+  }
+
   /** An error this page hit, for the admin's error log: what went wrong and the page, nothing about the visitor */
   reportError(error: SiteError): Promise<boolean> {
     return this.send('/v1/errors', error);

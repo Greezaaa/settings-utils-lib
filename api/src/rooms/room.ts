@@ -5,7 +5,8 @@ import type { LanguageId } from '../shared/catalog.js';
  * Multiplayer rooms (rooms.su-labs.dev): rules only, no sockets, so they can be tested on their own.
  *
  * A host creates a room and shares its short code; up to 4 players join, each with a generated nickname and avatar
- * (no names typed, nothing stored). The host picks the game and settings, everyone presses Ready, the host starts, and
+ * (nothing stored). A signed-in player may bring their screen name, once a moderator approved it (a name pass from the
+ * API); it shows only when the host turns players' own names on, and anyone can hide it for the room. The host picks the game and settings, everyone presses Ready, the host starts, and
  * all play the same exercises or puzzles (one shared random seed) for the same time; the most points wins (a right
  * answer, or a piece put in place, scores one).
  */
@@ -82,6 +83,8 @@ export interface RoomSettings {
   readonly language: LanguageId;
   /** Whether scores show during the round; some players rush (and slip) when they see them. Results always show them */
   readonly showScores: boolean;
+  /** Whether players' approved screen names show instead of their nicknames; off unless the host turns it on */
+  readonly ownNames: boolean;
 }
 
 export interface Nickname {
@@ -95,6 +98,8 @@ export interface Player {
   readonly token: string;
   /** Changes only when the player asks for another one, in the lobby */
   nickname: Nickname;
+  /** The player's approved screen name, from a name pass; null without one, or once someone in the room hid it */
+  ownName: string | null;
   readonly color: number;
   readonly gender: PlayerGender | null;
   ready: boolean;
@@ -137,6 +142,7 @@ export const DEFAULT_SETTINGS: RoomSettings = {
   seconds: 60,
   language: 'es',
   showScores: true,
+  ownNames: false,
 };
 
 /** A whole number from 0 to `max - 1`, from a secure source by default */
@@ -200,6 +206,7 @@ export function newPlayer(
   others: readonly Player[],
   random: RandomInt = secureInt,
   gender: PlayerGender | null = null,
+  ownName: string | null = null,
 ): Player {
   const id = Array.from({ length: 12 }, () => random(36).toString(36)).join('');
   const token = Array.from({ length: 32 }, () => random(36).toString(36)).join(
@@ -209,6 +216,7 @@ export function newPlayer(
     id,
     token,
     nickname: freeNickname(others, random, gender),
+    ownName,
     color: freeNumber(
       COLOR_COUNT,
       others.map(({ color }) => color),
@@ -297,6 +305,24 @@ export function setReady(
     return 'wrong-phase';
   }
   player.ready = ready;
+  room.lastActivity = now;
+  return null;
+}
+
+/**
+ * Hides a player's own name for everyone in the room, in any phase: someone found it rude (and reported it to the
+ * API). The player shows with their nickname from then on, even if the host turns names on again
+ */
+export function hideName(
+  room: Room,
+  playerId: string,
+  now: number,
+): RoomError | null {
+  const player = room.players.find(({ id }) => id === playerId);
+  if (!player) {
+    return 'wrong-phase';
+  }
+  player.ownName = null;
   room.lastActivity = now;
   return null;
 }
@@ -445,6 +471,8 @@ export interface RoomView {
   readonly players: readonly {
     readonly id: string;
     readonly nickname: Nickname;
+    /** Their approved screen name while the host shows players' own names; null shows the nickname */
+    readonly name: string | null;
     readonly color: number;
     readonly gender: PlayerGender | null;
     readonly ready: boolean;
@@ -469,9 +497,10 @@ export function viewOf(room: Room, now: number): RoomView {
     settings: room.settings,
     round: room.round,
     players: room.players.map(
-      ({ id, nickname, color, gender, ready, connected, score }) => ({
+      ({ id, nickname, ownName, color, gender, ready, connected, score }) => ({
         id,
         nickname,
+        name: room.settings.ownNames ? ownName : null,
         color,
         gender,
         ready,

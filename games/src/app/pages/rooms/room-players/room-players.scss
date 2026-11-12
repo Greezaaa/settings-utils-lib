@@ -122,7 +122,8 @@ $full-width: 10rem;
 
     &:not(.is-open) {
       .who,
-      .kick {
+      .kick,
+      .report-name {
         display: none;
       }
     }

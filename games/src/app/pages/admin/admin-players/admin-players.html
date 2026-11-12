@@ -1,3 +1,7 @@
+@if (hasRoomNames()) {
+  <app-admin-names />
+}
+
 <p class="muted">{{ 'admin.playersHelp' | translate }}</p>
 
 @if (list.isLoading()) {

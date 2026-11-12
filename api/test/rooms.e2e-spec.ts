@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { WebSocket } from 'ws';
 
 const ORIGIN = 'https://games.su-labs.dev';
+const ROOM_NAME_SECRET = 'n'.repeat(40);
 
 /** A player's connection that keeps every message it gets, and can wait for the next one of a kind */
 class Client {
@@ -77,6 +78,7 @@ describe('rooms service (e2e)', () => {
       CORS_ORIGINS: ORIGIN,
       PORT: '3999',
       TRUST_CLOUDFLARE: 'true',
+      ROOM_NAME_SECRET,
     });
     const { RoomsModule } = await import('../src/rooms/rooms.module.js');
     const moduleRef = await Test.createTestingModule({
@@ -100,6 +102,51 @@ describe('rooms service (e2e)', () => {
       stranger.socket.on('close', (code) => resolve(code)),
     );
     expect(await closed).toBe(1008);
+  });
+
+  it('shows an approved name only when the host turns names on, and anyone can hide it', async () => {
+    const { signNamePass } = await import('../src/shared/name-pass.js');
+    /** The players' names as a room message shows them */
+    const names = (data: Record<string, unknown>) =>
+      Array.isArray(data['players'])
+        ? data['players'].map((player: { name: string | null }) => player.name)
+        : [];
+    const settings = {
+      game: 'math-games',
+      mode: 'true-or-false',
+      level: 'normal',
+      seconds: 60,
+      language: 'es',
+    };
+
+    const host = await connect(undefined, '10.8.0.1');
+    host.send('create', {
+      language: 'es',
+      namePass: signNamePass('Lucía', ROOM_NAME_SECRET),
+    });
+    const code = String((await host.next('joined'))['code']);
+    // A pass signed with another secret is just ignored: the player shows with their nickname
+    const guest = await connect(undefined, '10.8.0.2');
+    guest.send('join', {
+      code,
+      namePass: signNamePass('Rude', 'x'.repeat(40)),
+    });
+    await guest.next('joined');
+    await host.next('room', playerCount(2));
+
+    host.send('settings', { ...settings, ownNames: true });
+    const shown = await guest.next('room', (data) => names(data)[0] !== null);
+    expect(names(shown)).toEqual(['Lucía', null]);
+
+    guest.send('hide-name', { playerId: String(shown['hostId']) });
+    expect(
+      names(
+        await host.next(
+          'room',
+          (data) => names(data).length === 2 && names(data)[0] === null,
+        ),
+      ),
+    ).toEqual([null, null]);
   });
 
   it('plays a round: create, join by code, settings, ready, start, scores, results', async () => {

@@ -1,4 +1,4 @@
-import { advance, canStart, CODE_ALPHABET, COUNTDOWN_MS, createRoom, join, MAX_PLAYERS, newCode, newPlayer, places, playAgain, removePlayer, renamePlayer, reportScore, Room, SCORE_GRACE_MS, setReady, setSettings, startRound, viewOf } from './room.js';
+import { advance, canStart, CODE_ALPHABET, COUNTDOWN_MS, createRoom, DEFAULT_SETTINGS, hideName, join, MAX_PLAYERS, newCode, newPlayer, places, playAgain, removePlayer, renamePlayer, reportScore, Room, SCORE_GRACE_MS, setReady, setSettings, startRound, viewOf } from './room.js';
 
 /** Always the same "random" numbers */
 const counter = () => {
@@ -193,5 +193,26 @@ describe('rooms', () => {
     expect(viewOf(room, 0).players.map(({ score }) => score)).toEqual([0, 0]);
     advance(room, round.endsAt + SCORE_GRACE_MS);
     expect(viewOf(room, 0).players.map(({ score }) => score)).toEqual([3, 0]);
+  });
+});
+
+describe('players’ own names', () => {
+  function roomWithName(): Room {
+    const host = newPlayer([], counter(), null, 'Lucía');
+    return createRoom('ABC234', host, 'es', 0);
+  }
+
+  it('shows an approved name only while the host turns names on', () => {
+    const room = roomWithName();
+    expect(viewOf(room, 0).players[0].name).toBeNull();
+    setSettings(room, room.hostId, { ...DEFAULT_SETTINGS, ownNames: true }, 0);
+    expect(viewOf(room, 0).players[0].name).toBe('Lucía');
+  });
+
+  it('lets anyone hide a name for the whole room, for good', () => {
+    const room = roomWithName();
+    setSettings(room, room.hostId, { ...DEFAULT_SETTINGS, ownNames: true }, 0);
+    expect(hideName(room, room.hostId, 0)).toBeNull();
+    expect(viewOf(room, 0).players[0].name).toBeNull();
   });
 });

@@ -18,6 +18,8 @@ export interface Account {
   readonly email: string | null;
   /** Whether the player appears on the leaderboards (they choose; off by default) */
   readonly showOnLeaderboard: boolean;
+  /** Whether a moderator approved the screen name, so it can show in rooms */
+  readonly nameApproved: boolean;
 }
 
 /**
@@ -56,6 +58,7 @@ export const ACCOUNT_PROBLEMS = [
   'wrong-password',
   'login-taken',
   'screen-name-taken',
+  'rude-name',
   'email-taken',
   'email-unavailable',
   'not-found',
@@ -231,6 +234,18 @@ export class PlayerAccount {
     return Array.isArray(boards) ? boards.flatMap((board: unknown) => parseBoard(board)) : null;
   }
 
+  /**
+   * A pass for the rooms service to show the player's approved screen name, while `room-names` is open; null when
+   * signed out, not approved yet, or the API can't be reached (the room then shows the nickname)
+   */
+  async roomNamePass(): Promise<string | null> {
+    if (!this.isSignedIn() || !this.features.canUse('room-names')) {
+      return null;
+    }
+    const pass = field(await this.read('/v1/account/room-name'), 'pass');
+    return typeof pass === 'string' ? pass : null;
+  }
+
   /** Changes the signed-in account here without asking the API again */
   private patch(changes: Partial<Account>): void {
     this.signedIn.update((account) => (account ? { ...account, ...changes } : account));
@@ -275,6 +290,7 @@ export class PlayerAccount {
       screenName,
       email: typeof email === 'string' ? email : null,
       showOnLeaderboard: field(body, 'showOnLeaderboard') === true,
+      nameApproved: field(body, 'nameApproved') === true,
     });
     this.favorites.set([...new Set([...this.favorites.games(), ...accountFavorites])].filter((game) => isGameSlug(game)));
     // Best results: this browser's go to the account, the account's come into this browser

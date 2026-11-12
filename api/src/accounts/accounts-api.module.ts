@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { FeatureFlagsModule } from '../feature-flags/feature-flags.module.js';
-import { AccountsController, LeaderboardController, PlayersAdminController } from './accounts.controller.js';
+import { AccountsController, LeaderboardController, NameReportsController, PlayersAdminController } from './accounts.controller.js';
 import { AccountsModule } from './accounts.module.js';
 
 /** The account's data (favourites, results, screen name), the leaderboards and their moderation, on api.su-labs.dev */
@@ -9,6 +9,7 @@ import { AccountsModule } from './accounts.module.js';
   controllers: [
     AccountsController,
     LeaderboardController,
+    NameReportsController,
     PlayersAdminController,
   ],
 })

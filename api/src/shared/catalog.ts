@@ -42,6 +42,7 @@ export const FEATURE_IDS = [
   'public-leaderboard',
   'how-many-sound',
   'room-reactions',
+  'room-names',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

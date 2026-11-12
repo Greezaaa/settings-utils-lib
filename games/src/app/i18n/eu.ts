@@ -965,6 +965,12 @@ export const EU: SiteMessages = {
     noWords: 'Ez dago hitzik hemen.',
     playersHelp: 'Sailkapenetako jokalariak, berrienak lehenik. Aldatu izen itsusi bat izen neutro batera, edo atera sailkapenetatik puntuazio asmatuak dituena; ezin izango du desegin.',
     noPlayers: 'Oraindik ez dago jokalaririk sailkapenetan.',
+    namesTitle: 'Berrikusteko izenak',
+    namesHelp:
+      'Geletan agertzeko zain dauden izen ikusgaiak; salatutakoak lehenengo. Onartu izen bat, edo aldatu izen zakar bat izen arrunt batengatik.',
+    noNames: 'Ez dago izenik zain.',
+    nameReports: count => `${count} aldiz salatua`,
+    allowName: 'Onartu',
     playerColumns: { name: 'Izen ikusgaia', boards: 'Sailkapenak', joined: 'Alta' },
     playerShown: 'Ikusgai',
     playerRemoved: 'Kanpoan',
@@ -995,6 +1001,7 @@ export const EU: SiteMessages = {
       'public-leaderboard': 'Sailkapena guztientzat (konturik gabe ere)',
       'how-many-sound': 'Zenbakiak ozen «Zenbat daude?» jokoan',
       'room-reactions': 'Pegatinak geletan',
+      'room-names': 'Jokalarien izenak geletan',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1096,6 +1103,8 @@ export const EU: SiteMessages = {
     gameGroup: 'Jokoa',
     roundLength: 'Txandaren iraupena',
     showScores: 'Puntuazioa txandan zehar',
+    ownNames: 'Jokalarien izenak',
+    reportName: 'Salatu izena',
     scoresShown: 'Erakutsi puntuazioa',
     scoresHidden: 'Puntuazioa amaieran bakarrik',
     seconds: seconds => `${seconds} s`,
@@ -1139,10 +1148,13 @@ export const EU: SiteMessages = {
     repeatPassword: 'Errepikatu pasahitza',
     passwordsDiffer: 'Pasahitzak ez dira berdinak.',
     screenName: 'Izen ikusgaia',
-    screenNameHint: '3tik 20ra letra, zenbaki edo zuriune. Beste jokalariek sailkapenetan ikusten dute.',
+    screenNameHint:
+      'Hitz bakarra, 3 eta 12 letra artean: zenbakirik, tarterik eta ikurrik gabe. Beste jokalariek sailkapenetan eta geletan ikusten dute.',
     screenNameTip:
       'Zure izen ikusgaia da beste jokalariek ikusten dutena. Ez du zure benetako izena izan behar: asmatu bat, «Suziri Urdina» bezala. Nahiago baduzu, zure benetako izena erabil dezakezu. Gero alda dezakezu.',
     screenNameTipLabel: 'Izen ikusgaiari buruz',
+    nameWaiting:
+      'Zure izen ikusgaia geletan agertuko da moderatzaile batek berrikusten duenean. Ordura arte, geletan zure animalia-ezizena agertzen da.',
     showOnLeaderboard: 'Erakutsi ni sailkapenetan',
     showOnLeaderboardHint:
       'Sailkapenak irekitzen dituen edonork ikusten ditu zure izen ikusgaia eta emaitza onenak. Desaktibatuta, zuk aktibatu arte; bitartean, zure emaitzak izen misteriotsu batekin zenbatzen dira. Nahi duzunean alda dezakezu.',
@@ -1185,6 +1197,7 @@ export const EU: SiteMessages = {
       'wrong-password': 'Pasahitza ez da zuzena.',
       'login-taken': 'Erabiltzaile-izen hori hartuta dago: saiatu beste batekin.',
       'screen-name-taken': 'Izen ikusgai hori hartuta dago: saiatu beste batekin.',
+      'rude-name': 'Izen ikusgai hau ez dago baimenduta: aukeratu beste bat.',
       'email-taken': 'Beste kontu batek du helbide hori.',
       'email-unavailable': 'Orain ezin da posta elektronikorik bidali, beraz kontuak ezin du oraindik helbiderik izan.',
       'not-found': 'Esteka honek ez du balio jada: eskatu berri bat.',

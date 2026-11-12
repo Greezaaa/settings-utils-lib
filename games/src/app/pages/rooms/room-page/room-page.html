@@ -39,6 +39,7 @@
         [reactions]="reactions.isAvailable() ? client.reactions() : []"
         (kick)="client.kick($event)"
         (rename)="client.rename()"
+        (reportName)="reportName($event)"
       />
 
       <div class="card board" [class.is-wide]="isWide()" appGameBoard>
@@ -130,11 +131,24 @@
                     role="switch"
                     [checked]="room.settings.showScores"
                     [disabled]="!client.isHost()"
-                    (change)="chooseShowScores(!room.settings.showScores)"
+                    (change)="toggleSetting('showScores')"
                   />
                   <span class="track" aria-hidden="true"></span>
                   <span>{{ 'rooms.showScores' | translate }}</span>
                 </label>
+                @if (hasOwnNames()) {
+                  <label class="switch score-switch">
+                    <input
+                      type="checkbox"
+                      role="switch"
+                      [checked]="room.settings.ownNames"
+                      [disabled]="!client.isHost()"
+                      (change)="toggleSetting('ownNames')"
+                    />
+                    <span class="track" aria-hidden="true"></span>
+                    <span>{{ 'rooms.ownNames' | translate }}</span>
+                  </label>
+                }
               </div>
             </div>
 

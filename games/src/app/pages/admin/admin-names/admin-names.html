@@ -1,0 +1,36 @@
+<section class="admin-group" aria-labelledby="names-title">
+  <h3 id="names-title" class="section-title">{{ 'admin.namesTitle' | translate }}</h3>
+  <p class="muted">{{ 'admin.namesHelp' | translate }}</p>
+
+  @if (list.isLoading()) {
+    <p class="muted">{{ 'admin.loading' | translate }}</p>
+  } @else if (list.items().length === 0) {
+    <p class="muted">{{ 'admin.noNames' | translate }}</p>
+  } @else {
+    <ul class="card plain-list">
+      @for (name of list.items(); track name.id) {
+        <li class="switch-row">
+          <span>
+            <strong>{{ name.screenName }}</strong>
+            @if (name.reports > 0) {
+              <small class="tag tag-red">{{ 'admin.nameReports' | translate: name.reports }}</small>
+            }
+          </span>
+          <span class="actions">
+            <button type="button" class="button button-small" (click)="approve(name)">
+              {{ 'admin.allowName' | translate }}
+            </button>
+            <button type="button" class="button button-secondary button-small" (click)="replace(name)">
+              {{ 'admin.plainName' | translate }}
+            </button>
+          </span>
+        </li>
+      }
+    </ul>
+    @if (list.hasMore()) {
+      <button type="button" class="button button-secondary load-more" (click)="list.loadMore()">
+        {{ 'admin.loadMore' | translate }}
+      </button>
+    }
+  }
+</section>

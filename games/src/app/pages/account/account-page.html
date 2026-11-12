@@ -26,6 +26,9 @@
       <form class="card account-card" (submit)="$event.preventDefault(); saveDetails(detailsForm)" #detailsForm>
         <h2 class="card-title">{{ 'account.detailsTitle' | translate }}</h2>
         <app-screen-name-field [value]="player.screenName" />
+        @if (hasRoomNames() && !player.nameApproved) {
+          <p class="muted name-waiting">{{ 'account.nameWaiting' | translate }}</p>
+        }
         @if (canEmail()) {
           <label class="field">
             <span>{{ 'account.email' | translate }}</span>

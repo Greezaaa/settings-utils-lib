@@ -5,8 +5,9 @@ import { ConfigService } from '@nestjs/config';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
 import { z } from 'zod';
-import { createSchema, joinSchema, kickSchema, reactSchema, readySchema, rejoinSchema, scoreSchema, ServerEvent, settingsSchema } from './room-messages.js';
-import { advance, createRoom, join, newCode, newPlayer, playAgain, REACTION_GAP_MS, removePlayer, reportScore, Room, RoomError, renamePlayer, setReady, setSettings, startRound, viewOf } from './room.js';
+import { createSchema, hideNameSchema, joinSchema, kickSchema, reactSchema, readySchema, rejoinSchema, scoreSchema, ServerEvent, settingsSchema } from './room-messages.js';
+import { advance, createRoom, hideName, join, newCode, newPlayer, playAgain, REACTION_GAP_MS, removePlayer, reportScore, Room, RoomError, renamePlayer, setReady, setSettings, startRound, viewOf } from './room.js';
+import { verifyNamePass } from '../shared/name-pass.js';
 import type { RoomsEnv } from './rooms-env.js';
 
 /** How long a dropped player keeps their seat, to come back after a reload or a flaky connection */
@@ -80,9 +81,13 @@ export class RoomsGateway
   /** When each room's last connected player left, while nobody is connected */
   private readonly emptySince = new Map<string, number>();
 
+  /** Checks the API's name passes; none, and every player shows with their nickname */
+  private readonly nameSecret: string | undefined;
+
   constructor(config: ConfigService<RoomsEnv, true>) {
     this.origins = config.get('CORS_ORIGINS', { infer: true });
     this.trustCloudflare = config.get('TRUST_CLOUDFLARE', { infer: true });
+    this.nameSecret = config.get('ROOM_NAME_SECRET', { infer: true });
   }
 
   onModuleDestroy(): void {
@@ -152,7 +157,12 @@ export class RoomsGateway
       return;
     }
     const now = Date.now();
-    const host = newPlayer([], undefined, data.gender);
+    const host = newPlayer(
+      [],
+      undefined,
+      data.gender,
+      this.ownName(data.namePass),
+    );
     const room = createRoom(
       newCode(new Set(this.rooms.keys())),
       host,
@@ -181,7 +191,12 @@ export class RoomsGateway
     }
     // One connection, one seat: joining again (here or elsewhere) gives up the old one, never leaving a ghost behind
     this.leaveCurrentRoom(client);
-    const player = newPlayer(room.players, undefined, data.gender);
+    const player = newPlayer(
+      room.players,
+      undefined,
+      data.gender,
+      this.ownName(data.namePass),
+    );
     const error = join(room, player, Date.now());
     if (error) {
       this.refuse(client, error);
@@ -241,6 +256,18 @@ export class RoomsGateway
   rename(@ConnectedSocket() client: WebSocket): void {
     this.act(client, {}, (room, playerId, now) =>
       renamePlayer(room, playerId, now),
+    );
+  }
+
+  /** Anyone in the room hides another player's own name for everyone, e.g. a rude one (the games site reports it) */
+  @SubscribeMessage('hide-name')
+  hideName(
+    @ConnectedSocket() client: WebSocket,
+    @MessageBody() body: unknown,
+  ): void {
+    const data = this.parse(client, hideNameSchema, body);
+    this.act(client, data, (room, _playerId, now) =>
+      data ? hideName(room, data.playerId, now) : null,
     );
   }
 
@@ -529,5 +556,12 @@ export class RoomsGateway
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({ event, data }));
     }
+  }
+
+  /** The approved screen name in a name pass, or null without one, without a secret, or when it doesn't check out */
+  private ownName(pass: string | null): string | null {
+    return pass && this.nameSecret
+      ? verifyNamePass(pass, this.nameSecret)
+      : null;
   }
 }

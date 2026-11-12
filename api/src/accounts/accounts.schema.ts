@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { MIN_PASSWORD_LENGTH } from '../auth/passwords.js';
 import { gameSchema, isPlausibleResult, resultGameSchema } from '../shared/catalog.js';
+import { screenNameSchema } from './screen-name.js';
 
 /** Sign-in: 3 to 30 letters, digits, dots, dashes or underscores; compared lowercase */
 export const loginNameSchema = z
@@ -8,16 +9,6 @@ export const loginNameSchema = z
   .trim()
   .toLowerCase()
   .regex(/^[a-z0-9._-]{3,30}$/);
-
-/**
- * The leaderboard's name: 3 to 20 letters (any alphabet), digits, spaces, dots, dashes or underscores, with single
- * spaces inside
- */
-export const screenNameSchema = z
-  .string()
-  .trim()
-  .transform((name) => name.replace(/\s+/g, ' '))
-  .pipe(z.string().regex(/^[\p{L}\p{N} ._-]{3,20}$/u));
 
 export const passwordSchema = z.string().min(MIN_PASSWORD_LENGTH).max(200);
 const emailSchema = z.email().max(254).toLowerCase();

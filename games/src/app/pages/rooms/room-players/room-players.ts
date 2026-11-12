@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import { reactionPicture } from '../../../core/reactions';
 import { PlayerReaction } from '../../../core/room-client';
-import { MAX_PLAYERS, RoomView } from '../../../core/room-view';
+import { MAX_PLAYERS, RoomPlayer, RoomView } from '../../../core/room-view';
 import { PlayerAvatar } from '../../../shared/player-avatar/player-avatar';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 /**
- * The players of a room: avatar, nickname, host, ready, away and score; the host can remove a player, and a player can
- * ask for another nickname. A sticker a player sends pops on their card for a moment, with a heartbeat. When the names don't fit in one row, only small avatars show; tapping one shows its name.
+ * The players of a room: avatar, nickname (or approved own name), host, ready, away and score; the host can remove a
+ * player, a player can ask for another nickname, and anyone can hide and report another player's name. A sticker a player sends pops on their card for a moment, with a heartbeat. When the names don't fit in one row, only small avatars show; tapping one shows its name.
  */
 @Component({
   selector: 'app-room-players',
@@ -24,6 +24,7 @@ export class RoomPlayers {
   readonly reactions = input<readonly PlayerReaction[]>([]);
   readonly kick = output<string>();
   readonly rename = output();
+  readonly reportName = output<RoomPlayer>();
 
   protected readonly maxPlayers = MAX_PLAYERS;
   /** The player whose name is shown while the bar only has room for avatars */

@@ -6,7 +6,7 @@ import { gameInfo } from '../../../core/games';
 import { GamesApi } from '../../../core/games-api';
 import { Reactions } from '../../../core/reactions';
 import { RoomClient } from '../../../core/room-client';
-import { MAX_PLAYERS, MIN_PLAYERS_TO_START, ROUND_SECONDS, RoundSeconds } from '../../../core/room-view';
+import { MAX_PLAYERS, MIN_PLAYERS_TO_START, ROUND_SECONDS, RoomPlayer, RoundSeconds } from '../../../core/room-view';
 import { ROOM_CHOICES, roomChoice, roomLetters, roomPicture, roomSliding } from '../../../games/room-games';
 import { roomMeasure } from '../../../games/room-measure';
 import { roomMath } from '../../../games/room-math';
@@ -109,6 +109,7 @@ export class RoomPage {
   );
   /** The 🎲 on the player's own avatar for another nickname */
   protected readonly canRename = computed(() => this.features.canUse('room-rename'));
+  protected readonly hasOwnNames = computed(() => this.features.canUse('room-names'));
   /** The lobby (games beside their settings) and the word builder (words beside the letters) need more room */
   protected readonly isWide = computed(
     () =>
@@ -143,7 +144,7 @@ export class RoomPage {
 
   constructor() {
     afterNextRender(() => {
-      this.client.enter(this.code());
+      void this.client.enter(this.code());
       this.hasEntered.set(true);
     });
     const ticker = setInterval(
@@ -213,10 +214,19 @@ export class RoomPage {
     void this.router.navigateByUrl('/rooms');
   }
 
-  protected chooseShowScores(showScores: boolean): void {
+  /** The host's switches: scores during the round, and players' own names */
+  protected toggleSetting(setting: 'showScores' | 'ownNames'): void {
     const settings = this.room()?.settings;
     if (settings) {
-      this.client.setSettings({ ...settings, showScores });
+      this.client.setSettings({ ...settings, [setting]: !settings[setting] });
+    }
+  }
+
+  /** A name someone finds rude: hidden for the whole room right away, and reported to the moderators */
+  protected reportName(player: RoomPlayer): void {
+    if (player.name) {
+      this.client.hideName(player.id);
+      void this.api.reportName(player.name);
     }
   }
 

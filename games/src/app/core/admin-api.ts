@@ -41,6 +41,14 @@ export interface ModeratedPlayer {
   readonly joined: string;
 }
 
+/** A screen name waiting to be allowed in rooms */
+export interface PendingName {
+  readonly id: string;
+  readonly screenName: string;
+  /** How many times players reported it as rude */
+  readonly reports: number;
+}
+
 /** Statistics periods, shortest first: today, this week (from Monday), this month, this year, all time */
 export const STATS_PERIODS = ['day', 'week', 'month', 'year', 'all'] as const;
 export type StatsPeriod = (typeof STATS_PERIODS)[number];
@@ -166,6 +174,13 @@ function parsePlayer(item: unknown): ModeratedPlayer[] {
     typeof removedFromBoards === 'boolean' &&
     typeof created === 'string'
     ? [{ id, screenName, removedFromBoards, joined: created.slice(0, 10) }]
+    : [];
+}
+
+function parsePendingName(item: unknown): PendingName[] {
+  const [id, screenName, reports] = ['id', 'screenName', 'reports'].map((key) => field(item, key));
+  return typeof id === 'string' && typeof screenName === 'string' && typeof reports === 'number'
+    ? [{ id, screenName, reports }]
     : [];
 }
 
@@ -385,6 +400,16 @@ export class AdminApi {
     return typeof screenName === 'string' ? screenName : null;
   }
 
+  /** Screen names waiting to be allowed in rooms, the most reported first */
+  async pendingNames(offset: number): Promise<PendingName[]> {
+    return listOf(await this.read(`/admin/players/names?offset=${offset}&limit=${ADMIN_PAGE_SIZE}`), parsePendingName);
+  }
+
+  /** Lets a screen name show in rooms */
+  approveName(id: string): Promise<boolean> {
+    return this.change('POST', `/admin/players/${id}/approve-name`);
+  }
+
   /** Takes a player off the leaderboards, or puts them back */
   setPlayerRemoved(id: string, removedFromBoards: boolean): Promise<boolean> {
     return this.change('PATCH', `/admin/players/${id}`, { removedFromBoards });
@@ -409,7 +434,7 @@ export class AdminApi {
   }
 
   private async change(
-    method: 'PUT' | 'PATCH' | 'DELETE',
+    method: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
     body?: object,
     service: ApiService = 'api',

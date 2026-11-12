@@ -42,7 +42,7 @@ export class RoomsPage {
   }
 
   protected create(): void {
-    this.client.create(this.language.language());
+    void this.client.create(this.language.language());
   }
 
   protected typeCode(value: string): void {

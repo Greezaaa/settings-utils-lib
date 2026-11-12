@@ -32,6 +32,7 @@ export class AccountPage {
   protected readonly minLength = MIN_PASSWORD_LENGTH;
   private readonly features = inject(FeatureFlags);
   protected readonly hasLivelyFields = computed(() => this.features.canUse('lively-fields'));
+  protected readonly hasRoomNames = computed(() => this.features.canUse('room-names'));
   protected readonly views: readonly SignedOutView[] = ['sign-in', 'sign-up', 'forgot'];
   protected readonly view = signal<SignedOutView>('sign-in');
   /** Whether the API can send emails, so accounts may have one */

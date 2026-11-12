@@ -16,6 +16,7 @@ import { setUpApp } from '../src/app.setup.js';
 const databaseUrl = process.env.TEST_DATABASE_URL;
 const ADMIN_TOKEN = 't'.repeat(40);
 const admin = { Authorization: `Bearer ${ADMIN_TOKEN}` };
+const ROOM_NAME_SECRET = 'n'.repeat(40);
 
 describe.runIf(databaseUrl)('API (e2e)', () => {
   let app: NestExpressApplication;
@@ -30,6 +31,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       COOKIE_SECURE: 'false',
       // Tests that sign in a lot pass their own visitor address, like Cloudflare does, to stay under the sign-in limit
       TRUST_CLOUDFLARE: 'true',
+      ROOM_NAME_SECRET,
     });
     // Imported only now: the configuration reads the environment as soon as the module loads. The API and the auth
     // service (two processes in production, sharing the database and cookies) run here as one app, so a test can sign
@@ -556,12 +558,12 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .send({
           loginName: ' Lucia_7 ',
           password: 'a long password',
-          screenName: '  Star   Cat ',
+          screenName: '  Starcat ',
         })
         .expect(201);
       expect(body).toMatchObject({
         loginName: 'lucia_7',
-        screenName: 'Star Cat',
+        screenName: 'Starcat',
         email: null,
         favorites: [],
         results: [],
@@ -582,7 +584,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .send({
           loginName: 'other',
           password: 'a long password',
-          screenName: 'STAR CAT',
+          screenName: 'STARCAT',
         })
         .expect(409, /screen-name-taken/);
       // No mail server here, so no emails either
@@ -605,7 +607,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .send({
           loginName: 'cookie_check',
           password: 'a long password',
-          screenName: 'Cookie Check',
+          screenName: 'Cookiecheck',
         })
         .expect(201);
       expect(String(headers['set-cookie'])).toMatch(/^su_labs_games_player=/);
@@ -887,6 +889,82 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .post('/v1/apps/games/account/login')
         .send({ loginName: 'kid', password: 'reset long password' })
         .expect(401);
+    });
+
+    it('shows a screen name in rooms once a moderator approves it, until a player reports it', async () => {
+      const server = app.getHttpServer();
+      const signUp = (screenName: string) =>
+        browser('10.1.3.1')
+          .post('/v1/apps/games/account')
+          .send({
+            loginName: 'namer',
+            password: 'a long password',
+            screenName,
+          });
+      // One word of letters: no ages or years
+      await signUp('Lucia2015').expect(400);
+      // A word moderators approved as rude, in any language, dressed up or not
+      await app
+        .get(DataSource)
+        .query(
+          `INSERT INTO word_reports (language, word, reports, status, "firstReported") VALUES ('es', 'caca', 3, 'approved', '2026-01-01')`,
+        );
+      await signUp('CAAACA').expect(400, /rude-name/);
+
+      const kid = browser('10.1.3.2');
+      const { body } = await kid
+        .post('/v1/apps/games/account')
+        .send({
+          loginName: 'namer',
+          password: 'a long password',
+          screenName: 'Lucía',
+        })
+        .expect(201);
+      expect(body.nameApproved).toBe(false);
+      await request(server)
+        .put('/admin/features/room-names')
+        .set(admin)
+        .send({ enabled: true })
+        .expect(204);
+      // Waiting for a moderator: no pass yet
+      expect(
+        (await kid.get('/v1/account/room-name').expect(200)).body.pass,
+      ).toBeNull();
+
+      const { body: waiting } = await request(server)
+        .get('/admin/players/names')
+        .set(admin)
+        .expect(200);
+      const lucia = waiting.find(
+        ({ screenName }: { screenName: string }) => screenName === 'Lucía',
+      );
+      await request(server)
+        .post(`/admin/players/${lucia.id}/approve-name`)
+        .set(admin)
+        .expect(204);
+      const { verifyNamePass } = await import('../src/shared/name-pass.js');
+      const { pass } = (await kid.get('/v1/account/room-name').expect(200))
+        .body;
+      expect(verifyNamePass(pass, ROOM_NAME_SECRET)).toBe('Lucía');
+
+      // Another player reports it: it waits for a moderator again, first in the list
+      await request(server)
+        .post('/v1/name-reports')
+        .send({ screenName: 'lucía' })
+        .expect(204);
+      expect(
+        (await kid.get('/v1/account/room-name').expect(200)).body.pass,
+      ).toBeNull();
+      const { body: again } = await request(server)
+        .get('/admin/players/names')
+        .set(admin)
+        .expect(200);
+      expect(again[0]).toMatchObject({ screenName: 'Lucía', reports: 1 });
+      await request(server)
+        .put('/admin/features/room-names')
+        .set(admin)
+        .send({ enabled: false })
+        .expect(204);
     });
   });
 

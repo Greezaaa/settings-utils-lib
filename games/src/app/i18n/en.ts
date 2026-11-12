@@ -939,6 +939,12 @@ export const EN: SiteMessages = {
     noWords: 'No words here.',
     playersHelp: 'Players on the leaderboards, newest first. Replace a rude screen name with a plain one, or take a player with made-up scores off the leaderboards; they can’t undo it.',
     noPlayers: 'No players on the leaderboards yet.',
+    namesTitle: 'Names to check',
+    namesHelp:
+      'Screen names waiting to show in rooms, reported ones first. Allow a name, or give a rude one a plain name.',
+    noNames: 'No names waiting.',
+    nameReports: count => `Reported ${count} ${count === 1 ? 'time' : 'times'}`,
+    allowName: 'Allow',
     playerColumns: { name: 'Screen name', boards: 'Leaderboards', joined: 'Joined' },
     playerShown: 'Shown',
     playerRemoved: 'Taken off',
@@ -969,6 +975,7 @@ export const EN: SiteMessages = {
       'public-leaderboard': 'Leaderboard for everyone (also signed out)',
       'how-many-sound': 'Numbers out loud in How many?',
       'room-reactions': 'Stickers in rooms',
+      'room-names': 'Players’ own names in rooms',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:
@@ -1064,6 +1071,8 @@ export const EN: SiteMessages = {
     gameGroup: 'Game',
     roundLength: 'Round length',
     showScores: 'Scores during the round',
+    ownNames: 'Players’ own names',
+    reportName: 'Report name',
     scoresShown: 'Show scores',
     scoresHidden: 'Scores only at the end',
     seconds: seconds => `${seconds} s`,
@@ -1107,10 +1116,13 @@ export const EN: SiteMessages = {
     repeatPassword: 'Repeat the password',
     passwordsDiffer: 'The passwords aren’t the same.',
     screenName: 'Screen name',
-    screenNameHint: '3 to 20 letters, digits or spaces. Other players see it on the leaderboards.',
+    screenNameHint:
+      'One word, 3 to 12 letters: no digits, spaces or symbols. Other players see it on the leaderboards and in rooms.',
     screenNameTip:
       'Your screen name is what other players see. It doesn’t have to be your real name: make one up, like “Blue Rocket”. You can use your real name if you prefer. You can change it later.',
     screenNameTipLabel: 'About the screen name',
+    nameWaiting:
+      'Your screen name shows in rooms once a moderator checks it. Until then, rooms show your animal nickname.',
     showOnLeaderboard: 'Show me on the leaderboards',
     showOnLeaderboardHint:
       'Everyone who opens the leaderboards sees your screen name and best results. Off until you turn it on; while it’s off, your results still count under a mystery name. You can change it any time.',
@@ -1153,6 +1165,7 @@ export const EN: SiteMessages = {
       'wrong-password': 'The password is wrong.',
       'login-taken': 'This login name is taken: try another one.',
       'screen-name-taken': 'This screen name is taken: try another one.',
+      'rude-name': 'This screen name isn’t allowed: choose another one.',
       'email-taken': 'Another account has this email.',
       'email-unavailable': 'Emails can’t be sent right now, so the account can’t have one yet.',
       'not-found': 'This link doesn’t work any more: ask for a new one.',

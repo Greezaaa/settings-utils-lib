@@ -1,4 +1,4 @@
-import { validateEnv } from './env.js';
+import { optionalSecret, validateEnv } from './env.js';
 
 const VALID = {
   DATABASE_URL: 'postgres://user:pass@db:5432/su_labs',
@@ -25,5 +25,14 @@ describe('environment', () => {
     expect(() => validateEnv({ ...VALID, ADMIN_TOKEN: 'short' })).toThrow(
       /ADMIN_TOKEN/,
     );
+  });
+});
+
+describe('optionalSecret', () => {
+  it('counts an empty line in .env as no secret, and refuses a short one', () => {
+    expect(optionalSecret.parse('')).toBeUndefined();
+    expect(optionalSecret.parse(undefined)).toBeUndefined();
+    expect(optionalSecret.parse('s'.repeat(32))).toBe('s'.repeat(32));
+    expect(optionalSecret.safeParse('short').success).toBe(false);
   });
 });

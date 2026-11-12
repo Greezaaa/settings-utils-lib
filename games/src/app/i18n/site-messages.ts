@@ -615,6 +615,12 @@ export interface SiteMessages {
     /** The players on the leaderboards, for moderators */
     readonly playersHelp: string;
     readonly noPlayers: string;
+    /** Screen names waiting to show in rooms: allow one, or give a rude one a plain name */
+    readonly namesTitle: string;
+    readonly namesHelp: string;
+    readonly noNames: string;
+    readonly nameReports: (count: number) => string;
+    readonly allowName: string;
     readonly playerColumns: { readonly name: string; readonly boards: string; readonly joined: string };
     readonly playerShown: string;
     readonly playerRemoved: string;
@@ -711,6 +717,9 @@ export interface SiteMessages {
     readonly roundLength: string;
     /** Whether scores show during the round */
     readonly showScores: string;
+    /** The host's switch for players' approved screen names, and the button to hide and report one */
+    readonly ownNames: string;
+    readonly reportName: string;
     readonly scoresShown: string;
     readonly scoresHidden: string;
     readonly seconds: (seconds: number) => string;
@@ -766,6 +775,8 @@ export interface SiteMessages {
     /** The tooltip next to the screen name: it is shown to others and needn't be a real name */
     readonly screenNameTip: string;
     readonly screenNameTipLabel: string;
+    /** Under the screen name while it waits for a moderator before it can show in rooms */
+    readonly nameWaiting: string;
     /** The player's choice to appear on the leaderboards, at sign-up and in the account */
     readonly showOnLeaderboard: string;
     readonly showOnLeaderboardHint: string;

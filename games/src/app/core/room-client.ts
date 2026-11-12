@@ -2,6 +2,7 @@ import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
 import { WordGender } from '../i18n/word-gender';
 import { field } from './api-url';
+import { PlayerAccount } from './player-account';
 import { PlayerGender } from './player-gender';
 import { isReaction, Reaction, REACTION_SHOW_MS } from './reactions';
 import { isRoomError, parseRoomView, RoomError, RoomSettings, RoomView } from './room-view';
@@ -33,8 +34,8 @@ export type RoomConnection = 'closed' | 'connecting' | 'open' | 'reconnecting';
 
 /** What a player asks for once the connection is open */
 type Intent =
-  | { readonly event: 'create'; readonly language: LanguageId }
-  | { readonly event: 'join'; readonly code: string };
+  | { readonly event: 'create'; readonly language: LanguageId; readonly namePass: string | null }
+  | { readonly event: 'join'; readonly code: string; readonly namePass: string | null };
 
 /**
  * The connection to a multiplayer room: creating or joining one, the room's live state, and everything a player can
@@ -45,6 +46,7 @@ type Intent =
 export class RoomClient {
   private readonly document = inject(DOCUMENT);
   private readonly gender = inject(PlayerGender);
+  private readonly account = inject(PlayerAccount);
   private socket: WebSocket | null = null;
   private seat: Seat | null = null;
   private intent: Intent | null = null;
@@ -85,12 +87,13 @@ export class RoomClient {
     return Date.now() + this.clockOffset;
   }
 
-  create(language: LanguageId): void {
-    this.open({ event: 'create', language });
+  /** Opens a room; a signed-in player brings their approved screen name (the host decides whether names show) */
+  async create(language: LanguageId): Promise<void> {
+    this.open({ event: 'create', language, namePass: await this.account.roomNamePass() });
   }
 
   /** Joins a room by code, or comes back to this tab's seat in it */
-  enter(code: string): void {
+  async enter(code: string): Promise<void> {
     // Already in it, e.g. right after creating it
     if (this.seat?.code === code.toUpperCase() && this.connection() !== 'closed') {
       return;
@@ -100,7 +103,7 @@ export class RoomClient {
       this.seat = seat;
       this.open(null);
     } else {
-      this.open({ event: 'join', code });
+      this.open({ event: 'join', code, namePass: await this.account.roomNamePass() });
     }
   }
 
@@ -132,6 +135,11 @@ export class RoomClient {
   /** Sends a sticker to everyone in the room */
   react(reaction: Reaction): void {
     this.send('react', { reaction });
+  }
+
+  /** Hides a player's own name for everyone in the room; the page also reports it */
+  hideName(playerId: string): void {
+    this.send('hide-name', { playerId });
   }
 
   kick(playerId: string): void {
@@ -192,9 +200,11 @@ export class RoomClient {
       if (this.seat) {
         this.send('rejoin', { code: this.seat.code, token: this.seat.token });
       } else if (this.intent?.event === 'create') {
-        this.send('create', { language: this.intent.language, gender: this.chosenGender() });
+        const { language, namePass } = this.intent;
+        this.send('create', { language, gender: this.chosenGender(), namePass });
       } else if (this.intent?.event === 'join') {
-        this.send('join', { code: this.intent.code, gender: this.chosenGender() });
+        const { code, namePass } = this.intent;
+        this.send('join', { code, gender: this.chosenGender(), namePass });
       }
     };
     socket.onmessage = (message) => this.receive(message.data);
