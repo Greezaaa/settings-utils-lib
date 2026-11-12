@@ -1,6 +1,8 @@
 {
+  // Suggested when the repository is opened: TS One-Line Imports keeps every import on one line (see .vscode/settings.json)
   "recommendations": [
-    "angular.ng-template",
-    "esbenp.prettier-vscode"
+    "su-labs.ts-one-line-imports",
+    "esbenp.prettier-vscode",
+    "angular.ng-template"
   ]
 }
