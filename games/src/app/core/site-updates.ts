@@ -1,4 +1,5 @@
 import { LanguageId } from '../i18n/site-messages';
+import { FeatureId } from './features';
 import { GameSlug } from './games';
 
 /**
@@ -8,7 +9,8 @@ import { GameSlug } from './games';
  * Add an entry for changes players would want to know about (a new game, a new setting, a new language),
  * never for small fixes. Give it the next version number and the time it goes live, write each change in
  * every language with its `kind` (a tag says what it's about, so the text can be short; `game` when it is about a
- * game, so the list links to it), and set `privacy: true`
+ * game, so the list links to it; `feature` when it is about a switched feature, so it's listed only once that's on),
+ * and set `privacy: true`
  * when the update changes what the site saves, so the privacy notice is shown again.
  */
 /** What a change is about, shown as a tag beside it */
@@ -35,6 +37,8 @@ export interface UpdateChange {
   readonly text: Readonly<Record<LanguageId, string>>;
   /** The game this change is about, linked from the notice */
   readonly game?: GameSlug;
+  /** The feature switch this change is about: listed only while visitors can use it */
+  readonly feature?: FeatureId;
 }
 
 export interface SiteUpdate {
@@ -336,6 +340,23 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
           eu: 'Joko berria: Zenbat daude?, 1etik 5era zenbatu, txikienentzat',
           it: 'Nuovo gioco: Quanti sono?, contare da 1 a 5, per i più piccoli',
           uk: 'Нова гра: Скільки?, лічба від 1 до 5, для найменших',
+        },
+      },
+    ],
+  },
+  {
+    version: 14,
+    published: '2026-11-12T12:00:00+01:00',
+    changes: [
+      {
+        kind: 'feature',
+        feature: 'room-reactions',
+        text: {
+          en: 'Stickers hand-drawn by Lucia, to send to your friends in rooms',
+          es: 'Pegatinas dibujadas a mano por Lucía, para enviar a tus amigos en las salas',
+          eu: 'Luciak eskuz marraztutako pegatinak, geletan lagunei bidaltzeko',
+          it: 'Adesivi disegnati a mano da Lucia, da inviare agli amici nelle stanze',
+          uk: 'Наліпки, які намалювала Луся, щоб надсилати друзям у кімнатах',
         },
       },
     ],

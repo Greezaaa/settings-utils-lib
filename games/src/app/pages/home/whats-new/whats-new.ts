@@ -1,5 +1,6 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { FeatureFlags } from '../../../core/feature-flags';
 import { GameAvailability } from '../../../core/game-availability';
 import { readStored, writeStored } from '../../../core/site-storage';
 import { LAST_SEEN_STORAGE, LATEST_VERSION, recentChanges, UPDATE_KIND_TAGS } from '../../../core/site-updates';
@@ -13,7 +14,8 @@ const LONG_LIST = 15;
 /**
  * "What's new" on the home page: the latest changes to the site, newest first, 3 at first and up to 15 on request.
  * Each change has a tag saying what it's about; changes since the visitor's last visit also get a "New" badge.
- * They count as seen once the visitor leaves the home page, so a reload keeps them. Changes about a game that isn't open aren't listed.
+ * They count as seen once the visitor leaves the home page, so a reload keeps them. Changes about a game that isn't open,
+ * or a feature that's switched off, aren't listed.
  */
 @Component({
   selector: 'app-whats-new',
@@ -25,6 +27,7 @@ const LONG_LIST = 15;
 export class WhatsNew {
   private readonly language = inject(SiteLanguage);
   private readonly availability = inject(GameAvailability);
+  private readonly features = inject(FeatureFlags);
   protected readonly t = this.language.messages;
 
   protected readonly isExpanded = signal(false);
@@ -34,7 +37,11 @@ export class WhatsNew {
   private readonly inBrowser = signal(false);
 
   private readonly changes = computed(() =>
-    recentChanges().filter(({ change }) => !change.game || this.availability.canPlay(change.game)),
+    recentChanges().filter(
+      ({ change }) =>
+        (!change.game || this.availability.canPlay(change.game)) &&
+        (!change.feature || this.features.canUse(change.feature)),
+    ),
   );
   protected readonly items = computed(() => {
     const language = this.language.language();
