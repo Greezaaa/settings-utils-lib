@@ -82,7 +82,7 @@ export const FEATURES: readonly FeatureInfo[] = [
   /** How many? says the numbers out loud with the browser's voice, which lags in some languages */
   { id: 'how-many-sound', openByDefault: false },
   /** Hand-drawn stickers players send each other in a room, with the side they stick to in the settings */
-  { id: 'room-reactions', openByDefault: false },
+  { id: 'room-reactions', openByDefault: true },
   /**
    * Signed-in players' screen names in rooms, once a moderator approves them: the host turns them on per room, and any
    * player can hide and report a name

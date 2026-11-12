@@ -142,8 +142,14 @@
     z-index: 4;
   }
 
-  // Phones and tablets: the stickers sit inside the game card's edge, so the card keeps room for them there
+  // Phones and tablets: the stickers sit inside the game card's edge, so the card keeps room for them there. The card
+  // takes its cell explicitly, like the stickers do: otherwise the grid would move it to the next row, below them
   @media (max-width: 55.99rem) {
+    > .card.board {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
     &:has(app-room-reactions:not(.is-left)) > .card.board {
       padding-right: 3.5rem;
     }
