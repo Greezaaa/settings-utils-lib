@@ -17,35 +17,97 @@
 }
 
 .track {
-  background: var(--border);
-  border-radius: 9999px;
-  flex-shrink: 0;
-  height: 1.75rem;
-  position: relative;
-  transition: background-color 200ms ease;
-  width: 3rem;
+  // Sizes: pages may set their own (the admin's switches are smaller); the rest follows from them
+  --switch-width: 3rem;
+  --switch-height: 1.75rem;
+  --switch-inset: 0.1875rem;
+  --switch-knob: calc(var(--switch-height) - 2 * var(--switch-inset));
+  --switch-travel: calc(var(--switch-width) - var(--switch-height));
+  // How much the knob stretches while pressed
+  --switch-stretch: calc(var(--switch-knob) * 0.3);
+  // The knob's phase: small and grey when off, full size when pressed or on
+  --knob-width: var(--switch-knob);
+  --knob-move: 0rem;
+  --knob-scale: 0.7;
+  --knob-colour: var(--muted);
 
+  background: var(--subtle);
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 2px var(--border);
+  flex-shrink: 0;
+  height: var(--switch-height);
+  position: relative;
+  transition:
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+  width: var(--switch-width);
+
+  // The knob
   &::after {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    box-sizing: border-box;
-    border-radius: 50%;
+    background: var(--knob-colour);
+    border-radius: 9999px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     content: '';
-    height: 1.375rem;
-    left: 0.1875rem;
+    height: var(--switch-knob);
+    left: var(--switch-inset);
     position: absolute;
-    top: 0.1875rem;
-    transition: translate 200ms ease;
-    width: 1.375rem;
+    scale: var(--knob-scale);
+    top: var(--switch-inset);
+    transition:
+      translate 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      width 200ms ease,
+      scale 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 200ms ease;
+    translate: var(--knob-move) 0;
+    width: var(--knob-width);
+  }
+
+  // The tick that pops into the knob when on
+  &::before {
+    background: var(--button-text);
+    content: '';
+    height: var(--switch-knob);
+    left: calc(var(--switch-inset) + var(--switch-travel));
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E")
+      center / 55% no-repeat;
+    opacity: 0;
+    position: absolute;
+    scale: 0.3;
+    top: var(--switch-inset);
+    transition:
+      opacity 150ms ease,
+      scale 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: var(--switch-knob);
+    z-index: 1;
   }
 }
 
-.switch input:checked + .track {
-  background: var(--button-bg);
+// Pressed: the knob grows to full size and stretches towards where it's going
+.switch:active input + .track {
+  --knob-scale: 1;
+  --knob-width: calc(var(--switch-knob) + var(--switch-stretch));
+}
 
-  &::after {
-    translate: 1.25rem 0;
+// On: a soft accent track, the knob in the accent colour at the far end, with its tick
+.switch input:checked + .track {
+  --knob-move: var(--switch-travel);
+  --knob-scale: 1;
+  --knob-colour: var(--button-bg);
+  background: color-mix(in srgb, var(--button-bg) 35%, var(--surface));
+  box-shadow: none;
+
+  &::before {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+// Pressed while on: it stretches back towards the off side, keeping its right edge
+.switch:active input:checked + .track {
+  --knob-move: calc(var(--switch-travel) - var(--switch-stretch));
+
+  &::before {
+    opacity: 0;
   }
 }
 
@@ -57,4 +119,12 @@
 .switch input:disabled + .track {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .track::after,
+  .track::before {
+    transition: none;
+  }
 }

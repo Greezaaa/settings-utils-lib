@@ -116,20 +116,10 @@ input[type='text'] {
   font-weight: 400;
 }
 
-// Smaller switches than on the players' pages, as the admin goes through many of them
+// Smaller switches than on the players' pages, as the admin goes through many of them (switch.scss sizes the rest)
 .switch-row .track {
-  height: 1.25rem;
-  width: 2.125rem;
-
-  &::after {
-    height: 0.875rem;
-    width: 0.875rem;
-  }
-}
-
-// .switch with it: stronger than switch.scss, which loads after these styles
-.switch.switch-row input:checked + .track::after {
-  translate: 0.875rem 0;
+  --switch-width: 2.125rem;
+  --switch-height: 1.25rem;
 }
 
 .plain-list {
