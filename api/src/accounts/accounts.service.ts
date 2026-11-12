@@ -1,18 +1,9 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomInt } from 'node:crypto';
 import { FindOptionsWhere, LessThan, Not, Repository } from 'typeorm';
-import {
-  hashPassword,
-  hashToken,
-  newSessionToken,
-  verifyPassword,
-} from '../auth/passwords.js';
+import { hashPassword, hashToken, newSessionToken, verifyPassword } from '../auth/passwords.js';
 import type { Env } from '../config/env.js';
 import { afterFailure, isLocked, UNLOCKED } from '../security/login-lock.js';
 import type { AppId } from '../shared/apps.js';
@@ -51,7 +42,9 @@ export interface ModeratedPlayer {
 
 /** Why a sign-up or change was refused, as the games site shows it */
 export type AccountConflict =
-  'login-taken' | 'screen-name-taken' | 'email-taken';
+  | 'login-taken'
+  | 'screen-name-taken'
+  | 'email-taken';
 
 /**
  * Player accounts, each in one app: signing up and in, sessions kept by a cookie, the screen name, an optional email to reset a
@@ -292,7 +285,14 @@ export class AccountsService {
       take: limit,
     });
     return players.map(
-      ({ id, app, screenName, showOnLeaderboard, removedFromBoards, created }) => ({
+      ({
+        id,
+        app,
+        screenName,
+        showOnLeaderboard,
+        removedFromBoards,
+        created,
+      }) => ({
         id,
         app,
         screenName,

@@ -1,10 +1,4 @@
-import {
-  hashPassword,
-  hashToken,
-  newSessionToken,
-  randomPassword,
-  verifyPassword,
-} from './passwords.js';
+import { hashPassword, hashToken, newSessionToken, randomPassword, verifyPassword } from './passwords.js';
 
 describe('passwords', () => {
   it('verifies the right password only, and never stores it', async () => {

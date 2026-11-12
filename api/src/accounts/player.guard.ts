@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { Request } from 'express';
 import { readCookie } from '../auth/session-cookie.js';
 import { API_APP, AppId, isAppId, playerCookie } from '../shared/apps.js';
@@ -31,7 +26,9 @@ export class PlayerGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<PlayerRequest>();
     const app = appOf(request);
     const token = readCookie(request, playerCookie(app));
-    const player = token ? await this.accounts.playerForToken(app, token) : null;
+    const player = token
+      ? await this.accounts.playerForToken(app, token)
+      : null;
     if (!player) {
       throw new UnauthorizedException();
     }

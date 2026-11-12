@@ -85,7 +85,10 @@ const PAIRS_PER_LEVEL: Readonly<Record<string, number>> = {
   expert: 18,
 };
 const RESULT_LIMITS: Readonly<
-  Record<ResultGame, { readonly min: (key: string) => number; readonly max: number }>
+  Record<
+    ResultGame,
+    { readonly min: (key: string) => number; readonly max: number }
+  >
 > = {
   'math-games': { min: () => 0, max: 1000 },
   'climb-tower': { min: () => 0, max: 1000 },

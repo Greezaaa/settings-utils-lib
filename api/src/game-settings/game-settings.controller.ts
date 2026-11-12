@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Header,
-  HttpCode,
-  Param,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Header, HttpCode, Param, Put, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
 import { AdminGuard, SuperAdminGuard } from '../security/admin.guard.js';
 import type { GameSlug } from '../shared/catalog.js';

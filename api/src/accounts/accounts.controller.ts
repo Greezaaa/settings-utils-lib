@@ -1,39 +1,18 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  NotFoundException,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Query,
-  Req,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, Put, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 import { z } from 'zod';
 import { AuthService } from '../auth/auth.service.js';
 import { readCookie, sessionToken } from '../auth/session-cookie.js';
-import { API_APP, playerCookie } from '../shared/apps.js';
 import { FeatureFlagsService } from '../feature-flags/feature-flags.service.js';
 import { AdminGuard } from '../security/admin.guard.js';
-import { limitSchema, offsetSchema } from '../shared/page.js';
+import { API_APP, playerCookie } from '../shared/apps.js';
 import type { ResultGame } from '../shared/catalog.js';
 import { resultGameSchema } from '../shared/catalog.js';
+import { limitSchema, offsetSchema } from '../shared/page.js';
 import { Account, accountView, FEW_PER_15_MINUTES, playerOf } from './account-view.js';
-import {
-  bestsSchema,
-  changeSchema,
-  favoritesSchema,
-  leaderboardChoiceSchema,
-  resultSchema,
-} from './accounts.schema.js';
 import type { ChangeInput, ResultInput } from './accounts.schema.js';
+import { bestsSchema, changeSchema, favoritesSchema, leaderboardChoiceSchema, resultSchema } from './accounts.schema.js';
 import { AccountsService, ModeratedPlayer } from './accounts.service.js';
 import type { PlayerRequest } from './player.guard.js';
 import { PlayerGuard } from './player.guard.js';
@@ -156,7 +135,11 @@ export class LeaderboardController {
       throw new UnauthorizedException();
     }
     return {
-      boards: await this.results.leaderboards(game, player?.id ?? null, isPublic),
+      boards: await this.results.leaderboards(
+        game,
+        player?.id ?? null,
+        isPublic,
+      ),
     };
   }
 
@@ -166,7 +149,10 @@ export class LeaderboardController {
       return true;
     }
     const adminToken = sessionToken(request);
-    return adminToken !== null && (await this.auth.adminForToken(adminToken)) !== null;
+    return (
+      adminToken !== null &&
+      (await this.auth.adminForToken(adminToken)) !== null
+    );
   }
 }
 

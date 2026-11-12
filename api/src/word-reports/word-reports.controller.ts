@@ -1,37 +1,15 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Param,
-  Patch,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 import { z } from 'zod';
 import { AdminGuard } from '../security/admin.guard.js';
-import {
-  visitorAddress,
-  VisitorThrottlerGuard,
-} from '../security/visitor-throttler.guard.js';
+import { visitorAddress, VisitorThrottlerGuard } from '../security/visitor-throttler.guard.js';
 import type { LanguageId } from '../shared/catalog.js';
 import { languageSchema } from '../shared/catalog.js';
 import { limitSchema, offsetSchema } from '../shared/page.js';
 import { WordReport } from './word-report.entity.js';
-import type {
-  DecisionInput,
-  ReportInput,
-  ReportStatus,
-} from './word-reports.schema.js';
-import {
-  decisionSchema,
-  REPORT_STATUSES,
-  reportSchema,
-} from './word-reports.schema.js';
+import type { DecisionInput, ReportInput, ReportStatus } from './word-reports.schema.js';
+import { decisionSchema, REPORT_STATUSES, reportSchema } from './word-reports.schema.js';
 import { WordReportsService } from './word-reports.service.js';
 
 /** Players report rude words the word builder accepted; the games site asks which words don't count */

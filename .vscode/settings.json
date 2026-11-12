@@ -1,13 +1,14 @@
 {
-  // Format with Prettier on save. prettier.config.js loads the single-line-imports plugin,
-  // so imports always end up on one line.
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // Format on save with TS One-Line Imports (su-labs.ts-one-line-imports): it runs Prettier with the config nearest the
+  // file (prettier.config.js here, api/.prettierrc in api/) and always adds the single-line-imports plugin, so imports
+  // end up on one line everywhere, api/ included.
+  "editor.defaultFormatter": "su-labs.ts-one-line-imports",
   "editor.formatOnSave": true,
   // Runs before formatting: TypeScript adds, merges and sorts imports, then Prettier puts each on one line.
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "su-labs.ts-one-line-imports"
   }
 }

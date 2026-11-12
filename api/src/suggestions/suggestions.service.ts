@@ -9,11 +9,7 @@ import type { Env } from '../config/env.js';
 import type { Page } from '../shared/page.js';
 import { cleanImage } from './clean-image.js';
 import { Suggestion } from './suggestion.entity.js';
-import {
-  StatusInput,
-  SuggestionInput,
-  SuggestionStatus,
-} from './suggestions.schema.js';
+import { StatusInput, SuggestionInput, SuggestionStatus } from './suggestions.schema.js';
 
 @Injectable()
 export class SuggestionsService implements OnModuleInit {

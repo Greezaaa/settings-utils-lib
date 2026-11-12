@@ -1,13 +1,6 @@
 import { z } from 'zod';
 import { languageSchema } from '../shared/catalog.js';
-import {
-  CODE_ALPHABET,
-  CODE_LENGTH,
-  PLAYER_GENDERS,
-  REACTIONS,
-  ROOM_GAMES,
-  ROUND_SECONDS,
-} from './room.js';
+import { CODE_ALPHABET, CODE_LENGTH, PLAYER_GENDERS, REACTIONS, ROOM_GAMES, ROUND_SECONDS } from './room.js';
 
 /**
  * What players send to the rooms service, as `{ event, data }` JSON over the WebSocket; every message is checked here

@@ -6,12 +6,7 @@ import { today } from '../shared/day.js';
 import type { Page } from '../shared/page.js';
 import { RecentReports } from './recent-reports.js';
 import { WordReport } from './word-report.entity.js';
-import {
-  DecisionInput,
-  ReportInput,
-  REPORTS_TO_HIDE,
-  ReportStatus,
-} from './word-reports.schema.js';
+import { DecisionInput, ReportInput, REPORTS_TO_HIDE, ReportStatus } from './word-reports.schema.js';
 
 @Injectable()
 export class WordReportsService {

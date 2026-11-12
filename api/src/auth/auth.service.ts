@@ -4,12 +4,7 @@ import { LessThan, Not, Repository } from 'typeorm';
 import { AdminSession } from './admin-session.entity.js';
 import { Admin } from './admin.entity.js';
 import { afterFailure, isLocked, UNLOCKED } from '../security/login-lock.js';
-import {
-  hashPassword,
-  hashToken,
-  newSessionToken,
-  verifyPassword,
-} from './passwords.js';
+import { hashPassword, hashToken, newSessionToken, verifyPassword } from './passwords.js';
 
 /** How long a browser stays signed in */
 export const SESSION_DAYS = 30;

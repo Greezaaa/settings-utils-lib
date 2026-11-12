@@ -11,7 +11,9 @@ export class PlayerApps1794900000000 implements MigrationInterface {
     await queryRunner.query(
       "ALTER TABLE players ADD COLUMN app varchar(20) NOT NULL DEFAULT 'games'",
     );
-    await queryRunner.query('ALTER TABLE players ALTER COLUMN app DROP DEFAULT');
+    await queryRunner.query(
+      'ALTER TABLE players ALTER COLUMN app DROP DEFAULT',
+    );
     await queryRunner.query(`
       ALTER TABLE players
         DROP CONSTRAINT players_login_name_key,

@@ -766,10 +766,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .send({ enabled: false })
         .expect(204);
 
-      await ben
-        .put('/v1/account/leaderboard')
-        .send({ show: true })
-        .expect(204);
+      await ben.put('/v1/account/leaderboard').send({ show: true }).expect(204);
 
       // A player deletes their results and keeps the account
       await ana.delete('/v1/account/results').expect(204);
@@ -878,7 +875,10 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       // The reset signed out the browser still on the old password
       await kid.get('/v1/account').expect(401);
 
-      await other.delete('/v1/apps/games/account').send({ password: 'wrong' }).expect(401);
+      await other
+        .delete('/v1/apps/games/account')
+        .send({ password: 'wrong' })
+        .expect(401);
       await other
         .delete('/v1/apps/games/account')
         .send({ password: 'reset long password' })

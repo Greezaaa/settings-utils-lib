@@ -1,9 +1,4 @@
-import {
-  afterFailure,
-  isLocked,
-  MAX_FAILED_LOGINS,
-  UNLOCKED,
-} from './login-lock.js';
+import { afterFailure, isLocked, MAX_FAILED_LOGINS, UNLOCKED } from './login-lock.js';
 
 describe('login lock', () => {
   it('locks for a while after too many failures in a row', () => {

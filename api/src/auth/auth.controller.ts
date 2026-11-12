@@ -1,16 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  NotFoundException,
-  Param,
-  Post,
-  Req,
-  Res,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, NotFoundException, Param, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
 import type { Response } from 'express';
@@ -21,13 +9,7 @@ import { AdminGuard } from '../security/admin.guard.js';
 import type { AdminRole } from './admin.entity.js';
 import { AuthService, SignedIn } from './auth.service.js';
 import { MIN_PASSWORD_LENGTH } from './passwords.js';
-import {
-  clearSessionCookie,
-  CookieSettings,
-  cookieSettings,
-  sessionToken,
-  setSessionCookie,
-} from './session-cookie.js';
+import { clearSessionCookie, CookieSettings, cookieSettings, sessionToken, setSessionCookie } from './session-cookie.js';
 
 const passwordField = z.string().min(MIN_PASSWORD_LENGTH).max(200);
 const signInSchema = z.object({
@@ -143,12 +125,7 @@ export class AuthController {
     if (!signedIn) {
       throw new UnauthorizedException('Wrong email or password');
     }
-    setSessionCookie(
-      response,
-      signedIn.token,
-      signedIn.expires,
-      this.cookies,
-    );
+    setSessionCookie(response, signedIn.token, signedIn.expires, this.cookies);
     return { email: signedIn.admin.email, role: signedIn.admin.role };
   }
 }

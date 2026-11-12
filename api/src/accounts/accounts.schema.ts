@@ -1,10 +1,6 @@
 import { z } from 'zod';
 import { MIN_PASSWORD_LENGTH } from '../auth/passwords.js';
-import {
-  gameSchema,
-  isPlausibleResult,
-  resultGameSchema,
-} from '../shared/catalog.js';
+import { gameSchema, isPlausibleResult, resultGameSchema } from '../shared/catalog.js';
 
 /** Sign-in: 3 to 30 letters, digits, dots, dashes or underscores; compared lowercase */
 export const loginNameSchema = z

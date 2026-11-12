@@ -1,52 +1,15 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  NotFoundException,
-  Param,
-  Post,
-  Req,
-  Res,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
 import type { Response } from 'express';
 import { z } from 'zod';
-import {
-  clearSessionCookie,
-  CookieSettings,
-  cookieSettings,
-  readCookie,
-  setSessionCookie,
-} from '../auth/session-cookie.js';
+import { clearSessionCookie, CookieSettings, cookieSettings, readCookie, setSessionCookie } from '../auth/session-cookie.js';
 import type { Env } from '../config/env.js';
 import type { AppId } from '../shared/apps.js';
 import { appSchema, playerCookie } from '../shared/apps.js';
-import {
-  Account,
-  accountView,
-  FEW_PER_15_MINUTES,
-  FEW_PER_HOUR,
-  playerOf,
-} from './account-view.js';
-import {
-  changePasswordSchema,
-  deleteSchema,
-  forgotSchema,
-  registerSchema,
-  resetSchema,
-  secretSchema,
-  signInSchema,
-} from './accounts.schema.js';
-import type {
-  ChangePasswordInput,
-  RegisterInput,
-  SignInInput,
-} from './accounts.schema.js';
+import { Account, accountView, FEW_PER_15_MINUTES, FEW_PER_HOUR, playerOf } from './account-view.js';
+import { changePasswordSchema, deleteSchema, forgotSchema, registerSchema, resetSchema, secretSchema, signInSchema } from './accounts.schema.js';
+import type { ChangePasswordInput, RegisterInput, SignInInput } from './accounts.schema.js';
 import { AccountsService, PlayerSignedIn } from './accounts.service.js';
 import type { PlayerRequest } from './player.guard.js';
 import { PlayerGuard } from './player.guard.js';

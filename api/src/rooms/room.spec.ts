@@ -1,25 +1,4 @@
-import {
-  advance,
-  canStart,
-  CODE_ALPHABET,
-  COUNTDOWN_MS,
-  createRoom,
-  join,
-  MAX_PLAYERS,
-  newCode,
-  newPlayer,
-  places,
-  playAgain,
-  removePlayer,
-  renamePlayer,
-  reportScore,
-  Room,
-  SCORE_GRACE_MS,
-  setReady,
-  setSettings,
-  startRound,
-  viewOf,
-} from './room.js';
+import { advance, canStart, CODE_ALPHABET, COUNTDOWN_MS, createRoom, join, MAX_PLAYERS, newCode, newPlayer, places, playAgain, removePlayer, renamePlayer, reportScore, Room, SCORE_GRACE_MS, setReady, setSettings, startRound, viewOf } from './room.js';
 
 /** Always the same "random" numbers */
 const counter = () => {

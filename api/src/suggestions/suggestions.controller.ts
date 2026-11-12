@@ -1,19 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Header,
-  HttpCode,
-  Param,
-  Patch,
-  Post,
-  Query,
-  StreamableFile,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Header, HttpCode, Param, Patch, Post, Query, StreamableFile, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Throttle } from '@nestjs/throttler';
 import { z } from 'zod';
@@ -21,16 +6,8 @@ import { AdminGuard } from '../security/admin.guard.js';
 import { limitSchema, offsetSchema } from '../shared/page.js';
 import { IMAGE_MAX_BYTES } from './clean-image.js';
 import { Suggestion } from './suggestion.entity.js';
-import type {
-  StatusInput,
-  SuggestionInput,
-  SuggestionStatus,
-} from './suggestions.schema.js';
-import {
-  statusSchema,
-  SUGGESTION_STATUSES,
-  suggestionSchema,
-} from './suggestions.schema.js';
+import type { StatusInput, SuggestionInput, SuggestionStatus } from './suggestions.schema.js';
+import { statusSchema, SUGGESTION_STATUSES, suggestionSchema } from './suggestions.schema.js';
 import { SuggestionsService } from './suggestions.service.js';
 import { TurnstileService } from './turnstile.service.js';
 

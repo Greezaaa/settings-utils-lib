@@ -123,7 +123,12 @@ export interface Room {
 }
 
 export type RoomError =
-  'not-found' | 'full' | 'in-game' | 'not-host' | 'not-ready' | 'wrong-phase';
+  | 'not-found'
+  | 'full'
+  | 'in-game'
+  | 'not-host'
+  | 'not-ready'
+  | 'wrong-phase';
 
 export const DEFAULT_SETTINGS: RoomSettings = {
   game: 'math-games',
