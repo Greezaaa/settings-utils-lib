@@ -130,7 +130,7 @@
   position: absolute;
   right: 0;
   top: calc(100% + 0.5rem);
-  z-index: 20;
+  z-index: 99;
 
   &.is-open {
     display: flex;
