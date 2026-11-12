@@ -96,7 +96,9 @@ export const italian = (gender: WordGender): SiteMessages => ({
     menuAnimation: 'Menu animato',
     menuAnimationChoices: { on: 'Sì', off: 'No' },
     reactionSide: 'Adesivi nelle stanze',
-    reactionSides: { left: 'Sinistra', right: 'Destra' },
+    reactionSides: { left: 'Sinistra', right: 'Destra', bottom: 'In basso' },
+    stickerDrag: 'Sposta gli adesivi tenendoli premuti',
+    stickerDragChoices: { on: 'Sì', off: 'No' },
     wordGender: 'Parlami come',
     wordGenders: { boy: 'bambino', girl: 'bambina' },
     wordGenderQuestion: 'Come vuoi che ti parliamo? Puoi cambiarlo quando vuoi nelle impostazioni.',
@@ -971,6 +973,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'how-many-sound': 'Numeri ad alta voce in Quanti sono?',
       'room-reactions': 'Adesivi nelle stanze',
       'room-names': 'Nomi dei giocatori nelle stanze',
+      'sticker-drag': 'Sposta gli adesivi delle stanze tenendoli premuti',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:

@@ -99,7 +99,9 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     menuAnimation: 'Menú animado',
     menuAnimationChoices: { on: 'Sí', off: 'No' },
     reactionSide: 'Pegatinas en las salas',
-    reactionSides: { left: 'Izquierda', right: 'Derecha' },
+    reactionSides: { left: 'Izquierda', right: 'Derecha', bottom: 'Abajo' },
+    stickerDrag: 'Mover las pegatinas manteniéndolas pulsadas',
+    stickerDragChoices: { on: 'Sí', off: 'No' },
     wordGender: 'Háblame como',
     wordGenders: { boy: 'chico', girl: 'chica' },
     wordGenderQuestion: '¿Cómo quieres que te hablemos? Puedes cambiarlo cuando quieras en los ajustes.',
@@ -1013,6 +1015,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'how-many-sound': 'Números en voz alta en ¿Cuántos hay?',
       'room-reactions': 'Pegatinas en las salas',
       'room-names': 'Nombres de los jugadores en las salas',
+      'sticker-drag': 'Mover las pegatinas de las salas manteniéndolas pulsadas',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:

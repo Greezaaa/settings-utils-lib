@@ -110,6 +110,23 @@
       }
     </div>
   </div>
+  @if (reactions.canChooseDrag()) {
+    <div class="setting is-small-screens-only">
+      <p class="setting-label" id="setting-sticker-drag">{{ 'site.stickerDrag' | translate }}</p>
+      <div class="languages" role="group" aria-labelledby="setting-sticker-drag">
+        @for (choice of stickerDragChoices; track choice) {
+          <button
+            type="button"
+            class="icon-button"
+            [attr.aria-pressed]="choice === reactions.dragChosen()"
+            (click)="reactions.setDrag(choice)"
+          >
+            {{ ('site.stickerDragChoices' | translate)[choice] }}
+          </button>
+        }
+      </div>
+    </div>
+  }
 }
 @if (playerGender.isAvailable()) {
   <div class="setting">

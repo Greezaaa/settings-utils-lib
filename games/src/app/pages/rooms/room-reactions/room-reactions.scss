@@ -23,6 +23,37 @@
   top: calc(var(--site-header-height, 0px) + var(--room-players-height, 4.5rem) + 0.5rem);
 }
 
+// Movable: held for a second, they move with the finger, so no page scroll, text selection or picture menu on them
+:host(.is-movable) .stickers {
+  -webkit-touch-callout: none;
+  touch-action: none;
+  user-select: none;
+}
+
+// Lifted while being moved
+.stickers.is-dragging {
+  filter: drop-shadow(0 6px 12px rgb(0 0 0 / 0.3));
+  scale: 1.08;
+  z-index: 10;
+}
+
+// A row along the bottom of the game card, stuck to the bottom of the screen while the card scrolls past
+@media (max-width: 55.99rem) {
+  :host(.is-bottom) {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    justify-self: stretch;
+  }
+
+  :host(.is-bottom) .stickers {
+    bottom: 0.5rem;
+    grid-auto-flow: column;
+    justify-content: center;
+    top: auto;
+  }
+}
+
 // Wide screens (the room's columns, see .room-layout in rooms.scss): always right of the game, scrolling with it
 @media (min-width: 56rem) {
   :host,
@@ -36,8 +67,10 @@
     top: calc(var(--site-header-height, 0px) + 1rem);
   }
 
-  .stickers {
+  .stickers,
+  :host(.is-movable) .stickers {
     position: static;
+    touch-action: auto;
   }
 }
 

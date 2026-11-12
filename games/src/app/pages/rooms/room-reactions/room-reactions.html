@@ -1,4 +1,14 @@
-<div class="stickers" role="group" [attr.aria-label]="'rooms.reactions.title' | translate">
+<div
+  class="stickers"
+  role="group"
+  [attr.aria-label]="'rooms.reactions.title' | translate"
+  [class.is-dragging]="dragOffset() !== null"
+  [style.translate]="dragTranslate()"
+  (pointerdown)="onPointerDown($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointercancel)="onPointerUp($event)"
+>
   @for (reaction of all; track reaction) {
     <button
       type="button"
@@ -7,7 +17,13 @@
       [title]="('rooms.reactions.names' | translate)[reaction]"
       (click)="send(reaction)"
     >
-      <img [src]="pictureOf(reaction)" [alt]="('rooms.reactions.names' | translate)[reaction]" width="80" height="80" />
+      <img
+        [src]="pictureOf(reaction)"
+        [alt]="('rooms.reactions.names' | translate)[reaction]"
+        width="80"
+        height="80"
+        draggable="false"
+      />
     </button>
   }
 </div>

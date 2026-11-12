@@ -97,7 +97,9 @@ export const EU: SiteMessages = {
     menuAnimation: 'Menu animatua',
     menuAnimationChoices: { on: 'Bai', off: 'Ez' },
     reactionSide: 'Pegatinak geletan',
-    reactionSides: { left: 'Ezkerrean', right: 'Eskuinean' },
+    reactionSides: { left: 'Ezkerrean', right: 'Eskuinean', bottom: 'Behean' },
+    stickerDrag: 'Mugitu pegatinak sakatuta edukiz',
+    stickerDragChoices: { on: 'Bai', off: 'Ez' },
     wordGender: 'Nola hitz egin?',
     wordGenders: { boy: 'mutila', girl: 'neska' },
     wordGenderQuestion: 'Nola hitz egitea nahi duzu? Nahi duzunean alda dezakezu ezarpenetan.',
@@ -999,6 +1001,7 @@ export const EU: SiteMessages = {
       'how-many-sound': 'Zenbakiak ozen «Zenbat daude?» jokoan',
       'room-reactions': 'Pegatinak geletan',
       'room-names': 'Jokalarien izenak geletan',
+      'sticker-drag': 'Mugitu gelako pegatinak sakatuta edukiz',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:

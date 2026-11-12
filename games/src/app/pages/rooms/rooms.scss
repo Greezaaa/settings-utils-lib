@@ -150,12 +150,16 @@
       grid-row: 2;
     }
 
-    &:has(app-room-reactions:not(.is-left)) > .card.board {
+    &:has(app-room-reactions:not(.is-left, .is-bottom)) > .card.board {
       padding-right: 3.5rem;
     }
 
     &:has(app-room-reactions.is-left) > .card.board {
       padding-left: 3.5rem;
+    }
+
+    &:has(app-room-reactions.is-bottom) > .card.board {
+      padding-bottom: 4rem;
     }
   }
 

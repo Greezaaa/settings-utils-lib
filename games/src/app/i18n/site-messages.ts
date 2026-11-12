@@ -7,7 +7,7 @@ import { GameThemeId } from '../core/game-themes';
 import { GameCategory, GameSlug } from '../core/games';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { MenuAnimationChoice } from '../core/menu-animation';
-import { Reaction, ReactionSide } from '../core/reactions';
+import { Reaction, ReactionSide, StickerDragChoice } from '../core/reactions';
 import { PictureId } from '../core/pictures';
 import { AccountProblem } from '../core/player-account';
 import { RoomError } from '../core/room-view';
@@ -82,6 +82,9 @@ export interface SiteMessages {
     /** The setting for the side of the screen the room stickers stick to */
     readonly reactionSide: string;
     readonly reactionSides: Readonly<Record<ReactionSide, string>>;
+    /** The player's own choice to move the stickers by holding them */
+    readonly stickerDrag: string;
+    readonly stickerDragChoices: Readonly<Record<StickerDragChoice, string>>;
     /** The setting to be spoken to as a boy or a girl */
     readonly wordGender: string;
     readonly wordGenders: Readonly<Record<WordGender, string>>;

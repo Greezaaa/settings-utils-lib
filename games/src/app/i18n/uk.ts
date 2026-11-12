@@ -129,7 +129,9 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     menuAnimation: 'Анімоване меню',
     menuAnimationChoices: { on: 'Так', off: 'Ні' },
     reactionSide: 'Наліпки в кімнатах',
-    reactionSides: { left: 'Ліворуч', right: 'Праворуч' },
+    reactionSides: { left: 'Ліворуч', right: 'Праворуч', bottom: 'Знизу' },
+    stickerDrag: 'Переміщати наліпки утриманням',
+    stickerDragChoices: { on: 'Так', off: 'Ні' },
     wordGender: 'Звертатися до мене як до',
     wordGenders: { boy: 'хлопчика', girl: 'дівчинки' },
     wordGenderQuestion: 'Як до тебе звертатися? Це можна будь-коли змінити в налаштуваннях.',
@@ -1032,6 +1034,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'how-many-sound': 'Числа вголос у грі «Скільки?»',
       'room-reactions': 'Наліпки в кімнатах',
       'room-names': 'Власні імена гравців у кімнатах',
+      'sticker-drag': 'Переміщати наліпки в кімнатах утриманням',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:

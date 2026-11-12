@@ -94,7 +94,9 @@ export const EN: SiteMessages = {
     menuAnimation: 'Animated menu',
     menuAnimationChoices: { on: 'Yes', off: 'No' },
     reactionSide: 'Stickers in rooms',
-    reactionSides: { left: 'Left', right: 'Right' },
+    reactionSides: { left: 'Left', right: 'Right', bottom: 'Bottom' },
+    stickerDrag: 'Move stickers by holding them',
+    stickerDragChoices: { on: 'Yes', off: 'No' },
     wordGender: 'Talk to me as',
     wordGenders: { boy: 'a boy', girl: 'a girl' },
     wordGenderQuestion: 'How should we talk to you? You can change it any time in the settings.',
@@ -974,6 +976,7 @@ export const EN: SiteMessages = {
       'how-many-sound': 'Numbers out loud in How many?',
       'room-reactions': 'Stickers in rooms',
       'room-names': 'Players’ own names in rooms',
+      'sticker-drag': 'Move room stickers by holding them',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:

@@ -8,7 +8,7 @@ import { FeatureFlags } from '../../core/feature-flags';
 import { GAME_THEMES, getGameTheme, isGameThemeId } from '../../core/game-themes';
 import { MENU_ANIMATION_CHOICES, MenuAnimation } from '../../core/menu-animation';
 import { PlayerGender } from '../../core/player-gender';
-import { REACTION_SIDES, Reactions } from '../../core/reactions';
+import { REACTION_SIDES, Reactions, STICKER_DRAG_CHOICES } from '../../core/reactions';
 import { SiteTheme } from '../../core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -43,6 +43,7 @@ export class SiteSettings {
   protected readonly languages = LANGUAGE_IDS;
   protected readonly answerStyles = ANSWER_STYLES;
   protected readonly reactionSides = REACTION_SIDES;
+  protected readonly stickerDragChoices = STICKER_DRAG_CHOICES;
   protected readonly menuAnimationChoices = MENU_ANIMATION_CHOICES;
   protected readonly wordGenders = WORD_GENDERS;
   protected readonly gameThemes = GAME_THEMES;

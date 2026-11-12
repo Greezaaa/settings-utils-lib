@@ -26,7 +26,8 @@ export type FeatureId =
   | 'public-leaderboard'
   | 'how-many-sound'
   | 'room-reactions'
-  | 'room-names';
+  | 'room-names'
+  | 'sticker-drag';
 
 /** Games playable in rooms, each with its multiplayer switch */
 export type RoomGame = Extract<
@@ -88,6 +89,8 @@ export const FEATURES: readonly FeatureInfo[] = [
    * player can hide and report a name
    */
   { id: 'room-names', openByDefault: false },
+  /** On phones and tablets, holding the room stickers for a second lets the player move them to an edge or the bottom */
+  { id: 'sticker-drag', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);
