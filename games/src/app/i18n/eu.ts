@@ -39,8 +39,6 @@ const ANIMALS = [
 ];
 
 export const EU: SiteMessages = {
-  languageName: 'Euskara',
-  languageCode: 'EU',
 
   answers: {
     right: 'Ondo!',

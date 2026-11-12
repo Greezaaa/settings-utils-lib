@@ -22,6 +22,7 @@ import { RoomPlayers } from '../room-players/room-players';
 import { RoomReactions } from '../room-reactions/room-reactions';
 import { RoomSlidingRound } from '../room-sliding-round/room-sliding-round';
 import { RoomTurnRound } from '../room-turn-round/room-turn-round';
+import { ShareHeight } from '../../../shared/share-height';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 /** How often the countdown is redrawn */
@@ -41,6 +42,7 @@ const TICK_MS = 100;
     RoomMeasureRound,
     RoomPlaceRound,
     RoomPlayers,
+    ShareHeight,
     RoomReactions,
     RoomSlidingRound,
     RoomTurnRound,

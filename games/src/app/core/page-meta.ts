@@ -1,7 +1,7 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, TitleStrategy } from '@angular/router';
-import { messagesIn, PRERENDER_LANGUAGE } from '../i18n/site-language';
+import { PRERENDER_MESSAGES } from '../i18n/site-language';
 import { SiteMessages } from '../i18n/site-messages';
 import { GameSlug } from './games';
 import { isGameSlug } from './games-api';
@@ -23,7 +23,7 @@ export const SITE_NAME = 'su-labs games';
  * Language of search results and link previews (page titles, descriptions, preview image text): the prerendered
  * pages' language. The preview image (public/og-image.png) is drawn in this language too.
  */
-export const PREVIEW_MESSAGES: SiteMessages = messagesIn(PRERENDER_LANGUAGE);
+export const PREVIEW_MESSAGES: SiteMessages = PRERENDER_MESSAGES;
 
 const SITE_DESCRIPTION = PREVIEW_MESSAGES.seo.siteDescription;
 

@@ -32,6 +32,7 @@
     -->
     <div class="room-layout">
       <app-room-players
+        appShareHeight="--room-players-height"
         [room]="room"
         [meId]="client.playerId()"
         [canKick]="client.isHost()"

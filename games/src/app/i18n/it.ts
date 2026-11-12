@@ -41,8 +41,6 @@ const ANIMALS = [
 
 /** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
 export const italian = (gender: WordGender): SiteMessages => ({
-  languageName: 'Italiano',
-  languageCode: 'IT',
 
   answers: {
     right: 'Giusto!',

@@ -46,10 +46,6 @@ export interface GameText {
 
 /** Every text of the games site in one language; each language must fill all of it */
 export interface SiteMessages {
-  /** The language's own name, e.g. `Español` */
-  readonly languageName: string;
-  /** Its short code on the language picker, e.g. `ES` */
-  readonly languageCode: string;
 
   /** What every game says about an answer (in words when the visitor chose them; always for screen readers) */
   readonly answers: {

@@ -1,31 +1,24 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, DOCUMENT, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DOCUMENT, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { FontSizeService } from '@su-labs/font-size';
 import { SuDialogComponent, SuDialogService } from '@su-labs/dialog';
 import { SuNotificationComponent } from '@su-labs/notifications';
-import { isSuBaseThemeName, SuThemeName } from '@su-labs/theme';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { PlayerAccount } from './core/player-account';
 import { byCategory, gameInfo, gameOfPath } from './core/games';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
-import { ANSWER_STYLES, AnswerWords } from './core/answer-words';
-import { MENU_ANIMATION_CHOICES, MenuAnimation } from './core/menu-animation';
-import { PlayerGender } from './core/player-gender';
-import { REACTION_SIDES, Reactions } from './core/reactions';
-import { WORD_GENDERS } from './i18n/word-gender';
-import { BoardColours } from './core/board-colours';
-import { GAME_THEMES, getGameTheme, isGameThemeId } from './core/game-themes';
+import { MenuAnimation } from './core/menu-animation';
 import { SiteNotices } from './core/site-notices';
-import { SiteTheme } from './core/site-theme';
-import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
+import { SiteLanguage } from './i18n/site-language';
 import { ChoiceRing } from './shared/choice-ring';
 import { MenuRing } from './shared/menu-ring';
 import { ScrollToActive } from './shared/scroll-to-active';
+import { ShareHeight } from './shared/share-height';
 import { TranslatePipe } from './i18n/translate-pipe';
+import { SiteSettings } from './shared/site-settings/site-settings';
 
-/** Site shell: header with text size, theme and language settings and the list of games, page outlet and footer */
+/** Site shell: header with the settings (SiteSettings) and the menu, page outlet and footer */
 @Component({
   selector: 'app-root',
   imports: [
@@ -35,8 +28,10 @@ import { TranslatePipe } from './i18n/translate-pipe';
     RouterLinkActive,
     RouterOutlet,
     ScrollToActive,
+    ShareHeight,
     SuDialogComponent,
     SuNotificationComponent,
+    SiteSettings,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
@@ -47,25 +42,11 @@ import { TranslatePipe } from './i18n/translate-pipe';
   },
 })
 export class App {
-  protected readonly theme = inject(SiteTheme);
-  protected readonly fontSize = inject(FontSizeService);
-
   protected readonly siteLanguage = inject(SiteLanguage);
   /** Started with the shell, so the privacy and "what's new" notices show on whichever page the visitor lands */
   private readonly notices = inject(SiteNotices);
   protected readonly t = this.siteLanguage.messages;
-  protected readonly languages = LANGUAGE_IDS;
-  protected readonly boardColours = inject(BoardColours);
-  protected readonly answerWords = inject(AnswerWords);
-  protected readonly answerStyles = ANSWER_STYLES;
-  protected readonly playerGender = inject(PlayerGender);
-  protected readonly reactions = inject(Reactions);
-  protected readonly reactionSides = REACTION_SIDES;
   protected readonly menuAnimation = inject(MenuAnimation);
-  protected readonly menuAnimationChoices = MENU_ANIMATION_CHOICES;
-  protected readonly wordGenders = WORD_GENDERS;
-  protected readonly gameThemes = GAME_THEMES;
-  protected readonly selectedBoardTheme = computed(() => getGameTheme(this.boardColours.selected()));
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = this.availability.visibleGames;
@@ -82,8 +63,6 @@ export class App {
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
 
-  /** The chosen theme's colours, for the swatch beside the picker */
-  protected readonly themeSwatch = computed(() => this.theme.coloursOf(this.theme.preference()));
   /** Whether the menu is open (phones only, where it hides behind the menu button) */
   protected readonly menuOpen = signal(false);
 
@@ -91,8 +70,6 @@ export class App {
   protected readonly settingsOpen = signal(false);
   private readonly settings = viewChild.required<ElementRef<HTMLElement>>('settings');
   private readonly siteHeader = viewChild.required<ElementRef<HTMLElement>>('siteHeader');
-  private readonly document = inject(DOCUMENT);
-  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     // Confirmation dialogs label their buttons in the site's language, unless a dialog names its own
@@ -103,7 +80,6 @@ export class App {
     afterNextRender(() => {
       void this.availability.ready();
       void this.features.ready();
-      this.shareHeaderHeight();
       choiceRing.start();
     });
     const router = inject(Router);
@@ -116,38 +92,9 @@ export class App {
     });
   }
 
-  /** A theme's name in the picker: the site's own themes, or a palette by its board-colours name */
-  protected themeName(theme: SuThemeName): string {
-    const { themeNames, boardThemes } = this.t().site;
-    return isSuBaseThemeName(theme) ? themeNames[theme] : boardThemes[theme].name;
-  }
-
-  protected chooseTheme(event: Event): void {
-    const value = event.target instanceof HTMLSelectElement ? event.target.value : null;
-    const theme = this.theme.choices.find((choice) => choice === value);
-    if (theme) {
-      this.theme.set(theme);
-    }
-  }
-
   protected toggleMenu(): void {
     this.menuOpen.update((open) => !open);
     this.settingsOpen.set(false);
-  }
-
-  /** Keeps --site-header-height on the root up to date, so bars stuck to the top sit just below the sticky header */
-  private shareHeaderHeight(): void {
-    const header = this.siteHeader().nativeElement;
-    const root = this.document.documentElement;
-    const observer = new ResizeObserver(() => root.style.setProperty('--site-header-height', `${header.offsetHeight}px`));
-    observer.observe(header);
-    this.destroyRef.onDestroy(() => observer.disconnect());
-  }
-
-  protected chooseBoardColours(event: Event): void {
-    if (event.target instanceof HTMLSelectElement && isGameThemeId(event.target.value)) {
-      this.boardColours.set(event.target.value);
-    }
   }
 
   protected toggleSettings(): void {

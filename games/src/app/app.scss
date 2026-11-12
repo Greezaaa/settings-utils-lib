@@ -73,42 +73,10 @@
   stroke: color-mix(in srgb, var(--bg) 25%, var(--heading));
 }
 
-.header-controls,
-.text-size {
+.header-controls {
   align-items: center;
   display: flex;
-  gap: 0.375rem;
-}
-
-.header-controls {
   gap: 0.75rem;
-}
-
-.icon-button {
-  align-items: center;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--heading);
-  cursor: pointer;
-  display: inline-flex;
-  font: inherit;
-  font-size: 0.8125rem;
-  gap: 0.375rem;
-  height: 2rem;
-  justify-content: center;
-  min-width: 2rem;
-  padding-inline: 0.5rem;
-  text-decoration: none;
-
-  &:hover:not(:disabled) {
-    background: var(--subtle);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-  }
 }
 
 // Settings: behind the gear button on every screen size, one labelled row per setting
@@ -142,59 +110,6 @@
   background: var(--button-bg);
   border-color: var(--button-bg);
   color: var(--button-text);
-}
-
-.setting {
-  display: grid;
-  gap: 0.375rem;
-}
-
-.setting-label {
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.text-size,
-.languages,
-.board-colours {
-  display: flex;
-  gap: 0.375rem;
-
-  .icon-button {
-    flex: 1;
-  }
-}
-
-.languages [aria-pressed='true'] {
-  background: var(--button-bg);
-  border-color: var(--button-bg);
-  color: var(--button-text);
-}
-
-// Game colours: a list of the themes, with a round swatch of the chosen one (its background, its accent in the middle)
-.board-colours {
-  align-items: center;
-
-  select {
-    flex: 1;
-    font-size: 0.875rem;
-    min-height: 2.25rem;
-  }
-}
-
-.swatch {
-  background: var(--swatch-accent);
-  border: 4px solid var(--swatch-background);
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--border);
-  flex: none;
-  height: 1.75rem;
-  width: 1.75rem;
-}
-
-.all-colours {
-  font-size: 0.8125rem;
 }
 
 // Phones: the menu hides behind its button; wide enough screens show it as a row instead

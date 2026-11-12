@@ -1,0 +1,148 @@
+<div class="setting">
+  <p class="setting-label" id="setting-text-size">{{ 'site.textSize' | translate }}</p>
+  <div class="text-size" role="group" aria-labelledby="setting-text-size">
+    <button
+      type="button"
+      class="icon-button"
+      (click)="fontSize.decrease()"
+      [disabled]="fontSize.isMin()"
+      [attr.aria-label]="'site.smallerText' | translate"
+    >
+      A<span aria-hidden="true">-</span>
+    </button>
+    <button
+      type="button"
+      class="icon-button"
+      (click)="fontSize.increase()"
+      [disabled]="fontSize.isMax()"
+      [attr.aria-label]="'site.largerText' | translate"
+    >
+      A<span aria-hidden="true">+</span>
+    </button>
+  </div>
+</div>
+<div class="setting">
+  <label class="setting-label" for="setting-theme">{{ 'site.theme' | translate }}</label>
+  <div class="board-colours">
+    <span
+      class="swatch"
+      aria-hidden="true"
+      [style.--swatch-background]="themeSwatch().background"
+      [style.--swatch-accent]="themeSwatch()['main-accent']"
+    ></span>
+    <select id="setting-theme" (change)="chooseTheme($event)">
+      @for (choice of theme.choices; track choice) {
+        <option [value]="choice" [selected]="choice === theme.preference()">{{ themeName(choice) }}</option>
+      }
+    </select>
+  </div>
+</div>
+<div class="setting">
+  <label class="setting-label" for="setting-game-colours">{{ 'site.boardColours' | translate }}</label>
+  <div class="board-colours">
+    <span
+      class="swatch"
+      aria-hidden="true"
+      [style.--swatch-background]="selectedBoardTheme().palette.background"
+      [style.--swatch-accent]="selectedBoardTheme().palette['main-accent']"
+    ></span>
+    <select id="setting-game-colours" (change)="chooseBoardColours($event)">
+      @for (theme of gameThemes; track theme.id) {
+        <option [value]="theme.id" [selected]="theme.id === boardColours.selected()">
+          {{ ('site.boardThemes' | translate)[theme.id].name }}
+        </option>
+      }
+    </select>
+  </div>
+  @if (features.canUse('colours-page')) {
+    <a class="all-colours" routerLink="/colours" (click)="navigated.emit()">{{ 'site.allColours' | translate }}</a>
+  }
+</div>
+@if (answerWords.isAvailable()) {
+  <div class="setting">
+    <p class="setting-label" id="setting-answers">{{ 'site.answerStyle' | translate }}</p>
+    <div class="languages" role="group" aria-labelledby="setting-answers">
+      @for (style of answerStyles; track style) {
+        <button
+          type="button"
+          class="icon-button"
+          [attr.aria-pressed]="style === answerWords.style()"
+          [title]="('site.answerStyles' | translate)[style].summary"
+          (click)="answerWords.set(style)"
+        >
+          {{ ('site.answerStyles' | translate)[style].name }}
+        </button>
+      }
+    </div>
+  </div>
+}
+@if (menuAnimation.isAvailable()) {
+  <div class="setting">
+    <p class="setting-label" id="setting-menu-animation">{{ 'site.menuAnimation' | translate }}</p>
+    <div class="languages" role="group" aria-labelledby="setting-menu-animation">
+      @for (choice of menuAnimationChoices; track choice) {
+        <button
+          type="button"
+          class="icon-button"
+          [attr.aria-pressed]="choice === menuAnimation.choice()"
+          (click)="menuAnimation.set(choice)"
+        >
+          {{ ('site.menuAnimationChoices' | translate)[choice] }}
+        </button>
+      }
+    </div>
+  </div>
+}
+@if (reactions.isAvailable()) {
+  <!-- Only phones and tablets: on wide screens the stickers always sit right of the game -->
+  <div class="setting is-small-screens-only">
+    <p class="setting-label" id="setting-reaction-side">{{ 'site.reactionSide' | translate }}</p>
+    <div class="languages" role="group" aria-labelledby="setting-reaction-side">
+      @for (side of reactionSides; track side) {
+        <button
+          type="button"
+          class="icon-button"
+          [attr.aria-pressed]="side === reactions.side()"
+          (click)="reactions.setSide(side)"
+        >
+          {{ ('site.reactionSides' | translate)[side] }}
+        </button>
+      }
+    </div>
+  </div>
+}
+@if (playerGender.isAvailable()) {
+  <div class="setting">
+    <p class="setting-label" id="setting-word-gender">{{ 'site.wordGender' | translate }}</p>
+    <div class="languages" role="group" aria-labelledby="setting-word-gender">
+      @for (gender of wordGenders; track gender) {
+        <button
+          type="button"
+          class="icon-button"
+          [attr.aria-pressed]="gender === playerGender.choice()"
+          (click)="playerGender.set(gender)"
+        >
+          {{ ('site.wordGenders' | translate)[gender] }}
+        </button>
+      }
+    </div>
+  </div>
+}
+<div class="setting">
+  <p class="setting-label" id="setting-language">{{ 'site.language' | translate }}</p>
+  <div class="languages" role="group" aria-labelledby="setting-language">
+    @for (language of languages; track language) {
+      <button
+        type="button"
+        class="icon-button"
+        [attr.lang]="language"
+        [attr.aria-label]="siteLanguage.nameOf(language)"
+        [attr.aria-pressed]="language === siteLanguage.language()"
+        [title]="siteLanguage.nameOf(language)"
+        (click)="siteLanguage.set(language)"
+      >
+        {{ siteLanguage.codeOf(language) }}
+      </button>
+    }
+  </div>
+</div>

@@ -41,8 +41,6 @@ const ANIMALS = [
 
 /** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
 export const spanish = (gender: WordGender): SiteMessages => ({
-  languageName: 'Español',
-  languageCode: 'ES',
 
   answers: {
     right: '¡Correcto!',

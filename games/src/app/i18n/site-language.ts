@@ -1,23 +1,32 @@
 import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, signal } from '@angular/core';
 import { readStored, writeStored } from '../core/site-storage';
 import { PlayerGender } from '../core/player-gender';
-import { EN } from './en';
 import { spanish } from './es';
-import { EU } from './eu';
-import { italian } from './it';
-import { ukrainian } from './uk';
 import { LanguageId, SiteMessages } from './site-messages';
 import { WordGender } from './word-gender';
 
-/** Each language's texts, in the boy's or the girl's forms (English and Basque don't change with it) */
-const MESSAGES: Readonly<
-  Record<LanguageId, (gender: WordGender) => SiteMessages>
-> = {
-  en: () => EN,
-  es: spanish,
-  eu: () => EU,
-  it: italian,
-  uk: ukrainian,
+/** A language's texts, in the boy's or the girl's forms (English and Basque don't change with it) */
+type MessagesFor = (gender: WordGender) => SiteMessages;
+
+/**
+ * Each language's texts, downloaded only when a visitor needs them: every language in the first download would make
+ * it twice as big, and a visitor reads one. Spanish, the prerendered pages' language, is always there (below).
+ */
+const LOADERS: Readonly<Record<LanguageId, () => Promise<MessagesFor>>> = {
+  en: () => import('./en').then(({ EN }) => () => EN),
+  es: () => Promise.resolve(spanish),
+  eu: () => import('./eu').then(({ EU }) => () => EU),
+  it: () => import('./it').then(({ italian }) => italian),
+  uk: () => import('./uk').then(({ ukrainian }) => ukrainian),
+};
+
+/** Each language's own name and short code, for the picker, without downloading its texts */
+const LANGUAGE_LABELS: Readonly<Record<LanguageId, { readonly name: string; readonly code: string }>> = {
+  en: { name: 'English', code: 'EN' },
+  es: { name: 'Español', code: 'ES' },
+  eu: { name: 'Euskara', code: 'EU' },
+  it: { name: 'Italiano', code: 'IT' },
+  uk: { name: 'Українська', code: 'УКР' },
 };
 
 /** Languages in the order of the picker */
@@ -37,8 +46,8 @@ const LANGUAGE_STORAGE = 'language';
  */
 export const PRERENDER_LANGUAGE: LanguageId = 'es';
 
-/** A language's texts in the forms used until the player chooses (the boy's) */
-export const messagesIn = (id: LanguageId): SiteMessages => MESSAGES[id]('boy');
+/** The prerendered pages' texts, in the forms used until the player chooses (the boy's) */
+export const PRERENDER_MESSAGES: SiteMessages = spanish('boy');
 
 const isLanguageId = (value: unknown): value is LanguageId =>
   LANGUAGE_IDS.some(id => id === value);
@@ -53,31 +62,50 @@ export class SiteLanguage {
   private readonly document = inject(DOCUMENT);
   private readonly languageId = signal<LanguageId>(PRERENDER_LANGUAGE);
   private readonly gender = inject(PlayerGender);
+  /** The languages downloaded so far */
+  private readonly loaded = signal<Partial<Record<LanguageId, MessagesFor>>>({ [PRERENDER_LANGUAGE]: spanish });
 
   readonly language = this.languageId.asReadonly();
-  readonly messages = computed(() =>
-    MESSAGES[this.languageId()](this.gender.wordGender())
-  );
+  readonly messages = computed(() => (this.loaded()[this.languageId()] ?? spanish)(this.gender.wordGender()));
 
   constructor() {
-    afterNextRender(() => this.languageId.set(initialLanguage()));
+    afterNextRender(() => void this.show(initialLanguage()));
     // Screen readers and browser translation read the page language from <html lang>
     effect(() =>
       this.document.documentElement.setAttribute('lang', this.languageId())
     );
   }
 
+  /** Switch language and remember it in this browser */
   set(id: LanguageId): void {
-    this.languageId.set(id);
     writeStored(LANGUAGE_STORAGE, id);
+    void this.show(id);
   }
 
+  /** A language's own name, for the picker */
   nameOf(id: LanguageId): string {
-    return messagesIn(id).languageName;
+    return LANGUAGE_LABELS[id].name;
   }
 
+  /** A language's short code, for the picker */
   codeOf(id: LanguageId): string {
-    return messagesIn(id).languageCode;
+    return LANGUAGE_LABELS[id].code;
+  }
+
+  /**
+   * Shows a language once its texts are here: the page keeps the current one meanwhile, so it never shows half of
+   * each. When the download fails (offline), the page stays as it is and the next choice tries again.
+   */
+  private async show(id: LanguageId): Promise<void> {
+    if (!this.loaded()[id]) {
+      try {
+        const messages = await LOADERS[id]();
+        this.loaded.update((loaded) => ({ ...loaded, [id]: messages }));
+      } catch {
+        return;
+      }
+    }
+    this.languageId.set(id);
   }
 }
 

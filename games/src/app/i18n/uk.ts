@@ -71,8 +71,6 @@ const FEMININE_ANIMALS = new Set([2, 5, 9, 10, 11, 13]);
 
 /** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
 export const ukrainian = (gender: WordGender): SiteMessages => ({
-  languageName: 'Українська',
-  languageCode: 'УКР',
 
   answers: {
     right: 'Правильно!',

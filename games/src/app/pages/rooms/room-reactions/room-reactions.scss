@@ -19,8 +19,8 @@
 .stickers {
   pointer-events: auto;
   position: sticky;
-  // Below the site header and the players' strip stuck under it (about 4.5rem)
-  top: calc(var(--site-header-height, 0px) + 4.5rem);
+  // Below the site header and the players' strip stuck under it, both measured (ShareHeight), so names never cover them
+  top: calc(var(--site-header-height, 0px) + var(--room-players-height, 4.5rem) + 0.5rem);
 }
 
 // Wide screens (the room's columns, see .room-layout in rooms.scss): always right of the game, scrolling with it

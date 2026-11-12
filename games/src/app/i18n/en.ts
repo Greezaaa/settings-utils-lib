@@ -39,8 +39,6 @@ const ANIMALS = [
 ];
 
 export const EN: SiteMessages = {
-  languageName: 'English',
-  languageCode: 'EN',
 
   answers: {
     right: 'Right!',
