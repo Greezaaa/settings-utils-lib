@@ -10,10 +10,20 @@ import { advance, createRoom, join, newCode, newPlayer, playAgain, REACTION_GAP_
 import type { RoomsEnv } from './rooms-env.js';
 
 /** How long a dropped player keeps their seat, to come back after a reload or a flaky connection */
-const RECONNECT_GRACE_MS = 30_000;
-/** Rooms close after this long without anything happening, or this long with nobody connected */
-const IDLE_ROOM_MS = 30 * 60_000;
-const EMPTY_ROOM_MS = 2 * 60_000;
+const RECONNECT_GRACE_MS = 2 * 60_000;
+/**
+ * A room closes once nobody has been connected for EMPTY_ROOM_MS (counted from the last one leaving, longer than the
+ * grace above so a seat can still come back), or after IDLE_ROOM_MS with nothing happening even with players waiting
+ * in it: long enough to wait for friends to join
+ */
+const EMPTY_ROOM_MS = 3 * 60_000;
+const IDLE_ROOM_MS = 2 * 60 * 60_000;
+/**
+ * Every HEARTBEAT_MS each connection gets a ping (browsers answer it by themselves): it keeps quiet connections open
+ * through Cloudflare, which closes WebSockets silent for about 100 s, and a connection that didn't answer the last ping
+ * is gone, so it's closed and its player shows as away
+ */
+const HEARTBEAT_MS = 25_000;
 /** How often the clock moves rooms along (countdown → playing → results) and tidies up */
 const TICK_MS = 250;
 /** Creating or joining rooms: at most this many tries a minute per visitor, so codes can't be guessed */
@@ -64,6 +74,11 @@ export class RoomsGateway
   private readonly origins: readonly string[];
   private readonly trustCloudflare: boolean;
   private readonly ticker = setInterval(() => this.tick(), TICK_MS);
+  private readonly heartbeat = setInterval(() => this.ping(), HEARTBEAT_MS);
+  /** Connections that answered the last ping */
+  private readonly alive = new WeakSet<WebSocket>();
+  /** When each room's last connected player left, while nobody is connected */
+  private readonly emptySince = new Map<string, number>();
 
   constructor(config: ConfigService<RoomsEnv, true>) {
     this.origins = config.get('CORS_ORIGINS', { infer: true });
@@ -72,6 +87,7 @@ export class RoomsGateway
 
   onModuleDestroy(): void {
     clearInterval(this.ticker);
+    clearInterval(this.heartbeat);
   }
 
   /** Only the games site may connect (browsers always send their page's origin) */
@@ -92,6 +108,8 @@ export class RoomsGateway
       client.close(1008, 'Too many connections');
       return;
     }
+    this.alive.add(client);
+    client.on('pong', () => this.alive.add(client));
     this.seats.set(client, {
       code: null,
       playerId: null,
@@ -387,10 +405,13 @@ export class RoomsGateway
         }
       }
       const nobodyHere = room.players.every(({ connected }) => !connected);
-      if (
-        now - room.lastActivity > IDLE_ROOM_MS ||
-        (nobodyHere && now - room.lastActivity > EMPTY_ROOM_MS)
-      ) {
+      if (!nobodyHere) {
+        this.emptySince.delete(room.code);
+      } else if (!this.emptySince.has(room.code)) {
+        this.emptySince.set(room.code, now);
+      }
+      const emptyFor = now - (this.emptySince.get(room.code) ?? now);
+      if (now - room.lastActivity > IDLE_ROOM_MS || emptyFor > EMPTY_ROOM_MS) {
         this.close(room, 'idle');
         continue;
       }
@@ -414,9 +435,22 @@ export class RoomsGateway
     }
   }
 
+  /** Pings every connection, and closes those that didn't answer the last ping (see HEARTBEAT_MS) */
+  private ping(): void {
+    for (const socket of this.seats.keys()) {
+      if (!this.alive.has(socket)) {
+        socket.terminate();
+        continue;
+      }
+      this.alive.delete(socket);
+      socket.ping();
+    }
+  }
+
   private close(room: Room, why: 'idle' | 'empty'): void {
     this.rooms.delete(room.code);
     this.openedBy.delete(room.code);
+    this.emptySince.delete(room.code);
     this.logger.log(
       `room ${room.code} closed, ${why} (${this.rooms.size} open)`,
     );

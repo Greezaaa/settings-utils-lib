@@ -11,8 +11,10 @@ const ROOMS_URL = 'wss://rooms.su-labs.dev/rooms';
 const LOCAL_ROOMS_URL = 'ws://localhost:3003/rooms';
 /** This tab's seat in a room, so a reload comes back to it (per tab, gone when the tab closes) */
 const SEAT_SESSION_KEY = 'su-labs-games:room-seat';
-/** Waits between reconnection tries */
+/** Waits between reconnection tries; after the last, every try waits that long */
 const RECONNECT_DELAYS_MS = [500, 1000, 2000, 4000, 8000];
+/** How long the rooms service keeps a dropped player's seat (RECONNECT_GRACE_MS in api/src/rooms/rooms.gateway.ts) */
+const SEAT_KEPT_MS = 2 * 60_000;
 
 interface Seat {
   readonly code: string;
@@ -47,6 +49,8 @@ export class RoomClient {
   private seat: Seat | null = null;
   private intent: Intent | null = null;
   private attempts = 0;
+  /** When the connection dropped, while trying to get back */
+  private droppedAt: number | null = null;
   private reconnectTimer?: ReturnType<typeof setTimeout>;
   /** Difference between the server's clock and this device's */
   private clockOffset = 0;
@@ -62,6 +66,19 @@ export class RoomClient {
 
   readonly me = computed(() => this.room()?.players.find(({ id }) => id === this.playerId()) ?? null);
   readonly isHost = computed(() => this.room()?.hostId === this.playerId());
+
+  constructor() {
+    // Phones drop connections while the screen is off or the tab is hidden, and Wi-Fi comes and goes
+    const window = this.document.defaultView;
+    if (window) {
+      window.addEventListener('online', () => this.retryNow());
+      this.document.addEventListener('visibilitychange', () => {
+        if (this.document.visibilityState === 'visible') {
+          this.retryNow();
+        }
+      });
+    }
+  }
 
   /** The server's clock now, for countdowns and round ends */
   serverNow(): number {
@@ -148,6 +165,18 @@ export class RoomClient {
     this.error.set(null);
     this.kicked.set(false);
     this.attempts = 0;
+    this.droppedAt = null;
+    this.connect();
+  }
+
+  /** Back online, or back on this tab: tries again at once if the connection dropped while in a room */
+  private retryNow(): void {
+    if (!this.seat || this.kicked() || this.socket) {
+      return;
+    }
+    clearTimeout(this.reconnectTimer);
+    this.attempts = 0;
+    this.droppedAt = null;
     this.connect();
   }
 
@@ -158,6 +187,7 @@ export class RoomClient {
     this.socket = socket;
     socket.onopen = () => {
       this.attempts = 0;
+      this.droppedAt = null;
       this.connection.set('open');
       if (this.seat) {
         this.send('rejoin', { code: this.seat.code, token: this.seat.token });
@@ -173,10 +203,12 @@ export class RoomClient {
         return;
       }
       this.socket = null;
-      // Keep trying while there is a seat to come back to
-      if (this.seat && !this.kicked() && this.attempts < RECONNECT_DELAYS_MS.length) {
+      this.droppedAt ??= Date.now();
+      // Keep trying while the rooms service still keeps the seat
+      if (this.seat && !this.kicked() && Date.now() - this.droppedAt < SEAT_KEPT_MS) {
         this.connection.set('reconnecting');
-        this.reconnectTimer = setTimeout(() => this.connect(), RECONNECT_DELAYS_MS[this.attempts++]);
+        const delay = RECONNECT_DELAYS_MS[Math.min(this.attempts++, RECONNECT_DELAYS_MS.length - 1)];
+        this.reconnectTimer = setTimeout(() => this.connect(), delay);
       } else {
         this.connection.set('closed');
         if (!this.room()) {
