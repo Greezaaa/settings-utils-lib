@@ -4,8 +4,6 @@ import type { Env } from '../config/env.js';
 
 /** The cookie that keeps an admin signed in; HttpOnly, so the page's scripts can't read it */
 export const SESSION_COOKIE = 'su_labs_admin';
-/** The cookie that keeps a player signed in to their account */
-export const PLAYER_COOKIE = 'su_labs_player';
 
 /**
  * A cookie's value from a request, if any; a badly encoded one counts as none, so it can't turn a 401 into a 500.
@@ -58,7 +56,7 @@ const cookieOptions = ({ secure, domain }: CookieSettings): CookieOptions => ({
   ...(domain ? { domain } : {}),
 });
 
-/** Sets a session cookie (`name` is SESSION_COOKIE or PLAYER_COOKIE) */
+/** Sets a session cookie (`name` is SESSION_COOKIE or an app's player cookie, see shared/apps.ts) */
 export function setSessionCookie(
   response: Response,
   token: string,

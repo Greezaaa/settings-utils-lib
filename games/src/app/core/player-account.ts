@@ -20,6 +20,12 @@ export interface Account {
   readonly showOnLeaderboard: boolean;
 }
 
+/**
+ * Where players of this site sign in on the auth service: the games' own accounts (api/src/shared/apps.ts), apart
+ * from other su-labs apps
+ */
+const SIGN_IN_PATH = '/v1/apps/games/account';
+
 /** Players shown per leaderboard; keep in sync with LEADERBOARD_SIZE in api/src/accounts/results.service.ts */
 export const LEADERBOARD_SIZE = 10;
 
@@ -133,7 +139,7 @@ export class PlayerAccount {
 
   /** Whether the API offers email for password resets */
   async canEmail(): Promise<boolean> {
-    return field(await this.read('/v1/account/options', 'auth'), 'email') === true;
+    return field(await this.read(`${SIGN_IN_PATH}/options`, 'auth'), 'email') === true;
   }
 
   register(details: {
@@ -143,22 +149,22 @@ export class PlayerAccount {
     email?: string;
     showOnLeaderboard: boolean;
   }): Promise<AccountAnswer> {
-    return this.startSession(this.fetch('/v1/account', jsonInit('POST', details), SEND_TIMEOUT_MS, 'auth'));
+    return this.startSession(this.fetch(SIGN_IN_PATH, jsonInit('POST', details), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Signs in with the login name or the account's email */
   signIn(loginName: string, password: string): Promise<AccountAnswer> {
-    return this.startSession(this.fetch('/v1/account/login', jsonInit('POST', { loginName, password }), SEND_TIMEOUT_MS, 'auth'));
+    return this.startSession(this.fetch(`${SIGN_IN_PATH}/login`, jsonInit('POST', { loginName, password }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Sets a new password from a reset link, and signs in */
   reset(secret: string, password: string): Promise<AccountAnswer> {
-    const path = `/v1/account/reset/${encodeURIComponent(secret)}`;
+    const path = `${SIGN_IN_PATH}/reset/${encodeURIComponent(secret)}`;
     return this.startSession(this.fetch(path, jsonInit('POST', { password }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   async signOut(): Promise<void> {
-    await this.fetch('/v1/account/logout', { method: 'POST' }, READ_TIMEOUT_MS, 'auth');
+    await this.fetch(`${SIGN_IN_PATH}/logout`, { method: 'POST' }, READ_TIMEOUT_MS, 'auth');
     this.signedIn.set(null);
   }
 
@@ -177,17 +183,17 @@ export class PlayerAccount {
   }
 
   changePassword(current: string, next: string): Promise<AccountAnswer> {
-    return this.answer(this.fetch('/v1/account/password', jsonInit('POST', { current, next }), SEND_TIMEOUT_MS, 'auth'));
+    return this.answer(this.fetch(`${SIGN_IN_PATH}/password`, jsonInit('POST', { current, next }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Asks for a reset link by email; the API answers the same whether or not an account has it */
   forgot(email: string): Promise<AccountAnswer> {
-    return this.answer(this.fetch('/v1/account/forgot', jsonInit('POST', { email }), SEND_TIMEOUT_MS, 'auth'));
+    return this.answer(this.fetch(`${SIGN_IN_PATH}/forgot`, jsonInit('POST', { email }), SEND_TIMEOUT_MS, 'auth'));
   }
 
   /** Deletes the account and everything in it */
   async remove(password: string): Promise<AccountAnswer> {
-    const answer = await this.answer(this.fetch('/v1/account', jsonInit('DELETE', { password }), SEND_TIMEOUT_MS, 'auth'));
+    const answer = await this.answer(this.fetch(SIGN_IN_PATH, jsonInit('DELETE', { password }), SEND_TIMEOUT_MS, 'auth'));
     if (answer === 'done') {
       this.signedIn.set(null);
     }

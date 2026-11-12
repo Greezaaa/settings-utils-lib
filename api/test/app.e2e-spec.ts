@@ -552,7 +552,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     it('signs up with a login name, keeps names unique, and signs in on another device', async () => {
       const first = browser('10.1.0.1');
       const { body } = await first
-        .post('/v1/account')
+        .post('/v1/apps/games/account')
         .send({
           loginName: ' Lucia_7 ',
           password: 'a long password',
@@ -570,7 +570,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
 
       const someoneElse = browser('10.1.0.2');
       await someoneElse
-        .post('/v1/account')
+        .post('/v1/apps/games/account')
         .send({
           loginName: 'lucia_7',
           password: 'a long password',
@@ -578,7 +578,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         })
         .expect(409, /login-taken/);
       await someoneElse
-        .post('/v1/account')
+        .post('/v1/apps/games/account')
         .send({
           loginName: 'other',
           password: 'a long password',
@@ -587,7 +587,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .expect(409, /screen-name-taken/);
       // No mail server here, so no emails either
       await someoneElse
-        .post('/v1/account')
+        .post('/v1/apps/games/account')
         .send({
           loginName: 'other',
           password: 'a long password',
@@ -596,20 +596,31 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         })
         .expect(400, /email-unavailable/);
       await someoneElse
-        .get('/v1/account/options')
+        .get('/v1/apps/games/account/options')
         .expect(200, { email: false });
+      // Only known apps have accounts, each behind its own cookie
+      await someoneElse.get('/v1/apps/chess/account/options').expect(400);
+      const { headers } = await browser('10.1.0.9')
+        .post('/v1/apps/games/account')
+        .send({
+          loginName: 'cookie_check',
+          password: 'a long password',
+          screenName: 'Cookie Check',
+        })
+        .expect(201);
+      expect(String(headers['set-cookie'])).toMatch(/^su_labs_games_player=/);
 
       const phone = browser('10.1.0.3');
       await phone
-        .post('/v1/account/login')
+        .post('/v1/apps/games/account/login')
         .send({ loginName: 'lucia_7', password: 'wrong password' })
         .expect(401);
       await phone
-        .post('/v1/account/login')
+        .post('/v1/apps/games/account/login')
         .send({ loginName: 'LUCIA_7', password: 'a long password' })
         .expect(201);
       await phone.get('/v1/account').expect(200);
-      await phone.post('/v1/account/logout').expect(204);
+      await phone.post('/v1/apps/games/account/logout').expect(204);
       await phone.get('/v1/account').expect(401);
     });
 
@@ -617,7 +628,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       const ana = browser('10.1.1.1');
       const ben = browser('10.1.1.2');
       await ana
-        .post('/v1/account')
+        .post('/v1/apps/games/account')
         .send({
           loginName: 'ana',
           password: 'a long password',
@@ -626,7 +637,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         })
         .expect(201);
       await ben
-        .post('/v1/account')
+        .post('/v1/apps/games/account')
         .send({
           loginName: 'ben',
           password: 'a long password',
@@ -759,7 +770,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     it('changes the screen name and password, resets a forgotten one, and deletes the account', async () => {
       const kid = browser('10.1.2.1');
       await kid
-        .post('/v1/account')
+        .post('/v1/apps/games/account')
         .send({
           loginName: 'kid',
           password: 'a long password',
@@ -776,11 +787,11 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .expect(409, /screen-name-taken/);
       await kid.patch('/v1/account').send({ screenName: 'Rocket' }).expect(204);
       await kid
-        .post('/v1/account/password')
+        .post('/v1/apps/games/account/password')
         .send({ current: 'wrong', next: 'new long password' })
         .expect(401);
       await kid
-        .post('/v1/account/password')
+        .post('/v1/apps/games/account/password')
         .send({ current: 'a long password', next: 'new long password' })
         .expect(204);
       expect((await kid.get('/v1/account').expect(200)).body.screenName).toBe(
@@ -788,7 +799,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       );
       // Always the same answer, whether or not an account has that email
       await kid
-        .post('/v1/account/forgot')
+        .post('/v1/apps/games/account/forgot')
         .send({ email: 'nobody@su-labs.dev' })
         .expect(204);
 
@@ -803,23 +814,23 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         );
       const other = browser('10.1.2.2');
       await other
-        .post(`/v1/account/reset/${secret}`)
+        .post(`/v1/apps/games/account/reset/${secret}`)
         .send({ password: 'reset long password' })
         .expect(201);
       await other
-        .post(`/v1/account/reset/${secret}`)
+        .post(`/v1/apps/games/account/reset/${secret}`)
         .send({ password: 'reset long password' })
         .expect(404);
       // The reset signed out the browser still on the old password
       await kid.get('/v1/account').expect(401);
 
-      await other.delete('/v1/account').send({ password: 'wrong' }).expect(401);
+      await other.delete('/v1/apps/games/account').send({ password: 'wrong' }).expect(401);
       await other
-        .delete('/v1/account')
+        .delete('/v1/apps/games/account')
         .send({ password: 'reset long password' })
         .expect(204);
       await browser('10.1.2.3')
-        .post('/v1/account/login')
+        .post('/v1/apps/games/account/login')
         .send({ loginName: 'kid', password: 'reset long password' })
         .expect(401);
     });

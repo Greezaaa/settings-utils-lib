@@ -20,11 +20,12 @@ import {
   clearSessionCookie,
   CookieSettings,
   cookieSettings,
-  PLAYER_COOKIE,
   readCookie,
   setSessionCookie,
 } from '../auth/session-cookie.js';
 import type { Env } from '../config/env.js';
+import type { AppId } from '../shared/apps.js';
+import { appSchema, playerCookie } from '../shared/apps.js';
 import {
   Account,
   accountView,
@@ -52,11 +53,12 @@ import { PlayerGuard } from './player.guard.js';
 import { ResultsService } from './results.service.js';
 
 /**
- * Players' sign-in on auth.su-labs.dev: sign up with a login name, a password and a screen name (an email only to
+ * Players' sign-in on auth.su-labs.dev, for each app at /v1/apps/<app>/account (shared/apps.ts): sign up with a login name, a password and a screen name (an email only to
  * reset a forgotten password), sign in on any device, sign out, change or reset the password, and delete the account.
- * The session cookie it sets reaches api.su-labs.dev too, where the account's data is (AccountsController).
+ * The session cookie it sets (one per app) reaches api.su-labs.dev too, where the games' account data is
+ * (AccountsController).
  */
-@Controller('v1/account')
+@Controller('v1/apps/:app/account')
 export class PlayerSignInController {
   private readonly cookies: CookieSettings;
 
@@ -70,44 +72,53 @@ export class PlayerSignInController {
 
   /** What the sign-up form may offer: an email only when the API can send emails */
   @Get('options')
-  options(): { email: boolean } {
+  options(@Param('app', { schema: appSchema }) _app: AppId): {
+    email: boolean;
+  } {
     return { email: this.accounts.canEmail };
   }
 
   @Post()
   @Throttle(FEW_PER_HOUR)
   async register(
+    @Param('app', { schema: appSchema }) app: AppId,
     @Body({ schema: registerSchema }) input: RegisterInput,
     @Res({ passthrough: true }) response: Response,
   ): Promise<Account> {
-    return this.startSession(await this.accounts.register(input), response);
+    return this.startSession(
+      app,
+      await this.accounts.register(app, input),
+      response,
+    );
   }
 
   /** Signs in with the login name (or the email, when the account has one) */
   @Post('login')
   @Throttle(FEW_PER_15_MINUTES)
   async signIn(
+    @Param('app', { schema: appSchema }) app: AppId,
     @Body({ schema: signInSchema }) { loginName, password }: SignInInput,
     @Res({ passthrough: true }) response: Response,
   ): Promise<Account> {
-    const signedIn = await this.accounts.signIn(loginName, password);
+    const signedIn = await this.accounts.signIn(app, loginName, password);
     if (!signedIn) {
       throw new UnauthorizedException('wrong-login');
     }
-    return this.startSession(signedIn, response);
+    return this.startSession(app, signedIn, response);
   }
 
   @Post('logout')
   @HttpCode(204)
   async signOut(
+    @Param('app', { schema: appSchema }) app: AppId,
     @Req() request: PlayerRequest,
     @Res({ passthrough: true }) response: Response,
   ): Promise<void> {
-    const token = readCookie(request, PLAYER_COOKIE);
+    const token = readCookie(request, playerCookie(app));
     if (token) {
       await this.accounts.signOut(token);
     }
-    clearSessionCookie(response, this.cookies, PLAYER_COOKIE);
+    clearSessionCookie(response, this.cookies, playerCookie(app));
   }
 
   @Post('password')
@@ -115,11 +126,12 @@ export class PlayerSignInController {
   @UseGuards(PlayerGuard)
   @Throttle(FEW_PER_15_MINUTES)
   async changePassword(
+    @Param('app', { schema: appSchema }) app: AppId,
     @Req() request: PlayerRequest,
     @Body({ schema: changePasswordSchema })
     { current, next }: ChangePasswordInput,
   ): Promise<void> {
-    const token = readCookie(request, PLAYER_COOKIE) ?? '';
+    const token = readCookie(request, playerCookie(app)) ?? '';
     if (
       !(await this.accounts.changePassword(
         playerOf(request),
@@ -137,23 +149,25 @@ export class PlayerSignInController {
   @HttpCode(204)
   @Throttle({ default: { limit: 3, ttl: 3_600_000 } })
   async forgot(
+    @Param('app', { schema: appSchema }) app: AppId,
     @Body({ schema: forgotSchema }) { email }: z.infer<typeof forgotSchema>,
   ): Promise<void> {
-    await this.accounts.forgot(email);
+    await this.accounts.forgot(app, email);
   }
 
   @Post('reset/:secret')
   @Throttle(FEW_PER_15_MINUTES)
   async reset(
+    @Param('app', { schema: appSchema }) app: AppId,
     @Param('secret', { schema: secretSchema }) secret: string,
     @Body({ schema: resetSchema }) { password }: z.infer<typeof resetSchema>,
     @Res({ passthrough: true }) response: Response,
   ): Promise<Account> {
-    const signedIn = await this.accounts.reset(secret, password);
+    const signedIn = await this.accounts.reset(app, secret, password);
     if (!signedIn) {
       throw new NotFoundException();
     }
-    return this.startSession(signedIn, response);
+    return this.startSession(app, signedIn, response);
   }
 
   /** Deletes the account and everything in it */
@@ -162,6 +176,7 @@ export class PlayerSignInController {
   @UseGuards(PlayerGuard)
   @Throttle(FEW_PER_15_MINUTES)
   async remove(
+    @Param('app', { schema: appSchema }) app: AppId,
     @Req() request: PlayerRequest,
     @Body({ schema: deleteSchema }) { password }: z.infer<typeof deleteSchema>,
     @Res({ passthrough: true }) response: Response,
@@ -169,14 +184,15 @@ export class PlayerSignInController {
     if (!(await this.accounts.remove(playerOf(request), password))) {
       throw new UnauthorizedException('wrong-password');
     }
-    clearSessionCookie(response, this.cookies, PLAYER_COOKIE);
+    clearSessionCookie(response, this.cookies, playerCookie(app));
   }
 
   private async startSession(
+    app: AppId,
     { player, token, expires }: PlayerSignedIn,
     response: Response,
   ): Promise<Account> {
-    setSessionCookie(response, token, expires, this.cookies, PLAYER_COOKIE);
+    setSessionCookie(response, token, expires, this.cookies, playerCookie(app));
     return accountView(player, this.results);
   }
 }

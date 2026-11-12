@@ -14,6 +14,7 @@ import {
 } from '../auth/passwords.js';
 import type { Env } from '../config/env.js';
 import { afterFailure, isLocked, UNLOCKED } from '../security/login-lock.js';
+import type { AppId } from '../shared/apps.js';
 import type { GameSlug } from '../shared/catalog.js';
 import type { ChangeInput, RegisterInput } from './accounts.schema.js';
 import { Mailer } from './mailer.js';
@@ -41,13 +42,14 @@ export type AccountConflict =
   'login-taken' | 'screen-name-taken' | 'email-taken';
 
 /**
- * Player accounts: signing up and in, sessions kept by a cookie, the screen name, an optional email to reset a
+ * Player accounts, each in one app: signing up and in, sessions kept by a cookie, the screen name, an optional email to reset a
  * forgotten password, favourites, and deleting the account with everything in it. Answers never tell a wrong name
  * from a wrong password, and an account locks for a while after too many failures.
  */
 @Injectable()
 export class AccountsService {
-  private readonly gamesUrl: string;
+  /** Each app's site, for the links in its emails */
+  private readonly appUrls: Readonly<Record<AppId, string>>;
 
   constructor(
     @InjectRepository(Player) private readonly players: Repository<Player>,
@@ -56,7 +58,7 @@ export class AccountsService {
     private readonly mailer: Mailer,
     config: ConfigService<Env, true>,
   ) {
-    this.gamesUrl = config.get('GAMES_URL', { infer: true });
+    this.appUrls = { games: config.get('GAMES_URL', { infer: true }) };
   }
 
   /** Whether accounts may have an email (only when emails can be sent) */
@@ -65,6 +67,7 @@ export class AccountsService {
   }
 
   async register(
+    app: AppId,
     {
       loginName,
       password,
@@ -77,8 +80,9 @@ export class AccountsService {
     if (email && !this.canEmail) {
       throw new BadRequestException('email-unavailable');
     }
-    await this.refuseTaken({ loginName, screenName, email });
+    await this.refuseTaken(app, { loginName, screenName, email });
     await this.players.insert({
+      app,
       loginName,
       screenName,
       screenNameKey: screenName.toLowerCase(),
@@ -87,19 +91,20 @@ export class AccountsService {
       showOnLeaderboard,
     });
     return this.startSession(
-      await this.players.findOneByOrFail({ loginName }),
+      await this.players.findOneByOrFail({ app, loginName }),
       now,
     );
   }
 
   /** A new session when the name (or email) and password are right; null otherwise */
   async signIn(
+    app: AppId,
     name: string,
     password: string,
     now = new Date(),
   ): Promise<PlayerSignedIn | null> {
     const player = await this.players.findOneBy(
-      name.includes('@') ? { email: name } : { loginName: name },
+      name.includes('@') ? { app, email: name } : { app, loginName: name },
     );
     if (!player) {
       await verifyPassword(password, await DUMMY_HASH_PROMISE);
@@ -116,8 +121,9 @@ export class AccountsService {
     return this.startSession(player, now);
   }
 
-  /** The player a session cookie belongs to, while it hasn't expired */
+  /** The player of `app` a session cookie belongs to, while it hasn't expired */
   async playerForToken(
+    app: AppId,
     token: string,
     now = new Date(),
   ): Promise<Player | null> {
@@ -127,7 +133,7 @@ export class AccountsService {
     if (!session || session.expires <= now) {
       return null;
     }
-    return this.players.findOneBy({ id: session.playerId });
+    return this.players.findOneBy({ id: session.playerId, app });
   }
 
   async signOut(token: string): Promise<void> {
@@ -148,6 +154,7 @@ export class AccountsService {
       }
     }
     await this.refuseTaken(
+      player.app,
       { screenName, email: email ?? undefined },
       player.id,
     );
@@ -184,10 +191,10 @@ export class AccountsService {
     return true;
   }
 
-  /** Emails a reset link when an account has this email; says nothing either way */
-  async forgot(email: string, now = new Date()): Promise<void> {
+  /** Emails a reset link when an account of `app` has this email; says nothing either way */
+  async forgot(app: AppId, email: string, now = new Date()): Promise<void> {
     const player = this.canEmail
-      ? await this.players.findOneBy({ email })
+      ? await this.players.findOneBy({ app, email })
       : null;
     if (!player) {
       return;
@@ -207,20 +214,22 @@ export class AccountsService {
         `Hi ${player.screenName},`,
         '',
         `To choose a new password, open this link within ${RESET_MINUTES} minutes:`,
-        `${this.gamesUrl}/account/reset/${secret}`,
+        `${this.appUrls[app]}/account/reset/${secret}`,
         '',
         "If you didn't ask for it, you can ignore this email: your password stays the same.",
       ].join('\n'),
     );
   }
 
-  /** Sets a new password from a reset link, signs out every browser, and signs this one in; null for a bad link */
+  /** Sets a new password from a reset link of `app`, signs out every browser, and signs this one in; null for a bad link */
   async reset(
+    app: AppId,
     secret: string,
     password: string,
     now = new Date(),
   ): Promise<PlayerSignedIn | null> {
     const player = await this.players.findOneBy({
+      app,
       resetHash: hashToken(secret),
     });
     if (!player?.resetExpires || player.resetExpires <= now) {
@@ -258,8 +267,9 @@ export class AccountsService {
     );
   }
 
-  /** Refuses a login name, screen name or email someone else already has */
+  /** Refuses a login name, screen name or email someone else in the app already has */
   private async refuseTaken(
+    app: AppId,
     {
       loginName,
       screenName,
@@ -268,7 +278,11 @@ export class AccountsService {
     exceptId?: string,
   ): Promise<void> {
     const others = (where: FindOptionsWhere<Player>) =>
-      this.players.existsBy(exceptId ? { ...where, id: Not(exceptId) } : where);
+      this.players.existsBy({
+        ...where,
+        app,
+        ...(exceptId ? { id: Not(exceptId) } : {}),
+      });
     const conflicts: [AccountConflict, boolean][] = [
       ['login-taken', loginName !== undefined && (await others({ loginName }))],
       [

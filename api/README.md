@@ -23,9 +23,10 @@ Admin sign-in (a 30-day HttpOnly session cookie): `POST /auth/login` (`{ email, 
 `POST /auth/logout`, `POST /auth/password` (`{ current, next }`), `GET`/`POST /auth/invite/:secret` (accept an invite
 with `{ password }`). The super admin manages the team: `GET /admin/team`, `POST /admin/team` (`{ email, role: moderator|tester, password? }`;
 without a password the answer has an invite link secret), `POST /admin/team/:id/invite`, `PATCH /admin/team/:id`
-(`{ active?, role? }`). Players sign in there too: `GET /v1/account/options`, `POST /v1/account` (sign up),
-`POST /v1/account/login`, `POST /v1/account/logout`, `POST /v1/account/password`, `POST /v1/account/forgot`,
-`POST /v1/account/reset/:secret` and `DELETE /v1/account`. Everything else, including the account's data
+(`{ active?, role? }`). Players sign in there too, each app with its own accounts
+and cookie (`su_labs_<app>_player`; apps are listed in `src/shared/apps.ts`, so far only `games`) under
+`/v1/apps/:app/account`: `GET …/options`, `POST …` (sign up), `POST …/login`, `POST …/logout`, `POST …/password`,
+`POST …/forgot`, `POST …/reset/:secret` and `DELETE …`. The admin team is shared by every app. Everything else, including the account's data
 (`GET`/`PATCH /v1/account`, favourites, results, leaderboards) and switching games (`PUT /admin/games/:game`), is on
 api.su-labs.dev.
 

@@ -3,20 +3,30 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
+import type { AppId } from '../shared/apps.js';
 
 /**
- * A player's account on the games site: a private login name and password, a public screen name for the leaderboard,
- * and optionally an email (only to reset a forgotten password), and whether they appear on the leaderboards. Holds the player's favourites; their results are in
- * player_results.
+ * A player's account in one app (the games site so far): a private login name and password, a public screen name for
+ * the leaderboard, optionally an email (only to reset a forgotten password), and whether they appear on the
+ * leaderboards. Holds the player's favourites; their results are in player_results. Names and emails are unique within
+ * the app.
  */
 @Entity('players')
+@Unique('players_app_login_name', ['app', 'loginName'])
+@Unique('players_app_screen_name', ['app', 'screenNameKey'])
+@Unique('players_app_email', ['app', 'email'])
 export class Player {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  /** The app the account belongs to */
+  @Column({ type: 'varchar', length: 20 })
+  app: AppId;
+
   /** Their sign-in, lowercase; never shown to anyone */
-  @Column({ type: 'varchar', length: 30, name: 'login_name', unique: true })
+  @Column({ type: 'varchar', length: 30, name: 'login_name' })
   loginName: string;
 
   /** The name the leaderboard shows, as they typed it */
@@ -24,12 +34,7 @@ export class Player {
   screenName: string;
 
   /** The screen name lowercase, so two players can't take names that only differ in capitals */
-  @Column({
-    type: 'varchar',
-    length: 20,
-    name: 'screen_name_key',
-    unique: true,
-  })
+  @Column({ type: 'varchar', length: 20, name: 'screen_name_key' })
   screenNameKey: string;
 
   /** scrypt hash with its salt (see auth/passwords.ts) */
@@ -37,7 +42,7 @@ export class Player {
   passwordHash: string;
 
   /** Only to reset a forgotten password; lowercase */
-  @Column({ type: 'varchar', length: 254, nullable: true, unique: true })
+  @Column({ type: 'varchar', length: 254, nullable: true })
   email: string | null;
 
   /** SHA-256 of an open password-reset link's secret, and when it stops working */

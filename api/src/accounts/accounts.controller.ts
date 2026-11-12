@@ -16,7 +16,8 @@ import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 import { z } from 'zod';
 import { AuthService } from '../auth/auth.service.js';
-import { PLAYER_COOKIE, readCookie, sessionToken } from '../auth/session-cookie.js';
+import { readCookie, sessionToken } from '../auth/session-cookie.js';
+import { API_APP, playerCookie } from '../shared/apps.js';
 import { FeatureFlagsService } from '../feature-flags/feature-flags.service.js';
 import type { ResultGame } from '../shared/catalog.js';
 import { resultGameSchema } from '../shared/catalog.js';
@@ -125,8 +126,10 @@ export class LeaderboardController {
     @Req() request: Request,
     @Param('game', { schema: resultGameSchema }) game: ResultGame,
   ): Promise<{ boards: Leaderboard[] }> {
-    const token = readCookie(request, PLAYER_COOKIE);
-    const player = token ? await this.accounts.playerForToken(token) : null;
+    const token = readCookie(request, playerCookie(API_APP));
+    const player = token
+      ? await this.accounts.playerForToken(API_APP, token)
+      : null;
     const isPublic = await this.isPublic(request);
     if (!player && !isPublic) {
       throw new UnauthorizedException();
