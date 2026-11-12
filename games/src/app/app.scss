@@ -150,6 +150,13 @@
   gap: 0.375rem;
 }
 
+// A setting that only matters on phones and tablets (the width where rooms switch to columns, see rooms.scss)
+.setting.is-small-screens-only {
+  @media (min-width: 56rem) {
+    display: none;
+  }
+}
+
 .setting-label {
   color: var(--muted);
   font-size: 0.75rem;

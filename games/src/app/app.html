@@ -136,7 +136,8 @@
             </div>
           }
           @if (reactions.isAvailable()) {
-            <div class="setting">
+            <!-- Only phones and tablets: on wide screens the stickers always sit right of the game -->
+            <div class="setting is-small-screens-only">
               <p class="setting-label" id="setting-reaction-side">{{ 'site.reactionSide' | translate }}</p>
               <div class="languages" role="group" aria-labelledby="setting-reaction-side">
                 @for (side of reactionSides; track side) {

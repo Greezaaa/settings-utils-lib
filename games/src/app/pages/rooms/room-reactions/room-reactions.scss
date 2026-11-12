@@ -1,4 +1,5 @@
-// A column stuck to the middle of the right edge (left when chosen), small enough to leave the game in view
+// Phones and tablets: a column stuck to the middle of the right edge (left when chosen in the settings), small enough
+// to leave the game in view
 :host {
   position: fixed;
   right: 0.5rem;
@@ -10,6 +11,18 @@
 :host(.is-left) {
   left: 0.5rem;
   right: auto;
+}
+
+// Wide screens (the room's columns, see .room-layout in rooms.scss): always right of the game, scrolling with it
+@media (min-width: 56rem) {
+  :host,
+  :host(.is-left) {
+    left: auto;
+    position: sticky;
+    right: auto;
+    top: calc(var(--site-header-height, 0px) + 1rem);
+    translate: none;
+  }
 }
 
 .stickers {

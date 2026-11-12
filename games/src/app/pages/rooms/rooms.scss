@@ -144,6 +144,11 @@
   @media (min-width: 56rem) {
     grid-template-columns: 16rem minmax(0, 1fr);
 
+    // The stickers, when on, in a narrow column right of the game (see room-reactions.scss)
+    &:has(app-room-reactions) {
+      grid-template-columns: 16rem minmax(0, 1fr) auto;
+    }
+
     app-room-players {
       background: none;
       padding-block: 0;
