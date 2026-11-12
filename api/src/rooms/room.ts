@@ -382,8 +382,8 @@ export function startRound(
 const MAX_ANSWERS_PER_SECOND = 3;
 
 /**
- * Takes a player's score during the round (it only goes up, and stays plausible for the time played), and moves the
- * room from countdown to playing once the round has started
+ * Takes a player's score during the round (the latest report, which can be lower after a wrong answer, capped to what
+ * is plausible for the time played), and moves the room from countdown to playing once the round has started
  */
 export function reportScore(
   room: Room,
@@ -403,7 +403,8 @@ export function reportScore(
   }
   const elapsedSeconds = (Math.min(now, round.endsAt) - round.startsAt) / 1000;
   const plausible = Math.ceil(elapsedSeconds * MAX_ANSWERS_PER_SECOND);
-  player.score = Math.max(player.score, Math.min(Math.floor(score), plausible));
+  // The latest report counts, so a score can fall: a wrong answer takes a point off
+  player.score = Math.min(Math.floor(score), plausible);
   room.lastActivity = now;
 }
 

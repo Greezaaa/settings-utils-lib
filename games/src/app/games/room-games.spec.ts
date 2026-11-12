@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ROOM_GAMES } from '../core/features';
 import { scramble } from './turn-picture';
-import { roomChoice, roomLetters, roomPicture, roomRandom, roomSliding, ROOM_CHOICES } from './room-games';
+import { ROOM_CHOICES, roomChoice, roomLetters, roomPicture, roomRandom, roomSliding, scoreAfterAnswer } from './room-games';
 import { roomWords } from './room-letters';
 import { tilesInPlace } from './sliding-puzzle';
 import { WORD_BANKS } from './words';
@@ -41,5 +41,18 @@ describe('room rounds', () => {
   it('counts the sliding puzzle’s tiles in their own cell', () => {
     expect(tilesInPlace([0, 2, 1, null])).toBe(1);
     expect(tilesInPlace([0, 1, 2, null])).toBe(3);
+  });
+});
+
+describe('scoreAfterAnswer', () => {
+  it('adds a point for a right answer and takes one off for a wrong one, never below zero', () => {
+    expect(scoreAfterAnswer(3, true)).toBe(4);
+    expect(scoreAfterAnswer(3, false)).toBe(2);
+    expect(scoreAfterAnswer(0, false)).toBe(0);
+  });
+
+  it('makes guessing true or false at random worth nothing on average', () => {
+    const guesses = [true, false, true, false, true, false];
+    expect(guesses.reduce(scoreAfterAnswer, 0)).toBeLessThanOrEqual(1);
   });
 });

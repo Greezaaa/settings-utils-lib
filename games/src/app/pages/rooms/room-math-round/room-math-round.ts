@@ -9,6 +9,7 @@ import { RoundResult } from '../../math-games/rounds/round-result';
 import { TrueOrFalseRound } from '../../math-games/rounds/true-or-false-round/true-or-false-round';
 import { YourAnswerRound } from '../../math-games/rounds/your-answer-round/your-answer-round';
 import { roundClock } from '../round-clock';
+import { scoreAfterAnswer } from '../../../games/room-games';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 /**
@@ -67,10 +68,8 @@ export class RoomMathRound {
     if (this.clock.isOver()) {
       return;
     }
-    if (isCorrect) {
-      this.score.update(score => score + 1);
-      this.scored.emit(this.score());
-    }
+    this.score.update(score => scoreAfterAnswer(score, isCorrect));
+    this.scored.emit(this.score());
     this.index.update(index => index + 1);
   }
 

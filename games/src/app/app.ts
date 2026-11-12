@@ -4,7 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { FontSizeService } from '@su-labs/font-size';
 import { SuDialogComponent, SuDialogService } from '@su-labs/dialog';
 import { SuNotificationComponent } from '@su-labs/notifications';
-import { SuBaseThemeName } from '@su-labs/theme';
+import { isSuBaseThemeName, SuThemeName } from '@su-labs/theme';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { PlayerAccount } from './core/player-account';
@@ -25,8 +25,6 @@ import { MenuRing } from './shared/menu-ring';
 import { ScrollToActive } from './shared/scroll-to-active';
 import { TranslatePipe } from './i18n/translate-pipe';
 
-const THEME_CYCLE: readonly SuBaseThemeName[] = ['system', 'light', 'dark', 'contrast'];
-
 /** Site shell: header with text size, theme and language settings and the list of games, page outlet and footer */
 @Component({
   selector: 'app-root',
@@ -44,8 +42,8 @@ const THEME_CYCLE: readonly SuBaseThemeName[] = ['system', 'light', 'dark', 'con
   templateUrl: './app.html',
   styleUrl: './app.scss',
   host: {
-    '(document:click)': 'closeSettingsOnOutsideClick($event)',
-    '(document:keydown.escape)': 'settingsOpen.set(false)',
+    '(document:click)': 'closePanelsOnOutsideClick($event)',
+    '(document:keydown.escape)': 'settingsOpen.set(false); menuOpen.set(false)',
   },
 })
 export class App {
@@ -84,10 +82,10 @@ export class App {
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
 
-  protected readonly nextTheme = computed(() => {
-    const index = THEME_CYCLE.indexOf(this.theme.preference());
-    return THEME_CYCLE[(index + 1) % THEME_CYCLE.length];
-  });
+  /** The chosen theme's colours, for the swatch beside the picker */
+  protected readonly themeSwatch = computed(() => this.theme.coloursOf(this.theme.preference()));
+  /** Whether the menu is open (phones only, where it hides behind the menu button) */
+  protected readonly menuOpen = signal(false);
 
   /** Whether the settings panel is open (only used on phones, where it hides behind the gear button) */
   protected readonly settingsOpen = signal(false);
@@ -112,12 +110,29 @@ export class App {
     router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.pageGame.set(gameOfPath(event.urlAfterRedirects));
+        // A link in the phone menu went to its page
+        this.menuOpen.set(false);
       }
     });
   }
 
-  protected cycleTheme(): void {
-    this.theme.set(this.nextTheme());
+  /** A theme's name in the picker: the site's own themes, or a palette by its board-colours name */
+  protected themeName(theme: SuThemeName): string {
+    const { themeNames, boardThemes } = this.t().site;
+    return isSuBaseThemeName(theme) ? themeNames[theme] : boardThemes[theme].name;
+  }
+
+  protected chooseTheme(event: Event): void {
+    const value = event.target instanceof HTMLSelectElement ? event.target.value : null;
+    const theme = this.theme.choices.find((choice) => choice === value);
+    if (theme) {
+      this.theme.set(theme);
+    }
+  }
+
+  protected toggleMenu(): void {
+    this.menuOpen.update((open) => !open);
+    this.settingsOpen.set(false);
   }
 
   /** Keeps --site-header-height on the root up to date, so bars stuck to the top sit just below the sticky header */
@@ -137,11 +152,19 @@ export class App {
 
   protected toggleSettings(): void {
     this.settingsOpen.update((open) => !open);
+    this.menuOpen.set(false);
   }
 
-  protected closeSettingsOnOutsideClick(event: MouseEvent): void {
-    if (event.target instanceof Node && !this.settings().nativeElement.contains(event.target)) {
+  /** A tap outside the settings closes them, and one outside the header closes the phone menu */
+  protected closePanelsOnOutsideClick(event: MouseEvent): void {
+    if (!(event.target instanceof Node)) {
+      return;
+    }
+    if (!this.settings().nativeElement.contains(event.target)) {
       this.settingsOpen.set(false);
+    }
+    if (!this.siteHeader().nativeElement.contains(event.target)) {
+      this.menuOpen.set(false);
     }
   }
 }

@@ -4,6 +4,7 @@ import { RoomMeasure, roomMeasureExercises } from '../../../games/room-measure';
 import { TimerBar } from '../../../shared/timer-bar/timer-bar';
 import { MeasureRound } from '../../measure-it/measure-round/measure-round';
 import { roundClock } from '../round-clock';
+import { scoreAfterAnswer } from '../../../games/room-games';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 /**
@@ -52,10 +53,8 @@ export class RoomMeasureRound {
     if (this.clock.isOver()) {
       return;
     }
-    if (isRight) {
-      this.score.update(score => score + 1);
-      this.scored.emit(this.score());
-    }
+    this.score.update(score => scoreAfterAnswer(score, isRight));
+    this.scored.emit(this.score());
     this.index.update(index => index + 1);
   }
 }

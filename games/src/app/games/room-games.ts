@@ -130,3 +130,10 @@ export function roomSliding(mode: string, level: string): RoomSliding {
  * number: the same on every device, whichever puzzle each player has reached
  */
 export const roomRandom = (seed: number, index: number): Random => seededRandom(seed * 1009 + index);
+
+/**
+ * A room round's score after an answer, in rounds where an answer is right or wrong (math, Measure it): a point for a
+ * right one, a point off for a wrong one, never below zero. Tapping at random then gains nothing, so a player who
+ * thinks beats one who guesses fast.
+ */
+export const scoreAfterAnswer = (score: number, isRight: boolean): number => Math.max(0, score + (isRight ? 1 : -1));

@@ -1,27 +1,43 @@
-// Phones and tablets: a column stuck to the middle of the right edge (left when chosen in the settings), small enough
-// to leave the game in view
+// Phones and tablets: a column inside the game card's right edge (left when chosen in the settings), in the same
+// cell of the room's grid as the card (see .room-layout in rooms.scss). The column itself follows the scroll within the
+// card, below the players' strip, so the stickers stay at hand without covering the page outside the game.
 :host {
-  position: fixed;
-  right: 0.5rem;
-  top: 50%;
-  translate: 0 -50%;
-  z-index: 20;
+  align-self: stretch;
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: end;
+  padding: 0.5rem;
+  // Only the stickers take taps; the rest of the strip lets them through to the game
+  pointer-events: none;
+  z-index: 3;
 }
 
 :host(.is-left) {
-  left: 0.5rem;
-  right: auto;
+  justify-self: start;
+}
+
+.stickers {
+  pointer-events: auto;
+  position: sticky;
+  // Below the site header and the players' strip stuck under it (about 4.5rem)
+  top: calc(var(--site-header-height, 0px) + 4.5rem);
 }
 
 // Wide screens (the room's columns, see .room-layout in rooms.scss): always right of the game, scrolling with it
 @media (min-width: 56rem) {
   :host,
   :host(.is-left) {
-    left: auto;
+    align-self: start;
+    grid-column: auto;
+    grid-row: auto;
+    justify-self: auto;
+    padding: 0;
     position: sticky;
-    right: auto;
     top: calc(var(--site-header-height, 0px) + 1rem);
-    translate: none;
+  }
+
+  .stickers {
+    position: static;
   }
 }
 

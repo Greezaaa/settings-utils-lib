@@ -68,8 +68,8 @@ export interface SiteMessages {
     readonly smallerText: string;
     readonly largerText: string;
     readonly themeNames: Readonly<Record<SuBaseThemeName, string>>;
-    /** Label of the theme switch, e.g. `Theme: dark. Switch to contrast` */
-    readonly themeSwitch: (current: string, next: string) => string;
+    /** The phone menu's button, for screen readers */
+    readonly menu: string;
     readonly language: string;
     readonly boardColours: string;
     readonly boardThemes: Readonly<Record<GameThemeId, OptionText>>;

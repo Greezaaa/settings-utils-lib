@@ -71,8 +71,8 @@
   }
 }
 
-// The animated menu (the appMenuRing directive): a pink shape drifts after the pointer over the menu and fills the
-// link it reaches, whose text turns white once covered
+// The animated menu (the appMenuRing directive): a shape in the theme's button colour drifts after the pointer over the
+// menu and fills the link it reaches, whose text takes the button text colour once covered
 .has-menu-ring {
   position: relative;
   // Room above the links for the shape, as the menu clips what sticks out (it scrolls sideways on phones)
@@ -83,7 +83,7 @@
 }
 
 .menu-ring {
-  background: #d4537e;
+  background: var(--button-bg);
   border-radius: 999px;
   left: 0;
   opacity: 0;

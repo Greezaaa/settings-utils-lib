@@ -140,8 +140,10 @@ describe('rooms', () => {
 
     reportScore(room, first.id, 1000, startsAt + 2000);
     expect(first.score).toBe(6);
-    reportScore(room, first.id, 12, startsAt + 10_000);
+    // A wrong answer takes a point off, so a lower score counts too
     reportScore(room, first.id, 3, startsAt + 11_000);
+    expect(first.score).toBe(3);
+    reportScore(room, first.id, 12, startsAt + 10_000);
     expect(first.score).toBe(12);
     reportScore(room, second.id, 12, startsAt + 10_000);
     reportScore(room, third.id, 4, startsAt + 10_000);
