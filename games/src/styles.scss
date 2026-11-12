@@ -96,3 +96,46 @@
     opacity: 1;
   }
 }
+
+// A header setting that only matters on phones and tablets (the width where rooms switch to columns, see rooms.scss)
+.setting.is-small-screens-only {
+  @media (min-width: 56rem) {
+    display: none;
+  }
+}
+
+// The same shape on every group of choice buttons while the animated menu is on (ChoiceRing): it carries the chosen
+// colour behind the buttons, which go see-through, and the button it covers takes the chosen text colour. The buttons
+// keep their borders, so the gaps between them stay. !important: each page styles its chosen button its own way, and
+// this has to win over all of them while it's on
+.has-choice-ring {
+  position: relative;
+
+  button[aria-pressed] {
+    background-color: transparent !important;
+    color: var(--choice-ring-plain) !important;
+    position: relative;
+    transition: color 150ms ease;
+    z-index: 1;
+
+    &.is-covered {
+      color: var(--choice-ring-text) !important;
+    }
+  }
+}
+
+.choice-ring {
+  background: var(--choice-ring-colour);
+  border-radius: var(--choice-ring-radius);
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transition: opacity 250ms ease;
+  z-index: 0;
+
+  &.is-visible {
+    opacity: 1;
+  }
+}

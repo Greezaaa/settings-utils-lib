@@ -20,6 +20,7 @@ import { GAME_THEMES, getGameTheme, isGameThemeId } from './core/game-themes';
 import { SiteNotices } from './core/site-notices';
 import { SiteTheme } from './core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from './i18n/site-language';
+import { ChoiceRing } from './shared/choice-ring';
 import { MenuRing } from './shared/menu-ring';
 import { ScrollToActive } from './shared/scroll-to-active';
 import { TranslatePipe } from './i18n/translate-pipe';
@@ -100,10 +101,12 @@ export class App {
     const dialog = inject(SuDialogService);
     effect(() => dialog.configure({ acceptLabel: this.t().site.noticeOk, cancelLabel: this.t().site.cancel }));
     // Which games are open (and whether this is the admin's preview) is known once the API answers
+    const choiceRing = inject(ChoiceRing);
     afterNextRender(() => {
       void this.availability.ready();
       void this.features.ready();
       this.shareHeaderHeight();
+      choiceRing.start();
     });
     const router = inject(Router);
     router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
