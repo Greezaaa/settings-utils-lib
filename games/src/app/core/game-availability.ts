@@ -50,6 +50,11 @@ export class GameAvailability {
     return this.loading;
   }
 
+  /** Sets one switch here straight away, e.g. while the admin's change is being saved */
+  setOpen(game: GameSlug, open: boolean): void {
+    this.switches.update((switches) => new Map(switches).set(game, open));
+  }
+
   /** Reads the switches again, e.g. after the admin changed one */
   async refresh(): Promise<void> {
     this.loading = this.load();

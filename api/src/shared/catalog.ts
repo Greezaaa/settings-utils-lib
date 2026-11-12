@@ -72,6 +72,42 @@ export const RESULT_DIRECTIONS: Readonly<
   'turn-picture': 'lower',
   'place-pieces': 'lower',
 };
+
+/**
+ * The results a game can really give, so a made-up score can't top the leaderboards: the most points or floors, the
+ * fewest moves or seconds. Find the pairs needs at least one move per pair of its board (by level). Keep in sync with
+ * the games (games/src/app/games/).
+ */
+const PAIRS_PER_LEVEL: Readonly<Record<string, number>> = {
+  easy: 6,
+  normal: 12,
+  hard: 15,
+  expert: 18,
+};
+const RESULT_LIMITS: Readonly<
+  Record<ResultGame, { readonly min: (key: string) => number; readonly max: number }>
+> = {
+  'math-games': { min: () => 0, max: 1000 },
+  'climb-tower': { min: () => 0, max: 1000 },
+  'find-pairs': { min: (key) => PAIRS_PER_LEVEL[key] ?? 6, max: 10_000 },
+  'sliding-puzzle': { min: () => 1, max: 100_000 },
+  'turn-picture': { min: () => 2, max: 100_000 },
+  'place-pieces': { min: () => 2, max: 100_000 },
+};
+
+/** Whether a game could really give this result */
+export function isPlausibleResult({
+  game,
+  key,
+  value,
+}: {
+  readonly game: ResultGame;
+  readonly key: string;
+  readonly value: number;
+}): boolean {
+  const { min, max } = RESULT_LIMITS[game];
+  return value >= min(key) && value <= max;
+}
 export type LanguageId = (typeof LANGUAGE_IDS)[number];
 export type FeatureId = (typeof FEATURE_IDS)[number];
 

@@ -4,10 +4,12 @@ import {
   Delete,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Put,
+  Query,
   Req,
   UnauthorizedException,
   UseGuards,
@@ -19,6 +21,8 @@ import { AuthService } from '../auth/auth.service.js';
 import { readCookie, sessionToken } from '../auth/session-cookie.js';
 import { API_APP, playerCookie } from '../shared/apps.js';
 import { FeatureFlagsService } from '../feature-flags/feature-flags.service.js';
+import { AdminGuard } from '../security/admin.guard.js';
+import { limitSchema, offsetSchema } from '../shared/page.js';
 import type { ResultGame } from '../shared/catalog.js';
 import { resultGameSchema } from '../shared/catalog.js';
 import { Account, accountView, FEW_PER_15_MINUTES, playerOf } from './account-view.js';
@@ -26,10 +30,11 @@ import {
   bestsSchema,
   changeSchema,
   favoritesSchema,
+  leaderboardChoiceSchema,
   resultSchema,
 } from './accounts.schema.js';
 import type { ChangeInput, ResultInput } from './accounts.schema.js';
-import { AccountsService } from './accounts.service.js';
+import { AccountsService, ModeratedPlayer } from './accounts.service.js';
 import type { PlayerRequest } from './player.guard.js';
 import { PlayerGuard } from './player.guard.js';
 import { Leaderboard, ResultsService } from './results.service.js';
@@ -60,6 +65,22 @@ export class AccountsController {
     @Body({ schema: changeSchema }) input: ChangeInput,
   ): Promise<void> {
     await this.accounts.change(playerOf(request), input);
+  }
+
+  /**
+   * Shows the player on the leaderboards or hides them. A switch a player may flip back and forth, so it allows more
+   * than the name and email changes (which can check a password, and stay strict)
+   */
+  @Put('leaderboard')
+  @HttpCode(204)
+  @UseGuards(PlayerGuard)
+  @Throttle({ default: { limit: 30, ttl: 60_000 } })
+  async setShowOnLeaderboard(
+    @Req() request: PlayerRequest,
+    @Body({ schema: leaderboardChoiceSchema })
+    { show }: z.infer<typeof leaderboardChoiceSchema>,
+  ): Promise<void> {
+    await this.accounts.setShowOnLeaderboard(playerOf(request), show);
   }
 
   @Put('favorites')
@@ -146,5 +167,49 @@ export class LeaderboardController {
     }
     const adminToken = sessionToken(request);
     return adminToken !== null && (await this.auth.adminForToken(adminToken)) !== null;
+  }
+}
+
+const playerIdSchema = z.uuid();
+const removedSchema = z.object({ removedFromBoards: z.boolean() });
+
+/**
+ * For moderators: the players on the leaderboards, to give one a plain new name (a rude screen name) or take them off
+ * the leaderboards (made-up scores), and put them back
+ */
+@Controller('admin/players')
+@UseGuards(AdminGuard)
+export class PlayersAdminController {
+  constructor(private readonly accounts: AccountsService) {}
+
+  @Get()
+  list(
+    @Query('offset', { schema: offsetSchema }) offset: number,
+    @Query('limit', { schema: limitSchema }) limit: number,
+  ): Promise<ModeratedPlayer[]> {
+    return this.accounts.moderationList({ offset, limit });
+  }
+
+  @Post(':id/rename')
+  async rename(
+    @Param('id', { schema: playerIdSchema }) id: string,
+  ): Promise<{ screenName: string }> {
+    const screenName = await this.accounts.renameByModerator(id);
+    if (screenName === null) {
+      throw new NotFoundException();
+    }
+    return { screenName };
+  }
+
+  @Patch(':id')
+  @HttpCode(204)
+  async setRemoved(
+    @Param('id', { schema: playerIdSchema }) id: string,
+    @Body({ schema: removedSchema })
+    { removedFromBoards }: z.infer<typeof removedSchema>,
+  ): Promise<void> {
+    if (!(await this.accounts.setRemovedFromBoards(id, removedFromBoards))) {
+      throw new NotFoundException();
+    }
   }
 }

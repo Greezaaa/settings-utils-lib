@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { randomInt } from 'node:crypto';
 import { FindOptionsWhere, LessThan, Not, Repository } from 'typeorm';
 import {
   hashPassword,
@@ -15,6 +16,7 @@ import {
 import type { Env } from '../config/env.js';
 import { afterFailure, isLocked, UNLOCKED } from '../security/login-lock.js';
 import type { AppId } from '../shared/apps.js';
+import type { Page } from '../shared/page.js';
 import type { GameSlug } from '../shared/catalog.js';
 import type { ChangeInput, RegisterInput } from './accounts.schema.js';
 import { Mailer } from './mailer.js';
@@ -35,6 +37,16 @@ export interface PlayerSignedIn {
   readonly player: Player;
   readonly token: string;
   readonly expires: Date;
+}
+
+/** A player as moderators see them: only what the leaderboards show, never the login name or email */
+export interface ModeratedPlayer {
+  readonly id: string;
+  readonly app: AppId;
+  readonly screenName: string;
+  readonly showOnLeaderboard: boolean;
+  readonly removedFromBoards: boolean;
+  readonly created: Date;
 }
 
 /** Why a sign-up or change was refused, as the games site shows it */
@@ -143,7 +155,7 @@ export class AccountsService {
   /** A new screen name, or an email added, changed or removed (changing it needs the password) */
   async change(
     player: Player,
-    { screenName, email, password, showOnLeaderboard }: ChangeInput,
+    { screenName, email, password }: ChangeInput,
   ): Promise<void> {
     if (email !== undefined) {
       if (email !== null && !this.canEmail) {
@@ -165,9 +177,13 @@ export class AccountsService {
           ? { screenName, screenNameKey: screenName.toLowerCase() }
           : {}),
         ...(email !== undefined ? { email } : {}),
-        ...(showOnLeaderboard !== undefined ? { showOnLeaderboard } : {}),
       },
     );
+  }
+
+  /** Shows the player on the leaderboards or hides them */
+  async setShowOnLeaderboard(player: Player, show: boolean): Promise<void> {
+    await this.players.update({ id: player.id }, { showOnLeaderboard: show });
   }
 
   /** Changes the password after checking the current one; signs out every other browser */
@@ -265,6 +281,57 @@ export class AccountsService {
       { id: player.id },
       { favorites: [...new Set(games)] },
     );
+  }
+
+  /** Players for moderators, newest first: those on the leaderboards, and those taken off them */
+  async moderationList({ offset, limit }: Page): Promise<ModeratedPlayer[]> {
+    const players = await this.players.find({
+      where: [{ showOnLeaderboard: true }, { removedFromBoards: true }],
+      order: { created: 'DESC' },
+      skip: offset,
+      take: limit,
+    });
+    return players.map(
+      ({ id, app, screenName, showOnLeaderboard, removedFromBoards, created }) => ({
+        id,
+        app,
+        screenName,
+        showOnLeaderboard,
+        removedFromBoards,
+        created,
+      }),
+    );
+  }
+
+  /** A moderator replaces a player's screen name with a plain one (`Player 4821`), free in the player's app; null if no such player */
+  async renameByModerator(id: string): Promise<string | null> {
+    const player = await this.players.findOneBy({ id });
+    if (!player) {
+      return null;
+    }
+    let screenName: string;
+    do {
+      screenName = `Player ${randomInt(1000, 10_000)}`;
+    } while (
+      await this.players.existsBy({
+        app: player.app,
+        screenNameKey: screenName.toLowerCase(),
+      })
+    );
+    await this.players.update(
+      { id },
+      { screenName, screenNameKey: screenName.toLowerCase() },
+    );
+    return screenName;
+  }
+
+  /** A moderator takes a player off the leaderboards, or puts them back; false if no such player */
+  async setRemovedFromBoards(id: string, removed: boolean): Promise<boolean> {
+    const { affected } = await this.players.update(
+      { id },
+      { removedFromBoards: removed },
+    );
+    return (affected ?? 0) > 0;
   }
 
   /** Refuses a login name, screen name or email someone else in the app already has */

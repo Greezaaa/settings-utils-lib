@@ -34,6 +34,11 @@ export class PagedList<T> {
     }
   }
 
+  /** A row changed by the moderator, in its place */
+  replace(item: T, next: T): void {
+    this.items.update(items => items.map(other => (other === item ? next : other)));
+  }
+
   remove(item: T): void {
     this.items.update(items => items.filter(other => other !== item));
   }

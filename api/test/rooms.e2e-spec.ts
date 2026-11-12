@@ -13,8 +13,12 @@ class Client {
     data: Record<string, unknown>;
   }[] = [];
 
-  constructor(url: string, origin = ORIGIN) {
-    this.socket = new WebSocket(url, { origin });
+  /** `ip`: the visitor's address as Cloudflare would send it, so a test can be a visitor of its own */
+  constructor(url: string, origin = ORIGIN, ip?: string) {
+    this.socket = new WebSocket(url, {
+      origin,
+      headers: ip ? { 'cf-connecting-ip': ip } : {},
+    });
     this.socket.on('message', (raw) =>
       this.messages.push(JSON.parse(raw.toString())),
     );
@@ -61,15 +65,19 @@ describe('rooms service (e2e)', () => {
   let url: string;
   const clients: Client[] = [];
 
-  const connect = async (origin?: string) => {
-    const client = new Client(url, origin);
+  const connect = async (origin?: string, ip?: string) => {
+    const client = new Client(url, origin, ip);
     clients.push(client);
     await client.open();
     return client;
   };
 
   beforeAll(async () => {
-    Object.assign(process.env, { CORS_ORIGINS: ORIGIN, PORT: '3999' });
+    Object.assign(process.env, {
+      CORS_ORIGINS: ORIGIN,
+      PORT: '3999',
+      TRUST_CLOUDFLARE: 'true',
+    });
     const { RoomsModule } = await import('../src/rooms/rooms.module.js');
     const moduleRef = await Test.createTestingModule({
       imports: [RoomsModule],
@@ -224,5 +232,33 @@ describe('rooms service (e2e)', () => {
 
     guest.send('react', { reaction: 'kiss' });
     expect(await guest.next('error')).toEqual({ error: 'invalid' });
+  });
+
+  it('lets one visitor keep only a few rooms open, so nobody can take them all', async () => {
+    const { MAX_ROOMS_PER_VISITOR } =
+      await import('../src/rooms/rooms.gateway.js');
+    for (let index = 0; index < MAX_ROOMS_PER_VISITOR; index++) {
+      // Different tabs of one visitor
+      const host = await connect(ORIGIN, '10.9.0.1');
+      host.send('create', { language: 'en' });
+      await host.next('joined');
+    }
+    const oneTooMany = await connect(ORIGIN, '10.9.0.1');
+    oneTooMany.send('create', { language: 'en' });
+    expect(await oneTooMany.next('error')).toEqual({ error: 'too-many' });
+  });
+
+  it('closes connections beyond the per-visitor limit', async () => {
+    const { MAX_CONNECTIONS_PER_VISITOR } =
+      await import('../src/rooms/rooms.gateway.js');
+    for (let index = 0; index < MAX_CONNECTIONS_PER_VISITOR; index++) {
+      await connect(ORIGIN, '10.9.0.2');
+    }
+    const extra = new Client(url, ORIGIN, '10.9.0.2');
+    clients.push(extra);
+    const closed = new Promise<number>((resolve) =>
+      extra.socket.on('close', (code) => resolve(code)),
+    );
+    expect(await closed).toBe(1008);
   });
 });

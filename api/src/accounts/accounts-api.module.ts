@@ -3,12 +3,17 @@ import { FeatureFlagsModule } from '../feature-flags/feature-flags.module.js';
 import {
   AccountsController,
   LeaderboardController,
+  PlayersAdminController,
 } from './accounts.controller.js';
 import { AccountsModule } from './accounts.module.js';
 
-/** The account's data (favourites, results, screen name) and the leaderboards, on api.su-labs.dev */
+/** The account's data (favourites, results, screen name), the leaderboards and their moderation, on api.su-labs.dev */
 @Module({
   imports: [AccountsModule, FeatureFlagsModule],
-  controllers: [AccountsController, LeaderboardController],
+  controllers: [
+    AccountsController,
+    LeaderboardController,
+    PlayersAdminController,
+  ],
 })
 export class AccountsApiModule {}

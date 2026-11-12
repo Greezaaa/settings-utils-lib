@@ -31,6 +31,16 @@ export interface WordReport {
   readonly firstReported: string;
 }
 
+/** A player on the leaderboards, as moderators see them: never the login name or email */
+export interface ModeratedPlayer {
+  readonly id: string;
+  readonly screenName: string;
+  /** Taken off the leaderboards by a moderator */
+  readonly removedFromBoards: boolean;
+  /** When the account was made, as YYYY-MM-DD */
+  readonly joined: string;
+}
+
 /** Statistics periods, shortest first: today, this week (from Monday), this month, this year, all time */
 export const STATS_PERIODS = ['day', 'week', 'month', 'year', 'all'] as const;
 export type StatsPeriod = (typeof STATS_PERIODS)[number];
@@ -144,6 +154,18 @@ function parseError(item: unknown): LoggedError[] {
     typeof firstSeen === 'string' &&
     typeof lastSeen === 'string'
     ? [{ id, source, code, title, problem, path, count, firstSeen, lastSeen }]
+    : [];
+}
+
+function parsePlayer(item: unknown): ModeratedPlayer[] {
+  const [id, screenName, removedFromBoards, created] = ['id', 'screenName', 'removedFromBoards', 'created'].map((key) =>
+    field(item, key),
+  );
+  return typeof id === 'string' &&
+    typeof screenName === 'string' &&
+    typeof removedFromBoards === 'boolean' &&
+    typeof created === 'string'
+    ? [{ id, screenName, removedFromBoards, joined: created.slice(0, 10) }]
     : [];
 }
 
@@ -349,6 +371,23 @@ export class AdminApi {
     return this.change('PATCH', `/admin/word-reports/${report.language}/${encodeURIComponent(report.word)}`, {
       status,
     });
+  }
+
+  /** Players on the leaderboards and those taken off them, newest first */
+  async players(offset: number): Promise<ModeratedPlayer[]> {
+    return listOf(await this.read(`/admin/players?offset=${offset}&limit=${ADMIN_PAGE_SIZE}`), parsePlayer);
+  }
+
+  /** Gives a player a plain screen name (`Player 4821`) in place of theirs; the new name, or null when it failed */
+  async renamePlayer(id: string): Promise<string | null> {
+    const response = await this.fetch(`/admin/players/${id}/rename`, { method: 'POST' }, SEND_TIMEOUT_MS);
+    const screenName = response?.ok ? field(await response.json(), 'screenName') : null;
+    return typeof screenName === 'string' ? screenName : null;
+  }
+
+  /** Takes a player off the leaderboards, or puts them back */
+  setPlayerRemoved(id: string, removedFromBoards: boolean): Promise<boolean> {
+    return this.change('PATCH', `/admin/players/${id}`, { removedFromBoards });
   }
 
   async feedback(period: StatsPeriod): Promise<GameFeedback[]> {

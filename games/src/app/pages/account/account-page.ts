@@ -125,12 +125,22 @@ export class AccountPage {
     );
   }
 
-  /** Shows or hides the player on the leaderboards straight away */
-  protected setShowOnLeaderboard(event: Event): void {
-    if (event.target instanceof HTMLInputElement) {
-      const showOnLeaderboard = event.target.checked;
-      void this.visibility.run(() => this.account.change({ showOnLeaderboard }), this.t().account.saved);
+  /**
+   * Shows or hides the player on the leaderboards: the switch moves straight away and is saved in the background (one
+   * save at a time); it moves back when the save fails
+   */
+  protected async setShowOnLeaderboard(event: Event): Promise<void> {
+    const box = event.target instanceof HTMLInputElement ? event.target : null;
+    const saved = () => this.account.account()?.showOnLeaderboard ?? false;
+    if (!box || this.visibility.isBusy()) {
+      if (box) {
+        box.checked = saved();
+      }
+      return;
     }
+    const showOnLeaderboard = box.checked;
+    await this.visibility.run(() => this.account.setShowOnLeaderboard(showOnLeaderboard), this.t().account.saved);
+    box.checked = saved();
   }
 
   protected async removeResults(): Promise<void> {

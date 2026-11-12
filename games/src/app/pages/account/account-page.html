@@ -53,7 +53,7 @@
             type="checkbox"
             role="switch"
             [checked]="player.showOnLeaderboard"
-            [disabled]="visibility.isBusy()"
+            [attr.aria-busy]="visibility.isBusy()"
             (change)="setShowOnLeaderboard($event)"
           />
           <span class="track" aria-hidden="true"></span>

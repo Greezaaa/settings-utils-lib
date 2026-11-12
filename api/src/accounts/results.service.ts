@@ -161,7 +161,7 @@ export class ResultsService {
                 COUNT(*) OVER (PARTITION BY r.key) AS players,
                 SUM(GREATEST(r.plays, 1)) OVER (PARTITION BY r.key) AS total_plays
          FROM player_results r JOIN players p ON p.id = r.player_id
-         WHERE r.game = $1 AND ($3 OR p.show_on_leaderboard)
+         WHERE r.game = $1 AND ($3 OR p.show_on_leaderboard) AND NOT p.removed_from_boards
        ) ranked
        WHERE place <= $2 OR player_id = $4
        ORDER BY players DESC, key ASC, place ASC`,

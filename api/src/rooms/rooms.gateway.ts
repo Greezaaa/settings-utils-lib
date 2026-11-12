@@ -57,6 +57,12 @@ const MAX_MESSAGE_BYTES = 2048;
 /** Rooms open at once; far more than the site needs, so a flood of new rooms can't fill the server's memory */
 const MAX_ROOMS = 2000;
 /**
+ * Per visitor address: open connections, and rooms they opened that are still open. Generous, as a whole class at
+ * school shares one address, yet one visitor can't take every room (filling MAX_ROOMS takes 200 addresses)
+ */
+export const MAX_CONNECTIONS_PER_VISITOR = 40;
+export const MAX_ROOMS_PER_VISITOR = 10;
+/**
  * Messages a connection may send in a room every few seconds (scores come at most 3 a second); more are ignored, so
  * one player can't flood the others with updates
  */
@@ -87,6 +93,8 @@ export class RoomsGateway
   private readonly rooms = new Map<string, Room>();
   private readonly seats = new Map<WebSocket, Seat>();
   private readonly tries = new Map<string, number[]>();
+  /** Who opened each open room (their address), for the per-visitor room limit */
+  private readonly openedBy = new Map<string, string>();
   private readonly origins: readonly string[];
   private readonly trustCloudflare: boolean;
   private readonly ticker = setInterval(() => this.tick(), TICK_MS);
@@ -111,6 +119,13 @@ export class RoomsGateway
       this.trustCloudflare && typeof cloudflareIp === 'string'
         ? cloudflareIp
         : (request.socket.remoteAddress ?? '');
+    const connections = [...this.seats.values()].filter(
+      (seat) => seat.ip === ip,
+    ).length;
+    if (connections >= MAX_CONNECTIONS_PER_VISITOR) {
+      client.close(1008, 'Too many connections');
+      return;
+    }
     this.seats.set(client, {
       code: null,
       playerId: null,
@@ -142,11 +157,16 @@ export class RoomsGateway
     if (!data || !this.allowTry(client)) {
       return;
     }
-    if (this.rooms.size >= MAX_ROOMS) {
+    // Leaving first: the room it leaves may close, and then doesn't count against the limits
+    this.leaveCurrentRoom(client);
+    const ip = this.seats.get(client)?.ip ?? '';
+    const opened = [...this.openedBy.values()].filter(
+      (opener) => opener === ip,
+    ).length;
+    if (this.rooms.size >= MAX_ROOMS || opened >= MAX_ROOMS_PER_VISITOR) {
       this.refuse(client, 'too-many');
       return;
     }
-    this.leaveCurrentRoom(client);
     const now = Date.now();
     const host = newPlayer([], undefined, data.gender);
     const room = createRoom(
@@ -156,6 +176,7 @@ export class RoomsGateway
       now,
     );
     this.rooms.set(room.code, room);
+    this.openedBy.set(room.code, ip);
     this.logger.log(`room ${room.code} opened (${this.rooms.size} open)`);
     this.seat(client, room, host.id, host.token);
   }
@@ -429,6 +450,7 @@ export class RoomsGateway
 
   private close(room: Room, why: 'idle' | 'empty'): void {
     this.rooms.delete(room.code);
+    this.openedBy.delete(room.code);
     this.logger.log(
       `room ${room.code} closed, ${why} (${this.rooms.size} open)`,
     );

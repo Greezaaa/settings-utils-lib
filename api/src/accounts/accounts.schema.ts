@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { MIN_PASSWORD_LENGTH } from '../auth/passwords.js';
-import { gameSchema, resultGameSchema } from '../shared/catalog.js';
+import {
+  gameSchema,
+  isPlausibleResult,
+  resultGameSchema,
+} from '../shared/catalog.js';
 
 /** Sign-in: 3 to 30 letters, digits, dots, dashes or underscores; compared lowercase */
 export const loginNameSchema = z
@@ -44,11 +48,13 @@ export type SignInInput = z.infer<typeof signInSchema>;
  */
 export const changeSchema = z.object({
   screenName: screenNameSchema.optional(),
-  showOnLeaderboard: z.boolean().optional(),
   email: emailSchema.nullable().optional(),
   password: z.string().min(1).max(200).optional(),
 });
 export type ChangeInput = z.infer<typeof changeSchema>;
+
+/** Whether the player appears on the leaderboards: a switch, so it has its own, more relaxed limit */
+export const leaderboardChoiceSchema = z.object({ show: z.boolean() });
 
 export const changePasswordSchema = z.object({
   current: z.string().min(1).max(200),
@@ -72,15 +78,25 @@ const resultKeySchema = z
   .max(60);
 const resultValueSchema = z.number().int().min(0).max(100_000);
 
-/** A finished game */
-export const resultSchema = z.object({
+const resultShape = z.object({
   game: resultGameSchema,
   key: resultKeySchema,
   value: resultValueSchema,
 });
+
+/** A finished game; a result the game can't give is refused */
+export const resultSchema = resultShape.refine(isPlausibleResult, {
+  message: 'implausible-result',
+});
 export type ResultInput = z.infer<typeof resultSchema>;
 
-/** Best results the browser kept before signing in, to add to the account */
+/**
+ * Best results the browser kept before signing in, to add to the account; ones the game can't give are left out
+ * quietly, so one odd value kept in a browser doesn't stop the others
+ */
 export const bestsSchema = z.object({
-  bests: z.array(resultSchema).max(300),
+  bests: z
+    .array(resultShape)
+    .max(300)
+    .transform((bests) => bests.filter(isPlausibleResult)),
 });

@@ -554,6 +554,7 @@ export interface SiteMessages {
       readonly plays: string;
       readonly suggestions: string;
       readonly words: string;
+      readonly players: string;
       readonly errors: string;
       readonly team: string;
       readonly account: string;
@@ -611,6 +612,15 @@ export interface SiteMessages {
     readonly keepOut: string;
     readonly letCount: string;
     readonly noWords: string;
+    /** The players on the leaderboards, for moderators */
+    readonly playersHelp: string;
+    readonly noPlayers: string;
+    readonly playerColumns: { readonly name: string; readonly boards: string; readonly joined: string };
+    readonly playerShown: string;
+    readonly playerRemoved: string;
+    readonly plainName: string;
+    readonly takeOff: string;
+    readonly putBack: string;
     /** Under a long list: the next rows */
     readonly loadMore: string;
     /** Feature switches, like rooms; every new feature gets one */

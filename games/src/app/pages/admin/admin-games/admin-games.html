@@ -16,7 +16,8 @@
               type="checkbox"
               role="switch"
               [checked]="availability.isOpen(game.slug)"
-              [disabled]="saving() !== null || !admin.isSuper()"
+              [disabled]="!admin.isSuper()"
+              [attr.aria-busy]="saving().has(game.slug)"
               (change)="toggle(game.slug, $event)"
             />
             <span class="track" aria-hidden="true"></span>
@@ -43,7 +44,8 @@
               type="checkbox"
               role="switch"
               [checked]="flags.isOpen(feature.id)"
-              [disabled]="saving() !== null || !admin.isSuper()"
+              [disabled]="!admin.isSuper()"
+              [attr.aria-busy]="saving().has(feature.id)"
               (change)="toggleFeature(feature.id, $event)"
             />
             <span class="track" aria-hidden="true"></span>
@@ -70,7 +72,8 @@
               type="checkbox"
               role="switch"
               [checked]="flags.isOpen(feature.id)"
-              [disabled]="saving() !== null || !admin.isSuper()"
+              [disabled]="!admin.isSuper()"
+              [attr.aria-busy]="saving().has(feature.id)"
               (change)="toggleFeature(feature.id, $event)"
             />
             <span class="track" aria-hidden="true"></span>

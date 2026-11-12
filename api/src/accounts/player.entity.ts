@@ -62,6 +62,10 @@ export class Player {
   @Column({ type: 'boolean', name: 'show_on_leaderboard', default: false })
   showOnLeaderboard: boolean;
 
+  /** Taken off the leaderboards by a moderator (e.g. a rude name or made-up scores); the player can't undo it */
+  @Column({ type: 'boolean', name: 'removed_from_boards', default: false })
+  removedFromBoards: boolean;
+
   /** Favourite games, most recent first */
   @Column({ type: 'varchar', length: 40, array: true, default: () => "'{}'" })
   favorites: string[];

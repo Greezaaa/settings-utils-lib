@@ -4,6 +4,7 @@ import { GameAvailability } from '../../core/game-availability';
 import { AdminAccount } from './admin-account/admin-account';
 import { AdminErrors } from './admin-errors/admin-errors';
 import { AdminGames } from './admin-games/admin-games';
+import { AdminPlayers } from './admin-players/admin-players';
 import { AdminPlays } from './admin-plays/admin-plays';
 import { AdminSuggestions } from './admin-suggestions/admin-suggestions';
 import { AdminTeam } from './admin-team/admin-team';
@@ -12,20 +13,21 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offline';
 
-const TABS = ['games', 'plays', 'suggestions', 'words', 'errors', 'team', 'account'] as const;
+const TABS = ['games', 'plays', 'suggestions', 'words', 'players', 'errors', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];
 /** Tabs only the super admin sees: switching games and features, the error log, and the team */
 const SUPER_TABS: readonly Tab[] = ['games', 'errors', 'team'];
 
 /**
  * The admin page, at /<ADMIN_PATH> (see core/links.ts): sign in with email and password (the browser stays signed in
- * for 30 days), then switch games, see plays and feedback, and moderate suggestions and reported words, one tab each.
+ * for 30 days), then switch games, see plays and feedback, and moderate suggestions, reported words and the players on
+ * the leaderboards, one tab each.
  * Only the super admin switches games and features and manages the team; moderators and testers moderate, and
  * testers also use preview. Everyone can change their own password.
  */
 @Component({
   selector: 'app-admin-page',
-  imports: [TranslatePipe, AdminAccount, AdminErrors, AdminGames, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
+  imports: [TranslatePipe, AdminAccount, AdminErrors, AdminGames, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],

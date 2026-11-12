@@ -676,6 +676,19 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .post('/v1/account/results')
         .send({ game: 'hit-the-note', key: 'x', value: 1 })
         .expect(400);
+      // Results a game can't give: refused one by one, left out quietly among the browser's bests
+      await ana
+        .post('/v1/account/results')
+        .send({ game: 'find-pairs', key: 'normal', value: 3 })
+        .expect(400);
+      await ana
+        .post('/v1/account/results')
+        .send({ game: 'math-games', key: 'a:b:c', value: 5000 })
+        .expect(400);
+      await ana
+        .put('/v1/account/bests')
+        .send({ bests: [{ game: 'find-pairs', key: 'normal', value: 1 }] })
+        .expect(204);
 
       const { body: account } = await ana.get('/v1/account').expect(200);
       expect(account.favorites).toEqual(['find-pairs', 'math-games']);
@@ -698,6 +711,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           me: null,
         },
       ]);
+
       const { body: tower } = await ana
         .get('/v1/leaderboard/climb-tower')
         .expect(200);
@@ -712,12 +726,16 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
 
       // A player who stops showing on the leaderboards leaves them, and is back when they choose to show again
       await ben
-        .patch('/v1/account')
-        .send({ showOnLeaderboard: false })
+        .put('/v1/account/leaderboard')
+        .send({ show: false })
         .expect(204);
       expect(
         (await ben.get('/v1/account').expect(200)).body.showOnLeaderboard,
       ).toBe(false);
+      // A switch: flipping it back and forth isn't held back like name or email changes
+      for (const show of [true, false, true, false, true, false]) {
+        await ben.put('/v1/account/leaderboard').send({ show }).expect(204);
+      }
       const { body: hidden } = await ana
         .get('/v1/leaderboard/find-pairs')
         .expect(200);
@@ -749,8 +767,8 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .expect(204);
 
       await ben
-        .patch('/v1/account')
-        .send({ showOnLeaderboard: true })
+        .put('/v1/account/leaderboard')
+        .send({ show: true })
         .expect(204);
 
       // A player deletes their results and keeps the account
@@ -765,6 +783,42 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         { place: 1, screenName: 'Ben', plays: 1, best: 18, isMe: false },
       ]);
       expect(after.boards[0].me).toBeNull();
+
+      // Moderators give a player a plain name, or take them off the boards and back
+      await request(app.getHttpServer()).get('/admin/players').expect(401);
+      const { body: moderated } = await request(app.getHttpServer())
+        .get('/admin/players')
+        .set(admin)
+        .expect(200);
+      const benId = String(
+        moderated.find(
+          ({ screenName }: { screenName: string }) => screenName === 'Ben',
+        )?.id,
+      );
+      expect(JSON.stringify(moderated)).not.toMatch(/loginName|email/);
+      const { body: renamed } = await request(app.getHttpServer())
+        .post(`/admin/players/${benId}/rename`)
+        .set(admin)
+        .expect(201);
+      expect(renamed.screenName).toMatch(/^Player \d{4}$/);
+      const namesOnBoard = async () =>
+        (
+          (await ben.get('/v1/leaderboard/find-pairs').expect(200)).body
+            .boards as { entries: { screenName: string | null }[] }[]
+        ).flatMap(({ entries }) => entries.map(({ screenName }) => screenName));
+      expect(await namesOnBoard()).toContain(renamed.screenName);
+      await request(app.getHttpServer())
+        .patch(`/admin/players/${benId}`)
+        .set(admin)
+        .send({ removedFromBoards: true })
+        .expect(204);
+      expect(await namesOnBoard()).not.toContain(renamed.screenName);
+      await request(app.getHttpServer())
+        .patch(`/admin/players/${benId}`)
+        .set(admin)
+        .send({ removedFromBoards: false })
+        .expect(204);
+      expect(await namesOnBoard()).toContain(renamed.screenName);
     });
 
     it('changes the screen name and password, resets a forgotten one, and deletes the account', async () => {

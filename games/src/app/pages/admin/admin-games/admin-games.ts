@@ -9,6 +9,13 @@ import { GAMES, GameSlug } from '../../../core/games';
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
+/** How a switch is read, set on the page, and saved */
+interface SwitchActions {
+  readonly isOpen: () => boolean;
+  readonly setOpen: (open: boolean) => void;
+  readonly request: (open: boolean) => Promise<boolean>;
+}
+
 /**
  * Super admin tab: an on/off switch for the public per game and per feature. The switches are read again when the tab
  * opens, so they are always the API's, not what this page loaded earlier.
@@ -28,8 +35,8 @@ export class AdminGames {
   protected readonly features = FEATURES.filter(({ roomGame }) => !roomGame);
   protected readonly roomGames = FEATURES.filter(({ roomGame }) => roomGame);
   protected readonly games = GAMES;
-  /** The game or feature being switched, while the API answers */
-  protected readonly saving = signal<GameSlug | FeatureId | null>(null);
+  /** The games and features being switched, while the API answers */
+  protected readonly saving = signal<ReadonlySet<GameSlug | FeatureId>>(new Set());
   private readonly notifySaveFailed = saveFailedNotice();
 
   constructor() {
@@ -37,52 +44,43 @@ export class AdminGames {
   }
 
   protected toggle(game: GameSlug, event: Event): Promise<void> {
-    return this.save(
-      game,
-      event,
-      () => this.admin.setGameEnabled(game, !this.availability.isOpen(game)),
-      () => this.availability.refresh(),
-      () => this.availability.isOpen(game),
-    );
+    return this.save(game, event, {
+      isOpen: () => this.availability.isOpen(game),
+      setOpen: (open) => this.availability.setOpen(game, open),
+      request: (open) => this.admin.setGameEnabled(game, open),
+    });
   }
 
   protected toggleFeature(feature: FeatureId, event: Event): Promise<void> {
-    return this.save(
-      feature,
-      event,
-      () => this.admin.setFeatureEnabled(feature, !this.flags.isOpen(feature)),
-      () => this.flags.refresh(),
-      () => this.flags.isOpen(feature),
-    );
+    return this.save(feature, event, {
+      isOpen: () => this.flags.isOpen(feature),
+      setOpen: (open) => this.flags.setOpen(feature, open),
+      request: (open) => this.admin.setFeatureEnabled(feature, open),
+    });
   }
 
   /**
-   * Saves a switch, reads the switches again, and sets the box to what the API now says: the box flips itself when
-   * clicked, so it would otherwise disagree with the API after a failed save
+   * Flips a switch straight away and saves it in the background; only that switch waits, and it flips back when the
+   * save fails. Nothing else on the page reloads.
    */
-  private async save(
-    id: GameSlug | FeatureId,
-    event: Event,
-    request: () => Promise<boolean>,
-    reload: () => Promise<void>,
-    isOpen: () => boolean,
-  ): Promise<void> {
+  private async save(id: GameSlug | FeatureId, event: Event, { isOpen, setOpen, request }: SwitchActions): Promise<void> {
     const box = event.target instanceof HTMLInputElement ? event.target : null;
-    if (this.saving()) {
+    if (this.saving().has(id)) {
       if (box) {
         box.checked = isOpen();
       }
       return;
     }
-    this.saving.set(id);
-    if (await request()) {
-      await reload();
-    } else {
+    const open = !isOpen();
+    this.saving.update((saving) => new Set(saving).add(id));
+    setOpen(open);
+    if (!(await request(open))) {
+      setOpen(!open);
       this.notifySaveFailed();
     }
     if (box) {
       box.checked = isOpen();
     }
-    this.saving.set(null);
+    this.saving.update((saving) => new Set([...saving].filter((other) => other !== id)));
   }
 }

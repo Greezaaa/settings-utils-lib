@@ -168,16 +168,20 @@ export class PlayerAccount {
     this.signedIn.set(null);
   }
 
-  /** A new screen name, an email added, changed or removed (with the password), or showing on the leaderboards or not */
-  async change(changes: {
-    screenName?: string;
-    email?: string | null;
-    password?: string;
-    showOnLeaderboard?: boolean;
-  }): Promise<AccountAnswer> {
+  /** A new screen name, or an email added, changed or removed (with the password); both come back as the API tidied them */
+  async change(changes: { screenName?: string; email?: string | null; password?: string }): Promise<AccountAnswer> {
     const answer = await this.answer(this.fetch('/v1/account', jsonInit('PATCH', changes), SEND_TIMEOUT_MS));
     if (answer === 'done') {
       await this.restore();
+    }
+    return answer;
+  }
+
+  /** Shows the player on the leaderboards or hides them; a switch, so only that value changes here */
+  async setShowOnLeaderboard(show: boolean): Promise<AccountAnswer> {
+    const answer = await this.answer(this.fetch('/v1/account/leaderboard', jsonInit('PUT', { show }), SEND_TIMEOUT_MS));
+    if (answer === 'done') {
+      this.patch({ showOnLeaderboard: show });
     }
     return answer;
   }
@@ -225,6 +229,11 @@ export class PlayerAccount {
   async leaderboards(game: ResultGame): Promise<Leaderboard[] | null> {
     const boards = field(await this.read(`/v1/leaderboard/${game}`), 'boards');
     return Array.isArray(boards) ? boards.flatMap((board: unknown) => parseBoard(board)) : null;
+  }
+
+  /** Changes the signed-in account here without asking the API again */
+  private patch(changes: Partial<Account>): void {
+    this.signedIn.update((account) => (account ? { ...account, ...changes } : account));
   }
 
   private async restore(): Promise<void> {
