@@ -23,17 +23,24 @@
     </a>
 
     <div class="header-controls">
-      <!-- Phones: the menu hides behind this button, as its links don't fit in a row -->
+      <!-- Phones and tablets: the menu hides behind this button, as its links don't fit in a row; ✕ while it's open -->
       <button
         type="button"
         class="icon-button menu-toggle"
-        [attr.aria-label]="'site.menu' | translate"
+        #menuToggle
+        [attr.aria-label]="(menuOpen() ? 'site.closeMenu' : 'site.menu') | translate"
         aria-controls="site-nav"
         [attr.aria-expanded]="menuOpen()"
         (click)="toggleMenu()"
       >
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-          <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path
+            [attr.d]="menuOpen() ? 'M6 6l12 12M18 6L6 18' : 'M4 7h16M4 12h16M4 17h16'"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
         </svg>
       </button>
       <!-- Settings behind the gear button: text size, theme, game colours, answers (when switched on) and language -->
@@ -64,7 +71,7 @@
     </div>
   </div>
 
-  <nav id="site-nav" class="container site-nav" [class.is-open]="menuOpen()" [attr.aria-label]="'site.gamesNav' | translate"
+  <nav id="site-nav" class="container site-nav" #siteNav [class.is-open]="menuOpen()" [attr.aria-label]="'site.gamesNav' | translate"
     [appMenuRing]="menuAnimation.isOn()" appScrollToActive>
     <!-- With the categories menu, a link per category (and, in the phone menu, its games under it); otherwise a link per game -->
     @if (features.canUse('category-menu')) {

@@ -5,6 +5,7 @@ import { FeatureFlags } from './feature-flags';
 import { GameSlug } from './games';
 import { isGameSlug } from './games-api';
 import { BestResult, bestsToSend, isResultGame, mergedBests, RESULT_GAME_SLUGS, RESULT_GAMES, ResultGame, storedBests } from './player-results';
+import { rememberSignedIn, wasSignedIn } from './session-hint';
 import { readStored, writeStored } from './site-storage';
 
 /** A player's results in one game and settings, as their account keeps them */
@@ -124,6 +125,10 @@ export class PlayerAccount {
 
   constructor() {
     afterNextRender(async () => {
+      // Without a session last time the page shows at once; the check goes on in the background
+      if (!wasSignedIn('player')) {
+        this.isKnown.set(true);
+      }
       await this.features.ready();
       if (this.isAvailable()) {
         await this.restore();
@@ -168,7 +173,7 @@ export class PlayerAccount {
 
   async signOut(): Promise<void> {
     await this.fetch(`${SIGN_IN_PATH}/logout`, { method: 'POST' }, READ_TIMEOUT_MS, 'auth');
-    this.signedIn.set(null);
+    this.setAccount(null);
   }
 
   /** A new screen name, or an email added, changed or removed (with the password); both come back as the API tidied them */
@@ -202,7 +207,7 @@ export class PlayerAccount {
   async remove(password: string): Promise<AccountAnswer> {
     const answer = await this.answer(this.fetch(SIGN_IN_PATH, jsonInit('DELETE', { password }), SEND_TIMEOUT_MS, 'auth'));
     if (answer === 'done') {
-      this.signedIn.set(null);
+      this.setAccount(null);
     }
     return answer;
   }
@@ -256,7 +261,7 @@ export class PlayerAccount {
     if (response?.ok) {
       await this.adopt(await response.json());
     } else if (response) {
-      this.signedIn.set(null);
+      this.setAccount(null);
     }
   }
 
@@ -273,19 +278,25 @@ export class PlayerAccount {
   }
 
   /** Takes the account the API sent, and brings this browser and the account into step */
+  /** Who is signed in, also noted in this browser so the next visit knows whether to wait for the API */
+  private setAccount(account: Account | null): void {
+    this.signedIn.set(account);
+    rememberSignedIn('player', account !== null);
+  }
+
   private async adopt(body: unknown): Promise<void> {
     const [loginName, screenName, email, results] = ['loginName', 'screenName', 'email', 'results'].map((name) =>
       field(body, name),
     );
     if (typeof loginName !== 'string' || typeof screenName !== 'string') {
-      this.signedIn.set(null);
+      this.setAccount(null);
       return;
     }
     const accountResults = Array.isArray(results) ? results.flatMap((item: unknown) => parseResult(item)) : [];
     const accountFavorites = readFavorites(field(body, 'favorites'));
     // Favourites from both, this browser's first
     this.savedFavorites = accountFavorites;
-    this.signedIn.set({
+    this.setAccount({
       loginName,
       screenName,
       email: typeof email === 'string' ? email : null,

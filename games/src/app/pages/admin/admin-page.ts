@@ -1,6 +1,7 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { AdminApi } from '../../core/admin-api';
 import { GameAvailability } from '../../core/game-availability';
+import { wasSignedIn } from '../../core/session-hint';
 import { AdminAccount } from './admin-account/admin-account';
 import { AdminErrors } from './admin-errors/admin-errors';
 import { AdminGames } from './admin-games/admin-games';
@@ -42,8 +43,15 @@ export class AdminPage {
 
   constructor() {
     afterNextRender(async () => {
+      // Without a session last time the form shows at once; the check goes on in the background
+      if (!wasSignedIn('admin')) {
+        this.signIn.set('idle');
+      }
       const restored = await this.admin.restore();
-      this.signIn.set(restored === 'offline' ? 'offline' : 'idle');
+      // A sign-in started meanwhile keeps its own state
+      if (this.signIn() === 'restoring') {
+        this.signIn.set(restored === 'offline' ? 'offline' : 'idle');
+      }
       if (this.admin.isSuper()) {
         this.tab.set('games');
       }

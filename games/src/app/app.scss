@@ -112,9 +112,10 @@
   color: var(--button-text);
 }
 
-// Phones: the menu hides behind its button; wide enough screens show it as a row instead
+// Phones and tablets: the menu hides behind its button; wide screens (from 56rem, where the rooms switch to columns
+// too) show it as a row instead
 .menu-toggle {
-  @media (min-width: 48rem) {
+  @media (min-width: 56rem) {
     display: none;
   }
 }
@@ -131,7 +132,7 @@
     display: none;
   }
 
-  @media (max-width: 47.99rem) {
+  @media (max-width: 55.99rem) {
     display: none;
 
     &.is-open {

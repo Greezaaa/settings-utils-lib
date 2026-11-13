@@ -7,9 +7,9 @@ import { GameThemeId } from '../core/game-themes';
 import { GameCategory, GameSlug } from '../core/games';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { MenuAnimationChoice } from '../core/menu-animation';
-import { Reaction, ReactionSide, StickerDragChoice } from '../core/reactions';
 import { PictureId } from '../core/pictures';
 import { AccountProblem } from '../core/player-account';
+import { Reaction, ReactionSide, StickerDragChoice } from '../core/reactions';
 import { RoomError } from '../core/room-view';
 import { UpdateKind } from '../core/site-updates';
 import { BoardLevelId } from '../games/board';
@@ -46,7 +46,6 @@ export interface GameText {
 
 /** Every text of the games site in one language; each language must fill all of it */
 export interface SiteMessages {
-
   /** What every game says about an answer (in words when the visitor chose them; always for screen readers) */
   readonly answers: {
     readonly right: string;
@@ -64,8 +63,8 @@ export interface SiteMessages {
     readonly smallerText: string;
     readonly largerText: string;
     readonly themeNames: Readonly<Record<SuBaseThemeName, string>>;
-    /** The phone menu's button, for screen readers */
     readonly menu: string;
+    readonly closeMenu: string;
     readonly language: string;
     readonly boardColours: string;
     readonly boardThemes: Readonly<Record<GameThemeId, OptionText>>;
@@ -620,7 +619,11 @@ export interface SiteMessages {
     readonly noNames: string;
     readonly nameReports: (count: number) => string;
     readonly allowName: string;
-    readonly playerColumns: { readonly name: string; readonly boards: string; readonly joined: string };
+    readonly playerColumns: {
+      readonly name: string;
+      readonly boards: string;
+      readonly joined: string;
+    };
     readonly playerShown: string;
     readonly playerRemoved: string;
     readonly plainName: string;

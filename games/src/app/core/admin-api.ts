@@ -4,6 +4,7 @@ import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_T
 import { FeatureId } from './features';
 import { GameSlug } from './games';
 import { GamePlays, isGameSlug, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
+import { rememberSignedIn } from './session-hint';
 
 const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
 const isLanguage = (value: unknown): value is LanguageId => LANGUAGES.some((language) => language === value);
@@ -69,6 +70,9 @@ export function failedSignIn(status: number): Exclude<SignInAnswer, 'right'> {
 
 /** Roles that see games and features switched off for the public */
 export const canPreview = (role: AdminRole | undefined): boolean => role === 'super' || role === 'tester';
+
+/** Whether this browser is signed in, as far as the auth service said (`offline` when it couldn't be reached) */
+export type Restored = 'signed-in' | 'signed-out' | 'offline';
 
 export interface Me {
   readonly email: string;
@@ -261,6 +265,8 @@ const listOf = <T>(body: unknown, parse: (item: unknown) => T[]): T[] =>
 export class AdminApi {
   private readonly document = inject(DOCUMENT);
   private readonly signedIn = signal<Me | null>(null);
+  /** The session check of this visit, once asked */
+  private restored?: Promise<Restored>;
 
   readonly me = this.signedIn.asReadonly();
   readonly isSignedIn = computed(() => this.signedIn() !== null);
@@ -268,14 +274,17 @@ export class AdminApi {
   /** The super admin and testers see every game and feature in preview */
   readonly canPreview = computed(() => canPreview(this.signedIn()?.role));
 
-  /** Asks the API whether this browser is still signed in (the cookie lasts 30 days) */
-  async restore(): Promise<'signed-in' | 'signed-out' | 'offline'> {
-    const response = await this.fetch('/auth/me', {}, READ_TIMEOUT_MS, 'auth');
-    if (!response) {
-      return 'offline';
+  /**
+   * Whether this browser is still signed in (the cookie lasts 30 days). Asked once per visit, so opening the admin
+   * page again needs no wait; sign-ins and sign-outs keep the answer up to date. Asked again after an offline answer.
+   */
+  async restore(): Promise<Restored> {
+    this.restored ??= this.askSession();
+    const answer = await this.restored;
+    if (answer === 'offline') {
+      this.restored = undefined;
     }
-    this.signedIn.set(response.ok ? parseMe(await response.json()) : null);
-    return this.signedIn() ? 'signed-in' : 'signed-out';
+    return answer === 'offline' ? answer : this.signedIn() ? 'signed-in' : 'signed-out';
   }
 
   /** Signs in; the answer tells wrong details, too many tries, and an API that can't be reached apart */
@@ -286,7 +295,7 @@ export class AdminApi {
 
   async signOut(): Promise<void> {
     await this.fetch('/auth/logout', { method: 'POST' }, READ_TIMEOUT_MS, 'auth');
-    this.signedIn.set(null);
+    this.setMe(null);
   }
 
   async changePassword(current: string, next: string): Promise<'saved' | 'wrong' | 'offline'> {
@@ -450,8 +459,23 @@ export class AdminApi {
     if (!response.ok) {
       return failedSignIn(response.status);
     }
-    this.signedIn.set(parseMe(await response.json()));
+    this.setMe(parseMe(await response.json()));
     return 'right';
+  }
+
+  private async askSession(): Promise<Restored> {
+    const response = await this.fetch('/auth/me', {}, READ_TIMEOUT_MS, 'auth');
+    if (!response) {
+      return 'offline';
+    }
+    this.setMe(response.ok ? parseMe(await response.json()) : null);
+    return this.signedIn() ? 'signed-in' : 'signed-out';
+  }
+
+  /** Who is signed in, also noted in this browser so the next visit knows whether to wait for the API */
+  private setMe(me: Me | null): void {
+    this.signedIn.set(me);
+    rememberSignedIn('admin', me !== null);
   }
 
   /** A request with the session cookie, to the API or the auth service; null when it couldn't reach it */
