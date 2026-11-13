@@ -167,6 +167,13 @@ export const EN: SiteMessages = {
       subtitle: 'vowels, mixed letters and word builder',
       intro: 'A letter and word game for kids.',
     },
+    'letter-sudoku': {
+      name: 'Letter sudoku',
+      summary:
+        'Put the letters on the board so each one appears once in every row, column and box. Drag them or tap a letter and then a cell.',
+      subtitle: 'each letter once in every row, column and box',
+      intro: 'A letter logic game for kids.',
+    },
     'hit-the-note': {
       name: 'Hit the note',
       summary:
@@ -768,6 +775,23 @@ export const EN: SiteMessages = {
     progress: (done, total) => `Round ${Math.min(done + 1, total)} of ${total}`,
     soundOn: 'Sound on: tap to mute',
     soundOff: 'Sound off: tap to hear the numbers',
+  },
+
+  letterSudoku: {
+    lead: 'Drag the letters onto the empty cells, or tap a letter and then a cell.',
+    rule: 'Each letter goes once in every row, every column and every box. Press Check to see the repeated ones.',
+    board: 'Letter board',
+    letters: 'ABCDEFGHIJ',
+    tray: 'Letters',
+    sizeGroup: 'Board',
+    sizeSummary: letters => `${letters} letters`,
+    cell: (row, column, letter) => `Row ${row}, column ${column}: ${letter || 'empty'}`,
+    check: 'Check',
+    repeated: 'The red letters repeat in their row, column or box.',
+    noRepeats: 'No repeated letters so far!',
+    done: 'Board complete!',
+    summary: time => `In ${time}`,
+    newGame: 'New game',
   },
 
   findPairs: {

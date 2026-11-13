@@ -1,0 +1,119 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
+  </div>
+  <h1>{{ 'games.letter-sudoku.name' | translate }}</h1>
+  <p class="lead">
+    {{ 'letterSudoku.lead' | translate }}
+    <br />
+    {{ 'letterSudoku.rule' | translate }}
+  </p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="'letterSudoku.board' | translate">
+  <div class="card play" appGameBoard>
+    <!-- The board and its letters on one side, the size, time and buttons on the other (settings first on phones) -->
+    <div class="play-layout">
+      <div class="play-main">
+        <div
+          class="sudoku"
+          [class.is-done]="phase() === 'done'"
+          [style.--size]="size()"
+          [style.--box-columns]="boxShape().columns"
+          role="group"
+          [attr.aria-label]="'letterSudoku.board' | translate"
+        >
+          <!-- Drawn box by box, so the boxes stand apart; cells are still numbered in row order -->
+          @for (box of boxes(); track $index) {
+            <div class="box">
+              @for (cell of box; track cell) {
+                @let letter = board()[cell];
+                <button
+                  type="button"
+                  class="cell"
+                  [attr.data-cell]="cell"
+                  [class.is-given]="isGiven(cell)"
+                  [class.is-placed]="letter !== null && !isGiven(cell)"
+                  [class.is-repeated]="repeated().has(cell)"
+                  [class.is-lifted]="isLifted(cell)"
+                  [attr.aria-label]="'letterSudoku.cell' | translate: rowOf(cell) : columnOf(cell) : letterOf(letter)"
+                  (pointerdown)="onPointerDown($event, cellSource(cell))"
+                  (pointermove)="onPointerMove($event)"
+                  (pointerup)="onPointerUp($event)"
+                  (pointercancel)="cancelPress()"
+                  (click)="onClick($event, cellSource(cell))"
+                >
+                  {{ letterOf(letter) }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="tray" role="group" [attr.aria-label]="'letterSudoku.tray' | translate">
+          @for (letter of trayLetters(); track letter) {
+            <button
+              type="button"
+              class="tray-letter"
+              [class.is-used-up]="usedUp().has(letter)"
+              [attr.aria-pressed]="picked() === letter"
+              (pointerdown)="onPointerDown($event, traySource(letter))"
+              (pointermove)="onPointerMove($event)"
+              (pointerup)="onPointerUp($event)"
+              (pointercancel)="cancelPress()"
+              (click)="onClick($event, traySource(letter))"
+            >
+              {{ letterOf(letter) }}
+            </button>
+          }
+        </div>
+
+        @if (dragged(); as drag) {
+          <span class="drag-letter" aria-hidden="true" [style.left.px]="drag.x" [style.top.px]="drag.y">
+            {{ letterOf(drag.letter) }}
+          </span>
+        }
+
+        @if (phase() === 'done') {
+          <p class="done" role="status">
+            {{ 'letterSudoku.done' | translate }}
+            <small>{{ 'letterSudoku.summary' | translate: clock.time() }}</small>
+          </p>
+        } @else if (isChecked()) {
+          <p class="check-result" role="status" [class.is-wrong]="repeated().size > 0">
+            {{ repeated().size > 0 ? ('letterSudoku.repeated' | translate) : ('letterSudoku.noRepeats' | translate) }}
+          </p>
+        }
+      </div>
+      <div class="play-side">
+        <div class="choices" role="group" [attr.aria-label]="'letterSudoku.sizeGroup' | translate">
+          @for (option of sizes; track option) {
+            <button
+              type="button"
+              class="button button-secondary"
+              [attr.aria-pressed]="option === size()"
+              [title]="'letterSudoku.sizeSummary' | translate: option"
+              (click)="chooseSize(option)"
+            >
+              {{ option }} × {{ option }}
+            </button>
+          }
+        </div>
+
+        <div class="status">
+          <span class="mono">{{ clock.time() }}</span>
+        </div>
+        <div class="actions">
+          <button type="button" class="button" [disabled]="phase() === 'done'" (click)="check()">
+            {{ 'letterSudoku.check' | translate }}
+          </button>
+          <button type="button" class="button button-secondary" (click)="newGame()">
+            {{ 'letterSudoku.newGame' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-game-feedback game="letter-sudoku" />
+</section>

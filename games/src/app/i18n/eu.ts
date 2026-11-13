@@ -171,6 +171,13 @@ export const EU: SiteMessages = {
       subtitle: 'bokalak, letra nahasiak eta hitz-sortzailea',
       intro: 'Letra eta hitz joko bat haurrentzat.',
     },
+    'letter-sudoku': {
+      name: 'Hizki sudokua',
+      summary:
+        'Jarri hizkiak taulan, bakoitza behin ager dadin errenkada, zutabe eta karratu bakoitzean. Arrastatu edo sakatu hizki bat eta gero gelaxka bat.',
+      subtitle: 'hizki bakoitza behin errenkada, zutabe eta karratu bakoitzean',
+      intro: 'Hizkiekin logika joko bat haurrentzat.',
+    },
     'hit-the-note': {
       name: 'Asmatu nota',
       summary:
@@ -789,6 +796,23 @@ export const EU: SiteMessages = {
     progress: (done, total) => `${Math.min(done + 1, total)}. txanda, ${total}etik`,
     soundOn: 'Soinua piztuta: sakatu isilarazteko',
     soundOff: 'Soinua itzalita: sakatu zenbakiak entzuteko',
+  },
+
+  letterSudoku: {
+    lead: 'Arrastatu hizkiak gelaxka hutsetara, edo sakatu hizki bat eta gero gelaxka bat.',
+    rule: 'Hizki bakoitza behin doa errenkada, zutabe eta karratu bakoitzean. Sakatu Egiaztatu errepikatuak ikusteko.',
+    board: 'Hizki taula',
+    letters: 'ABDEFGHIJK',
+    tray: 'Hizkiak',
+    sizeGroup: 'Taula',
+    sizeSummary: letters => `${letters} hizki`,
+    cell: (row, column, letter) => `${row}. errenkada, ${column}. zutabea: ${letter || 'hutsik'}`,
+    check: 'Egiaztatu',
+    repeated: 'Hizki gorriak errepikatuta daude beren errenkadan, zutabean edo karratuan.',
+    noRepeats: 'Oraingoz ez dago hizki errepikaturik!',
+    done: 'Taula osatuta!',
+    summary: time => time,
+    newGame: 'Partida berria',
   },
 
   findPairs: {

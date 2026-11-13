@@ -484,6 +484,27 @@ export interface SiteMessages {
     readonly soundOff: string;
   };
 
+  /** Letter sudoku: each letter once in every row, column and box */
+  readonly letterSudoku: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    /** The letters used, in order: the first 4, 6 or 9 go on the board */
+    readonly letters: string;
+    readonly tray: string;
+    readonly sizeGroup: string;
+    /** A size's description, e.g. `4 letters` */
+    readonly sizeSummary: (letters: number) => string;
+    /** A cell for screen readers; the letter is empty when the cell is */
+    readonly cell: (row: number, column: number, letter: string) => string;
+    readonly check: string;
+    readonly repeated: string;
+    readonly noRepeats: string;
+    readonly done: string;
+    readonly summary: (time: string) => string;
+    readonly newGame: string;
+  };
+
   readonly findPairs: {
     readonly lead: string;
     readonly rule: string;

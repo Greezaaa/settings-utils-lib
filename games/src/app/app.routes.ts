@@ -132,6 +132,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/how-many/how-many-page').then(m => m.HowManyPage),
   },
+  {
+    path: 'letter-sudoku',
+    ...gameMeta('letter-sudoku'),
+    loadComponent: () => import('./pages/letter-sudoku/letter-sudoku-page').then(m => m.LetterSudokuPage),
+  },
   ...categoryRoutes,
   {
     path: 'rooms',

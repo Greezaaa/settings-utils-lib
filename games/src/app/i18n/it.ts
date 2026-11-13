@@ -167,6 +167,13 @@ export const italian = (gender: WordGender): SiteMessages => ({
       subtitle: 'vocali, lettere mescolate e forma parole',
       intro: 'Un gioco di lettere e parole per bambini.',
     },
+    'letter-sudoku': {
+      name: 'Sudoku di lettere',
+      summary:
+        'Metti le lettere sul tabellone in modo che ognuna compaia una volta in ogni riga, colonna e riquadro. Trascinale o tocca una lettera e poi una casella.',
+      subtitle: 'ogni lettera una volta in ogni riga, colonna e riquadro',
+      intro: 'Un gioco di logica con le lettere per bambini.',
+    },
     'hit-the-note': {
       name: 'Prendi la nota',
       summary:
@@ -762,6 +769,23 @@ export const italian = (gender: WordGender): SiteMessages => ({
     progress: (done, total) => `Turno ${Math.min(done + 1, total)} di ${total}`,
     soundOn: 'Audio attivo: tocca per silenziare',
     soundOff: 'Audio spento: tocca per sentire i numeri',
+  },
+
+  letterSudoku: {
+    lead: 'Trascina le lettere nelle caselle vuote, oppure tocca una lettera e poi una casella.',
+    rule: 'Ogni lettera va una volta in ogni riga, in ogni colonna e in ogni riquadro. Premi Controlla per vedere quelle ripetute.',
+    board: 'Tabellone di lettere',
+    letters: 'ABCDEFGHIL',
+    tray: 'Lettere',
+    sizeGroup: 'Tabellone',
+    sizeSummary: (letters) => `${letters} lettere`,
+    cell: (row, column, letter) => `Riga ${row}, colonna ${column}: ${letter || 'vuota'}`,
+    check: 'Controlla',
+    repeated: 'Le lettere in rosso si ripetono nella loro riga, colonna o riquadro.',
+    noRepeats: 'Per ora nessuna lettera ripetuta!',
+    done: 'Tabellone completo!',
+    summary: (time) => `In ${time}`,
+    newGame: 'Nuova partita',
   },
 
   findPairs: {

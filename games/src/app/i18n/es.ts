@@ -173,6 +173,13 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       subtitle: 'vocales, letras mezcladas y forma palabras',
       intro: 'Un juego de letras y palabras para niños.',
     },
+    'letter-sudoku': {
+      name: 'Sudoku de letras',
+      summary:
+        'Pon las letras en el tablero para que cada una salga una vez en cada fila, columna y cuadro. Arrástralas o toca una letra y luego una casilla.',
+      subtitle: 'cada letra una vez en cada fila, columna y cuadro',
+      intro: 'Un juego de lógica con letras para peques.',
+    },
     'hit-the-note': {
       name: 'Dando la nota',
       summary:
@@ -799,6 +806,23 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     progress: (done, total) => `Ronda ${Math.min(done + 1, total)} de ${total}`,
     soundOn: 'Sonido activado: toca para silenciar',
     soundOff: 'Sonido desactivado: toca para oír los números',
+  },
+
+  letterSudoku: {
+    lead: 'Arrastra las letras a las casillas vacías, o toca una letra y luego una casilla.',
+    rule: 'Cada letra va una vez en cada fila, en cada columna y en cada cuadro. Pulsa Comprobar para ver las repetidas.',
+    board: 'Tablero de letras',
+    letters: 'ABCDEFGHIJ',
+    tray: 'Letras',
+    sizeGroup: 'Tablero',
+    sizeSummary: letters => `${letters} letras`,
+    cell: (row, column, letter) => `Fila ${row}, columna ${column}: ${letter || 'vacía'}`,
+    check: 'Comprobar',
+    repeated: 'Las letras en rojo se repiten en su fila, columna o cuadro.',
+    noRepeats: '¡De momento no se repite ninguna letra!',
+    done: '¡Tablero completo!',
+    summary: time => `En ${time}`,
+    newGame: 'Nueva partida',
   },
 
   findPairs: {

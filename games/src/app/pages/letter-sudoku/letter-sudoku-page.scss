@@ -1,0 +1,156 @@
+.play {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+// The board: its boxes apart from each other, square cells, smaller on the bigger sizes so 9 × 9 still fits a phone
+.sudoku {
+  display: grid;
+  gap: clamp(0.375rem, 1.6vw, 0.75rem);
+  grid-template-columns: repeat(calc(var(--size) / var(--box-columns)), minmax(0, 1fr));
+  width: min(100%, calc(var(--size) * 4.5rem), 34rem);
+  // Letters are sized from the board's width, so they fit their cells on every size
+  container-type: inline-size;
+}
+
+// Each box on its own tinted tile, so the boxes read at a glance
+.box {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  border-radius: var(--radius);
+  display: grid;
+  gap: clamp(0.125rem, 0.5vw, 0.25rem);
+  grid-template-columns: repeat(var(--box-columns), minmax(0, 1fr));
+  padding: clamp(0.125rem, 0.5vw, 0.25rem);
+}
+
+// Letters are dragged, so the page must not scroll under the finger
+.cell,
+.tray-letter {
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  font-family: inherit;
+  font-weight: 600;
+  justify-content: center;
+  padding: 0;
+  touch-action: none;
+  user-select: none;
+}
+
+.cell {
+  aspect-ratio: 1;
+  background: var(--surface);
+  border-color: color-mix(in srgb, var(--text) 30%, var(--surface));
+  border-style: dashed;
+  font-size: calc(100cqi / var(--size) * 0.5);
+}
+
+// Given letters can't be moved: plain text on a raised cell
+.cell.is-given {
+  background: color-mix(in srgb, var(--text) 12%, var(--surface));
+  border-style: solid;
+  color: var(--text);
+  cursor: default;
+}
+
+// The player's letters, in colour like the tray they came from
+.cell.is-placed {
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-text);
+  color: var(--blue-text);
+}
+
+.cell.is-repeated {
+  background: var(--red-bg);
+  border-color: var(--red-text);
+  color: var(--red-text);
+}
+
+// The cell a letter is being dragged out of
+.cell.is-lifted {
+  opacity: 0.4;
+}
+
+.is-done .cell {
+  background: var(--green-bg);
+  border-color: var(--green-text);
+  color: var(--green-text);
+}
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  width: min(100%, 34rem);
+}
+
+.tray-letter {
+  background: var(--blue-bg);
+  border-color: var(--blue-text);
+  color: var(--blue-text);
+  cursor: grab;
+  font-size: 1.5rem;
+  height: 3rem;
+  width: 3rem;
+}
+
+// A letter picked by a tap, placed on each cell tapped next
+.tray-letter[aria-pressed='true'] {
+  box-shadow:
+    0 0 0 3px var(--button-bg),
+    0 6px 16px rgba(0, 0, 0, 0.25);
+  transform: scale(1.08);
+}
+
+// Every one of this letter is on the board
+.tray-letter.is-used-up {
+  opacity: 0.45;
+}
+
+// The dragged letter follows the pointer, above everything and never under it, so the cell below can be found
+.drag-letter {
+  align-items: center;
+  background: var(--blue-bg);
+  border: 2px solid var(--blue-text);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  color: var(--blue-text);
+  display: flex;
+  font-size: 1.75rem;
+  font-weight: 600;
+  height: 3.25rem;
+  justify-content: center;
+  pointer-events: none;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 3.25rem;
+  z-index: 20;
+}
+
+.done,
+.check-result {
+  display: grid;
+  font-weight: 600;
+  gap: 0.25rem;
+  justify-items: center;
+  margin: 0;
+}
+
+.check-result {
+  color: var(--green-text);
+}
+
+.check-result.is-wrong {
+  color: var(--red-text);
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}

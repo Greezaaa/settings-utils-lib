@@ -15,6 +15,7 @@ export const GAME_SLUGS = [
   'place-pieces',
   'find-pairs',
   'how-many',
+  'letter-sudoku',
 ] as const;
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'it', 'uk'] as const;
 /**
