@@ -8,6 +8,14 @@
   gap: 0.375rem;
 }
 
+// A setting that only matters on phones and tablets: from the width where rooms switch to columns (see rooms.scss) the
+// stickers always sit right of the game and can't be moved. Kept here so it beats `display: grid` above
+.setting.is-small-screens-only {
+  @media (min-width: 56rem) {
+    display: none;
+  }
+}
+
 .setting-label {
   color: var(--muted);
   font-size: 0.75rem;

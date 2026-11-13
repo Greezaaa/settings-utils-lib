@@ -97,13 +97,6 @@
   }
 }
 
-// A header setting that only matters on phones and tablets (the width where rooms switch to columns, see rooms.scss)
-.setting.is-small-screens-only {
-  @media (min-width: 56rem) {
-    display: none;
-  }
-}
-
 // The same shape on every group of choice buttons while the animated menu is on (ChoiceRing): it carries the chosen
 // colour behind the buttons, which go see-through (outlines too, so none cut across the shape as it passes, like the
 // menu's plain links; only the chosen one keeps its outline), and the button it covers takes the chosen text colour. !important: each page styles its chosen
