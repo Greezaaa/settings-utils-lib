@@ -1,7 +1,7 @@
 const FOLLOW = 0.08;
 const COVERED = 0.3;
 const SETTLED = 0.5;
-const DOT = 18;
+const DOT = 8;
 
 interface Place {
   readonly x: number;
@@ -63,6 +63,7 @@ export class DriftShape {
     } else {
       const box = this.host.getBoundingClientRect();
       this.target = null;
+      this.shape?.classList.add('is-dot');
       this.go({
         x: event.clientX - box.left + this.host.scrollLeft,
         y: event.clientY - box.top + this.host.scrollTop,
@@ -110,6 +111,7 @@ export class DriftShape {
     const around = item.getBoundingClientRect();
     const { wrapX, wrapY } = this.options;
     this.target = item;
+    this.shape?.classList.remove('is-dot');
     this.go({
       x: around.left - box.left + this.host.scrollLeft + around.width / 2,
       y: around.top - box.top + this.host.scrollTop + around.height / 2,

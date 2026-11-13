@@ -78,6 +78,11 @@
   }
 }
 
+.menu-ring.is-dot,
+.choice-ring.is-dot {
+  border-radius: 50%;
+}
+
 .has-choice-ring {
   position: relative;
 

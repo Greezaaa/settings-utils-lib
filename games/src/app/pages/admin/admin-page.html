@@ -32,23 +32,27 @@
       </button>
     </form>
   } @else {
-    <div class="tabs" role="tablist">
-      @for (option of tabs(); track option) {
-        <button
-          type="button"
-          role="tab"
-          class="button button-secondary button-small"
-          [attr.aria-selected]="option === tab()"
-          [attr.aria-pressed]="option === tab()"
-          (click)="tab.set(option)"
-        >
-          {{ ('admin.tabs' | translate)[option] }}
+    <div class="admin-bar">
+      <div class="signed-in">
+        <span class="muted">{{ admin.me()?.email }}</span>
+        <button type="button" class="button button-secondary button-small" (click)="signOut()">
+          {{ 'admin.signOut' | translate }}
         </button>
-      }
-      <span class="signed-in muted">{{ admin.me()?.email }}</span>
-      <button type="button" class="button button-secondary button-small" (click)="signOut()">
-        {{ 'admin.signOut' | translate }}
-      </button>
+      </div>
+      <div class="tabs" role="tablist" appScrollToActive="[aria-selected='true']">
+        @for (option of tabs(); track option) {
+          <button
+            type="button"
+            role="tab"
+            class="button button-secondary button-small"
+            [attr.aria-selected]="option === tab()"
+            [attr.aria-pressed]="option === tab()"
+            (click)="tab.set(option)"
+          >
+            {{ ('admin.tabs' | translate)[option] }}
+          </button>
+        }
+      </div>
     </div>
 
     @switch (tab()) {

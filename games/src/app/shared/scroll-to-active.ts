@@ -1,7 +1,8 @@
-import { afterNextRender, DestroyRef, Directive, DOCUMENT, ElementRef, inject } from '@angular/core';
+import { afterNextRender, DestroyRef, Directive, DOCUMENT, ElementRef, inject, input } from '@angular/core';
 
 @Directive({ selector: '[appScrollToActive]' })
 export class ScrollToActive {
+  readonly activeSelector = input('a.active', { alias: 'appScrollToActive', transform: (value: string) => value || 'a.active' });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
   private activeLink: Element | null = null;
@@ -10,7 +11,7 @@ export class ScrollToActive {
   constructor() {
     afterNextRender(() => {
       const watcher = new MutationObserver(() => this.reveal());
-      watcher.observe(this.host, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true });
+      watcher.observe(this.host, { attributes: true, attributeFilter: ['class', 'aria-selected'], childList: true, subtree: true });
       this.reveal();
       this.stop = () => watcher.disconnect();
     });
@@ -18,7 +19,7 @@ export class ScrollToActive {
   }
 
   private reveal(): void {
-    const active = this.host.querySelector('a.active');
+    const active = this.host.querySelector(this.activeSelector());
     if (!active || active === this.activeLink) {
       return;
     }

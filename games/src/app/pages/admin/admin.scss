@@ -61,18 +61,40 @@ input[type='password'] {
   gap: 0.5rem;
 }
 
-.tabs {
+.admin-bar {
+  display: grid;
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
+}
+
+.signed-in {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+  gap: 0.5rem 0.75rem;
+  justify-content: flex-end;
+  overflow-wrap: anywhere;
+}
+
+.admin-bar .tabs {
+  border-bottom: 1px solid var(--border);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+
+  > button {
+    flex: none;
+  }
+
+  @media (min-width: 64rem) {
+    flex-wrap: wrap;
+  }
 }
 
 .load-more {
   justify-self: start;
-}
-
-.signed-in {
-  align-self: center;
-  font-size: 0.8125rem;
-  margin-left: auto;
 }
 
 .card-title {
