@@ -1,11 +1,10 @@
 import { DOCUMENT, Injector, runInInjectionContext } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GamesApi } from './games-api';
+import { readOutbox } from './outbox';
 
-function answer(body: unknown, ok = true) {
-  return vi.fn(
-    async (..._args: Parameters<typeof fetch>) => new Response(JSON.stringify(body), { status: ok ? 200 : 500 }),
-  );
+function answer(body: unknown, ok = true, status = ok ? 200 : 500) {
+  return vi.fn(async (..._args: Parameters<typeof fetch>) => new Response(JSON.stringify(body), { status }));
 }
 
 describe('GamesApi', () => {
@@ -18,6 +17,7 @@ describe('GamesApi', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    localStorage.clear();
   });
 
   it('keeps only known games from the play counts', async () => {
@@ -44,7 +44,23 @@ describe('GamesApi', () => {
       }),
     );
     expect(await api.plays()).toEqual([]);
-    expect(await api.reportWord('casa', 'es')).toBe(false);
+  });
+
+  it('keeps reports that cannot reach the API (or hit a server error) for later, and drops the ones it refuses', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('offline');
+      }),
+    );
+    expect(await api.reportWord('casa', 'es')).toBe(true);
+    expect(readOutbox()).toEqual([{ path: '/v1/word-reports', body: { word: 'casa', language: 'es' } }]);
+    vi.stubGlobal('fetch', answer({}, false, 504));
+    expect(await api.reportWord('gato', 'es')).toBe(true);
+    expect(readOutbox()).toHaveLength(2);
+    vi.stubGlobal('fetch', answer({}, false, 400));
+    expect(await api.reportWord('perro', 'es')).toBe(false);
+    expect(readOutbox()).toHaveLength(2);
   });
 
   it('sends JSON to the local API while the site runs on localhost', async () => {

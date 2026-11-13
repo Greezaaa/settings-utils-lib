@@ -111,6 +111,9 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
     lastUpdate: moment => `Última actualización: ${moment}`,
     noticeOk: 'Vale',
+    noticeLater: 'Luego',
+    updateReady: 'Hay una nueva versión de los juegos.',
+    reload: 'Recargar',
     cancel: 'Cancelar',
     privacySettings: 'Ajustes de privacidad',
     privacyLink: 'Privacidad',
@@ -388,6 +391,21 @@ export const spanish = (gender: WordGender): SiteMessages => ({
         what: 'Juegos que has valorado',
         where: 'Almacenamiento local',
         why: 'Para no volver a preguntarte',
+      },
+      {
+        what: 'Partidas, valoraciones y palabras denunciadas pendientes de enviar',
+        where: 'Almacenamiento local',
+        why: 'Si no hay internet esperan aquí, y se envían en cuanto vuelve la conexión',
+      },
+      {
+        what: 'Qué juegos y opciones están abiertos',
+        where: 'Almacenamiento local',
+        why: 'Para que la web se vea igual sin internet',
+      },
+      {
+        what: 'Los archivos de los juegos (solo con el juego sin conexión activado)',
+        where: 'La caché de este navegador',
+        why: 'Para que los juegos sigan funcionando sin internet',
       },
       {
         what: 'Sesión de administración (solo el equipo)',
@@ -1117,6 +1135,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'room-reactions': 'Pegatinas en las salas',
       'room-names': 'Nombres de los jugadores en las salas',
       'sticker-drag': 'Mover las pegatinas de las salas manteniéndolas pulsadas',
+      offline: 'Jugar sin conexión: los juegos siguen funcionando sin internet',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:

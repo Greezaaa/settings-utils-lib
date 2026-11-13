@@ -108,6 +108,9 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'Usiamo i cookie solo per salvare le tue preferenze, come tema, dimensione del testo e lingua. Non vendiamo né condividiamo mai i tuoi dati con nessuno. Teniamo alla tua privacy!',
     lastUpdate: (moment) => `Ultimo aggiornamento: ${moment}`,
     noticeOk: 'OK',
+    noticeLater: 'Più tardi',
+    updateReady: 'È pronta una nuova versione dei giochi.',
+    reload: 'Ricarica',
     cancel: 'Annulla',
     privacySettings: 'Impostazioni della privacy',
     privacyLink: 'Privacy',
@@ -374,6 +377,21 @@ export const italian = (gender: WordGender): SiteMessages => ({
         what: 'Giochi che hai valutato',
         where: 'Archivio locale',
         why: 'Per non chiedertelo di nuovo',
+      },
+      {
+        what: 'Partite, valutazioni e parole segnalate in attesa di invio',
+        where: 'Archiviazione locale',
+        why: 'Senza internet aspettano qui, e vengono inviate appena torna la connessione',
+      },
+      {
+        what: 'Quali giochi e opzioni sono aperti',
+        where: 'Archiviazione locale',
+        why: 'Perché il sito resti uguale anche senza internet',
+      },
+      {
+        what: 'I file dei giochi (solo con il gioco offline attivo)',
+        where: 'La cache di questo browser',
+        why: 'Perché i giochi funzionino anche senza internet',
       },
       {
         what: 'Accesso degli amministratori (solo il team)',
@@ -1075,6 +1093,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'room-reactions': 'Adesivi nelle stanze',
       'room-names': 'Nomi dei giocatori nelle stanze',
       'sticker-drag': 'Sposta gli adesivi delle stanze tenendoli premuti',
+      offline: 'Gioca offline: i giochi funzionano anche senza internet',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:

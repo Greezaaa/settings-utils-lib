@@ -1,5 +1,6 @@
 import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import { Connection } from './connection';
 import { FavoriteGames, readFavorites } from './favorite-games';
 import { FeatureFlags } from './feature-flags';
 import { GameSlug } from './games';
@@ -94,6 +95,7 @@ export class PlayerAccount {
   private readonly document = inject(DOCUMENT);
   private readonly features = inject(FeatureFlags);
   private readonly favorites = inject(FavoriteGames);
+  private readonly connection = inject(Connection);
   private readonly signedIn = signal<Account | null>(null);
   private readonly isKnown = signal(false);
   private savedFavorites: readonly GameSlug[] = [];
@@ -113,6 +115,14 @@ export class PlayerAccount {
         await this.restore();
       }
       this.isKnown.set(true);
+    });
+    let wasOnline = true;
+    effect(() => {
+      const isOnline = this.connection.isOnline();
+      if (isOnline && !wasOnline && untracked(this.isAvailable) && wasSignedIn('player')) {
+        void untracked(() => this.restore());
+      }
+      wasOnline = isOnline;
     });
     effect(() => {
       const games = this.favorites.games();

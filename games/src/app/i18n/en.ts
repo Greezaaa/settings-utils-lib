@@ -107,6 +107,9 @@ export const EN: SiteMessages = {
       'We use cookies only to save your preferences, like theme, text size and language. We never sell or share your data with anyone. We love your privacy!',
     lastUpdate: moment => `Last update: ${moment}`,
     noticeOk: 'OK',
+    noticeLater: 'Later',
+    updateReady: 'A new version of the games is ready.',
+    reload: 'Reload',
     cancel: 'Cancel',
     privacySettings: 'Privacy settings',
     privacyLink: 'Privacy',
@@ -372,6 +375,21 @@ export const EN: SiteMessages = {
         what: 'Games you rated',
         where: 'Local storage',
         why: 'So we don’t ask again',
+      },
+      {
+        what: 'Plays, ratings and reported words waiting to be sent',
+        where: 'Local storage',
+        why: 'When there’s no internet they wait here, and are sent once you’re back online',
+      },
+      {
+        what: 'Which games and options are open',
+        where: 'Local storage',
+        why: 'So the site looks the same without internet',
+      },
+      {
+        what: 'The games’ files (only while playing offline is on)',
+        where: 'This browser’s cache',
+        why: 'So the games keep working without internet',
       },
       {
         what: 'Admin sign-in (the admin team only)',
@@ -1079,6 +1097,7 @@ export const EN: SiteMessages = {
       'room-reactions': 'Stickers in rooms',
       'room-names': 'Players’ own names in rooms',
       'sticker-drag': 'Move room stickers by holding them',
+      offline: 'Play offline: the games keep working without internet',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:

@@ -3,6 +3,7 @@ import { LanguageId } from '../i18n/site-messages';
 import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FEATURE_IDS, FeatureId } from './features';
 import { GAME_SLUGS, GameSlug } from './games';
+import { OutboxItem, readOutbox, SendResult, withItem, writeOutbox } from './outbox';
 
 export const FEEDBACK_REASONS = {
   up: ['fun', 'learned'],
@@ -61,7 +62,7 @@ export interface FeatureSwitch {
   readonly enabled: boolean;
 }
 
-const isFeatureId = (value: unknown): value is FeatureId => FEATURE_IDS.some((feature) => feature === value);
+export const isFeatureId = (value: unknown): value is FeatureId => FEATURE_IDS.some((feature) => feature === value);
 
 function parseFeatureSwitches(body: unknown): FeatureSwitch[] | null {
   const features = field(body, 'features');
@@ -80,12 +81,13 @@ function parseWords(body: unknown): string[] {
   return Array.isArray(words) ? words.filter((word: unknown): word is string => typeof word === 'string') : [];
 }
 
+const SERVER_ERROR = 500;
+
 @Injectable({ providedIn: 'root' })
 export class GamesApi {
   private readonly document = inject(DOCUMENT);
-
   countPlay(game: GameSlug): void {
-    void this.send('/v1/plays', { game });
+    void this.sendOrQueue({ path: '/v1/plays', body: { game } });
   }
 
   async plays(): Promise<GamePlays[]> {
@@ -93,11 +95,11 @@ export class GamesApi {
   }
 
   sendFeedback(game: GameSlug, vote: Vote, language: LanguageId, reason?: FeedbackReason): Promise<boolean> {
-    return this.send('/v1/feedback', { game, vote, language, reason });
+    return this.sendOrQueue({ path: '/v1/feedback', body: { game, vote, language, reason } });
   }
 
   reportWord(word: string, language: LanguageId): Promise<boolean> {
-    return this.send('/v1/word-reports', { word, language });
+    return this.sendOrQueue({ path: '/v1/word-reports', body: { word, language } });
   }
 
   reportName(screenName: string): Promise<boolean> {
@@ -136,20 +138,35 @@ export class GamesApi {
     }
   }
 
-  private send(path: string, body: object | FormData): Promise<boolean> {
+  private async send(path: string, body: object | FormData): Promise<boolean> {
+    return (await this.post(path, body)) === 'sent';
+  }
+
+  private async sendOrQueue(item: OutboxItem): Promise<boolean> {
+    const result = await this.post(item.path, item.body);
+    if (result === 'unreachable') {
+      writeOutbox(withItem(readOutbox(), item));
+    }
+    return result !== 'rejected';
+  }
+
+  sendQueued(item: OutboxItem): Promise<SendResult> {
+    return this.post(item.path, item.body);
+  }
+
+  private async post(path: string, body: object | FormData): Promise<SendResult> {
     const init: RequestInit =
       body instanceof FormData
         ? { method: 'POST', body }
         : { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } };
-    return this.request(path, init, SEND_TIMEOUT_MS);
-  }
-
-  private async request(path: string, init: RequestInit, timeoutMs: number): Promise<boolean> {
     try {
-      const response = await fetch(apiUrl(this.document, path), { ...init, signal: AbortSignal.timeout(timeoutMs) });
-      return response.ok;
+      const response = await fetch(apiUrl(this.document, path), { ...init, signal: AbortSignal.timeout(SEND_TIMEOUT_MS) });
+      if (response.ok) {
+        return 'sent';
+      }
+      return response.status >= SERVER_ERROR ? 'unreachable' : 'rejected';
     } catch {
-      return false;
+      return 'unreachable';
     }
   }
 }

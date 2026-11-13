@@ -1,10 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { AdminApi } from './admin-api';
 import { GAMES, GameSlug } from './games';
-import { GamesApi } from './games-api';
+import { GamesApi, isGameSlug } from './games-api';
+import { readSwitches, writeSwitches } from './remembered-switches';
 import { readStored, writeStored } from './site-storage';
 
 const PREVIEW_STORAGE = 'admin-preview';
+const SWITCHES_STORAGE = 'game-switches';
 
 @Injectable({ providedIn: 'root' })
 export class GameAvailability {
@@ -62,7 +64,11 @@ export class GameAvailability {
       writeStored(PREVIEW_STORAGE, false);
     }
     if (switches) {
-      this.switches.set(new Map(switches.map(({ game, enabled }) => [game, enabled])));
+      const known = new Map(switches.map(({ game, enabled }) => [game, enabled]));
+      this.switches.set(known);
+      writeSwitches(SWITCHES_STORAGE, known);
+    } else {
+      this.switches.set(readSwitches(SWITCHES_STORAGE, isGameSlug) ?? this.switches());
     }
     this.isKnown.set(true);
   }

@@ -355,6 +355,24 @@ export const SITE_UPDATES: readonly SiteUpdate[] = [
       },
     ],
   },
+  {
+    version: 15,
+    published: '2026-11-14T12:00:00+01:00',
+    privacy: true,
+    changes: [
+      {
+        kind: 'feature',
+        feature: 'offline',
+        text: {
+          en: 'The games keep working without internet, and what you send waits until you’re back online',
+          es: 'Los juegos siguen funcionando sin internet, y lo que envías espera hasta que vuelva la conexión',
+          eu: 'Jokoek internetik gabe ere funtzionatzen dute, eta bidaltzen duzuna konexioa itzuli arte itxaroten du',
+          it: 'I giochi funzionano anche senza internet, e ciò che invii aspetta finché torna la connessione',
+          uk: 'Ігри працюють і без інтернету, а те, що ти надсилаєш, чекає, доки повернеться зʼєднання',
+        },
+      },
+    ],
+  },
 ];
 
 export const LATEST_VERSION = Math.max(

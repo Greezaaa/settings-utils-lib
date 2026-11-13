@@ -27,7 +27,8 @@ export type FeatureId =
   | 'how-many-sound'
   | 'room-reactions'
   | 'room-names'
-  | 'sticker-drag';
+  | 'sticker-drag'
+  | 'offline';
 
 export type RoomGame = Extract<
   GameSlug,
@@ -43,20 +44,17 @@ export interface FeatureInfo {
   readonly id: FeatureId;
   readonly openByDefault: boolean;
   readonly roomGame?: RoomGame;
+  readonly needsConnection?: boolean;
 }
 
 export const FEATURES: readonly FeatureInfo[] = [
-  { id: 'rooms', openByDefault: true },
-  { id: 'rooms-math-games', openByDefault: true, roomGame: 'math-games' },
-  { id: 'rooms-measure-it', openByDefault: true, roomGame: 'measure-it' },
-  { id: 'rooms-letter-games', openByDefault: true, roomGame: 'letter-games' },
-  {
-    id: 'rooms-sliding-puzzle',
-    openByDefault: true,
-    roomGame: 'sliding-puzzle',
-  },
-  { id: 'rooms-turn-picture', openByDefault: true, roomGame: 'turn-picture' },
-  { id: 'rooms-place-pieces', openByDefault: true, roomGame: 'place-pieces' },
+  { id: 'rooms', openByDefault: true, needsConnection: true },
+  { id: 'rooms-math-games', openByDefault: true, roomGame: 'math-games', needsConnection: true },
+  { id: 'rooms-measure-it', openByDefault: true, roomGame: 'measure-it', needsConnection: true },
+  { id: 'rooms-letter-games', openByDefault: true, roomGame: 'letter-games', needsConnection: true },
+  { id: 'rooms-sliding-puzzle', openByDefault: true, roomGame: 'sliding-puzzle', needsConnection: true },
+  { id: 'rooms-turn-picture', openByDefault: true, roomGame: 'turn-picture', needsConnection: true },
+  { id: 'rooms-place-pieces', openByDefault: true, roomGame: 'place-pieces', needsConnection: true },
   { id: 'answer-words', openByDefault: true },
   { id: 'word-gender', openByDefault: true },
   { id: 'menu-ring', openByDefault: true },
@@ -71,6 +69,7 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'room-reactions', openByDefault: true },
   { id: 'room-names', openByDefault: false },
   { id: 'sticker-drag', openByDefault: false },
+  { id: 'offline', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

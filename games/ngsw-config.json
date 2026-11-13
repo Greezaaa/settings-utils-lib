@@ -1,0 +1,42 @@
+{
+  "$schema": "../node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.csr.html",
+  "navigationRequestStrategy": "freshness",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/index.csr.html",
+          "/*.js",
+          "/*.css",
+          "/site.webmanifest",
+          "/favicon.svg",
+          "/favicon-32.png",
+          "/icon-*.png",
+          "/apple-touch-icon.png",
+          "/pictures/**",
+          "/reactions/**"
+        ]
+      }
+    },
+    {
+      "name": "dictionaries",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "files": ["/dictionaries/**"]
+      }
+    },
+    {
+      "name": "fonts",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "urls": ["https://fonts.googleapis.com/**", "https://fonts.gstatic.com/**"]
+      }
+    }
+  ]
+}

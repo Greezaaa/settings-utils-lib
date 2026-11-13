@@ -110,6 +110,9 @@ export const EU: SiteMessages = {
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
     lastUpdate: moment => `Azken eguneratzea: ${moment}`,
     noticeOk: 'Ados',
+    noticeLater: 'Gero',
+    updateReady: 'Jokoen bertsio berri bat prest dago.',
+    reload: 'Berriz kargatu',
     cancel: 'Utzi',
     privacySettings: 'Pribatutasun-ezarpenak',
     privacyLink: 'Pribatutasuna',
@@ -378,6 +381,21 @@ export const EU: SiteMessages = {
         what: 'Baloratu dituzun jokoak',
         where: 'Tokiko biltegiratzea',
         why: 'Berriro ez galdetzeko',
+      },
+      {
+        what: 'Bidaltzeko zain dauden partidak, balorazioak eta salatutako hitzak',
+        where: 'Biltegiratze lokala',
+        why: 'Internetik ez dagoenean hemen itxaroten dute, eta konexioa itzultzean bidaltzen dira',
+      },
+      {
+        what: 'Zein joko eta aukera dauden irekita',
+        where: 'Biltegiratze lokala',
+        why: 'Webgunea internetik gabe ere berdin ikusteko',
+      },
+      {
+        what: 'Jokoen fitxategiak (konexiorik gabe jolastea aktibatuta dagoenean bakarrik)',
+        where: 'Nabigatzaile honen cachea',
+        why: 'Jokoek internetik gabe ere funtziona dezaten',
       },
       {
         what: 'Administrazio saioa (taldea bakarrik)',
@@ -1104,6 +1122,7 @@ export const EU: SiteMessages = {
       'room-reactions': 'Pegatinak geletan',
       'room-names': 'Jokalarien izenak geletan',
       'sticker-drag': 'Mugitu gelako pegatinak sakatuta edukiz',
+      offline: 'Konexiorik gabe jolastu: jokoek internetik gabe ere funtzionatzen dute',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:

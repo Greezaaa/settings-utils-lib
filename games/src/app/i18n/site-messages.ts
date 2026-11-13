@@ -94,6 +94,9 @@ export interface SiteMessages {
     readonly privacyNotice: string;
     readonly lastUpdate: (moment: string) => string;
     readonly noticeOk: string;
+    readonly noticeLater: string;
+    readonly updateReady: string;
+    readonly reload: string;
     readonly cancel: string;
     readonly privacySettings: string;
     readonly privacyLink: string;

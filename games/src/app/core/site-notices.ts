@@ -93,6 +93,22 @@ export class SiteNotices {
     );
   }
 
+  announceUpdate(reload: () => void): void {
+    this.open(
+      computed(() => {
+        const { site } = this.language.messages();
+        return {
+          message: site.updateReady,
+          actions: [
+            { label: site.reload, onClick: reload },
+            { label: site.noticeLater, onClick: () => undefined },
+          ],
+        };
+      }),
+      () => undefined,
+    );
+  }
+
   private open(content: Signal<NoticeContent>, onClosed: () => void): void {
     const show = (): string => this.notifications.show({ type: 'info', autoClose: false, ...content() });
     let id = show();

@@ -103,7 +103,8 @@
 									"maximumError": "8kB"
 								}
 							],
-							"outputHashing": "all"
+							"outputHashing": "all",
+							"serviceWorker": "games/ngsw-config.json"
 						},
 						"development": {
 							"optimization": false,
