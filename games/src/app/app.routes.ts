@@ -143,6 +143,11 @@ export const routes: Routes = [
     ...gameMeta('number-sudoku'),
     loadComponent: () => import('./pages/sudoku/sudoku-page').then(m => m.SudokuPage),
   },
+  {
+    path: 'word-search',
+    ...gameMeta('word-search'),
+    loadComponent: () => import('./pages/word-search/word-search-page').then(m => m.WordSearchPage),
+  },
   ...categoryRoutes,
   {
     path: 'rooms',

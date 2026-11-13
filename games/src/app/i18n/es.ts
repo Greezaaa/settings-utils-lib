@@ -187,6 +187,13 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       subtitle: 'cada número una vez en cada fila, columna y cuadro',
       intro: 'Un juego de lógica con números para peques.',
     },
+    'word-search': {
+      name: 'Sopa de letras',
+      summary:
+        'Encuentra las palabras escondidas entre las letras, en horizontal, en vertical o en diagonal. Traza una línea sobre cada una o toca su primera y su última letra.',
+      subtitle: 'encuentra las palabras escondidas entre las letras',
+      intro: 'Un juego de palabras para peques.',
+    },
     'hit-the-note': {
       name: 'Dando la nota',
       summary:
@@ -844,6 +851,23 @@ export const spanish = (gender: WordGender): SiteMessages => ({
         noRepeats: '¡De momento no se repite ningún número!',
       },
     },
+  },
+
+  wordSearch: {
+    lead: 'Traza una línea desde la primera letra de una palabra hasta la última, o toca las dos puntas.',
+    rule: 'Encuentra todas las palabras de la lista: se esconden en horizontal, en vertical o en diagonal.',
+    board: 'Letras',
+    words: 'Palabras que buscar',
+    levels: {
+      easy: { name: 'Fácil', summary: '6 × 6 · 4 palabras · en horizontal y en vertical' },
+      normal: { name: 'Normal', summary: '8 × 8 · 6 palabras · también en diagonal' },
+      hard: { name: 'Difícil', summary: '10 × 10 · 8 palabras · en todas las direcciones, también al revés' },
+    },
+    cell: (row, column, letter) => `Fila ${row}, columna ${column}: ${letter}`,
+    found: (found, total) => `Palabras ${found}/${total}`,
+    done: '¡Todas las palabras encontradas!',
+    summary: time => `En ${time}`,
+    newGame: 'Nueva partida',
   },
 
   findPairs: {

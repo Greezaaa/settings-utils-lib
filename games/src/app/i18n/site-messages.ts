@@ -22,6 +22,7 @@ import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { PictureModeId } from '../games/picture-game';
 import { SudokuGame } from '../games/sudoku';
+import { SearchLevelId } from '../games/word-search';
 import { WordGender } from './word-gender';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
@@ -510,6 +511,23 @@ export interface SiteMessages {
     readonly newGame: string;
     /** Each game's own texts */
     readonly games: Readonly<Record<SudokuGame, SudokuText>>;
+  };
+
+  /** Word search: picture words hidden in a square of letters */
+  readonly wordSearch: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    /** The list of words to find */
+    readonly words: string;
+    /** Levels: name, and the board size, words and directions */
+    readonly levels: Readonly<Record<SearchLevelId, OptionText>>;
+    /** A letter for screen readers */
+    readonly cell: (row: number, column: number, letter: string) => string;
+    readonly found: (found: number, total: number) => string;
+    readonly done: string;
+    readonly summary: (time: string) => string;
+    readonly newGame: string;
   };
 
   readonly findPairs: {

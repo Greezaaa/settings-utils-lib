@@ -181,6 +181,13 @@ export const EN: SiteMessages = {
       subtitle: 'each number once in every row, column and box',
       intro: 'A number logic game for kids.',
     },
+    'word-search': {
+      name: 'Word search',
+      summary:
+        'Find the hidden words among the letters, across, down or diagonally. Draw a line over each one or tap its first and last letter.',
+      subtitle: 'find the words hidden among the letters',
+      intro: 'A word game for kids.',
+    },
     'hit-the-note': {
       name: 'Hit the note',
       summary:
@@ -813,6 +820,23 @@ export const EN: SiteMessages = {
         noRepeats: 'No repeated numbers so far!',
       },
     },
+  },
+
+  wordSearch: {
+    lead: 'Draw a line from the first letter of a word to its last, or tap both ends.',
+    rule: 'Find every word in the list: they hide across, down or diagonally.',
+    board: 'Letters',
+    words: 'Words to find',
+    levels: {
+      easy: { name: 'Easy', summary: '6 × 6 · 4 words · across and down' },
+      normal: { name: 'Normal', summary: '8 × 8 · 6 words · also diagonally' },
+      hard: { name: 'Hard', summary: '10 × 10 · 8 words · in every direction, backwards too' },
+    },
+    cell: (row, column, letter) => `Row ${row}, column ${column}: ${letter}`,
+    found: (found, total) => `Words ${found}/${total}`,
+    done: 'All words found!',
+    summary: time => `In ${time}`,
+    newGame: 'New game',
   },
 
   findPairs: {

@@ -11,7 +11,8 @@ export type GameSlug =
   | 'find-pairs'
   | 'how-many'
   | 'letter-sudoku'
-  | 'number-sudoku';
+  | 'number-sudoku'
+  | 'word-search';
 
 /** What a game trains; the home page lists the games by category, in this order */
 export type GameCategory = 'numbers' | 'letters' | 'music' | 'puzzles';
@@ -122,6 +123,13 @@ export const GAMES: readonly GameInfo[] = [
     minAge: 5,
     openByDefault: false,
     icon: '9️⃣',
+  },
+  {
+    slug: 'word-search',
+    category: 'letters',
+    minAge: 6,
+    openByDefault: false,
+    icon: '🔍',
   },
 ];
 

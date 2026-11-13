@@ -1,0 +1,88 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <a class="tag" routerLink="/">{{ 'page.section' | translate }}</a>
+    <span class="tag">{{ 'page.ages' | translate: minAge }}</span>
+  </div>
+  <h1>{{ 'games.word-search.name' | translate }}</h1>
+  <p class="lead">
+    {{ 'wordSearch.lead' | translate }}
+    <br />
+    {{ 'wordSearch.rule' | translate }}
+  </p>
+</header>
+
+<section class="container page-section" [attr.aria-label]="'wordSearch.board' | translate">
+  <div class="card play" appGameBoard>
+    <!-- The letters and the words to find on one side, the level, time and buttons on the other (settings first on phones) -->
+    <div class="play-layout">
+      <div class="play-main">
+        @if (search(); as search) {
+          <div
+            class="letters"
+            [class.is-done]="phase() === 'done'"
+            [style.--size]="search.size"
+            role="group"
+            [attr.aria-label]="'wordSearch.board' | translate"
+            (pointerdown)="onPointerDown($event)"
+            (pointermove)="onPointerMove($event)"
+            (pointerup)="onPointerUp($event)"
+            (pointercancel)="cancelPress()"
+          >
+            @for (letter of search.letters; track $index; let cell = $index) {
+              @let colour = foundColour(cell);
+              <button
+                type="button"
+                class="letter"
+                [attr.data-cell]="cell"
+                [attr.data-found]="colour"
+                [class.is-selected]="selected().has(cell)"
+                [attr.aria-pressed]="anchor() === cell"
+                [attr.aria-label]="'wordSearch.cell' | translate: rowOf(cell) : columnOf(cell) : shown(letter)"
+                (click)="onClick($event, cell)"
+              >
+                {{ shown(letter) }}
+              </button>
+            }
+          </div>
+
+          <ul class="words" [attr.aria-label]="'wordSearch.words' | translate" aria-live="polite">
+            @for (hidden of search.words; track hidden.word.word) {
+              <li class="word" [class.is-found]="isFound(hidden)">{{ shown(hidden.word.word) }}</li>
+            }
+          </ul>
+        }
+
+        @if (phase() === 'done') {
+          <p class="done" role="status">
+            {{ 'wordSearch.done' | translate }}
+            <small>{{ 'wordSearch.summary' | translate: clock.time() }}</small>
+          </p>
+        }
+      </div>
+      <div class="play-side">
+        <div class="choices" role="group" [attr.aria-label]="'settings.levelGroup' | translate">
+          @for (option of levels; track option.id) {
+            <button
+              type="button"
+              class="button button-secondary"
+              [attr.aria-pressed]="option.id === levelId()"
+              [title]="('wordSearch.levels' | translate)[option.id].summary"
+              (click)="chooseLevel(option.id)"
+            >
+              {{ ('wordSearch.levels' | translate)[option.id].name }}
+            </button>
+          }
+        </div>
+
+        <div class="status">
+          <span class="mono" aria-live="polite">{{ 'wordSearch.found' | translate: found().length : search()?.words?.length ?? 0 }}</span>
+          <span class="mono">{{ clock.time() }}</span>
+        </div>
+        <div class="actions">
+          <button type="button" class="button button-secondary" (click)="newGame()">{{ 'wordSearch.newGame' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-game-feedback game="word-search" />
+</section>

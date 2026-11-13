@@ -181,6 +181,13 @@ export const italian = (gender: WordGender): SiteMessages => ({
       subtitle: 'ogni numero una volta in ogni riga, colonna e riquadro',
       intro: 'Un gioco di logica con i numeri per bambini.',
     },
+    'word-search': {
+      name: 'Cerca parole',
+      summary:
+        'Trova le parole nascoste tra le lettere, in orizzontale, in verticale o in diagonale. Traccia una linea su ognuna o tocca la sua prima e la sua ultima lettera.',
+      subtitle: 'trova le parole nascoste tra le lettere',
+      intro: 'Un gioco di parole per bambini.',
+    },
     'hit-the-note': {
       name: 'Prendi la nota',
       summary:
@@ -807,6 +814,23 @@ export const italian = (gender: WordGender): SiteMessages => ({
         noRepeats: 'Per ora nessun numero ripetuto!',
       },
     },
+  },
+
+  wordSearch: {
+    lead: 'Traccia una linea dalla prima lettera di una parola all’ultima, oppure tocca le due estremità.',
+    rule: 'Trova tutte le parole dell’elenco: si nascondono in orizzontale, in verticale o in diagonale.',
+    board: 'Lettere',
+    words: 'Parole da trovare',
+    levels: {
+      easy: { name: 'Facile', summary: '6 × 6 · 4 parole · in orizzontale e in verticale' },
+      normal: { name: 'Normale', summary: '8 × 8 · 6 parole · anche in diagonale' },
+      hard: { name: 'Difficile', summary: '10 × 10 · 8 parole · in tutte le direzioni, anche al contrario' },
+    },
+    cell: (row, column, letter) => `Riga ${row}, colonna ${column}: ${letter}`,
+    found: (found, total) => `Parole ${found}/${total}`,
+    done: 'Tutte le parole trovate!',
+    summary: (time) => `In ${time}`,
+    newGame: 'Nuova partita',
   },
 
   findPairs: {

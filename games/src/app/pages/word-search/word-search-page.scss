@@ -1,0 +1,103 @@
+.play {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+// The letters: square cells, sized from the board's width so 10 × 10 still fits a phone. Lines are drawn across
+// them, so the page must not scroll under the finger.
+.letters {
+  container-type: inline-size;
+  display: grid;
+  gap: clamp(0.125rem, 0.6vw, 0.25rem);
+  grid-template-columns: repeat(var(--size), minmax(0, 1fr));
+  touch-action: none;
+  user-select: none;
+  width: min(100%, calc(var(--size) * 3.5rem), 34rem);
+}
+
+.letter {
+  align-items: center;
+  aspect-ratio: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  display: flex;
+  font-family: inherit;
+  font-size: calc(100cqi / var(--size) * 0.5);
+  font-weight: 600;
+  justify-content: center;
+  padding: 0;
+}
+
+// Each found word in its own colour, in turn
+.letter[data-found='0'] {
+  background: var(--blue-bg);
+  border-color: var(--blue-text);
+  color: var(--blue-text);
+}
+
+.letter[data-found='1'] {
+  background: var(--green-bg);
+  border-color: var(--green-text);
+  color: var(--green-text);
+}
+
+.letter[data-found='2'] {
+  background: var(--yellow-bg);
+  border-color: var(--yellow-text);
+  color: var(--yellow-text);
+}
+
+.letter[data-found='3'] {
+  background: var(--purple-bg);
+  border-color: var(--purple-text);
+  color: var(--purple-text);
+}
+
+// The line being drawn, or the first end tapped
+.letter.is-selected {
+  background: var(--button-bg);
+  border-color: var(--button-bg);
+  color: var(--surface);
+}
+
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.word {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.625rem;
+}
+
+.word.is-found {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.done {
+  display: grid;
+  font-weight: 600;
+  gap: 0.25rem;
+  justify-items: center;
+  margin: 0;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}

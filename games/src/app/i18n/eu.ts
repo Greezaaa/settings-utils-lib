@@ -185,6 +185,13 @@ export const EU: SiteMessages = {
       subtitle: 'zenbaki bakoitza behin errenkada, zutabe eta karratu bakoitzean',
       intro: 'Zenbakiekin logika joko bat haurrentzat.',
     },
+    'word-search': {
+      name: 'Letra zopa',
+      summary:
+        'Aurkitu hizkien artean ezkutatuta dauden hitzak, horizontalean, bertikalean edo diagonalean. Marraztu lerro bat bakoitzaren gainean edo sakatu bere lehen eta azken hizkia.',
+      subtitle: 'aurkitu hizkien artean ezkutatutako hitzak',
+      intro: 'Hitz joko bat haurrentzat.',
+    },
     'hit-the-note': {
       name: 'Asmatu nota',
       summary:
@@ -834,6 +841,23 @@ export const EU: SiteMessages = {
         noRepeats: 'Oraingoz ez dago zenbaki errepikaturik!',
       },
     },
+  },
+
+  wordSearch: {
+    lead: 'Marraztu lerro bat hitz baten lehen hizkitik azkenera, edo sakatu bi muturrak.',
+    rule: 'Aurkitu zerrendako hitz guztiak: horizontalean, bertikalean edo diagonalean ezkutatzen dira.',
+    board: 'Hizkiak',
+    words: 'Bilatu beharreko hitzak',
+    levels: {
+      easy: { name: 'Erraza', summary: '6 × 6 · 4 hitz · horizontalean eta bertikalean' },
+      normal: { name: 'Normala', summary: '8 × 8 · 6 hitz · diagonalean ere bai' },
+      hard: { name: 'Zaila', summary: '10 × 10 · 8 hitz · norabide guztietan, atzetik aurrera ere bai' },
+    },
+    cell: (row, column, letter) => `${row}. errenkada, ${column}. zutabea: ${letter}`,
+    found: (found, total) => `Hitzak ${found}/${total}`,
+    done: 'Hitz guztiak aurkitu dituzu!',
+    summary: time => time,
+    newGame: 'Partida berria',
   },
 
   findPairs: {
