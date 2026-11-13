@@ -18,10 +18,6 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 const BEST_TIMES_STORAGE = RESULT_GAMES['place-pieces'].storage;
 
-/**
- * Place the pieces: drag a piece onto another to swap them (or tap two pieces) until the drawing is whole.
- * Look mode keeps the drawing visible and marks the pieces in place; Memory mode shows it only until Ready.
- */
 @Component({
   selector: 'app-place-pieces-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, PlaceBoard, RouterLink],
@@ -44,7 +40,6 @@ export class PlacePiecesPage {
   protected readonly levelId = signal<BoardLevelId>('normal');
   protected readonly level = computed(() => getPictureLevel(this.levelId()));
 
-  /** Chosen in the browser only, so the prerendered page and the first render agree */
   protected readonly picture = signal<GamePicture | null>(null);
   protected readonly arrangement = signal<Arrangement>([]);
   protected readonly phase = signal<PicturePhase>('playing');
@@ -60,7 +55,6 @@ export class PlacePiecesPage {
   });
 
   protected readonly placed = computed(() => piecesPlaced(this.arrangement()));
-  /** Look mode marks the pieces already in place */
   protected readonly showHints = computed(() => this.modeId() === 'look' && this.phase() === 'playing');
 
   constructor() {
@@ -87,7 +81,6 @@ export class PlacePiecesPage {
     this.moves.set(0);
     this.isNewBest.set(false);
     if (this.modeId() === 'memory') {
-      // The whole picture first: every piece in place until Ready
       this.arrangement.set(solvedArrangement(this.level()));
       this.phase.set('preview');
     } else {
@@ -96,7 +89,6 @@ export class PlacePiecesPage {
     }
   }
 
-  /** Memory mode: the player has looked; mix up the pieces and start */
   protected ready(): void {
     this.arrangement.set(shuffle(this.level()));
     this.phase.set('playing');
@@ -105,7 +97,6 @@ export class PlacePiecesPage {
   protected swapPieces({ first, second }: PieceSwap): void {
     if (this.moves() === 0) {
       this.clock.start();
-      // The first move starts the game: count it as a play
       this.api.countPlay('place-pieces');
     }
     this.arrangement.update((arrangement) => swap(arrangement, first, second));

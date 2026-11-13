@@ -1,7 +1,5 @@
-/** A source of numbers in [0, 1), like `Math.random`; replaceable in tests */
 export type Random = () => number;
 
-/** Whole numbers from `min` to `max`, both included */
 export interface NumberRange {
   readonly min: number;
   readonly max: number;
@@ -24,10 +22,6 @@ export function shuffled<T>(items: readonly T[], random: Random): T[] {
   return copy;
 }
 
-/**
- * A repeatable source of numbers from a seed (mulberry32): the same seed gives the same numbers on every device, so
- * players in a room get the same exercises
- */
 export function seededRandom(seed: number): Random {
   let state = seed >>> 0;
   return () => {

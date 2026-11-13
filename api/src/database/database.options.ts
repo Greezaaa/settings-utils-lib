@@ -23,11 +23,6 @@ import { PlayerApps1794900000000 } from './migrations/1794900000000-player-apps.
 import { BoardModeration1795000000000 } from './migrations/1795000000000-board-moderation.js';
 import { NameApproval1795100000000 } from './migrations/1795100000000-name-approval.js';
 
-/**
- * How the API and the auth service reach PostgreSQL. The tables are only ever changed by migrations, which run when the
- * API starts (`runMigrations`; the auth service shares the tables and leaves them alone); `synchronize` stays off so a
- * code change can never drop data.
- */
 export const databaseOptions = (
   url: string,
   runMigrations: boolean,

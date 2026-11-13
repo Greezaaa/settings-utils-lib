@@ -4,8 +4,6 @@
   justify-items: center;
 }
 
-// The letters: square cells, sized from the board's width so 10 × 10 still fits a phone. Lines are drawn across
-// them, so the page must not scroll under the finger.
 .letters {
   container-type: inline-size;
   display: grid;
@@ -31,7 +29,6 @@
   padding: 0;
 }
 
-// Each found word in its own colour, in turn
 .letter[data-found='0'] {
   background: var(--blue-bg);
   border-color: var(--blue-text);
@@ -56,7 +53,6 @@
   color: var(--purple-text);
 }
 
-// The line being drawn, or the first end tapped
 .letter.is-selected {
   background: var(--button-bg);
   border-color: var(--button-bg);

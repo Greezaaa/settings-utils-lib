@@ -45,14 +45,12 @@ export class VisitTrackerPage {
   protected readonly visits = inject(SuVisitTrackerService);
 
   private readonly notifications = inject(SuNotificationService);
-  /** Visits are only counted while the visitor allows saving; read in the browser */
   protected readonly savingAllowed = signal(true);
 
   constructor() {
     afterNextRender(() => this.savingAllowed.set(isSavingAllowed()));
   }
 
-  /** Remove the saved visits so the next page load counts as the first visit */
   protected forget(): void {
     localStorage.removeItem(VISIT_STORAGE_KEY);
     this.notifications.show({ type: 'info', message: 'Visits forgotten. Reload the page to start again from 1.' });

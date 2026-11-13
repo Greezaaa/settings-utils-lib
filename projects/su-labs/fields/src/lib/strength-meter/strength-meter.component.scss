@@ -9,7 +9,6 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
-// Each bar fills from the left, one after another, and every filled bar takes the colour of the current step
 .bar {
   background: var(--su-field-track, rgb(127 127 127 / 20%));
   border-radius: 9999px;

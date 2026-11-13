@@ -21,7 +21,6 @@ const admin = (role: Admin['role']): Admin => ({
   created: new Date(),
 });
 
-/** Session tokens "super" and "moderator" belong to admins with those roles */
 const auth: Pick<AuthService, 'adminForToken'> = {
   adminForToken: async (token: string) =>
     token === 'super' || token === 'moderator' ? admin(token) : null,

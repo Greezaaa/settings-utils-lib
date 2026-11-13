@@ -12,10 +12,8 @@ import { LATEST_PRIVACY_VERSION, LATEST_VERSION } from './site-updates';
 const PRIVACY_SEEN_STORAGE = 'privacy-notice-version';
 /** Before versions, closing the privacy notice was saved as `true`: that visitor has seen version 1 */
 const OLD_PRIVACY_STORAGE = 'privacy-notice-dismissed';
-/** The visitor was asked how to be spoken to (whether or not they chose), so they aren't asked again */
 const GENDER_ASKED_STORAGE = 'word-gender-asked';
 
-/** What a notice shows; it is rebuilt when the language changes */
 interface NoticeContent {
   readonly message: string;
   readonly actions: SuNotificationAction[];
@@ -26,7 +24,6 @@ const readVersion = (name: string): number | null => {
   return typeof value === 'number' && Number.isInteger(value) ? value : null;
 };
 
-/** Notices are compared by their text and button labels to tell when the language changed */
 const signature = ({ message, actions }: NoticeContent): string =>
   [message, ...actions.map(({ label }) => label)].join('\n');
 
@@ -48,7 +45,6 @@ export class SiteNotices {
   private readonly gender = inject(PlayerGender);
 
   constructor() {
-    // After the first render, once the saved language has been applied
     afterNextRender(() => this.showDue());
   }
 
@@ -77,7 +73,6 @@ export class SiteNotices {
     );
   }
 
-  /** Asks once, when the setting is open and nothing is chosen yet, how the texts should speak to the visitor */
   private async askGender(): Promise<void> {
     await this.features.ready();
     if (!this.gender.isAvailable() || this.gender.choice() !== null || readStored(GENDER_ASKED_STORAGE) === true) {
@@ -98,7 +93,6 @@ export class SiteNotices {
     );
   }
 
-  /** Shows a notice until it is closed, then calls `onClosed`; shows it again if its content changes meanwhile */
   private open(content: Signal<NoticeContent>, onClosed: () => void): void {
     const show = (): string => this.notifications.show({ type: 'info', autoClose: false, ...content() });
     let id = show();
@@ -111,7 +105,6 @@ export class SiteNotices {
           onClosed();
           watcher.destroy();
         } else if (current !== shown) {
-          // The language changed: replace it with the same notice in the new language
           this.notifications.dismiss(id);
           id = show();
           shown = current;

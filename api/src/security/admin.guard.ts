@@ -10,13 +10,8 @@ import type { Env } from '../config/env.js';
 const digest = (value: string): Buffer =>
   createHash('sha256').update(value).digest();
 
-/** A request let through by the admin guards: the signed-in admin, or null when it came with the backup token */
 export type AdminRequest = Request & { admin?: Admin | null };
 
-/**
- * Lets a request through for the admin team only: a browser signed in with email and password (the session cookie),
- * or a script with the backup key, `Authorization: Bearer <ADMIN_TOKEN>`. For the moderation endpoints.
- */
 @Injectable()
 export class AdminGuard implements CanActivate {
   private readonly expected: Buffer;
@@ -34,7 +29,6 @@ export class AdminGuard implements CanActivate {
     const bearer = header.startsWith('Bearer ')
       ? header.slice('Bearer '.length)
       : '';
-    // Compare digests in constant time, so the response time says nothing about the token
     if (bearer && timingSafeEqual(digest(bearer), this.expected)) {
       request.admin = null;
       return true;
@@ -49,7 +43,6 @@ export class AdminGuard implements CanActivate {
   }
 }
 
-/** Like AdminGuard, but only for the super admin (or the backup token): managing the team */
 @Injectable()
 export class SuperAdminGuard extends AdminGuard {
   override async canActivate(context: ExecutionContext): Promise<boolean> {

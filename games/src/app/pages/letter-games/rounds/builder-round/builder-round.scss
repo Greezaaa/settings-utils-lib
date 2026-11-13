@@ -1,5 +1,3 @@
-// Word builder: the words to find in a column on the left of the letters on wide screens, above them on phones
-
 .found-list,
 .play {
   display: grid;
@@ -7,7 +5,6 @@
   justify-items: center;
 }
 
-// The dictionary download, with why in its tooltip
 .dictionary {
   align-items: center;
   color: var(--muted);
@@ -32,7 +29,6 @@
   }
 }
 
-// Report a rude bonus word
 .report {
   background: none;
   border: 0;

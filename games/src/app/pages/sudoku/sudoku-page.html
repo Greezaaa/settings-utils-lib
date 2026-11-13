@@ -1,4 +1,3 @@
-<!-- This game's own texts; the shared ones are under sudoku -->
 @let text = ('sudoku.games' | translate)[game()];
 <header class="container page-head">
   <div class="page-meta">
@@ -15,7 +14,6 @@
 
 <section class="container page-section" [attr.aria-label]="text.board">
   <div class="card play" appGameBoard>
-    <!-- The board and its symbols on one side, the size, time and buttons on the other (settings first on phones) -->
     <div class="play-layout">
       <div class="play-main">
         <div
@@ -26,7 +24,6 @@
           role="group"
           [attr.aria-label]="text.board"
         >
-          <!-- Drawn box by box, so the boxes stand apart; cells are still numbered in row order -->
           @for (box of boxes(); track $index) {
             <div class="box">
               @for (cell of box; track cell) {

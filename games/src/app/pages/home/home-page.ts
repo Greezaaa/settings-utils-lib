@@ -11,13 +11,8 @@ import { WhatsNew } from './whats-new/whats-new';
 import { Reveal } from '../../shared/reveal';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-/** Games in the home page's "Recently added" section */
 const RECENT_LIMIT = 4;
 
-/**
- * Home page: the games by category, and what's new. With the categories menu: the player's favourites, the most
- * played and the latest games first, then a card per category.
- */
 @Component({
   selector: 'app-home-page',
   imports: [TranslatePipe, GameCard, Reveal, RouterLink, WhatsNew],
@@ -39,7 +34,6 @@ export class HomePage {
   );
   protected readonly recent = computed(() => this.visible(recentlyAdded()).slice(0, RECENT_LIMIT));
 
-  /** The games of a list that are open (or all of them, in preview) */
   private visible(games: readonly GameSlug[]): GameSlug[] {
     const open = this.availability.visibleGames();
     return games.filter((game) => open.includes(game));

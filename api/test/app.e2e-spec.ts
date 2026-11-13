@@ -8,11 +8,6 @@ import request from 'supertest';
 import { DataSource } from 'typeorm';
 import { setUpApp } from '../src/app.setup.js';
 
-/**
- * The whole API against a real PostgreSQL: run with TEST_DATABASE_URL pointing at an empty test database, e.g.
- * `docker run --rm -d -p 55432:5432 -e POSTGRES_PASSWORD=test postgres:17-alpine` and
- * `TEST_DATABASE_URL=postgres://postgres:test@localhost:55432/postgres npm run test:e2e`. Its tables are dropped.
- */
 const databaseUrl = process.env.TEST_DATABASE_URL;
 const ADMIN_TOKEN = 't'.repeat(40);
 const admin = { Authorization: `Bearer ${ADMIN_TOKEN}` };
@@ -29,13 +24,9 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       ADMIN_TOKEN,
       UPLOADS_DIR: uploadsDir,
       COOKIE_SECURE: 'false',
-      // Tests that sign in a lot pass their own visitor address, like Cloudflare does, to stay under the sign-in limit
       TRUST_CLOUDFLARE: 'true',
       ROOM_NAME_SECRET,
     });
-    // Imported only now: the configuration reads the environment as soon as the module loads. The API and the auth
-    // service (two processes in production, sharing the database and cookies) run here as one app, so a test can sign
-    // in and then use the API like a browser does
     const { CoreModule } = await import('../src/core.module.js');
     const { ApiModule } = await import('../src/api.module.js');
     const { SignInModule } = await import('../src/auth/sign-in.module.js');
@@ -186,7 +177,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .set('cf-connecting-ip', visitor)
         .send(report)
         .expect(204);
-    // One visitor reporting again and again counts once
     for (let reports = 1; reports <= 3; reports++) {
       await reportFrom('10.0.1.1');
     }
@@ -254,7 +244,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .set('Cookie', bossCookie)
       .expect(200, { email: 'boss@su-labs.dev', role: 'super' });
 
-    // A moderator with a starting password
     await request(server)
       .post('/admin/team')
       .set('Cookie', bossCookie)
@@ -278,7 +267,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .send({ enabled: false })
       .expect(403);
 
-    // A moderator invited by link, who chooses a password
     const invited = await request(server)
       .post('/admin/team')
       .set('Cookie', bossCookie)
@@ -301,7 +289,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     );
     const newcomerCookie = newcomer.headers['set-cookie'];
 
-    // A new invite resets a forgotten password: accepting it signs out the browsers still on the old one
     const newcomerId = invited.body.member.id;
     const again = await request(server)
       .post(`/admin/team/${newcomerId}/invite`)
@@ -316,7 +303,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .set('Cookie', newcomerCookie)
       .expect(401);
 
-    // Turning a moderator off signs them out and stops sign-ins
     const team = await request(server)
       .get('/admin/team')
       .set('Cookie', bossCookie)
@@ -535,7 +521,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
   });
 
   describe('player accounts', () => {
-    /** A browser of its own (keeping its cookies), from its own address so the sign-in limits don't add up */
     const browser = (address: string) => {
       const agent = request.agent(app.getHttpServer());
       return {
@@ -587,7 +572,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           screenName: 'STARCAT',
         })
         .expect(409, /screen-name-taken/);
-      // No mail server here, so no emails either
       await someoneElse
         .post('/v1/apps/games/account')
         .send({
@@ -600,7 +584,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       await someoneElse
         .get('/v1/apps/games/account/options')
         .expect(200, { email: false });
-      // Only known apps have accounts, each behind its own cookie
       await someoneElse.get('/v1/apps/chess/account/options').expect(400);
       const { headers } = await browser('10.1.0.9')
         .post('/v1/apps/games/account')
@@ -652,7 +635,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .put('/v1/account/favorites')
         .send({ games: ['find-pairs', 'math-games'] })
         .expect(204);
-      // Fewer moves is better in Find the pairs; a higher floor in Climb the tower
       for (const [player, value] of [
         [ana, 20],
         [ana, 16],
@@ -667,7 +649,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .post('/v1/account/results')
         .send({ game: 'climb-tower', key: 'which-one:easy', value: 7 })
         .expect(204);
-      // Bests kept in the browser before signing in: counted when better, without plays
       await ben
         .put('/v1/account/bests')
         .send({
@@ -678,7 +659,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .post('/v1/account/results')
         .send({ game: 'hit-the-note', key: 'x', value: 1 })
         .expect(400);
-      // Results a game can't give: refused one by one, left out quietly among the browser's bests
       await ana
         .post('/v1/account/results')
         .send({ game: 'find-pairs', key: 'normal', value: 3 })
@@ -726,7 +706,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .get('/v1/leaderboard/find-pairs')
         .expect(401);
 
-      // A player who stops showing on the leaderboards leaves them, and is back when they choose to show again
       await ben
         .put('/v1/account/leaderboard')
         .send({ show: false })
@@ -734,7 +713,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       expect(
         (await ben.get('/v1/account').expect(200)).body.showOnLeaderboard,
       ).toBe(false);
-      // A switch: flipping it back and forth isn't held back like name or email changes
       for (const show of [true, false, true, false, true, false]) {
         await ben.put('/v1/account/leaderboard').send({ show }).expect(204);
       }
@@ -747,7 +725,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         ),
       ).toEqual(['Ana']);
 
-      // Public leaderboards: anyone may look, and a player who chose not to show is ranked under no name
       await request(app.getHttpServer())
         .put('/admin/features/public-leaderboard')
         .set(admin)
@@ -770,7 +747,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
 
       await ben.put('/v1/account/leaderboard').send({ show: true }).expect(204);
 
-      // A player deletes their results and keeps the account
       await ana.delete('/v1/account/results').expect(204);
       expect((await ana.get('/v1/account').expect(200)).body.results).toEqual(
         [],
@@ -783,7 +759,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       ]);
       expect(after.boards[0].me).toBeNull();
 
-      // Moderators give a player a plain name, or take them off the boards and back
       await request(app.getHttpServer()).get('/admin/players').expect(401);
       const { body: moderated } = await request(app.getHttpServer())
         .get('/admin/players')
@@ -830,7 +805,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
           screenName: 'Kid',
         })
         .expect(201);
-      // Nobody shows on the leaderboards without choosing it
       expect(
         (await kid.get('/v1/account').expect(200)).body.showOnLeaderboard,
       ).toBe(false);
@@ -850,13 +824,11 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       expect((await kid.get('/v1/account').expect(200)).body.screenName).toBe(
         'Rocket',
       );
-      // Always the same answer, whether or not an account has that email
       await kid
         .post('/v1/apps/games/account/forgot')
         .send({ email: 'nobody@su-labs.dev' })
         .expect(204);
 
-      // A reset link (sent by email when a mail server is set up)
       const { hashToken } = await import('../src/auth/passwords.js');
       const secret = 'r'.repeat(43);
       await app
@@ -874,7 +846,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .post(`/v1/apps/games/account/reset/${secret}`)
         .send({ password: 'reset long password' })
         .expect(404);
-      // The reset signed out the browser still on the old password
       await kid.get('/v1/account').expect(401);
 
       await other
@@ -901,9 +872,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
             password: 'a long password',
             screenName,
           });
-      // One word of letters: no ages or years
       await signUp('Lucia2015').expect(400);
-      // A word moderators approved as rude, in any language, dressed up or not
       await app
         .get(DataSource)
         .query(
@@ -926,7 +895,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .set(admin)
         .send({ enabled: true })
         .expect(204);
-      // Waiting for a moderator: no pass yet
       expect(
         (await kid.get('/v1/account/room-name').expect(200)).body.pass,
       ).toBeNull();
@@ -947,7 +915,6 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .body;
       expect(verifyNamePass(pass, ROOM_NAME_SECRET)).toBe('Lucía');
 
-      // Another player reports it: it waits for a moderator again, first in the list
       await request(server)
         .post('/v1/name-reports')
         .send({ screenName: 'lucía' })

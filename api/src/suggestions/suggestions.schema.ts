@@ -11,12 +11,10 @@ export const SUGGESTION_CATEGORIES = [
 export const SUGGESTION_STATUSES = ['new', 'read', 'archived'] as const;
 export type SuggestionStatus = (typeof SUGGESTION_STATUSES)[number];
 
-/** The form's fields; they arrive as multipart text fields, next to the optional image */
 export const suggestionSchema = z.object({
   category: z.enum(SUGGESTION_CATEGORIES),
   text: z.string().trim().min(3).max(500),
   language: languageSchema,
-  /** Cloudflare Turnstile's answer, needed when the API has a Turnstile secret */
   turnstileToken: z.string().max(2048).optional(),
 });
 export type SuggestionInput = z.infer<typeof suggestionSchema>;

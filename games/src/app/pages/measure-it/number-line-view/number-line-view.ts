@@ -5,14 +5,9 @@ const LEFT = 20;
 const RIGHT = 300;
 const Y = 40;
 
-/** Numbers as people write them: no long decimals (0.5, −2.25) */
 export const formatNumber = (value: number): string =>
   String(Math.round(value * 100) / 100).replace('-', '−');
 
-/**
- * A number line with only its ends numbered, its ticks, and an x over the tick to find; after an answer, `answer`
- * shows the right number there instead, in green
- */
 @Component({
   selector: 'app-number-line-view',
   changeDetection: ChangeDetectionStrategy.OnPush,

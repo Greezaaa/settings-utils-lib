@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { CodeBlock } from './code-block';
 
-/** One tab of code, e.g. the Angular and the framework-agnostic version of an example */
 export interface CodeTab {
   readonly label: string;
   readonly code: string;
 }
 
-/** Switch between code samples */
 @Component({
   selector: 'app-code-tabs',
   imports: [CodeBlock],

@@ -15,7 +15,6 @@
   <div class="card board" [class.is-wide]="isBuilder() && phase() === 'playing'" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
-        <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
           <div class="settings-column">
             <div class="levels" role="group" [attr.aria-label]="'letterGames.modeGroup' | translate">

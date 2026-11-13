@@ -10,11 +10,6 @@ import { puzzleRun } from '../puzzle-run';
 import { roundClock } from '../round-clock';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/**
- * Turn the picture in a room: every player turns the same scrambled pictures, one after another, and scores a point
- * per square the right way up (a finished picture banks all its squares). Keyed on the round's seed and settings
- * (plain values), so a new room message never restarts it.
- */
 @Component({
   selector: 'app-room-turn-round',
   imports: [TranslatePipe, TimerBar, TurnBoard],
@@ -25,7 +20,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 export class RoomTurnRound {
   readonly picture = input.required<RoomPicture>();
   readonly round = input.required<Round>();
-  /** The room's choice: show the player's own score during the round, or only in the results */
   readonly showScore = input(true);
   readonly scored = output<number>();
 
@@ -41,7 +35,6 @@ export class RoomTurnRound {
     scramble(this.settings().level, roomRandom(this.seed(), this.run.index())),
   );
   private readonly isMemory = computed(() => this.settings().mode === 'memory');
-  /** Memory mode shows the whole picture until Ready */
   protected readonly phase = linkedSignal({
     source: () => ({ puzzle: this.scrambled(), memory: this.isMemory() }),
     computation: ({ memory }): PicturePhase => (memory ? 'preview' : 'playing'),

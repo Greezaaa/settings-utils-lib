@@ -14,20 +14,10 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'playing' | 'done';
 
-/** At most this many answer buttons to a row */
 const MAX_ANSWER_COLUMNS = 5;
-/** How long the round celebrates a right answer before the next one */
 const CELEBRATE_MS = 1600;
-/** Confetti pieces in a celebration, spread around a circle */
 const CONFETTI = ['🎉', '⭐', '✨', '🌟', '🎊', '💫', '⭐', '✨'];
 
-/**
- * How many? A counting game for the youngest (from 3): a few things pop in, the child counts them (tapping each one
- * numbers it, and the browser says the number out loud once the admin opens the sound) and taps how many there are,
- * from 1 to 3 up to 1 to 10. A right
- * answer makes everything dance; a wrong one just shakes, and the child tries again. Ten rounds, a star for each one
- * right at the first try.
- */
 @Component({
   selector: 'app-how-many-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
@@ -53,25 +43,20 @@ export class HowManyPage {
 
   protected readonly levelId = signal<HowManyLevelId>('easy');
   protected readonly answers = computed(() => answersFor(getHowManyLevel(this.levelId())));
-  /** Answer buttons per row: all of them, up to 5 */
   protected readonly answerColumns = computed(() => Math.min(this.answers().length, MAX_ANSWER_COLUMNS));
   protected readonly phase = signal<Phase>('playing');
   protected readonly rounds = signal<readonly HowManyRound[]>([]);
   protected readonly index = signal(0);
   protected readonly round = computed(() => this.rounds()[this.index()] ?? null);
-  /** Each thing's tilt and pop-in, drawn once per round */
   protected readonly places = computed(() => {
     const round = this.round();
     return round ? thingPlaces(round.count, seededRandom(this.index() * 97 + round.count)) : [];
   });
 
-  /** The things tapped so far this round, in the order they were counted */
   protected readonly counted = linkedSignal({ source: this.index, computation: (): readonly number[] => [] });
-  /** Whether this round has had a wrong answer, and the number just picked wrong (to shake it) */
   private readonly missed = linkedSignal({ source: this.index, computation: () => false });
   protected readonly wrongPick = linkedSignal({ source: this.index, computation: (): number | null => null });
   protected readonly isCelebrating = linkedSignal({ source: this.index, computation: () => false });
-  /** For each finished round: right at the first try (a star) or after another go */
   protected readonly results = signal<readonly boolean[]>([]);
   protected readonly stars = computed(() => this.results().filter(Boolean).length);
 
@@ -79,7 +64,6 @@ export class HowManyPage {
   private nextRound?: ReturnType<typeof setTimeout>;
 
   constructor() {
-    // Dealt in the browser only, so the prerendered page doesn't show one round and then another
     afterNextRender(() => this.newGame());
     inject(DestroyRef).onDestroy(() => {
       clearTimeout(this.nextRound);
@@ -100,7 +84,6 @@ export class HowManyPage {
     this.phase.set('playing');
   }
 
-  /** Tapping a thing counts it: it gets the next number, and the number is said out loud */
   protected count(thing: number): void {
     if (this.isCelebrating() || this.counted().includes(thing)) {
       return;
@@ -109,7 +92,6 @@ export class HowManyPage {
     this.voice.say(String(this.counted().length), this.language.language());
   }
 
-  /** The number on a thing once it's counted */
   protected numberOf(thing: number): number | null {
     const position = this.counted().indexOf(thing);
     return position === -1 ? null : position + 1;
@@ -143,7 +125,6 @@ export class HowManyPage {
     }, CELEBRATE_MS);
   }
 
-  /** Dots under a number, like on a dice, for kids who don't read numbers yet */
   protected dots(value: number): readonly number[] {
     return Array.from({ length: value }, (_, index) => index);
   }

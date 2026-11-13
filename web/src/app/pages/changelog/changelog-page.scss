@@ -1,4 +1,3 @@
-// Wider screens: the page fills the screen and only the release list scrolls
 @media (min-width: 48rem) {
   :host {
     display: flex;
@@ -62,7 +61,6 @@
     overflow-y: auto;
   }
 
-  /* Hover only underlines; the selected package alone gets the bright color and the marker */
   a {
     border-bottom: 2px solid transparent;
     color: var(--muted);

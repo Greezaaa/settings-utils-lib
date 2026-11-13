@@ -13,7 +13,6 @@
 				} @else if (typeof notification.icon === 'string') {
 					<span [innerHTML]="getSanitizedIcon(notification.icon)"></span>
 				}
-			<!-- if icon === true, render default SVG via switch -->
 				@else {
 					@switch (notification.type) {
 					@case('success') {

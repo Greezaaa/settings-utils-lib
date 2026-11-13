@@ -17,7 +17,6 @@ const BEFORE = `import {
 
 const AFTER = `import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';`;
 
-/** One of the two ways to get single-line imports */
 interface Option {
   readonly item: SuPackage;
   readonly title: string;
@@ -26,7 +25,6 @@ interface Option {
   readonly install: string;
   readonly registry: RegistryLink;
   readonly readme: string;
-  /** A file to download and install by hand, when there is one */
   readonly download?: RegistryLink;
 }
 
@@ -44,7 +42,6 @@ const OPTIONS: readonly Option[] = [
     install: `code --install-extension ${VSCODE_EXTENSION.packageName}`,
     registry: registryLink(VSCODE_EXTENSION),
     readme: readmeUrl(VSCODE_EXTENSION.slug),
-    // Releases are tagged `ts-one-line-imports-v<version>`, each with its `.vsix` and SHA-256 checksum
     download: { label: 'Download .vsix', url: githubReleasesUrl('ts-one-line-imports') },
   },
   {
@@ -92,7 +89,6 @@ const SETUP: readonly CodeTab[] = [
   },
 ];
 
-/** How the extension treats each kind of project */
 const PROJECT_MODES: readonly { readonly project: string; readonly result: string }[] = [
   {
     project: 'A Prettier config',
@@ -104,7 +100,6 @@ const PROJECT_MODES: readonly { readonly project: string; readonly result: strin
   { project: 'The file in .prettierignore', result: 'Left alone' },
 ];
 
-/** Page for the VS Code extension and the Prettier plugin that keep every import on one line */
 @Component({
   selector: 'app-one-line-imports-page',
   imports: [CodeBlock, CodeTabs, Reveal, RouterLink],

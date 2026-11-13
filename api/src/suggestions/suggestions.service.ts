@@ -27,7 +27,6 @@ export class SuggestionsService implements OnModuleInit {
     await mkdir(this.uploadsDir, { recursive: true });
   }
 
-  /** Saves a suggestion and its picture, cleaned of metadata */
   async add(
     { category, text, language }: SuggestionInput,
     image?: Buffer,
@@ -48,7 +47,6 @@ export class SuggestionsService implements OnModuleInit {
     });
   }
 
-  /** Latest first; the id keeps the order stable between pages */
   list(
     status: SuggestionStatus,
     { offset, limit }: Page,
@@ -74,7 +72,6 @@ export class SuggestionsService implements OnModuleInit {
     await this.suggestions.update({ id }, { status });
   }
 
-  /** Deletes a suggestion and its picture for good */
   async remove(id: string): Promise<void> {
     const suggestion = await this.find(id);
     if (suggestion.image) {

@@ -1,4 +1,3 @@
-// The real field covers the boxes, invisible, so a tap anywhere on them focuses it
 :host {
   display: block;
   position: relative;
@@ -47,7 +46,6 @@
   }
 }
 
-// Where the next letter goes, while the field has focus
 .field:focus-visible + .boxes .box.is-current,
 .field:focus + .boxes .box.is-current {
   border-color: var(--su-field-accent, #3b82f6);
@@ -55,7 +53,6 @@
     color-mix(in srgb, var(--su-field-accent, #3b82f6) 25%, transparent);
 }
 
-// The whole code: green, box after box
 .boxes.is-complete .box {
   animation: box-done 360ms ease calc(var(--index) * 60ms) both;
   background: var(--su-field-success-bg, #e6f4ea);

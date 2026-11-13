@@ -4,10 +4,8 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, TitleStrategy } from '@ang
 import { SITE_PREVIEW_IMAGE, SITE_PREVIEW_IMAGE_URL, SITE_URL } from './links';
 import { getUtility } from './packages';
 
-/** Search and link-preview data of a page, set as route `data` */
 export interface PageMeta {
   readonly description: string;
-  /** Keep the page out of search results, e.g. the not-found page */
   readonly noIndex?: boolean;
 }
 
@@ -16,10 +14,8 @@ export const SITE_NAME = 'su-labs';
 const SITE_DESCRIPTION =
   'Framework-agnostic browser utilities for theme, font size, notifications, scroll spy and visit tracking. Works with React, Vue, Svelte, Angular, vanilla JavaScript and Node.';
 
-/** Route data for the home page and any page without its own description */
 export const SITE_META: PageMeta = { description: SITE_DESCRIPTION };
 
-/** Route data for a utility page, built from its entry in packages.ts */
 export function utilityMeta(slug: string): PageMeta {
   const utility = getUtility(slug);
   return {
@@ -29,10 +25,6 @@ export function utilityMeta(slug: string): PageMeta {
   };
 }
 
-/**
- * Sets the title, description, canonical URL and Open Graph / Twitter tags on every navigation.
- * Runs during prerendering too, so the static HTML of each page carries its own tags.
- */
 @Injectable({ providedIn: 'root' })
 export class PageMetaStrategy extends TitleStrategy {
   private readonly title = inject(Title);
@@ -88,7 +80,6 @@ export class PageMetaStrategy extends TitleStrategy {
   }
 }
 
-/** The most specific page data in the active route tree */
 function deepestMeta(route: ActivatedRouteSnapshot): PageMeta {
   let meta: PageMeta = SITE_META;
   for (let current: ActivatedRouteSnapshot | null = route; current; current = current.firstChild) {
@@ -100,7 +91,6 @@ function deepestMeta(route: ActivatedRouteSnapshot): PageMeta {
   return meta;
 }
 
-/** Public URL of a router path, with the trailing slash the server uses for folders */
 function canonicalUrl(routerUrl: string): string {
   const path = routerUrl.split(/[?#]/)[0].replace(/\/$/, '');
   return `${SITE_URL}${path}/`;

@@ -6,7 +6,6 @@ import { setUpApp } from './app.setup.js';
 import type { Env } from './config/env.js';
 import { requestLog } from './logging/request-log.js';
 
-/** Starts the auth service (auth.su-labs.dev), a separate process from the API: `node dist/auth-main.js` */
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AuthAppModule, {
     bodyParser: false,

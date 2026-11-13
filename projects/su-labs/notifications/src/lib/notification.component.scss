@@ -1,6 +1,5 @@
 .notification-container {
 	--_edge: var(--su-notification-container-position, 1rem);
-	// Where a notification starts its slide in (and ends its slide out), per direction
 	--_left: calc(-100% - 2rem) 0;
 	--_right: calc(100% + 2rem) 0;
 	--_top: 0 calc(-100% - 2rem);
@@ -14,8 +13,6 @@
 	max-width: var(--su-notification-max-width, min(100% - 2rem, 300px));
 	z-index: 999999;
 
-	// A position is a vertical edge (top, bottom) plus a side (left, right, center), e.g. `top-right`;
-	// notifications slide in from that side, or from the top or bottom edge when centred
 	&[class*='top-'] {
 		top: var(--_edge);
 		--_slide: var(--_top);
@@ -45,7 +42,6 @@
 		translate: -50% 0;
 	}
 
-	// slideFrom: a fixed direction, whatever the position
 	@each $side in left, right, top, bottom {
 		&[data-slide='#{$side}'] {
 			--_slide: var(--_#{$side});
@@ -60,7 +56,6 @@
 	color: var(--su-notification-text-color, #333);
 	padding-block: var(--su-notification-padding-block, 1rem);
 	padding-inline: var(--su-notification-padding-inline, 1.25rem);
-	// Private shorthands (--_*), defined once and reused below
 	--_shadow: 0 4px 8px var(--su-notification-box-shadow, rgba(0, 0, 0, 0.15));
 	box-shadow: var(--_shadow);
 	border-left: 4px solid var(--_border);
@@ -114,8 +109,6 @@
 	}
 }
 
-// Not nested under .notification: the styles are scoped to this component anyway, and shorter selectors keep
-// them under the 4 kB component style budget
 .icon-container {
 	display: flex;
 	align-items: center;
@@ -142,7 +135,6 @@
 	gap: 0.5rem;
 }
 
-// The buttons under the message, and links inside it
 .action,
 .link {
 	background: none;
@@ -163,7 +155,6 @@
 	text-decoration: underline;
 }
 
-// Slide in from the side the notifications sit on, and back out when closed (Angular's animate.enter/leave)
 .su-notification-enter {
 	animation: su-notification-slide var(--su-notification-enter-duration, 400ms) ease-out;
 }

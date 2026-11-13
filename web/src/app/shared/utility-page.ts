@@ -8,10 +8,6 @@ import { SuUtility } from '../core/packages';
 import { CodeTab, CodeTabs } from './code-tabs';
 import { Reveal } from './reveal';
 
-/**
- * Shared layout of every utility page: header, live demo (projected content),
- * usage examples and the latest release, loaded live from GitHub.
- */
 @Component({
   selector: 'app-utility-page',
   imports: [CodeTabs, ReleaseList, RouterLink, Reveal],
@@ -23,7 +19,6 @@ export class UtilityPage {
   readonly utility = input.required<SuUtility>();
   readonly usage = input.required<readonly CodeTab[]>();
 
-  /** Guides for every environment, shown when the utility is also in `@su-labs/core` */
   protected readonly environments = ENVIRONMENTS;
 
   protected readonly changelog = changelogResource(() => this.utility().slug);

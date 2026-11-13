@@ -6,7 +6,6 @@ import { periodStart, StatsPeriod } from '../shared/period.js';
 import { Feedback } from './feedback.entity.js';
 import { FeedbackInput } from './feedback.schema.js';
 
-/** Votes and reasons of one game, for moderators */
 export interface FeedbackSummary {
   readonly game: string;
   readonly up: number;
@@ -33,12 +32,10 @@ export class FeedbackService {
     });
   }
 
-  /** Deletes every vote, so statistics start again from today */
   async clear(): Promise<void> {
     await this.feedback.clear();
   }
 
-  /** Every game's votes and reasons in a period */
   async summary(
     period: StatsPeriod = 'all',
     now = new Date(),

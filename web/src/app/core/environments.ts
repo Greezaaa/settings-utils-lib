@@ -1,15 +1,11 @@
 import { guideUrl } from './links';
 
-/** An environment with its own installation guide */
 export interface SiteEnvironment {
   readonly name: string;
-  /** How the utilities plug into it, in a few words */
   readonly detail: string;
-  /** Link to its guide on GitHub */
   readonly url: string;
 }
 
-/** Every environment with a guide, in the order they appear on the site */
 export const ENVIRONMENTS: readonly SiteEnvironment[] = [
   {
     name: 'React',

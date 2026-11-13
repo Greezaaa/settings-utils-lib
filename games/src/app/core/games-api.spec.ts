@@ -2,7 +2,6 @@ import { DOCUMENT, Injector, runInInjectionContext } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GamesApi } from './games-api';
 
-/** A fake fetch answering with `body` */
 function answer(body: unknown, ok = true) {
   return vi.fn(
     async (..._args: Parameters<typeof fetch>) => new Response(JSON.stringify(body), { status: ok ? 200 : 500 }),
@@ -53,7 +52,6 @@ describe('GamesApi', () => {
     vi.stubGlobal('fetch', fetchMock);
     await api.sendFeedback('letter-games', 'up', 'eu', 'fun');
     const [url, init] = fetchMock.mock.calls[0];
-    // jsdom runs on localhost, like `npm run start:games`
     expect(String(url)).toBe('http://localhost:3000/v1/feedback');
     expect(init?.body).toBe(JSON.stringify({ game: 'letter-games', vote: 'up', language: 'eu', reason: 'fun' }));
   });

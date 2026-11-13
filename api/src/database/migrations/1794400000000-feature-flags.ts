@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** The on/off switch for each feature, like the games' switches */
 export class FeatureFlags1794400000000 implements MigrationInterface {
   name = 'FeatureFlags1794400000000';
 

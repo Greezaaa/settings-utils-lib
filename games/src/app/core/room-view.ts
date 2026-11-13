@@ -3,7 +3,6 @@ import { WORD_GENDERS, WordGender } from '../i18n/word-gender';
 import { field } from './api-url';
 import { ROOM_GAMES, RoomGame } from './features';
 
-/** A room's state as the rooms service (rooms.su-labs.dev, api/src/rooms/) sends it; every field is checked */
 export type RoomPhase = 'lobby' | 'countdown' | 'playing' | 'results';
 export const ROUND_SECONDS = [30, 60, 90, 120] as const;
 export type RoundSeconds = (typeof ROUND_SECONDS)[number];
@@ -16,9 +15,7 @@ export interface RoomSettings {
   readonly level: string;
   readonly seconds: RoundSeconds;
   readonly language: LanguageId;
-  /** Whether scores show during the round (they always do in the results) */
   readonly showScores: boolean;
-  /** Whether players' approved screen names show instead of their nicknames (the host's choice, off by default) */
   readonly ownNames: boolean;
 }
 
@@ -30,10 +27,8 @@ export interface Nickname {
 export interface RoomPlayer {
   readonly id: string;
   readonly nickname: Nickname;
-  /** Their approved screen name, while the room shows players' own names; null shows the nickname */
   readonly name: string | null;
   readonly color: number;
-  /** Whether they chose to be spoken to as a boy or a girl */
   readonly gender: WordGender | null;
   readonly ready: boolean;
   readonly connected: boolean;
@@ -57,7 +52,6 @@ export interface RoomView {
   readonly serverNow: number;
 }
 
-/** Errors the rooms service can answer with, plus the connection itself failing */
 export type RoomError =
   | 'not-found'
   | 'full'
@@ -96,11 +90,9 @@ const oneOf =
 
 export const isRoomError = oneOf(ROOM_ERRORS);
 
-/** A player's choice from the rooms service, or null for none (or anything unknown) */
 const genderOf = (value: unknown): WordGender | null =>
   WORD_GENDERS.find(gender => gender === value) ?? null;
 
-/** A screen name from the rooms service: one word of letters, as the API allows; anything else shows the nickname */
 const nameOf = (value: unknown): string | null =>
   typeof value === 'string' && /^\p{L}{3,12}$/u.test(value) ? value : null;
 
@@ -157,8 +149,7 @@ function parseSettings(value: unknown): RoomSettings | null {
     typeof level === 'string' &&
     oneOf(ROUND_SECONDS)(seconds) &&
     oneOf(LANGUAGES)(language)
-    ? // An older rooms service sends no showScores (scores show, as they always did) nor ownNames (nicknames only)
-      { game, mode, level, seconds, language, showScores: showScores !== false, ownNames: ownNames === true }
+    ? { game, mode, level, seconds, language, showScores: showScores !== false, ownNames: ownNames === true }
     : null;
 }
 
@@ -171,7 +162,6 @@ function parseRound(value: unknown): Round | null {
     : null;
 }
 
-/** A room message from the server, or null when it doesn't have the right shape */
 export function parseRoomView(data: unknown): RoomView | null {
   const [code, hostId, phase, players, serverNow] = [
     'code',

@@ -1,6 +1,5 @@
 import { SiteError } from './games-api';
 
-/** What to report about an error: its name and message, and the page; never anything about the visitor */
 export function siteErrorOf(error: unknown, path: string): SiteError {
   const isError = error instanceof Error;
   return {

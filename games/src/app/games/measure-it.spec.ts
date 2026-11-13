@@ -63,7 +63,6 @@ describe('measure it', () => {
       expect(
         isLineRight(exercise, lineValue(exercise, exercise.mark + 1))
       ).toBe(false);
-      // The slider reaches past both ends, never below zero on this level
       expect(exercise.slider.min).toBeGreaterThanOrEqual(0);
       expect(exercise.slider.min).toBeLessThanOrEqual(exercise.start);
       expect(exercise.slider.max).toBeGreaterThan(lineEnd(exercise));
@@ -129,7 +128,6 @@ describe('measure it', () => {
       fill: right,
     } = glassExercise('expert', seededRandom(11));
     expect(improper).toBe(true);
-    // Close choices: every wrong one within a glass of the right one
     for (const choice of choices) {
       expect(Math.abs(choice.whole - right.whole)).toBeLessThanOrEqual(1);
     }

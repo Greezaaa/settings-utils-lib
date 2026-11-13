@@ -1,6 +1,5 @@
 import { WordBank } from '../letter-games';
 
-/** Italian words without written accents (città, papà… are left out), checked to be kid-friendly */
 export const IT_WORDS: WordBank = {
   vowels: ['a', 'e', 'i', 'o', 'u'],
   pictures: [
@@ -72,15 +71,12 @@ export const IT_WORDS: WordBank = {
     { word: 'palloncino', emoji: '🎈' },
   ],
   words: [
-    // 3 letters
     ...'ape oca uva oro ora ago ala ali eco uno una tre due sei blu sud est noi voi qui con per tra mio tuo suo zoo gru sci'.split(
       ' ',
     ),
-    // 4 letters
     ...'casa cane sole luna mela pera rana neve fata dado lago mano naso nave nido nodo orso pane polo rosa sale seta topo vaso vela foca lupo mare dito filo foto gufo luce muro nota uovo zero erba arco alto anno coda lana moto nube pino riso rete sera tela toro volo ruga mago fumo onda baco pelo'.split(
       ' ',
     ),
-    // 5 letters and more
     ...'gatto palla pesce scarpa scuola stella treno zebra amico bambino bambina bosco cielo colore estate famiglia festa fiore fiume foglia gelato giardino giorno libro mamma montagna nonna nonno notte pioggia piatto ponte porta prato regalo sedia sorriso spiaggia strada tamburo torta vento verde rosso giallo bianco nero azzurro cavallo coniglio farfalla formica fragola giraffa leone maiale mucca tavolo albero anello aquilone balena biscotto campana carota chitarra elefante granchio lumaca nuvola ombrello orologio polpo razzo scimmia tartaruga uccello unicorno sasso tazza torre ruota zuppa matita pallone gioco isola'.split(
       ' ',
     ),

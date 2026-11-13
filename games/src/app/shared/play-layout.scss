@@ -1,5 +1,3 @@
-// A game's board on one side and everything else (settings, score, goal, buttons) on the other, on boards wide
-// enough; stacked on phones with the settings first, as before. Each settings group shows its name, from its aria-label.
 .card.play:has(> .play-layout) {
   max-width: 58rem;
 }

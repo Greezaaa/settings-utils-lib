@@ -6,7 +6,6 @@ import { PictureSlice } from '../../../shared/picture-slice/picture-slice';
 import { PuzzleTile } from '../puzzle-tile/puzzle-tile';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/** A tile on the board: which piece it is and the cell it sits in now */
 interface PlacedTile {
   readonly tile: number;
   readonly cell: number;
@@ -14,7 +13,6 @@ interface PlacedTile {
   readonly canMove: boolean;
 }
 
-/** A press on a tile: where it started, to tell a swipe from a tap */
 interface Press {
   readonly cell: number;
   readonly pointerId: number;
@@ -22,7 +20,6 @@ interface Press {
   readonly y: number;
 }
 
-/** Pointer movement, in pixels, from which a press counts as a swipe */
 const SWIPE_THRESHOLD = 16;
 
 const ARROWS: Readonly<Record<string, Direction>> = {
@@ -32,10 +29,6 @@ const ARROWS: Readonly<Record<string, Direction>> = {
   ArrowLeft: 'left',
 };
 
-/**
- * The board of the sliding puzzle: tap, swipe or use the arrow keys to slide a tile next to the gap. Shared by the
- * game's page and its room round, which keep the puzzle and slide the tiles they're told.
- */
 @Component({
   selector: 'app-sliding-board',
   imports: [TranslatePipe, PictureSlice, PuzzleTile],
@@ -47,16 +40,13 @@ const ARROWS: Readonly<Record<string, Direction>> = {
 export class SlidingBoard {
   readonly puzzle = input.required<Puzzle>();
   readonly pictureMode = input.required<PuzzlePictureMode>();
-  /** The drawing the tiles show in drawing mode */
   readonly picture = input<GamePicture | null>(null);
-  /** The cell of the tile to slide into the gap */
   readonly slid = output<number>();
 
   private press: Press | null = null;
 
   protected readonly isSolved = computed(() => isSolved(this.puzzle().board, this.puzzle().gap));
 
-  /** The tiles with their current cells, tracked by tile so slides animate */
   protected readonly tiles = computed<readonly PlacedTile[]>(() => {
     const { shape, board, gap } = this.puzzle();
     return board.flatMap((tile, cell) =>
@@ -81,7 +71,6 @@ export class SlidingBoard {
     this.press = { cell, pointerId: event.pointerId, x: event.clientX, y: event.clientY };
   }
 
-  /** A swipe slides the tile when the gap lies in the direction of the swipe; taps are clicks */
   protected onPointerUp(event: PointerEvent): void {
     const press = this.press;
     this.press = null;
@@ -117,7 +106,6 @@ export class SlidingBoard {
     }
   }
 
-  /** Position of a cell on the board, as offsets in tile sizes */
   protected position(cell: number): string {
     const { columns } = this.puzzle().shape;
     return `translate(${(cell % columns) * 100}%, ${Math.floor(cell / columns) * 100}%)`;

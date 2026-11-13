@@ -3,7 +3,6 @@ import { BoardLevelId } from '../../games/board';
 import { PICTURE_LEVELS, PICTURE_MODE_IDS, PictureModeId } from '../../games/picture-game';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-/** The settings both picture games share: Look or Memory, and the board size */
 @Component({
   selector: 'app-picture-settings',
   imports: [TranslatePipe],

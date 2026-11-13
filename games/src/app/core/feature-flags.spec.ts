@@ -5,7 +5,6 @@ import { FeatureFlags } from './feature-flags';
 import { GameAvailability } from './game-availability';
 import { FeatureSwitch, GamesApi, GameSwitch } from './games-api';
 
-/** The flags service with an API answering `features` */
 function flagsWith(features: FeatureSwitch[]): { flags: FeatureFlags; availability: GameAvailability } {
   const api: Pick<GamesApi, 'featureSwitches' | 'gameSwitches'> = {
     featureSwitches: vi.fn(async () => features),
@@ -15,7 +14,6 @@ function flagsWith(features: FeatureSwitch[]): { flags: FeatureFlags; availabili
     providers: [
       { provide: DOCUMENT, useValue: document },
       { provide: GamesApi, useValue: api },
-      // A signed-in tester, who may use preview
       {
         provide: AdminApi,
         useValue: { restore: vi.fn(async () => 'signed-in'), canPreview: signal(true).asReadonly() },

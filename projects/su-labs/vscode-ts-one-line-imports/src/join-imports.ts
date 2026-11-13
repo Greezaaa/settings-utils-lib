@@ -51,12 +51,10 @@ const canJoin = (source: string): boolean => /\r?\n/.test(source) && !containsCo
  */
 export async function joinImports(text: string, parser: ParserName, filePath?: string): Promise<string | null> {
   const selectedParser = PARSERS[parser];
-  // The file name tells the parser whether JSX is allowed (.tsx, .jsx)
   const parsed = await selectedParser.parse(text, { filepath: filePath ?? '' });
   const statements = parsed.body ?? parsed.program?.body ?? [];
 
   let result = text;
-  // From the last import to the first, so earlier offsets stay valid after each replacement
   for (const node of [...statements].reverse()) {
     if (node.type !== 'ImportDeclaration') continue;
     const start = selectedParser.locStart(node);

@@ -14,14 +14,8 @@ import { MixedRound } from '../../letter-games/rounds/mixed-round/mixed-round';
 import { roundClock } from '../round-clock';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/** How long a finished word stays before the next one */
 const SOLVED_MS = 700;
 
-/**
- * Letter games in a room: every player gets the same words (or, in the word builder, the same sets of letters) in the
- * room's language, from the round's seed, and scores a point per word. Keyed on the round's seed and settings (plain
- * values), so a new room message never restarts it.
- */
 @Component({
   selector: 'app-room-letters-round',
   imports: [TranslatePipe, BuilderRound, GapRound, MixedRound, TimerBar],
@@ -31,10 +25,8 @@ const SOLVED_MS = 700;
 })
 export class RoomLettersRound {
   readonly letters = input.required<RoomLetters>();
-  /** The room's language: the words come from its word bank */
   readonly language = input.required<LanguageId>();
   readonly round = input.required<Round>();
-  /** The room's choice: show the player's own score during the round, or only in the results */
   readonly showScore = input(true);
   readonly scored = output<number>();
 
@@ -49,7 +41,6 @@ export class RoomLettersRound {
   private readonly bank = computed(() => WORD_BANKS[this.language()]);
   protected readonly vowels = computed(() => this.bank().vowels);
 
-  /** The word (or set of letters) the player is on, and their score */
   private readonly index = linkedSignal({ source: this.seed, computation: () => 0 });
   protected readonly score = linkedSignal({ source: this.seed, computation: () => 0 });
   private nextWord?: ReturnType<typeof setTimeout>;
@@ -72,7 +63,6 @@ export class RoomLettersRound {
 
   constructor() {
     inject(DestroyRef).onDestroy(() => clearTimeout(this.nextWord));
-    // The word builder accepts any real word, once the room language's dictionary has downloaded
     afterNextRender(() => {
       if (this.settings().mode === 'word-builder') {
         void this.dictionaries.load(this.language());
@@ -80,7 +70,6 @@ export class RoomLettersRound {
     });
   }
 
-  /** A right word scores; the next one comes after a moment */
   protected onSolved(): void {
     if (this.clock.isOver()) {
       return;
@@ -94,19 +83,16 @@ export class RoomLettersRound {
     }, SOLVED_MS);
   }
 
-  /** Word builder: each word found scores */
   protected onWordFound(): void {
     if (!this.clock.isOver()) {
       this.addPoint();
     }
   }
 
-  /** Word builder: the next set of letters */
   protected nextLetters(): void {
     this.index.update((index) => index + 1);
   }
 
-  /** A word reported as rude stops counting here straight away, and the API counts the report */
   protected onReported(word: string): void {
     this.dictionaries.hide(this.language(), word);
     void this.api.reportWord(word, this.language());

@@ -3,7 +3,6 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { ErrorLogFilter } from './error-log.filter.js';
 import { ErrorEntry, ErrorLogsService } from './error-logs.service.js';
 
-/** A filter whose logged errors land in `logged`, answering through a fake HTTP adapter */
 function filterLogging(logged: ErrorEntry[]): ErrorLogFilter {
   const errors: Pick<ErrorLogsService, 'add'> = {
     add: async (entry) => {

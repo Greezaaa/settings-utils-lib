@@ -4,10 +4,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 import { PagedList } from '../paged-list';
 import { saveFailedNotice } from '../save-failed-notice';
 
-/**
- * Admin tab: words players reported in the word builder, a page at a time. A word reported 3 times stops counting
- * until decided: keep it out for good, or let it count again.
- */
 @Component({
   selector: 'app-admin-word-reports',
   host: { class: 'admin-tab' },
@@ -33,7 +29,6 @@ export class AdminWordReports {
     void this.list.reload();
   }
 
-  /** A decided word moves to another status, so it leaves this one */
   protected async decide(report: WordReport, status: 'approved' | 'rejected'): Promise<void> {
     if (await this.admin.decideWord(report, status)) {
       this.list.remove(report);

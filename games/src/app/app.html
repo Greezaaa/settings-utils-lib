@@ -2,9 +2,7 @@
 
 <header class="site-header" #siteHeader appShareHeight="--site-header-height">
   <div class="container header-bar">
-    <!-- The brand, "su-labs / games", goes to this site's home; the games link to no other site -->
     <a routerLink="/" class="brand">
-        <!-- Same mark as public/favicon.svg, colored by the site theme -->
         <svg class="brand-logo" viewBox="0 0 128 128" aria-hidden="true">
           <rect class="brand-tile" width="128" height="128" rx="28" />
           <g class="brand-mark" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
@@ -23,7 +21,6 @@
     </a>
 
     <div class="header-controls">
-      <!-- Phones and tablets: the menu hides behind this button, as its links don't fit in a row; ✕ while it's open -->
       <button
         type="button"
         class="icon-button menu-toggle"
@@ -43,7 +40,6 @@
           />
         </svg>
       </button>
-      <!-- Settings behind the gear button: text size, theme, game colours, answers (when switched on) and language -->
       <div class="settings" #settings>
         <button
           type="button"
@@ -73,7 +69,6 @@
 
   <nav id="site-nav" class="container site-nav" #siteNav [class.is-open]="menuOpen()" [attr.aria-label]="'site.gamesNav' | translate"
     [appMenuRing]="menuAnimation.isOn()" appScrollToActive>
-    <!-- With the categories menu, a link per category (and, in the phone menu, its games under it); otherwise a link per game -->
     @if (features.canUse('category-menu')) {
       @for (group of categories(); track group.category) {
         <a [routerLink]="['/category', group.category]" routerLinkActive="active">{{ ('categories' | translate)[group.category] }}</a>
@@ -115,7 +110,6 @@
     <nav class="footer-links" [attr.aria-label]="'site.projectLinks' | translate">
       <a routerLink="/suggestions" routerLinkActive="active">{{ 'site.suggestionsLink' | translate }}</a>
       <a routerLink="/privacy" routerLinkActive="active">{{ 'site.privacyLink' | translate }}</a>
-      <!-- The admin team's sign-in; small, as it's not for players -->
       <a class="admin-link" [routerLink]="['/', adminPath]" [attr.aria-label]="'admin.title' | translate" [title]="'admin.title' | translate">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="5" y="11" width="14" height="10" rx="2" />

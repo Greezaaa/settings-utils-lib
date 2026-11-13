@@ -10,14 +10,12 @@
   grid-template-columns: 1fr 1fr;
 }
 
-// Four sizes, two by two (in the game's side panel on wide screens)
 .levels {
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
 }
 
-// Each group's name above it, from its aria-label
 [role='group']::before {
   color: var(--muted);
   content: attr(aria-label);

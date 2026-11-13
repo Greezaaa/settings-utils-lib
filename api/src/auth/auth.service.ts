@@ -6,11 +6,9 @@ import { Admin } from './admin.entity.js';
 import { afterFailure, isLocked, UNLOCKED } from '../security/login-lock.js';
 import { hashPassword, hashToken, newSessionToken, verifyPassword } from './passwords.js';
 
-/** How long a browser stays signed in */
 export const SESSION_DAYS = 30;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** Checked against when the email doesn't exist, so a wrong email takes as long as a wrong password */
 const DUMMY_HASH_PROMISE = hashPassword('not a real password');
 
 export interface SignedIn {
@@ -19,14 +17,9 @@ export interface SignedIn {
   readonly expires: Date;
 }
 
-/** Emails are compared lowercase and without spaces around them */
 export const normalizeEmail = (email: string): string =>
   email.trim().toLowerCase();
 
-/**
- * Signing in: email and password, sessions kept by a cookie, changing one's password, and accepting an invite.
- * Answers never tell a wrong email from a wrong password, and an account locks for a while after too many failures.
- */
 @Injectable()
 export class AuthService {
   constructor(
@@ -35,7 +28,6 @@ export class AuthService {
     private readonly sessions: Repository<AdminSession>,
   ) {}
 
-  /** A new session when the email and password are right and the admin is active; null otherwise */
   async signIn(
     email: string,
     password: string,
@@ -57,7 +49,6 @@ export class AuthService {
     return this.startSession(admin, now);
   }
 
-  /** The active admin a session cookie belongs to, while it hasn't expired */
   async adminForToken(token: string, now = new Date()): Promise<Admin | null> {
     const session = await this.sessions.findOneBy({
       tokenHash: hashToken(token),
@@ -73,7 +64,6 @@ export class AuthService {
     await this.sessions.delete({ tokenHash: hashToken(token) });
   }
 
-  /** Changes a password after checking the current one; signs out every other browser of that admin */
   async changePassword(
     admin: Admin,
     current: string,
@@ -97,7 +87,6 @@ export class AuthService {
     return true;
   }
 
-  /** The admin an open invite link belongs to, or null when it's wrong, used or expired */
   async adminForInvite(
     secret: string,
     now = new Date(),
@@ -110,10 +99,6 @@ export class AuthService {
       : null;
   }
 
-  /**
-   * Accepts an invite: the admin chooses their password, the link stops working, any browser still signed in with
-   * the old password is signed out (a new invite is also how a forgotten password is reset), and they are signed in
-   */
   async acceptInvite(
     secret: string,
     password: string,
@@ -136,7 +121,6 @@ export class AuthService {
     return this.startSession(admin, now);
   }
 
-  /** Signs an admin out of every browser, e.g. when they are deactivated */
   async signOutEverywhere(adminId: string): Promise<void> {
     await this.sessions.delete({ adminId });
   }

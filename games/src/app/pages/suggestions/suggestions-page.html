@@ -55,9 +55,7 @@
           (dragleave)="isDragging.set(false)"
           (drop)="onDrop($event)"
         >
-          <!-- Any picture the browser can open (JPG, PNG, WebP, HEIC from iPhones…); it is redrawn as WebP or JPEG before sending -->
           <input type="file" accept="image/*" (change)="onImage($event)" />
-          <!-- An inbox with an arrow dropping in, drawn in the theme's colours -->
           <svg class="drop-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M8 2.5c4 0 6 2.5 6 6.5" />
             <path d="M10.5 7.5 14 10.5l3.5-3" />

@@ -28,16 +28,12 @@ import { WordGender } from './word-gender';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
 
-/** A setting's name on its button, and a longer description shown on hover or below it */
-/** A sudoku game's own texts: its symbols, and the words that name them */
 export interface SudokuText {
   readonly lead: string;
   readonly rule: string;
   readonly board: string;
-  /** The symbols used, in order: the first 4, 6 or 9 go on the board */
   readonly symbols: string;
   readonly tray: string;
-  /** A size's description, e.g. `4 letters` */
   readonly sizeSummary: (symbols: number) => string;
   readonly repeated: string;
   readonly noRepeats: string;
@@ -48,29 +44,22 @@ export interface OptionText {
   readonly summary: string;
 }
 
-/** How the sliding puzzle's tiles are drawn: pieces of a line, or pieces of a drawing */
 export type PuzzlePictureMode = 'lines' | 'drawing';
 
-/** A game's texts: its name and summary on cards, and its page title and description for search results */
 export interface GameText {
   readonly name: string;
   readonly summary: string;
-  /** Follows the name in the page title, e.g. `Math games: true or false, …` */
   readonly subtitle: string;
-  /** Comes before the summary in the page description */
   readonly intro: string;
 }
 
-/** Every text of the games site in one language; each language must fill all of it */
 export interface SiteMessages {
-  /** What every game says about an answer (in words when the visitor chose them; always for screen readers) */
   readonly answers: {
     readonly right: string;
     readonly wrong: string;
     readonly wrongWith: (answer: string) => string;
   };
 
-  /** Header, settings and footer */
   readonly site: {
     readonly skipToContent: string;
     readonly gamesNav: string;
@@ -85,48 +74,34 @@ export interface SiteMessages {
     readonly language: string;
     readonly boardColours: string;
     readonly boardThemes: Readonly<Record<GameThemeId, OptionText>>;
-    /** Link from the settings to the page with every set of game colours */
     readonly allColours: string;
-    /** How games show answers: colours only, or colours and words */
     readonly answerStyle: string;
     readonly answerStyles: Readonly<Record<AnswerStyle, OptionText>>;
-    /** The setting for an animated menu */
     readonly menuAnimation: string;
     readonly menuAnimationChoices: Readonly<
       Record<MenuAnimationChoice, string>
     >;
-    /** The setting for the side of the screen the room stickers stick to */
     readonly reactionSide: string;
     readonly reactionSides: Readonly<Record<ReactionSide, string>>;
-    /** The player's own choice to move the stickers by holding them */
     readonly stickerDrag: string;
     readonly stickerDragChoices: Readonly<Record<StickerDragChoice, string>>;
-    /** The setting to be spoken to as a boy or a girl */
     readonly wordGender: string;
     readonly wordGenders: Readonly<Record<WordGender, string>>;
-    /** The question asked once, as a notice, and its two answers */
     readonly wordGenderQuestion: string;
     readonly wordGenderAnswers: Readonly<Record<WordGender, string>>;
     readonly madeBy: string;
     readonly projectLinks: string;
-    /** Shown once until closed: what the site stores, and that it is never sold or shared */
     readonly privacyNotice: string;
-    /** When the site was last updated, in the visitor's local time */
     readonly lastUpdate: (moment: string) => string;
-    /** Button in "What's new" that opens a new game */
     readonly noticeOk: string;
-    /** The cancel button of confirmation dialogs */
     readonly cancel: string;
     readonly privacySettings: string;
     readonly privacyLink: string;
     readonly suggestionsLink: string;
-    /** Shown while a game's page checks that the game is open */
     readonly loading: string;
   };
 
-  /** Titles, descriptions and image text for search results and link previews */
   readonly seo: {
-    /** Open Graph locale, e.g. `es_ES` */
     readonly locale: string;
     readonly siteDescription: string;
     readonly notFoundTitle: string;
@@ -134,28 +109,21 @@ export interface SiteMessages {
     readonly previewImageAlt: string;
   };
 
-  /** Name and description of each game */
   readonly games: Readonly<Record<GameSlug, GameText>>;
-  /** Headings of the home page's game lists */
   readonly categories: Readonly<Record<GameCategory, string>>;
 
   readonly home: {
     readonly title: string;
     readonly lead: string;
-    /** Second line of the lead */
     readonly rule: string;
-    /** Notice that the site is still in beta, shown above the games */
     readonly betaLabel: string;
     readonly betaText: string;
-    /** "What's new": the latest changes, and the button to see more or fewer */
     readonly whatsNewTitle: string;
-    /** The tag beside each change in What's new */
     readonly updateKinds: Readonly<Record<UpdateKind, string>>;
     readonly showMore: string;
     readonly showFewer: string;
     readonly madeByTitle: string;
     readonly madeByText: string;
-    /** With the categories menu: the player's favourites, the most played and the latest games, then the categories */
     readonly favoritesTitle: string;
     readonly popularTitle: string;
     readonly recentTitle: string;
@@ -163,12 +131,10 @@ export interface SiteMessages {
     readonly categoryGames: (games: number) => string;
   };
 
-  /** What each category's page says about its games */
   readonly categoryIntros: Readonly<Record<GameCategory, string>>;
 
   readonly slidingPuzzle: {
     readonly lead: string;
-    /** Second line of the lead */
     readonly rule: string;
     readonly board: string;
     readonly levelGroup: string;
@@ -186,7 +152,6 @@ export interface SiteMessages {
     readonly keys: string;
   };
 
-  /** Texts both picture games share: modes, sizes and the end of a game */
   readonly pictureGames: {
     readonly modeGroup: string;
     readonly modes: Readonly<Record<PictureModeId, OptionText>>;
@@ -195,7 +160,6 @@ export interface SiteMessages {
     readonly picture: string;
     readonly memorize: string;
     readonly ready: string;
-    /** Progress, e.g. `6 of 9 in place` */
     readonly inPlace: (placed: number, total: number) => string;
     readonly newGame: string;
     readonly solved: string;
@@ -205,7 +169,6 @@ export interface SiteMessages {
 
   readonly turnPicture: {
     readonly lead: string;
-    /** Second line of the lead */
     readonly rule: string;
     readonly board: string;
     readonly tile: (number: number) => string;
@@ -215,7 +178,6 @@ export interface SiteMessages {
 
   readonly placePieces: {
     readonly lead: string;
-    /** Second line of the lead */
     readonly rule: string;
     readonly board: string;
     readonly piece: (number: number, picked: boolean) => string;
@@ -223,7 +185,6 @@ export interface SiteMessages {
     readonly solvedIn: (swaps: number, time: string) => string;
   };
 
-  /** Description of each picture, read by screen readers */
   readonly pictures: Readonly<Record<PictureId, string>>;
 
   /** The privacy page: what is saved, where and why, and the switch to stop saving */
@@ -243,20 +204,16 @@ export interface SiteMessages {
     }[];
     readonly differenceTitle: string;
     readonly difference: string;
-    /** What the games send to our servers (the API and the rooms service) */
     readonly sentTitle: string;
     readonly sentLead: string;
     readonly sent: readonly string[];
     readonly neverTitle: string;
     readonly never: readonly string[];
-    /** The microphone item, last in the "never" list; `inDevelopment` follows it while Hit the note is closed */
     readonly microphone: string;
     readonly inDevelopment: string;
-    /** Player accounts (shown while accounts are open): what an account keeps and how to delete it */
     readonly accountsTitle: string;
     readonly accountsLead: string;
     readonly accounts: readonly string[];
-    /** The email item, last in the accounts list; `emailUnavailable` follows it while the API can't send emails */
     readonly accountsEmail: string;
     readonly emailUnavailable: string;
     readonly choiceTitle: string;
@@ -276,20 +233,14 @@ export interface SiteMessages {
 
   readonly page: {
     readonly section: string;
-    /** The youngest recommended age, e.g. `Ages 4+` */
     readonly ages: (age: number) => string;
-    /** Badge on a game added lately */
     readonly new: string;
-    /** Badge on the most played games */
     readonly popular: string;
-    /** Badge the admin sees in preview on games closed to the public */
     readonly hidden: string;
-    /** The heart on a game card, for screen readers */
     readonly addFavorite: (game: string) => string;
     readonly removeFavorite: (game: string) => string;
     readonly title: string;
     readonly lead: string;
-    /** The one rule, shown on its own line below the lead */
     readonly rule: string;
     readonly game: string;
   };
@@ -327,7 +278,6 @@ export interface SiteMessages {
   readonly trueOrFalse: {
     readonly true: string;
     readonly false: string;
-    /** How the answer is written on the end screen, e.g. `true` */
     readonly given: (saysTrue: boolean) => string;
     readonly keys: string;
   };
@@ -342,22 +292,18 @@ export interface SiteMessages {
 
   readonly findTheSigns: {
     readonly signs: string;
-    /** Label of a gap, e.g. `Sign 2: empty` */
     readonly gap: (position: number, sign: string | null) => string;
     readonly deleteSign: string;
     readonly check: string;
     readonly fillEveryGap: string;
     readonly tapGapToChange: string;
     readonly precedence: string;
-    /** Shown instead of a result when the player's signs leave a remainder or go below zero */
     readonly notWholeNumber: string;
   };
 
-  /** The suggestions form */
   readonly suggestions: {
     readonly title: string;
     readonly lead: string;
-    /** The call to action, on its own line under the lead */
     readonly rule: string;
     readonly noPersonalData: string;
     readonly categoryLabel: string;
@@ -365,7 +311,6 @@ export interface SiteMessages {
     readonly textLabel: string;
     readonly imageLabel: string;
     readonly imageHint: string;
-    /** The picture's drop zone: what it says, while a file is over it, and which files it takes */
     readonly chooseImage: string;
     readonly dropHere: string;
     readonly imageTypes: string;
@@ -378,7 +323,6 @@ export interface SiteMessages {
     readonly failed: string;
   };
 
-  /** "Do you like this game?" under every game */
   readonly feedback: {
     readonly question: string;
     readonly votes: Readonly<Record<'up' | 'down', string>>;
@@ -390,7 +334,6 @@ export interface SiteMessages {
     readonly failed: string;
   };
 
-  /** The letter games: first vowel, missing vowels, mixed letters and word builder */
   readonly letterGames: {
     readonly lead: string;
     readonly rule: string;
@@ -399,37 +342,29 @@ export interface SiteMessages {
     readonly modes: Readonly<Record<LetterModeId, OptionText>>;
     readonly levelGroup: string;
     readonly builderLevels: Readonly<Record<BuilderLevelId, OptionText>>;
-    /** What the timer option means here; its name comes from settings.timers */
     readonly timers: Readonly<Record<TimerId, string>>;
     readonly hintsGroup: string;
     readonly hints: Readonly<Record<HintsId, OptionText>>;
-    /** What to do, shown above each word */
     readonly instructions: Readonly<Record<LetterModeId, string>>;
     readonly progress: (word: number, total: number) => string;
     readonly mistakes: (mistakes: number) => string;
-    /** Name of an empty letter box, for screen readers */
     readonly gap: string;
     readonly letters: string;
     readonly answer: string;
     readonly delete: string;
     readonly check: string;
-    /** Keyboard help, shown on devices with a keyboard */
     readonly keys: string;
     readonly builderKeys: string;
     readonly found: (found: number, total: number) => string;
-    /** What the word builder says about a word */
     readonly checks: Readonly<Record<WordCheck, string>>;
-    /** Shows the words still missing, and says they are shown */
     readonly showWords: string;
     readonly wordsShown: string;
-    /** The word builder's dictionary: downloading (with why, for its tooltip), failed, and its credit */
     readonly dictionary: {
       readonly loading: string;
       readonly why: string;
       readonly failed: string;
       readonly credit: string;
     };
-    /** Report a rude bonus word, and the thanks after it */
     readonly report: string;
     readonly reportThanks: string;
     readonly newLetters: string;
@@ -438,7 +373,6 @@ export interface SiteMessages {
     readonly summary: (words: number, mistakes: number) => string;
   };
 
-  /** Measure it: read and make angles, how full a glass is, numbers on a line */
   readonly measureIt: {
     readonly lead: string;
     readonly rule: string;
@@ -446,20 +380,16 @@ export interface SiteMessages {
     readonly modeGroup: string;
     readonly modes: Readonly<Record<MeasureModeId, OptionText>>;
     readonly levels: Readonly<Record<MeasureLevelId, string>>;
-    /** What each level means in each mode */
     readonly levelSummaries: Readonly<
       Record<MeasureModeId, Readonly<Record<MeasureLevelId, string>>>
     >;
     readonly hintsGroup: string;
     readonly hintOptions: Readonly<Record<HintsId, OptionText>>;
-    /** The hint after a wrong first try: the right answer is more, or less */
     readonly aim: Readonly<Record<AimHint, string>>;
-    /** The question above each exercise */
     readonly whichAngle: string;
     readonly makeAngle: (angle: number) => string;
     readonly howFull: string;
     readonly whichNumber: string;
-    /** Name of the slider or the choices, for screen readers */
     readonly yourAnswer: string;
     readonly check: string;
     readonly progress: (exercise: number, total: number) => string;
@@ -467,14 +397,12 @@ export interface SiteMessages {
     readonly summary: (right: number, total: number) => string;
   };
 
-  /** Climb the tower: right answers climb a floor, a wrong one falls */
   readonly climbTower: {
     readonly lead: string;
     readonly rule: string;
     readonly board: string;
     readonly modeGroup: string;
     readonly modes: Readonly<Record<ClimbModeId, OptionText>>;
-    /** Name of the two answer buttons, for screen readers */
     readonly answers: string;
     readonly floors: (floors: number) => string;
     readonly best: (floors: number) => string;
@@ -482,7 +410,6 @@ export interface SiteMessages {
     readonly summary: (floors: number) => string;
   };
 
-  /** How many? Count the things and tap how many there are (for the youngest) */
   readonly howMany: {
     readonly lead: string;
     readonly rule: string;
@@ -490,7 +417,6 @@ export interface SiteMessages {
     readonly levels: Readonly<Record<HowManyLevelId, OptionText>>;
     readonly question: string;
     readonly tapHint: string;
-    /** A thing not counted yet, for screen readers */
     readonly countThis: string;
     readonly great: string;
     readonly tryAgain: string;
@@ -501,29 +427,22 @@ export interface SiteMessages {
     readonly soundOff: string;
   };
 
-  /** The sudoku games (letter and number sudoku): each symbol once in every row, column and box */
   readonly sudoku: {
     readonly sizeGroup: string;
-    /** A cell for screen readers; the symbol is empty when the cell is */
     readonly cell: (row: number, column: number, symbol: string) => string;
     readonly check: string;
     readonly done: string;
     readonly summary: (time: string) => string;
     readonly newGame: string;
-    /** Each game's own texts */
     readonly games: Readonly<Record<SudokuGame, SudokuText>>;
   };
 
-  /** Word search: picture words hidden in a square of letters */
   readonly wordSearch: {
     readonly lead: string;
     readonly rule: string;
     readonly board: string;
-    /** The list of words to find */
     readonly words: string;
-    /** Levels: name, and the board size, words and directions */
     readonly levels: Readonly<Record<SearchLevelId, OptionText>>;
-    /** A letter for screen readers */
     readonly cell: (row: number, column: number, letter: string) => string;
     readonly found: (found: number, total: number) => string;
     readonly done: string;
@@ -531,19 +450,14 @@ export interface SiteMessages {
     readonly newGame: string;
   };
 
-  /** Secret word: guess the hidden word in a few tries */
   readonly secretWord: {
     readonly lead: string;
     readonly rule: string;
     readonly board: string;
-    /** The word's picture, shown as a hint */
     readonly picture: string;
-    /** Levels: name, and the word's length */
     readonly levels: Readonly<Record<SecretLevelId, OptionText>>;
     readonly hintsGroup: string;
-    /** With hints the word's picture is shown */
     readonly hints: Readonly<Record<HintsId, OptionText>>;
-    /** A guessed letter's mark, for screen readers */
     readonly marks: Readonly<Record<LetterMark, string>>;
     readonly keyboard: string;
     readonly erase: string;
@@ -559,11 +473,9 @@ export interface SiteMessages {
     readonly lead: string;
     readonly rule: string;
     readonly board: string;
-    /** Board sizes: name, and how many cards and pictures */
     readonly levels: Readonly<Record<BoardLevelId, OptionText>>;
     readonly moves: (moves: number) => string;
     readonly pairs: (found: number, total: number) => string;
-    /** A face-down card, for screen readers */
     readonly card: (number: number) => string;
     readonly done: string;
     readonly summary: (moves: number, time: string) => string;
@@ -571,7 +483,6 @@ export interface SiteMessages {
     readonly newGame: string;
   };
 
-  /** Hit the note: find the note, higher or lower, sing it */
   readonly hitTheNote: {
     readonly lead: string;
     readonly rule: string;
@@ -580,11 +491,9 @@ export interface SiteMessages {
     readonly modes: Readonly<Record<MusicModeId, OptionText>>;
     readonly levelGroup: string;
     readonly levels: Readonly<Record<MusicLevelId, OptionText>>;
-    /** What to do, shown above each round */
     readonly instructions: Readonly<Record<MusicModeId, string>>;
     readonly progress: (round: number, total: number) => string;
     readonly mistakes: (mistakes: number) => string;
-    /** Each note's name in this language (C, Do, До…) */
     readonly noteNames: Readonly<Record<NoteId, string>>;
     readonly notes: string;
     readonly listen: string;
@@ -596,7 +505,6 @@ export interface SiteMessages {
     readonly micDenied: string;
     readonly micUnavailable: string;
     readonly meter: string;
-    /** What the singing meter says: done, silence, hold it, too low, too high */
     readonly singHints: Readonly<
       Record<'done' | 'silent' | 'hold' | 'low' | 'high', string>
     >;
@@ -605,14 +513,12 @@ export interface SiteMessages {
     readonly summary: (right: number, total: number) => string;
   };
 
-  /** The admin page (/admin): sign in, game switches, plays and feedback, suggestions and reported words */
   readonly admin: {
     readonly title: string;
     readonly lead: string;
     readonly email: string;
     readonly password: string;
     readonly wrongCredentials: string;
-    /** The API refuses more sign-in tries for a while */
     readonly tooManyTries: string;
     readonly offline: string;
     readonly checking: string;
@@ -630,7 +536,6 @@ export interface SiteMessages {
     };
     readonly saveFailed: string;
     readonly loading: string;
-    /** The error log */
     readonly errorsHelp: string;
     readonly noErrors: string;
     readonly clearErrors: string;
@@ -652,7 +557,6 @@ export interface SiteMessages {
     readonly byDefault: (open: boolean) => string;
     readonly periodGroup: string;
     readonly periods: Readonly<Record<StatsPeriod, string>>;
-    /** The super admin's button to delete every play and vote, so statistics start again */
     readonly resetStats: string;
     readonly confirmResetStats: string;
     readonly statsReset: string;
@@ -681,10 +585,8 @@ export interface SiteMessages {
     readonly keepOut: string;
     readonly letCount: string;
     readonly noWords: string;
-    /** The players on the leaderboards, for moderators */
     readonly playersHelp: string;
     readonly noPlayers: string;
-    /** Screen names waiting to show in rooms: allow one, or give a rude one a plain name */
     readonly namesTitle: string;
     readonly namesHelp: string;
     readonly noNames: string;
@@ -700,19 +602,14 @@ export interface SiteMessages {
     readonly plainName: string;
     readonly takeOff: string;
     readonly putBack: string;
-    /** Under a long list: the next rows */
     readonly loadMore: string;
-    /** Feature switches, like rooms; every new feature gets one */
     readonly featuresTitle: string;
     readonly featuresHelp: string;
     readonly featureNames: Readonly<Record<FeatureId, string>>;
-    /** Each game's multiplayer switch, apart from its single-player one */
     readonly multiplayerTitle: string;
     readonly multiplayerHelp: string;
-    /** Team (super admin) */
     readonly addMember: string;
     readonly roleLabel: string;
-    /** What each role can do, shown when adding a member */
     readonly roleHelp: { readonly moderator: string; readonly tester: string };
     readonly makeTester: string;
     readonly makeModerator: string;
@@ -735,7 +632,6 @@ export interface SiteMessages {
     readonly newLink: string;
     readonly activate: string;
     readonly deactivate: string;
-    /** Account and invites */
     readonly changePassword: string;
     readonly currentPassword: string;
     readonly newPassword: string;
@@ -750,7 +646,6 @@ export interface SiteMessages {
     readonly inviteInvalid: string;
   };
 
-  /** Multiplayer rooms: create or join by code, the lobby, rounds and results */
   readonly rooms: {
     readonly navLink: string;
     readonly title: string;
@@ -763,7 +658,6 @@ export interface SiteMessages {
     readonly join: string;
     readonly homeTitle: string;
     readonly homeText: string;
-    /** The home page's button to the rooms page, where a room is created or joined */
     readonly homeLink: string;
     readonly errors: Readonly<Record<RoomError, string>>;
     readonly connecting: string;
@@ -772,7 +666,6 @@ export interface SiteMessages {
     readonly copyLink: string;
     readonly copied: string;
     readonly players: (count: number, max: number) => string;
-    /** A player's role and status, written to match that player's own choice (boy, girl, or not chosen) */
     readonly host: (player: WordGender | null) => string;
     readonly you: string;
     readonly ready: (player: WordGender | null) => string;
@@ -785,12 +678,9 @@ export interface SiteMessages {
     readonly waitingForReady: string;
     readonly waitingForHost: string;
     readonly settingsTitle: string;
-    /** The host's choice of game, when more than one is open in rooms */
     readonly gameGroup: string;
     readonly roundLength: string;
-    /** Whether scores show during the round */
     readonly showScores: string;
-    /** The host's switch for players' approved screen names, and the button to hide and report one */
     readonly ownNames: string;
     readonly reportName: string;
     readonly scoresShown: string;
@@ -805,31 +695,23 @@ export interface SiteMessages {
     readonly playAgain: string;
     readonly leave: string;
     readonly kick: string;
-    /** The button on a player's own avatar that asks for another random nickname */
     readonly newName: string;
-    /** The hand-drawn stickers players send each other: the bar's name and each sticker's name */
     readonly reactions: {
       readonly title: string;
       readonly names: Readonly<Record<Reaction, string>>;
     };
     readonly kicked: string;
-    /** When the room's game is switched off for rooms */
     readonly gameUnavailable: string;
-    /** Animal names by number (the same animal in every language), for nicknames and avatars */
     readonly animals: readonly string[];
-    /** A player's nickname from its adjective and animal numbers, e.g. `Brave Fox`, `Zorro valiente` */
     readonly nickname: (adjective: number, animal: number) => string;
   };
 
-  /** The player's account page: sign up, sign in, change details, sign out, delete; and the password-reset page */
   readonly account: {
-    /** The strength meter under a new password: its name for screen readers, and its word per step */
     readonly strengthLabel: string;
     readonly strength: Readonly<Record<SuStrengthLevel, string>>;
     readonly navLink: string;
     readonly title: string;
     readonly lead: string;
-    /** Second line of the lead, the call to action */
     readonly rule: string;
     readonly loading: string;
     readonly signInTab: string;
@@ -837,7 +719,6 @@ export interface SiteMessages {
     readonly forgotTab: string;
     readonly loginName: string;
     readonly loginNameHint: string;
-    /** Sign-in takes the login name or the account's email */
     readonly loginOrEmail: string;
     readonly password: string;
     readonly passwordRule: (min: number) => string;
@@ -845,21 +726,16 @@ export interface SiteMessages {
     readonly passwordsDiffer: string;
     readonly screenName: string;
     readonly screenNameHint: string;
-    /** The tooltip next to the screen name: it is shown to others and needn't be a real name */
     readonly screenNameTip: string;
     readonly screenNameTipLabel: string;
-    /** Under the screen name while it waits for a moderator before it can show in rooms */
     readonly nameWaiting: string;
-    /** The player's choice to appear on the leaderboards, at sign-up and in the account */
     readonly showOnLeaderboard: string;
     readonly showOnLeaderboardHint: string;
     readonly email: string;
     readonly emailHint: string;
-    /** Shown while no email is given: a forgotten password can't be reset */
     readonly noEmailWarning: string;
     readonly signIn: string;
     readonly signUp: string;
-    /** Favourites and best results on this device join the account */
     readonly syncNote: string;
     readonly forgotLead: string;
     readonly sendLink: string;
@@ -869,7 +745,6 @@ export interface SiteMessages {
     readonly loginNameIs: (loginName: string) => string;
     readonly signOut: string;
     readonly detailsTitle: string;
-    /** Changing or removing the email needs the password */
     readonly emailNeedsPassword: string;
     readonly currentPassword: string;
     readonly save: string;
@@ -878,7 +753,6 @@ export interface SiteMessages {
     readonly newPassword: string;
     readonly changePassword: string;
     readonly passwordChanged: string;
-    /** Deleting only the results, keeping the account */
     readonly resultsTitle: string;
     readonly resultsLead: string;
     readonly deleteResults: string;
@@ -896,22 +770,18 @@ export interface SiteMessages {
     readonly resetDone: string;
   };
 
-  /** Every set of game colours, each on a small sample board, to pick one */
   readonly colours: {
     readonly title: string;
     readonly lead: string;
-    /** Second line of the lead, the call to action */
     readonly rule: string;
     readonly use: string;
     readonly inUse: string;
   };
 
-  /** Leaderboards for signed-in players: a table per game setting */
   readonly leaderboard: {
     readonly navLink: string;
     readonly title: string;
     readonly lead: string;
-    /** Second line of the lead, the call to action */
     readonly rule: string;
     readonly signInFirst: string;
     readonly signInLink: string;
@@ -926,20 +796,14 @@ export interface SiteMessages {
       readonly best: string;
     };
     readonly you: string;
-    /** For a signed-in player who chose not to appear */
     readonly youreHidden: string;
     readonly changeInAccount: string;
-    /** In place of the name of a player who chose not to appear (public leaderboards) */
     readonly mysteryPlayer: string;
-    /** Everyone ranked on a board and the games they finished, e.g. `12 players · 40 games played` */
     readonly totals: (players: number, plays: number) => string;
-    /** The games the signed-in player finished on a board, after the totals */
     readonly yourPlays: (plays: number) => string;
-    /** The visitor's own best on a board, never added to it; with the place it would have or has */
     readonly yourBest: (best: string) => string;
     readonly wouldBePlace: (place: number) => string;
     readonly yourPlace: (place: number) => string;
-    /** For signed-out visitors of the public leaderboards */
     readonly joinText: string;
   };
 }

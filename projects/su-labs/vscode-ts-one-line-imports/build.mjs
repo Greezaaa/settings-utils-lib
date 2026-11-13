@@ -1,5 +1,3 @@
-// Bundles the extension, with Prettier and the single-line imports plugin inside,
-// into dist/su-labs/vscode-ts-one-line-imports, ready for `vsce package`.
 import { build } from 'esbuild';
 import { copyFileSync, mkdirSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -19,12 +17,9 @@ await build({
   bundle: true,
   minify: true,
   platform: 'node',
-  // VS Code loads extensions as CommonJS; Node 20 is the oldest runtime of the supported VS Code versions
   format: 'cjs',
   target: 'node20',
-  // Provided by VS Code at runtime
   external: ['vscode'],
-  // Prettier uses import.meta.url, which CommonJS doesn't have: give it the bundle's own URL
   banner: { js: "const importMetaUrl = require('node:url').pathToFileURL(__filename).href;" },
   define: { 'import.meta.url': 'importMetaUrl' },
   logLevel: 'warning',

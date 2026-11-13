@@ -1,8 +1,4 @@
-// How every puzzle ends: its pieces join into one picture (each board closes its own gaps), then the
-// whole board celebrates with a little pop and a glow, and "Well done!" appears below it, never over it.
-
 .board.is-solved {
-  // Starts once the pieces have joined
   animation: board-celebrate 700ms ease 300ms both;
 }
 

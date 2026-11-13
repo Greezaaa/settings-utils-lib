@@ -7,14 +7,10 @@ import { PlayerGender } from './player-gender';
 import { isReaction, Reaction, REACTION_SHOW_MS } from './reactions';
 import { isRoomError, parseRoomView, RoomError, RoomSettings, RoomView } from './room-view';
 
-/** The rooms service (api/src/rooms/); the local one while the site runs on localhost */
 const ROOMS_URL = 'wss://rooms.su-labs.dev/rooms';
 const LOCAL_ROOMS_URL = 'ws://localhost:3003/rooms';
-/** This tab's seat in a room, so a reload comes back to it (per tab, gone when the tab closes) */
 const SEAT_SESSION_KEY = 'su-labs-games:room-seat';
-/** Waits between reconnection tries; after the last, every try waits that long */
 const RECONNECT_DELAYS_MS = [500, 1000, 2000, 4000, 8000];
-/** How long the rooms service keeps a dropped player's seat (RECONNECT_GRACE_MS in api/src/rooms/rooms.gateway.ts) */
 const SEAT_KEPT_MS = 2 * 60_000;
 
 interface Seat {
@@ -23,7 +19,6 @@ interface Seat {
   readonly token: string;
 }
 
-/** A sticker a player sent, shown on their card for a moment; `key` tells two of the same apart */
 export interface PlayerReaction {
   readonly key: number;
   readonly playerId: string;
@@ -32,16 +27,10 @@ export interface PlayerReaction {
 
 export type RoomConnection = 'closed' | 'connecting' | 'open' | 'reconnecting';
 
-/** What a player asks for once the connection is open */
 type Intent =
   | { readonly event: 'create'; readonly language: LanguageId; readonly namePass: string | null }
   | { readonly event: 'join'; readonly code: string; readonly namePass: string | null };
 
-/**
- * The connection to a multiplayer room: creating or joining one, the room's live state, and everything a player can
- * do in it. Reconnects by itself after a dropped connection or a reload (the seat is kept in this tab), and keeps the
- * server's clock, so every screen counts down and ends rounds at the same moment.
- */
 @Injectable({ providedIn: 'root' })
 export class RoomClient {
   private readonly document = inject(DOCUMENT);
@@ -51,10 +40,8 @@ export class RoomClient {
   private seat: Seat | null = null;
   private intent: Intent | null = null;
   private attempts = 0;
-  /** When the connection dropped, while trying to get back */
   private droppedAt: number | null = null;
   private reconnectTimer?: ReturnType<typeof setTimeout>;
-  /** Difference between the server's clock and this device's */
   private clockOffset = 0;
   private reactionKey = 0;
 
@@ -63,14 +50,12 @@ export class RoomClient {
   readonly error = signal<RoomError | null>(null);
   readonly kicked = signal(false);
   readonly playerId = signal<string | null>(null);
-  /** Stickers sent in the last few seconds, own ones included */
   readonly reactions = signal<readonly PlayerReaction[]>([]);
 
   readonly me = computed(() => this.room()?.players.find(({ id }) => id === this.playerId()) ?? null);
   readonly isHost = computed(() => this.room()?.hostId === this.playerId());
 
   constructor() {
-    // Phones drop connections while the screen is off or the tab is hidden, and Wi-Fi comes and goes
     const window = this.document.defaultView;
     if (window) {
       window.addEventListener('online', () => this.retryNow());
@@ -82,19 +67,15 @@ export class RoomClient {
     }
   }
 
-  /** The server's clock now, for countdowns and round ends */
   serverNow(): number {
     return Date.now() + this.clockOffset;
   }
 
-  /** Opens a room; a signed-in player brings their approved screen name (the host decides whether names show) */
   async create(language: LanguageId): Promise<void> {
     this.open({ event: 'create', language, namePass: await this.account.roomNamePass() });
   }
 
-  /** Joins a room by code, or comes back to this tab's seat in it */
   async enter(code: string): Promise<void> {
-    // Already in it, e.g. right after creating it
     if (this.seat?.code === code.toUpperCase() && this.connection() !== 'closed') {
       return;
     }
@@ -127,17 +108,14 @@ export class RoomClient {
     this.send('again');
   }
 
-  /** Asks for another random nickname, in the lobby */
   rename(): void {
     this.send('rename');
   }
 
-  /** Sends a sticker to everyone in the room */
   react(reaction: Reaction): void {
     this.send('react', { reaction });
   }
 
-  /** Hides a player's own name for everyone in the room; the page also reports it */
   hideName(playerId: string): void {
     this.send('hide-name', { playerId });
   }
@@ -146,16 +124,13 @@ export class RoomClient {
     this.send('kick', { playerId });
   }
 
-  /** Leaves the room for good and closes the connection */
   leave(): void {
     this.send('leave');
     this.forgetSeat();
     this.close();
-    // The room may close right after (nobody left in it): don't greet the next page with "no room with that code"
     this.error.set(null);
   }
 
-  /** Closes the connection, keeping the seat for a later reload */
   close(): void {
     clearTimeout(this.reconnectTimer);
     this.intent = null;
@@ -177,7 +152,6 @@ export class RoomClient {
     this.connect();
   }
 
-  /** Back online, or back on this tab: tries again at once if the connection dropped while in a room */
   private retryNow(): void {
     if (!this.seat || this.kicked() || this.socket) {
       return;
@@ -214,7 +188,6 @@ export class RoomClient {
       }
       this.socket = null;
       this.droppedAt ??= Date.now();
-      // Keep trying while the rooms service still keeps the seat
       if (this.seat && !this.kicked() && Date.now() - this.droppedAt < SEAT_KEPT_MS) {
         this.connection.set('reconnecting');
         const delay = RECONNECT_DELAYS_MS[Math.min(this.attempts++, RECONNECT_DELAYS_MS.length - 1)];
@@ -259,7 +232,6 @@ export class RoomClient {
     } else if (event === 'error') {
       const error = field(data, 'error');
       this.error.set(isRoomError(error) ? error : 'invalid');
-      // A seat that no longer exists (the room closed): forget it, so the next try joins afresh
       if (error === 'not-found') {
         this.forgetSeat();
       }
@@ -278,7 +250,6 @@ export class RoomClient {
     );
   }
 
-  /** The player's choice to be spoken to as a boy or a girl, while that setting is open; the room fits their animal to it */
   private chosenGender(): WordGender | null {
     return this.gender.isAvailable() ? this.gender.choice() : null;
   }
@@ -305,7 +276,6 @@ export class RoomClient {
     try {
       sessionStorage.setItem(SEAT_SESSION_KEY, JSON.stringify(seat));
     } catch {
-      // Storage blocked: a reload just joins again as a new player
     }
   }
 
@@ -315,7 +285,6 @@ export class RoomClient {
     try {
       sessionStorage.removeItem(SEAT_SESSION_KEY);
     } catch {
-      // Nothing was kept
     }
   }
 }

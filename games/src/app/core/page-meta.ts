@@ -8,32 +8,20 @@ import { isGameSlug } from './games-api';
 import { SITE_PREVIEW_IMAGE, SITE_PREVIEW_IMAGE_URL, SITE_URL } from './links';
 import { structuredData } from './structured-data';
 
-/** Search and link-preview data of a page, set as route `data` */
 export interface PageMeta {
   readonly description: string;
-  /** Keep the page out of search results, e.g. the not-found page */
   readonly noIndex?: boolean;
-  /** A game's own page */
   readonly game?: GameSlug;
 }
 
 export const SITE_NAME = 'su-labs games';
 
-/**
- * Language of search results and link previews (page titles, descriptions, preview image text): the prerendered
- * pages' language. The preview image (public/og-image.png) is drawn in this language too.
- */
 export const PREVIEW_MESSAGES: SiteMessages = PRERENDER_MESSAGES;
 
 const SITE_DESCRIPTION = PREVIEW_MESSAGES.seo.siteDescription;
 
-/** Route data for the home page and any page without its own description */
 export const SITE_META: PageMeta = { description: SITE_DESCRIPTION };
 
-/**
- * Sets the title, description, canonical URL and Open Graph / Twitter tags on every navigation.
- * Runs during prerendering too, so the static HTML of each page carries its own tags.
- */
 @Injectable({ providedIn: 'root' })
 export class PageMetaStrategy extends TitleStrategy {
   private readonly title = inject(Title);
@@ -101,7 +89,6 @@ export class PageMetaStrategy extends TitleStrategy {
   }
 }
 
-/** The most specific page data in the active route tree */
 function deepestMeta(route: ActivatedRouteSnapshot): PageMeta {
   let meta: PageMeta = SITE_META;
   for (let current: ActivatedRouteSnapshot | null = route; current; current = current.firstChild) {
@@ -118,7 +105,6 @@ function deepestMeta(route: ActivatedRouteSnapshot): PageMeta {
   return meta;
 }
 
-/** Public URL of a router path, with the trailing slash the server uses for folders */
 function canonicalUrl(routerUrl: string): string {
   const path = routerUrl.split(/[?#]/)[0].replace(/\/$/, '');
   return `${SITE_URL}${path}/`;

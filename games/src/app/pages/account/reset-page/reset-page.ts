@@ -8,10 +8,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { SuStrengthMeterComponent } from '@su-labs/fields';
 
-/**
- * A password-reset link from an email, /account/reset/<secret>: the player chooses a new password, which also signs
- * them in, and goes to their account. Built in the browser, as every link is different.
- */
 @Component({
   selector: 'app-reset-page',
   imports: [TranslatePipe, SuStrengthMeterComponent],
@@ -20,7 +16,6 @@ import { SuStrengthMeterComponent } from '@su-labs/fields';
   styleUrls: ['../../../shared/utility-page.scss', '../../admin/admin.scss', '../account.scss'],
 })
 export class ResetPage {
-  /** From the address, through the router's component input binding */
   readonly secret = input.required<string>();
 
   private readonly account = inject(PlayerAccount);

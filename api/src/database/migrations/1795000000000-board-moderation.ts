@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** Moderators can take a player off the leaderboards; the player can't undo it */
 export class BoardModeration1795000000000 implements MigrationInterface {
   name = 'BoardModeration1795000000000';
 

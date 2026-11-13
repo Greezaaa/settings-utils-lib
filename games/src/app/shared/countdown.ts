@@ -1,12 +1,7 @@
 import { computed, DestroyRef, inject, signal } from '@angular/core';
 
-/** How often the remaining time is updated */
 const TICK_MS = 50;
 
-/**
- * A countdown for timed games: start it with a duration and what to do when it ends; read the seconds left
- * and the share of time left (for a TimerBar). Create it in a component's field so it stops with the component.
- */
 export class Countdown {
   private readonly totalMs = signal(1);
   private readonly remainingMs = signal(0);
@@ -14,7 +9,6 @@ export class Countdown {
   private timer?: ReturnType<typeof setInterval>;
 
   readonly secondsLeft = computed(() => Math.ceil(this.remainingMs() / 1000));
-  /** From 1 at the start to 0 at the end */
   readonly share = computed(() => this.remainingMs() / this.totalMs());
 
   constructor() {

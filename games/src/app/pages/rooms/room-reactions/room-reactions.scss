@@ -1,13 +1,9 @@
-// Phones and tablets: a column inside the game card's right edge (left when chosen in the settings), in the same
-// cell of the room's grid as the card (see .room-layout in rooms.scss). The column itself follows the scroll within the
-// card, below the players' strip, so the stickers stay at hand without covering the page outside the game.
 :host {
   align-self: stretch;
   grid-column: 1;
   grid-row: 2;
   justify-self: end;
   padding: 0.5rem;
-  // Only the stickers take taps; the rest of the strip lets them through to the game
   pointer-events: none;
   z-index: 3;
 }
@@ -19,25 +15,21 @@
 .stickers {
   pointer-events: auto;
   position: sticky;
-  // Below the site header and the players' strip stuck under it, both measured (ShareHeight), so names never cover them
   top: calc(var(--site-header-height, 0px) + var(--room-players-height, 4.5rem) + 0.5rem);
 }
 
-// Movable: held for a second, they move with the finger, so no page scroll, text selection or picture menu on them
 :host(.is-movable) .stickers {
   -webkit-touch-callout: none;
   touch-action: none;
   user-select: none;
 }
 
-// Lifted while being moved
 .stickers.is-dragging {
   filter: drop-shadow(0 6px 12px rgb(0 0 0 / 0.3));
   scale: 1.08;
   z-index: 10;
 }
 
-// A row along the bottom of the game card, stuck to the bottom of the screen while the card scrolls past
 @media (max-width: 55.99rem) {
   :host(.is-bottom) {
     display: flex;
@@ -54,7 +46,6 @@
   }
 }
 
-// Wide screens (the room's columns, see .room-layout in rooms.scss): always right of the game, scrolling with it
 @media (min-width: 56rem) {
   :host,
   :host(.is-left) {
@@ -79,7 +70,6 @@
   gap: 0.375rem;
 }
 
-// Round white stickers in every theme, as the drawings have dark lines on paper
 .sticker {
   background: #ffffff;
   border: 1px solid var(--border);

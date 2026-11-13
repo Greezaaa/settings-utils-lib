@@ -1,30 +1,18 @@
-/**
- * Rules of "Find the signs": an equation with its signs missing, like `4 ? 5 ? 5 = 14`, which the player
- * completes with + − × ÷. Any signs that make the equation true count, not only the ones it was built with.
- * × and ÷ are worked out before + and −, as in normal math.
- */
-
 import { LevelId, Operator, Timing } from './math-games';
 import { between, NumberRange, pick, Random } from './random';
 
-/** Find the signs has every level except advanced */
 export type SignsLevelId = Exclude<LevelId, 'advanced'>;
 
-/** A level of Find the signs: which signs, which numbers and how many of them */
 export interface SignsLevel extends Timing {
   readonly id: SignsLevelId;
   readonly operators: readonly Operator[];
   readonly numbers: NumberRange;
-  /** How many numbers an equation can have; one sign fewer than that is missing */
   readonly counts: readonly number[];
-  /** Largest result, so easy levels stay small */
   readonly maxResult: number;
 }
 
-/** An equation with its signs missing */
 export interface SignsPuzzle {
   readonly numbers: readonly number[];
-  /** Signs the equation was built with; one correct answer among possibly several */
   readonly operators: readonly Operator[];
   readonly result: number;
 }
@@ -68,13 +56,10 @@ export const SIGNS_LEVELS: readonly SignsLevel[] = [
   },
 ];
 
-/** Sign shown in place of a missing one */
 export const MISSING_SIGN = '?';
 
-/** Attempts before giving up on random numbers; never reached in practice */
 const MAX_ATTEMPTS = 1000;
 
-/** How many times bigger a number before ÷ is than the one after it */
 const QUOTIENTS: NumberRange = { min: 2, max: 9 };
 
 export function getSignsLevel(id: LevelId): SignsLevel {
@@ -85,10 +70,6 @@ export function getSignsLevel(id: LevelId): SignsLevel {
   return level;
 }
 
-/**
- * The equation with the given signs, or `?` where one is still missing,
- * e.g. `4 + 5 ? 5 = 14`
- */
 export function formatSigns(
   numbers: readonly number[],
   signs: readonly (Operator | null)[],
@@ -100,10 +81,6 @@ export function formatSigns(
   return `${parts.join(' ')} = ${result}`;
 }
 
-/**
- * The value of the numbers joined by these signs, × and ÷ first.
- * `null` when it can't be worked out with whole, non-negative numbers: a remainder or a total below zero.
- */
 export function evaluate(numbers: readonly number[], operators: readonly Operator[]): number | null {
   const terms = [numbers[0]];
   const joins: ('+' | '−')[] = [];
@@ -138,13 +115,11 @@ export function solves(puzzle: SignsPuzzle, signs: readonly Operator[]): boolean
   return signs.length === puzzle.operators.length && evaluate(puzzle.numbers, signs) === puzzle.result;
 }
 
-/** A new equation that works out with whole, non-negative numbers within the level's limits */
 export function createSignsPuzzle(level: SignsLevel, random: Random = Math.random): SignsPuzzle {
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const count = pick(level.counts, random);
     const operators = Array.from({ length: count - 1 }, () => pick(level.operators, random));
     const numbers = Array.from({ length: count }, () => between(level.numbers, random));
-    // Make each number before ÷ a multiple of the one after it, so most divisions come out even
     for (let index = operators.length - 1; index >= 0; index--) {
       if (operators[index] === '÷') {
         numbers[index] = numbers[index + 1] * between(QUOTIENTS, random);

@@ -19,7 +19,6 @@ export class SuAutoGrowDirective {
   constructor() {
     const destroyRef = inject(DestroyRef);
     afterNextRender(() => {
-      // Emptied by a form reset, which sends no input event; the value only changes after the event
       const onReset = () => setTimeout(() => this.fit());
       this.box.form?.addEventListener('reset', onReset);
       destroyRef.onDestroy(() =>
@@ -34,7 +33,6 @@ export class SuAutoGrowDirective {
     }
     const box = this.box;
     const from = box.offsetHeight;
-    // Measured at its natural height, without the animation, then set back so the change can animate
     box.style.transition = 'none';
     box.style.height = 'auto';
     const to = box.scrollHeight + box.offsetHeight - box.clientHeight;

@@ -42,7 +42,6 @@ export async function formatDocument(document: DocumentToFormat): Promise<Format
     if (project.kind === 'none') return joinImportsOnly(document);
     if (project.kind === 'ignored') return { text: null, mode: 'ignored' };
 
-    // A parser set in the project's config (overrides included) wins over the language's default
     const formatted = await format(document.text, { parser: document.parser, ...project.options, filepath: filePath });
     return { text: formatted === document.text ? null : formatted, mode: 'prettier' };
   } catch (error) {

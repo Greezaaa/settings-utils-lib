@@ -9,11 +9,9 @@ const roleSchema = z.enum(MEMBER_ROLES);
 const addSchema = z.object({
   email: z.email().max(254),
   role: roleSchema.default('moderator'),
-  /** A starting password to hand over; without one, an invite link is made instead */
   password: z.string().min(MIN_PASSWORD_LENGTH).max(200).optional(),
 });
 type AddInput = z.infer<typeof addSchema>;
-/** Turn a member on or off, or change their role */
 const changeSchema = z.object({
   active: z.boolean().optional(),
   role: roleSchema.optional(),
@@ -21,7 +19,6 @@ const changeSchema = z.object({
 type ChangeInput = z.infer<typeof changeSchema>;
 const idSchema = z.uuid();
 
-/** For the super admin: the team of moderators and testers, their roles, invites, and turning them on or off */
 @Controller('admin/team')
 @UseGuards(SuperAdminGuard)
 export class TeamController {
@@ -39,7 +36,6 @@ export class TeamController {
     return this.team.addMember(email, role, password);
   }
 
-  /** A new invite link, e.g. when the first one expired or the moderator forgot their password */
   @Post(':id/invite')
   reinvite(@Param('id', { schema: idSchema }) id: string): Promise<Invite> {
     return this.team.reinvite(id);

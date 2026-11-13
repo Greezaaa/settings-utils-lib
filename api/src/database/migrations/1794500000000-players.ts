@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** Player accounts, their signed-in browsers, and their results per game and settings */
 export class Players1794500000000 implements MigrationInterface {
   name = 'Players1794500000000';
 
@@ -36,7 +35,6 @@ export class Players1794500000000 implements MigrationInterface {
         updated timestamptz NOT NULL DEFAULT now(),
         PRIMARY KEY (player_id, game, key)
       )`);
-    // The leaderboard ranks one game and key at a time
     await queryRunner.query(
       'CREATE INDEX player_results_board ON player_results (game, key, best)',
     );

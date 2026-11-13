@@ -17,7 +17,6 @@ export class GameSettingsService {
     private readonly settings: Repository<GameSetting>,
   ) {}
 
-  /** The games switched on or off; games never switched aren't listed and keep their default */
   async list(): Promise<GameSwitch[]> {
     const rows = await this.settings.find({ order: { game: 'ASC' } });
     return rows.map(({ game, enabled }) => ({ game, enabled }));

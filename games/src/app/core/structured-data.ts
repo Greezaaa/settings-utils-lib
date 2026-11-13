@@ -3,10 +3,6 @@ import { SiteMessages } from '../i18n/site-messages';
 import { gameInfo, GameSlug } from './games';
 import { AUTHOR_NAME, SITE_URL } from './links';
 
-/**
- * Schema.org data for search engines: the site on every page, and the game on a game's page. Built from the same texts
- * as the page's title and description, so it is always in their language and lists only real games.
- */
 export function structuredData(messages: SiteMessages, siteName: string, game?: GameSlug): object {
   const site = {
     '@type': 'WebSite',

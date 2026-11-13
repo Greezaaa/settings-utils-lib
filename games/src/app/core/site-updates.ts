@@ -13,7 +13,6 @@ import { GameSlug } from './games';
  * and set `privacy: true`
  * when the update changes what the site saves, so the privacy notice is shown again.
  */
-/** What a change is about, shown as a tag beside it */
 export const UPDATE_KINDS = [
   'game',
   'language',
@@ -23,7 +22,6 @@ export const UPDATE_KINDS = [
 ] as const;
 export type UpdateKind = (typeof UPDATE_KINDS)[number];
 
-/** The colour of each kind's tag (a `.tag-*` class), so the kinds are told apart at a glance */
 export const UPDATE_KIND_TAGS: Readonly<Record<UpdateKind, string>> = {
   game: 'tag-blue',
   language: 'tag-yellow',
@@ -35,16 +33,12 @@ export const UPDATE_KIND_TAGS: Readonly<Record<UpdateKind, string>> = {
 export interface UpdateChange {
   readonly kind: UpdateKind;
   readonly text: Readonly<Record<LanguageId, string>>;
-  /** The game this change is about, linked from the notice */
   readonly game?: GameSlug;
-  /** The feature switch this change is about: listed only while visitors can use it */
   readonly feature?: FeatureId;
 }
 
 export interface SiteUpdate {
-  /** Counts up by one per update */
   readonly version: number;
-  /** When it went live, as an ISO date and time with its offset; the latest one is shown as the last update */
   readonly published: string;
   /** The update changes what the site saves; visitors see the privacy notice again */
   readonly privacy?: boolean;
@@ -371,10 +365,8 @@ export const LATEST_PUBLISHED = SITE_UPDATES.reduce((latest, update) =>
   update.version > latest.version ? update : latest
 ).published;
 
-/** The site version the visitor last saw (in the browser's storage) */
 export const LAST_SEEN_STORAGE = 'last-seen-version';
 
-/** The newest version that changed what the site saves */
 export const LATEST_PRIVACY_VERSION = Math.max(
   0,
   ...SITE_UPDATES.filter(({ privacy }) => privacy).map(({ version }) => version)
@@ -383,11 +375,9 @@ export const LATEST_PRIVACY_VERSION = Math.max(
 export interface DatedChange {
   readonly change: UpdateChange;
   readonly version: number;
-  /** When its update went live, as an ISO date and time */
   readonly published: string;
 }
 
-/** Every change, newest update first (keeping each update's own order), for the home page's "What's new" */
 export function recentChanges(
   updates: readonly SiteUpdate[] = SITE_UPDATES
 ): DatedChange[] {
@@ -398,7 +388,6 @@ export function recentChanges(
     );
 }
 
-/** A moment as a short local date and time in a language, e.g. `7 Nov 2026, 16:30` */
 export function formatMoment(iso: string, language: LanguageId): string {
   return new Intl.DateTimeFormat(language, {
     dateStyle: 'medium',

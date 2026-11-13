@@ -4,7 +4,6 @@ import { Direction, HigherOrLowerRound } from '../../../../games/music-notes';
 import { AnswerLine } from '../../../../shared/answer-line/answer-line';
 import { TranslatePipe } from '../../../../i18n/translate-pipe';
 
-/** Higher or lower: two notes play, the player says whether the second was higher or lower; the answer then shows */
 @Component({
   selector: 'app-higher-lower-round',
   imports: [TranslatePipe, AnswerLine],
@@ -19,9 +18,7 @@ export class HigherLowerRound {
 
   protected readonly player = inject(NotePlayer);
   protected readonly directions: readonly Direction[] = ['lower', 'higher'];
-  /** The player's answer, shown right or wrong; resets with each round */
   protected readonly given = linkedSignal({ source: this.round, computation: (): Direction | null => null });
-  /** For the answer line: right or wrong once answered, nothing before */
   protected readonly result = computed(() => {
     const given = this.given();
     return given ? given === this.round().answer : null;
@@ -46,7 +43,6 @@ export class HigherLowerRound {
     if (direction !== this.round().answer) {
       this.mistake.emit();
     }
-    // Right or wrong, the round ends; the page shows the answer a moment first
     this.solved.emit();
   }
 }

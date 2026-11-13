@@ -8,7 +8,6 @@
     padding-block: 6rem 3rem;
   }
 
-  // Phones: a smaller intro, so the game starts closer to the top
   @media (max-width: 47.99rem) {
     .lead {
       font-size: 1rem;
@@ -16,7 +15,6 @@
   }
 }
 
-// Phones: less room between the intro and the game
 .page-head + .page-section {
   @media (max-width: 47.99rem) {
     padding-block: 1.5rem;

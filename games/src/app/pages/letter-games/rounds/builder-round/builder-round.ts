@@ -5,12 +5,6 @@ import { roundFeedback } from '../../../../shared/round-feedback';
 import { typedKey } from '../../../../shared/typed-letter';
 import { TranslatePipe } from '../../../../i18n/translate-pipe';
 
-/**
- * Word builder: the player taps letters to make a word and checks it. Every word to find shows as empty boxes,
- * longest first, and fills in once found: the checked word bank's words and, once the language's dictionary has
- * downloaded, its common words the letters make. Any other real word the player makes counts too and joins the list.
- * "Show the words" reveals the ones still missing.
- */
 @Component({
   selector: 'app-builder-round',
   imports: [TranslatePipe],
@@ -21,32 +15,23 @@ import { TranslatePipe } from '../../../../i18n/translate-pipe';
 })
 export class BuilderRound {
   readonly set = input.required<LetterSet>();
-  /** With the timer on, time ran out: show every word and stop taking new ones */
   readonly isTimeUp = input(false);
-  /** The language's dictionary, once downloaded, its most common words, and how its download is doing */
   readonly dictionary = input<ReadonlySet<string>>();
   readonly commonWords = input<readonly string[]>([]);
   readonly dictionaryStatus = input<DictionaryStatus>();
   readonly newLetters = output<void>();
   readonly allFound = output<void>();
-  /** The player reported a word from the dictionary as rude */
   readonly reported = output<string>();
-  /** A word was found (a room round scores each one) */
   readonly wordFound = output<string>();
 
   protected readonly feedback = roundFeedback();
 
   protected readonly tiles = computed(() => this.set().letters.map((letter, id) => ({ id, letter })));
-  /** Ids of the tiles in the word being made */
   protected readonly picked = linkedSignal({ source: this.set, computation: (): readonly number[] => [] });
   protected readonly found = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
-  /** Real words the player made that weren't asked for; they join the list */
   private readonly extras = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
-  /** Words the player reported, taken off the list */
   private readonly removed = linkedSignal({ source: this.set, computation: (): readonly string[] => [] });
-  /** The player asked to see the words still missing */
   private readonly gaveUp = linkedSignal({ source: this.set, computation: () => false });
-  /** A word was reported with these letters: thank the player */
   protected readonly hasReported = linkedSignal({ source: this.set, computation: () => false });
   protected readonly lastCheck = signal<WordCheck | null>(null);
 
@@ -55,7 +40,6 @@ export class BuilderRound {
       .map((id) => this.set().letters[id])
       .join(''),
   );
-  /** Every word to find: the word bank's, common dictionary words, and real words the player added; longest first */
   private readonly targets = computed(() =>
     [...targetWords(this.set(), this.commonWords()), ...this.extras()]
       .filter((word) => !this.removed().includes(word))
@@ -69,7 +53,6 @@ export class BuilderRound {
         answer,
         isFound,
         isShown: isFound || this.isRevealed(),
-        /** Words from the dictionary rather than the checked word bank can be reported */
         canReport: !this.set().answers.includes(answer),
         letters: lettersOf(answer),
       };
@@ -78,13 +61,11 @@ export class BuilderRound {
   protected readonly foundCount = computed(() => this.answers().filter(({ isFound }) => isFound).length);
   protected readonly isAllFound = computed(() => this.foundCount() === this.answers().length);
 
-  /** Shows the words still missing and ends these letters */
   protected showWords(): void {
     this.gaveUp.set(true);
     this.picked.set([]);
   }
 
-  /** Takes a reported word off the list; the page sends the report */
   protected report(word: string): void {
     this.removed.update((removed) => [...removed, word]);
     this.found.update((found) => found.filter((foundWord) => foundWord !== word));
@@ -92,7 +73,6 @@ export class BuilderRound {
     this.reported.emit(word);
   }
 
-  /** Typing picks letters, Backspace deletes the last one and Enter checks the word */
   protected onKey(event: KeyboardEvent): void {
     const key = typedKey(event);
     if (!key || this.isRevealed() || this.isAllFound()) {

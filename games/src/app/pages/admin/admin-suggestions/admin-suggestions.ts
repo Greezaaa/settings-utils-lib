@@ -6,10 +6,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 import { PagedList } from '../paged-list';
 import { saveFailedNotice } from '../save-failed-notice';
 
-/**
- * Admin tab: the suggestions players sent, by status (new, read, archived), a page at a time, with their pictures on
- * request; each can be moved to another status or deleted for good.
- */
 @Component({
   selector: 'app-admin-suggestions',
   host: { class: 'admin-tab' },
@@ -27,7 +23,6 @@ export class AdminSuggestions {
   protected readonly status = signal<SuggestionStatus>('new');
   protected readonly list = new PagedList(offset => this.admin.suggestions(this.status(), offset));
   private readonly notifySaveFailed = saveFailedNotice();
-  /** Pictures loaded so far, by suggestion, as object URLs released when the tab closes */
   protected readonly images = signal<ReadonlyMap<string, string>>(new Map());
 
   constructor() {
@@ -62,7 +57,6 @@ export class AdminSuggestions {
     return SUGGESTION_STATUSES.filter(other => other !== status);
   }
 
-  /** A moved or deleted suggestion no longer belongs to this status */
   private async afterChange(suggestion: AdminSuggestion, change: Promise<boolean>): Promise<void> {
     if (await change) {
       this.list.remove(suggestion);

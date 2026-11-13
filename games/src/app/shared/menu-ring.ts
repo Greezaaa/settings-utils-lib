@@ -1,11 +1,6 @@
 import { afterNextRender, afterRenderEffect, DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, signal } from '@angular/core';
 import { DriftShape } from './drift-shape';
 
-/**
- * A playful shape for a menu (see DriftShape): a filled pill behind the current page's link (`a.active`) that drifts
- * after the pointer, fills the link it reaches, and goes over to a new current link. Never for visitors whose device
- * asks for less motion. Turn it on with `[appMenuRing]="true"`; its look is `.menu-ring` in styles.scss.
- */
 @Directive({
   selector: '[appMenuRing]',
   host: {
@@ -22,7 +17,6 @@ export class MenuRing {
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
-  /** Whether this device suits the shape: no wish for less motion */
   private readonly suits = signal(false);
   private shape: DriftShape | null = null;
 
@@ -42,7 +36,6 @@ export class MenuRing {
         );
       }
     });
-    // Shown (on the current page's link) when turned on, gone when turned off
     afterRenderEffect(() => {
       if (this.isOn()) {
         this.shape?.rest();

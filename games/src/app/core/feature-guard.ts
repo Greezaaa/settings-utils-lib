@@ -4,10 +4,6 @@ import { CanActivateFn, Router } from '@angular/router';
 import { FeatureFlags } from './feature-flags';
 import { FeatureId } from './features';
 
-/**
- * Lets a feature's page open only when the feature is open, or in preview; otherwise goes to the home page.
- * Always passes while prerendering, so the page is built.
- */
 export const featureGuard =
   (feature: FeatureId): CanActivateFn =>
   async () => {

@@ -1,4 +1,3 @@
-// eslint.config.js
 // @ts-check
 const eslint = require('@eslint/js');
 const tseslint = require('typescript-eslint');
@@ -21,7 +20,6 @@ module.exports = tseslint.config(
     },
     rules: {},
   },
-  // ✅ TypeScript + Prettier
   {
     files: ['projects/settings-utils/src/**/*.ts'],
     plugins: {
@@ -132,7 +130,6 @@ module.exports = tseslint.config(
       radix: 'error',
     },
   },
-  // ✅ HTML linting (NO Prettier)
   {
     files: ['**/*.html'],
     languageOptions: {
@@ -150,8 +147,6 @@ module.exports = tseslint.config(
       '@angular-eslint/template/no-negated-async': 'error',
       '@angular-eslint/template/alt-text': 'warn',
       '@angular-eslint/template/button-has-type': 'error',
-      // prettier disabled here 👇
-      // 'prettier/prettier': 'error',
     },
   },
 );

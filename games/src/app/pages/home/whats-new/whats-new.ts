@@ -7,16 +7,9 @@ import { LAST_SEEN_STORAGE, LATEST_VERSION, recentChanges, UPDATE_KIND_TAGS } fr
 import { SiteLanguage } from '../../../i18n/site-language';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/** Changes shown at first, and with "Show more updates" */
 const SHORT_LIST = 3;
 const LONG_LIST = 15;
 
-/**
- * "What's new" on the home page: the latest changes to the site, newest first, 3 at first and up to 15 on request.
- * Each change has a tag saying what it's about; changes since the visitor's last visit also get a "New" badge.
- * They count as seen once the visitor leaves the home page, so a reload keeps them. Changes about a game that isn't open,
- * or a feature that's switched off, aren't listed.
- */
 @Component({
   selector: 'app-whats-new',
   imports: [TranslatePipe, RouterLink],
@@ -31,9 +24,7 @@ export class WhatsNew {
   protected readonly t = this.language.messages;
 
   protected readonly isExpanded = signal(false);
-  /** The version the visitor saw last, read in the browser; null on a first visit or while prerendering */
   private readonly lastSeen = signal<number | null>(null);
-  /** Whether the list has been shown in the browser (not while prerendering), so its versions count as seen */
   private readonly inBrowser = signal(false);
 
   private readonly changes = computed(() =>

@@ -3,18 +3,12 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { AdminApi, Invite, MEMBER_ROLES, MemberRole, TeamMember } from '../../../core/admin-api';
 import { ADMIN_INVITE_PATH } from '../../../core/links';
 
-/** A fresh invite link to copy, for whom */
 interface ShownInvite {
   readonly email: string;
   readonly url: string;
   readonly expires: Date;
 }
 
-/**
- * Super admin tab: the team. Add a moderator or tester with a starting password, or leave the password empty to get an
- * invite link to copy and send (they choose their own password); change their role, turn them on or off, or make a new
- * link for them.
- */
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
@@ -33,12 +27,10 @@ export class AdminTeam {
   protected readonly members = signal<readonly TeamMember[]>([]);
   protected readonly invite = signal<ShownInvite | null>(null);
   protected readonly isCopied = signal(false);
-  /** Adding someone already on the team; other failures show as a notification */
   protected readonly isAlreadyOnTeam = signal(false);
   private readonly notifySaveFailed = saveFailedNotice();
   protected readonly isSaving = signal(false);
   protected readonly roles = MEMBER_ROLES;
-  /** The role for the next member added */
   protected readonly newRole = signal<MemberRole>('moderator');
 
   constructor() {
@@ -68,7 +60,6 @@ export class AdminTeam {
     this.show(member.email, await this.admin.reinvite(member.id));
   }
 
-  /** Moderator ↔ tester */
   protected async switchRole(member: TeamMember): Promise<void> {
     const role: MemberRole = member.role === 'tester' ? 'moderator' : 'tester';
     if (await this.admin.setRole(member.id, role)) {
@@ -91,7 +82,6 @@ export class AdminTeam {
     this.isCopied.set(true);
   }
 
-  /** Selects the whole link when its box gets focus, ready to copy by hand */
   protected selectAll(event: FocusEvent): void {
     if (event.target instanceof HTMLInputElement) {
       event.target.select();

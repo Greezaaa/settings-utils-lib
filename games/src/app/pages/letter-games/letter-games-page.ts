@@ -18,14 +18,8 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'done';
 
-/** How long a finished word stays before the next one */
 const SOLVED_MS = 700;
 
-/**
- * Letter games: the settings screen, the progress through the words and the end screen.
- * Each kind of round is its own component; the words come from the word bank of the site's language,
- * so changing the language goes back to the settings.
- */
 @Component({
   selector: 'app-letter-games-page',
   imports: [TranslatePipe, BuilderRound, GameBoard, GameFeedback, GapRound, MixedRound, RouterLink, TimerBar],
@@ -45,7 +39,6 @@ export class LetterGamesPage {
   private readonly api = inject(GamesApi);
 
   private readonly bank = computed(() => WORD_BANKS[this.language.language()]);
-  /** The word builder's dictionary in the site's language, and how its download is doing */
   protected readonly dictionary = computed(() => this.dictionaries.wordsOf(this.language.language()));
   protected readonly dictionaryStatus = computed(() => this.dictionaries.status(this.language.language()));
   protected readonly commonWords = computed(() => this.dictionaries.commonWordsOf(this.language.language()));
@@ -62,16 +55,13 @@ export class LetterGamesPage {
     () => BUILDER_LEVELS.find(({ id }) => id === this.builderLevelId()) ?? BUILDER_LEVELS[0],
   );
   protected readonly countdown = new Countdown();
-  /** The game ended because time ran out (or, in the word builder, the letters' time did) */
   protected readonly isTimeUp = signal(false);
   private nextWordTimer?: ReturnType<typeof setTimeout>;
 
-  /** Back to the settings whenever the language, and so the words, change */
   protected readonly phase = linkedSignal({ source: this.language.language, computation: (): Phase => 'ready' });
 
   constructor() {
     inject(DestroyRef).onDestroy(() => this.stopTimers());
-    // The dictionary downloads as soon as the word builder is chosen, in the browser only
     afterRenderEffect(() => {
       if (this.isBuilder()) {
         void this.dictionaries.load(this.language.language());
@@ -90,7 +80,6 @@ export class LetterGamesPage {
   );
   protected readonly gapWord = computed(() => this.gapWords()[this.index()] ?? null);
   protected readonly mixedWord = computed(() => this.mixed()[this.index()] ?? null);
-  /** Words finished: all of them, or those before time ran out */
   protected readonly wordsDone = computed(() => (this.isTimeUp() ? this.index() : this.total()));
 
   protected start(): void {
@@ -117,7 +106,6 @@ export class LetterGamesPage {
     this.startWordTimer();
   }
 
-  /** A new set of letters for the word builder, with its own time */
   protected newLetters(): void {
     const { letters, seconds } = this.builderLevel();
     this.letterSet.set(createLetterSet(this.bank(), letters, Math.random));
@@ -127,7 +115,6 @@ export class LetterGamesPage {
     }
   }
 
-  /** The word is right: it stays a moment, finished, then the next one comes */
   protected onSolved(): void {
     this.countdown.stop();
     this.nextWordTimer = setTimeout(() => {
@@ -143,7 +130,6 @@ export class LetterGamesPage {
     }, SOLVED_MS);
   }
 
-  /** A bonus word reported as rude: it stops counting here straight away, and the API counts the report */
   protected onReported(word: string): void {
     const language = this.language.language();
     this.dictionaries.hide(language, word);
@@ -154,7 +140,6 @@ export class LetterGamesPage {
     this.mistakes.update((mistakes) => mistakes + 1);
   }
 
-  /** With the timer on, each word of the first three games has its own time; running out ends the game */
   private startWordTimer(): void {
     if (!this.isTimed() || this.isBuilder()) {
       return;

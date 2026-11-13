@@ -7,7 +7,6 @@ import type { FeedbackInput } from './feedback.schema.js';
 import { feedbackSchema } from './feedback.schema.js';
 import { FeedbackService, FeedbackSummary } from './feedback.service.js';
 
-/** Anonymous 👍/👎 per game from the games site; the browser remembers it voted, the API keeps no visitor data */
 @Controller('v1/feedback')
 export class FeedbackController {
   constructor(private readonly feedback: FeedbackService) {}
@@ -22,7 +21,6 @@ export class FeedbackController {
   }
 }
 
-/** For moderators: what players think of each game */
 @Controller('admin/feedback')
 @UseGuards(AdminGuard)
 export class FeedbackAdminController {

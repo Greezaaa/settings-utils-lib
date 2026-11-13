@@ -21,11 +21,6 @@ export const GAME_SLUGS = [
   'secret-word',
 ] as const;
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'it', 'uk'] as const;
-/**
- * Features the admin switches on or off for the public (games/src/app/core/features.ts): rooms, and each game in rooms
- * on its own (`rooms-<game>`), apart from the game's single-player switch, and
- * settings like answers in words (`answer-words`)
- */
 export const FEATURE_IDS = [
   'rooms',
   'rooms-math-games',
@@ -52,7 +47,6 @@ export const FEATURE_IDS = [
 
 export type GameSlug = (typeof GAME_SLUGS)[number];
 
-/** Games that keep players' best results, for accounts and the leaderboard */
 export const RESULT_GAME_SLUGS = [
   'math-games',
   'climb-tower',
@@ -104,7 +98,6 @@ const RESULT_LIMITS: Readonly<
   'place-pieces': { min: () => 2, max: 100_000 },
 };
 
-/** Whether a game could really give this result */
 export function isPlausibleResult({
   game,
   key,

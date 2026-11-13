@@ -21,26 +21,17 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'over';
 
-/** Why the game ended */
 type Ending = 'wrong' | 'timeout';
 
-/** Best scores are kept apart for each combination of settings, e.g. `your-answer:timer:normal` */
 type ScoreKey = `${AnswerStyleId}:${TimerId}:${LevelId}`;
 type BestScores = Partial<Record<ScoreKey, number>>;
 
-/** A level button: its id and its translated text */
 type LevelOption = OptionText & { readonly id: LevelId };
 
 const BEST_SCORES_STORAGE = RESULT_GAMES['math-games'].storage;
 
-/** Level picked when the chosen one doesn't exist for the new answer style */
 const DEFAULT_LEVEL: LevelId = 'normal';
 
-/**
- * Math games: the settings screen, the score and the timer.
- * Each answer style is its own round component; this page only hears whether an answer was right.
- * All text comes from the site's language (see i18n/).
- */
 @Component({
   selector: 'app-math-games-page',
   imports: [TranslatePipe, FindTheSignsRound, GameBoard, GameFeedback, RouterLink, TimerBar, TrueOrFalseRound, YourAnswerRound],
@@ -49,7 +40,6 @@ const DEFAULT_LEVEL: LevelId = 'normal';
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './math-games-page.scss'],
 })
 export class MathGamesPage {
-  /** The home page, which lists every game */
   protected readonly gamesPath = '/';
   protected readonly timers = TIMER_IDS;
   protected readonly answerStyles = ANSWER_STYLE_IDS;
@@ -65,7 +55,6 @@ export class MathGamesPage {
   protected readonly isTimed = computed(() => this.timerId() === 'timer');
   protected readonly isSigns = computed(() => this.answerStyleId() === 'find-the-signs');
 
-  /** Level buttons; Find the signs has its own levels */
   protected readonly levels = computed<readonly LevelOption[]>(() => {
     const { levels, signsLevels } = this.t().settings;
     return this.isSigns()
@@ -76,7 +65,6 @@ export class MathGamesPage {
   protected readonly signsLevel = computed(() => getSignsLevel(this.levelId()));
   private readonly timing = computed<Timing>(() => (this.isSigns() ? this.signsLevel() : this.level()));
 
-  /** Settings of the current game, shown on the end screen */
   protected readonly settingsLabel = computed(() => {
     const { answerStyles, timers } = this.t().settings;
     const level = this.levels().find(({ id }) => id === this.levelId());
@@ -89,7 +77,6 @@ export class MathGamesPage {
   protected readonly score = signal(0);
   protected readonly ending = signal<Ending>('wrong');
   protected readonly isNewBest = signal(false);
-  /** The player's last answer, shown when it ends the game */
   protected readonly given = signal('');
 
   private readonly bestScores = signal<BestScores>({});
@@ -98,7 +85,6 @@ export class MathGamesPage {
 
   protected readonly countdown = new Countdown();
 
-  /** The equation with its right answer, shown when the game ends */
   protected readonly solution = computed(() => {
     const puzzle = this.puzzle();
     const question = this.question();
@@ -137,7 +123,6 @@ export class MathGamesPage {
     this.nextQuestion();
   }
 
-  /** Back to the settings, from the end or in the middle of a game (its timer stops, so nothing ends it later) */
   protected backToSettings(): void {
     this.countdown.stop();
     this.phase.set('ready');
@@ -183,7 +168,6 @@ export class MathGamesPage {
   }
 }
 
-/** Best scores saved in this browser, keeping only known keys with numeric values */
 function readBestScores(): BestScores {
   const stored = readStored(BEST_SCORES_STORAGE);
   if (typeof stored !== 'object' || stored === null) {

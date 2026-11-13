@@ -3,7 +3,6 @@ import { MIN_PASSWORD_LENGTH } from '../auth/passwords.js';
 import { gameSchema, isPlausibleResult, resultGameSchema } from '../shared/catalog.js';
 import { screenNameSchema } from './screen-name.js';
 
-/** Sign-in: 3 to 30 letters, digits, dots, dashes or underscores; compared lowercase */
 export const loginNameSchema = z
   .string()
   .trim()
@@ -18,7 +17,6 @@ export const registerSchema = z.object({
   password: passwordSchema,
   screenName: screenNameSchema,
   email: emailSchema.optional(),
-  /** Whether the player appears on the leaderboards; off unless they choose it */
   showOnLeaderboard: z.boolean().default(false),
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
@@ -29,10 +27,6 @@ export const signInSchema = z.object({
 });
 export type SignInInput = z.infer<typeof signInSchema>;
 
-/**
- * Changes to the account: a new screen name, an email (null removes it; changing it needs the password), or whether the
- * player appears on the leaderboards
- */
 export const changeSchema = z.object({
   screenName: screenNameSchema.optional(),
   email: emailSchema.nullable().optional(),
@@ -40,7 +34,6 @@ export const changeSchema = z.object({
 });
 export type ChangeInput = z.infer<typeof changeSchema>;
 
-/** Whether the player appears on the leaderboards: a switch, so it has its own, more relaxed limit */
 export const leaderboardChoiceSchema = z.object({ show: z.boolean() });
 
 export const changePasswordSchema = z.object({
@@ -58,7 +51,6 @@ export const favoritesSchema = z.object({
   games: z.array(gameSchema).max(50),
 });
 
-/** A game's settings, as the games site names them, e.g. `which-one:normal` */
 const resultKeySchema = z
   .string()
   .regex(/^[a-z0-9-]{1,20}(:[a-z0-9-]{1,20}){0,3}$/)
@@ -71,16 +63,11 @@ const resultShape = z.object({
   value: resultValueSchema,
 });
 
-/** A finished game; a result the game can't give is refused */
 export const resultSchema = resultShape.refine(isPlausibleResult, {
   message: 'implausible-result',
 });
 export type ResultInput = z.infer<typeof resultSchema>;
 
-/**
- * Best results the browser kept before signing in, to add to the account; ones the game can't give are left out
- * quietly, so one odd value kept in a browser doesn't stop the others
- */
 export const bestsSchema = z.object({
   bests: z
     .array(resultShape)

@@ -1,44 +1,23 @@
 import { randomInt } from 'node:crypto';
 import type { LanguageId } from '../shared/catalog.js';
 
-/**
- * Multiplayer rooms (rooms.su-labs.dev): rules only, no sockets, so they can be tested on their own.
- *
- * A host creates a room and shares its short code; up to 4 players join, each with a generated nickname and avatar
- * (nothing stored). A signed-in player may bring their screen name, once a moderator approved it (a name pass from the
- * API); it shows only when the host turns players' own names on, and anyone can hide it for the room. The host picks the game and settings, everyone presses Ready, the host starts, and
- * all play the same exercises or puzzles (one shared random seed) for the same time; the most points wins (a right
- * answer, or a piece put in place, scores one).
- */
-
 export const MAX_PLAYERS = 4;
 export const MIN_PLAYERS_TO_START = 2;
-/** Round lengths the host can choose, in seconds */
 export const ROUND_SECONDS = [30, 60, 90, 120] as const;
 export type RoundSeconds = (typeof ROUND_SECONDS)[number];
-/** The 3-2-1 before a round, so every screen starts together */
 export const COUNTDOWN_MS = 3500;
-/** Late scores are still taken this long after the end, for slow connections */
 export const SCORE_GRACE_MS = 1500;
 
-/** Room codes: 6 characters with nothing easy to mix up (no 0/O, 1/I/L) */
 export const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 export const CODE_LENGTH = 6;
 
-/** Nickname and avatar parts, as ids; each screen shows them in its own language (games site, i18n) */
 export const ADJECTIVE_COUNT = 16;
 export const ANIMAL_COUNT = 16;
 export const COLOR_COUNT = 8;
 
-/**
- * Whether a player chose to be spoken to as a boy or a girl on the games site; each screen then writes their status
- * ("ready", "host") to match, and their animal fits: a girl gets one whose name is feminine (turtle, otter, squirrel,
- * giraffe), a boy one whose name is masculine, as far as the free animals allow
- */
 export const PLAYER_GENDERS = ['boy', 'girl'] as const;
 export type PlayerGender = (typeof PLAYER_GENDERS)[number];
 
-/** The hand-drawn stickers players can send each other in a room (the games site has their pictures) */
 export const REACTIONS = [
   'shy',
   'happy',
@@ -49,7 +28,6 @@ export const REACTIONS = [
   'cry',
 ] as const;
 export type Reaction = (typeof REACTIONS)[number];
-/** Least time between two stickers from the same player, so nobody can flood the others' screens */
 export const REACTION_GAP_MS = 1500;
 const GIRL_ANIMALS: readonly number[] = [9, 11, 13, 15];
 const animalsFor = (gender: PlayerGender | null): readonly number[] => {
@@ -62,7 +40,6 @@ const animalsFor = (gender: PlayerGender | null): readonly number[] => {
     : all;
 };
 
-/** Games that can be played in a room; each has its own multiplayer switch on the games site */
 export const ROOM_GAMES = [
   'math-games',
   'measure-it',
@@ -75,15 +52,11 @@ export type RoomGame = (typeof ROOM_GAMES)[number];
 
 export interface RoomSettings {
   readonly game: RoomGame;
-  /** The game's own mode and level ids (e.g. math: answer style and level), checked by the games site */
   readonly mode: string;
   readonly level: string;
   readonly seconds: RoundSeconds;
-  /** The room's language, for games with words */
   readonly language: LanguageId;
-  /** Whether scores show during the round; some players rush (and slip) when they see them. Results always show them */
   readonly showScores: boolean;
-  /** Whether players' approved screen names show instead of their nicknames; off unless the host turns it on */
   readonly ownNames: boolean;
 }
 
@@ -94,17 +67,13 @@ export interface Nickname {
 
 export interface Player {
   readonly id: string;
-  /** Secret that lets this player come back after a reload; never shown to others */
   readonly token: string;
-  /** Changes only when the player asks for another one, in the lobby */
   nickname: Nickname;
-  /** The player's approved screen name, from a name pass; null without one, or once someone in the room hid it */
   ownName: string | null;
   readonly color: number;
   readonly gender: PlayerGender | null;
   ready: boolean;
   connected: boolean;
-  /** When the connection dropped, to give up on the seat after a while */
   disconnectedAt: number | null;
   score: number;
 }
@@ -145,11 +114,9 @@ export const DEFAULT_SETTINGS: RoomSettings = {
   ownNames: false,
 };
 
-/** A whole number from 0 to `max - 1`, from a secure source by default */
 export type RandomInt = (max: number) => number;
 const secureInt: RandomInt = (max) => randomInt(max);
 
-/** A room code no other room has */
 export function newCode(
   taken: ReadonlySet<string>,
   random: RandomInt = secureInt,
@@ -165,7 +132,6 @@ export function newCode(
   }
 }
 
-/** A random pick among the numbers below `count` that `used` doesn't hold, from `preferred` while one is free */
 function freeNumber(
   count: number,
   used: readonly number[],
@@ -180,7 +146,6 @@ function freeNumber(
   return choices[random(choices.length)];
 }
 
-/** A nickname whose adjective and animal none of `taken` has, the animal fitting the player's choice */
 function freeNickname(
   taken: readonly Player[],
   random: RandomInt,
@@ -201,7 +166,6 @@ function freeNickname(
   };
 }
 
-/** A new player with a nickname and colour nobody else in the room has, the animal fitting their choice */
 export function newPlayer(
   others: readonly Player[],
   random: RandomInt = secureInt,
@@ -247,7 +211,6 @@ export function createRoom(
   };
 }
 
-/** Adds a player, unless the room is full or a round is on */
 export function join(
   room: Room,
   player: Player,
@@ -264,7 +227,6 @@ export function join(
   return null;
 }
 
-/** Takes a player out; when it was the host, the next player still connected (or any) takes over */
 export function removePlayer(room: Room, playerId: string, now: number): void {
   room.players = room.players.filter(({ id }) => id !== playerId);
   if (room.hostId === playerId && room.players.length > 0) {
@@ -288,7 +250,6 @@ export function setSettings(
     return 'wrong-phase';
   }
   room.settings = settings;
-  // New settings: everyone confirms again
   room.players.forEach((player) => (player.ready = false));
   room.lastActivity = now;
   return null;
@@ -309,10 +270,6 @@ export function setReady(
   return null;
 }
 
-/**
- * Hides a player's own name for everyone in the room, in any phase: someone found it rude (and reported it to the
- * API). The player shows with their nickname from then on, even if the host turns names on again
- */
 export function hideName(
   room: Room,
   playerId: string,
@@ -327,7 +284,6 @@ export function hideName(
   return null;
 }
 
-/** In the lobby, gives a player another random nickname, unlike their own and everyone else's */
 export function renamePlayer(
   room: Room,
   playerId: string,
@@ -343,7 +299,6 @@ export function renamePlayer(
   return null;
 }
 
-/** A round can start in the lobby with at least 2 connected players, all of them ready */
 export function canStart(room: Room): boolean {
   const connected = room.players.filter((player) => player.connected);
   return (
@@ -353,7 +308,6 @@ export function canStart(room: Room): boolean {
   );
 }
 
-/** Starts a round: the countdown, then everyone plays the same exercises (same seed) for the chosen time */
 export function startRound(
   room: Room,
   playerId: string,
@@ -378,13 +332,8 @@ export function startRound(
   return null;
 }
 
-/** Most answers a player could plausibly give per second; higher scores are capped */
 const MAX_ANSWERS_PER_SECOND = 3;
 
-/**
- * Takes a player's score during the round (the latest report, which can be lower after a wrong answer, capped to what
- * is plausible for the time played), and moves the room from countdown to playing once the round has started
- */
 export function reportScore(
   room: Room,
   playerId: string,
@@ -403,12 +352,10 @@ export function reportScore(
   }
   const elapsedSeconds = (Math.min(now, round.endsAt) - round.startsAt) / 1000;
   const plausible = Math.ceil(elapsedSeconds * MAX_ANSWERS_PER_SECOND);
-  // The latest report counts, so a score can fall: a wrong answer takes a point off
   player.score = Math.min(Math.floor(score), plausible);
   room.lastActivity = now;
 }
 
-/** Moves the room along the clock: countdown → playing → results */
 export function advance(room: Room, now: number): boolean {
   const round = room.round;
   if (!round) {
@@ -426,7 +373,6 @@ export function advance(room: Room, now: number): boolean {
   return false;
 }
 
-/** Back to the lobby after the results, for another round with the same players */
 export function playAgain(
   room: Room,
   playerId: string,
@@ -444,7 +390,6 @@ export function playAgain(
   return null;
 }
 
-/** Each player's place by score; equal scores share a place */
 export function places(players: readonly Player[]): Map<string, number> {
   const sorted = [...players].sort(
     (first, second) => second.score - first.score,
@@ -462,7 +407,6 @@ export function places(players: readonly Player[]): Map<string, number> {
   return result;
 }
 
-/** What every player in the room sees: no tokens */
 export interface RoomView {
   readonly code: string;
   readonly hostId: string;
@@ -472,7 +416,6 @@ export interface RoomView {
   readonly players: readonly {
     readonly id: string;
     readonly nickname: Nickname;
-    /** Their approved screen name while the host shows players' own names; null shows the nickname */
     readonly name: string | null;
     readonly color: number;
     readonly gender: PlayerGender | null;
@@ -481,13 +424,11 @@ export interface RoomView {
     readonly score: number;
     readonly place: number | null;
   }[];
-  /** The server's clock when this was sent, so screens can line up the countdown */
   readonly serverNow: number;
 }
 
 export function viewOf(room: Room, now: number): RoomView {
   const ranking = room.phase === 'results' ? places(room.players) : null;
-  // With scores hidden, nobody gets them before the results, not even by reading the messages
   const hideScores =
     !room.settings.showScores &&
     (room.phase === 'countdown' || room.phase === 'playing');

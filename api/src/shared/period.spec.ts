@@ -1,7 +1,6 @@
 import { periodStart } from './period.js';
 
 describe('periodStart', () => {
-  // A Sunday
   const now = new Date('2026-11-08T15:00:00Z');
 
   it('starts each period on its calendar day, and all time has no start', () => {

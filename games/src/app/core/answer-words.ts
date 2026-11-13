@@ -7,11 +7,6 @@ const STORAGE = 'answer-words';
 export type AnswerStyle = 'colours' | 'words';
 export const ANSWER_STYLES: readonly AnswerStyle[] = ['colours', 'words'];
 
-/**
- * The visitor's choice, in the header settings, of how every game shows answers: colours only (the default), or
- * colours with a short line of words ("Right!", "Not quite: 60°"). Remembered in this browser; the setting only
- * shows, and words only appear, while its feature switch (`answer-words`) is on.
- */
 @Injectable({ providedIn: 'root' })
 export class AnswerWords {
   private readonly features = inject(FeatureFlags);

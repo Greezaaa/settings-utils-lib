@@ -1,6 +1,4 @@
 // A real checkbox drawn as a sliding switch, for the privacy and admin pages:
-// <label class="switch"><input type="checkbox" role="switch" /><span class="track" aria-hidden="true"></span>…</label>
-// (the input comes right before its track)
 .switch {
   align-items: center;
   cursor: pointer;
@@ -17,15 +15,12 @@
 }
 
 .track {
-  // Sizes: pages may set their own (the admin's switches are smaller); the rest follows from them
   --switch-width: 3rem;
   --switch-height: 1.75rem;
   --switch-inset: 0.1875rem;
   --switch-knob: calc(var(--switch-height) - 2 * var(--switch-inset));
   --switch-travel: calc(var(--switch-width) - var(--switch-height));
-  // How much the knob stretches while pressed
   --switch-stretch: calc(var(--switch-knob) * 0.3);
-  // The knob's phase: small and grey when off, full size when pressed or on
   --knob-width: var(--switch-knob);
   --knob-move: 0rem;
   --knob-scale: 0.7;
@@ -42,7 +37,6 @@
     box-shadow 200ms ease;
   width: var(--switch-width);
 
-  // The knob
   &::after {
     background: var(--knob-colour);
     border-radius: 9999px;
@@ -62,7 +56,6 @@
     width: var(--knob-width);
   }
 
-  // The tick that pops into the knob when on
   &::before {
     background: var(--button-text);
     content: '';
@@ -82,13 +75,11 @@
   }
 }
 
-// Pressed: the knob grows to full size and stretches towards where it's going
 .switch:active input + .track {
   --knob-scale: 1;
   --knob-width: calc(var(--switch-knob) + var(--switch-stretch));
 }
 
-// On: a soft accent track, the knob in the accent colour at the far end, with its tick
 .switch input:checked + .track {
   --knob-move: var(--switch-travel);
   --knob-scale: 1;
@@ -102,7 +93,6 @@
   }
 }
 
-// Pressed while on: it stretches back towards the off side, keeping its right edge
 .switch:active input:checked + .track {
   --knob-move: calc(var(--switch-travel) - var(--switch-stretch));
 

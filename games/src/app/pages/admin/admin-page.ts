@@ -16,16 +16,8 @@ type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offlin
 
 const TABS = ['games', 'plays', 'suggestions', 'words', 'players', 'errors', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];
-/** Tabs only the super admin sees: switching games and features, the error log, and the team */
 const SUPER_TABS: readonly Tab[] = ['games', 'errors', 'team'];
 
-/**
- * The admin page, at /<ADMIN_PATH> (see core/links.ts): sign in with email and password (the browser stays signed in
- * for 30 days), then switch games, see plays and feedback, and moderate suggestions, reported words and the players on
- * the leaderboards, one tab each.
- * Only the super admin switches games and features and manages the team; moderators and testers moderate, and
- * testers also use preview. Everyone can change their own password.
- */
 @Component({
   selector: 'app-admin-page',
   imports: [TranslatePipe, AdminAccount, AdminErrors, AdminGames, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
@@ -43,12 +35,10 @@ export class AdminPage {
 
   constructor() {
     afterNextRender(async () => {
-      // Without a session last time the form shows at once; the check goes on in the background
       if (!wasSignedIn('admin')) {
         this.signIn.set('idle');
       }
       const restored = await this.admin.restore();
-      // A sign-in started meanwhile keeps its own state
       if (this.signIn() === 'restoring') {
         this.signIn.set(restored === 'offline' ? 'offline' : 'idle');
       }
@@ -64,7 +54,6 @@ export class AdminPage {
     const answer = await this.admin.signIn(email.value.trim(), password.value);
     this.signIn.set(answer === 'right' ? 'idle' : answer);
     if (answer === 'right') {
-      // The super admin starts on the switches; signing in turns preview on for those who may use it
       this.tab.set(this.admin.isSuper() ? 'games' : 'plays');
       this.availability.setPreview(this.admin.canPreview());
     }

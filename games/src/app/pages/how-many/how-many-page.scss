@@ -1,6 +1,3 @@
-// How many? Big, bouncy and simple for three-year-olds: things pop in one by one, tapped things jump and get their
-// number, the right answer makes everything dance with confetti, a wrong one only shakes.
-
 .play {
   display: grid;
   gap: 1.25rem;
@@ -16,7 +13,6 @@
   gap: 0.75rem;
   width: 100%;
 
-  // The level choices take the free width, the sound button (when there is one) the rest
   .choices {
     flex: 1;
   }
@@ -105,7 +101,6 @@
   }
 }
 
-// The number a counted thing gets, in a bubble on its corner
 .badge {
   align-items: center;
   animation: pop 300ms ease-out;
@@ -124,7 +119,6 @@
   width: 2rem;
 }
 
-// A right answer: every thing dances
 .field.is-celebrating .emoji {
   animation: dance 600ms ease-in-out 2;
 }
@@ -134,7 +128,6 @@
   margin: 0;
 }
 
-// Rows of equal buttons, at most 5 to a row (1 to 10 makes two rows of 5)
 .answers {
   display: grid;
   gap: 0.5rem;
@@ -143,7 +136,6 @@
   width: 100%;
 }
 
-// Big number buttons, with dots under each number like on a dice
 .answer {
   align-items: center;
   background: var(--surface);
@@ -220,7 +212,6 @@
   color: var(--muted);
 }
 
-// Confetti bursting out from the middle, each piece along its own angle
 .confetti {
   inset: 0;
   pointer-events: none;
@@ -311,7 +302,6 @@
   }
 }
 
-// No bouncing, dancing or confetti for players who asked their device for less motion
 @media (prefers-reduced-motion: reduce) {
   :host * {
     animation: none !important;

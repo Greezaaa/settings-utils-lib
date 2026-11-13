@@ -4,7 +4,6 @@ import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { UtilityPage } from '../../shared/utility-page';
 
-/** One example message per notification type */
 const EXAMPLES: readonly { type: SuNotificationType; label: string; message: string }[] = [
   { type: 'success', label: 'Success', message: 'Your settings were saved.' },
   { type: 'info', label: 'Info', message: 'Version 22.1.0 is available.' },

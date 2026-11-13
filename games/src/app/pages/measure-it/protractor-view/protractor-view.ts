@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-/** The protractor's centre and radius, in the drawing's units */
 const CX = 120;
 const CY = 120;
 const RADIUS = 100;
 
-/** A point at `degrees` on a circle of `radius` around the centre (0° on the right, counterclockwise) */
 function pointAt(degrees: number, radius: number): { x: number; y: number } {
   const radians = (degrees * Math.PI) / 180;
   return {
@@ -14,17 +12,11 @@ function pointAt(degrees: number, radius: number): { x: number; y: number } {
   };
 }
 
-/** A ray drawn after an answer: green when right, red when wrong */
 export interface CheckedRay {
   readonly angle: number;
   readonly isRight: boolean;
 }
 
-/**
- * A drawn protractor from 0 to 180°, with a ray at `angle` from the 0° line. Its marks are every `marksEvery` degrees
- * (0 for none), numbered when `labels` is on, so harder levels can hide them. After an answer, `checked` adds a
- * coloured ray: the player's guess, or the right angle.
- */
 @Component({
   selector: 'app-protractor-view',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,7 +61,6 @@ export class ProtractorView {
       }
     );
   });
-  /** The small arc between the 0° line and the ray, showing the angle */
   protected readonly angleArc = computed(() => {
     const end = pointAt(this.angle(), 26);
     return `M ${CX + 26} ${CY} A 26 26 0 0 0 ${end.x} ${end.y}`;

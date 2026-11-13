@@ -1,14 +1,9 @@
-// Styles the rooms pages share
-
-// Create a room and join one: stacked on phones, side by side on wide screens
 .rooms-entry {
   display: grid;
   gap: 1rem;
-  // minmax(0, …): the code field never pushes the cards wider than a phone
   grid-template-columns: minmax(0, 1fr);
   max-width: 28rem;
 
-  // Wide screens: the cards share three rows (title, what's in the middle, button), so titles and buttons line up
   @media (min-width: 48rem) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto 1fr auto;
@@ -22,7 +17,6 @@
         align-self: center;
       }
 
-      // The code boxes are only as wide as their boxes: centred, like the rest of the card
       su-lib-code-boxes {
         margin-inline: auto;
       }
@@ -30,7 +24,6 @@
   }
 }
 
-// Both cards take the row's height (the grid stretches them)
 .entry-card {
   align-content: center;
   display: grid;
@@ -127,13 +120,11 @@
   justify-self: start;
 }
 
-// Players and game: side by side on wide screens, the players' strip stuck to the top on phones
 .room-layout {
   align-items: start;
   display: grid;
   gap: 1rem;
 
-  // Just below the sticky site header
   app-room-players {
     background: var(--bg);
     padding-block: 0.5rem;
@@ -142,8 +133,6 @@
     z-index: 4;
   }
 
-  // Phones and tablets: the stickers sit inside the game card's edge, so the card keeps room for them there. The card
-  // takes its cell explicitly, like the stickers do: otherwise the grid would move it to the next row, below them
   @media (max-width: 55.99rem) {
     > .card.board {
       grid-column: 1;
@@ -166,7 +155,6 @@
   @media (min-width: 56rem) {
     grid-template-columns: 16rem minmax(0, 1fr);
 
-    // The stickers, when on, in a narrow column right of the game (see room-reactions.scss)
     &:has(app-room-reactions) {
       grid-template-columns: 16rem minmax(0, 1fr) auto;
     }
@@ -179,18 +167,15 @@
   }
 }
 
-// Letter games: what to do, above the round
 .instructions {
   color: var(--heading);
   font-weight: 600;
 }
 
-// The word builder shows its words beside the letters, so it needs more room
 .board.is-wide {
   max-width: 48rem;
 }
 
-// The lobby: the game list and its settings side by side on wide screens, one under the other on phones
 .lobby {
   display: grid;
   gap: 1.5rem;
@@ -219,7 +204,6 @@
   gap: 0.375rem;
 }
 
-// One game per line, with its icon; the chosen one inverted
 .game-option {
   align-items: center;
   background: var(--surface);
@@ -262,7 +246,6 @@
   font-weight: 500;
 }
 
-// Small choices that wrap; round lengths stay on one line
 .chips {
   display: flex;
   flex-wrap: wrap;

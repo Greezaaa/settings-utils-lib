@@ -18,11 +18,6 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
 
-/**
- * Turn the picture: tap squares to turn them a quarter clockwise until the drawing is right again.
- * Look mode keeps the drawing visible under the board and marks the squares that are right; Memory mode
- * shows it only until Ready. A counter shows how many squares are right in both modes.
- */
 @Component({
   selector: 'app-turn-picture-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, RouterLink, TurnBoard],
@@ -45,7 +40,6 @@ export class TurnPicturePage {
   protected readonly levelId = signal<BoardLevelId>('normal');
   protected readonly level = computed(() => getPictureLevel(this.levelId()));
 
-  /** Chosen in the browser only, so the prerendered page and the first render agree */
   protected readonly picture = signal<GamePicture | null>(null);
   protected readonly turns = signal<Turns>([]);
   protected readonly phase = signal<PicturePhase>('playing');
@@ -62,7 +56,6 @@ export class TurnPicturePage {
 
   protected readonly cells = computed(() => Array.from({ length: cellCount(this.level()) }, (_, cell) => cell));
   protected readonly right = computed(() => tilesRight(this.turns()));
-  /** Look mode marks the squares that are already right */
   protected readonly showHints = computed(() => this.modeId() === 'look' && this.phase() === 'playing');
 
   constructor() {
@@ -89,7 +82,6 @@ export class TurnPicturePage {
     this.taps.set(0);
     this.isNewBest.set(false);
     if (this.modeId() === 'memory') {
-      // The whole picture first: every square in place until Ready
       this.turns.set(this.cells().map(() => 0));
       this.phase.set('preview');
     } else {
@@ -98,7 +90,6 @@ export class TurnPicturePage {
     }
   }
 
-  /** Memory mode: the player has looked; turn every square away and start */
   protected ready(): void {
     this.turns.set(scramble(this.level()));
     this.phase.set('playing');
@@ -107,7 +98,6 @@ export class TurnPicturePage {
   protected tap(cell: number): void {
     if (this.taps() === 0) {
       this.clock.start();
-      // The first move starts the game: count it as a play
       this.api.countPlay('turn-picture');
     }
     this.turns.update((turns) => turn(turns, cell));

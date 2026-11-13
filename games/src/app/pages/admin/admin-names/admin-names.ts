@@ -4,10 +4,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 import { PagedList } from '../paged-list';
 import { saveFailedNotice } from '../save-failed-notice';
 
-/**
- * The screen names waiting to show in rooms, reported ones first, a page at a time: allow one, or give a rude one a
- * plain name in its place. Part of the Players tab.
- */
 @Component({
   selector: 'app-admin-names',
   host: { class: 'admin-tab' },
@@ -34,7 +30,6 @@ export class AdminNames {
     await this.decided(name, this.admin.renamePlayer(name.id).then(screenName => screenName !== null));
   }
 
-  /** A decided name leaves the list */
   private async decided(name: PendingName, saved: Promise<boolean>): Promise<void> {
     if (await saved) {
       this.list.remove(name);

@@ -4,10 +4,6 @@ import { CanActivateFn, Router } from '@angular/router';
 import { GameAvailability } from './game-availability';
 import { GameSlug } from './games';
 
-/**
- * Lets a game's page open only when the game is open, or in preview; otherwise goes to the home page.
- * Always passes while prerendering, so every game's page is built.
- */
 export const gameAvailableGuard =
   (game: GameSlug): CanActivateFn =>
   async () => {

@@ -18,8 +18,6 @@ beforeAll(() => {
   }));
 });
 
-// Theme logic is covered by the SuThemeController tests in @su-labs/core/theme;
-// these tests cover the Angular wrapper only.
 describe('SuThemeService', () => {
   let service: SuThemeService;
 

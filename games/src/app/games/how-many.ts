@@ -1,6 +1,5 @@
 import { pick, Random } from './random';
 
-/** How many things a round can have at most: up to 3 for a start, then 5, 7 and 10 as counting gets easy */
 export type HowManyLevelId = 'easy' | 'normal' | 'hard' | 'expert';
 
 export interface HowManyLevel {
@@ -18,7 +17,6 @@ export const HOW_MANY_LEVELS: readonly HowManyLevel[] = [
 export const getHowManyLevel = (id: HowManyLevelId): HowManyLevel =>
   HOW_MANY_LEVELS.find((level) => level.id === id) ?? HOW_MANY_LEVELS[0];
 
-/** Things to count: animals, fruit and toys kids know, each easy to tell apart */
 export const COUNT_THINGS: readonly string[] = [
   '🐬',
   '🐟',
@@ -40,19 +38,13 @@ export const COUNT_THINGS: readonly string[] = [
 
 export const HOW_MANY_ROUNDS = 10;
 
-/** One round: a thing shown `count` times */
 export interface HowManyRound {
   readonly thing: string;
   readonly count: number;
 }
 
-/** The numbers a level asks for, from 1 */
 export const answersFor = ({ max }: HowManyLevel): number[] => Array.from({ length: max }, (_, index) => index + 1);
 
-/**
- * The rounds of a game: every count of the level comes up, never the same count or the same thing twice in a row,
- * so each round looks new
- */
 export function howManyRounds(level: HowManyLevel, random: Random, rounds = HOW_MANY_ROUNDS): HowManyRound[] {
   const counts = answersFor(level);
   const result: HowManyRound[] = [];
@@ -71,11 +63,9 @@ export function howManyRounds(level: HowManyLevel, random: Random, rounds = HOW_
   return result;
 }
 
-/** A little tilt and lift for each thing, so a round looks scattered rather than lined up; the same every render */
 export interface ThingPlace {
   readonly rotate: number;
   readonly lift: number;
-  /** When it pops in, so the things appear one after another */
   readonly delayMs: number;
 }
 

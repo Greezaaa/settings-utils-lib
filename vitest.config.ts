@@ -1,19 +1,29 @@
-import { configDefaults, defineConfig } from 'vitest/config';
 import { resolve } from 'path';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   resolve: {
-    // Resolve @su-labs/core entry points to source so tests don't need a prior build
     alias: [
-      { find: /^@su-labs\/core\/(.+)$/, replacement: resolve(__dirname, 'projects/su-labs/core/$1/src/public-api.ts') },
-      { find: /^@su-labs\/core$/, replacement: resolve(__dirname, 'projects/su-labs/core/src/public-api.ts') },
+      {
+        find: /^@su-labs\/core\/(.+)$/,
+        replacement: resolve(
+          __dirname,
+          'projects/su-labs/core/$1/src/public-api.ts'
+        ),
+      },
+      {
+        find: /^@su-labs\/core$/,
+        replacement: resolve(
+          __dirname,
+          'projects/su-labs/core/src/public-api.ts'
+        ),
+      },
     ],
   },
   test: {
     globals: true,
     environment: 'jsdom',
-    // .claude/ holds local tooling, including git worktrees of other sessions; api/ runs its own tests (npm run test:api)
-    exclude: [...configDefaults.exclude, '.claude/**', 'api/**'],
+    exclude: [...configDefaults.exclude, 'api/**'],
     setupFiles: resolve(__dirname, 'vitest.setup.ts'),
     coverage: {
       reporter: ['text', 'html'],

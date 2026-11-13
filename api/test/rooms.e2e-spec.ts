@@ -6,7 +6,6 @@ import { WebSocket } from 'ws';
 const ORIGIN = 'https://games.su-labs.dev';
 const ROOM_NAME_SECRET = 'n'.repeat(40);
 
-/** A player's connection that keeps every message it gets, and can wait for the next one of a kind */
 class Client {
   readonly socket: WebSocket;
   private readonly messages: {
@@ -14,7 +13,6 @@ class Client {
     data: Record<string, unknown>;
   }[] = [];
 
-  /** `ip`: the visitor's address as Cloudflare would send it, so a test can be a visitor of its own */
   constructor(url: string, origin = ORIGIN, ip?: string) {
     this.socket = new WebSocket(url, {
       origin,
@@ -36,7 +34,6 @@ class Client {
     this.socket.send(JSON.stringify({ event, data }));
   }
 
-  /** The next message of a kind (that matches `test`), waiting up to `timeoutMs` */
   async next(
     event: string,
     test: (data: Record<string, unknown>) => boolean = () => true,
@@ -106,7 +103,6 @@ describe('rooms service (e2e)', () => {
 
   it('shows an approved name only when the host turns names on, and anyone can hide it', async () => {
     const { signNamePass } = await import('../src/shared/name-pass.js');
-    /** The players' names as a room message shows them */
     const names = (data: Record<string, unknown>) =>
       Array.isArray(data['players'])
         ? data['players'].map((player: { name: string | null }) => player.name)
@@ -125,7 +121,6 @@ describe('rooms service (e2e)', () => {
       namePass: signNamePass('Lucía', ROOM_NAME_SECRET),
     });
     const code = String((await host.next('joined'))['code']);
-    // A pass signed with another secret is just ignored: the player shows with their nickname
     const guest = await connect(undefined, '10.8.0.2');
     guest.send('join', {
       code,
@@ -161,7 +156,6 @@ describe('rooms service (e2e)', () => {
     const guestJoined = await guest.next('joined');
     await host.next('room', playerCount(2));
 
-    // Only the host changes settings; a short round for the test
     guest.send('settings', {
       game: 'math-games',
       mode: 'your-answer',
@@ -182,7 +176,6 @@ describe('rooms service (e2e)', () => {
       (data) => (data['settings'] as { seconds: number }).seconds === 30,
     );
 
-    // Nobody starts until everyone is ready
     host.send('start');
     expect(await host.next('error')).toEqual({ error: 'not-ready' });
     host.send('ready', { ready: true });
@@ -252,7 +245,6 @@ describe('rooms service (e2e)', () => {
       guest.send('join', { code });
       await guest.next('joined');
     }
-    // Each join replaced the guest's old seat, so the room isn't full: two more can still come in
     for (let index = 0; index < 2; index++) {
       const other = await connect();
       other.send('join', { code });
@@ -273,7 +265,6 @@ describe('rooms service (e2e)', () => {
     expect(await guest.next('reaction')).toEqual(sticker);
     expect(await host.next('reaction')).toEqual(sticker);
 
-    // Too soon after the last one: dropped
     host.send('react', { reaction: 'laugh' });
     await expect(guest.next('reaction', () => true, 300)).rejects.toThrow();
 
@@ -285,7 +276,6 @@ describe('rooms service (e2e)', () => {
     const { MAX_ROOMS_PER_VISITOR } =
       await import('../src/rooms/rooms.gateway.js');
     for (let index = 0; index < MAX_ROOMS_PER_VISITOR; index++) {
-      // Different tabs of one visitor
       const host = await connect(ORIGIN, '10.9.0.1');
       host.send('create', { language: 'en' });
       await host.next('joined');

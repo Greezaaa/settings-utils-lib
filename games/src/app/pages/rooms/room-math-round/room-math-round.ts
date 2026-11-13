@@ -12,14 +12,6 @@ import { roundClock } from '../round-clock';
 import { scoreAfterAnswer } from '../../../games/room-games';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/**
- * A math round in a room: the round's whole list of exercises is built once from its seed, the same on every device,
- * and each player moves through it at their own pace, on the server's clock. Each right answer scores a point and is
- * sent to the room; a wrong one just moves on. It ends for everyone at the same moment.
- *
- * The room's state arrives again with every player's score, so everything here is keyed on the round's seed and
- * settings (plain values), never on those messages: a new message must not restart the round.
- */
 @Component({
   selector: 'app-room-math-round',
   imports: [TranslatePipe, FindTheSignsRound, TimerBar, TrueOrFalseRound, YourAnswerRound],
@@ -30,7 +22,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 export class RoomMathRound {
   readonly math = input.required<RoomMath>();
   readonly round = input.required<Round>();
-  /** The room's choice: show the player's own score during the round, or only in the results */
   readonly showScore = input(true);
   readonly scored = output<number>();
 
@@ -40,7 +31,6 @@ export class RoomMathRound {
     equal: (first, second) =>
       first.style === second.style && first.levelId === second.levelId,
   });
-  /** Every exercise of the round, built once when the round (its seed) or the settings change */
   private readonly exercises = computed(() =>
     roomExercises(this.settings(), this.seed())
   );
@@ -57,7 +47,6 @@ export class RoomMathRound {
   });
 
   protected readonly clock = roundClock(this.round);
-  /** Only Find the signs has signs to choose from (and only its levels exist for it) */
   protected readonly signsOperators = computed(() =>
     this.settings().style === 'find-the-signs'
       ? signsLevelOf(this.settings()).operators

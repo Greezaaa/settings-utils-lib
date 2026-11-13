@@ -5,11 +5,9 @@ import { RESULT_DIRECTIONS, ResultGame } from '../shared/catalog.js';
 import type { ResultInput } from './accounts.schema.js';
 import { PlayerResult } from './player-result.entity.js';
 
-/** Players shown per leaderboard, and leaderboards (settings) shown per game */
 const LEADERBOARD_SIZE = 10;
 const MAX_BOARDS = 12;
 
-/** One of a player's results, as their account gives it back */
 export interface MyResult {
   readonly game: string;
   readonly key: string;
@@ -19,7 +17,6 @@ export interface MyResult {
 
 export interface LeaderboardEntry {
   readonly place: number;
-  /** null for a player who chose not to show: ranked, but under no name */
   readonly screenName: string | null;
   readonly plays: number;
   readonly best: number;
@@ -28,28 +25,19 @@ export interface LeaderboardEntry {
 
 export interface Leaderboard {
   readonly key: string;
-  /** Everyone ranked on this board, and the games they finished, so visitors see how much it's played */
   readonly players: number;
   readonly plays: number;
-  /** The best players */
   readonly entries: LeaderboardEntry[];
-  /** The player asking, when they're ranked below the best players */
   readonly me: LeaderboardEntry | null;
 }
 
-/** SQL keeping the better of the stored best and a new value; directions come from the catalog, never a request */
 const betterOf = (game: ResultGame): string =>
   RESULT_DIRECTIONS[game] === 'higher' ? 'GREATEST' : 'LEAST';
 
-/** Games where a higher result is better; the others keep the lower one */
 const HIGHER_GAMES = Object.entries(RESULT_DIRECTIONS)
   .filter(([, direction]) => direction === 'higher')
   .map(([game]) => game);
 
-/**
- * One result per game and settings, the better one when a list repeats a key: a single insert can't change the same
- * row twice
- */
 export function betterPerKey(bests: readonly ResultInput[]): ResultInput[] {
   const byKey = new Map<string, ResultInput>();
   for (const best of bests) {
@@ -66,7 +54,6 @@ export function betterPerKey(bests: readonly ResultInput[]): ResultInput[] {
   return [...byKey.values()];
 }
 
-/** Players' results per game and settings: finished games counted, best results kept, and the leaderboards */
 @Injectable()
 export class ResultsService {
   constructor(
@@ -74,7 +61,6 @@ export class ResultsService {
     private readonly results: Repository<PlayerResult>,
   ) {}
 
-  /** A finished game: one more play, and a new best when it's better */
   async record(
     playerId: string,
     { game, key, value }: ResultInput,
@@ -87,7 +73,6 @@ export class ResultsService {
     );
   }
 
-  /** Best results from before signing in: kept when better, without counting plays; one query for all of them */
   async mergeBests(
     playerId: string,
     bests: readonly ResultInput[],
@@ -113,7 +98,6 @@ export class ResultsService {
     );
   }
 
-  /** Deletes a player's results: their plays, bests and places on the leaderboards; the account stays */
   async clear(playerId: string): Promise<void> {
     await this.results.delete({ playerId });
   }
@@ -131,12 +115,6 @@ export class ResultsService {
     }));
   }
 
-  /**
-   * A game's leaderboards: the best players for each of its settings, the most played settings first, and the asking
-   * player's own place below them. Only players who chose to appear are ranked, unless `withHidden` (the public
-   * leaderboards): then everyone is, those who chose not to appear under no name. A best kept from before the account
-   * (merged with no plays counted) still counts as one game played.
-   */
   async leaderboards(
     game: ResultGame,
     playerId: string | null,

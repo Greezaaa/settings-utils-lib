@@ -6,10 +6,6 @@ import { SiteLanguage } from '../../../i18n/site-language';
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/**
- * Admin tab, for the super admin: errors from the API and from visitors' browsers, latest first, each with its code,
- * title, problem, page, how many times and when it happened. Remove an error once it's fixed, or clear them all.
- */
 @Component({
   selector: 'app-admin-errors',
   host: { class: 'admin-tab' },
@@ -38,7 +34,6 @@ export class AdminErrors {
     this.loading.set(false);
   }
 
-  /** A moment in the visitor's language and time zone */
   protected when(iso: string): string {
     return formatMoment(iso, this.language.language());
   }

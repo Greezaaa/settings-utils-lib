@@ -1,6 +1,5 @@
 import { ThemeCssVariables } from '@su-labs/theme';
 
-/** Starting point for the editor: a warm paper palette */
 export const SAMPLE_CUSTOM_THEME: ThemeCssVariables = {
   background: '#f4ecd8',
   color: '#3b2f2f',
@@ -9,32 +8,18 @@ export const SAMPLE_CUSTOM_THEME: ThemeCssVariables = {
   'third-accent': '#4f6f52',
 };
 
-/** The only variables accepted, so the page never collects unknown `--su-theme-*` properties */
 const ALLOWED_KEYS: readonly string[] = ['background', 'color', 'main-accent', 'second-accent', 'third-accent'];
 
-/** Longest JSON accepted; the sample is about 150 characters */
 export const MAX_CUSTOM_THEME_LENGTH = 2000;
 
-/** WCAG AA contrast for normal text */
 const MIN_TEXT_CONTRAST = 4.5;
 
-/** A color in sRGB: red, green and blue from 0 to 255, alpha from 0 to 1 */
 export type Rgba = readonly [number, number, number, number];
 
-/** Turns a CSS color into sRGB, or returns null when it is not a color */
 export type ColorReader = (value: string) => Rgba | null;
 
 export type CustomThemeResult = { ok: true; variables: ThemeCssVariables } | { ok: false; error: string };
 
-/**
- * Read theme variables from JSON text, e.g. `{ "background": "#fff", "color": "#111" }`.
- *
- * Treats the text as untrusted: limits its size, accepts only the five theme variables,
- * requires literal colors (no `var()`, `url()` or other functions that aren't colors) and
- * requires opaque, readable text on the background.
- * @param json Text from the editor or an imported file.
- * @param readColor Converts a CSS color to sRGB; defaults to the browser's canvas.
- */
 export function parseCustomTheme(json: string, readColor: ColorReader = readCanvasColor): CustomThemeResult {
   if (json.length > MAX_CUSTOM_THEME_LENGTH) {
     return { ok: false, error: `Keep it under ${MAX_CUSTOM_THEME_LENGTH} characters. A theme needs only five colors.` };
@@ -88,13 +73,11 @@ export function parseCustomTheme(json: string, readColor: ColorReader = readCanv
   return { ok: true, variables };
 }
 
-/** WCAG contrast ratio between two opaque colors, from 1 to 21 */
 export function contrastRatio(first: Rgba, second: Rgba): number {
   const [lighter, darker] = [luminance(first), luminance(second)].sort((a, b) => b - a);
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-/** WCAG relative luminance */
 function luminance([red, green, blue]: Rgba): number {
   const [r, g, b] = [red, green, blue].map((channel) => {
     const value = channel / 255;
@@ -105,10 +88,6 @@ function luminance([red, green, blue]: Rgba): number {
 
 let canvasContext: CanvasRenderingContext2D | null | undefined;
 
-/**
- * Read a color with a 1x1 canvas. The canvas only accepts real colors (not `var()`, `url()`
- * or broken CSS) and converts any color space to sRGB.
- */
 function readCanvasColor(value: string): Rgba | null {
   canvasContext ??= document.createElement('canvas').getContext('2d', { willReadFrequently: true });
   const context = canvasContext;
@@ -116,7 +95,6 @@ function readCanvasColor(value: string): Rgba | null {
     return null;
   }
 
-  // An invalid value leaves fillStyle unchanged, so try it after two different colors
   context.fillStyle = '#000000';
   context.fillStyle = value;
   const afterBlack = context.fillStyle;

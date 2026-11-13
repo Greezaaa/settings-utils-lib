@@ -45,12 +45,10 @@ function createFormatter(output: vscode.LogOutputChannel): vscode.DocumentFormat
         const result = await formatDocument({ text, parser, filePath });
         if (result.warning) output.warn(result.warning);
         output.info(`${result.mode}: ${filePath ?? document.uri.toString()}`);
-        // A file in .prettierignore isn't touched at all, its imports included
         if (result.mode === 'ignored') return [];
         const formatted = result.text ?? text;
         return formatted === original ? [] : [replaceAll(document, formatted)];
       } catch (error) {
-        // Usually a syntax error while typing: leave the file as it is
         output.error(`${filePath ?? document.uri.toString()}: ${error instanceof Error ? error.message : String(error)}`);
         return [];
       }

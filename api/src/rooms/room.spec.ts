@@ -1,6 +1,5 @@
 import { advance, canStart, CODE_ALPHABET, COUNTDOWN_MS, createRoom, DEFAULT_SETTINGS, hideName, join, MAX_PLAYERS, newCode, newPlayer, places, playAgain, removePlayer, renamePlayer, reportScore, Room, SCORE_GRACE_MS, setReady, setSettings, startRound, viewOf } from './room.js';
 
-/** Always the same "random" numbers */
 const counter = () => {
   let next = 0;
   return (max: number) => next++ % max;
@@ -140,7 +139,6 @@ describe('rooms', () => {
 
     reportScore(room, first.id, 1000, startsAt + 2000);
     expect(first.score).toBe(6);
-    // A wrong answer takes a point off, so a lower score counts too
     reportScore(room, first.id, 3, startsAt + 11_000);
     expect(first.score).toBe(3);
     reportScore(room, first.id, 12, startsAt + 10_000);

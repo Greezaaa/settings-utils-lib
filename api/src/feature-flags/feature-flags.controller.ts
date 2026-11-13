@@ -8,12 +8,10 @@ import { FeatureFlagsService, FeatureSwitch } from './feature-flags.service.js';
 const switchSchema = z.object({ enabled: z.boolean() });
 type SwitchInput = z.infer<typeof switchSchema>;
 
-/** Which features are open to the public, read by the games site when it starts */
 @Controller('v1/features')
 export class FeatureFlagsController {
   constructor(private readonly flags: FeatureFlagsService) {}
 
-  /** Never cached: a switch the admin changes counts from the next read */
   @Get()
   @Header('Cache-Control', 'no-store')
   async list(): Promise<{ features: FeatureSwitch[] }> {
@@ -21,7 +19,6 @@ export class FeatureFlagsController {
   }
 }
 
-/** For the super admin: open or close a feature */
 @Controller('admin/features')
 @UseGuards(SuperAdminGuard)
 export class FeatureFlagsAdminController {

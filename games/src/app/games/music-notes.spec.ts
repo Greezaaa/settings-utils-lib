@@ -10,7 +10,6 @@ function seeded(seed = 1): Random {
   };
 }
 
-/** A sound with harmonics, like a voice or an instrument */
 function tone(frequency: number, sampleRate = 44_100, length = 2048, harmonics = [1, 0.5, 0.25]): Float32Array {
   return Float32Array.from(
     { length },

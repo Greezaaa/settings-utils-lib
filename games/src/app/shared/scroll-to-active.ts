@@ -1,10 +1,5 @@
 import { afterNextRender, DestroyRef, Directive, DOCUMENT, ElementRef, inject } from '@angular/core';
 
-/**
- * For a menu that scrolls sideways (the header menu on phones): whenever a link becomes the current page's
- * (`a.active`), the menu scrolls to bring it to the middle, so the page you're on is always in view. It never scrolls
- * the page itself, and glides only for visitors who don't ask their device for less motion.
- */
 @Directive({ selector: '[appScrollToActive]' })
 export class ScrollToActive {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
@@ -14,7 +9,6 @@ export class ScrollToActive {
 
   constructor() {
     afterNextRender(() => {
-      // Links come and go (the games list loads after the first render) and become current on each page change
       const watcher = new MutationObserver(() => this.reveal());
       watcher.observe(this.host, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true });
       this.reveal();
@@ -28,11 +22,9 @@ export class ScrollToActive {
     if (!active || active === this.activeLink) {
       return;
     }
-    // Nothing to scroll yet (e.g. before every game is listed): try again on the next change
     if (this.host.scrollWidth <= this.host.clientWidth) {
       return;
     }
-    // On a fresh page it jumps there (a glide would be cut short as the page itself scrolls to the top)
     const isFirst = this.activeLink === null;
     this.activeLink = active;
     const menu = this.host.getBoundingClientRect();

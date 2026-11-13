@@ -1,27 +1,17 @@
-/** Where a package is published */
 export type SuRegistry = 'npm' | 'vscode-marketplace';
 
-/** A published package, identified by its folder under `projects/su-labs` */
 export interface SuPackage {
-  /** Folder name and URL segment, e.g. `font-size` */
   readonly slug: string;
-  /** Display name, e.g. `Font size` */
   readonly name: string;
-  /** Name in its registry: the npm package name, or `publisher.name` for a VS Code extension */
   readonly packageName: string;
-  /** One-line description */
   readonly summary: string;
-  /** Where it's published; npm unless set */
   readonly registry?: SuRegistry;
 }
 
-/** A utility with an Angular package, and usually a `@su-labs/core` entry point too */
 export interface SuUtility extends SuPackage {
-  /** Entry point in `@su-labs/core`, e.g. `@su-labs/core/theme`; none for Angular-only packages */
   readonly coreEntry?: string;
 }
 
-/** The framework-agnostic package every utility is built on */
 export const CORE_PACKAGE: SuPackage = {
   slug: 'core',
   name: 'Core',
@@ -29,7 +19,6 @@ export const CORE_PACKAGE: SuPackage = {
   summary: 'Every utility without a framework, plus a tiny reactive store.',
 };
 
-/** All utilities, in the order they appear on the site */
 export const UTILITIES: readonly SuUtility[] = [
   {
     slug: 'theme',
@@ -81,7 +70,6 @@ export const UTILITIES: readonly SuUtility[] = [
   },
 ];
 
-/** Prettier plugin that keeps every import on one line, added to a project */
 export const PRETTIER_PLUGIN: SuPackage = {
   slug: 'prettier-plugin-single-line-imports',
   name: 'Prettier plugin',
@@ -89,7 +77,6 @@ export const PRETTIER_PLUGIN: SuPackage = {
   summary: 'Keeps every import on one line in a project, for everyone and every tool that runs Prettier.',
 };
 
-/** VS Code extension that keeps every import on one line in every project you open */
 export const VSCODE_EXTENSION: SuPackage = {
   slug: 'vscode-ts-one-line-imports',
   name: 'TS One-Line Imports',
@@ -99,16 +86,12 @@ export const VSCODE_EXTENSION: SuPackage = {
   registry: 'vscode-marketplace',
 };
 
-/** Developer tools, in the order they appear on the site */
 export const TOOLS: readonly SuPackage[] = [VSCODE_EXTENSION, PRETTIER_PLUGIN];
 
-/** Every package with a changelog: core first, then the utilities, then the tools */
 export const ALL_PACKAGES: readonly SuPackage[] = [CORE_PACKAGE, ...UTILITIES, ...TOOLS];
 
-/** Find a package by slug */
 export const findPackage = (slug: string): SuPackage | undefined => ALL_PACKAGES.find((item) => item.slug === slug);
 
-/** Find a utility by slug; throws for unknown slugs because pages pass constants */
 export function getUtility(slug: string): SuUtility {
   const utility = UTILITIES.find((item) => item.slug === slug);
   if (!utility) {

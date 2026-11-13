@@ -43,11 +43,8 @@ describe('real-world files', () => {
     const plain = await format(source, { ...OPTIONS, filepath: file });
     const formatted = await format(source, { ...OPTIONS, filepath: file, plugins: [plugin] });
 
-    // No import is wrapped, except ones with comments, which Prettier handles
     expect(wrappedImports(formatted).filter(text => !hasComment(text))).toEqual([]);
-    // Everything that isn't an import is exactly what Prettier produces
     expect(withoutImports(formatted)).toBe(withoutImports(plain));
-    // Formatting again changes nothing
     expect(await format(formatted, { ...OPTIONS, filepath: file, plugins: [plugin] })).toBe(formatted);
   });
 });

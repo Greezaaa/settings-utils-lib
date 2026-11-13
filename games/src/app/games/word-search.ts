@@ -1,13 +1,6 @@
 import { PictureWord } from './letter-games';
 import { pick, Random, shuffled } from './random';
 
-/**
- * Word search: rules only, no Angular, so they can be tested on their own. Picture words hide in a square of letters,
- * along straight lines; the player marks each one by drawing from its first letter to its last. Harder levels have a
- * bigger board, more words and more directions to read in.
- */
-
-/** A step from one cell to the next along a line: rows and columns, each -1, 0 or 1 */
 export interface Direction {
   readonly rows: number;
   readonly columns: number;
@@ -17,7 +10,6 @@ const RIGHT: Direction = { rows: 0, columns: 1 };
 const DOWN: Direction = { rows: 1, columns: 0 };
 const DOWN_RIGHT: Direction = { rows: 1, columns: 1 };
 const UP_RIGHT: Direction = { rows: -1, columns: 1 };
-/** Every direction, backwards too */
 const ALL_DIRECTIONS: readonly Direction[] = [RIGHT, DOWN, DOWN_RIGHT, UP_RIGHT].flatMap((step) => [
   step,
   { rows: -step.rows, columns: -step.columns },
@@ -27,7 +19,6 @@ export type SearchLevelId = 'easy' | 'normal' | 'hard';
 
 export interface SearchLevel {
   readonly id: SearchLevelId;
-  /** Rows, and columns */
   readonly size: number;
   readonly wordCount: number;
   readonly directions: readonly Direction[];
@@ -41,12 +32,9 @@ export const SEARCH_LEVELS: readonly SearchLevel[] = [
 
 export const DEFAULT_SEARCH_LEVEL: SearchLevelId = 'easy';
 
-/** Shortest word hidden, so filler letters rarely spell one by chance */
 const MIN_HIDDEN_LENGTH = 3;
-/** Tries to fit each word before choosing another */
 const PLACE_TRIES = 60;
 
-/** A word in the board and the cells it covers, from its first letter to its last */
 export interface HiddenWord {
   readonly word: PictureWord;
   readonly cells: readonly number[];
@@ -54,9 +42,7 @@ export interface HiddenWord {
 
 export interface WordSearch {
   readonly size: number;
-  /** One letter per cell, in row order */
   readonly letters: readonly string[];
-  /** In the order the player sees them listed */
   readonly words: readonly HiddenWord[];
 }
 
@@ -68,10 +54,6 @@ export function getSearchLevel(id: SearchLevelId): SearchLevel {
   return level;
 }
 
-/**
- * A new board: picture words placed one by one in random places and directions (crossing only where they share a
- * letter), then every other cell filled with letters from the same words, so the board looks like the language
- */
 export function createWordSearch(level: SearchLevel, pictures: readonly PictureWord[], random: Random): WordSearch {
   const { size } = level;
   const board: (string | null)[] = Array<string | null>(size * size).fill(null);
@@ -94,7 +76,6 @@ export function createWordSearch(level: SearchLevel, pictures: readonly PictureW
   return { size, letters: board.map((letter) => letter ?? pick(alphabet, random)), words };
 }
 
-/** The cells of a straight line (across, down or diagonal) from one cell to another, both included; null otherwise */
 export function lineCells(from: number, to: number, size: number): number[] | null {
   const [fromRow, fromColumn, toRow, toColumn] = [Math.floor(from / size), from % size, Math.floor(to / size), to % size];
   const [rows, columns] = [toRow - fromRow, toColumn - fromColumn];
@@ -106,7 +87,6 @@ export function lineCells(from: number, to: number, size: number): number[] | nu
   return Array.from({ length }, (_, index) => from + index * step);
 }
 
-/** The hidden word, not found yet, that a line of cells spells, read either way; null when there's none */
 export function wordAt(
   search: WordSearch,
   cells: readonly number[],
@@ -119,13 +99,11 @@ export function wordAt(
   );
 }
 
-/** Pictures with the same word appear once (the last one) */
 function uniqueWords(pictures: readonly PictureWord[]): PictureWord[] {
   const byWord = new Map(pictures.map((picture) => [picture.word, picture]));
   return [...byWord.values()];
 }
 
-/** Cells where a word fits in one of the directions, or null after enough tries */
 function findPlace(
   board: readonly (string | null)[],
   size: number,

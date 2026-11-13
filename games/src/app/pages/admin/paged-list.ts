@@ -1,15 +1,10 @@
 import { signal } from '@angular/core';
 import { ADMIN_PAGE_SIZE } from '../../core/admin-api';
 
-/**
- * A moderated list loaded a page at a time. A row the moderator moves or deletes leaves the list here instead of the
- * whole list being downloaded again; the next page then starts after the rows still shown.
- */
 export class PagedList<T> {
   readonly items = signal<readonly T[]>([]);
   readonly isLoading = signal(true);
   readonly hasMore = signal(false);
-  /** Answers to an earlier reload (e.g. before the filter changed) are dropped */
   private generation = 0;
 
   constructor(private readonly fetchPage: (offset: number) => Promise<T[]>) {}
@@ -34,7 +29,6 @@ export class PagedList<T> {
     }
   }
 
-  /** A row changed by the moderator, in its place */
   replace(item: T, next: T): void {
     this.items.update(items => items.map(other => (other === item ? next : other)));
   }

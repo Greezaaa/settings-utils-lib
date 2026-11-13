@@ -40,7 +40,6 @@ describe('SuThemeController', () => {
     currentMatches = false;
     matchMediaCallback = null;
     service = new SuThemeController();
-    // Reset the DOM for each test
     document.documentElement.setAttribute('data-theme', '');
     document.documentElement.style.cssText = '';
   });
@@ -48,7 +47,6 @@ describe('SuThemeController', () => {
   it('should initialize with default theme "system" if no config', () => {
     service.init();
     expect(service.getUserPreference()).toBe('system');
-    // The resolved theme can be either 'light' or 'dark' based on the initial `currentMatches`
     expect(['light', 'dark']).toContain(service.getTheme());
   });
 
@@ -96,7 +94,7 @@ describe('SuThemeController', () => {
   });
 
   it('should resolve system theme when preference is "system"', () => {
-    currentMatches = true; // Simulates dark mode
+    currentMatches = true;
     service.init({ defaultTheme: 'system' });
     expect(service.getTheme()).toBe('dark');
     expect(service.getUserPreference()).toBe('system');
@@ -131,27 +129,23 @@ describe('SuThemeController', () => {
   });
 
   it('should listen and react to system theme changes only when preference is "system"', () => {
-    // Initial state: system preference, light mode
     service.init({ defaultTheme: 'system' });
     expect(service.getTheme()).toBe('light');
 
-    // System switches to dark mode
     currentMatches = true;
     matchMediaCallback?.({ matches: true } as MediaQueryListEvent);
     expect(service.getTheme()).toBe('dark');
 
-    // System switches back to light mode
     currentMatches = false;
     matchMediaCallback?.({ matches: false } as MediaQueryListEvent);
     expect(service.getTheme()).toBe('light');
 
-    // User switches to a specific theme, listener should no longer react
     service.setTheme('dark', true);
     expect(service.getUserPreference()).toBe('dark');
 
     currentMatches = true;
     matchMediaCallback?.({ matches: true } as MediaQueryListEvent);
-    expect(service.getTheme()).toBe('dark'); // Theme should not change
+    expect(service.getTheme()).toBe('dark');
   });
 
   it('should notify theme subscribers when the theme changes', () => {

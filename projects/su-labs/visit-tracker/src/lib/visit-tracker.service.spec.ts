@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { SuVisitTrackerService } from './visit-tracker.service';
 
-// Visit logic is tested in @su-labs/core/visit-tracker; these tests cover the Angular wrapper.
 describe('SuVisitTrackerService', () => {
   let service: SuVisitTrackerService;
 

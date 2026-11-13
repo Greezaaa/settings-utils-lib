@@ -8,10 +8,6 @@ import { SiteLanguage } from '../../../i18n/site-language';
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/**
- * Admin tab: plays per game in a chosen period, with each game's 👍/👎 and the reasons given in it; the super admin can
- * reset them
- */
 @Component({
   selector: 'app-admin-plays',
   host: { class: 'admin-tab' },
@@ -33,7 +29,6 @@ export class AdminPlays {
   private readonly feedback = signal<readonly GameFeedback[]>([]);
   protected readonly loading = signal(true);
 
-  /** One row per game, most played first */
   protected readonly rows = computed(() =>
     GAMES.map(({ slug }) => {
       const feedback = this.feedback().find(({ game }) => game === slug);
@@ -66,7 +61,6 @@ export class AdminPlays {
     void this.load();
   }
 
-  /** Super admin: deletes every play and vote, after asking, so statistics start again from today */
   protected async resetStats(): Promise<void> {
     const { resetStats, confirmResetStats } = this.t().admin;
     if (
@@ -87,7 +81,6 @@ export class AdminPlays {
     }
   }
 
-  /** A feedback reason in the site's language, or as the API sent it if it's unknown */
   protected reasonName(reason: string): string {
     return Object.entries(this.t().feedback.reasons).find(([id]) => id === reason)?.[1] ?? reason;
   }

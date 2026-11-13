@@ -1,6 +1,5 @@
 @use 'sass:math';
 
-// Width a player needs with their name; below it, times the players, the bar shows small avatars only
 $full-width: 10rem;
 
 :host {
@@ -9,7 +8,6 @@ $full-width: 10rem;
   gap: 0.5rem;
 }
 
-// Phones: one row of players sharing the width; wide screens: a column
 .players {
   display: flex;
   gap: 0.5rem;
@@ -32,7 +30,6 @@ $full-width: 10rem;
     --avatar-size: 2rem;
   }
 
-  // Ready: a green gradient fills the player's background
   .is-ready {
     background: linear-gradient(
       90deg,
@@ -87,7 +84,6 @@ $full-width: 10rem;
   }
 }
 
-// The player's own button for another nickname, on their avatar's corner
 .rename {
   align-items: center;
   background: var(--surface);
@@ -113,7 +109,6 @@ $full-width: 10rem;
   font-size: 0.8125rem;
 }
 
-// Too many players for their names: small avatars only, and a tapped one opens to show its name
 @mixin compact {
   li {
     flex: none;
@@ -138,7 +133,6 @@ $full-width: 10rem;
   }
 }
 
-// Only for the row on phones and tablets; wide screens list the players in a column, with room for every name
 @media (max-width: 55.99rem) {
   @for $count from 2 through 4 {
     @container (max-width: #{math.div($full-width * $count, 1rem)}rem) {
@@ -149,7 +143,6 @@ $full-width: 10rem;
   }
 }
 
-// A sticker the player just sent, over their avatar: pops in, beats like a heart, then fades
 .reaction {
   animation:
     sticker-beat 1200ms ease-in-out 2,
@@ -167,7 +160,6 @@ $full-width: 10rem;
   width: calc(var(--avatar-size) + 0.25rem);
   z-index: 1;
 
-  // Over the avatar, which sits further in on wide screens
   @media (min-width: 56rem) {
     left: 0.625rem;
   }

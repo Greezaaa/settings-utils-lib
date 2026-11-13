@@ -3,11 +3,6 @@ import { BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
 import type { Request } from 'express';
 import { ErrorLogsService } from './error-logs.service.js';
 
-/**
- * Logs the API's own failures (status 500 and up: bugs, the database down…) to the error log, then answers as
- * NestJS always does. Expected answers (a wrong password, a bad request, a missing page) aren't errors and aren't
- * logged.
- */
 @Catch()
 export class ErrorLogFilter extends BaseExceptionFilter {
   constructor(

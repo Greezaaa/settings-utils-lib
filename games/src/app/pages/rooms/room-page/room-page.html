@@ -16,7 +16,6 @@
       <p class="error" role="alert">{{ ('rooms.errors' | translate)[error] }}</p>
       <a class="button" routerLink="/rooms">{{ 'rooms.title' | translate }}</a>
     } @else if (hasEntered() && client.connection() === 'closed') {
-      <!-- Not connected and not trying: never leave the player waiting on "Connecting…" -->
       <a class="button" routerLink="/rooms">{{ 'rooms.title' | translate }}</a>
     } @else {
       <p class="muted">{{ 'rooms.connecting' | translate }}</p>
@@ -26,10 +25,6 @@
       <p class="muted" role="status">{{ 'rooms.reconnecting' | translate }}</p>
     }
 
-    <!--
-      Players beside the game on wide screens, a strip stuck to the top on phones: their status is always in view.
-      The stickers sit right of the game on wide screens, and stick to the screen's edge on phones and tablets.
-    -->
     <div class="room-layout">
       <app-room-players
         appShareHeight="--room-players-height"
@@ -52,7 +47,6 @@
               </button>
             </div>
 
-            <!-- The host's choices: the game in the middle, its settings beside it (stacked on phones) -->
             <div class="lobby">
               @if (openGames().length > 1) {
                 <div class="lobby-column">

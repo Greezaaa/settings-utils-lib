@@ -17,14 +17,11 @@ import { PlayerSession } from './player-session.entity.js';
 import { Player } from './player.entity.js';
 import { isRudeName, SCREEN_NAME_PATTERN } from './screen-name.js';
 
-/** How long a browser stays signed in to a player's account */
 export const PLAYER_SESSION_DAYS = 90;
-/** How long a password-reset link works */
 const RESET_MINUTES = 60;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const MINUTE_MS = 60 * 1000;
 
-/** Checked against when the account doesn't exist, so a wrong name takes as long as a wrong password */
 const DUMMY_HASH_PROMISE = hashPassword('not a real password');
 
 export interface PlayerSignedIn {
@@ -33,7 +30,6 @@ export interface PlayerSignedIn {
   readonly expires: Date;
 }
 
-/** A player as moderators see them: only what the leaderboards show, never the login name or email */
 export interface ModeratedPlayer {
   readonly id: string;
   readonly app: AppId;
@@ -43,8 +39,6 @@ export interface ModeratedPlayer {
   readonly created: Date;
 }
 
-/** Why a sign-up or change was refused, as the games site shows it */
-/** A screen name waiting for a moderator, reported ones first */
 export interface PendingName {
   readonly id: string;
   readonly app: AppId;
@@ -53,7 +47,6 @@ export interface PendingName {
   readonly created: Date;
 }
 
-/** What a new or changed screen name resets: it waits for a moderator again, with no reports */
 const NEW_NAME = { nameApproved: false, nameReports: 0 } as const;
 
 export type AccountConflict =
@@ -61,16 +54,9 @@ export type AccountConflict =
   | 'screen-name-taken'
   | 'email-taken';
 
-/**
- * Player accounts, each in one app: signing up and in, sessions kept by a cookie, the screen name, an optional email to reset a
- * forgotten password, favourites, and deleting the account with everything in it. Answers never tell a wrong name
- * from a wrong password, and an account locks for a while after too many failures.
- */
 @Injectable()
 export class AccountsService {
-  /** Each app's site, for the links in its emails */
   private readonly appUrls: Readonly<Record<AppId, string>>;
-  /** Signs the passes that let an approved screen name show in rooms; none, and rooms only show nicknames */
   private readonly roomNameSecret: string | undefined;
 
   constructor(
@@ -86,7 +72,6 @@ export class AccountsService {
     this.roomNameSecret = config.get('ROOM_NAME_SECRET', { infer: true });
   }
 
-  /** Whether accounts may have an email (only when emails can be sent) */
   get canEmail(): boolean {
     return this.mailer.isAvailable;
   }
@@ -123,7 +108,6 @@ export class AccountsService {
     );
   }
 
-  /** A new session when the name (or email) and password are right; null otherwise */
   async signIn(
     app: AppId,
     name: string,
@@ -148,7 +132,6 @@ export class AccountsService {
     return this.startSession(player, now);
   }
 
-  /** The player of `app` a session cookie belongs to, while it hasn't expired */
   async playerForToken(
     app: AppId,
     token: string,
@@ -167,7 +150,6 @@ export class AccountsService {
     await this.sessions.delete({ tokenHash: hashToken(token) });
   }
 
-  /** A new screen name, or an email added, changed or removed (changing it needs the password) */
   async change(
     player: Player,
     { screenName, email, password }: ChangeInput,
@@ -199,12 +181,10 @@ export class AccountsService {
     );
   }
 
-  /** Shows the player on the leaderboards or hides them */
   async setShowOnLeaderboard(player: Player, show: boolean): Promise<void> {
     await this.players.update({ id: player.id }, { showOnLeaderboard: show });
   }
 
-  /** Changes the password after checking the current one; signs out every other browser */
   async changePassword(
     player: Player,
     current: string,
@@ -225,7 +205,6 @@ export class AccountsService {
     return true;
   }
 
-  /** Emails a reset link when an account of `app` has this email; says nothing either way */
   async forgot(app: AppId, email: string, now = new Date()): Promise<void> {
     const player = this.canEmail
       ? await this.players.findOneBy({ app, email })
@@ -255,7 +234,6 @@ export class AccountsService {
     );
   }
 
-  /** Sets a new password from a reset link of `app`, signs out every browser, and signs this one in; null for a bad link */
   async reset(
     app: AppId,
     secret: string,
@@ -282,7 +260,6 @@ export class AccountsService {
     return this.startSession(player, now);
   }
 
-  /** Deletes the account and everything in it (sessions and results go with it); needs the password */
   async remove(player: Player, password: string): Promise<boolean> {
     if (!(await verifyPassword(password, player.passwordHash))) {
       return false;
@@ -301,7 +278,6 @@ export class AccountsService {
     );
   }
 
-  /** Players for moderators, newest first: those on the leaderboards, and those taken off them */
   async moderationList({ offset, limit }: Page): Promise<ModeratedPlayer[]> {
     const players = await this.players.find({
       where: [{ showOnLeaderboard: true }, { removedFromBoards: true }],
@@ -328,7 +304,6 @@ export class AccountsService {
     );
   }
 
-  /** A moderator replaces a player's screen name with a plain one (`Player 4821`), free in the player's app; null if no such player */
   async renameByModerator(id: string): Promise<string | null> {
     const player = await this.players.findOneBy({ id });
     if (!player) {
@@ -343,7 +318,6 @@ export class AccountsService {
         screenNameKey: screenName.toLowerCase(),
       })
     );
-    // The moderator's own plain name needs no check; it never shows in rooms, as it isn't one word of letters
     await this.players.update(
       { id },
       {
@@ -355,7 +329,6 @@ export class AccountsService {
     return screenName;
   }
 
-  /** Screen names waiting for a moderator: the most reported first, then the oldest */
   async pendingNames({ offset, limit }: Page): Promise<PendingName[]> {
     const players = await this.players.find({
       where: { nameApproved: false },
@@ -372,7 +345,6 @@ export class AccountsService {
     }));
   }
 
-  /** A moderator lets a screen name show in rooms; false if no such player */
   async approveName(id: string): Promise<boolean> {
     const { affected } = await this.players.update(
       { id },
@@ -381,10 +353,6 @@ export class AccountsService {
     return (affected ?? 0) > 0;
   }
 
-  /**
-   * A pass for the rooms service to show the player's screen name: only for an approved name that follows today's
-   * rule (one word of letters) and a player still allowed on the leaderboards; null otherwise
-   */
   roomNamePass({
     screenName,
     nameApproved,
@@ -399,10 +367,6 @@ export class AccountsService {
       : null;
   }
 
-  /**
-   * Another player reports a screen name they saw in a room: it stops showing in rooms until a moderator looks again.
-   * Says nothing about whether the name exists.
-   */
   async reportName(app: AppId, screenName: string): Promise<void> {
     await this.players
       .createQueryBuilder()
@@ -415,7 +379,6 @@ export class AccountsService {
       .execute();
   }
 
-  /** Refuses a screen name that is a known rude word: one moderators approved as rude in the word builder, any language */
   private async refuseRudeName(screenName: string): Promise<void> {
     const rows = await this.wordReports.find({
       select: { word: true },
@@ -431,7 +394,6 @@ export class AccountsService {
     }
   }
 
-  /** A moderator takes a player off the leaderboards, or puts them back; false if no such player */
   async setRemovedFromBoards(id: string, removed: boolean): Promise<boolean> {
     const { affected } = await this.players.update(
       { id },
@@ -440,7 +402,6 @@ export class AccountsService {
     return (affected ?? 0) > 0;
   }
 
-  /** Refuses a login name, screen name or email someone else in the app already has */
   private async refuseTaken(
     app: AppId,
     {

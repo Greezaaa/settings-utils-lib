@@ -85,14 +85,12 @@ export async function resolveProjectPrettier(filePath: string): Promise<ProjectP
   if (!configFile && !(packageJson && dependsOnPrettier(packageJson))) return { kind: 'none' };
 
   const projectRoot = dirname(configFile ?? packageJson ?? filePath);
-  // Only the ignore check: resolving the config here would load the project's plugins before they're filtered
   const ignorePath = join(projectRoot, '.prettierignore');
   const { ignored } = await prettier.getFileInfo(filePath, { ignorePath, resolveConfig: false });
   if (ignored) return { kind: 'ignored' };
 
   const config = (await prettier.resolveConfig(filePath, { editorconfig: true })) ?? {};
   const plugins = configFile ? projectPlugins(config.plugins, configFile) : [];
-  // This plugin goes last, so its TypeScript and JavaScript parsers are the ones Prettier uses
   return { kind: 'prettier', options: { ...config, plugins: [...plugins, singleLineImports] } };
 }
 

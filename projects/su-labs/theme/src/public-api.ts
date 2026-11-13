@@ -1,7 +1,3 @@
-/*
- * Public API Surface of theme
- */
-
 export * from './lib/theme.service';
 export type {
   SuBaseThemeName,

@@ -1,6 +1,5 @@
 import { WordBank } from '../letter-games';
 
-/** Spanish words without written accents (ñ is its own letter), checked to be kid-friendly */
 export const ES_WORDS: WordBank = {
   vowels: ['a', 'e', 'i', 'o', 'u'],
   pictures: [
@@ -73,15 +72,12 @@ export const ES_WORDS: WordBank = {
     { word: 'globo', emoji: '🎈' },
   ],
   words: [
-    // 3 letters
     ...'sol mar pan oso ojo uva ola rey luz red mes sal paz voz col tos gol dos sur ave asa ajo uno mil son oro ama ese eso esa una sed fin pez tez mal sin dar ver'.split(
       ' ',
     ),
-    // 4 letters
     ...'casa gato pato rana vaca mesa sopa luna lobo nube flor taza mano pelo boca ropa rosa pera piña foca loro mapa cama cara agua azul rojo gris lana lago isla mono nido niño niña pala papa mama tren hoja hilo nota puma toro ruta sapo seta vela bola dedo pico copa dama gota hada hora idea lima lata lupa miel moto pino pozo rama rata reno sala tela tapa todo vaso yate zumo coco saco paso peso piso pata cena alto bajo amor arte bote cola cubo dado gafa goma kiwi lazo mago nata oler ocho once pare polo rico seda suma trono vida'.split(
       ' ',
     ),
-    // 5 letters and more
     ...'perro gallo libro llave leche nieve fresa queso huevo cebra tigre barco coche playa arena cielo verde negro blanco amigo campo cerdo cabra dulce feliz fuego gorra grande hielo juego mango noche oveja padre madre pelota perla piedra planta plato pluma pollo pulpo puerta radio regalo reloj rueda selva silla sombra sonrisa tambor tarta tienda tierra tomate tortuga torre trigo viento zapato zorro ardilla abeja ballena caballo caracol cangrejo cohete conejo elefante estrella galleta guitarra hormiga erizo canica cuento dibujo escuela familia fiesta globo granja helado hermano juguete lluvia montaña museo pintura mochila manzana naranja mariposa abuelo abuela parque bosque flores colores sirena'.split(
       ' ',
     ),

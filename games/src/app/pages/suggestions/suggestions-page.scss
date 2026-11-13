@@ -48,7 +48,6 @@ textarea {
   justify-self: center;
 }
 
-// The picture's drop zone: a big dashed area to click or drop a picture on; the real file input is inside it, hidden
 .drop-zone {
   align-items: center;
   background: var(--subtle);
@@ -78,7 +77,6 @@ textarea {
     width: 1px;
   }
 
-  // Dragging across its text mustn't count as leaving the zone
   > :not(input) {
     pointer-events: none;
   }

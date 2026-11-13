@@ -1,14 +1,5 @@
-/*
- * Global styles for games.su-labs.dev.
- *
- * The games share the su-labs design system with the main site, so they load its global styles
- * (tokens, light/dark/contrast/custom themes, base elements and components) instead of copying them.
- * Anything only the games need goes below.
- */
-
 @use '../../web/src/styles';
 
-// Cards a step lighter than the page and neutral tags a step darker, so both stand out on the games' background
 :root {
   --subtle: #ecebe8;
 }
@@ -20,9 +11,6 @@
   --border: #333333;
 }
 
-// Game boards (the appGameBoard directive) take the board colours chosen in the header settings.
-// @su-labs/theme sets data-theme and --su-theme-* on the board; like the site's custom theme,
-// every other colour is mixed from text, background and accent.
 .game-board[data-theme] {
   --text: var(--su-theme-color);
   --heading: var(--su-theme-color);
@@ -31,11 +19,9 @@
   --subtle: color-mix(in srgb, var(--su-theme-color) 10%, var(--su-theme-background));
   --border: color-mix(in srgb, var(--su-theme-color) 18%, var(--su-theme-background));
   --button-bg: var(--su-theme-main-accent);
-  // A palette's own text on its accent (dark on bright accents), else the background
   --button-text: var(--su-theme-button-text, var(--su-theme-background));
   --button-hover: color-mix(in srgb, var(--su-theme-main-accent) 85%, var(--su-theme-background));
   color: var(--text);
-  // @su-labs/fields in the board's colours: the root's mapping (web styles) is resolved with the page's colours
   --su-field-surface: var(--surface);
   --su-field-border: var(--border);
   --su-field-filled-border: var(--muted);
@@ -49,7 +35,6 @@
   --su-field-font-mono: var(--font-mono);
 }
 
-// The admin team's sign-in in the footer: a small lock
 .site-footer .admin-link {
   align-items: center;
   display: inline-flex;
@@ -71,15 +56,11 @@
   }
 }
 
-// The animated menu (the appMenuRing directive): a shape in the theme's button colour drifts after the pointer over the
-// menu and fills the link it reaches, whose text takes the button text colour once covered
 .has-menu-ring {
   position: relative;
-  // Room above the links for the shape, as the menu clips what sticks out (it scrolls sideways on phones)
   padding-top: 0.5rem;
   margin-top: -0.5rem;
 
-  // Its links sit above the shape: see .site-nav.has-menu-ring in app.scss
 }
 
 .menu-ring {
@@ -97,10 +78,6 @@
   }
 }
 
-// The same shape on every group of choice buttons while the animated menu is on (ChoiceRing): it carries the chosen
-// colour behind the buttons, which go see-through (outlines too, so none cut across the shape as it passes, like the
-// menu's plain links; only the chosen one keeps its outline), and the button it covers takes the chosen text colour. !important: each page styles its chosen
-// button its own way, and this has to win over all of them while it's on
 .has-choice-ring {
   position: relative;
 
@@ -117,7 +94,6 @@
       color: var(--choice-ring-text) !important;
     }
 
-    // The chosen one keeps an outline in the chosen colour, so it still shows while the shape follows the pointer
     &[aria-pressed='true'] {
       border-color: var(--choice-ring-colour) !important;
     }
@@ -140,7 +116,6 @@
   }
 }
 
-// A small bordered button for the header and its settings (text size, language…), on every page
 .icon-button {
   align-items: center;
   background: transparent;

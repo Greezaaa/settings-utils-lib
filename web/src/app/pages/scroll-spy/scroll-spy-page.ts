@@ -4,7 +4,6 @@ import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { UtilityPage } from '../../shared/utility-page';
 
-/** Example article sections tracked by the demo */
 const SECTIONS: readonly { id: string; title: string; text: string }[] = [
   {
     id: 'spy-install',
@@ -64,7 +63,6 @@ export class ScrollSpyPage {
   protected readonly sections = SECTIONS;
   protected readonly scrollSpy = inject(ScrollSpyService);
 
-  /** Scroll to a section and mark it active right away */
   protected goTo(id: string): void {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     this.scrollSpy.setActiveSection(id);

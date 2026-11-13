@@ -3,12 +3,10 @@
   font-weight: 600;
 }
 
-// The word builder shows its words beside the letters, so it needs more room
 .board.is-wide {
   max-width: 48rem;
 }
 
-// Credit for the word builder's dictionaries, as their licence asks
 .credit {
   color: var(--muted);
   font-size: 0.75rem;

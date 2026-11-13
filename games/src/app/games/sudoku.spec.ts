@@ -34,14 +34,8 @@ describe('sudoku', () => {
   });
 
   it('marks symbols repeated in a row, a column or a box', () => {
-    // A . | . .
-    // . A | . .   ← same box as the first A
-    // ----+----
-    // . . | . .
-    // A . | . .   ← same column as the first A
     const board = [0, null, null, null, null, 0, null, null, null, null, null, null, 0, null, null, null];
     expect([...repeatedCells(board, 4)].sort((first, second) => first - second)).toEqual([0, 5, 12]);
-    // Diagonal in different boxes: no repeat
     expect(repeatedCells([0, null, null, null, null, null, null, null, null, null, 0, null, null, null, null, null], 4).size).toBe(0);
   });
 

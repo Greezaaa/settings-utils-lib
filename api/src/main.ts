@@ -11,7 +11,6 @@ async function bootstrap(): Promise<void> {
     bodyParser: false,
   });
   setUpApp(app);
-  // Only the running API logs each request; the end-to-end tests set the app up without it
   app.use(requestLog());
   app.enableShutdownHooks();
   await app.listen(

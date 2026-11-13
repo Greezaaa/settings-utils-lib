@@ -6,7 +6,6 @@ import { Arrangement, isPlaced } from '../../../games/place-pieces';
 import { PictureSlice } from '../../../shared/picture-slice/picture-slice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/** A piece being dragged: where the pointer started and how far it has moved */
 interface Drag {
   readonly cell: number;
   readonly pointerId: number;
@@ -16,26 +15,19 @@ interface Drag {
   readonly dy: number;
 }
 
-/** Two cells whose pieces swap */
 export interface PieceSwap {
   readonly first: number;
   readonly second: number;
 }
 
-/** Pointer movement, in pixels, below which a press counts as a tap rather than a drag */
 const DRAG_THRESHOLD = 8;
 
-/**
- * The board of Place the pieces: drag a piece onto another, or tap two pieces, to swap them. Shared by the game's page
- * and its room round, which keep the arrangement and swap the pieces they're told.
- */
 @Component({
   selector: 'app-place-board',
   imports: [TranslatePipe, PictureSlice],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './place-board.html',
   styleUrls: ['../../../shared/picture-board.scss', './place-board.scss'],
-  // The board sits straight in its parent's layout
   host: { style: 'display: contents' },
 })
 export class PlaceBoard {
@@ -43,11 +35,9 @@ export class PlaceBoard {
   readonly shape = input.required<Shape>();
   readonly arrangement = input.required<Arrangement>();
   readonly phase = input.required<PicturePhase>();
-  /** Look mode marks the pieces already in place */
   readonly showHints = input(false);
   readonly swapped = output<PieceSwap>();
 
-  /** A piece chosen by a tap, waiting for a second tap to swap with; any new arrangement drops it */
   protected readonly picked = linkedSignal({ source: this.arrangement, computation: (): number | null => null });
   protected readonly drag = linkedSignal({ source: this.arrangement, computation: (): Drag | null => null });
   private readonly board = viewChild<ElementRef<HTMLElement>>('board');
@@ -56,7 +46,6 @@ export class PlaceBoard {
     return isPlaced(this.arrangement(), cell);
   }
 
-  /** Where a dragged piece is drawn: following the pointer, a little bigger */
   protected dragTransform(cell: number): string | null {
     const drag = this.drag();
     return drag?.cell === cell ? `translate(${drag.dx}px, ${drag.dy}px) scale(1.06)` : null;
@@ -100,14 +89,12 @@ export class PlaceBoard {
     this.drag.set(null);
   }
 
-  /** Keyboard (Enter or Space) works like a tap; pointer taps are handled on pointer up */
   protected onClick(event: MouseEvent, cell: number): void {
     if (event.detail === 0 && this.phase() === 'playing') {
       this.tapPiece(cell);
     }
   }
 
-  /** First tap picks a piece; a second tap on another piece swaps them, on the same piece drops it */
   private tapPiece(cell: number): void {
     const picked = this.picked();
     if (picked === null) {
@@ -120,7 +107,6 @@ export class PlaceBoard {
     }
   }
 
-  /** The board cell under a point, other than the one being dragged */
   private cellAt(x: number, y: number, dragged: number): number | null {
     const board = this.board()?.nativeElement;
     for (const element of document.elementsFromPoint(x, y)) {

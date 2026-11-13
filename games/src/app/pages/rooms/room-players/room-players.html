@@ -6,7 +6,6 @@
       [class.is-ready]="room().phase === 'lobby' && player.ready && player.connected"
       [class.is-open]="player.id === openId()"
     >
-      <!-- Tapping a player shows their name when the bar only has room for avatars -->
       @for (shown of latestReactions().get(player.id) ?? []; track shown.key) {
         <img
           class="reaction"

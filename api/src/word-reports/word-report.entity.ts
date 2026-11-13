@@ -1,9 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-/**
- * A word players reported as rude, per language. After a few reports it stops counting in the word builder until
- * a moderator decides: approved keeps it out, rejected lets it count again.
- */
 @Entity('word_reports')
 export class WordReport {
   @PrimaryColumn({ type: 'varchar', length: 2 })

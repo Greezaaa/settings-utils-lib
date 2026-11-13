@@ -9,11 +9,6 @@ import { puzzleRun } from '../puzzle-run';
 import { roundClock } from '../round-clock';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/**
- * The sliding puzzle in a room: every player solves the same puzzles, one after another, and scores a point per tile
- * in its place (a finished puzzle banks all its tiles). Keyed on the round's seed and settings (plain values), so a
- * new room message never restarts it.
- */
 @Component({
   selector: 'app-room-sliding-round',
   imports: [TranslatePipe, SlidingBoard, TimerBar],
@@ -24,7 +19,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 export class RoomSlidingRound {
   readonly sliding = input.required<RoomSliding>();
   readonly round = input.required<Round>();
-  /** The room's choice: show the player's own score during the round, or only in the results */
   readonly showScore = input(true);
   readonly scored = output<number>();
 
@@ -41,7 +35,6 @@ export class RoomSlidingRound {
   );
   protected readonly isSolved = computed(() => isSolved(this.puzzle().board, this.puzzle().gap));
   protected readonly inPlace = computed(() => tilesInPlace(this.puzzle().board));
-  /** Tiles on the board: every cell but the gap */
   protected readonly tileCount = computed(() => this.puzzle().board.length - 1);
 
   protected slide(cell: number): void {

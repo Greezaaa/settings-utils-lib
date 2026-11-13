@@ -14,30 +14,20 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'over';
 
-/** Best heights are kept apart for each mode and level, e.g. `which-one:normal` */
 type BestKey = `${ClimbModeId}:${LevelId}`;
 type BestFloors = Partial<Record<BestKey, number>>;
 const BEST_STORAGE = RESULT_GAMES['climb-tower'].storage;
 
-/** How long a jump takes before the next exercise shows, and a fall before the end screen */
 const JUMP_MS = 800;
 const FALL_MS = 1100;
 
-/** Where True or false's platforms go, floor after floor, so the climber zigzags up */
 const ZIGZAG = [150, 80, 210, 120, 230, 70, 180] as const;
 const zigzagX = (floor: number): number => ZIGZAG[floor % ZIGZAG.length];
-/** Which one's two platforms */
 const SIDE_X: Readonly<Record<Side, number>> = { left: 80, right: 220 };
-/** Platforms below the climber that stay drawn */
 const FLOORS_BELOW = 3;
 
-/** Arrow keys answer too: left is False (or the left platform), right is True (or the right one) */
 const ANSWER_KEYS: Readonly<Record<string, Side>> = { ArrowLeft: 'left', ArrowRight: 'right' };
 
-/**
- * Climb the tower: every right answer jumps the climber up a floor, the first wrong one makes it fall. The settings
- * are a mode and a math level; the best height for each is kept in this browser.
- */
 @Component({
   selector: 'app-climb-tower-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, TowerView],
@@ -59,18 +49,14 @@ export class ClimbTowerPage {
   protected readonly levelId = signal<LevelId>('easy');
   protected readonly phase = signal<Phase>('ready');
 
-  /** The floor the climber stands on, and where each floor's platform was */
   protected readonly floor = signal(0);
   private readonly path = signal<readonly number[]>([zigzagX(0)]);
   protected readonly step = signal<ClimbStep | null>(null);
-  /** The climber is in the air (jumping or falling): answers wait */
   private readonly isMoving = signal(false);
   protected readonly isFalling = signal(false);
-  /** Where the climber heads when it misses */
   private readonly missedX = signal<number | null>(null);
 
   protected readonly climberX = computed(() => this.missedX() ?? this.path()[this.floor()]);
-  /** The last few platforms climbed, and the next floor's ones */
   protected readonly platforms = computed<readonly TowerPlatform[]>(() => {
     const floor = this.floor();
     const below = this.path()
@@ -86,7 +72,6 @@ export class ClimbTowerPage {
         : [{ floor: floor + 1, x: zigzagX(floor + 1) }];
     return [...below, ...next];
   });
-  /** The right answer, shown when the climber falls */
   protected readonly solution = signal('');
 
   private readonly bestFloors = signal<BestFloors>({});
@@ -119,12 +104,10 @@ export class ClimbTowerPage {
     this.phase.set('ready');
   }
 
-  /** True or false: False is the left answer, True the right one */
   protected judge(saysTrue: boolean): void {
     this.answer(saysTrue ? 'right' : 'left');
   }
 
-  /** An answer: the left or right button (False or True, or the left or right equation) */
   protected answer(side: Side): void {
     const step = this.step();
     if (!step || this.isMoving() || this.phase() !== 'playing') {
@@ -186,7 +169,6 @@ export class ClimbTowerPage {
   }
 }
 
-/** Best heights saved in this browser, keeping only known keys with numeric values */
 function readBestFloors(): BestFloors {
   const stored = readStored(BEST_STORAGE);
   if (typeof stored !== 'object' || stored === null) {

@@ -6,7 +6,6 @@ import { ErrorLogFilter } from './error-log.filter.js';
 import { ErrorLogsAdminController, ErrorReportsController } from './error-logs.controller.js';
 import { ErrorLogsService } from './error-logs.service.js';
 
-/** The error log: the API's own failures (through a global filter) and errors the games site reports */
 @Module({
   imports: [TypeOrmModule.forFeature([ErrorLog])],
   controllers: [ErrorReportsController, ErrorLogsAdminController],

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SuDialogService } from './dialog.service';
 
-// Dialog logic is covered by the SuDialogController tests in @su-labs/core/dialog; these cover the Angular wrapper.
 describe('SuDialogService', () => {
   it('exposes the dialog on screen as a signal and resolves with the answer', async () => {
     const service = new SuDialogService();

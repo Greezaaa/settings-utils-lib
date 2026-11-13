@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** Admin accounts (the super admin and moderators), their invites and signed-in browsers */
 export class Admins1794300000000 implements MigrationInterface {
   name = 'Admins1794300000000';
 

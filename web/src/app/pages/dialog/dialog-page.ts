@@ -11,7 +11,6 @@ const KINDS: readonly { kind: SuDialogKind; label: string }[] = [
 const SIZES: readonly SuDialogSize[] = ['small', 'medium', 'large'];
 const BACKDROPS: readonly SuDialogBackdrop[] = ['dim', 'none'];
 
-/** The demo's rich text: a list, small print and a link, as the body may be HTML */
 const RICH_BODY =
   '<p>Deleting your results removes:</p><ul><li>your plays</li><li>your best results</li><li>your places on the leaderboards</li></ul><small>Your account and favourites stay.</small>';
 const PLAIN_BODY = 'This removes your plays and best results. Your account and favourites stay.';
@@ -82,7 +81,6 @@ export class DialogPage {
   protected readonly withImage = signal(false);
   protected readonly danger = signal(true);
   protected readonly dismissible = signal(true);
-  /** What the last dialog answered */
   protected readonly answer = signal<string>('—');
 
   protected async open(): Promise<void> {
@@ -103,7 +101,6 @@ export class DialogPage {
     this.answer.set(accepted ? 'accepted' : 'cancelled');
   }
 
-  /** A select or radio group's value, when it's one of the options */
   protected choose<T extends string>(options: readonly T[], event: Event, set: (value: T) => void): void {
     if (event.target instanceof HTMLSelectElement || event.target instanceof HTMLInputElement) {
       const { value } = event.target;

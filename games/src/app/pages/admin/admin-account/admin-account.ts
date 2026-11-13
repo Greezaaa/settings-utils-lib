@@ -6,7 +6,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
 
-/** Admin tab: preview mode (super admin and testers), and changing your own password (other browsers are signed out) */
 @Component({
   selector: 'app-admin-account',
   host: { class: 'admin-tab' },

@@ -9,15 +9,8 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 import { FeatureFlags } from '../../core/feature-flags';
 import { SuStrengthMeterComponent } from '@su-labs/fields';
 
-/** The forms shown while signed out */
 type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 
-/**
- * The player's account (behind the `accounts` switch). Signed out: sign in, make an account (login name, screen name,
- * password and, when the API can send emails, an optional email for resets), or ask for a reset link. Signed in:
- * change the screen name or email, show on the leaderboards or not, change the password, sign out, delete the results only,
- * or delete the account.
- */
 @Component({
   selector: 'app-account-page',
   imports: [TranslatePipe, SuStrengthMeterComponent, ScreenNameField],
@@ -35,12 +28,9 @@ export class AccountPage {
   protected readonly hasRoomNames = computed(() => this.features.canUse('room-names'));
   protected readonly views: readonly SignedOutView[] = ['sign-in', 'sign-up', 'forgot'];
   protected readonly view = signal<SignedOutView>('sign-in');
-  /** Whether the API can send emails, so accounts may have one */
   protected readonly canEmail = signal(false);
-  /** The email typed when signing up, to warn while it's empty */
   protected readonly newEmail = signal('');
 
-  /** One state per form, so a message shows only below the form it belongs to */
   protected readonly entry = new AccountForm();
   protected readonly details = new AccountForm();
   protected readonly password = new AccountForm();
@@ -96,7 +86,6 @@ export class AccountPage {
     );
   }
 
-  /** Sends only what changed: the screen name, and the email with the password */
   protected saveDetails(form: HTMLFormElement): void {
     const current = this.account.account();
     const screenName = formText(form, 'screenName').trim();
@@ -126,10 +115,6 @@ export class AccountPage {
     );
   }
 
-  /**
-   * Shows or hides the player on the leaderboards: the switch moves straight away and is saved in the background (one
-   * save at a time); it moves back when the save fails
-   */
   protected async setShowOnLeaderboard(event: Event): Promise<void> {
     const box = event.target instanceof HTMLInputElement ? event.target : null;
     const saved = () => this.account.account()?.showOnLeaderboard ?? false;
@@ -174,7 +159,6 @@ export class AccountPage {
     for (const input of form.querySelectorAll('input[type="password"]')) {
       if (input instanceof HTMLInputElement) {
         input.value = '';
-        // Fields that follow the typing, like the strength meter, see it emptied
         input.dispatchEvent(new Event('input'));
       }
     }

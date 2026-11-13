@@ -25,19 +25,14 @@ export class PrivacyPage {
   private readonly notifications = inject(SuNotificationService);
   private readonly account = inject(PlayerAccount);
   private readonly availability = inject(GameAvailability);
-  /** What accounts keep is described while accounts are open */
   protected readonly accountsOpen = this.account.isAvailable;
-  /** Whether the API can send password-reset emails; until it says so, the email item is marked unavailable */
   protected readonly canEmail = signal(false);
-  /** Hit the note (its Sing it mode uses the microphone) is marked in development while it's closed to the public */
   protected readonly isSingClosed = computed(
     () => this.availability.isKnown() && !this.availability.isOpen('hit-the-note'),
   );
 
-  /** Read in the browser, where the choice is stored */
   protected readonly savingAllowed = signal(true);
 
-  /** Shown in the visitor's own time zone, so only once in the browser */
   private readonly inBrowser = signal(false);
   protected readonly lastUpdate = computed(() =>
     this.inBrowser() ? formatMoment(LATEST_PUBLISHED, this.language.language()) : null,
@@ -51,7 +46,6 @@ export class PrivacyPage {
     });
   }
 
-  /** Wipes everything saved so far; saving goes on if the visitor allows it, from a fresh start */
   protected deleteSaved(): void {
     deleteSaved(forgetSharedSettings);
     this.notifications.show({ type: 'success', message: this.t().privacy.deleted });

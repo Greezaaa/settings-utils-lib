@@ -4,7 +4,6 @@ import { LanguageId } from '../i18n/site-messages';
 import { Random } from './random';
 import { WORD_BANKS } from './words';
 
-/** Always the same "random" numbers, so every run is alike */
 function seeded(seed = 1): Random {
   let state = seed;
   return () => {
@@ -22,7 +21,6 @@ const BANK: WordBank = {
   words: ['cat', 'act', 'tea', 'eat', 'ate', 'seat', 'east', 'at'],
 };
 
-/** The letters each language's words may use */
 const ALPHABETS: readonly (readonly [LanguageId, RegExp])[] = [
   ['en', /^[a-z]+$/],
   ['es', /^[a-zñ]+$/],
@@ -107,7 +105,6 @@ describe('letter games', () => {
     expect(checkWord('tea', set, targets, [])).toBe('found');
     expect(checkWord('eat', set, targets, ['eat'])).toBe('already-found');
     expect(checkWord('tas', set, targets, [])).toBe('unknown');
-    // Any real word the letters make counts, even when it isn't asked for
     expect(checkWord('sat', set, targets, [], new Set(['sat']))).toBe('found');
     expect(checkWord('seats', set, targets, [], new Set(['seats']))).toBe('unknown');
   });

@@ -6,10 +6,8 @@ import { AnswerLine } from '../../../../shared/answer-line/answer-line';
 import { RoundResult } from '../round-result';
 import { TranslatePipe } from '../../../../i18n/translate-pipe';
 
-/** Arrow keys answer too, so the round also works with a keyboard in every language */
 const ANSWER_KEYS: Readonly<Record<string, boolean>> = { ArrowLeft: false, ArrowRight: true };
 
-/** Shows a full equation; the player taps whether its result is true or false */
 @Component({
   selector: 'app-true-or-false-round',
   imports: [TranslatePipe, AnswerLine],

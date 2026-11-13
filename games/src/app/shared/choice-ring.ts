@@ -2,19 +2,10 @@ import { DOCUMENT, effect, inject, Injectable } from '@angular/core';
 import { MenuAnimation } from '../core/menu-animation';
 import { DriftShape } from './drift-shape';
 
-/** Groups of choice buttons, one pressed at a time, and their buttons */
 const GROUP = '[role="group"], [role="tablist"]';
 const CHOICE = 'button[aria-pressed]';
 const PRESSED = 'button[aria-pressed="true"]';
 
-/**
- * The menu's shape (DriftShape) for every group of choice buttons on the site (a `role="group"` or tab list whose
- * buttons use `aria-pressed`), while the animated menu is on: it rests behind the chosen button in the group's pressed
- * colour, drifts after the pointer and fills the button it reaches, and goes over to a newly chosen one. One listener
- * for the whole site, so every group gets it without changing its template; a group gets its shape the first time the
- * pointer or focus comes in. Never for visitors whose device asks for less motion. Its look is `.choice-ring` in
- * styles.scss.
- */
 @Injectable({ providedIn: 'root' })
 export class ChoiceRing {
   private readonly document = inject(DOCUMENT);
@@ -22,7 +13,6 @@ export class ChoiceRing {
   private readonly shapes = new Map<HTMLElement, DriftShape>();
 
   constructor() {
-    // Turned off in the settings: every group goes back to its own look
     effect(() => {
       if (!this.menuAnimation.isOn()) {
         this.detachAll();
@@ -30,10 +20,7 @@ export class ChoiceRing {
     });
   }
 
-  /** Starts listening; in the browser only, once */
   start(): void {
-    // Another theme (the site's, or a game board's colours) gives the buttons other colours: the shapes take them up
-    // again the next time they're needed
     new MutationObserver(() => this.detachAll()).observe(this.document.documentElement, {
       attributes: true,
       attributeFilter: ['data-theme', 'data-theme-scheme'],
@@ -53,7 +40,6 @@ export class ChoiceRing {
         this.shapes.get(group)?.rest();
       }
     });
-    // A tap chooses straight away: the shape is there to drift over
     this.document.addEventListener('pointerdown', (event) => this.shapeFor(event.target));
   }
 
@@ -62,7 +48,6 @@ export class ChoiceRing {
     return group?.querySelector(CHOICE) ? group : null;
   }
 
-  /** The group's shape, made the first time it's needed; none while the animated menu is off */
   private shapeFor(target: EventTarget | null): DriftShape | null {
     const window = this.document.defaultView;
     const group = this.groupOf(target);
@@ -78,13 +63,11 @@ export class ChoiceRing {
     if (known) {
       return known;
     }
-    // Groups that left the page (another page, a closed panel) give their shapes up
     for (const old of this.shapes.keys()) {
       if (!old.isConnected) {
         this.detach(old);
       }
     }
-    // The shape takes the group's own colours: the chosen button's for the shape, a plain one's for the rest
     const chosen = group.querySelector<HTMLElement>(PRESSED);
     const plain = group.querySelector<HTMLElement>('button[aria-pressed="false"]');
     const chosenStyle = chosen ? window.getComputedStyle(chosen) : null;

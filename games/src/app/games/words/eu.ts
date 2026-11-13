@@ -1,6 +1,5 @@
 import { WordBank } from '../letter-games';
 
-/** Basque words in their dictionary form (etxe, not etxea), checked to be kid-friendly */
 export const EU_WORDS: WordBank = {
   vowels: ['a', 'e', 'i', 'o', 'u'],
   pictures: [
@@ -71,23 +70,18 @@ export const EU_WORDS: WordBank = {
     { word: 'puxika', emoji: '🎈' },
   ],
   words: [
-    // Numbers, body and family
     ...'bat bi hiru lau bost sei zazpi zortzi hamar esku oin buru begi aho sudur hortz ile beso hanka bihotz ama aita amona aitona anaia arreba ahizpa lagun haur neska mutil'.split(
       ' ',
     ),
-    // Home, school and toys
     ...'etxe ate leiho ohe mahai aulki giltza eskola liburu arkatz margo kolore pilota panpina jostailu musika kanta dantza jolas joko marrazki'.split(
       ' ',
     ),
-    // Places and weather
     ...'kale bide zubi herri hiri baserri mendi itsaso ibai laku uharte harri hondartza eguzki ilargi izar hodei euri elur haize gau egun goiz lur'.split(
       ' ',
     ),
-    // Colours and describing words
     ...'gorri urdin berde hori zuri beltz arrosa more handi txiki polit alai berri zahar gozo bero hotz argi ilun poz irri amets maite'.split(
       ' ',
     ),
-    // Food and animals
     ...'sagar mahats ogi gazta esne arrautza tarta opil gozoki izotz katu txakur zaldi behi ardi txerri oilo arrain txori sagu erle inurri igel otso hartz lehoi azeri untxi ahate asto ahuntz lore hosto belar zuhaitz arbola gona zapata txapela auto tren hegazkin bizikleta'.split(
       ' ',
     ),

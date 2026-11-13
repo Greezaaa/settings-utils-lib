@@ -18,8 +18,6 @@ export class SuDialogComponent {
   private readonly element = viewChild.required<ElementRef<HTMLDialogElement>>('element');
 
   constructor() {
-    // Opens the native dialog when there's one to show (after its buttons are drawn, so focus lands on one of them),
-    // and closes it when there isn't
     afterRenderEffect(() => {
       const element = this.element().nativeElement;
       const dialog = this.dialog();

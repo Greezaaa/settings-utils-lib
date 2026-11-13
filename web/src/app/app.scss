@@ -122,7 +122,6 @@
   width: 0.75rem;
 }
 
-// The menu and settings: hidden behind ☰ on tablets and phones, opened as a panel under the bar
 .site-menu {
   display: none;
   flex-direction: column;
@@ -150,12 +149,10 @@
   display: grid;
   gap: 0.125rem;
 
-  /* A collapsed section: `display: grid` would otherwise beat the hidden attribute */
   &[hidden] {
     display: none;
   }
 
-  /* Each link draws its piece of a thin rail, so every section reads as one block */
   a {
     border-left: 4px solid var(--border);
     color: var(--muted);
@@ -165,13 +162,11 @@
       border-color 0.15s ease,
       color 0.15s ease;
 
-    /* Hover lights up the bar and the text */
     &:hover {
       border-left-color: var(--heading);
       color: var(--heading);
     }
 
-    /* The current page also gets the background */
     &.active {
       background: var(--subtle);
       border-left-color: var(--heading);
@@ -180,7 +175,6 @@
   }
 }
 
-/* Section title: a button that expands or collapses its links, with + or − on the right */
 .nav-heading {
   align-items: center;
   background: none;
@@ -221,7 +215,6 @@
   justify-self: start;
 }
 
-// While the menu is open the ☰ button inverts, like a pressed button
 .icon-button.menu-toggle[aria-expanded='true'],
 .icon-button.menu-toggle[aria-expanded='true']:hover:not(:disabled) {
   background: var(--button-bg);
@@ -229,8 +222,6 @@
   color: var(--button-text);
 }
 
-// Desktop: the header becomes a column on the left, as tall as the screen and sticky, with the menu always in view
-// under the logo and the settings at its foot
 @media (min-width: 64rem) {
   :host {
     display: grid;
@@ -272,8 +263,6 @@
   }
 }
 
-// The page and footer in a column at least one screen tall: the page takes the free space, so the footer sits at the
-// bottom of short pages whatever its height (it grows with the text size setting)
 .page {
   display: flex;
   flex-direction: column;

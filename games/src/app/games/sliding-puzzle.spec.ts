@@ -8,7 +8,6 @@ const WIDE: Shape = { rows: 2, columns: 3 };
 
 const OPPOSITE: Record<Direction, Direction> = { up: 'down', right: 'left', down: 'up', left: 'right' };
 
-/** Cells reached by following the picture's lines from `start` */
 function reachable(shape: Shape, picture: Picture, start: number): Set<number> {
   const seen = new Set([start]);
   const queue = [start];
@@ -50,9 +49,7 @@ describe('sliding puzzle rules', () => {
 
         expect(picture[gap]).toEqual([]);
         expect(reachable(shape, picture, start).size).toBe(cells - 1);
-        // A tree through n tiles has n - 1 links, each drawn on both tiles it joins
         expect(picture.flat().length).toBe((cells - 2) * 2);
-        // No "+" anywhere, so no swastika-like shape can appear
         expect(picture.every((lines) => lines.length < 4)).toBe(true);
         picture.forEach((directions, cell) =>
           directions.forEach((direction) => {

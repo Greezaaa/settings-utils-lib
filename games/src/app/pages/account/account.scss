@@ -1,5 +1,3 @@
-// The account pages: their forms, the signed-in bar and the screen-name tooltip (inputs and tabs come from admin.scss)
-
 .account-card {
   display: grid;
   gap: 1rem;
@@ -87,7 +85,6 @@
   opacity: 1;
 }
 
-// The sign-up choice to show on the leaderboards: a box beside its label and hint
 .check {
   align-items: start;
   display: flex;

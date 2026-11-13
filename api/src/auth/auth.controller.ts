@@ -26,13 +26,11 @@ const inviteSchema = z.object({ password: passwordField });
 type InviteInput = z.infer<typeof inviteSchema>;
 const secretSchema = z.string().regex(/^[\w-]{20,100}$/);
 
-/** Who is signed in, as the admin page sees it; null for the backup token */
 interface Me {
   readonly email: string | null;
   readonly role: AdminRole;
 }
 
-/** Sign-in for the admin page with email and password: a session cookie that keeps the browser signed in for 30 days */
 @Controller('auth')
 export class AuthController {
   private readonly cookies: CookieSettings;
@@ -44,7 +42,6 @@ export class AuthController {
     this.cookies = cookieSettings(config);
   }
 
-  /** At most 5 tries every 15 minutes from one address; the account itself locks after 5 failures in a row */
   @Post('login')
   @Throttle({ default: { limit: 5, ttl: 15 * 60_000 } })
   async signIn(
@@ -54,7 +51,6 @@ export class AuthController {
     return this.startSession(await this.auth.signIn(email, password), response);
   }
 
-  /** Who is signed in, so the admin page can skip the form and show the super admin's tabs */
   @Get('me')
   @UseGuards(AdminGuard)
   me(@Req() { admin }: AdminRequest): Me {
@@ -93,7 +89,6 @@ export class AuthController {
     }
   }
 
-  /** The email an invite link is for, so its page can greet them; 404 when the link is wrong, used or expired */
   @Get('invite/:secret')
   @Throttle({ default: { limit: 20, ttl: 15 * 60_000 } })
   async invite(
@@ -106,7 +101,6 @@ export class AuthController {
     return { email: admin.email };
   }
 
-  /** Accepts an invite with the password the new moderator chose, and signs them in */
   @Post('invite/:secret')
   @Throttle({ default: { limit: 5, ttl: 15 * 60_000 } })
   async acceptInvite(

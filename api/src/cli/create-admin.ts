@@ -3,10 +3,6 @@ import { z } from 'zod';
 import { AppModule } from '../app.module.js';
 import { TeamService } from '../auth/team.service.js';
 
-/**
- * Creates the super admin (or gives that account a new random password) and prints the password once. On the server:
- * `docker compose exec api node dist/cli/create-admin.js you@example.com`. Change the password on the admin page.
- */
 async function createSuperAdmin(): Promise<void> {
   const email = z.email().safeParse(process.argv[2]?.trim());
   if (!email.success) {

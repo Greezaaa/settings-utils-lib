@@ -6,10 +6,6 @@ import { Admin } from './admin.entity.js';
 import { AuthService } from './auth.service.js';
 import { TeamService } from './team.service.js';
 
-/**
- * Admin accounts, sessions and the team; global, so every module's admin endpoints can use the admin guards. Its
- * endpoints (signing in, the team) are on auth.su-labs.dev: see SignInModule.
- */
 @Global()
 @Module({
   imports: [TypeOrmModule.forFeature([Admin, AdminSession])],

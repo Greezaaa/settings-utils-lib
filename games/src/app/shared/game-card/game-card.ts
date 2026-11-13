@@ -8,7 +8,6 @@ import { NewGames } from '../../core/new-games';
 import { PopularGames } from '../../core/popular-games';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-/** A card that links to a game: its recommended age, "New" and "Most played" badges, name, summary and favourite heart */
 @Component({
   selector: 'app-game-card',
   imports: [TranslatePipe, RouterLink],
@@ -28,9 +27,7 @@ export class GameCard {
   protected readonly minAge = computed(() => gameInfo(this.game()).minAge);
   protected readonly isNew = computed(() => this.newGames().includes(this.game()));
   protected readonly isPopular = computed(() => this.popularGames().includes(this.game()));
-  /** Shown to the admin in preview: the game isn't open to the public */
   protected readonly isHidden = computed(() => !this.availability.isOpen(this.game()));
-  /** Favourites come with the categories menu */
   protected readonly canFavorite = computed(() => this.features.canUse('category-menu'));
   protected readonly isFavorite = computed(() => this.favorites.games().includes(this.game()));
 }

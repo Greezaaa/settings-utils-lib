@@ -6,10 +6,6 @@ import { FeatureFlags } from '../../../core/feature-flags';
 import { PagedList } from '../paged-list';
 import { saveFailedNotice } from '../save-failed-notice';
 
-/**
- * Admin tab: the players on the leaderboards, a page at a time. A rude screen name gets a plain one in its place;
- * made-up scores take the player off the leaderboards (they can't undo it), until a moderator puts them back.
- */
 @Component({
   selector: 'app-admin-players',
   host: { class: 'admin-tab' },
@@ -20,7 +16,6 @@ import { saveFailedNotice } from '../save-failed-notice';
 })
 export class AdminPlayers {
   private readonly admin = inject(AdminApi);
-  /** Names wait for a moderator only while they can show in rooms (in preview too, to try it) */
   private readonly features = inject(FeatureFlags);
   protected readonly hasRoomNames = computed(() => this.features.canUse('room-names'));
 

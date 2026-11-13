@@ -5,22 +5,18 @@ import { Admin, AdminRole, MemberRole } from './admin.entity.js';
 import { AuthService, normalizeEmail } from './auth.service.js';
 import { hashPassword, newSessionToken, randomPassword } from './passwords.js';
 
-/** How long an invite link works */
 export const INVITE_DAYS = 7;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** A team member as the admin page shows them; never their password or invite secret */
 export interface TeamMember {
   readonly id: string;
   readonly email: string;
   readonly role: AdminRole;
   readonly active: boolean;
-  /** Invited and hasn't chosen a password yet */
   readonly invited: boolean;
   readonly created: Date;
 }
 
-/** A new invite link's secret (shown once, to copy) and when it stops working */
 export interface Invite {
   readonly secret: string;
   readonly expires: Date;
@@ -42,11 +38,6 @@ const toMember = ({
   created,
 });
 
-/**
- * The admin team: the super admin (created on the server) adds moderators and testers with a starting password or an
- * invite link,
- * and turns them on or off.
- */
 @Injectable()
 export class TeamService {
   constructor(
@@ -61,7 +52,6 @@ export class TeamService {
     return admins.map(toMember);
   }
 
-  /** Adds a moderator or tester with a starting password, or with an invite link when there is no password */
   async addMember(
     email: string,
     role: MemberRole,
@@ -88,7 +78,6 @@ export class TeamService {
     };
   }
 
-  /** A fresh invite link for a member who hasn't chosen a password yet, or who forgot theirs */
   async reinvite(id: string): Promise<Invite> {
     const admin = await this.member(id);
     const invite = newInvite();
@@ -99,7 +88,6 @@ export class TeamService {
     return { secret: invite.secret, expires: invite.expires };
   }
 
-  /** Turns a member on or off; off signs them out everywhere */
   async setActive(id: string, active: boolean): Promise<void> {
     const admin = await this.member(id);
     await this.admins.update({ id: admin.id }, { active });
@@ -108,16 +96,11 @@ export class TeamService {
     }
   }
 
-  /** Makes a member a moderator or a tester */
   async setRole(id: string, role: MemberRole): Promise<void> {
     const admin = await this.member(id);
     await this.admins.update({ id: admin.id }, { role });
   }
 
-  /**
-   * Creates the super admin, or gives an existing account a new random password and makes it super admin; returns that
-   * password, shown once. Used by the create-admin command on the server.
-   */
   async createSuperAdmin(email: string): Promise<string> {
     const normalized = normalizeEmail(email);
     const password = randomPassword();
@@ -145,7 +128,6 @@ export class TeamService {
     return password;
   }
 
-  /** A team member (moderator or tester) by id; the super admin can't be changed from the admin page */
   private async member(id: string): Promise<Admin> {
     const admin = await this.admins.findOneBy({ id });
     if (!admin) {

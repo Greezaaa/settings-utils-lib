@@ -7,10 +7,8 @@ import { AnswerLine } from '../../../../shared/answer-line/answer-line';
 import { RoundResult } from '../round-result';
 import { TranslatePipe } from '../../../../i18n/translate-pipe';
 
-/** Keyboard keys for each sign, so the round also works with a keyboard */
 const SIGN_KEYS: Readonly<Record<string, Operator>> = { '+': '+', '-': '−', '*': '×', x: '×', '/': '÷', ':': '÷' };
 
-/** Shows an equation with its signs missing; the player taps a sign for each gap, then checks */
 @Component({
   selector: 'app-find-the-signs-round',
   imports: [TranslatePipe, AnswerLine],
@@ -21,31 +19,26 @@ const SIGN_KEYS: Readonly<Record<string, Operator>> = { '+': '+', '-': '−', '*
 })
 export class FindTheSignsRound {
   readonly puzzle = input.required<SignsPuzzle>();
-  /** Signs the level uses, shown as buttons */
   readonly operators = input.required<readonly Operator[]>();
   readonly answering = output<void>();
   readonly answered = output<RoundResult>();
 
   protected readonly t = inject(SiteLanguage).messages;
 
-  /** The player's sign for each gap, `null` while empty; cleared for every new puzzle */
   protected readonly signs = linkedSignal<SignsPuzzle, readonly (Operator | null)[]>({
     source: this.puzzle,
     computation: (puzzle) => puzzle.operators.map(() => null),
   });
-  /** The gap the next sign goes into */
   protected readonly selected = linkedSignal({ source: this.puzzle, computation: () => 0 });
   protected readonly showHint = linkedSignal({ source: this.puzzle, computation: () => false });
 
   protected readonly flash = answerFlash();
-  /** The equation with the puzzle's own signs */
   protected readonly solution = computed(() => {
     const { numbers, operators, result } = this.puzzle();
     return formatSigns(numbers, operators, result);
   });
 
   protected readonly isComplete = computed(() => this.signs().every((sign) => sign !== null));
-  /** Whether the order of signs matters, so the hint about × and ÷ is worth showing */
   protected readonly hasPrecedence = computed(() =>
     this.operators().some((operator) => operator === '×' || operator === '÷'),
   );
@@ -57,7 +50,6 @@ export class FindTheSignsRound {
     this.selected.set(gap);
   }
 
-  /** Puts a sign in the selected gap, then moves on to the next empty one */
   protected choose(operator: Operator): void {
     if (this.flash.isShowing()) {
       return;
@@ -88,7 +80,6 @@ export class FindTheSignsRound {
       return;
     }
     const { numbers } = this.puzzle();
-    // Show what the player's signs actually make, e.g. `4 × 5 − 5 = 15`
     const value = evaluate(numbers, signs);
     const result: RoundResult = {
       isCorrect: solves(this.puzzle(), signs),

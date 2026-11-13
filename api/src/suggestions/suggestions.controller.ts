@@ -13,7 +13,6 @@ import { TurnstileService } from './turnstile.service.js';
 
 const idSchema = z.uuid();
 
-/** The suggestions form: an idea in a category, with an optional picture; checked for bots, read only by moderators */
 @Controller('v1/suggestions')
 export class SuggestionsController {
   constructor(
@@ -26,7 +25,6 @@ export class SuggestionsController {
   @Throttle({ default: { limit: 3, ttl: 3_600_000 } })
   @UseInterceptors(
     FileInterceptor('image', {
-      // The picture, and the form's few short text fields (category, text, language, bot check)
       limits: {
         fileSize: IMAGE_MAX_BYTES,
         files: 1,
@@ -45,7 +43,6 @@ export class SuggestionsController {
   }
 }
 
-/** For moderators: read suggestions and their pictures, mark them read or archived, or delete them */
 @Controller('admin/suggestions')
 @UseGuards(AdminGuard)
 export class SuggestionsAdminController {

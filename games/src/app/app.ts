@@ -18,7 +18,6 @@ import { ScrollToActive } from './shared/scroll-to-active';
 import { ShareHeight } from './shared/share-height';
 import { SiteSettings } from './shared/site-settings/site-settings';
 
-/** Site shell: header with the settings (SiteSettings) and the menu, page outlet and footer */
 @Component({
   selector: 'app-root',
   imports: [

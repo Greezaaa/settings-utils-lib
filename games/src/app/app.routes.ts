@@ -20,10 +20,6 @@ const {
   colours,
 } = PREVIEW_MESSAGES;
 
-/**
- * Page title and description of a game, for search results and link previews; the page opens only when the game does.
- * A game closed by default stays out of search results, as its page sends visitors home.
- */
 function gameMeta(
   slug: GameSlug
 ): Pick<Route, 'title' | 'data' | 'canActivate'> {
@@ -35,7 +31,6 @@ function gameMeta(
   };
 }
 
-/** The not-found page: prerendered at /404 (copied to 404.html after the build) and shown for unknown links */
 const notFound = {
   title: `${seo.notFoundTitle} · ${SITE_NAME}`,
   data: { description: seo.notFoundDescription, noIndex: true },
@@ -43,7 +38,6 @@ const notFound = {
     import('./pages/not-found/not-found-page').then(m => m.NotFoundPage),
 } satisfies Omit<Route, 'path'>;
 
-/** A page per category (from the categories menu), at /category/<category> */
 const categoryRoutes: Routes = GAME_CATEGORIES.map(category => ({
   path: `category/${category}`,
   title: `${categories[category]} · ${SITE_NAME}`,
@@ -133,7 +127,6 @@ export const routes: Routes = [
       import('./pages/how-many/how-many-page').then(m => m.HowManyPage),
   },
   {
-    // The sudoku games share one page, told which game by the route's data (`game`, from gameMeta)
     path: 'letter-sudoku',
     ...gameMeta('letter-sudoku'),
     loadComponent: () => import('./pages/sudoku/sudoku-page').then(m => m.SudokuPage),
@@ -163,7 +156,6 @@ export const routes: Routes = [
       import('./pages/rooms/rooms-page').then(m => m.RoomsPage),
   },
   {
-    // A room by its code; built in the browser, as every room is different
     path: 'r/:code',
     title: `${rooms.title} · ${SITE_NAME}`,
     data: { description: rooms.lead, noIndex: true },
@@ -180,7 +172,6 @@ export const routes: Routes = [
       import('./pages/account/account-page').then(m => m.AccountPage),
   },
   {
-    // A password-reset link from an email; built in the browser, as every link is different
     path: 'account/reset/:secret',
     title: `${account.resetTitle} · ${SITE_NAME}`,
     data: { description: account.lead, noIndex: true },
@@ -189,7 +180,6 @@ export const routes: Routes = [
       import('./pages/account/reset-page/reset-page').then(m => m.ResetPage),
   },
   {
-    // Needs accounts too, as only signed-in players see it
     path: 'leaderboard',
     title: `${leaderboard.title} · ${SITE_NAME}`,
     data: { description: leaderboard.lead, noIndex: true },
@@ -224,7 +214,6 @@ export const routes: Routes = [
       ),
   },
   {
-    // The admin's page: linked from nowhere and kept out of search results
     path: ADMIN_PATH,
     title: `${admin.title} · ${SITE_NAME}`,
     data: { description: admin.lead, noIndex: true },
@@ -232,7 +221,6 @@ export const routes: Routes = [
       import('./pages/admin/admin-page').then(m => m.AdminPage),
   },
   {
-    // An invite link for a new moderator; never prerendered, as each link is different
     path: `${ADMIN_INVITE_PATH}/:secret`,
     title: `${admin.inviteTitle} · ${SITE_NAME}`,
     data: { description: admin.lead, noIndex: true },

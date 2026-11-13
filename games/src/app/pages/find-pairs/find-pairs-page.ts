@@ -16,13 +16,8 @@ type Phase = 'playing' | 'done';
 type BestMoves = Partial<Record<BoardLevelId, number>>;
 
 const BEST_STORAGE = RESULT_GAMES['find-pairs'].storage;
-/** How long two different cards stay face up before turning back */
 const MISMATCH_MS = 900;
 
-/**
- * Find the pairs: a board of face-down cards, turned two at a time; pairs stay face up. The clock starts on the first
- * card, and the fewest moves for each board size are kept in this browser. Changing the size deals a new board.
- */
 @Component({
   selector: 'app-find-pairs-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
@@ -46,7 +41,6 @@ export class FindPairsPage {
   protected readonly level = computed(() => getBoardLevel(PAIRS_LEVELS, this.levelId()));
   protected readonly phase = signal<Phase>('playing');
   protected readonly cards = signal<readonly PairCard[]>([]);
-  /** Cards of the pairs found, and the one or two turned now */
   private readonly matched = signal<ReadonlySet<number>>(new Set());
   private readonly open = signal<readonly number[]>([]);
   protected readonly moves = signal(0);
@@ -61,7 +55,6 @@ export class FindPairsPage {
   private timer?: ReturnType<typeof setTimeout>;
 
   constructor() {
-    // Dealt in the browser only, so the prerendered page doesn't show one board and then another
     afterNextRender(() => {
       this.bestMoves.set(readBestMoves());
       this.newGame();
@@ -98,7 +91,6 @@ export class FindPairsPage {
   }
 
   protected flip(card: PairCard): void {
-    // Two cards are already up (waiting to turn back), or this one is up already
     if (this.phase() !== 'playing' || this.open().length === 2 || this.isFaceUp(card)) {
       return;
     }
@@ -141,7 +133,6 @@ export class FindPairsPage {
   }
 }
 
-/** Best moves saved in this browser, keeping only known levels with whole numbers */
 function readBestMoves(): BestMoves {
   const stored = readStored(BEST_STORAGE);
   if (typeof stored !== 'object' || stored === null) {

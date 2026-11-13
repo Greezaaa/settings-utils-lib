@@ -1,7 +1,6 @@
 import sharp from 'sharp';
 import { cleanImage } from './clean-image.js';
 
-/** A small JPEG carrying camera and location metadata */
 async function photoWithMetadata(width = 40, height = 20): Promise<Buffer> {
   return sharp({
     create: { width, height, channels: 3, background: '#3366ff' },
@@ -33,7 +32,6 @@ describe('cleanImage', () => {
   });
 
   it('rejects pictures that would unpack into too many pixels', async () => {
-    // A plain 8000 × 6000 PNG: a small file, but 48 million pixels once decoded
     const huge = await sharp({
       create: { width: 8000, height: 6000, channels: 3, background: '#000' },
     })

@@ -1,14 +1,5 @@
 import { between, pick, Random, shuffled } from './random';
 
-/**
- * Measure it: rules only, no Angular, so they can be tested on their own.
- *
- * - Read the angle: a protractor (0 to 180°) shows a ray; slide to the angle it makes.
- * - Make the angle: turn the ray to a given angle, with fewer marks on the protractor as levels go up.
- * - Glass of water: how full is the glass? Pick the fraction (on the hardest level, 2 to 10 glasses, written as
- *   improper fractions like 7/2).
- * - Number line: only its ends are labelled; slide to the number at the mark.
- */
 export type MeasureModeId =
   | 'read-angle'
   | 'set-angle'
@@ -29,20 +20,13 @@ export const MEASURE_LEVEL_IDS: readonly MeasureLevelId[] = [
   'expert',
 ];
 
-/** Exercises in one single-player game */
 export const EXERCISES_PER_GAME = 10;
 
-// Angles
-
 export interface AngleLevel {
-  /** Angles are multiples of this, between it and 180 minus it */
   readonly multipleOf: number;
-  /** How far off an answer may be, in degrees */
   readonly tolerance: number;
-  /** Make the angle: the marks the protractor shows (every n degrees; 0 = none) and whether they have numbers */
   readonly marksEvery: number;
   readonly markLabels: boolean;
-  /** How many degrees the slider moves at a time */
   readonly step: number;
 }
 
@@ -79,7 +63,6 @@ export const ANGLE_LEVELS: Readonly<Record<MeasureLevelId, AngleLevel>> = {
 
 export interface AngleExercise {
   readonly kind: 'angle';
-  /** Degrees, from the protractor's 0 on the right, counterclockwise */
   readonly angle: number;
   readonly level: AngleLevel;
 }
@@ -102,9 +85,6 @@ export const isAngleRight = (
   answer: number
 ): boolean => Math.abs(answer - angle) <= level.tolerance;
 
-// Glasses
-
-/** A fraction of a glass, possibly with whole glasses before it (1 ½) */
 export interface Fill {
   readonly whole: number;
   readonly numerator: number;
@@ -113,10 +93,8 @@ export interface Fill {
 
 interface GlassLevel {
   readonly denominators: readonly number[];
-  /** Whole full glasses that can come before the fraction */
   readonly wholes: readonly number[];
   readonly choices: number;
-  /** Fractions written improper (7/2, not 3 ½), with the wrong choices close to the right one */
   readonly improper: boolean;
 }
 
@@ -129,7 +107,6 @@ const GLASS_LEVELS: Readonly<Record<MeasureLevelId, GlassLevel>> = {
     choices: 4,
     improper: false,
   },
-  // 1 to 9 full glasses, so 2 to 10 glasses in all
   expert: {
     denominators: [2, 3, 4],
     wholes: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -141,13 +118,10 @@ const GLASS_LEVELS: Readonly<Record<MeasureLevelId, GlassLevel>> = {
 export interface GlassExercise {
   readonly kind: 'glass';
   readonly fill: Fill;
-  /** The answers to choose from, the right one among them */
   readonly choices: readonly Fill[];
-  /** Written as improper fractions (7/2), not mixed numbers (3 ½) */
   readonly improper: boolean;
 }
 
-/** How a fill is written: whole glasses (null when none, or when improper), then the fraction */
 export interface FillParts {
   readonly whole: number | null;
   readonly numerator: number;
@@ -168,7 +142,6 @@ export function fillParts(
   return { whole: whole > 0 ? whole : null, numerator, denominator };
 }
 
-/** A fill as text: `3/4`, `1 1/2`, or improper `7/2` */
 export function formatFill(fill: Fill, improper: boolean): string {
   const { whole, numerator, denominator } = fillParts(fill, improper);
   return `${whole === null ? '' : `${whole} `}${numerator}/${denominator}`;
@@ -180,7 +153,6 @@ const fillValue = ({ whole, numerator, denominator }: Fill): number =>
 const greatestDivisor = (first: number, second: number): number =>
   second === 0 ? first : greatestDivisor(second, first % second);
 
-/** All fractions of a level in lowest terms (½, not 2/4) */
 function levelFills({ denominators, wholes }: GlassLevel): Fill[] {
   const fills = wholes.flatMap(whole =>
     denominators.flatMap(denominator =>
@@ -189,7 +161,6 @@ function levelFills({ denominators, wholes }: GlassLevel): Fill[] {
         .map(numerator => ({ whole, numerator, denominator }))
     )
   );
-  // One of each value
   return fills.filter(
     (fill, index) =>
       fills.findIndex(other => fillValue(other) === fillValue(fill)) === index
@@ -209,7 +180,6 @@ export function glassExercise(
     fills.filter(other => fillValue(other) !== fillValue(fill)),
     random
   );
-  // Close wrong answers, so counting the full glasses isn't enough (the sort keeps the shuffled order on ties)
   const others = (
     level.improper
       ? wrong.sort((first, second) => distance(first) - distance(second))
@@ -224,11 +194,8 @@ export function glassExercise(
 export const isSameFill = (first: Fill, second: Fill): boolean =>
   fillValue(first) === fillValue(second);
 
-// Number lines
-
 interface LineLevel {
   readonly steps: readonly number[];
-  /** The first number is a multiple of the step, from these many steps below zero to above */
   readonly startSteps: { readonly min: number; readonly max: number };
   readonly gaps: { readonly min: number; readonly max: number };
 }
@@ -260,18 +227,11 @@ export interface LineExercise {
   readonly kind: 'line';
   readonly start: number;
   readonly step: number;
-  /** Spaces between the ends; the line has one more tick than this */
   readonly gaps: number;
-  /** The tick with the mark, never an end */
   readonly mark: number;
-  /**
-   * The slider's ends: a random few steps past the line's ends, so its thumb never lines up with the drawing and the
-   * answer has to be worked out, not matched by eye
-   */
   readonly slider: { readonly min: number; readonly max: number };
 }
 
-/** How many steps past each end of the line the slider may reach */
 const SLIDER_EXTRA_STEPS = { min: 2, max: 8 };
 
 export function lineExercise(
@@ -282,7 +242,6 @@ export function lineExercise(
   const step = pick(level.steps, random);
   const gaps = between(level.gaps, random);
   const start = between(level.startSteps, random) * step;
-  // Below zero only on levels whose lines go there
   const lowest = level.startSteps.min < 0 ? -Infinity : 0;
   return {
     kind: 'line',
@@ -308,8 +267,6 @@ export const lineEnd = (exercise: LineExercise): number =>
 export const isLineRight = (exercise: LineExercise, answer: number): boolean =>
   Math.abs(answer - lineValue(exercise, exercise.mark)) < exercise.step / 2;
 
-// All modes
-
 export type MeasureExercise = AngleExercise | GlassExercise | LineExercise;
 
 export function measureExercise(
@@ -327,7 +284,6 @@ export function measureExercise(
   }
 }
 
-/** `count` exercises in a row, from the same random numbers (a room's seed gives every player the same list) */
 export function measureExercises(
   mode: MeasureModeId,
   level: MeasureLevelId,
@@ -339,10 +295,8 @@ export function measureExercises(
   );
 }
 
-/** Which way a wrong slider answer is off, for the hint: the right answer is more, or less */
 export type AimHint = 'more' | 'less';
 
-/** The right value of a slider exercise (an angle's degrees, the number at a line's mark) */
 export const rightValue = (exercise: AngleExercise | LineExercise): number =>
   exercise.kind === 'angle'
     ? exercise.angle

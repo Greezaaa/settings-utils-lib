@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { SuNotificationService } from '@su-labs/notifications';
 
-/** Code sample with a copy button; copying is confirmed with a notification */
 @Component({
   selector: 'app-code-block',
   changeDetection: ChangeDetectionStrategy.OnPush,

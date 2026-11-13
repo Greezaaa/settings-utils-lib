@@ -2,7 +2,6 @@ import { RoomGame } from '../../core/features';
 import { BUILDER_LEVELS } from '../../games/letter-games';
 import { OptionText, SiteMessages } from '../../i18n/site-messages';
 
-/** A text by its id, or the id itself when unknown (an older or newer site) */
 function textIn(texts: Readonly<Record<string, OptionText>>, id: string): OptionText {
   return Object.entries(texts).find(([key]) => key === id)?.[1] ?? { name: id, summary: '' };
 }
@@ -11,7 +10,6 @@ function nameIn(names: Readonly<Record<string, string>>, id: string): string {
   return Object.entries(names).find(([key]) => key === id)?.[1] ?? id;
 }
 
-/** The name of the host's choice of mode in a room's settings, e.g. "Answer style" or "Game" */
 export function roomModeGroup(t: SiteMessages, game: RoomGame): string {
   switch (game) {
     case 'math-games':
@@ -28,7 +26,6 @@ export function roomModeGroup(t: SiteMessages, game: RoomGame): string {
   }
 }
 
-/** A mode's name and description, in the game's own words */
 export function roomModeText(t: SiteMessages, game: RoomGame, mode: string): OptionText {
   switch (game) {
     case 'math-games':
@@ -45,7 +42,6 @@ export function roomModeText(t: SiteMessages, game: RoomGame, mode: string): Opt
   }
 }
 
-/** A level's name and description for the chosen mode, in the game's own words */
 export function roomLevelText(t: SiteMessages, game: RoomGame, mode: string, level: string): OptionText {
   switch (game) {
     case 'math-games':
@@ -59,7 +55,6 @@ export function roomLevelText(t: SiteMessages, game: RoomGame, mode: string, lev
       if (mode !== 'word-builder') {
         return textIn(t.letterGames.hints, level);
       }
-      // The word builder's levels go by their number of letters
       const { name, summary } = textIn(t.letterGames.builderLevels, level);
       const letters = BUILDER_LEVELS.find(({ id }) => id === level)?.letters;
       return { name: letters ? `${name} · ${letters}` : name, summary };
@@ -72,7 +67,6 @@ export function roomLevelText(t: SiteMessages, game: RoomGame, mode: string, lev
   }
 }
 
-/** Measure it describes each level per mode */
 function textOfMode(
   summaries: Readonly<Record<string, Readonly<Record<string, string>>>>,
   mode: string,

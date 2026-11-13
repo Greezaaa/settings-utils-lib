@@ -15,7 +15,6 @@
   <div class="card board" appGameBoard>
     @switch (phase()) {
       @case ('ready') {
-        <!-- Settings: the game first, then its settings (side by side on wide boards, stacked on phones) -->
         <div class="settings-layout">
           <div class="settings-column">
             <div class="levels" role="group" [attr.aria-label]="'climbTower.modeGroup' | translate">
@@ -78,7 +77,6 @@
             }
           </div>
         } @else {
-          <!-- Keeps the buttons' room while the climber jumps -->
           <div class="pad-space" aria-hidden="true"></div>
         }
         <button type="button" class="button button-secondary button-small" (click)="backToSettings()">

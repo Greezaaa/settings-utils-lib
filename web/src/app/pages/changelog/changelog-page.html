@@ -20,7 +20,6 @@
       </p>
     </div>
 
-    <!-- On wider screens only this part scrolls; the title, the package list and the links stay in view -->
     <div class="releases-body" tabindex="0" [attr.aria-label]="selected().name + ' releases'">
       @if (changelog.isLoading()) {
         <p class="muted">Loading the changelog from GitHub…</p>

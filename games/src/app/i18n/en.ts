@@ -1,6 +1,5 @@
 import { SiteMessages } from './site-messages';
 
-/** Room nicknames: an adjective and an animal, by number */
 const ADJECTIVES = [
   'Brave',
   'Happy',

@@ -9,7 +9,6 @@ import { GamePlays, PlaysService, POPULAR_DAYS } from './plays.service.js';
 
 const playSchema = z.object({ game: gameSchema });
 
-/** The play counter: the games site reports each game started, and reads the totals for "Most popular" */
 @Controller('v1/plays')
 export class PlaysController {
   constructor(private readonly plays: PlaysService) {}
@@ -29,7 +28,6 @@ export class PlaysController {
   }
 }
 
-/** For the admin team: plays per game in a period (all time, today, this week, this month or this year) */
 @Controller('admin/plays')
 @UseGuards(AdminGuard)
 export class PlaysAdminController {

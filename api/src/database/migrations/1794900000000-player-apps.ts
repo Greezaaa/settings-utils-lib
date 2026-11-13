@@ -1,9 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/**
- * Player accounts belong to one app (shared/apps.ts): every account so far is the games'. Login names, screen names
- * and emails are unique within an app, so another app's players can pick the same ones.
- */
 export class PlayerApps1794900000000 implements MigrationInterface {
   name = 'PlayerApps1794900000000';
 

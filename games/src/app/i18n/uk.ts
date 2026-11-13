@@ -1,7 +1,6 @@
 import { SiteMessages } from './site-messages';
 import { forGender, WordGender } from './word-gender';
 
-/** Ukrainian plural: 1, 21… → one; 2–4, 22–24… → few; the rest → many */
 function plural(count: number, one: string, few: string, many: string): string {
   const lastTwo = count % 100;
   const last = count % 10;
@@ -11,7 +10,6 @@ function plural(count: number, one: string, few: string, many: string): string {
   return last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14) ? few : many;
 }
 
-/** Room nicknames: adjectives agree with the animal (masculine and feminine forms) */
 const ADJECTIVES = [
   'Хоробрий',
   'Щасливий',
@@ -66,10 +64,8 @@ const ANIMALS = [
   'Слон',
   'Жираф',
 ];
-/** Animals whose name is feminine: Panda, Owl, Turtle, Koala, Otter, Squirrel */
 const FEMININE_ANIMALS = new Set([2, 5, 9, 10, 11, 13]);
 
-/** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
 export const ukrainian = (gender: WordGender): SiteMessages => ({
 
   answers: {
@@ -1374,5 +1370,4 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
   },
 });
 
-/** The texts until the player chooses: the boy's forms, as always */
 export const UK: SiteMessages = ukrainian('boy');

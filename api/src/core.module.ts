@@ -9,13 +9,8 @@ import { databaseOptions } from './database/database.options.js';
 import { HealthController } from './health/health.controller.js';
 import { VisitorThrottlerGuard } from './security/visitor-throttler.guard.js';
 
-/**
- * What api.su-labs.dev and auth.su-labs.dev share: the environment, the database, the rate limits, the health check and
- * the admin sessions (whose guards protect both). Each process adds its own endpoints on top.
- */
 @Module({})
 export class CoreModule {
-  /** `runMigrations`: only the API changes the tables, so two processes never migrate at once */
   static forRoot({ runMigrations }: { runMigrations: boolean }): DynamicModule {
     return {
       module: CoreModule,
@@ -29,7 +24,6 @@ export class CoreModule {
               runMigrations,
             ),
         }),
-        // Every endpoint: at most 60 requests a minute per visitor; endpoints that write have tighter limits
         ThrottlerModule.forRoot([{ ttl: 60_000, limit: 60 }]),
         AuthModule,
       ],

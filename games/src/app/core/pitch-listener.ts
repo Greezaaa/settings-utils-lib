@@ -2,16 +2,10 @@ import { inject, Injectable, signal } from '@angular/core';
 import { detectPitch } from '../games/music-notes';
 import { NotePlayer } from './note-player';
 
-/** Samples looked at each time: about 46 ms of sound at 44.1 kHz, long enough for a low voice */
 const WINDOW_SIZE = 2048;
 
 export type MicrophoneState = 'off' | 'asking' | 'listening' | 'denied' | 'unavailable';
 
-/**
- * Listens to the microphone and works out the pitch of what it hears, many times a second. The sound is only
- * analysed in memory on the device: it is never recorded, saved or sent anywhere. The microphone is on only
- * between `start()` and `stop()`, and the browser shows that it is in use.
- */
 @Injectable({ providedIn: 'root' })
 export class PitchListener {
   private readonly player = inject(NotePlayer);
@@ -20,10 +14,6 @@ export class PitchListener {
   private frame = 0;
 
   readonly state = signal<MicrophoneState>('off');
-  /**
-   * The pitch heard just now, in hertz, or null in silence. Updated on every reading, even when the value is the
-   * same, so whatever times a steady note (like holding it in tune) keeps counting.
-   */
   readonly pitch = signal<number | null>(null, { equal: () => false });
 
   async start(): Promise<void> {
@@ -36,7 +26,6 @@ export class PitchListener {
     }
     this.state.set('asking');
     try {
-      // The browser's voice processing would bend the pitch, so it is turned off
       this.stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
       });

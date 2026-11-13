@@ -12,7 +12,6 @@ import type { DecisionInput, ReportInput, ReportStatus } from './word-reports.sc
 import { decisionSchema, REPORT_STATUSES, reportSchema } from './word-reports.schema.js';
 import { WordReportsService } from './word-reports.service.js';
 
-/** Players report rude words the word builder accepted; the games site asks which words don't count */
 @Controller('v1/word-reports')
 export class WordReportsController {
   constructor(private readonly reports: WordReportsService) {}
@@ -38,7 +37,6 @@ export class WordReportsController {
   }
 }
 
-/** For moderators: approve a report (the word stays out) or reject it (the word counts again) */
 @Controller('admin/word-reports')
 @UseGuards(AdminGuard)
 export class WordReportsAdminController {

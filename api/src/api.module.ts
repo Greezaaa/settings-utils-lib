@@ -9,7 +9,6 @@ import { StatsModule } from './stats/stats.module.js';
 import { SuggestionsModule } from './suggestions/suggestions.module.js';
 import { WordReportsModule } from './word-reports/word-reports.module.js';
 
-/** The endpoints of api.su-labs.dev; signing in and out is on auth.su-labs.dev (SignInModule) */
 @Module({
   imports: [
     AccountsApiModule,

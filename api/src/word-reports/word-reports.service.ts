@@ -17,10 +17,6 @@ export class WordReportsService {
     private readonly reports: Repository<WordReport>,
   ) {}
 
-  /**
-   * Counts one more report of a word, once per visitor a day; a word a moderator already decided on keeps that
-   * decision
-   */
   async report(
     { word, language }: ReportInput,
     visitor: string,
@@ -36,7 +32,6 @@ export class WordReportsService {
     );
   }
 
-  /** Words that don't count in a language: approved by a moderator, or reported often enough and not yet decided */
   async hidden(language: LanguageId): Promise<string[]> {
     const rows = await this.reports
       .createQueryBuilder('report')
@@ -51,7 +46,6 @@ export class WordReportsService {
     return rows.map(({ word }) => word);
   }
 
-  /** Reports for moderators, most reported first */
   list(status: ReportStatus, { offset, limit }: Page): Promise<WordReport[]> {
     return this.reports.find({
       where: { status },

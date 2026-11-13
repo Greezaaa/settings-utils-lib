@@ -1,8 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { SuNotificationService } from './notification.service';
 
-// Notification logic is covered by the SuNotificationController tests in @su-labs/core/notifications;
-// these tests cover the Angular wrapper only.
 describe('SuNotificationService', () => {
   it('should expose the notifications as a signal', () => {
     const service = new SuNotificationService();

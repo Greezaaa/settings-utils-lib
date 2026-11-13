@@ -5,10 +5,6 @@ import { ReleaseList } from '../../changelog/release-list';
 import { changelogUrl, registryLink } from '../../core/links';
 import { ALL_PACKAGES, CORE_PACKAGE, findPackage } from '../../core/packages';
 
-/**
- * Changelog of every package, read live from CHANGELOG.md on GitHub.
- * Nothing to update here when a release ships: pushing the CHANGELOG.md is enough.
- */
 @Component({
   selector: 'app-changelog-page',
   imports: [ReleaseList, RouterLink, RouterLinkActive],
@@ -17,7 +13,6 @@ import { ALL_PACKAGES, CORE_PACKAGE, findPackage } from '../../core/packages';
   styleUrl: './changelog-page.scss',
 })
 export class ChangelogPage {
-  /** Package folder from the URL, e.g. /changelog/theme */
   readonly slug = input<string>(CORE_PACKAGE.slug);
 
   protected readonly packages = ALL_PACKAGES;

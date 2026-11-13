@@ -6,11 +6,9 @@ import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { SuCodeBoxesComponent } from '@su-labs/fields';
 
-/** Room codes: letters and digits without the easily mixed-up ones (0/O, 1/I/L), like the rooms service */
 const CODE_PATTERN = /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/;
 const CODE_LENGTH = 6;
 
-/** "Play together": create a room, or join one by typing its code */
 @Component({
   selector: 'app-rooms-page',
   imports: [TranslatePipe, SuCodeBoxesComponent],
@@ -25,14 +23,11 @@ export class RoomsPage {
   private readonly features = inject(FeatureFlags);
   protected readonly hasLivelyFields = computed(() => this.features.canUse('lively-fields'));
   protected readonly codeLength = CODE_LENGTH;
-  /** The code typed so far, in capitals without spaces */
   protected readonly code = signal('');
   protected readonly isCodeComplete = computed(() => CODE_PATTERN.test(this.code()));
 
   constructor() {
-    // Errors belong to the last attempt, not to this visit of the page
     this.client.error.set(null);
-    // A room just created: go to it
     effect(() => {
       const room = this.client.room();
       if (room) {

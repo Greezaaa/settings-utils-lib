@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-/** One 👍 or 👎 for a game, with an optional preset reason; anonymous, dated by day only */
 @Entity('feedback')
 export class Feedback {
   @PrimaryGeneratedColumn('uuid')

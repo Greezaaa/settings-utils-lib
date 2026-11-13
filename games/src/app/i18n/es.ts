@@ -1,7 +1,6 @@
 import { SiteMessages } from './site-messages';
 import { forGender, WordGender } from './word-gender';
 
-/** Room nicknames: an adjective and an animal, by number */
 const ADJECTIVES = [
   'valiente',
   'feliz',
@@ -39,7 +38,6 @@ const ANIMALS = [
   'Jirafa',
 ];
 
-/** The texts, with each line that changes with the player's choice in the boy's or the girl's form */
 export const spanish = (gender: WordGender): SiteMessages => ({
 
   answers: {
@@ -1358,5 +1356,4 @@ export const spanish = (gender: WordGender): SiteMessages => ({
   },
 });
 
-/** The texts until the player chooses: the boy's forms, as always */
 export const ES: SiteMessages = spanish('boy');

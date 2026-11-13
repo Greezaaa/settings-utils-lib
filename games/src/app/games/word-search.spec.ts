@@ -19,7 +19,6 @@ describe('word search', () => {
   });
 
   it('reads straight lines only: across, down and diagonal, either way', () => {
-    // A 4 × 4 board: cell = row * 4 + column
     expect(lineCells(0, 3, 4)).toEqual([0, 1, 2, 3]);
     expect(lineCells(12, 0, 4)).toEqual([12, 8, 4, 0]);
     expect(lineCells(0, 15, 4)).toEqual([0, 5, 10, 15]);

@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** The on/off switch for each game */
 export class GameSettings1794200000000 implements MigrationInterface {
   name = 'GameSettings1794200000000';
 

@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** The first tables: play counts, feedback, word reports and suggestions */
 export class Initial1794100000000 implements MigrationInterface {
   name = 'Initial1794100000000';
 

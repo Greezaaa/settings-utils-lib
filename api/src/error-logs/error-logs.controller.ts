@@ -5,7 +5,6 @@ import { SuperAdminGuard } from '../security/admin.guard.js';
 import { ErrorLog } from './error-log.entity.js';
 import { ErrorLogsService } from './error-logs.service.js';
 
-/** An error a visitor's browser hit on the games site: what went wrong and on which page, nothing about them */
 const siteErrorSchema = z.object({
   code: z.string().regex(/^[a-z0-9-]{1,20}$/),
   title: z.string().min(1).max(120),
@@ -13,7 +12,6 @@ const siteErrorSchema = z.object({
   path: z.string().regex(/^\/[^?#\s]{0,199}$/),
 });
 
-/** The games site reports the errors its visitors hit */
 @Controller('v1/errors')
 export class ErrorReportsController {
   constructor(private readonly errors: ErrorLogsService) {}
@@ -28,7 +26,6 @@ export class ErrorReportsController {
   }
 }
 
-/** For the super admin: the error log, and clearing errors once fixed */
 @Controller('admin/errors')
 @UseGuards(SuperAdminGuard)
 export class ErrorLogsAdminController {

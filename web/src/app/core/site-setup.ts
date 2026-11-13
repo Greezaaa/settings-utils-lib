@@ -6,24 +6,14 @@ import { SHARED_SETTINGS } from './shared-settings';
 import { isSavingAllowed } from './site-storage';
 import { SiteTheme } from './site-theme';
 
-/**
- * localStorage key for the site's visit data, also used by the visit tracker demo; under the site's prefix, so turning
- * saving off deletes it
- */
 export const VISIT_STORAGE_KEY = 'su-labs-site:visits';
 
-/** Visit numbers celebrated with a notification */
 export const VISIT_MILESTONES = [3, 10, 50, 100];
 
-/**
- * Start every utility once, before the first render.
- * The site uses its own libraries: theme, font size, notifications and visit tracking.
- */
 export function setUpSite(): void {
   inject(SiteTheme).init();
 
   const fontSize = inject(FontSizeService);
-  // Shared with the other su-labs site; key and limits are also read by the inline script in index.html
   fontSize.configure({
     defaultSize: 16,
     minSize: 12,
@@ -37,7 +27,6 @@ export function setUpSite(): void {
   const notifications = inject(SuNotificationService);
   notifications.configure({ position: 'bottom-right' });
 
-  // Visits are only counted (and saved) while the visitor allows saving
   const visits = inject(SuVisitTrackerService);
   if (!isSavingAllowed()) {
     return;

@@ -10,58 +10,27 @@ import { advance, createRoom, hideName, join, newCode, newPlayer, playAgain, REA
 import { verifyNamePass } from '../shared/name-pass.js';
 import type { RoomsEnv } from './rooms-env.js';
 
-/** How long a dropped player keeps their seat, to come back after a reload or a flaky connection */
 const RECONNECT_GRACE_MS = 2 * 60_000;
-/**
- * A room closes once nobody has been connected for EMPTY_ROOM_MS (counted from the last one leaving, longer than the
- * grace above so a seat can still come back), or after IDLE_ROOM_MS with nothing happening even with players waiting
- * in it: long enough to wait for friends to join
- */
 const EMPTY_ROOM_MS = 3 * 60_000;
 const IDLE_ROOM_MS = 2 * 60 * 60_000;
-/**
- * Every HEARTBEAT_MS each connection gets a ping (browsers answer it by themselves): it keeps quiet connections open
- * through Cloudflare, which closes WebSockets silent for about 100 s, and a connection that didn't answer the last ping
- * is gone, so it's closed and its player shows as away
- */
 const HEARTBEAT_MS = 25_000;
-/** How often the clock moves rooms along (countdown → playing → results) and tidies up */
 const TICK_MS = 250;
-/** Creating or joining rooms: at most this many tries a minute per visitor, so codes can't be guessed */
 const MAX_ROOM_TRIES_PER_MINUTE = 20;
-/** Largest message accepted; every message is a few short fields */
 const MAX_MESSAGE_BYTES = 2048;
-/** Rooms open at once; far more than the site needs, so a flood of new rooms can't fill the server's memory */
 const MAX_ROOMS = 2000;
-/**
- * Per visitor address: open connections, and rooms they opened that are still open. Generous, as a whole class at
- * school shares one address, yet one visitor can't take every room (filling MAX_ROOMS takes 200 addresses)
- */
 export const MAX_CONNECTIONS_PER_VISITOR = 40;
 export const MAX_ROOMS_PER_VISITOR = 10;
-/**
- * Messages a connection may send in a room every few seconds (scores come at most 3 a second); more are ignored, so
- * one player can't flood the others with updates
- */
 const MAX_MESSAGES = 40;
 const MESSAGE_WINDOW_MS = 5_000;
 
-/** Which room and player a connection belongs to, and the visitor's address for the limits */
 interface Seat {
   code: string | null;
   playerId: string | null;
   readonly ip: string;
-  /** When its recent room messages came, for the message limit */
   messages: number[];
-  /** When it last sent a sticker, for the gap between stickers */
   reactedAt: number;
 }
 
-/**
- * The rooms service's WebSocket, at wss://rooms.su-labs.dev/rooms: creating and joining rooms by code, the lobby
- * (settings, ready), rounds on a shared clock, live scores and results. Rooms live in memory only and nothing about the
- * players is stored; visitor addresses are held only for the join limit, for a minute.
- */
 @WebSocketGateway({ path: '/rooms', maxPayload: MAX_MESSAGE_BYTES })
 export class RoomsGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnModuleDestroy
@@ -70,18 +39,14 @@ export class RoomsGateway
   private readonly rooms = new Map<string, Room>();
   private readonly seats = new Map<WebSocket, Seat>();
   private readonly tries = new Map<string, number[]>();
-  /** Who opened each open room (their address), for the per-visitor room limit */
   private readonly openedBy = new Map<string, string>();
   private readonly origins: readonly string[];
   private readonly trustCloudflare: boolean;
   private readonly ticker = setInterval(() => this.tick(), TICK_MS);
   private readonly heartbeat = setInterval(() => this.ping(), HEARTBEAT_MS);
-  /** Connections that answered the last ping */
   private readonly alive = new WeakSet<WebSocket>();
-  /** When each room's last connected player left, while nobody is connected */
   private readonly emptySince = new Map<string, number>();
 
-  /** Checks the API's name passes; none, and every player shows with their nickname */
   private readonly nameSecret: string | undefined;
 
   constructor(config: ConfigService<RoomsEnv, true>) {
@@ -95,7 +60,6 @@ export class RoomsGateway
     clearInterval(this.heartbeat);
   }
 
-  /** Only the games site may connect (browsers always send their page's origin) */
   handleConnection(client: WebSocket, request: IncomingMessage): void {
     if (!this.origins.includes(request.headers.origin ?? '')) {
       client.close(1008, 'Origin not allowed');
@@ -124,7 +88,6 @@ export class RoomsGateway
     });
   }
 
-  /** A dropped player keeps their seat for a while (see tick) */
   handleDisconnect(client: WebSocket): void {
     const seat = this.seats.get(client);
     this.seats.delete(client);
@@ -146,7 +109,6 @@ export class RoomsGateway
     if (!data || !this.allowTry(client)) {
       return;
     }
-    // Leaving first: the room it leaves may close, and then doesn't count against the limits
     this.leaveCurrentRoom(client);
     const ip = this.seats.get(client)?.ip ?? '';
     const opened = [...this.openedBy.values()].filter(
@@ -189,7 +151,6 @@ export class RoomsGateway
       this.refuse(client, 'not-found');
       return;
     }
-    // One connection, one seat: joining again (here or elsewhere) gives up the old one, never leaving a ghost behind
     this.leaveCurrentRoom(client);
     const player = newPlayer(
       room.players,
@@ -205,7 +166,6 @@ export class RoomsGateway
     this.seat(client, room, player.id, player.token);
   }
 
-  /** Back after a reload or a dropped connection, with the token from joining */
   @SubscribeMessage('rejoin')
   rejoin(
     @ConnectedSocket() client: WebSocket,
@@ -259,7 +219,6 @@ export class RoomsGateway
     );
   }
 
-  /** Anyone in the room hides another player's own name for everyone, e.g. a rude one (the games site reports it) */
   @SubscribeMessage('hide-name')
   hideName(
     @ConnectedSocket() client: WebSocket,
@@ -271,10 +230,6 @@ export class RoomsGateway
     );
   }
 
-  /**
-   * A sticker for everyone in the room, in any phase; it changes nothing in the room, so it's passed on as is. One
-   * every REACTION_GAP_MS per player; quicker ones are dropped quietly.
-   */
   @SubscribeMessage('react')
   react(
     @ConnectedSocket() client: WebSocket,
@@ -358,7 +313,6 @@ export class RoomsGateway
     }
   }
 
-  /** Takes the connection's player out of its room, if it has one; true when it did */
   private leaveCurrentRoom(client: WebSocket): boolean {
     const seat = this.seats.get(client);
     const room = seat?.code ? this.rooms.get(seat.code) : undefined;
@@ -372,7 +326,6 @@ export class RoomsGateway
     return true;
   }
 
-  /** The connection stays open, in no room */
   private unseat(client: WebSocket): void {
     const seat = this.seats.get(client);
     if (seat) {
@@ -380,7 +333,6 @@ export class RoomsGateway
     }
   }
 
-  /** Runs a change on the player's room and tells everyone, or tells the player why not */
   private act<T>(
     client: WebSocket,
     data: T | null,
@@ -416,7 +368,6 @@ export class RoomsGateway
     this.broadcast(room);
   }
 
-  /** The clock: moves rounds along, gives up on seats left too long, and closes idle rooms */
   private tick(): void {
     const now = Date.now();
     for (const room of this.rooms.values()) {
@@ -462,7 +413,6 @@ export class RoomsGateway
     }
   }
 
-  /** Pings every connection, and closes those that didn't answer the last ping (see HEARTBEAT_MS) */
   private ping(): void {
     for (const socket of this.seats.keys()) {
       if (!this.alive.has(socket)) {
@@ -483,7 +433,6 @@ export class RoomsGateway
     );
   }
 
-  /** At most MAX_MESSAGES room messages every MESSAGE_WINDOW_MS per connection; the rest are dropped quietly */
   private allowMessage(seat: Seat): boolean {
     const now = Date.now();
     seat.messages = seat.messages.filter(
@@ -496,7 +445,6 @@ export class RoomsGateway
     return true;
   }
 
-  /** At most MAX_ROOM_TRIES_PER_MINUTE creates and joins a minute per visitor */
   private allowTry(client: WebSocket): boolean {
     const ip = this.seats.get(client)?.ip ?? '';
     const now = Date.now();
@@ -542,7 +490,6 @@ export class RoomsGateway
     }
   }
 
-  /** Tells the player why an action was refused, and logs it so problems show in `docker compose logs -f rooms` */
   private refuse(
     client: WebSocket,
     error: RoomError | 'invalid' | 'too-many',
@@ -558,7 +505,6 @@ export class RoomsGateway
     }
   }
 
-  /** The approved screen name in a name pass, or null without one, without a secret, or when it doesn't check out */
   private ownName(pass: string | null): string | null {
     return pass && this.nameSecret
       ? verifyNamePass(pass, this.nameSecret)

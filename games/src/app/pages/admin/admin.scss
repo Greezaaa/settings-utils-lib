@@ -1,6 +1,3 @@
-// Styles the admin page and its tabs share
-
-// Each tab: its cards, titles and help one under the other, evenly spaced
 :host(.admin-tab) {
   align-content: start;
   display: grid;
@@ -17,7 +14,6 @@
   }
 }
 
-// The switches' groups (games, features, multiplayer): one column, two on wide screens
 .admin-groups {
   align-items: start;
   display: grid;
@@ -37,7 +33,6 @@
     font-size: 1.375rem;
   }
 
-  // A category's name above its games' switches
   .category-title {
     color: var(--muted);
     font-size: 0.875rem;
@@ -129,7 +124,6 @@ input[type='text'] {
   font-weight: 400;
 }
 
-// Smaller switches than on the players' pages, as the admin goes through many of them (switch.scss sizes the rest)
 .switch-row .track {
   --switch-width: 2.125rem;
   --switch-height: 1.25rem;
@@ -143,7 +137,6 @@ input[type='text'] {
   padding: 0;
 }
 
-// A list drawn as a card keeps the card's padding
 .card.plain-list {
   gap: 1rem;
   padding: 1.25rem 1.5rem;
@@ -177,7 +170,6 @@ table {
   color: var(--red-text);
 }
 
-// The error log: long problems wrap instead of widening the table
 .problem {
   max-width: 28rem;
   overflow-wrap: anywhere;

@@ -11,10 +11,8 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'playing' | 'done';
 
-/** Where a press started: a symbol in the tray, or a cell of the board */
 type PressSource = { readonly kind: 'tray'; readonly symbol: number } | { readonly kind: 'cell'; readonly cell: number };
 
-/** A press on a symbol or a cell, which becomes a drag once the pointer moves far enough */
 interface Press {
   readonly source: PressSource;
   readonly pointerId: number;
@@ -24,17 +22,10 @@ interface Press {
   readonly y: number;
 }
 
-/** Pointer movement, in pixels, below which a press counts as a tap rather than a drag */
 const DRAG_THRESHOLD = 8;
 
 const NO_CELLS: ReadonlySet<number> = new Set();
 
-/**
- * The page of the sudoku games (symbol and number sudoku, given by the route as `game`): a classic sudoku where each
- * symbol goes once in every row, column and box. Symbols are dragged from the tray onto the empty cells, from one cell
- * to another, or off the board to take them back; tapping a symbol and then a cell does the same, also with the
- * keyboard. Check marks the symbols repeated in a row, column or box.
- */
 @Component({
   selector: 'app-sudoku-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
@@ -48,7 +39,6 @@ const NO_CELLS: ReadonlySet<number> = new Set();
   ],
 })
 export class SudokuPage {
-  /** Which sudoku game this page plays, from the route's data */
   readonly game = input.required<SudokuGame>();
   protected readonly sizes = SUDOKU_SIZES;
   protected readonly minAge = computed(() => gameInfo(this.game()).minAge);
@@ -61,26 +51,20 @@ export class SudokuPage {
   private readonly puzzle = signal<SudokuPuzzle | null>(null);
   protected readonly board = signal<SudokuBoard>([]);
   protected readonly boxShape = computed(() => BOX_SHAPES[this.size()]);
-  /** The board's cells, box by box; none until a puzzle is dealt in the browser */
   protected readonly boxes = computed(() => (this.puzzle() ? boxCells(this.size()) : []));
-  /** The symbols of the tray, as indexes, in order */
   protected readonly traySymbols = computed(() => Array.from({ length: this.size() }, (_, symbol) => symbol));
-  /** Symbols already on the board as many times as there are rows */
   protected readonly usedUp = computed(() => {
     const board = this.board();
     return new Set(this.traySymbols().filter((symbol) => board.filter((cell) => cell === symbol).length >= this.size()));
   });
 
-  /** A tray symbol chosen by a tap, placed on each cell tapped next */
   protected readonly picked = signal<number | null>(null);
-  /** Check was pressed since the last move: the repeated symbols are marked */
   protected readonly isChecked = signal(false);
   protected readonly repeated = computed(() =>
     this.isChecked() ? repeatedCells(this.board(), this.size()) : NO_CELLS,
   );
 
   protected readonly press = signal<Press | null>(null);
-  /** The symbol being dragged and where to draw it, once the press has moved far enough */
   protected readonly dragged = computed(() => {
     const press = this.press();
     const symbol = press && this.movableSymbol(press.source);
@@ -90,12 +74,10 @@ export class SudokuPage {
   private hasStarted = false;
 
   constructor() {
-    // Dealt in the browser only, so the prerendered page doesn't show one board and then another
     afterNextRender(() => this.newGame());
     inject(DestroyRef).onDestroy(() => this.clock.stop());
   }
 
-  /** A symbol as shown, e.g. 0 → `A` in symbol sudoku (in the site's language) or `1` in number sudoku */
   protected symbolOf(symbol: number | null): string {
     return symbol === null ? '' : this.messages().sudoku.games[this.game()].symbols[symbol];
   }
@@ -112,13 +94,11 @@ export class SudokuPage {
     return { kind: 'tray', symbol };
   }
 
-  /** The cell whose symbol is being dragged away */
   protected isLifted(cell: number): boolean {
     const source = this.press()?.source;
     return this.dragged() !== null && source?.kind === 'cell' && source.cell === cell;
   }
 
-  /** A cell's row and column, counted from 1, for screen readers */
   protected rowOf(cell: number): number {
     return Math.floor(cell / this.size()) + 1;
   }
@@ -184,17 +164,12 @@ export class SudokuPage {
     this.press.set(null);
   }
 
-  /** Keyboard (Enter or Space) works like a tap; pointer taps are handled on pointer up */
   protected onClick(event: MouseEvent, source: PressSource): void {
     if (event.detail === 0 && this.phase() === 'playing') {
       this.tap(source);
     }
   }
 
-  /**
-   * A tap on a tray symbol picks it (or drops it, when picked already). A tap on a cell places the picked symbol, or
-   * empties it when it holds that symbol already or nothing is picked.
-   */
   private tap(source: PressSource): void {
     if (source.kind === 'tray') {
       this.picked.update((picked) => (picked === source.symbol ? null : source.symbol));
@@ -204,7 +179,6 @@ export class SudokuPage {
     this.setCell(source.cell, picked === this.board()[source.cell] ? null : picked);
   }
 
-  /** A dragged symbol lands on a cell, leaving the one it came from; dragged off the board, it goes back */
   private drop(source: PressSource, symbol: number, target: number | null): void {
     if (source.kind === 'cell' && source.cell !== target) {
       this.setCell(source.cell, null);
@@ -214,7 +188,6 @@ export class SudokuPage {
     }
   }
 
-  /** The symbol a press can drag: any tray symbol, or a symbol the player put on the board */
   private movableSymbol(source: PressSource): number | null {
     if (source.kind === 'tray') {
       return source.symbol;
@@ -222,7 +195,6 @@ export class SudokuPage {
     return this.isGiven(source.cell) ? null : this.board()[source.cell];
   }
 
-  /** Puts a symbol on a cell (null empties it), unless its symbol was given; the board may now be solved */
   private setCell(cell: number, symbol: number | null): void {
     if (this.isGiven(cell) || this.board()[cell] === symbol) {
       return;
@@ -241,7 +213,6 @@ export class SudokuPage {
     }
   }
 
-  /** The board cell under a point */
   private cellAt(x: number, y: number): number | null {
     const tile = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-cell]');
     const cell = Number(tile?.dataset['cell']);

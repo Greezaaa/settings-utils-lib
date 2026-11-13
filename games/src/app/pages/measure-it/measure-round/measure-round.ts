@@ -7,10 +7,8 @@ import { formatNumber, NumberLineView } from '../number-line-view/number-line-vi
 import { CheckedRay, ProtractorView } from '../protractor-view/protractor-view';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/** How long the answer (right, or the right one) shows before the next exercise */
 const FEEDBACK_MS = 1300;
 
-/** An exercise answered with the slider */
 type SliderExercise = AngleExercise | LineExercise;
 
 const isSliderRight = (exercise: SliderExercise, answer: number): boolean =>
@@ -18,11 +16,6 @@ const isSliderRight = (exercise: SliderExercise, answer: number): boolean =>
     ? isAngleRight(exercise, answer)
     : isLineRight(exercise, answer);
 
-/**
- * One exercise of Measure it, any mode: the drawing, the slider or the choices, and Check. The answer shows in colour
- * (green or red, with the right answer drawn) for a moment before the page hears right or wrong. With `hints`, a wrong
- * first try gets a hint (a bit more or less, or the wrong glass marked) and one more try. Used alone and in rooms.
- */
 @Component({
   selector: 'app-measure-round',
   imports: [
@@ -41,31 +34,26 @@ export class MeasureRound {
   readonly exercise = input.required<MeasureExercise>();
   readonly mode = input.required<MeasureModeId>();
   readonly hints = input(false);
-  /** Right or wrong, once the answer has shown */
   readonly answered = output<boolean>();
 
   protected readonly formatFill = formatFill;
   protected readonly fillParts = fillParts;
   protected readonly formatNumber = formatNumber;
 
-  /** Everything below starts again with each exercise */
   protected readonly value = linkedSignal({
     source: this.exercise,
     computation: (exercise): number =>
       exercise.kind === 'line' ? exercise.start : 90,
   });
-  /** Right or wrong once answered for good; null while the player is still answering */
   protected readonly isRight = linkedSignal({
     source: this.exercise,
     computation: (): boolean | null => null,
   });
   protected readonly isDone = computed(() => this.isRight() !== null);
-  /** The hint after a wrong first try on the slider */
   protected readonly hint = linkedSignal({
     source: this.exercise,
     computation: (): AimHint | null => null,
   });
-  /** Glasses picked wrong, shown in red */
   protected readonly wrongChoices = linkedSignal({
     source: this.exercise,
     computation: (): readonly Fill[] => [],
@@ -74,12 +62,10 @@ export class MeasureRound {
   protected readonly angle = computed(() => this.asAngle(this.exercise()));
   protected readonly glass = computed(() => this.asGlass(this.exercise()));
   protected readonly line = computed(() => this.asLine(this.exercise()));
-  /** The slider moves by the level's step: a few degrees, or the line's step */
   protected readonly step = computed(
     () => this.angle()?.level.step ?? this.line()?.step ?? 1
   );
 
-  /** Once answered: reading, the player's guess in green or red; making, the right angle in green */
   protected readonly checkedRay = computed((): CheckedRay | null => {
     const angle = this.angle();
     const isRight = this.isRight();
@@ -90,12 +76,10 @@ export class MeasureRound {
       ? { angle: angle.angle, isRight: true }
       : { angle: this.value(), isRight };
   });
-  /** Once answered, the number at the line's mark */
   protected readonly lineAnswer = computed(() => {
     const line = this.line();
     return line && this.isDone() ? rightValue(line) : null;
   });
-  /** The right answer as text, for the answer line */
   protected readonly rightText = computed(() => {
     const exercise = this.exercise();
     switch (exercise.kind) {
@@ -120,7 +104,6 @@ export class MeasureRound {
     }
   }
 
-  /** Checks the slider's answer (angles and number lines) */
   protected check(): void {
     const exercise = this.angle() ?? this.line();
     if (!exercise || this.isDone()) {

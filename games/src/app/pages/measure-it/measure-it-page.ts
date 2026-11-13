@@ -11,10 +11,6 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'done';
 
-/**
- * Measure it: the settings screen (mode and level), ten exercises in a row and the end screen.
- * Each exercise is a MeasureRound, which this page only hears right or wrong from.
- */
 @Component({
   selector: 'app-measure-it-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, MeasureRound, RouterLink],

@@ -20,7 +20,6 @@ import { PlayerGuard } from './player.guard.js';
 import { screenNameSchema } from './screen-name.js';
 import { Leaderboard, ResultsService } from './results.service.js';
 
-/** A feature switched on for everyone, or a signed-in admin trying it in preview */
 async function isOpenOrPreviewed(
   feature: FeatureId,
   request: Request,
@@ -34,10 +33,6 @@ async function isOpenOrPreviewed(
   return adminToken !== null && (await auth.adminForToken(adminToken)) !== null;
 }
 
-/**
- * A signed-in player's account on games.su-labs.dev: their details, favourites and best results. Signing up, in and
- * out, passwords and deleting the account are on auth.su-labs.dev (PlayerSignInController).
- */
 @Controller('v1/account')
 export class AccountsController {
   constructor(
@@ -64,10 +59,6 @@ export class AccountsController {
     await this.accounts.change(playerOf(request), input);
   }
 
-  /**
-   * Shows the player on the leaderboards or hides them. A switch a player may flip back and forth, so it allows more
-   * than the name and email changes (which can check a password, and stay strict)
-   */
   @Put('leaderboard')
   @HttpCode(204)
   @UseGuards(PlayerGuard)
@@ -80,10 +71,6 @@ export class AccountsController {
     await this.accounts.setShowOnLeaderboard(playerOf(request), show);
   }
 
-  /**
-   * A short-lived pass for the rooms service to show the player's screen name, while `room-names` is on: null until a
-   * moderator approves the name (or when it can't show in rooms)
-   */
   @Get('room-name')
   @UseGuards(PlayerGuard)
   async roomName(
@@ -111,7 +98,6 @@ export class AccountsController {
     await this.accounts.setFavorites(playerOf(request), games);
   }
 
-  /** A finished game, from a signed-in player */
   @Post('results')
   @HttpCode(204)
   @UseGuards(PlayerGuard)
@@ -123,8 +109,6 @@ export class AccountsController {
     await this.results.record(playerOf(request).id, result);
   }
 
-  /** Best results the browser kept before signing in */
-  /** The player deletes their results (plays, bests, leaderboard places) and keeps the account */
   @Delete('results')
   @HttpCode(204)
   @UseGuards(PlayerGuard)
@@ -145,11 +129,6 @@ export class AccountsController {
   }
 }
 
-/**
- * The leaderboards: screen names of the players who chose to show, games finished and best results; nothing else.
- * Signed-in players only, until the admin opens `public-leaderboard` (or previews it): then anyone may look, and players
- * who chose not to show are ranked too, under no name.
- */
 @Controller('v1/leaderboard')
 export class LeaderboardController {
   constructor(
@@ -181,7 +160,6 @@ export class LeaderboardController {
     };
   }
 
-  /** Open to everyone: switched on, or the admin trying it in preview */
   private isPublic(request: Request): Promise<boolean> {
     return isOpenOrPreviewed(
       'public-leaderboard',
@@ -194,7 +172,6 @@ export class LeaderboardController {
 
 const nameReportSchema = z.object({ screenName: screenNameSchema });
 
-/** Players report a screen name they found rude in a room; it stops showing in rooms until a moderator looks again */
 @Controller('v1/name-reports')
 export class NameReportsController {
   constructor(private readonly accounts: AccountsService) {}
@@ -213,10 +190,6 @@ export class NameReportsController {
 const playerIdSchema = z.uuid();
 const removedSchema = z.object({ removedFromBoards: z.boolean() });
 
-/**
- * For moderators: the players on the leaderboards, to give one a plain new name (a rude screen name) or take them off
- * the leaderboards (made-up scores), and put them back
- */
 @Controller('admin/players')
 @UseGuards(AdminGuard)
 export class PlayersAdminController {
@@ -230,7 +203,6 @@ export class PlayersAdminController {
     return this.accounts.moderationList({ offset, limit });
   }
 
-  /** Screen names waiting to be allowed in rooms, reported ones first */
   @Get('names')
   pendingNames(
     @Query('offset', { schema: offsetSchema }) offset: number,
@@ -239,7 +211,6 @@ export class PlayersAdminController {
     return this.accounts.pendingNames({ offset, limit });
   }
 
-  /** Lets a screen name show in rooms; a rude one gets a plain new name instead (rename) */
   @Post(':id/approve-name')
   @HttpCode(204)
   async approveName(

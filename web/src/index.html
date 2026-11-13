@@ -13,7 +13,7 @@
   <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)">
   <meta name="author" content="Yevheniy Alekseyev">
-  <!-- Structured data for search engines. URLs must match SITE_URL in app/core/links.ts -->
+  <!-- Keep the URLs in sync with SITE_URL in app/core/links.ts -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -37,11 +37,7 @@
       ]
     }
   </script>
-  <!--
-    Apply the saved theme and text size before the first paint, so the page doesn't flash
-    from the default to the visitor's choice while the app loads. The app then takes over.
-    Both values live in cookies shared with the other su-labs site; keys must match core/shared-settings.ts.
-  -->
+  <!-- Keep the cookie keys in sync with core/shared-settings.ts -->
   <script>
     (function () {
       var root = document.documentElement;

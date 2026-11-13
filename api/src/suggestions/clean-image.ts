@@ -1,21 +1,11 @@
 import { BadRequestException } from '@nestjs/common';
 import sharp from 'sharp';
 
-/** Largest upload accepted; the games site shrinks pictures well below this before sending */
 export const IMAGE_MAX_BYTES = 2 * 1024 * 1024;
-/** Longest side of a stored picture */
 const MAX_SIDE = 1600;
 const ACCEPTED_FORMATS = ['jpeg', 'png', 'webp'];
-/**
- * Most pixels a picture may have once decoded (about a 40-megapixel photo): a small file can still unpack into a
- * huge image, which would take the server's memory
- */
 const MAX_INPUT_PIXELS = 40_000_000;
 
-/**
- * Re-encodes an uploaded picture as WebP: turned upright, no larger than 1600 px, and without any metadata
- * (camera, date, location), whatever the browser sent. Rejects anything that isn't a JPEG, PNG or WebP picture.
- */
 export async function cleanImage(input: Buffer): Promise<Buffer> {
   try {
     const image = sharp(input, {
@@ -26,7 +16,6 @@ export async function cleanImage(input: Buffer): Promise<Buffer> {
     if (!format || !ACCEPTED_FORMATS.includes(format)) {
       throw new Error(`Unsupported format: ${format}`);
     }
-    // sharp writes no metadata unless asked to, so EXIF and location are dropped here
     return await image
       .rotate()
       .resize({

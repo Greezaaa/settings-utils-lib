@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ColorReader, contrastRatio, MAX_CUSTOM_THEME_LENGTH, parseCustomTheme, SAMPLE_CUSTOM_THEME } from './custom-theme';
 
-/**
- * jsdom has no canvas, so colors are read by a stand-in that only knows #rrggbb and 'transparent'.
- * Like the canvas, it rejects anything that isn't a literal color.
- */
 const readColor: ColorReader = (value) => {
   if (value === 'transparent') {
     return [0, 0, 0, 0];

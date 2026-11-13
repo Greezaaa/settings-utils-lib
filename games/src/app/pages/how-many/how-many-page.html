@@ -13,7 +13,6 @@
 
 <section class="container page-section" [attr.aria-label]="'howMany.board' | translate">
   <div class="card play" appGameBoard>
-    <!-- The game on one side, its settings, score and buttons on the other (settings first on phones) -->
     <div class="play-layout">
       <div class="play-main">
         @switch (phase()) {
@@ -133,7 +132,6 @@
           }
         </div>
 
-        <!-- A star for each round right at the first try, a dot for the others -->
         <ol class="progress-stars" [attr.aria-label]="'howMany.progress' | translate: results().length : rounds().length">
           @for (round of rounds(); track $index; let roundIndex = $index) {
             <li

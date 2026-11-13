@@ -1,9 +1,5 @@
 import { Directive, ElementRef, inject, OnDestroy, OnInit } from '@angular/core';
 
-/**
- * Fades an element in the first time it enters the viewport.
- * The animation itself is in styles.scss (`.reveal`) and is skipped for reduced motion.
- */
 @Directive({
   selector: '[appReveal]',
   host: { class: 'reveal' },

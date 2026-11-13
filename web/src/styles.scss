@@ -1,13 +1,3 @@
-/*
- * Global styles for the su-labs website.
- *
- * Background, text and accent colors come from @su-labs/theme (--su-theme-*), configured in
- * app.config.ts. Everything else is defined here per `data-theme`, which the theme service sets.
- * The root font size comes from @su-labs/font-size (--base-font-size), so the site scales with it.
- */
-
-/* ---------- Tokens ---------- */
-
 :root {
   --font-sans: 'Geist', 'SF Pro Display', 'Helvetica Neue', sans-serif;
   --font-serif: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
@@ -41,13 +31,10 @@
   --radius-large: 12px;
   --content-width: 64rem;
   --gutter: 1rem;
-  /* Height of the bar on top (tablets and phones); 0 on desktop, where the menu is a column on the left */
   --header-offset: 3.75rem;
   --sidebar-width: 15rem;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* @su-labs/notifications, styled to match the site */
-  /* Wide enough for a sentence or two; short messages stay as narrow as their text */
   --su-notification-max-width: min(100% - 2rem, 26rem);
   --su-notification-background-color: var(--surface);
   --su-notification-text-color: var(--text);
@@ -61,7 +48,6 @@
   --su-notification-close-btn-hover-background: var(--subtle);
   --su-notification-close-btn-hover-color: var(--heading);
 
-  /* @su-labs/dialog, styled to match the site (and so each theme) */
   --su-dialog-background: var(--surface);
   --su-dialog-text-color: var(--text);
   --su-dialog-title-color: var(--heading);
@@ -81,10 +67,8 @@
   color-scheme: light;
 }
 
-/* Dark tokens for the dark theme and for every dark palette (data-theme-scheme comes from @su-labs/theme) */
 :root[data-theme='dark'],
 :root[data-theme-scheme='dark'] {
-  /* Fallbacks until @su-labs/theme sets --su-theme-* (see the inline script in index.html) */
   --bg: var(--su-theme-background, #191919);
   --text: var(--su-theme-color, #e3e2e0);
   --accent: var(--su-theme-main-accent, #f5f5f4);
@@ -123,7 +107,6 @@
   --button-hover: #000000;
 }
 
-/* A visitor's own palette, or a ready-made one: every other color is mixed from its text and background */
 :root[data-theme='custom'],
 :root[data-theme-scheme]:not([data-theme='light'], [data-theme='dark'], [data-theme='contrast']) {
   --heading: var(--su-theme-color);
@@ -147,8 +130,6 @@
     --header-offset: 0rem;
   }
 }
-
-/* ---------- Base ---------- */
 
 *,
 *::before,
@@ -240,8 +221,6 @@ kbd {
   color: var(--heading);
 }
 
-/* ---------- Layout ---------- */
-
 .container {
   width: 100%;
   max-width: calc(var(--content-width) + 2 * var(--gutter));
@@ -286,8 +265,6 @@ kbd {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-
-/* ---------- Components ---------- */
 
 .card {
   background: var(--surface);
@@ -448,7 +425,6 @@ input[type='checkbox'] {
   accent-color: var(--accent);
 }
 
-/* @su-labs/fields in the site's colours; set on the root, which also carries data-theme */
 :root {
   --su-field-surface: var(--surface);
   --su-field-border: var(--border);
@@ -463,7 +439,6 @@ input[type='checkbox'] {
   --su-field-font-mono: var(--font-mono);
 }
 
-/* Key-value list used by the demos to show live state */
 .state-list {
   align-content: start;
   display: grid;
@@ -497,7 +472,6 @@ input[type='checkbox'] {
   }
 }
 
-/* Two columns on wide screens: controls and live state */
 .demo-grid {
   display: grid;
   gap: 2rem;
@@ -513,8 +487,6 @@ input[type='checkbox'] {
   align-content: start;
   gap: 1.5rem;
 }
-
-/* ---------- Motion ---------- */
 
 @media (prefers-reduced-motion: no-preference) {
   .reveal {

@@ -5,10 +5,6 @@ import { AnswerLine } from '../../../../shared/answer-line/answer-line';
 import { roundFeedback } from '../../../../shared/round-feedback';
 import { TranslatePipe } from '../../../../i18n/translate-pipe';
 
-/**
- * Find the note: a note plays, the player taps its name. A wrong tap plays the tapped note, so the two can be
- * compared, and counts a mistake; the right one ends the round.
- */
 @Component({
   selector: 'app-find-note-round',
   imports: [TranslatePipe, AnswerLine],
@@ -25,15 +21,11 @@ export class FindNoteRound {
   protected readonly player = inject(NotePlayer);
   protected readonly feedback = roundFeedback();
   protected readonly isSharp = isSharp;
-  /** The right note was tapped; resets with each note */
   protected readonly isDone = linkedSignal({ source: this.note, computation: () => false });
-  /** The last try was wrong; cleared by the next right one and with each new note */
   private readonly missed = linkedSignal({ source: this.note, computation: () => false });
-  /** For the answer line: right once done, wrong after a miss, nothing in between */
   protected readonly result = computed(() => (this.isDone() ? true : this.missed() ? false : null));
 
   constructor() {
-    // Each new note plays as soon as it is shown
     effect(() => {
       const note = this.note();
       untracked(() => void this.player.play(note));

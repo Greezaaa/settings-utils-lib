@@ -16,17 +16,11 @@ import { PuzzleTile } from './puzzle-tile/puzzle-tile';
 import { SlidingBoard } from './sliding-board/sliding-board';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-/** Fewest moves per level, saved in this browser */
 const BEST_MOVES_STORAGE = RESULT_GAMES['sliding-puzzle'].storage;
 type BestMoves = Partial<Record<BoardLevelId, number>>;
 
 const DEFAULT_LEVEL: BoardLevelId = 'normal';
 
-/**
- * Sliding puzzle: tap or swipe a tile next to the gap to slide it there, until the picture joins up.
- * Four board sizes, from 2 × 3 to 5 × 5, with tiles showing pieces of a line or of a drawing.
- * Counts moves and time, and remembers the fewest moves per size.
- */
 @Component({
   selector: 'app-sliding-puzzle-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, PuzzleTile, RouterLink, SlidingBoard],
@@ -48,10 +42,8 @@ export class SlidingPuzzlePage {
   protected readonly levelId = signal<BoardLevelId>(DEFAULT_LEVEL);
   protected readonly pictureModes: readonly PuzzlePictureMode[] = ['lines', 'drawing'];
   protected readonly pictureMode = signal<PuzzlePictureMode>('lines');
-  /** The drawing the tiles show in drawing mode */
   protected readonly picture = signal<GamePicture | null>(null);
 
-  /** Created in the browser only, so the prerendered page and the first render agree */
   protected readonly puzzle = signal<Puzzle | null>(null);
   protected readonly moves = signal(0);
   protected readonly clock = new GameClock();
@@ -90,7 +82,6 @@ export class SlidingPuzzlePage {
     this.isNewBest.set(false);
   }
 
-  /** Slides the tile in `cell` into the gap, if it is next to it */
   protected slide(cell: number): void {
     const puzzle = this.puzzle();
     if (!puzzle || this.isSolved() || !canMove(puzzle.shape, puzzle.board, cell)) {
@@ -98,7 +89,6 @@ export class SlidingPuzzlePage {
     }
     if (this.moves() === 0) {
       this.clock.start();
-      // The first move starts the game: count it as a play
       this.api.countPlay('sliding-puzzle');
     }
     this.puzzle.set({ ...puzzle, board: move(puzzle.shape, puzzle.board, cell) });
@@ -120,7 +110,6 @@ export class SlidingPuzzlePage {
   }
 }
 
-/** Fewest moves per level saved in this browser, keeping only known levels with whole positive numbers */
 function readBestMoves(): BestMoves {
   const stored = readStored(BEST_MOVES_STORAGE);
   if (typeof stored !== 'object' || stored === null) {

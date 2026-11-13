@@ -11,7 +11,6 @@ export interface TextReplacement {
  * @returns the changed text
  */
 export function applyReplacements(text: string, replacements: readonly TextReplacement[]): string {
-  // From the last to the first, so earlier offsets stay valid after each replacement
   const lastFirst = [...replacements].sort((a, b) => b.start - a.start);
   return lastFirst.reduce((result, { start, end, newText }) => result.slice(0, start) + newText + result.slice(end), text);
 }

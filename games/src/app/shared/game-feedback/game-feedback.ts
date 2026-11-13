@@ -5,7 +5,6 @@ import { readStored, writeStored } from '../../core/site-storage';
 import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-/** The games this browser already rated, so it isn't asked again */
 const RATED_STORAGE = 'rated-games';
 
 type Step = 'ask' | 'reason' | 'sending' | 'thanks' | 'failed';
@@ -15,10 +14,6 @@ function readRated(): string[] {
   return Array.isArray(stored) ? stored.filter((game: unknown): game is string => typeof game === 'string') : [];
 }
 
-/**
- * "Do you like this game?" under a game: 👍 or 👎, then an optional preset reason, sent anonymously to the API.
- * Once a game is rated in this browser, the question no longer shows.
- */
 @Component({
   selector: 'app-game-feedback',
   imports: [TranslatePipe],
@@ -32,7 +27,6 @@ export class GameFeedback {
   private readonly api = inject(GamesApi);
   private readonly language = inject(SiteLanguage);
 
-  /** Hidden until the browser says whether this game was rated, so prerendered pages never show it */
   protected readonly step = signal<Step | null>(null);
   protected readonly vote = signal<Vote>('up');
   protected readonly reasons = FEEDBACK_REASONS;

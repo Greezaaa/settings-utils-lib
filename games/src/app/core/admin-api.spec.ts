@@ -32,7 +32,6 @@ describe('AdminApi', () => {
     expect(await api.signIn('mod@su-labs.dev', 'secret')).toBe('right');
     expect(api.me()).toEqual({ email: 'mod@su-labs.dev', role: 'moderator' });
     expect(api.isSuper()).toBe(false);
-    // The session travels as a cookie, never as a header the page could read
     expect(fetchMock.mock.calls[0][1]?.credentials).toBe('include');
   });
 

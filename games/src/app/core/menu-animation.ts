@@ -4,14 +4,9 @@ import { readStored, writeStored } from './site-storage';
 
 const STORAGE = 'menu-animation';
 
-/** Whether the header menu is animated (a shape drifts after the pointer and fills the link it reaches) */
 export type MenuAnimationChoice = 'on' | 'off';
 export const MENU_ANIMATION_CHOICES: readonly MenuAnimationChoice[] = ['on', 'off'];
 
-/**
- * The visitor's choice, in the header settings, of an animated menu: off until they turn it on. Remembered in this
- * browser; the setting only shows, and the menu only animates, while its feature switch (`menu-ring`) is on.
- */
 @Injectable({ providedIn: 'root' })
 export class MenuAnimation {
   private readonly features = inject(FeatureFlags);

@@ -1,7 +1,6 @@
 import { Route, Routes } from '@angular/router';
 import { SITE_META, SITE_NAME, utilityMeta } from './core/page-meta';
 
-/** The not-found page: prerendered at /404 (copied to 404.html after the build) and shown for unknown links */
 const notFound = {
   title: `Page not found · ${SITE_NAME}`,
   data: { description: 'This page doesn’t exist.', noIndex: true },

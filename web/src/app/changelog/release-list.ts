@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ChangelogRelease } from './changelog.parser';
 import { InlineText } from './inline-text';
 
-/** Pastel tag color for each Keep a Changelog section */
 const SECTION_TAGS: Readonly<Record<string, string>> = {
   added: 'tag-green',
   changed: 'tag-blue',
@@ -12,7 +11,6 @@ const SECTION_TAGS: Readonly<Record<string, string>> = {
   security: 'tag-red',
 };
 
-/** Renders parsed changelog releases as a timeline */
 @Component({
   selector: 'app-release-list',
   imports: [InlineText],
@@ -92,7 +90,6 @@ const SECTION_TAGS: Readonly<Record<string, string>> = {
 export class ReleaseList {
   readonly releases = input.required<readonly ChangelogRelease[]>();
 
-  /** Tag class for a section title, neutral when unknown */
   protected sectionTag(title: string): string {
     return `tag ${SECTION_TAGS[title.toLowerCase()] ?? ''}`;
   }

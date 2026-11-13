@@ -15,12 +15,6 @@ import type { PlayerRequest } from './player.guard.js';
 import { PlayerGuard } from './player.guard.js';
 import { ResultsService } from './results.service.js';
 
-/**
- * Players' sign-in on auth.su-labs.dev, for each app at /v1/apps/<app>/account (shared/apps.ts): sign up with a login name, a password and a screen name (an email only to
- * reset a forgotten password), sign in on any device, sign out, change or reset the password, and delete the account.
- * The session cookie it sets (one per app) reaches api.su-labs.dev too, where the games' account data is
- * (AccountsController).
- */
 @Controller('v1/apps/:app/account')
 export class PlayerSignInController {
   private readonly cookies: CookieSettings;
@@ -33,7 +27,6 @@ export class PlayerSignInController {
     this.cookies = cookieSettings(config);
   }
 
-  /** What the sign-up form may offer: an email only when the API can send emails */
   @Get('options')
   options(@Param('app', { schema: appSchema }) _app: AppId): {
     email: boolean;
@@ -55,7 +48,6 @@ export class PlayerSignInController {
     );
   }
 
-  /** Signs in with the login name (or the email, when the account has one) */
   @Post('login')
   @Throttle(FEW_PER_15_MINUTES)
   async signIn(
@@ -107,7 +99,6 @@ export class PlayerSignInController {
     }
   }
 
-  /** Emails a reset link when an account has this email; always the same answer, so it tells nobody who has one */
   @Post('forgot')
   @HttpCode(204)
   @Throttle({ default: { limit: 3, ttl: 3_600_000 } })
@@ -133,7 +124,6 @@ export class PlayerSignInController {
     return this.startSession(app, signedIn, response);
   }
 
-  /** Deletes the account and everything in it */
   @Delete()
   @HttpCode(204)
   @UseGuards(PlayerGuard)

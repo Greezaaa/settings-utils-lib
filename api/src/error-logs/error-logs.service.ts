@@ -4,13 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Repository } from 'typeorm';
 import { ErrorLog, ErrorSource } from './error-log.entity.js';
 
-/** How long an error stays in the log after it last happened */
 const KEEP_DAYS = 90;
 const DAY_MS = 24 * 60 * 60 * 1000;
-/** Longest problem text kept */
 const MAX_PROBLEM = 1000;
 
-/** An error to log */
 export interface ErrorEntry {
   readonly source: ErrorSource;
   readonly code: string;
@@ -19,7 +16,6 @@ export interface ErrorEntry {
   readonly path: string;
 }
 
-/** The error log: distinct errors counted, kept 90 days after they last happened, and cleared by the super admin */
 @Injectable()
 export class ErrorLogsService {
   private readonly logger = new Logger(ErrorLogsService.name);
@@ -28,7 +24,6 @@ export class ErrorLogsService {
     @InjectRepository(ErrorLog) private readonly logs: Repository<ErrorLog>,
   ) {}
 
-  /** Logs an error, or counts it again; never throws, so logging can't cause errors of its own */
   async add(entry: ErrorEntry, now = new Date()): Promise<void> {
     const problem = entry.problem.slice(0, MAX_PROBLEM);
     const path = entry.path.split('?')[0].slice(0, 200);
@@ -61,7 +56,6 @@ export class ErrorLogsService {
     }
   }
 
-  /** The latest errors first */
   list(): Promise<ErrorLog[]> {
     return this.logs.find({ order: { lastSeen: 'DESC' }, take: 500 });
   }

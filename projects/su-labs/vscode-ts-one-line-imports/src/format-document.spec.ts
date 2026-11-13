@@ -31,7 +31,6 @@ const formatInProject = (files: Record<string, string>, text = CODE) =>
   formatDocument({ text, parser: 'typescript', filePath: createProject(files) });
 
 beforeEach(async () => {
-  // Inside a folder with its own package.json, so the repo's own Prettier config is never found
   root = mkdtempSync(join(tmpdir(), 'single-line-imports-'));
   await clearProjectPrettierCache();
 });
@@ -81,7 +80,6 @@ describe('formatDocument', () => {
     });
 
     it('loads plugins the project installed, by package name', async () => {
-      // A plugin that adds a language without changing TypeScript: it must load without errors
       const plugin = "module.exports = { languages: [{ name: 'fake', parsers: ['fake'], extensions: ['.fake'] }] };";
       const result = await formatInProject({
         'package.json': '{}',
@@ -142,7 +140,6 @@ describe('formatDocument', () => {
       const filePath = join(root, 'loose/app.ts');
       mkdirSync(dirname(filePath), { recursive: true });
       const result = await formatDocument({ text: WRAPPED_IMPORT, parser: 'typescript', filePath });
-      // The temp folder may sit inside a project with Prettier; either way the import ends up on one line
       expect(result.text ?? WRAPPED_IMPORT).toContain(LONG_IMPORT);
     });
   });

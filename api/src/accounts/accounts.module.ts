@@ -9,10 +9,6 @@ import { Player } from './player.entity.js';
 import { PlayerGuard } from './player.guard.js';
 import { ResultsService } from './results.service.js';
 
-/**
- * Player accounts, their sessions and results, for both processes: signing in on auth.su-labs.dev (SignInModule), the
- * account's data and the leaderboards on api.su-labs.dev (AccountsApiModule)
- */
 @Module({
   imports: [
     TypeOrmModule.forFeature([Player, PlayerSession, PlayerResult, WordReport]),

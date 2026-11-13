@@ -1,4 +1,3 @@
-// The beta notice: still being built, email updates to come
 .beta {
   background: var(--yellow-bg);
   border: 1px solid color-mix(in srgb, var(--yellow-text) 35%, transparent);
@@ -24,7 +23,6 @@
   vertical-align: 0.1em;
 }
 
-// With the categories menu: a card per category, linking to its page
 .category-card {
   align-content: start;
   display: grid;
@@ -39,7 +37,6 @@
   letter-spacing: -0.02em;
 }
 
-// Goes to the rooms page, sized to its label
 .play-together-link {
   justify-self: start;
 }

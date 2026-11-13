@@ -3,7 +3,6 @@ import { SuNotificationService } from '@su-labs/notifications';
 import { forgetSharedSettings } from '../../core/shared-settings';
 import { deleteSaved, isSavingAllowed, setSavingAllowed } from '../../core/site-storage';
 
-/** One thing the site saves, where and why */
 interface SavedItem {
   readonly what: string;
   readonly where: string;
@@ -51,14 +50,12 @@ export class PrivacyPage {
   protected readonly saved = SAVED;
   protected readonly never = NEVER;
 
-  /** Read in the browser, where the choice is stored */
   protected readonly savingAllowed = signal(true);
 
   constructor() {
     afterNextRender(() => this.savingAllowed.set(isSavingAllowed()));
   }
 
-  /** Wipes everything saved so far; saving goes on if the visitor allows it, from a fresh start */
   protected deleteSaved(): void {
     deleteSaved(forgetSharedSettings);
     this.notifications.show({

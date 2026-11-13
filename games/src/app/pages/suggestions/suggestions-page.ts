@@ -7,16 +7,11 @@ import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { SuAutoGrowDirective } from '@su-labs/fields';
 
-/** Longest text the API accepts */
 export const MAX_SUGGESTION_LENGTH = 500;
 const MIN_SUGGESTION_LENGTH = 3;
 
 type Sending = 'idle' | 'sending' | 'failed';
 
-/**
- * Suggestions: an idea for a new game, an improvement, a drawing or a problem, with an optional picture that is
- * shrunk and cleaned of metadata on the device before it is sent. Only the site's author reads them.
- */
 @Component({
   selector: 'app-suggestions-page',
   imports: [TranslatePipe, SuAutoGrowDirective],
@@ -37,7 +32,6 @@ export class SuggestionsPage {
   protected readonly category = signal<SuggestionCategory>('new-game');
   protected readonly text = signal('');
   protected readonly image = signal<Blob | null>(null);
-  /** A preview of the chosen picture, as an object URL released when replaced or when the page closes */
   protected readonly preview = signal<string | null>(null);
   protected readonly imageError = signal(false);
   protected readonly sending = signal<Sending>('idle');
@@ -56,14 +50,12 @@ export class SuggestionsPage {
     }
   }
 
-  /** A file is being dragged over the drop zone */
   protected readonly isDragging = signal(false);
 
   protected onImage(event: Event): void {
     const input = event.target instanceof HTMLInputElement ? event.target : null;
     void this.useImage(input?.files?.[0]);
     if (input) {
-      // So choosing the same file again after removing it still counts as a change
       input.value = '';
     }
   }
@@ -79,7 +71,6 @@ export class SuggestionsPage {
     void this.useImage(event.dataTransfer?.files[0]);
   }
 
-  /** Shrinks a chosen or dropped picture and shows it; anything that isn't a picture shows an error */
   private async useImage(file: File | undefined): Promise<void> {
     this.imageError.set(false);
     if (!file) {

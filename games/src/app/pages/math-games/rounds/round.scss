@@ -1,5 +1,3 @@
-// Styles shared by every kind of round: the equation and big tap-friendly buttons
-
 :host {
   display: grid;
   gap: 1.25rem;
@@ -16,7 +14,6 @@
   transition: color 150ms ease;
   white-space: nowrap;
 
-  // The answer, for a moment before the next one
   &.is-right {
     color: var(--green-text);
   }

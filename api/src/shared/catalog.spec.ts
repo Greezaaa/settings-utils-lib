@@ -12,7 +12,6 @@ const gamesApp = join(
   'app',
 );
 
-/** The quoted values of a TypeScript union type in a file, e.g. `type A = 'x' | 'y'` → ['x', 'y'] */
 function unionValues(file: string, typeName: string): string[] {
   const source = readFileSync(join(gamesApp, file), 'utf8');
   const union =

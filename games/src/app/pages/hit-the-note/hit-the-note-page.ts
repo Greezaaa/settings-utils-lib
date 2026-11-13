@@ -13,13 +13,8 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'ready' | 'playing' | 'done';
 
-/** How long a finished round stays before the next one (Higher or lower shows its answer meanwhile) */
 const NEXT_ROUND_MS = 1200;
 
-/**
- * Hit the note: the settings screen, the progress through the rounds and the end screen.
- * Each mode is its own round component; sounds are made in the browser and the microphone is only used by Sing it.
- */
 @Component({
   selector: 'app-hit-the-note-page',
   imports: [TranslatePipe, FindNoteRound, GameBoard, GameFeedback, HigherLowerRound, RouterLink, SingRound],
@@ -43,7 +38,6 @@ export class HitTheNotePage {
   protected readonly pairs = signal<readonly HigherOrLowerRound[]>([]);
   protected readonly index = signal(0);
   protected readonly mistakes = signal(0);
-  /** Rounds got right at the first try */
   protected readonly firstTries = signal(0);
   private hadMistake = false;
   protected readonly total = ROUNDS_PER_GAME;
@@ -56,7 +50,6 @@ export class HitTheNotePage {
   }
 
   protected start(): void {
-    // Sound may only start after a tap: this is the tap
     this.player.audioContext();
     this.api.countPlay('hit-the-note');
     const level = this.level();
@@ -78,7 +71,6 @@ export class HitTheNotePage {
     this.phase.set('playing');
   }
 
-  /** The round is over: it stays a moment, then the next one comes */
   protected onSolved(): void {
     if (!this.hadMistake) {
       this.firstTries.update((rounds) => rounds + 1);

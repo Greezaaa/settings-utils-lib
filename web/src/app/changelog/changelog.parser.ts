@@ -1,27 +1,19 @@
-/** A piece of inline text: plain, `code`, **strong** or a [link](https://...) */
 export interface ChangelogInline {
   readonly kind: 'text' | 'code' | 'strong' | 'link';
   readonly text: string;
-  /** Only for links; always http(s) */
   readonly href?: string;
 }
 
-/** One line of text, split into inline pieces */
 export type ChangelogLine = readonly ChangelogInline[];
 
-/** A group of changes such as "Added" or "Fixed" */
 export interface ChangelogSection {
   readonly title: string;
   readonly items: ChangelogLine[];
 }
 
-/** One version, e.g. `## [1.0.0] - 2026-11-05` */
 export interface ChangelogRelease {
-  /** Version number, or `Unreleased` */
   readonly version: string;
-  /** Release date as written in the file, or null */
   readonly date: string | null;
-  /** Paragraphs written before the first section */
   readonly notes: ChangelogLine[];
   readonly sections: ChangelogSection[];
 }
@@ -31,7 +23,6 @@ const SECTION_HEADING = /^###\s+(.+?)\s*$/;
 const LIST_ITEM = /^[-*]\s+(.*)$/;
 const INLINE_TOKEN = /`([^`]+)`|\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
 
-/** Mutable versions of the public types, used only while parsing */
 interface ReleaseDraft {
   version: string;
   date: string | null;
@@ -39,11 +30,6 @@ interface ReleaseDraft {
   sections: { title: string; items: string[] }[];
 }
 
-/**
- * Parse a changelog written in the Keep a Changelog format
- * (https://keepachangelog.com) into releases, newest first as in the file.
- * Text before the first `##` heading (title and introduction) is ignored.
- */
 export function parseChangelog(markdown: string): ChangelogRelease[] {
   const releases: ReleaseDraft[] = [];
 
@@ -72,7 +58,6 @@ export function parseChangelog(markdown: string): ChangelogRelease[] {
       const target = section ?? addSection(release);
       target.items.push(itemMatch[1]);
     } else if (section?.items.length) {
-      // Wrapped list item: continue the previous item
       section.items[section.items.length - 1] += ` ${line}`;
     } else {
       release.notes.push(line);
@@ -89,7 +74,6 @@ export function parseChangelog(markdown: string): ChangelogRelease[] {
   }));
 }
 
-/** Split a line into plain text, inline code, bold text and links */
 export function parseInline(text: string): ChangelogLine {
   const parts: ChangelogInline[] = [];
   let lastIndex = 0;
@@ -117,12 +101,10 @@ export function parseInline(text: string): ChangelogLine {
   return parts;
 }
 
-/** The newest published release (skips `Unreleased`), or null */
 export function latestRelease(releases: readonly ChangelogRelease[]): ChangelogRelease | null {
   return releases.find((release) => release.version.toLowerCase() !== 'unreleased') ?? null;
 }
 
-/** Add an untitled section for list items that appear before any `###` heading */
 function addSection(release: ReleaseDraft): { title: string; items: string[] } {
   const section = { title: '', items: [] };
   release.sections.push(section);

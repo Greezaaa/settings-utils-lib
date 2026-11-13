@@ -4,10 +4,6 @@ import { GameAvailability } from '../../core/game-availability';
 import { GameCard } from '../../shared/game-card/game-card';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-/**
- * Shown for any address the games site doesn't have. Prerendered as 404.html, which the server
- * sends with a 404 status, and shown by the app itself for unknown links inside the site.
- */
 @Component({
   selector: 'app-not-found-page',
   imports: [TranslatePipe, GameCard, RouterLink],

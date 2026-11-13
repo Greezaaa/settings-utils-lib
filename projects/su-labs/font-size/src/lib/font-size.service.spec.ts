@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { FontSizeService } from './font-size.service';
 
-// Size logic is tested in @su-labs/core/font-size; these tests cover the Angular wrapper.
 describe('FontSizeService', () => {
   let service: FontSizeService;
 

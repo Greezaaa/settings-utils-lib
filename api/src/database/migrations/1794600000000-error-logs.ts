@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** Errors from the API and the games site, for the super admin */
 export class ErrorLogs1794600000000 implements MigrationInterface {
   name = 'ErrorLogs1794600000000';
 

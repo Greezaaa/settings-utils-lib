@@ -5,7 +5,6 @@ import { GameAvailability } from './game-availability';
 import { GAMES } from './games';
 import { GamesApi, GameSwitch } from './games-api';
 
-/** An admin API whose session belongs to `role` (signed out when undefined) */
 function adminAs(role?: AdminRole): Pick<AdminApi, 'restore' | 'canPreview'> {
   return {
     restore: vi.fn(async () => (role ? 'signed-in' : 'signed-out')),
@@ -13,7 +12,6 @@ function adminAs(role?: AdminRole): Pick<AdminApi, 'restore' | 'canPreview'> {
   };
 }
 
-/** The availability service with an API answering `switches`, for a visitor signed in as `role` */
 function availabilityWith(switches: GameSwitch[] | null, role?: AdminRole): GameAvailability {
   const api: Pick<GamesApi, 'gameSwitches'> = { gameSwitches: vi.fn(async () => switches) };
   const injector = Injector.create({
@@ -31,7 +29,6 @@ describe('GameAvailability', () => {
 
   it('opens the games open by default until the admin switches them', async () => {
     const availability = availabilityWith([{ game: 'sliding-puzzle', enabled: false }]);
-    // Before the switches arrive the defaults show, so prerendered pages list the usual games
     expect(availability.canPlay('sliding-puzzle')).toBe(true);
     expect(availability.canPlay('how-many')).toBe(false);
     await availability.ready();

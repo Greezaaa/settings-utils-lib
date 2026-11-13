@@ -12,18 +12,11 @@ import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 
 type Phase = 'playing' | 'won' | 'lost';
 
-/** A tile of the board: a letter (empty while not typed) and its mark once the guess is in */
 interface Tile {
   readonly letter: string;
   readonly mark: LetterMark | null;
 }
 
-/**
- * Secret word: guess the hidden word in a few tries, typing on the on-screen keyboard or a real one. After each guess
- * the tiles show which letters are in the right place, in the word elsewhere, or not in it, and the keyboard keeps
- * the best of each. With hints on, the word's picture is shown. Words come from the letter games in the site's
- * language, so changing the language starts a new word.
- */
 @Component({
   selector: 'app-secret-word-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
@@ -50,10 +43,8 @@ export class SecretWordPage {
   protected readonly phase = signal<Phase>('playing');
   protected readonly secret = signal<SecretWord | null>(null);
   private readonly secretLetters = computed(() => Array.from(this.secret()?.word ?? ''));
-  /** Guesses sent, and the letters of the one being typed */
   private readonly guesses = signal<readonly (readonly string[])[]>([]);
   private readonly typing = signal<readonly string[]>([]);
-  /** A guess sent too short: the board says how many letters it needs */
   protected readonly isTooShort = signal(false);
 
   protected readonly keyboard = computed(() => keyboardRows(WORD_BANKS[this.language()], this.language()));
@@ -61,7 +52,6 @@ export class SecretWordPage {
   protected readonly marks = computed(() => keyMarks(this.guesses(), this.secretLetters()));
   protected readonly triesLeft = computed(() => MAX_GUESSES - this.guesses().length);
 
-  /** Every row of the board: the guesses with their marks, the one being typed, then empty rows */
   protected readonly rows = computed<Tile[][]>(() => {
     const [guesses, typing, length] = [this.guesses(), this.typing(), this.level().length];
     return Array.from({ length: MAX_GUESSES }, (_, row) => {
@@ -79,9 +69,7 @@ export class SecretWordPage {
   private readonly isRendered = signal(false);
 
   constructor() {
-    // Chosen in the browser only, so the prerendered page doesn't give one word away and then change it
     afterNextRender(() => this.isRendered.set(true));
-    // A new word in the site's language, also whenever the language changes
     effect(() => {
       if (this.isRendered()) {
         this.language();
@@ -90,7 +78,6 @@ export class SecretWordPage {
     });
   }
 
-  /** A letter as shown, in capitals of the site's language */
   protected shown(letter: string): string {
     return letter.toLocaleUpperCase(this.language());
   }
@@ -100,7 +87,6 @@ export class SecretWordPage {
     this.newGame();
   }
 
-  /** Hints on or off: a new word, as with hints it must be one with a picture */
   protected chooseHints(id: HintsId): void {
     this.hintsId.set(id);
     this.newGame();
@@ -130,7 +116,6 @@ export class SecretWordPage {
     }
   }
 
-  /** Sends the typed guess: the right word wins, the last try without it loses */
   protected send(): void {
     const guess = this.typing();
     if (this.phase() !== 'playing') {
@@ -153,7 +138,6 @@ export class SecretWordPage {
     }
   }
 
-  /** A real keyboard types too: letters of the language, Backspace and Enter; not while a field or a shortcut is used */
   protected onKeydown(event: KeyboardEvent): void {
     const target = event.target;
     const isField = target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
@@ -162,7 +146,6 @@ export class SecretWordPage {
     }
     const key = event.key.toLocaleLowerCase(this.language());
     if (event.key === 'Enter') {
-      // Enter on a focused button presses it; only typing elsewhere sends the guess
       if (!(target instanceof HTMLButtonElement)) {
         event.preventDefault();
         this.send();

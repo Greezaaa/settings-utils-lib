@@ -13,7 +13,6 @@ const THEME_OPTIONS: readonly { value: SuThemeName; label: string }[] = [
   { value: 'contrast', label: 'High contrast' },
 ];
 
-/** CSS variables set by the theme, shown as swatches */
 const THEME_VARIABLES = ['background', 'color', 'main-accent', 'second-accent', 'third-accent'] as const;
 
 const USAGE: readonly CodeTab[] = [

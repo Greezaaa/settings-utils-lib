@@ -7,10 +7,6 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 type Step = 'checking' | 'ready' | 'invalid' | 'saving' | 'mismatch' | 'failed';
 
-/**
- * An invite link, /<ADMIN_INVITE_PATH>/<secret>: a new moderator chooses their password, which also signs them in, and goes
- * to the admin page. The link works once, for 7 days.
- */
 @Component({
   selector: 'app-admin-invite-page',
   imports: [TranslatePipe],
@@ -19,7 +15,6 @@ type Step = 'checking' | 'ready' | 'invalid' | 'saving' | 'mismatch' | 'failed';
   styleUrls: ['../../../shared/utility-page.scss', '../admin.scss'],
 })
 export class AdminInvitePage {
-  /** From the address, through the router's component input binding */
   readonly secret = input.required<string>();
 
   private readonly admin = inject(AdminApi);

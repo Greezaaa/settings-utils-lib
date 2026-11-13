@@ -1,16 +1,8 @@
-/** How much of the way to its target the shape moves each frame: small, so it drifts rather than jumps */
 const FOLLOW = 0.08;
-/**
- * How close the shape's centre must be to an item's, as a share of the item's size, to count as covering it: about a
- * third, so the item's text changes colour while the shape is still arriving rather than once it's settled
- */
 const COVERED = 0.3;
-/** How close (in pixels) the shape must be to its goal to stop moving */
 const SETTLED = 0.5;
-/** The shape's size while following the pointer between items */
 const DOT = 18;
 
-/** Where the shape is or is heading: its centre and size, in the host's own coordinates */
 interface Place {
   readonly x: number;
   readonly y: number;
@@ -19,38 +11,23 @@ interface Place {
 }
 
 export interface DriftShapeOptions {
-  /** The items the shape can cover, e.g. the menu's links */
   readonly items: string;
-  /** The item it rests on, e.g. the current page's link */
   readonly current: string;
-  /** The shape element's class, which gives its look */
   readonly className: string;
-  /** Room the shape leaves around an item it covers, in pixels */
   readonly wrapX: number;
   readonly wrapY: number;
-  /** Whether the shape is wanted now (a setting, a feature switch) */
   readonly isOn: () => boolean;
 }
 
-/**
- * A playful shape inside a host element (a menu, a group of choices). It rests behind the current item; when that
- * changes it drifts over to the new one. With a mouse or trackpad it also drifts after the pointer over the host and
- * fills the item it reaches, then goes back to the current item when the pointer leaves; keyboard focus on an item moves
- * it there too. The item it covers gets `is-covered`, so its text can change colour. Plain DOM, used by the menu
- * (MenuRing) and the choice groups (ChoiceRing).
- */
 export class DriftShape {
   private shape: HTMLElement | null = null;
   private frame = 0;
   private current: Place = { x: 0, y: 0, width: DOT, height: DOT };
   private goal: Place = { x: 0, y: 0, width: DOT, height: DOT };
   private isVisible = false;
-  /** The item the shape is heading for, and the one it covers now */
   private target: Element | null = null;
   private covered: Element | null = null;
-  /** The pointer is over the host, so the shape follows it rather than resting */
   private isPointing = false;
-  /** The current item, to notice when another one becomes current */
   private currentItem: Element | null = null;
   private readonly watcher: MutationObserver;
 
@@ -59,8 +36,6 @@ export class DriftShape {
     private readonly options: DriftShapeOptions,
     private readonly window: Window,
   ) {
-    // The current item changes (another page, another choice): the shape goes over to it. Its own marks on the items
-    // it covers change classes too, so only a new current item counts
     this.watcher = new MutationObserver(() => {
       const item = this.host.querySelector(this.options.current);
       if (item !== this.currentItem) {
@@ -78,7 +53,6 @@ export class DriftShape {
   }
 
   pointer(event: PointerEvent): void {
-    // A finger has no hover: a tap chooses, and the shape follows the current item
     if (event.pointerType === 'touch') {
       return;
     }
@@ -104,7 +78,6 @@ export class DriftShape {
     }
   }
 
-  /** Back to the current item, or out of sight when there is none */
   rest(): void {
     this.isPointing = false;
     const item = this.host.querySelector(this.options.current);
@@ -123,10 +96,8 @@ export class DriftShape {
     this.shape?.classList.remove('is-visible');
   }
 
-  /** Stops for good and takes the shape away */
   destroy(): void {
     this.watcher.disconnect();
-    // Only a shape that ever moved has a frame to cancel
     if (this.frame) {
       this.window.cancelAnimationFrame(this.frame);
     }
@@ -134,7 +105,6 @@ export class DriftShape {
     this.shape?.remove();
   }
 
-  /** Heads for the item, wrapped with a little room */
   private headFor(item: Element): void {
     const box = this.host.getBoundingClientRect();
     const around = item.getBoundingClientRect();
@@ -148,7 +118,6 @@ export class DriftShape {
     });
   }
 
-  /** Sets where the shape is heading, showing it there first if it was out of sight, and wakes it up */
   private go(goal: Place): void {
     this.goal = goal;
     const shape = this.shape ?? this.createShape();
@@ -162,7 +131,6 @@ export class DriftShape {
     }
   }
 
-  /** Marks the item the shape covers, so its text can change colour, and unmarks the one it left */
   private cover(item: Element | null): void {
     if (item !== this.covered) {
       this.covered?.classList.remove('is-covered');
@@ -180,7 +148,6 @@ export class DriftShape {
     return shape;
   }
 
-  /** One frame: a step towards the goal; it stops once it has settled, and `go` wakes it up again */
   private move(): void {
     this.frame = 0;
     if (!this.isVisible || !this.shape) {

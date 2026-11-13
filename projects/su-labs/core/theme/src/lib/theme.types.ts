@@ -42,10 +42,10 @@ export interface SuThemeConfig {
 
 /** Available CSS variables for theming */
 export interface ThemeCssVariables {
-  color?: string; // --su-theme-color
-  background?: string; // --su-theme-background
-  'main-accent'?: string; // --su-theme-main-accent
-  'second-accent'?: string; // --su-theme-second-accent
-  'third-accent'?: string; // --su-theme-third-accent
-  [key: string]: string | undefined; // allow future custom variables
+  color?: string;
+  background?: string;
+  'main-accent'?: string;
+  'second-accent'?: string;
+  'third-accent'?: string;
+  [key: string]: string | undefined;
 }

@@ -25,13 +25,8 @@ import { RoomTurnRound } from '../room-turn-round/room-turn-round';
 import { ShareHeight } from '../../../shared/share-height';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
-/** How often the countdown is redrawn */
 const TICK_MS = 100;
 
-/**
- * A room, at /r/<code>: joins it (or comes back to this tab's seat), then shows the lobby (players, the host's game
- * settings, Ready and Start), the 3-2-1 countdown, the round for everyone at once, and the results.
- */
 @Component({
   selector: 'app-room-page',
   imports: [
@@ -58,7 +53,6 @@ const TICK_MS = 100;
   ],
 })
 export class RoomPage {
-  /** From the address, through the router's component input binding */
   readonly code = input.required<string>();
 
   protected readonly client = inject(RoomClient);
@@ -73,24 +67,20 @@ export class RoomPage {
   protected readonly minPlayers = MIN_PLAYERS_TO_START;
   protected readonly roundSeconds = ROUND_SECONDS;
   protected readonly isCopied = signal(false);
-  /** The page has started connecting (it does right after the first render) */
   protected readonly hasEntered = signal(false);
 
   protected readonly room = this.client.room;
   protected readonly game = computed<RoomGame>(
     () => this.room()?.settings.game ?? 'math-games'
   );
-  /** The room's mode and level, as ids the game has */
   protected readonly choice = computed(() => {
     const settings = this.room()?.settings;
     return roomChoice(this.game(), settings?.mode ?? '', settings?.level ?? '');
   });
-  /** What the host can pick: the game's modes, and the chosen mode's levels */
   protected readonly modes = computed(() => ROOM_CHOICES[this.game()].modes);
   protected readonly levels = computed(() =>
     ROOM_CHOICES[this.game()].levelsOf(this.choice().mode)
   );
-  /** Each game's settings for its round, read from the room's mode and level ids */
   protected readonly math = computed(() =>
     roomMath(this.choice().mode, this.choice().level)
   );
@@ -109,10 +99,8 @@ export class RoomPage {
   protected readonly placePieces = computed(() =>
     roomPicture('place-pieces', this.choice().mode, this.choice().level)
   );
-  /** The 🎲 on the player's own avatar for another nickname */
   protected readonly canRename = computed(() => this.features.canUse('room-rename'));
   protected readonly hasOwnNames = computed(() => this.features.canUse('room-names'));
-  /** The lobby (games beside their settings) and the word builder (words beside the letters) need more room */
   protected readonly isWide = computed(
     () =>
       this.room()?.phase === 'lobby' ||
@@ -120,7 +108,6 @@ export class RoomPage {
         this.choice().mode === 'word-builder' &&
         this.room()?.phase === 'playing')
   );
-  /** Each game has its own multiplayer switch (apart from its single-player one); the host picks among those open */
   protected readonly openGames = computed(() =>
     ROOM_GAMES.filter(game => this.features.canUse(ROOM_GAME_FEATURES[game]))
   );
@@ -155,7 +142,6 @@ export class RoomPage {
     );
     inject(DestroyRef).onDestroy(() => {
       clearInterval(ticker);
-      // Leaving the page keeps the seat for a short while, so coming back (or a reload) returns to the room
       this.client.close();
     });
   }
@@ -176,7 +162,6 @@ export class RoomPage {
     return roomLevelText(this.t(), this.game(), this.choice().mode, level);
   }
 
-  /** Another game, starting from its own mode and level */
   protected chooseGame(game: RoomGame): void {
     const settings = this.room()?.settings;
     if (settings) {
@@ -185,7 +170,6 @@ export class RoomPage {
     }
   }
 
-  /** Another mode, keeping the level when the mode has it */
   protected chooseMode(mode: string): void {
     const settings = this.room()?.settings;
     if (settings) {
@@ -210,13 +194,11 @@ export class RoomPage {
     }
   }
 
-  /** Leaves the room for good and goes back to Play together */
   protected leave(): void {
     this.client.leave();
     void this.router.navigateByUrl('/rooms');
   }
 
-  /** The host's switches: scores during the round, and players' own names */
   protected toggleSetting(setting: 'showScores' | 'ownNames'): void {
     const settings = this.room()?.settings;
     if (settings) {
@@ -224,7 +206,6 @@ export class RoomPage {
     }
   }
 
-  /** A name someone finds rude: hidden for the whole room right away, and reported to the moderators */
   protected reportName(player: RoomPlayer): void {
     if (player.name) {
       this.client.hideName(player.id);

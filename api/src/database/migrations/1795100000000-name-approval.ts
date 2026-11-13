@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-/** Screen names wait for a moderator before they can show in rooms, and players can report them */
 export class NameApproval1795100000000 implements MigrationInterface {
   name = 'NameApproval1795100000000';
 

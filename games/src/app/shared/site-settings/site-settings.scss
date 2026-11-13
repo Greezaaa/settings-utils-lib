@@ -1,4 +1,3 @@
-// One labelled row per setting; the header's panel lays the rows out (see .settings-panel in app.scss)
 :host {
   display: contents;
 }
@@ -8,8 +7,6 @@
   gap: 0.375rem;
 }
 
-// A setting that only matters on phones and tablets: from the width where rooms switch to columns (see rooms.scss) the
-// stickers always sit right of the game and can't be moved. Kept here so it beats `display: grid` above
 .setting.is-small-screens-only {
   @media (min-width: 56rem) {
     display: none;
@@ -40,7 +37,6 @@
   color: var(--button-text);
 }
 
-// Game colours: a list of the themes, with a round swatch of the chosen one (its background, its accent in the middle)
 .board-colours {
   align-items: center;
 

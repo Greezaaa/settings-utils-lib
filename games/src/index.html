@@ -13,11 +13,7 @@
   <meta name="theme-color" content="#f6f6f4" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)">
   <meta name="author" content="Yevheniy Alekseyev">
-  <!--
-    Apply the saved theme and text size before the first paint, so the page doesn't flash
-    from the default to the visitor's choice while the app loads. The app then takes over.
-    Both values live in cookies shared with the other su-labs site; keys must match core/shared-settings.ts.
-  -->
+  <!-- Keep the cookie keys in sync with core/shared-settings.ts -->
   <script>
     (function () {
       var root = document.documentElement;
@@ -48,7 +44,6 @@
       }
     })();
   </script>
-  <!-- The auth service answers whether the visitor is signed in, so its connection is ready before that check -->
   <link rel="preconnect" href="https://auth.su-labs.dev">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
