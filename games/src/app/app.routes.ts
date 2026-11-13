@@ -133,9 +133,15 @@ export const routes: Routes = [
       import('./pages/how-many/how-many-page').then(m => m.HowManyPage),
   },
   {
+    // The sudoku games share one page, told which game by the route's data (`game`, from gameMeta)
     path: 'letter-sudoku',
     ...gameMeta('letter-sudoku'),
-    loadComponent: () => import('./pages/letter-sudoku/letter-sudoku-page').then(m => m.LetterSudokuPage),
+    loadComponent: () => import('./pages/sudoku/sudoku-page').then(m => m.SudokuPage),
+  },
+  {
+    path: 'number-sudoku',
+    ...gameMeta('number-sudoku'),
+    loadComponent: () => import('./pages/sudoku/sudoku-page').then(m => m.SudokuPage),
   },
   ...categoryRoutes,
   {

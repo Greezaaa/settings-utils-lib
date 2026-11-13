@@ -1,8 +1,8 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { gameInfo } from '../../core/games';
 import { GamesApi } from '../../core/games-api';
-import { BOX_SHAPES, boxCells, dealSudoku, DEFAULT_SUDOKU_SIZE, isSolved, repeatedCells, SudokuBoard, SudokuPuzzle, SudokuSize, SUDOKU_SIZES } from '../../games/letter-sudoku';
+import { BOX_SHAPES, boxCells, dealSudoku, DEFAULT_SUDOKU_SIZE, isSolved, repeatedCells, SudokuBoard, SudokuGame, SudokuPuzzle, SudokuSize, SUDOKU_SIZES } from '../../games/sudoku';
 import { GameBoard } from '../../shared/game-board';
 import { GameClock } from '../../shared/game-clock';
 import { GameFeedback } from '../../shared/game-feedback/game-feedback';
@@ -11,10 +11,10 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type Phase = 'playing' | 'done';
 
-/** Where a press started: a letter in the tray, or a cell of the board */
-type PressSource = { readonly kind: 'tray'; readonly letter: number } | { readonly kind: 'cell'; readonly cell: number };
+/** Where a press started: a symbol in the tray, or a cell of the board */
+type PressSource = { readonly kind: 'tray'; readonly symbol: number } | { readonly kind: 'cell'; readonly cell: number };
 
-/** A press on a letter or a cell, which becomes a drag once the pointer moves far enough */
+/** A press on a symbol or a cell, which becomes a drag once the pointer moves far enough */
 interface Press {
   readonly source: PressSource;
   readonly pointerId: number;
@@ -30,25 +30,28 @@ const DRAG_THRESHOLD = 8;
 const NO_CELLS: ReadonlySet<number> = new Set();
 
 /**
- * Letter sudoku: a classic sudoku where each letter goes once in every row, column and box. Letters are dragged from
- * the tray onto the empty cells, from one cell to another, or off the board to take them back; tapping a letter and
- * then a cell does the same, also with the keyboard. Check marks the letters repeated in a row, column or box.
+ * The page of the sudoku games (symbol and number sudoku, given by the route as `game`): a classic sudoku where each
+ * symbol goes once in every row, column and box. Symbols are dragged from the tray onto the empty cells, from one cell
+ * to another, or off the board to take them back; tapping a symbol and then a cell does the same, also with the
+ * keyboard. Check marks the symbols repeated in a row, column or box.
  */
 @Component({
-  selector: 'app-letter-sudoku-page',
+  selector: 'app-sudoku-page',
   imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './letter-sudoku-page.html',
+  templateUrl: './sudoku-page.html',
   styleUrls: [
     '../../shared/utility-page.scss',
     '../../shared/game-settings.scss',
     '../../shared/play-layout.scss',
-    './letter-sudoku-page.scss',
+    './sudoku-page.scss',
   ],
 })
-export class LetterSudokuPage {
+export class SudokuPage {
+  /** Which sudoku game this page plays, from the route's data */
+  readonly game = input.required<SudokuGame>();
   protected readonly sizes = SUDOKU_SIZES;
-  protected readonly minAge = gameInfo('letter-sudoku').minAge;
+  protected readonly minAge = computed(() => gameInfo(this.game()).minAge);
   private readonly api = inject(GamesApi);
   private readonly messages = inject(SiteLanguage).messages;
   protected readonly clock = new GameClock();
@@ -60,28 +63,28 @@ export class LetterSudokuPage {
   protected readonly boxShape = computed(() => BOX_SHAPES[this.size()]);
   /** The board's cells, box by box; none until a puzzle is dealt in the browser */
   protected readonly boxes = computed(() => (this.puzzle() ? boxCells(this.size()) : []));
-  /** The letters of the tray, as indexes, in alphabet order */
-  protected readonly trayLetters = computed(() => Array.from({ length: this.size() }, (_, letter) => letter));
-  /** Letters already on the board as many times as there are rows */
+  /** The symbols of the tray, as indexes, in order */
+  protected readonly traySymbols = computed(() => Array.from({ length: this.size() }, (_, symbol) => symbol));
+  /** Symbols already on the board as many times as there are rows */
   protected readonly usedUp = computed(() => {
     const board = this.board();
-    return new Set(this.trayLetters().filter((letter) => board.filter((cell) => cell === letter).length >= this.size()));
+    return new Set(this.traySymbols().filter((symbol) => board.filter((cell) => cell === symbol).length >= this.size()));
   });
 
-  /** A tray letter chosen by a tap, placed on each cell tapped next */
+  /** A tray symbol chosen by a tap, placed on each cell tapped next */
   protected readonly picked = signal<number | null>(null);
-  /** Check was pressed since the last move: the repeated letters are marked */
+  /** Check was pressed since the last move: the repeated symbols are marked */
   protected readonly isChecked = signal(false);
   protected readonly repeated = computed(() =>
     this.isChecked() ? repeatedCells(this.board(), this.size()) : NO_CELLS,
   );
 
   protected readonly press = signal<Press | null>(null);
-  /** The letter being dragged and where to draw it, once the press has moved far enough */
+  /** The symbol being dragged and where to draw it, once the press has moved far enough */
   protected readonly dragged = computed(() => {
     const press = this.press();
-    const letter = press && this.movableLetter(press.source);
-    return press && letter !== null && isDrag(press) ? { letter, x: press.x, y: press.y } : null;
+    const symbol = press && this.movableSymbol(press.source);
+    return press && symbol !== null && isDrag(press) ? { symbol, x: press.x, y: press.y } : null;
   });
 
   private hasStarted = false;
@@ -92,9 +95,9 @@ export class LetterSudokuPage {
     inject(DestroyRef).onDestroy(() => this.clock.stop());
   }
 
-  /** A letter's character in the site's language, e.g. 0 → `A` */
-  protected letterOf(letter: number | null): string {
-    return letter === null ? '' : this.messages().letterSudoku.letters[letter];
+  /** A symbol as shown, e.g. 0 → `A` in symbol sudoku (in the site's language) or `1` in number sudoku */
+  protected symbolOf(symbol: number | null): string {
+    return symbol === null ? '' : this.messages().sudoku.games[this.game()].symbols[symbol];
   }
 
   protected isGiven(cell: number): boolean {
@@ -105,11 +108,11 @@ export class LetterSudokuPage {
     return { kind: 'cell', cell };
   }
 
-  protected traySource(letter: number): PressSource {
-    return { kind: 'tray', letter };
+  protected traySource(symbol: number): PressSource {
+    return { kind: 'tray', symbol };
   }
 
-  /** The cell whose letter is being dragged away */
+  /** The cell whose symbol is being dragged away */
   protected isLifted(cell: number): boolean {
     const source = this.press()?.source;
     return this.dragged() !== null && source?.kind === 'cell' && source.cell === cell;
@@ -173,7 +176,7 @@ export class LetterSudokuPage {
     if (!isDrag(press)) {
       this.tap(press.source);
     } else if (dragged) {
-      this.drop(press.source, dragged.letter, this.cellAt(event.clientX, event.clientY));
+      this.drop(press.source, dragged.symbol, this.cellAt(event.clientX, event.clientY));
     }
   }
 
@@ -189,47 +192,47 @@ export class LetterSudokuPage {
   }
 
   /**
-   * A tap on a tray letter picks it (or drops it, when picked already). A tap on a cell places the picked letter, or
-   * empties it when it holds that letter already or nothing is picked.
+   * A tap on a tray symbol picks it (or drops it, when picked already). A tap on a cell places the picked symbol, or
+   * empties it when it holds that symbol already or nothing is picked.
    */
   private tap(source: PressSource): void {
     if (source.kind === 'tray') {
-      this.picked.update((picked) => (picked === source.letter ? null : source.letter));
+      this.picked.update((picked) => (picked === source.symbol ? null : source.symbol));
       return;
     }
     const picked = this.picked();
     this.setCell(source.cell, picked === this.board()[source.cell] ? null : picked);
   }
 
-  /** A dragged letter lands on a cell, leaving the one it came from; dragged off the board, it goes back */
-  private drop(source: PressSource, letter: number, target: number | null): void {
+  /** A dragged symbol lands on a cell, leaving the one it came from; dragged off the board, it goes back */
+  private drop(source: PressSource, symbol: number, target: number | null): void {
     if (source.kind === 'cell' && source.cell !== target) {
       this.setCell(source.cell, null);
     }
     if (target !== null) {
-      this.setCell(target, letter);
+      this.setCell(target, symbol);
     }
   }
 
-  /** The letter a press can drag: any tray letter, or a letter the player put on the board */
-  private movableLetter(source: PressSource): number | null {
+  /** The symbol a press can drag: any tray symbol, or a symbol the player put on the board */
+  private movableSymbol(source: PressSource): number | null {
     if (source.kind === 'tray') {
-      return source.letter;
+      return source.symbol;
     }
     return this.isGiven(source.cell) ? null : this.board()[source.cell];
   }
 
-  /** Puts a letter on a cell (null empties it), unless its letter was given; the board may now be solved */
-  private setCell(cell: number, letter: number | null): void {
-    if (this.isGiven(cell) || this.board()[cell] === letter) {
+  /** Puts a symbol on a cell (null empties it), unless its symbol was given; the board may now be solved */
+  private setCell(cell: number, symbol: number | null): void {
+    if (this.isGiven(cell) || this.board()[cell] === symbol) {
       return;
     }
     if (!this.hasStarted) {
       this.hasStarted = true;
-      this.api.countPlay('letter-sudoku');
+      this.api.countPlay(this.game());
       this.clock.start();
     }
-    this.board.update((board) => board.map((current, index) => (index === cell ? letter : current)));
+    this.board.update((board) => board.map((current, index) => (index === cell ? symbol : current)));
     this.isChecked.set(false);
     if (isSolved(this.board(), this.size())) {
       this.clock.stop();

@@ -178,6 +178,13 @@ export const EU: SiteMessages = {
       subtitle: 'hizki bakoitza behin errenkada, zutabe eta karratu bakoitzean',
       intro: 'Hizkiekin logika joko bat haurrentzat.',
     },
+    'number-sudoku': {
+      name: 'Zenbaki sudokua',
+      summary:
+        'Jarri zenbakiak taulan, bakoitza behin ager dadin errenkada, zutabe eta karratu bakoitzean. Arrastatu edo sakatu zenbaki bat eta gero gelaxka bat.',
+      subtitle: 'zenbaki bakoitza behin errenkada, zutabe eta karratu bakoitzean',
+      intro: 'Zenbakiekin logika joko bat haurrentzat.',
+    },
     'hit-the-note': {
       name: 'Asmatu nota',
       summary:
@@ -798,21 +805,35 @@ export const EU: SiteMessages = {
     soundOff: 'Soinua itzalita: sakatu zenbakiak entzuteko',
   },
 
-  letterSudoku: {
-    lead: 'Arrastatu hizkiak gelaxka hutsetara, edo sakatu hizki bat eta gero gelaxka bat.',
-    rule: 'Hizki bakoitza behin doa errenkada, zutabe eta karratu bakoitzean. Sakatu Egiaztatu errepikatuak ikusteko.',
-    board: 'Hizki taula',
-    letters: 'ABDEFGHIJK',
-    tray: 'Hizkiak',
+  sudoku: {
     sizeGroup: 'Taula',
-    sizeSummary: letters => `${letters} hizki`,
-    cell: (row, column, letter) => `${row}. errenkada, ${column}. zutabea: ${letter || 'hutsik'}`,
+    cell: (row, column, symbol) => `${row}. errenkada, ${column}. zutabea: ${symbol || 'hutsik'}`,
     check: 'Egiaztatu',
-    repeated: 'Hizki gorriak errepikatuta daude beren errenkadan, zutabean edo karratuan.',
-    noRepeats: 'Oraingoz ez dago hizki errepikaturik!',
     done: 'Taula osatuta!',
     summary: time => time,
     newGame: 'Partida berria',
+    games: {
+      'letter-sudoku': {
+        lead: 'Arrastatu hizkiak gelaxka hutsetara, edo sakatu hizki bat eta gero gelaxka bat.',
+        rule: 'Hizki bakoitza behin doa errenkada, zutabe eta karratu bakoitzean. Sakatu Egiaztatu errepikatuak ikusteko.',
+        board: 'Hizki taula',
+        symbols: 'ABDEFGHIJ',
+        tray: 'Hizkiak',
+        sizeSummary: letters => `${letters} hizki`,
+        repeated: 'Hizki gorriak errepikatuta daude beren errenkadan, zutabean edo karratuan.',
+        noRepeats: 'Oraingoz ez dago hizki errepikaturik!',
+      },
+      'number-sudoku': {
+        lead: 'Arrastatu zenbakiak gelaxka hutsetara, edo sakatu zenbaki bat eta gero gelaxka bat.',
+        rule: 'Zenbaki bakoitza behin doa errenkada, zutabe eta karratu bakoitzean. Sakatu Egiaztatu errepikatuak ikusteko.',
+        board: 'Zenbaki taula',
+        symbols: '123456789',
+        tray: 'Zenbakiak',
+        sizeSummary: numbers => `1etik ${numbers}era bitarteko zenbakiak`,
+        repeated: 'Zenbaki gorriak errepikatuta daude beren errenkadan, zutabean edo karratuan.',
+        noRepeats: 'Oraingoz ez dago zenbaki errepikaturik!',
+      },
+    },
   },
 
   findPairs: {

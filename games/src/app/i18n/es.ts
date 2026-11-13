@@ -180,6 +180,13 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       subtitle: 'cada letra una vez en cada fila, columna y cuadro',
       intro: 'Un juego de lógica con letras para peques.',
     },
+    'number-sudoku': {
+      name: 'Sudoku de números',
+      summary:
+        'Pon los números en el tablero para que cada uno salga una vez en cada fila, columna y cuadro. Arrástralos o toca un número y luego una casilla.',
+      subtitle: 'cada número una vez en cada fila, columna y cuadro',
+      intro: 'Un juego de lógica con números para peques.',
+    },
     'hit-the-note': {
       name: 'Dando la nota',
       summary:
@@ -808,21 +815,35 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     soundOff: 'Sonido desactivado: toca para oír los números',
   },
 
-  letterSudoku: {
-    lead: 'Arrastra las letras a las casillas vacías, o toca una letra y luego una casilla.',
-    rule: 'Cada letra va una vez en cada fila, en cada columna y en cada cuadro. Pulsa Comprobar para ver las repetidas.',
-    board: 'Tablero de letras',
-    letters: 'ABCDEFGHIJ',
-    tray: 'Letras',
+  sudoku: {
     sizeGroup: 'Tablero',
-    sizeSummary: letters => `${letters} letras`,
-    cell: (row, column, letter) => `Fila ${row}, columna ${column}: ${letter || 'vacía'}`,
+    cell: (row, column, symbol) => `Fila ${row}, columna ${column}: ${symbol || 'vacía'}`,
     check: 'Comprobar',
-    repeated: 'Las letras en rojo se repiten en su fila, columna o cuadro.',
-    noRepeats: '¡De momento no se repite ninguna letra!',
     done: '¡Tablero completo!',
     summary: time => `En ${time}`,
     newGame: 'Nueva partida',
+    games: {
+      'letter-sudoku': {
+        lead: 'Arrastra las letras a las casillas vacías, o toca una letra y luego una casilla.',
+        rule: 'Cada letra va una vez en cada fila, en cada columna y en cada cuadro. Pulsa Comprobar para ver las repetidas.',
+        board: 'Tablero de letras',
+        symbols: 'ABCDEFGHI',
+        tray: 'Letras',
+        sizeSummary: letters => `${letters} letras`,
+        repeated: 'Las letras en rojo se repiten en su fila, columna o cuadro.',
+        noRepeats: '¡De momento no se repite ninguna letra!',
+      },
+      'number-sudoku': {
+        lead: 'Arrastra los números a las casillas vacías, o toca un número y luego una casilla.',
+        rule: 'Cada número va una vez en cada fila, en cada columna y en cada cuadro. Pulsa Comprobar para ver los repetidos.',
+        board: 'Tablero de números',
+        symbols: '123456789',
+        tray: 'Números',
+        sizeSummary: numbers => `Números del 1 al ${numbers}`,
+        repeated: 'Los números en rojo se repiten en su fila, columna o cuadro.',
+        noRepeats: '¡De momento no se repite ningún número!',
+      },
+    },
   },
 
   findPairs: {

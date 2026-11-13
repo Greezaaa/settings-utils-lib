@@ -174,6 +174,13 @@ export const EN: SiteMessages = {
       subtitle: 'each letter once in every row, column and box',
       intro: 'A letter logic game for kids.',
     },
+    'number-sudoku': {
+      name: 'Number sudoku',
+      summary:
+        'Put the numbers on the board so each one appears once in every row, column and box. Drag them or tap a number and then a cell.',
+      subtitle: 'each number once in every row, column and box',
+      intro: 'A number logic game for kids.',
+    },
     'hit-the-note': {
       name: 'Hit the note',
       summary:
@@ -777,21 +784,35 @@ export const EN: SiteMessages = {
     soundOff: 'Sound off: tap to hear the numbers',
   },
 
-  letterSudoku: {
-    lead: 'Drag the letters onto the empty cells, or tap a letter and then a cell.',
-    rule: 'Each letter goes once in every row, every column and every box. Press Check to see the repeated ones.',
-    board: 'Letter board',
-    letters: 'ABCDEFGHIJ',
-    tray: 'Letters',
+  sudoku: {
     sizeGroup: 'Board',
-    sizeSummary: letters => `${letters} letters`,
-    cell: (row, column, letter) => `Row ${row}, column ${column}: ${letter || 'empty'}`,
+    cell: (row, column, symbol) => `Row ${row}, column ${column}: ${symbol || 'empty'}`,
     check: 'Check',
-    repeated: 'The red letters repeat in their row, column or box.',
-    noRepeats: 'No repeated letters so far!',
     done: 'Board complete!',
     summary: time => `In ${time}`,
     newGame: 'New game',
+    games: {
+      'letter-sudoku': {
+        lead: 'Drag the letters onto the empty cells, or tap a letter and then a cell.',
+        rule: 'Each letter goes once in every row, every column and every box. Press Check to see the repeated ones.',
+        board: 'Letter board',
+        symbols: 'ABCDEFGHI',
+        tray: 'Letters',
+        sizeSummary: letters => `${letters} letters`,
+        repeated: 'The red letters repeat in their row, column or box.',
+        noRepeats: 'No repeated letters so far!',
+      },
+      'number-sudoku': {
+        lead: 'Drag the numbers onto the empty cells, or tap a number and then a cell.',
+        rule: 'Each number goes once in every row, every column and every box. Press Check to see the repeated ones.',
+        board: 'Number board',
+        symbols: '123456789',
+        tray: 'Numbers',
+        sizeSummary: numbers => `Numbers 1 to ${numbers}`,
+        repeated: 'The red numbers repeat in their row, column or box.',
+        noRepeats: 'No repeated numbers so far!',
+      },
+    },
   },
 
   findPairs: {

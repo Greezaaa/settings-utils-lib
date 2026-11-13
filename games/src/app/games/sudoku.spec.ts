@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { boxCells, countSolutions, dealSudoku, fullBoard, isSolved, repeatedCells, SUDOKU_SIZES } from './letter-sudoku';
+import { boxCells, countSolutions, dealSudoku, fullBoard, isSolved, repeatedCells, SUDOKU_SIZES } from './sudoku';
 import { seededRandom } from './random';
 
-describe('letter sudoku', () => {
-  it('builds full boards with each letter once in every row, column and box', () => {
+describe('sudoku', () => {
+  it('builds full boards with each symbol once in every row, column and box', () => {
     for (const size of SUDOKU_SIZES) {
       const board = fullBoard(size, seededRandom(size));
       expect(board).toHaveLength(size * size);
@@ -20,20 +20,20 @@ describe('letter sudoku', () => {
     }
   });
 
-  it('deals puzzles with empty cells, no repeated letters and only one answer', () => {
+  it('deals puzzles with empty cells, no repeated symbols and only one answer', () => {
     for (const size of SUDOKU_SIZES) {
       const { start } = dealSudoku(size, seededRandom(7));
-      expect(start.filter((letter) => letter === null).length).toBeGreaterThan(size);
+      expect(start.filter((symbol) => symbol === null).length).toBeGreaterThan(size);
       expect(repeatedCells(start, size).size).toBe(0);
       expect(countSolutions(start, size, 2)).toBe(1);
     }
   });
 
-  it('counts more than one answer on a board with too few letters', () => {
+  it('counts more than one answer on a board with too few symbols', () => {
     expect(countSolutions(Array<null>(16).fill(null), 4, 2)).toBe(2);
   });
 
-  it('marks letters repeated in a row, a column or a box', () => {
+  it('marks symbols repeated in a row, a column or a box', () => {
     // A . | . .
     // . A | . .   ← same box as the first A
     // ----+----

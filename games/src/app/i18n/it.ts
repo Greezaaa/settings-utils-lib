@@ -174,6 +174,13 @@ export const italian = (gender: WordGender): SiteMessages => ({
       subtitle: 'ogni lettera una volta in ogni riga, colonna e riquadro',
       intro: 'Un gioco di logica con le lettere per bambini.',
     },
+    'number-sudoku': {
+      name: 'Sudoku di numeri',
+      summary:
+        'Metti i numeri sul tabellone in modo che ognuno compaia una volta in ogni riga, colonna e riquadro. Trascinali o tocca un numero e poi una casella.',
+      subtitle: 'ogni numero una volta in ogni riga, colonna e riquadro',
+      intro: 'Un gioco di logica con i numeri per bambini.',
+    },
     'hit-the-note': {
       name: 'Prendi la nota',
       summary:
@@ -771,21 +778,35 @@ export const italian = (gender: WordGender): SiteMessages => ({
     soundOff: 'Audio spento: tocca per sentire i numeri',
   },
 
-  letterSudoku: {
-    lead: 'Trascina le lettere nelle caselle vuote, oppure tocca una lettera e poi una casella.',
-    rule: 'Ogni lettera va una volta in ogni riga, in ogni colonna e in ogni riquadro. Premi Controlla per vedere quelle ripetute.',
-    board: 'Tabellone di lettere',
-    letters: 'ABCDEFGHIL',
-    tray: 'Lettere',
+  sudoku: {
     sizeGroup: 'Tabellone',
-    sizeSummary: (letters) => `${letters} lettere`,
-    cell: (row, column, letter) => `Riga ${row}, colonna ${column}: ${letter || 'vuota'}`,
+    cell: (row, column, symbol) => `Riga ${row}, colonna ${column}: ${symbol || 'vuota'}`,
     check: 'Controlla',
-    repeated: 'Le lettere in rosso si ripetono nella loro riga, colonna o riquadro.',
-    noRepeats: 'Per ora nessuna lettera ripetuta!',
     done: 'Tabellone completo!',
     summary: (time) => `In ${time}`,
     newGame: 'Nuova partita',
+    games: {
+      'letter-sudoku': {
+        lead: 'Trascina le lettere nelle caselle vuote, oppure tocca una lettera e poi una casella.',
+        rule: 'Ogni lettera va una volta in ogni riga, in ogni colonna e in ogni riquadro. Premi Controlla per vedere quelle ripetute.',
+        board: 'Tabellone di lettere',
+        symbols: 'ABCDEFGHI',
+        tray: 'Lettere',
+        sizeSummary: (letters) => `${letters} lettere`,
+        repeated: 'Le lettere in rosso si ripetono nella loro riga, colonna o riquadro.',
+        noRepeats: 'Per ora nessuna lettera ripetuta!',
+      },
+      'number-sudoku': {
+        lead: 'Trascina i numeri nelle caselle vuote, oppure tocca un numero e poi una casella.',
+        rule: 'Ogni numero va una volta in ogni riga, in ogni colonna e in ogni riquadro. Premi Controlla per vedere quelli ripetuti.',
+        board: 'Tabellone di numeri',
+        symbols: '123456789',
+        tray: 'Numeri',
+        sizeSummary: (numbers) => `Numeri da 1 a ${numbers}`,
+        repeated: 'I numeri in rosso si ripetono nella loro riga, colonna o riquadro.',
+        noRepeats: 'Per ora nessun numero ripetuto!',
+      },
+    },
   },
 
   findPairs: {

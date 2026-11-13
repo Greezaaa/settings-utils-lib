@@ -10,7 +10,7 @@
   gap: clamp(0.375rem, 1.6vw, 0.75rem);
   grid-template-columns: repeat(calc(var(--size) / var(--box-columns)), minmax(0, 1fr));
   width: min(100%, calc(var(--size) * 4.5rem), 34rem);
-  // Letters are sized from the board's width, so they fit their cells on every size
+  // Symbols are sized from the board's width, so they fit their cells on every size
   container-type: inline-size;
 }
 
@@ -24,9 +24,9 @@
   padding: clamp(0.125rem, 0.5vw, 0.25rem);
 }
 
-// Letters are dragged, so the page must not scroll under the finger
+// Symbols are dragged, so the page must not scroll under the finger
 .cell,
-.tray-letter {
+.tray-symbol {
   align-items: center;
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -47,7 +47,7 @@
   font-size: calc(100cqi / var(--size) * 0.5);
 }
 
-// Given letters can't be moved: plain text on a raised cell
+// Given symbols can't be moved: plain text on a raised cell
 .cell.is-given {
   background: color-mix(in srgb, var(--text) 12%, var(--surface));
   border-style: solid;
@@ -55,7 +55,7 @@
   cursor: default;
 }
 
-// The player's letters, in colour like the tray they came from
+// The player's symbols, in colour like the tray they came from
 .cell.is-placed {
   background: var(--blue-bg);
   border: 1px solid var(--blue-text);
@@ -68,7 +68,7 @@
   color: var(--red-text);
 }
 
-// The cell a letter is being dragged out of
+// The cell a symbol is being dragged out of
 .cell.is-lifted {
   opacity: 0.4;
 }
@@ -87,7 +87,7 @@
   width: min(100%, 34rem);
 }
 
-.tray-letter {
+.tray-symbol {
   background: var(--blue-bg);
   border-color: var(--blue-text);
   color: var(--blue-text);
@@ -97,21 +97,21 @@
   width: 3rem;
 }
 
-// A letter picked by a tap, placed on each cell tapped next
-.tray-letter[aria-pressed='true'] {
+// A symbol picked by a tap, placed on each cell tapped next
+.tray-symbol[aria-pressed='true'] {
   box-shadow:
     0 0 0 3px var(--button-bg),
     0 6px 16px rgba(0, 0, 0, 0.25);
   transform: scale(1.08);
 }
 
-// Every one of this letter is on the board
-.tray-letter.is-used-up {
+// Every one of this symbol is on the board
+.tray-symbol.is-used-up {
   opacity: 0.45;
 }
 
-// The dragged letter follows the pointer, above everything and never under it, so the cell below can be found
-.drag-letter {
+// The dragged symbol follows the pointer, above everything and never under it, so the cell below can be found
+.drag-symbol {
   align-items: center;
   background: var(--blue-bg);
   border: 2px solid var(--blue-text);

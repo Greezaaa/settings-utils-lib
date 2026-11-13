@@ -21,11 +21,26 @@ import { AnswerStyleId, LevelId, TimerId } from '../games/math-games';
 import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { PictureModeId } from '../games/picture-game';
+import { SudokuGame } from '../games/sudoku';
 import { WordGender } from './word-gender';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
 
 /** A setting's name on its button, and a longer description shown on hover or below it */
+/** A sudoku game's own texts: its symbols, and the words that name them */
+export interface SudokuText {
+  readonly lead: string;
+  readonly rule: string;
+  readonly board: string;
+  /** The symbols used, in order: the first 4, 6 or 9 go on the board */
+  readonly symbols: string;
+  readonly tray: string;
+  /** A size's description, e.g. `4 letters` */
+  readonly sizeSummary: (symbols: number) => string;
+  readonly repeated: string;
+  readonly noRepeats: string;
+}
+
 export interface OptionText {
   readonly name: string;
   readonly summary: string;
@@ -484,25 +499,17 @@ export interface SiteMessages {
     readonly soundOff: string;
   };
 
-  /** Letter sudoku: each letter once in every row, column and box */
-  readonly letterSudoku: {
-    readonly lead: string;
-    readonly rule: string;
-    readonly board: string;
-    /** The letters used, in order: the first 4, 6 or 9 go on the board */
-    readonly letters: string;
-    readonly tray: string;
+  /** The sudoku games (letter and number sudoku): each symbol once in every row, column and box */
+  readonly sudoku: {
     readonly sizeGroup: string;
-    /** A size's description, e.g. `4 letters` */
-    readonly sizeSummary: (letters: number) => string;
-    /** A cell for screen readers; the letter is empty when the cell is */
-    readonly cell: (row: number, column: number, letter: string) => string;
+    /** A cell for screen readers; the symbol is empty when the cell is */
+    readonly cell: (row: number, column: number, symbol: string) => string;
     readonly check: string;
-    readonly repeated: string;
-    readonly noRepeats: string;
     readonly done: string;
     readonly summary: (time: string) => string;
     readonly newGame: string;
+    /** Each game's own texts */
+    readonly games: Readonly<Record<SudokuGame, SudokuText>>;
   };
 
   readonly findPairs: {
