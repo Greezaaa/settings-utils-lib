@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { AdminApi } from '../../../core/admin-api';
 import { ADMIN_PATH } from '../../../core/links';
 import { MIN_PASSWORD_LENGTH } from '../../../core/passwords';
+import { RevealPassword } from '../../../shared/reveal-password';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 type Step = 'checking' | 'ready' | 'invalid' | 'saving' | 'mismatch' | 'failed';
 
 @Component({
   selector: 'app-admin-invite-page',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, RevealPassword],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-invite-page.html',
   styleUrls: ['../../../shared/utility-page.scss', '../admin.scss'],

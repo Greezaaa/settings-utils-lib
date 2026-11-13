@@ -85,6 +85,8 @@ export interface SiteMessages {
     readonly reactionSide: string;
     readonly reactionSides: Readonly<Record<ReactionSide, string>>;
     readonly stickerDrag: string;
+    readonly showPassword: string;
+    readonly hidePassword: string;
     readonly offlinePlay: string;
     readonly offlinePlayChoices: Readonly<Record<OfflineChoice, string>>;
     readonly offlinePlayHelp: string;

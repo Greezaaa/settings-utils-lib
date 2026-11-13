@@ -100,6 +100,8 @@ export const EU: SiteMessages = {
     reactionSides: { left: 'Ezkerrean', right: 'Eskuinean', bottom: 'Behean' },
     stickerDrag: 'Mugitu pegatinak sakatuta edukiz',
     stickerDragChoices: { on: 'Bai', off: 'Ez' },
+    showPassword: 'Erakutsi pasahitza',
+    hidePassword: 'Ezkutatu pasahitza',
     offlinePlay: 'Konexiorik gabe jolastu',
     offlinePlayChoices: { on: 'Bai', off: 'Ez' },
     offlinePlayHelp: 'Jokoak gailu honetan gordetzen ditu (2 MB inguru), internetik gabe funtziona dezaten',

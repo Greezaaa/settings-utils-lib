@@ -50,7 +50,7 @@
           }
         </div>
 
-        <div class="tray" role="group" [attr.aria-label]="text.tray">
+        <div class="tray" role="group" data-board [attr.aria-label]="text.tray">
           @for (symbol of traySymbols(); track symbol) {
             <button
               type="button"

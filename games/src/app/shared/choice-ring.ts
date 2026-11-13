@@ -2,7 +2,7 @@ import { DOCUMENT, effect, inject, Injectable } from '@angular/core';
 import { MenuAnimation } from '../core/menu-animation';
 import { DriftShape } from './drift-shape';
 
-const GROUP = '[role="group"], [role="tablist"]';
+const GROUP = '[role="group"]:not([data-board]), [role="tablist"]';
 const CHOICE = 'button[aria-pressed]';
 const PRESSED = 'button[aria-pressed="true"]';
 

@@ -97,6 +97,8 @@ export const EN: SiteMessages = {
     reactionSides: { left: 'Left', right: 'Right', bottom: 'Bottom' },
     stickerDrag: 'Move stickers by holding them',
     stickerDragChoices: { on: 'Yes', off: 'No' },
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
     offlinePlay: 'Play offline',
     offlinePlayChoices: { on: 'Yes', off: 'No' },
     offlinePlayHelp: 'Keeps the games on this device (about 2 MB) so they work without internet',

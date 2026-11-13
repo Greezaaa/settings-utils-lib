@@ -129,6 +129,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     reactionSides: { left: 'Ліворуч', right: 'Праворуч', bottom: 'Знизу' },
     stickerDrag: 'Переміщати наліпки утриманням',
     stickerDragChoices: { on: 'Так', off: 'Ні' },
+    showPassword: 'Показати пароль',
+    hidePassword: 'Сховати пароль',
     offlinePlay: 'Грати без мережі',
     offlinePlayChoices: { on: 'Так', off: 'Ні' },
     offlinePlayHelp: 'Зберігає ігри на цьому пристрої (близько 2 МБ), щоб вони працювали без інтернету',

@@ -98,6 +98,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     reactionSides: { left: 'Sinistra', right: 'Destra', bottom: 'In basso' },
     stickerDrag: 'Sposta gli adesivi tenendoli premuti',
     stickerDragChoices: { on: 'Sì', off: 'No' },
+    showPassword: 'Mostra password',
+    hidePassword: 'Nascondi password',
     offlinePlay: 'Gioca offline',
     offlinePlayChoices: { on: 'Sì', off: 'No' },
     offlinePlayHelp: 'Tiene i giochi su questo dispositivo (circa 2 MB) per farli funzionare senza internet',

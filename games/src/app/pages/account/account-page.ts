@@ -5,6 +5,7 @@ import { PlayerAccount } from '../../core/player-account';
 import { SiteLanguage } from '../../i18n/site-language';
 import { AccountForm, formText } from './account-form';
 import { ScreenNameField } from './screen-name-field/screen-name-field';
+import { RevealPassword } from '../../shared/reveal-password';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { FeatureFlags } from '../../core/feature-flags';
 import { SuStrengthMeterComponent } from '@su-labs/fields';
@@ -13,7 +14,7 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 
 @Component({
   selector: 'app-account-page',
-  imports: [TranslatePipe, SuStrengthMeterComponent, ScreenNameField],
+  imports: [TranslatePipe, RevealPassword, SuStrengthMeterComponent, ScreenNameField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', '../admin/admin.scss', './account.scss'],
@@ -156,7 +157,7 @@ export class AccountPage {
   }
 
   private clearPasswords(form: HTMLFormElement): void {
-    for (const input of form.querySelectorAll('input[type="password"]')) {
+    for (const input of form.querySelectorAll('input[data-password]')) {
       if (input instanceof HTMLInputElement) {
         input.value = '';
         input.dispatchEvent(new Event('input'));

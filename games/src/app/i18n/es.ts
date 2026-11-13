@@ -101,6 +101,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     reactionSides: { left: 'Izquierda', right: 'Derecha', bottom: 'Abajo' },
     stickerDrag: 'Mover las pegatinas manteniéndolas pulsadas',
     stickerDragChoices: { on: 'Sí', off: 'No' },
+    showPassword: 'Mostrar contraseña',
+    hidePassword: 'Ocultar contraseña',
     offlinePlay: 'Jugar sin conexión',
     offlinePlayChoices: { on: 'Sí', off: 'No' },
     offlinePlayHelp: 'Guarda los juegos en este dispositivo (unos 2 MB) para que funcionen sin internet',

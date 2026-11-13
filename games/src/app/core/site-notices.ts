@@ -5,7 +5,7 @@ import { SiteLanguage } from '../i18n/site-language';
 import { WORD_GENDERS } from '../i18n/word-gender';
 import { FeatureFlags } from './feature-flags';
 import { PlayerGender } from './player-gender';
-import { readStored, writeStored } from './site-storage';
+import { isSavingAllowed, readStored, writeStored } from './site-storage';
 import { LATEST_PRIVACY_VERSION, LATEST_VERSION } from './site-updates';
 
 /** The version whose privacy notice the visitor closed */
@@ -49,6 +49,9 @@ export class SiteNotices {
   }
 
   private showDue(): void {
+    if (!isSavingAllowed()) {
+      return;
+    }
     const oldDismissed = readStored(OLD_PRIVACY_STORAGE) === true;
     const privacySeen = readVersion(PRIVACY_SEEN_STORAGE) ?? (oldDismissed ? 1 : 0);
     if (privacySeen >= LATEST_PRIVACY_VERSION) {

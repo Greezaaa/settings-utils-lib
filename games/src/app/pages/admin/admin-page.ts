@@ -11,6 +11,7 @@ import { AdminSuggestions } from './admin-suggestions/admin-suggestions';
 import { AdminTeam } from './admin-team/admin-team';
 import { AdminWordReports } from './admin-word-reports/admin-word-reports';
 import { ScrollToActive } from '../../shared/scroll-to-active';
+import { RevealPassword } from '../../shared/reveal-password';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offline';
@@ -21,7 +22,7 @@ const SUPER_TABS: readonly Tab[] = ['games', 'errors', 'team'];
 
 @Component({
   selector: 'app-admin-page',
-  imports: [TranslatePipe, ScrollToActive, AdminAccount, AdminErrors, AdminGames, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
+  imports: [TranslatePipe, RevealPassword, ScrollToActive, AdminAccount, AdminErrors, AdminGames, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],

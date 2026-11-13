@@ -3,6 +3,7 @@ import { AdminApi } from '../../../core/admin-api';
 import { GameAvailability } from '../../../core/game-availability';
 import { OfflineMode, OfflineStatus } from '../../../core/offline-mode';
 import { MIN_PASSWORD_LENGTH } from '../../../core/passwords';
+import { RevealPassword } from '../../../shared/reveal-password';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
@@ -10,7 +11,7 @@ type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
 @Component({
   selector: 'app-admin-account',
   host: { class: 'admin-tab' },
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, RevealPassword],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-account.html',
   styleUrls: ['../admin.scss', '../../../shared/switch.scss'],

@@ -4,13 +4,14 @@ import { MIN_PASSWORD_LENGTH } from '../../../core/passwords';
 import { PlayerAccount } from '../../../core/player-account';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { AccountForm, formText } from '../account-form';
+import { RevealPassword } from '../../../shared/reveal-password';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { SuStrengthMeterComponent } from '@su-labs/fields';
 
 @Component({
   selector: 'app-reset-page',
-  imports: [TranslatePipe, SuStrengthMeterComponent],
+  imports: [TranslatePipe, RevealPassword, SuStrengthMeterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './reset-page.html',
   styleUrls: ['../../../shared/utility-page.scss', '../../admin/admin.scss', '../account.scss'],
