@@ -22,6 +22,7 @@ interface SwitchActions {
  */
 @Component({
   selector: 'app-admin-games',
+  host: { class: 'admin-tab' },
   imports: [TranslatePipe, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-games.html',

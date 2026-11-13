@@ -12,6 +12,7 @@ import { saveFailedNotice } from '../save-failed-notice';
  */
 @Component({
   selector: 'app-admin-players',
+  host: { class: 'admin-tab' },
   imports: [TranslatePipe, AdminNames],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-players.html',

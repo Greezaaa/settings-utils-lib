@@ -9,6 +9,7 @@ type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
 /** Admin tab: preview mode (super admin and testers), and changing your own password (other browsers are signed out) */
 @Component({
   selector: 'app-admin-account',
+  host: { class: 'admin-tab' },
   imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-account.html',

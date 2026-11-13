@@ -10,6 +10,7 @@ import { saveFailedNotice } from '../save-failed-notice';
  */
 @Component({
   selector: 'app-admin-word-reports',
+  host: { class: 'admin-tab' },
   imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-word-reports.html',

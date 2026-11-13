@@ -1,5 +1,12 @@
 // Styles the admin page and its tabs share
 
+// Each tab: its cards, titles and help one under the other, evenly spaced
+:host(.admin-tab) {
+  align-content: start;
+  display: grid;
+  gap: 1.5rem;
+}
+
 .admin-card {
   display: grid;
   gap: 1rem;
@@ -64,7 +71,7 @@ input[type='password'] {
 }
 
 .load-more {
-  margin-top: 1rem;
+  justify-self: start;
 }
 
 .signed-in {
@@ -101,10 +108,6 @@ input[type='text'] {
 
 .success {
   color: var(--green-text);
-}
-
-.filters {
-  margin-bottom: 1rem;
 }
 
 .switch-row {

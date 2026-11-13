@@ -12,6 +12,7 @@ import { TranslatePipe } from '../../../i18n/translate-pipe';
  */
 @Component({
   selector: 'app-admin-errors',
+  host: { class: 'admin-tab' },
   imports: [TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-errors.html',
