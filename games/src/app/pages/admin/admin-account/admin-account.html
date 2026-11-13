@@ -11,6 +11,17 @@
   </div>
 }
 
+@if (offlineMode.isAvailable() && offline(); as status) {
+  <div class="card admin-card">
+    <span class="switch-text">
+      <strong>{{ 'admin.offlineTitle' | translate }}</strong>
+      <small class="muted">
+        {{ status.isActive ? ('admin.offlineActive' | translate: megabytes(status.storedBytes)) : ('admin.offlineInactive' | translate) }}
+      </small>
+    </span>
+  </div>
+}
+
 <form class="card admin-card" (submit)="change($event, form, current, next, repeat)" #form>
   <h2 class="card-title">{{ 'admin.changePassword' | translate }}</h2>
   <p class="muted">{{ admin.me()?.email }}</p>

@@ -93,6 +93,34 @@
     </div>
   </div>
 }
+@if (offlineMode.isAvailable()) {
+  <div class="setting">
+    <p class="setting-label" id="setting-offline">{{ 'site.offlinePlay' | translate }}</p>
+    <div class="languages" role="group" aria-labelledby="setting-offline">
+      @for (choice of offlineChoices; track choice) {
+        <button
+          type="button"
+          class="icon-button"
+          [attr.aria-pressed]="choice === offlineMode.choice()"
+          (click)="offlineMode.set(choice)"
+        >
+          {{ ('site.offlinePlayChoices' | translate)[choice] }}
+        </button>
+      }
+    </div>
+    <small class="muted">{{ 'site.offlinePlayHelp' | translate }}</small>
+  </div>
+}
+@if (appInstall.isAvailable()) {
+  <div class="setting">
+    <p class="setting-label">{{ 'site.install' | translate }}</p>
+    @if (appInstall.canPrompt()) {
+      <button type="button" class="icon-button" (click)="appInstall.install()">{{ 'site.installButton' | translate }}</button>
+    } @else {
+      <small class="muted">{{ 'site.installSteps' | translate }}</small>
+    }
+  </div>
+}
 @if (reactions.isAvailable()) {
   <div class="setting is-small-screens-only">
     <p class="setting-label" id="setting-reaction-side">{{ 'site.reactionSide' | translate }}</p>

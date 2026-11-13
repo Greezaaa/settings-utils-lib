@@ -44,6 +44,7 @@ export const FEATURE_IDS = [
   'room-names',
   'sticker-drag',
   'offline',
+  'install-app',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

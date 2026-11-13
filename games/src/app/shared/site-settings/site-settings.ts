@@ -4,9 +4,11 @@ import { FontSizeService } from '@su-labs/font-size';
 import { isSuBaseThemeName, SuThemeName } from '@su-labs/theme';
 import { ANSWER_STYLES, AnswerWords } from '../../core/answer-words';
 import { BoardColours } from '../../core/board-colours';
+import { AppInstall } from '../../core/app-install';
 import { FeatureFlags } from '../../core/feature-flags';
 import { GAME_THEMES, getGameTheme, isGameThemeId } from '../../core/game-themes';
 import { MENU_ANIMATION_CHOICES, MenuAnimation } from '../../core/menu-animation';
+import { OFFLINE_CHOICES, OfflineMode } from '../../core/offline-mode';
 import { PlayerGender } from '../../core/player-gender';
 import { REACTION_SIDES, Reactions, STICKER_DRAG_CHOICES } from '../../core/reactions';
 import { SiteTheme } from '../../core/site-theme';
@@ -32,6 +34,8 @@ export class SiteSettings {
   protected readonly playerGender = inject(PlayerGender);
   protected readonly reactions = inject(Reactions);
   protected readonly menuAnimation = inject(MenuAnimation);
+  protected readonly offlineMode = inject(OfflineMode);
+  protected readonly appInstall = inject(AppInstall);
   protected readonly features = inject(FeatureFlags);
 
   protected readonly languages = LANGUAGE_IDS;
@@ -39,6 +43,7 @@ export class SiteSettings {
   protected readonly reactionSides = REACTION_SIDES;
   protected readonly stickerDragChoices = STICKER_DRAG_CHOICES;
   protected readonly menuAnimationChoices = MENU_ANIMATION_CHOICES;
+  protected readonly offlineChoices = OFFLINE_CHOICES;
   protected readonly wordGenders = WORD_GENDERS;
   protected readonly gameThemes = GAME_THEMES;
   protected readonly selectedBoardTheme = computed(() => getGameTheme(this.boardColours.selected()));

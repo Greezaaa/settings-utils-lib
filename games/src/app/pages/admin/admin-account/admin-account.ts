@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AdminApi } from '../../../core/admin-api';
 import { GameAvailability } from '../../../core/game-availability';
+import { OfflineMode, OfflineStatus } from '../../../core/offline-mode';
 import { MIN_PASSWORD_LENGTH } from '../../../core/passwords';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
@@ -19,6 +20,16 @@ export class AdminAccount {
   protected readonly availability = inject(GameAvailability);
   protected readonly minLength = MIN_PASSWORD_LENGTH;
   protected readonly saving = signal<Saving>('idle');
+  protected readonly offlineMode = inject(OfflineMode);
+  protected readonly offline = signal<OfflineStatus | null>(null);
+
+  constructor() {
+    afterNextRender(async () => this.offline.set(await this.offlineMode.status()));
+  }
+
+  protected megabytes(bytes: number): string {
+    return (bytes / 1_000_000).toFixed(1);
+  }
 
   protected togglePreview(): void {
     this.availability.setPreview(!this.availability.isPreview());

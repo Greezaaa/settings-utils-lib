@@ -9,6 +9,7 @@ import { byCategory, gameInfo, gameOfPath } from './core/games';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
 import { MenuAnimation } from './core/menu-animation';
 import { PlayerAccount } from './core/player-account';
+import { AppInstall } from './core/app-install';
 import { OfflineMode } from './core/offline-mode';
 import { OutboxSender } from './core/outbox-sender';
 import { SiteNotices } from './core/site-notices';
@@ -46,6 +47,7 @@ export class App {
   protected readonly siteLanguage = inject(SiteLanguage);
   private readonly notices = inject(SiteNotices);
   private readonly offlineMode = inject(OfflineMode);
+  private readonly appInstall = inject(AppInstall);
   private readonly outboxSender = inject(OutboxSender);
   protected readonly t = this.siteLanguage.messages;
   protected readonly menuAnimation = inject(MenuAnimation);

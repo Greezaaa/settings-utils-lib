@@ -7,6 +7,7 @@ import { GameThemeId } from '../core/game-themes';
 import { GameCategory, GameSlug } from '../core/games';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { MenuAnimationChoice } from '../core/menu-animation';
+import { OfflineChoice } from '../core/offline-mode';
 import { PictureId } from '../core/pictures';
 import { AccountProblem } from '../core/player-account';
 import { Reaction, ReactionSide, StickerDragChoice } from '../core/reactions';
@@ -84,6 +85,12 @@ export interface SiteMessages {
     readonly reactionSide: string;
     readonly reactionSides: Readonly<Record<ReactionSide, string>>;
     readonly stickerDrag: string;
+    readonly offlinePlay: string;
+    readonly offlinePlayChoices: Readonly<Record<OfflineChoice, string>>;
+    readonly offlinePlayHelp: string;
+    readonly install: string;
+    readonly installButton: string;
+    readonly installSteps: string;
     readonly stickerDragChoices: Readonly<Record<StickerDragChoice, string>>;
     readonly wordGender: string;
     readonly wordGenders: Readonly<Record<WordGender, string>>;
@@ -553,6 +560,9 @@ export interface SiteMessages {
       >
     >;
     readonly previewTitle: string;
+    readonly offlineTitle: string;
+    readonly offlineActive: (megabytes: string) => string;
+    readonly offlineInactive: string;
     readonly previewHelp: (hiddenBadge: string) => string;
     readonly gamesTitle: string;
     readonly open: string;
