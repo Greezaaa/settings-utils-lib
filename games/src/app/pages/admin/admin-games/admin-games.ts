@@ -4,7 +4,7 @@ import { AdminApi } from '../../../core/admin-api';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { FEATURES, FeatureId } from '../../../core/features';
 import { GameAvailability } from '../../../core/game-availability';
-import { GAMES, GameSlug } from '../../../core/games';
+import { byCategory, GAME_SLUGS, gameInfo, GameSlug } from '../../../core/games';
 
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
@@ -34,7 +34,9 @@ export class AdminGames {
   /** Site features (like rooms), and each game's multiplayer switch, shown apart */
   protected readonly features = FEATURES.filter(({ roomGame }) => !roomGame);
   protected readonly roomGames = FEATURES.filter(({ roomGame }) => roomGame);
-  protected readonly games = GAMES;
+  /** Every game, grouped by category as the site lists them */
+  protected readonly categories = byCategory(GAME_SLUGS);
+  protected readonly gameInfo = gameInfo;
   /** The games and features being switched, while the API answers */
   protected readonly saving = signal<ReadonlySet<GameSlug | FeatureId>>(new Set());
   private readonly notifySaveFailed = saveFailedNotice();

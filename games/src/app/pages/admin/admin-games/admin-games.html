@@ -1,30 +1,33 @@
 <div class="admin-groups">
   <section class="admin-group">
     <h2 class="section-title">{{ 'admin.gamesTitle' | translate }}</h2>
-    <ul class="card admin-card plain-list">
-      @for (game of games; track game.slug) {
-        <li>
-          <label class="switch switch-row">
-            <span class="switch-text">
-              <a [routerLink]="['/', game.slug]">{{ ('games' | translate)[game.slug].name }}</a>
-              <small class="muted">
-                {{ availability.isOpen(game.slug) ? ('admin.open' | translate) : ('admin.hidden' | translate) }}
-                · {{ 'admin.byDefault' | translate: game.openByDefault }}
-              </small>
-            </span>
-            <input
-              type="checkbox"
-              role="switch"
-              [checked]="availability.isOpen(game.slug)"
-              [disabled]="!admin.isSuper()"
-              [attr.aria-busy]="saving().has(game.slug)"
-              (change)="toggle(game.slug, $event)"
-            />
-            <span class="track" aria-hidden="true"></span>
-          </label>
-        </li>
-      }
-    </ul>
+    @for (group of categories; track group.category) {
+      <h3 class="category-title">{{ ('categories' | translate)[group.category] }}</h3>
+      <ul class="card admin-card plain-list">
+        @for (slug of group.games; track slug) {
+          <li>
+            <label class="switch switch-row">
+              <span class="switch-text">
+                <a [routerLink]="['/', slug]">{{ ('games' | translate)[slug].name }}</a>
+                <small class="muted">
+                  {{ availability.isOpen(slug) ? ('admin.open' | translate) : ('admin.hidden' | translate) }}
+                  · {{ 'admin.byDefault' | translate: gameInfo(slug).openByDefault }}
+                </small>
+              </span>
+              <input
+                type="checkbox"
+                role="switch"
+                [checked]="availability.isOpen(slug)"
+                [disabled]="!admin.isSuper()"
+                [attr.aria-busy]="saving().has(slug)"
+                (change)="toggle(slug, $event)"
+              />
+              <span class="track" aria-hidden="true"></span>
+            </label>
+          </li>
+        }
+      </ul>
+    }
   </section>
   <section class="admin-group">
     <h2 class="section-title">{{ 'admin.featuresTitle' | translate }}</h2>

@@ -29,6 +29,16 @@
   .section-title {
     font-size: 1.375rem;
   }
+
+  // A category's name above its games' switches
+  .category-title {
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0.5rem 0 -0.5rem;
+    text-transform: uppercase;
+  }
 }
 
 input[type='password'] {
