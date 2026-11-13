@@ -77,7 +77,7 @@
   </div>
 }
 @if (menuAnimation.isAvailable()) {
-  <div class="setting">
+  <div class="setting is-inline">
     <p class="setting-label" id="setting-menu-animation">{{ 'site.menuAnimation' | translate }}</p>
     <div class="languages" role="group" aria-labelledby="setting-menu-animation">
       @for (choice of menuAnimationChoices; track choice) {
@@ -94,7 +94,7 @@
   </div>
 }
 @if (offlineMode.isAvailable()) {
-  <div class="setting">
+  <div class="setting is-inline">
     <p class="setting-label" id="setting-offline">{{ 'site.offlinePlay' | translate }}</p>
     <div class="languages" role="group" aria-labelledby="setting-offline">
       @for (choice of offlineChoices; track choice) {
@@ -138,7 +138,7 @@
     </div>
   </div>
   @if (reactions.canChooseDrag()) {
-    <div class="setting is-small-screens-only">
+    <div class="setting is-inline is-small-screens-only">
       <p class="setting-label" id="setting-sticker-drag">{{ 'site.stickerDrag' | translate }}</p>
       <div class="languages" role="group" aria-labelledby="setting-sticker-drag">
         @for (choice of stickerDragChoices; track choice) {
