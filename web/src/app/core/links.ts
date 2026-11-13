@@ -14,7 +14,7 @@ export const SITE_PREVIEW_IMAGE = {
   width: '1200',
   height: '630',
   type: 'image/png',
-  alt: 'su-labs: settings utilities for Angular and any framework',
+  alt: 'su-labs: framework-agnostic browser utilities',
 } as const;
 
 /** How to reach the author */

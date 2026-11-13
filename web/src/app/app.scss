@@ -138,26 +138,75 @@
 
 .site-nav {
   display: grid;
+  gap: 0.75rem;
+}
+
+.nav-section {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.nav-links {
+  display: grid;
   gap: 0.125rem;
 
+  /* A collapsed section: `display: grid` would otherwise beat the hidden attribute */
+  &[hidden] {
+    display: none;
+  }
+
+  /* Each link draws its piece of a thin rail, so every section reads as one block */
   a {
-    border-left: 4px solid transparent;
+    border-left: 4px solid var(--border);
     color: var(--muted);
     padding: 0.5rem 0.625rem;
     text-decoration: none;
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease;
 
+    /* Hover lights up the bar and the text */
     &:hover {
-      background: var(--subtle);
+      border-left-color: var(--heading);
       color: var(--heading);
     }
 
-    /* The current page alone gets the bright color, with a thick bar on its left */
+    /* The current page also gets the background */
     &.active {
       background: var(--subtle);
       border-left-color: var(--heading);
       color: var(--heading);
     }
   }
+}
+
+/* Section title: a button that expands or collapses its links, with + or − on the right */
+.nav-heading {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  justify-content: space-between;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.625rem 0.25rem 0;
+  text-align: left;
+  text-transform: uppercase;
+
+  &:hover {
+    color: var(--heading);
+  }
+}
+
+.nav-heading-sign {
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
 .site-settings {
@@ -213,7 +262,7 @@
     padding: 0 0.75rem 1.5rem;
   }
 
-  .site-nav a {
+  .nav-links a {
     font-size: 0.9375rem;
   }
 

@@ -14,7 +14,7 @@ export interface PageMeta {
 export const SITE_NAME = 'su-labs';
 
 const SITE_DESCRIPTION =
-  'Theme, font size, notifications, scroll spy and visit tracking utilities for Angular, React, Svelte, vanilla JavaScript and Node.';
+  'Framework-agnostic browser utilities for theme, font size, notifications, scroll spy and visit tracking. Works with React, Vue, Svelte, Angular, vanilla JavaScript and Node.';
 
 /** Route data for the home page and any page without its own description */
 export const SITE_META: PageMeta = { description: SITE_DESCRIPTION };

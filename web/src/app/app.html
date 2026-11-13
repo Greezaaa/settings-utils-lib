@@ -42,13 +42,30 @@
   </div>
 
   <div id="site-menu" class="site-menu" [class.is-open]="menuOpen()">
-    <nav class="site-nav" aria-label="Utilities">
-      @for (utility of utilities; track utility.slug) {
-        <a [routerLink]="['/', utility.slug]" routerLinkActive="active">{{ utility.name }}</a>
+    <nav class="site-nav" aria-label="Site">
+      @for (section of menu; track section.id) {
+        <div class="nav-section">
+          <button
+            type="button"
+            class="nav-heading"
+            [attr.aria-expanded]="isSectionOpen(section.id)"
+            [attr.aria-controls]="'nav-' + section.id"
+            (click)="toggleSection(section.id)"
+          >
+            {{ section.title }}
+            <span class="nav-heading-sign" aria-hidden="true">{{ isSectionOpen(section.id) ? '−' : '+' }}</span>
+          </button>
+          <div class="nav-links" [id]="'nav-' + section.id" [hidden]="!isSectionOpen(section.id)">
+            @for (link of section.links; track link.label) {
+              @if ('route' in link) {
+                <a [routerLink]="link.route" routerLinkActive="active">{{ link.label }}</a>
+              } @else {
+                <a [href]="link.href">{{ link.label }}</a>
+              }
+            }
+          </div>
+        </div>
       }
-      <a routerLink="/one-line-imports" routerLinkActive="active">One-line imports</a>
-      <a [href]="gamesUrl">Smart games</a>
-      <a routerLink="/changelog" routerLinkActive="active">Changelog</a>
     </nav>
 
     <div class="site-settings">

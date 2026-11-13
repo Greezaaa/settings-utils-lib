@@ -15,6 +15,14 @@
     <a [href]="links().npm" target="_blank" rel="noopener">npm</a>
     <a [routerLink]="['/changelog', utility().slug]">Changelog</a>
   </nav>
+  @if (utility().coreEntry) {
+    <nav class="page-environments" aria-label="Guides for other frameworks">
+      <span class="muted">Works with</span>
+      @for (environment of environments; track environment.name) {
+        <a [href]="environment.url" target="_blank" rel="noopener">{{ environment.name }}</a>
+      }
+    </nav>
+  }
 </header>
 
 <section class="container page-section" appReveal aria-labelledby="demo-title">

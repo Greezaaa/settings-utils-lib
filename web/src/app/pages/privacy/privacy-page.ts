@@ -22,6 +22,7 @@ const SAVED: readonly SavedItem[] = [
     why: 'For the visit tracker demo and its “thanks for coming back” messages: how many times and when you last came',
   },
   { what: 'Notices you’ve seen', where: 'Local storage', why: 'So we don’t show them again' },
+  { what: 'Menu sections you opened', where: 'Local storage', why: 'So the menu looks the way you left it' },
   {
     what: 'Your choice about saving (only when you turn it off)',
     where: 'A cookie for su-labs.dev',

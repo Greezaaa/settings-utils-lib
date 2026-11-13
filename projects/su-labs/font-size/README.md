@@ -13,7 +13,7 @@
 
 An accessible Angular service for managing font size preferences. Provides reactive controls for text scaling, user preference persistence, and WCAG-compliant font size management.
 
-> **Not using Angular?** The same font size controls are available for React, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
+> **Not using Angular?** The same font size controls are available for React, Vue, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
 
 ## Table of Contents
 

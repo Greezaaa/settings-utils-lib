@@ -1,8 +1,8 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-direct-single.svg)](https://stand-with-ukraine.pp.ua)
 
-# @su-labs • Angular Utility Libraries
+# @su-labs • Framework-Agnostic Browser Utilities
 
-![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Framework Agnostic](https://img.shields.io/badge/Framework-Agnostic-4B5563?style=for-the-badge)
 ![Angular Version](https://img.shields.io/badge/Angular-v22-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
@@ -11,7 +11,7 @@
 A collection of lightweight, reactive browser utilities built with modern practices. Each library is independently versioned and published to npm.
 
 - **Angular:** dedicated packages with injectable services and signals.
-- **React, Svelte, vanilla JavaScript and Node:** the framework-agnostic [`@su-labs/core`](projects/su-labs/core/README.md) package.
+- **React, Vue, Svelte, vanilla JavaScript and Node:** the framework-agnostic [`@su-labs/core`](projects/su-labs/core/README.md) package.
 
 **Website:** live demos of every utility and all changelogs at [su-labs.dev](https://su-labs.dev/).
 
@@ -22,6 +22,7 @@ A collection of lightweight, reactive browser utilities built with modern practi
 | Vanilla JavaScript (bundler or CDN, no build step) | `@su-labs/core` | [Vanilla JS guide](docs/guides/vanilla.md) |
 | React (Vite, Next.js, Remix, …) | `@su-labs/core` | [React guide](docs/guides/react.md) |
 | Svelte and SvelteKit | `@su-labs/core` | [Svelte guide](docs/guides/svelte.md) |
+| Vue 3 and Nuxt | `@su-labs/core` | [Vue guide](docs/guides/vue.md) |
 | Angular | `@su-labs/theme`, `@su-labs/font-size`, … | [Angular guide](docs/guides/angular.md) |
 | Node.js and server-side rendering | `@su-labs/core` | [Node guide](docs/guides/node.md) |
 
@@ -32,7 +33,7 @@ Every utility is available in `@su-labs/core`. See [which utilities are availabl
 ## Framework-Agnostic Core
 
 ### [@su-labs/core](https://www.npmjs.com/package/@su-labs/core)
-Browser utilities with no framework dependencies, exposed as small reactive stores that work with React's `useSyncExternalStore` and Svelte's `$store` syntax.
+Browser utilities with no framework dependencies, exposed as small reactive stores that work with React's `useSyncExternalStore`, Svelte's `$store` syntax and a tiny Vue composable.
 
 [![npm](https://img.shields.io/npm/v/@su-labs/core?style=flat-square)](https://www.npmjs.com/package/@su-labs/core)
 [![downloads](https://img.shields.io/npm/dt/@su-labs/core?style=flat-square)](https://www.npmjs.com/package/@su-labs/core)

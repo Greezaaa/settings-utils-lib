@@ -20,15 +20,18 @@
       </p>
     </div>
 
-    @if (changelog.isLoading()) {
-      <p class="muted">Loading the changelog from GitHub…</p>
-    } @else if (changelog.failed()) {
-      <p class="muted">
-        The changelog could not be loaded.
-        <a [href]="links().github" target="_blank" rel="noopener">Read it on GitHub</a>.
-      </p>
-    } @else {
-      <app-release-list [releases]="changelog.releases()" />
-    }
+    <!-- On wider screens only this part scrolls; the title, the package list and the links stay in view -->
+    <div class="releases-body" tabindex="0" [attr.aria-label]="selected().name + ' releases'">
+      @if (changelog.isLoading()) {
+        <p class="muted">Loading the changelog from GitHub…</p>
+      } @else if (changelog.failed()) {
+        <p class="muted">
+          The changelog could not be loaded.
+          <a [href]="links().github" target="_blank" rel="noopener">Read it on GitHub</a>.
+        </p>
+      } @else {
+        <app-release-list [releases]="changelog.releases()" />
+      }
+    </div>
   </section>
 </div>

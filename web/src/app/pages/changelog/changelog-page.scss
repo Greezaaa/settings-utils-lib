@@ -1,10 +1,37 @@
+// Wider screens: the page fills the screen and only the release list scrolls
+@media (min-width: 48rem) {
+  :host {
+    display: flex;
+    flex-direction: column;
+    height: calc(100dvh - var(--header-offset));
+    min-height: 32rem;
+  }
+
+  .changelog-layout {
+    flex: 1;
+    grid-template-rows: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .releases {
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .releases-body {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 1rem;
+  }
+}
+
 .page-head {
   display: grid;
   gap: 1.25rem;
   padding-block: 4rem 2rem;
 
   @media (min-width: 48rem) {
-    padding-block: 6rem 3rem;
+    padding-block: 4rem 2.5rem;
   }
 }
 
@@ -14,9 +41,9 @@
   padding-bottom: 6rem;
 
   @media (min-width: 48rem) {
-    align-items: start;
     gap: 4rem;
     grid-template-columns: 12rem 1fr;
+    padding-bottom: 2rem;
   }
 }
 
@@ -31,8 +58,8 @@
     border-bottom: 0;
     display: grid;
     gap: 0.5rem;
-    position: sticky;
-    top: calc(var(--header-offset) + 1rem);
+    align-content: start;
+    overflow-y: auto;
   }
 
   /* Hover only underlines; the selected package alone gets the bright color and the marker */

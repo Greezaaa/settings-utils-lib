@@ -17,7 +17,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    title: `${SITE_NAME}: settings utilities for Angular and any framework`,
+    title: `${SITE_NAME}: framework-agnostic browser utilities`,
     data: SITE_META,
     loadComponent: () => import('./pages/home/home-page').then((m) => m.HomePage),
   },

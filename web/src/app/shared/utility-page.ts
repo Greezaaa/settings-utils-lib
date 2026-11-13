@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { RouterLink } from '@angular/router';
 import { changelogResource } from '../changelog/changelog.resource';
 import { ReleaseList } from '../changelog/release-list';
+import { ENVIRONMENTS } from '../core/environments';
 import { changelogUrl, npmUrl, readmeUrl } from '../core/links';
 import { SuUtility } from '../core/packages';
 import { CodeTab, CodeTabs } from './code-tabs';
@@ -21,6 +22,9 @@ import { Reveal } from './reveal';
 export class UtilityPage {
   readonly utility = input.required<SuUtility>();
   readonly usage = input.required<readonly CodeTab[]>();
+
+  /** Guides for every environment, shown when the utility is also in `@su-labs/core` */
+  protected readonly environments = ENVIRONMENTS;
 
   protected readonly changelog = changelogResource(() => this.utility().slug);
   protected readonly latest = computed(() => {

@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/v/@su-labs/core?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 
-Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Svelte, Angular or any other framework. No dependencies besides `tslib`.
+Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Vue, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
 > Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services with signals.
 
@@ -37,6 +37,7 @@ Pick the guide for your environment. Each one covers installation, setup and usa
 | Vanilla JavaScript (bundler or CDN, no build step) | [Vanilla JS guide](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/guides/vanilla.md) |
 | React (Vite, Next.js, Remix, …) | [React guide](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/guides/react.md) |
 | Svelte and SvelteKit | [Svelte guide](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/guides/svelte.md) |
+| Vue 3 and Nuxt | [Vue guide](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/guides/vue.md) |
 | Angular | [Angular guide](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/guides/angular.md) (uses the Angular packages) |
 | Node.js and server-side rendering | [Node guide](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/guides/node.md) |
 

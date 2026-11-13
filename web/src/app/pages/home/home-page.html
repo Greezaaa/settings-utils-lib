@@ -1,6 +1,6 @@
 <section class="hero">
   <div class="container hero-inner">
-    <p class="eyebrow">Angular 22 · React · Svelte · Vanilla JS · Node</p>
+    <p class="eyebrow">Framework-agnostic · React · Vue · Svelte · Angular · Vanilla JS · Node</p>
     <h1>The settings every app needs, built once.</h1>
     <p class="lead">
       Five small, tested utilities for theme, text size, notifications, scroll position and visits. Use them as
@@ -12,6 +12,27 @@
     </div>
     <app-code-block class="hero-install" code="npm install @su-labs/core" />
   </div>
+</section>
+
+<section class="container section">
+  <div class="section-head" appReveal>
+    <p class="eyebrow">Works everywhere</p>
+    <h2>Wherever you build, it fits.</h2>
+    <p class="muted">
+      The same utilities for every framework, or none at all.<br />
+      Pick your environment to open its guide.
+    </p>
+  </div>
+  <ul class="environments">
+    @for (environment of environments; track environment.name; let index = $index) {
+      <li appReveal [style.--index]="index">
+        <a [href]="environment.url" target="_blank" rel="noopener">
+          <span class="environment-name">{{ environment.name }}</span>
+          <span class="muted">{{ environment.detail }}</span>
+        </a>
+      </li>
+    }
+  </ul>
 </section>
 
 <section id="utilities" class="container section">
@@ -92,21 +113,4 @@
       <app-code-block [code]="coreExample" />
     </div>
   </div>
-</section>
-
-<section class="container section">
-  <div class="section-head" appReveal>
-    <p class="eyebrow">Guides</p>
-    <h2>Pick your environment.</h2>
-  </div>
-  <ul class="environments">
-    @for (environment of environments; track environment.guide; let index = $index) {
-      <li appReveal [style.--index]="index">
-        <a [href]="environment.url" target="_blank" rel="noopener">
-          <span class="environment-name">{{ environment.name }}</span>
-          <span class="muted">{{ environment.detail }}</span>
-        </a>
-      </li>
-    }
-  </ul>
 </section>

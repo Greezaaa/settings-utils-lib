@@ -6,8 +6,9 @@ import { readStored, writeStored } from './site-storage';
 /**
  * Raise when what the site saves changes, so visitors see the notice again (and update the privacy page).
  * 1: theme and text size cookies, visit count, notices seen.
+ * 2: menu sections left open.
  */
-export const PRIVACY_VERSION = 1;
+export const PRIVACY_VERSION = 2;
 const PRIVACY_SEEN_STORAGE = 'privacy-notice-version';
 
 /**

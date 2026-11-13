@@ -1,18 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GAMES_URL, guideUrl, GUIDES_URL } from '../../core/links';
+import { ENVIRONMENTS } from '../../core/environments';
+import { GAMES_URL, GUIDES_URL } from '../../core/links';
 import { TOOLS, UTILITIES } from '../../core/packages';
 import { CodeBlock } from '../../shared/code-block';
 import { Reveal } from '../../shared/reveal';
-
-/** Environments with an installation guide */
-const ENVIRONMENTS = [
-  { name: 'Angular', detail: 'Services with signals, one package per utility', guide: 'angular' },
-  { name: 'React', detail: 'useSyncExternalStore, no adapter needed', guide: 'react' },
-  { name: 'Svelte', detail: 'Stores work with the $ syntax directly', guide: 'svelte' },
-  { name: 'Vanilla JavaScript', detail: 'With a bundler or straight from a CDN', guide: 'vanilla' },
-  { name: 'Node and SSR', detail: 'Safe to import on the server', guide: 'node' },
-] as const;
 
 const ANGULAR_EXAMPLE = `import { inject } from '@angular/core';
 import { SuThemeService } from '@su-labs/theme';
@@ -38,10 +30,7 @@ theme.theme.subscribe((name) => console.log(name));`;
 export class HomePage {
   protected readonly utilities = UTILITIES;
   protected readonly tools = TOOLS;
-  protected readonly environments = ENVIRONMENTS.map((environment) => ({
-    ...environment,
-    url: guideUrl(environment.guide),
-  }));
+  protected readonly environments = ENVIRONMENTS;
   protected readonly guidesUrl = GUIDES_URL;
   protected readonly gamesUrl = GAMES_URL;
   protected readonly angularExample = ANGULAR_EXAMPLE;

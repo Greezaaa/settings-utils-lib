@@ -13,7 +13,7 @@
 
 A lightweight Angular service to track user visits. Provides reactive signals for visit count, last visit date, and milestone visits.
 
-> **Not using Angular?** The same visit tracker is available for React, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
+> **Not using Angular?** The same visit tracker is available for React, Vue, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
 
 ## Table of Contents
 

@@ -13,7 +13,7 @@
 
 A lightweight Angular service and directive for managing active sections based on scroll position. Easily track which section of a page is currently visible and update your UI accordingly. Perfect for navigation menus, table of contents, or one-page scroll applications.
 
-> **Not using Angular?** The same scroll spy is available for React, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
+> **Not using Angular?** The same scroll spy is available for React, Vue, Svelte and vanilla JavaScript in [`@su-labs/core`](https://www.npmjs.com/package/@su-labs/core). See the [installation guides](https://github.com/Greezaaa/settings-utils-lib/blob/main/docs/README.md).
 
 ## Table of Contents
 

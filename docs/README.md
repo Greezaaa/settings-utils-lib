@@ -7,6 +7,7 @@ Pick the guide for your environment. Each guide covers installation, setup and u
 | Vanilla JavaScript (with or without a bundler) | [Vanilla JS guide](guides/vanilla.md) | `@su-labs/core` |
 | React (Vite, Next.js, Remix, …) | [React guide](guides/react.md) | `@su-labs/core` |
 | Svelte and SvelteKit | [Svelte guide](guides/svelte.md) | `@su-labs/core` |
+| Vue 3 and Nuxt | [Vue guide](guides/vue.md) | `@su-labs/core` |
 | Angular | [Angular guide](guides/angular.md) | `@su-labs/theme`, `@su-labs/font-size`, … |
 | Node.js and server-side rendering | [Node guide](guides/node.md) | `@su-labs/core` |
 
