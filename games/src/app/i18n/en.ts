@@ -188,6 +188,13 @@ export const EN: SiteMessages = {
       subtitle: 'find the words hidden among the letters',
       intro: 'A word game for kids.',
     },
+    'secret-word': {
+      name: 'Secret word',
+      summary:
+        'Guess the hidden word in six tries. After each try the letters turn green when they are in the right place and yellow when the word has them somewhere else.',
+      subtitle: 'guess the hidden word in six tries',
+      intro: 'A word guessing game for kids.',
+    },
     'hit-the-note': {
       name: 'Hit the note',
       summary:
@@ -837,6 +844,32 @@ export const EN: SiteMessages = {
     done: 'All words found!',
     summary: time => `In ${time}`,
     newGame: 'New game',
+  },
+
+  secretWord: {
+    lead: 'Type a word and press Try: green letters are in the right place, yellow ones are in the word but elsewhere.',
+    rule: 'Find the secret word in six tries. Turn on hints to see its picture.',
+    board: 'Your tries',
+    picture: 'The secret word’s picture',
+    levels: {
+      easy: { name: 'Easy', summary: '4 letters' },
+      normal: { name: 'Normal', summary: '5 letters' },
+      hard: { name: 'Hard', summary: '6 letters' },
+    },
+    hintsGroup: 'Hints',
+    hints: {
+      hints: { name: 'With hints', summary: 'See the picture of the word' },
+      'no-hints': { name: 'No hints', summary: 'Only the letters tell you' },
+    },
+    marks: { right: 'right place', present: 'in the word, elsewhere', absent: 'not in the word' },
+    keyboard: 'Keyboard',
+    erase: 'Erase a letter',
+    send: 'Try',
+    tooShort: letters => `The word has ${letters} letters`,
+    triesLeft: tries => (tries === 1 ? '1 try left' : `${tries} tries left`),
+    won: 'You found the secret word!',
+    lost: word => `The secret word was ${word}`,
+    newGame: 'New word',
   },
 
   findPairs: {

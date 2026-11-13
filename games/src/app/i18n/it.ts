@@ -188,6 +188,13 @@ export const italian = (gender: WordGender): SiteMessages => ({
       subtitle: 'trova le parole nascoste tra le lettere',
       intro: 'Un gioco di parole per bambini.',
     },
+    'secret-word': {
+      name: 'Parola segreta',
+      summary:
+        'Indovina la parola nascosta in sei tentativi. Dopo ogni tentativo le lettere diventano verdi se sono al posto giusto e gialle se la parola le ha in un altro punto.',
+      subtitle: 'indovina la parola nascosta in sei tentativi',
+      intro: 'Un gioco per indovinare parole per bambini.',
+    },
     'hit-the-note': {
       name: 'Prendi la nota',
       summary:
@@ -831,6 +838,32 @@ export const italian = (gender: WordGender): SiteMessages => ({
     done: 'Tutte le parole trovate!',
     summary: (time) => `In ${time}`,
     newGame: 'Nuova partita',
+  },
+
+  secretWord: {
+    lead: 'Scrivi una parola e premi Prova: le lettere verdi sono al posto giusto, quelle gialle sono nella parola ma in un altro punto.',
+    rule: 'Trova la parola segreta in sei tentativi. Attiva gli aiuti per vedere il suo disegno.',
+    board: 'I tuoi tentativi',
+    picture: 'Il disegno della parola segreta',
+    levels: {
+      easy: { name: 'Facile', summary: '4 lettere' },
+      normal: { name: 'Normale', summary: '5 lettere' },
+      hard: { name: 'Difficile', summary: '6 lettere' },
+    },
+    hintsGroup: 'Aiuti',
+    hints: {
+      hints: { name: 'Con aiuti', summary: 'Vedi il disegno della parola' },
+      'no-hints': { name: 'Senza aiuti', summary: 'Ti guidano solo le lettere' },
+    },
+    marks: { right: 'al posto giusto', present: 'nella parola, in un altro punto', absent: 'non è nella parola' },
+    keyboard: 'Tastiera',
+    erase: 'Cancella una lettera',
+    send: 'Prova',
+    tooShort: (letters) => `La parola ha ${letters} lettere`,
+    triesLeft: (tries) => (tries === 1 ? 'Resta 1 tentativo' : `Restano ${tries} tentativi`),
+    won: 'Hai trovato la parola segreta!',
+    lost: (word) => `La parola segreta era ${word}`,
+    newGame: 'Un’altra parola',
   },
 
   findPairs: {

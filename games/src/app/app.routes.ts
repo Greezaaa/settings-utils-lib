@@ -148,6 +148,11 @@ export const routes: Routes = [
     ...gameMeta('word-search'),
     loadComponent: () => import('./pages/word-search/word-search-page').then(m => m.WordSearchPage),
   },
+  {
+    path: 'secret-word',
+    ...gameMeta('secret-word'),
+    loadComponent: () => import('./pages/secret-word/secret-word-page').then(m => m.SecretWordPage),
+  },
   ...categoryRoutes,
   {
     path: 'rooms',

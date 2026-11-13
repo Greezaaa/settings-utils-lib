@@ -192,6 +192,13 @@ export const EU: SiteMessages = {
       subtitle: 'aurkitu hizkien artean ezkutatutako hitzak',
       intro: 'Hitz joko bat haurrentzat.',
     },
+    'secret-word': {
+      name: 'Hitz sekretua',
+      summary:
+        'Asmatu ezkutuko hitza sei saiakeratan. Saiakera bakoitzaren ondoren, hizkiak berde jartzen dira bere lekuan badaude, eta hori hitzak beste leku batean baditu.',
+      subtitle: 'asmatu ezkutuko hitza sei saiakeratan',
+      intro: 'Hitzak asmatzeko joko bat haurrentzat.',
+    },
     'hit-the-note': {
       name: 'Asmatu nota',
       summary:
@@ -858,6 +865,32 @@ export const EU: SiteMessages = {
     done: 'Hitz guztiak aurkitu dituzu!',
     summary: time => time,
     newGame: 'Partida berria',
+  },
+
+  secretWord: {
+    lead: 'Idatzi hitz bat eta sakatu Probatu: hizki berdeak bere lekuan daude, horiak hitzean daude baina beste leku batean.',
+    rule: 'Aurkitu hitz sekretua sei saiakeratan. Aktibatu laguntzak bere marrazkia ikusteko.',
+    board: 'Zure saiakerak',
+    picture: 'Hitz sekretuaren marrazkia',
+    levels: {
+      easy: { name: 'Erraza', summary: '4 hizki' },
+      normal: { name: 'Normala', summary: '5 hizki' },
+      hard: { name: 'Zaila', summary: '6 hizki' },
+    },
+    hintsGroup: 'Laguntzak',
+    hints: {
+      hints: { name: 'Laguntzekin', summary: 'Hitzaren marrazkia ikusten duzu' },
+      'no-hints': { name: 'Laguntzarik gabe', summary: 'Hizkiek bakarrik gidatzen zaituzte' },
+    },
+    marks: { right: 'bere lekuan', present: 'hitzean, beste leku batean', absent: 'ez dago hitzean' },
+    keyboard: 'Teklatua',
+    erase: 'Ezabatu hizki bat',
+    send: 'Probatu',
+    tooShort: letters => `Hitzak ${letters} hizki ditu`,
+    triesLeft: tries => (tries === 1 ? 'Saiakera 1 geratzen da' : `${tries} saiakera geratzen dira`),
+    won: 'Hitz sekretua aurkitu duzu!',
+    lost: word => `Hitz sekretua ${word} zen`,
+    newGame: 'Beste hitz bat',
   },
 
   findPairs: {

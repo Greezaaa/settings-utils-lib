@@ -22,6 +22,7 @@ import { AimHint, MeasureLevelId, MeasureModeId } from '../games/measure-it';
 import { Direction, MusicLevelId, MusicModeId, NoteId } from '../games/music-notes';
 import { PictureModeId } from '../games/picture-game';
 import { SudokuGame } from '../games/sudoku';
+import { LetterMark, SecretLevelId } from '../games/secret-word';
 import { SearchLevelId } from '../games/word-search';
 import { WordGender } from './word-gender';
 
@@ -527,6 +528,30 @@ export interface SiteMessages {
     readonly found: (found: number, total: number) => string;
     readonly done: string;
     readonly summary: (time: string) => string;
+    readonly newGame: string;
+  };
+
+  /** Secret word: guess the hidden word in a few tries */
+  readonly secretWord: {
+    readonly lead: string;
+    readonly rule: string;
+    readonly board: string;
+    /** The word's picture, shown as a hint */
+    readonly picture: string;
+    /** Levels: name, and the word's length */
+    readonly levels: Readonly<Record<SecretLevelId, OptionText>>;
+    readonly hintsGroup: string;
+    /** With hints the word's picture is shown */
+    readonly hints: Readonly<Record<HintsId, OptionText>>;
+    /** A guessed letter's mark, for screen readers */
+    readonly marks: Readonly<Record<LetterMark, string>>;
+    readonly keyboard: string;
+    readonly erase: string;
+    readonly send: string;
+    readonly tooShort: (letters: number) => string;
+    readonly triesLeft: (tries: number) => string;
+    readonly won: string;
+    readonly lost: (word: string) => string;
     readonly newGame: string;
   };
 

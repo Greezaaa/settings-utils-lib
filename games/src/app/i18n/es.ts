@@ -194,6 +194,13 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       subtitle: 'encuentra las palabras escondidas entre las letras',
       intro: 'Un juego de palabras para peques.',
     },
+    'secret-word': {
+      name: 'Palabra secreta',
+      summary:
+        'Adivina la palabra escondida en seis intentos. Tras cada intento, las letras se ponen verdes si están en su sitio y amarillas si la palabra las tiene en otro lugar.',
+      subtitle: 'adivina la palabra escondida en seis intentos',
+      intro: 'Un juego de adivinar palabras para peques.',
+    },
     'hit-the-note': {
       name: 'Dando la nota',
       summary:
@@ -868,6 +875,32 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     done: '¡Todas las palabras encontradas!',
     summary: time => `En ${time}`,
     newGame: 'Nueva partida',
+  },
+
+  secretWord: {
+    lead: 'Escribe una palabra y pulsa Probar: las letras verdes están en su sitio, las amarillas están en la palabra pero en otro lugar.',
+    rule: 'Encuentra la palabra secreta en seis intentos. Activa las pistas para ver su dibujo.',
+    board: 'Tus intentos',
+    picture: 'El dibujo de la palabra secreta',
+    levels: {
+      easy: { name: 'Fácil', summary: '4 letras' },
+      normal: { name: 'Normal', summary: '5 letras' },
+      hard: { name: 'Difícil', summary: '6 letras' },
+    },
+    hintsGroup: 'Pistas',
+    hints: {
+      hints: { name: 'Con pistas', summary: 'Ves el dibujo de la palabra' },
+      'no-hints': { name: 'Sin pistas', summary: 'Solo te guían las letras' },
+    },
+    marks: { right: 'en su sitio', present: 'en la palabra, en otro lugar', absent: 'no está en la palabra' },
+    keyboard: 'Teclado',
+    erase: 'Borrar una letra',
+    send: 'Probar',
+    tooShort: letters => `La palabra tiene ${letters} letras`,
+    triesLeft: tries => (tries === 1 ? 'Queda 1 intento' : `Quedan ${tries} intentos`),
+    won: '¡Has encontrado la palabra secreta!',
+    lost: word => `La palabra secreta era ${word}`,
+    newGame: 'Otra palabra',
   },
 
   findPairs: {

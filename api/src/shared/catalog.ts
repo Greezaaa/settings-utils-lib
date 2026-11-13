@@ -18,6 +18,7 @@ export const GAME_SLUGS = [
   'letter-sudoku',
   'number-sudoku',
   'word-search',
+  'secret-word',
 ] as const;
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'it', 'uk'] as const;
 /**
