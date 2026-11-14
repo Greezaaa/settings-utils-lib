@@ -1,0 +1,52 @@
+<ul
+  class="menu-links"
+  [class.is-rail]="rail()"
+  [class.is-customising]="customising()"
+  [class.is-dragging]="drag() !== null"
+>
+  @for (link of links(); track link.key; let index = $index) {
+    <li
+      [attr.data-menu-key]="link.key"
+      [class.is-dragged]="drag()?.from === index"
+      [style.transform]="dragTransform(index)"
+    >
+      @if (customising() && !rail()) {
+        <button
+          type="button"
+          class="menu-handle"
+          [attr.aria-label]="moveLabel(link, index)"
+          (keydown)="onHandleKey($event, index)"
+          (pointerdown)="onHandleDown($event, index)"
+          (pointermove)="onHandleMove($event)"
+          (pointerup)="onHandleUp()"
+          (pointercancel)="cancelDrag()"
+        >
+          <app-site-icon name="grip" [size]="16" />
+        </button>
+      }
+      @if ('route' in link) {
+        <a
+          class="menu-link"
+          routerLinkActive="active"
+          [routerLink]="link.route"
+          [attr.aria-label]="rail() ? link.label : null"
+          [attr.data-tooltip]="rail() ? link.label : null"
+        >
+          <app-site-icon [name]="link.icon" />
+          <span class="menu-label">{{ link.label }}</span>
+        </a>
+      } @else {
+        <a
+          class="menu-link"
+          [href]="link.href"
+          [attr.aria-label]="rail() ? link.label : null"
+          [attr.data-tooltip]="rail() ? link.label : null"
+        >
+          <app-site-icon [name]="link.icon" />
+          <span class="menu-label">{{ link.label }}</span>
+        </a>
+      }
+    </li>
+  }
+</ul>
+<div class="visually-hidden" role="status">{{ announcement() }}</div>

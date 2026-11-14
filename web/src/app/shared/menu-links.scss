@@ -1,0 +1,126 @@
+:host {
+  display: block;
+}
+
+.menu-links {
+  display: grid;
+  gap: 0.125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  align-items: center;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.menu-link {
+  align-items: center;
+  border-left: 4px solid var(--border);
+  color: var(--muted);
+  display: flex;
+  flex: 1;
+  gap: 0.625rem;
+  min-width: 0;
+  padding: 0.5rem 0.625rem;
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    border-left-color: var(--heading);
+    color: var(--heading);
+  }
+
+  &.active {
+    background: var(--subtle);
+    border-left-color: var(--heading);
+    color: var(--heading);
+  }
+}
+
+.menu-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.is-rail {
+  justify-items: center;
+
+  .menu-link {
+    border: 0;
+    border-radius: 8px;
+    justify-content: center;
+    padding: 0.55rem;
+    position: relative;
+
+    &.active {
+      box-shadow: inset 0 0 0 1px var(--border);
+    }
+  }
+
+  .menu-label {
+    display: none;
+  }
+
+  .menu-link[data-tooltip]:is(:hover, :focus-visible)::after {
+    background: var(--heading);
+    border-radius: 6px;
+    color: var(--bg);
+    content: attr(data-tooltip);
+    font-size: 0.8125rem;
+    left: calc(100% + 0.6rem);
+    padding: 0.3rem 0.55rem;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    z-index: 20;
+  }
+}
+
+.menu-handle {
+  align-items: center;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: grab;
+  display: inline-flex;
+  flex: none;
+  justify-content: center;
+  padding: 0.35rem 0.15rem;
+  touch-action: none;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--border);
+    color: var(--heading);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.is-customising li {
+  border-radius: 8px;
+}
+
+li.is-dragged {
+  background: var(--surface);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.18);
+  position: relative;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-dragging li:not(.is-dragged) {
+    transition: transform 150ms ease-out;
+  }
+}

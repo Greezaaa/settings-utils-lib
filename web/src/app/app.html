@@ -1,6 +1,61 @@
 <a class="skip-link" [routerLink]="[]" fragment="main">Skip to content</a>
 
-<header class="site-header" #header>
+<ng-template #githubIcon>
+  <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+    />
+  </svg>
+</ng-template>
+
+<ng-template #settingControls>
+  <div class="setting">
+    <p class="setting-label">Text size</p>
+    <div class="text-size" role="group" aria-label="Text size">
+      <button
+        type="button"
+        class="icon-button"
+        (click)="fontSize.decrease()"
+        [disabled]="fontSize.isMin()"
+        aria-label="Smaller text"
+      >
+        A<span aria-hidden="true">-</span>
+      </button>
+      <button
+        type="button"
+        class="icon-button"
+        (click)="fontSize.increase()"
+        [disabled]="fontSize.isMax()"
+        aria-label="Larger text"
+      >
+        A<span aria-hidden="true">+</span>
+      </button>
+    </div>
+  </div>
+  <div class="setting">
+    <p class="setting-label">Theme</p>
+    <button
+      type="button"
+      class="theme-switch"
+      (click)="cycleTheme()"
+      [attr.aria-label]="'Theme: ' + theme.preference() + '. Switch to ' + nextTheme()"
+    >
+      <span class="theme-dot" aria-hidden="true"></span>
+      <span class="mono">{{ theme.preference() }}</span>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #settings>
+  <ng-container *ngTemplateOutlet="settingControls" />
+  <a class="icon-button github-link" [href]="githubUrl" target="_blank" rel="noopener">
+    <ng-container *ngTemplateOutlet="githubIcon" />
+    GitHub
+  </a>
+</ng-template>
+
+<header class="site-header">
   <div class="header-bar">
     <a routerLink="/" class="brand" aria-label="su-labs home">
       <svg class="brand-logo" viewBox="0 0 128 128" aria-hidden="true">
@@ -15,102 +70,112 @@
         </g>
         <path class="brand-mark" d="M48 64h32" stroke-width="9" stroke-linecap="round" />
       </svg>
-      su-labs
+      <span class="brand-name">su-labs</span>
     </a>
-
-    <button
-      type="button"
-      class="icon-button menu-toggle"
-      aria-controls="site-menu"
-      [attr.aria-expanded]="menuOpen()"
-      [attr.aria-label]="menuOpen() ? 'Close the menu' : 'Open the menu'"
-      (click)="toggleMenu()"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          @if (menuOpen()) {
-            <path d="M6 6l12 12M18 6L6 18" />
-          } @else {
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          }
-        </g>
-      </svg>
-    </button>
   </div>
 
-  <div id="site-menu" class="site-menu" [class.is-open]="menuOpen()">
+  @if (!closedBySize()) {
+    <button
+      type="button"
+      class="menu-collapse"
+      aria-controls="site-menu"
+      [attr.aria-expanded]="!collapsed()"
+      [attr.aria-label]="collapsed() ? 'Open the menu' : 'Close the menu'"
+      (click)="toggleCollapsed()"
+    >
+      <app-site-icon name="chevron" [size]="14" />
+    </button>
+  }
+
+  <div id="site-menu" class="site-menu">
     <nav class="site-nav" aria-label="Site">
-      @for (section of menu; track section.id) {
+      @for (section of sections(); track section.id) {
         <div class="nav-section">
-          <button
-            type="button"
-            class="nav-heading"
-            [attr.aria-expanded]="isSectionOpen(section.id)"
-            [attr.aria-controls]="'nav-' + section.id"
-            (click)="toggleSection(section.id)"
-          >
-            {{ section.title }}
-            <span class="nav-heading-sign" aria-hidden="true">{{ isSectionOpen(section.id) ? '−' : '+' }}</span>
-          </button>
-          <div class="nav-links" [id]="'nav-' + section.id" [hidden]="!isSectionOpen(section.id)">
-            @for (link of section.links; track link.label) {
-              @if ('route' in link) {
-                <a [routerLink]="link.route" routerLinkActive="active">{{ link.label }}</a>
-              } @else {
-                <a [href]="link.href">{{ link.label }}</a>
-              }
-            }
-          </div>
+          @if (collapsed()) {
+            <h2 class="visually-hidden">{{ section.title }}</h2>
+          } @else {
+            <button
+              type="button"
+              class="nav-heading"
+              [attr.aria-expanded]="isSectionOpen(section.id)"
+              [attr.aria-controls]="'nav-' + section.id"
+              (click)="toggleSection(section.id)"
+            >
+              {{ section.title }}
+              <span class="nav-heading-sign" aria-hidden="true">{{ isSectionOpen(section.id) ? '−' : '+' }}</span>
+            </button>
+          }
+          @if (collapsed() || isSectionOpen(section.id)) {
+            <app-menu-links
+              [attr.id]="'nav-' + section.id"
+              [sectionId]="section.id"
+              [links]="section.links"
+              [rail]="collapsed()"
+              [customising]="customising()"
+            />
+          }
         </div>
       }
     </nav>
 
-    <div class="site-settings">
-      <div class="setting">
-        <p class="setting-label" id="setting-text-size">Text size</p>
-        <div class="text-size" role="group" aria-labelledby="setting-text-size">
+    @if (collapsed()) {
+      <div class="rail-settings">
+        <div #settingsPopover class="rail-popover-anchor">
           <button
+            #settingsButton
             type="button"
-            class="icon-button"
-            (click)="fontSize.decrease()"
-            [disabled]="fontSize.isMin()"
-            aria-label="Smaller text"
+            class="icon-button rail-button"
+            aria-label="Settings"
+            aria-controls="rail-settings-panel"
+            [attr.aria-expanded]="settingsOpen()"
+            [attr.data-tooltip]="settingsOpen() ? null : 'Settings'"
+            (click)="settingsOpen.set(!settingsOpen())"
           >
-            A<span aria-hidden="true">-</span>
+            <app-site-icon name="settings" />
           </button>
-          <button
-            type="button"
-            class="icon-button"
-            (click)="fontSize.increase()"
-            [disabled]="fontSize.isMax()"
-            aria-label="Larger text"
-          >
-            A<span aria-hidden="true">+</span>
-          </button>
+          @if (settingsOpen()) {
+            <div
+              id="rail-settings-panel"
+              class="rail-popover"
+              animate.enter="is-flying-out"
+              animate.leave="is-flying-back"
+              role="group"
+              aria-labelledby="rail-settings-title"
+              (keydown.escape)="closeSettings()"
+            >
+              <p id="rail-settings-title" class="rail-popover-title">Settings</p>
+              <ng-container *ngTemplateOutlet="settingControls" />
+            </div>
+          }
         </div>
-      </div>
-      <div class="setting">
-        <p class="setting-label" id="setting-theme">Theme</p>
-        <button
-          type="button"
-          class="theme-switch"
-          (click)="cycleTheme()"
-          [attr.aria-label]="'Theme: ' + theme.preference() + '. Switch to ' + nextTheme()"
+        <a class="icon-button rail-button" routerLink="/privacy" aria-label="Privacy" data-tooltip="Privacy">
+          <app-site-icon name="privacy" />
+        </a>
+        <a
+          class="icon-button rail-button"
+          aria-label="GitHub"
+          data-tooltip="GitHub"
+          target="_blank"
+          rel="noopener"
+          [href]="githubUrl"
         >
-          <span class="theme-dot" aria-hidden="true"></span>
-          <span class="mono">{{ theme.preference() }}</span>
-        </button>
+          <ng-container *ngTemplateOutlet="githubIcon" />
+        </a>
       </div>
-      <a class="icon-button github-link" [href]="githubUrl" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-          <path
-            fill="currentColor"
-            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
-          />
-        </svg>
-        GitHub
-      </a>
-    </div>
+    } @else {
+      <div class="menu-customise">
+        <button type="button" class="text-button" [attr.aria-pressed]="customising()" (click)="customising.set(!customising())">
+          <app-site-icon name="customise" [size]="15" />
+          {{ customising() ? 'Done' : 'Customise the menu' }}
+        </button>
+        @if (customising() && menuOrder.customised()) {
+          <button type="button" class="text-button" (click)="menuOrder.reset()">Reset order</button>
+        }
+      </div>
+      <div class="site-settings">
+        <ng-container *ngTemplateOutlet="settings" />
+      </div>
+    }
   </div>
 </header>
 
@@ -133,6 +198,95 @@
     </div>
   </footer>
 </div>
+
+<nav class="tab-bar" aria-label="Main">
+  <a class="tab" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <app-site-icon name="home" [size]="20" />
+    <span>Home</span>
+  </a>
+  <button
+    type="button"
+    class="tab"
+    aria-haspopup="dialog"
+    [class.active]="onSectionPage('packages')"
+    [attr.aria-expanded]="sheet() === 'packages'"
+    (click)="openSheet('packages')"
+  >
+    <app-site-icon name="packages" [size]="20" />
+    <span>Packages</span>
+  </button>
+  <button
+    type="button"
+    class="tab"
+    aria-haspopup="dialog"
+    [class.active]="onSectionPage('extensions')"
+    [attr.aria-expanded]="sheet() === 'extensions'"
+    (click)="openSheet('extensions')"
+  >
+    <app-site-icon name="imports" [size]="20" />
+    <span>Extensions</span>
+  </button>
+  <a class="tab" [href]="gamesUrl">
+    <app-site-icon name="games" [size]="20" />
+    <span>Games</span>
+  </a>
+  <button
+    type="button"
+    class="tab"
+    aria-haspopup="dialog"
+    [attr.aria-expanded]="sheet() === 'more'"
+    (click)="openSheet('more')"
+  >
+    <app-site-icon name="more" [size]="20" />
+    <span>More</span>
+  </button>
+</nav>
+
+<dialog
+  #sheetDialog
+  class="sheet"
+  aria-labelledby="sheet-title"
+  (cancel)="onSheetCancel($event)"
+  (click)="onSheetClick($event)"
+>
+  @if (sheet(); as current) {
+    <div class="sheet-content">
+      <div class="sheet-head">
+        <h2 id="sheet-title" class="sheet-title">{{ sheetSection()?.title ?? 'More' }}</h2>
+        @if ((sheetSection()?.links?.length ?? 0) > 1) {
+          <button type="button" class="text-button" [attr.aria-pressed]="customising()" (click)="customising.set(!customising())">
+            <app-site-icon name="customise" [size]="15" />
+            {{ customising() ? 'Done' : 'Customise' }}
+          </button>
+        }
+        <button type="button" class="icon-button" aria-label="Close" (click)="closeSheet()">
+          <app-site-icon name="close" />
+        </button>
+      </div>
+
+      @if (sheetSection(); as section) {
+        <app-menu-links [sectionId]="section.id" [links]="section.links" [customising]="customising()" />
+        @if (customising() && menuOrder.customised()) {
+          <button type="button" class="text-button reset-order" (click)="menuOrder.reset()">Reset order</button>
+        }
+      } @else {
+        @for (section of moreSections(); track section.id) {
+          <div class="sheet-section">
+            <h3 class="sheet-section-title">{{ section.title }}</h3>
+            <app-menu-links [sectionId]="section.id" [links]="section.links" />
+          </div>
+        }
+        <a class="sheet-privacy" routerLink="/privacy">
+          <app-site-icon name="privacy" />
+          Privacy
+        </a>
+        <div class="site-settings">
+          <ng-container *ngTemplateOutlet="settings" />
+        </div>
+      }
+    </div>
+  }
+</dialog>
 
 <su-lib-notifications />
 <su-lib-dialog />
