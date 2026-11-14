@@ -29,7 +29,8 @@ export type FeatureId =
   | 'room-names'
   | 'sticker-drag'
   | 'offline'
-  | 'install-app';
+  | 'install-app'
+  | 'fullscreen';
 
 export type RoomGame = Extract<
   GameSlug,
@@ -72,6 +73,7 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'sticker-drag', openByDefault: false },
   { id: 'offline', openByDefault: false },
   { id: 'install-app', openByDefault: false },
+  { id: 'fullscreen', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

@@ -9,7 +9,6 @@ import { Suggestion } from './suggestion.entity.js';
 import type { StatusInput, SuggestionInput, SuggestionStatus } from './suggestions.schema.js';
 import { statusSchema, SUGGESTION_STATUSES, suggestionSchema } from './suggestions.schema.js';
 import { SuggestionsService } from './suggestions.service.js';
-import { TurnstileService } from './turnstile.service.js';
 
 const idSchema = z.uuid();
 
@@ -17,7 +16,6 @@ const idSchema = z.uuid();
 export class SuggestionsController {
   constructor(
     private readonly suggestions: SuggestionsService,
-    private readonly turnstile: TurnstileService,
   ) {}
 
   @Post()
@@ -38,7 +36,9 @@ export class SuggestionsController {
     @Body({ schema: suggestionSchema }) input: SuggestionInput,
     @UploadedFile() image?: Express.Multer.File,
   ): Promise<void> {
-    await this.turnstile.verify(input.turnstileToken);
+    if (input.website) {
+      return;
+    }
     await this.suggestions.add(input, image?.buffer);
   }
 }

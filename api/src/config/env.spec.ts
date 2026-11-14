@@ -15,7 +15,6 @@ describe('environment', () => {
     expect(env.PORT).toBe(3000);
     expect(env.CORS_ORIGINS).toEqual(['https://a.dev', 'https://b.dev']);
     expect(env.TRUST_CLOUDFLARE).toBe(true);
-    expect(env.TURNSTILE_SECRET).toBeUndefined();
   });
 
   it('refuses to start without a database or with a short admin token', () => {

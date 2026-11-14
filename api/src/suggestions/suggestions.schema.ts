@@ -15,7 +15,7 @@ export const suggestionSchema = z.object({
   category: z.enum(SUGGESTION_CATEGORIES),
   text: z.string().trim().min(3).max(500),
   language: languageSchema,
-  turnstileToken: z.string().max(2048).optional(),
+  website: z.string().max(200).optional(),
 });
 export type SuggestionInput = z.infer<typeof suggestionSchema>;
 

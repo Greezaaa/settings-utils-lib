@@ -12,7 +12,10 @@ import { wasSignedIn } from './core/session-hint';
 import { MenuAnimation } from './core/menu-animation';
 import { PlayerAccount } from './core/player-account';
 import { AppInstall } from './core/app-install';
+import { ConnectionNotices } from './core/connection-notices';
+import { Fullscreen } from './core/fullscreen';
 import { LiveSettings } from './core/live-settings';
+import { SuggestionSender } from './core/suggestion-sender';
 import { OfflineMode } from './core/offline-mode';
 import { OutboxSender } from './core/outbox-sender';
 import { SiteNotices } from './core/site-notices';
@@ -50,6 +53,8 @@ export class App {
   protected readonly siteLanguage = inject(SiteLanguage);
   private readonly notices = inject(SiteNotices);
   private readonly offlineMode = inject(OfflineMode);
+  private readonly connectionNotices = inject(ConnectionNotices);
+  private readonly suggestionSender = inject(SuggestionSender);
   private readonly appInstall = inject(AppInstall);
   private readonly outboxSender = inject(OutboxSender);
   protected readonly t = this.siteLanguage.messages;
@@ -81,6 +86,10 @@ export class App {
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
   protected readonly admin = inject(AdminApi);
+  protected readonly fullscreen = inject(Fullscreen);
+  protected readonly canGoFullscreen = computed(
+    () => this.pageGame() !== null && this.fullscreen.isSupported() && this.features.canUse('fullscreen'),
+  );
 
   protected readonly menuOpen = signal(false);
   private readonly menuToggle =

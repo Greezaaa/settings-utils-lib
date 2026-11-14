@@ -25,6 +25,27 @@
     </a>
 
     <div class="header-controls">
+      @if (canGoFullscreen()) {
+        <button
+          type="button"
+          class="icon-button"
+          [attr.aria-label]="(fullscreen.isOn() ? 'site.exitFullscreen' : 'site.fullscreen') | translate"
+          [title]="(fullscreen.isOn() ? 'site.exitFullscreen' : 'site.fullscreen') | translate"
+          [attr.aria-pressed]="fullscreen.isOn()"
+          (click)="fullscreen.toggle()"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path
+              [attr.d]="fullscreen.isOn() ? 'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5' : 'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      }
       <button
         type="button"
         class="icon-button menu-toggle"

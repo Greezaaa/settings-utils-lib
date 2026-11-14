@@ -15,6 +15,8 @@ export type FeedbackReason = (typeof FEEDBACK_REASONS)[Vote][number];
 
 export const SUGGESTION_CATEGORIES = ['new-game', 'improvement', 'drawing', 'problem', 'other'] as const;
 export type SuggestionCategory = (typeof SUGGESTION_CATEGORIES)[number];
+export const isSuggestionCategory = (value: unknown): value is SuggestionCategory =>
+  SUGGESTION_CATEGORIES.some((category) => category === value);
 
 export interface GameSwitch {
   readonly game: GameSlug;
@@ -145,6 +147,9 @@ function parseWords(body: unknown): string[] {
 }
 
 const SERVER_ERROR = 500;
+const TOO_MANY = 429;
+
+export type SuggestionResult = 'sent' | 'too-many' | 'refused' | 'offline';
 
 @Injectable({ providedIn: 'root' })
 export class GamesApi {
@@ -177,8 +182,12 @@ export class GamesApi {
     return parseWords(await this.read(`/v1/word-reports/hidden?language=${language}`));
   }
 
-  sendSuggestion(form: FormData): Promise<boolean> {
-    return this.send('/v1/suggestions', form);
+  async sendSuggestion(form: FormData): Promise<SuggestionResult> {
+    const status = await this.postStatus('/v1/suggestions', form);
+    if (status === null || status >= SERVER_ERROR) {
+      return 'offline';
+    }
+    return status < 300 ? 'sent' : status === TOO_MANY ? 'too-many' : 'refused';
   }
 
   async featureSwitches(): Promise<FeatureSwitch[] | null> {
@@ -223,18 +232,23 @@ export class GamesApi {
   }
 
   private async post(path: string, body: object | FormData): Promise<SendResult> {
+    const status = await this.postStatus(path, body);
+    if (status === null || status >= SERVER_ERROR) {
+      return 'unreachable';
+    }
+    return status < 300 ? 'sent' : 'rejected';
+  }
+
+  private async postStatus(path: string, body: object | FormData): Promise<number | null> {
     const init: RequestInit =
       body instanceof FormData
         ? { method: 'POST', body }
         : { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } };
     try {
       const response = await fetch(apiUrl(this.document, path), { ...init, signal: AbortSignal.timeout(SEND_TIMEOUT_MS) });
-      if (response.ok) {
-        return 'sent';
-      }
-      return response.status >= SERVER_ERROR ? 'unreachable' : 'rejected';
+      return response.status;
     } catch {
-      return 'unreachable';
+      return null;
     }
   }
 }

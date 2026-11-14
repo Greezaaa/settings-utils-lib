@@ -1,10 +1,12 @@
-import { DestroyRef, Directive, effect, ElementRef, inject, input } from '@angular/core';
+import { afterNextRender, DestroyRef, Directive, effect, ElementRef, inject, input } from '@angular/core';
 import { SuStorage } from '@su-labs/core';
 import { SuThemeController } from '@su-labs/core/theme';
 import { BoardColours } from '../core/board-colours';
 import { GameThemeId, getGameTheme } from '../core/game-themes';
 
 const UNSAVED: SuStorage = { getItem: () => null, setItem: () => undefined, removeItem: () => undefined };
+
+const SAFARI_ZOOM_GESTURES = ['gesturestart', 'gesturechange'];
 
 @Directive({
   selector: '[appGameBoard]',
@@ -31,6 +33,17 @@ export class GameBoard {
         });
       }
     });
-    inject(DestroyRef).onDestroy(() => this.controller.destroy());
+    const stopZoom = (event: Event): void => event.preventDefault();
+    afterNextRender(() => {
+      for (const gesture of SAFARI_ZOOM_GESTURES) {
+        this.element.addEventListener(gesture, stopZoom, { passive: false });
+      }
+    });
+    inject(DestroyRef).onDestroy(() => {
+      this.controller.destroy();
+      for (const gesture of SAFARI_ZOOM_GESTURES) {
+        this.element.removeEventListener(gesture, stopZoom);
+      }
+    });
   }
 }

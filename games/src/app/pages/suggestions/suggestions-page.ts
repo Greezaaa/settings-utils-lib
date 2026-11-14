@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { SuNotificationService } from '@su-labs/notifications';
 import { FeatureFlags } from '../../core/feature-flags';
-import { GamesApi, SUGGESTION_CATEGORIES, SuggestionCategory } from '../../core/games-api';
+import { SUGGESTION_CATEGORIES, SuggestionCategory } from '../../core/games-api';
+import { SendOutcome, SuggestionSender } from '../../core/suggestion-sender';
 import { shrinkImage } from '../../core/shrink-image';
 import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -10,7 +11,6 @@ import { SuAutoGrowDirective } from '@su-labs/fields';
 export const MAX_SUGGESTION_LENGTH = 500;
 const MIN_SUGGESTION_LENGTH = 3;
 
-type Sending = 'idle' | 'sending' | 'failed';
 
 @Component({
   selector: 'app-suggestions-page',
@@ -20,7 +20,7 @@ type Sending = 'idle' | 'sending' | 'failed';
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './suggestions-page.scss'],
 })
 export class SuggestionsPage {
-  private readonly api = inject(GamesApi);
+  protected readonly sender = inject(SuggestionSender);
   private readonly language = inject(SiteLanguage);
   private readonly notifications = inject(SuNotificationService);
   protected readonly t = this.language.messages;
@@ -33,14 +33,14 @@ export class SuggestionsPage {
   protected readonly text = signal('');
   protected readonly image = signal<Blob | null>(null);
   protected readonly preview = signal<string | null>(null);
-  protected readonly imageError = signal(false);
-  protected readonly sending = signal<Sending>('idle');
+  protected readonly isSending = signal(false);
 
   protected readonly canSend = computed(
-    () => this.text().trim().length >= MIN_SUGGESTION_LENGTH && this.sending() !== 'sending',
+    () => this.text().trim().length >= MIN_SUGGESTION_LENGTH && !this.isSending() && this.sender.remaining() > 0,
   );
 
   constructor() {
+    this.sender.tick();
     inject(DestroyRef).onDestroy(() => this.setPreview(null));
   }
 
@@ -72,20 +72,18 @@ export class SuggestionsPage {
   }
 
   private async useImage(file: File | undefined): Promise<void> {
-    this.imageError.set(false);
     if (!file) {
       return;
     }
-    if (!file.type.startsWith('image/')) {
-      this.imageError.set(true);
-      return;
-    }
     try {
+      if (!file.type.startsWith('image/')) {
+        throw new Error('Not a picture');
+      }
       const image = await shrinkImage(file);
       this.image.set(image);
       this.setPreview(URL.createObjectURL(image));
     } catch {
-      this.imageError.set(true);
+      this.notifications.show({ type: 'error', message: this.t().suggestions.imageError });
       this.removeImage();
     }
   }
@@ -99,24 +97,33 @@ export class SuggestionsPage {
     if (!this.canSend()) {
       return;
     }
-    this.sending.set('sending');
-    const data = new FormData();
-    data.set('category', this.category());
-    data.set('text', this.text().trim());
-    data.set('language', this.language.language());
-    const image = this.image();
-    if (image) {
-      data.set('image', image, image.type === 'image/webp' ? 'picture.webp' : 'picture.jpg');
+    this.isSending.set(true);
+    const website = new FormData(form).get('website');
+    const outcome = await this.sender.send({
+      category: this.category(),
+      text: this.text().trim(),
+      language: this.language.language(),
+      image: this.image(),
+      website: typeof website === 'string' ? website : '',
+    });
+    this.isSending.set(false);
+    this.notify(outcome);
+    if (outcome === 'sent' || outcome === 'saved') {
+      form.reset();
+      this.text.set('');
+      this.removeImage();
     }
-    if (!(await this.api.sendSuggestion(data))) {
-      this.sending.set('failed');
-      return;
-    }
-    this.notifications.show({ type: 'success', message: this.t().suggestions.sent });
-    form.reset();
-    this.text.set('');
-    this.removeImage();
-    this.sending.set('idle');
+  }
+
+  private notify(outcome: SendOutcome): void {
+    const texts = this.t().suggestions;
+    const notices: Record<SendOutcome, { type: 'success' | 'info' | 'error'; message: string }> = {
+      sent: { type: 'success', message: texts.sent },
+      saved: { type: 'info', message: texts.saved },
+      'too-many': { type: 'error', message: texts.tooMany },
+      refused: { type: 'error', message: texts.refused },
+    };
+    this.notifications.show(notices[outcome]);
   }
 
   private setPreview(url: string | null): void {

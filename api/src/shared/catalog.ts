@@ -49,6 +49,7 @@ export const FEATURE_IDS = [
   'sticker-drag',
   'offline',
   'install-app',
+  'fullscreen',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

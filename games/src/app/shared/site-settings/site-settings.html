@@ -31,8 +31,13 @@
       [style.--swatch-accent]="themeSwatch()['main-accent']"
     ></span>
     <select id="setting-theme" (change)="chooseTheme($event)">
-      @for (choice of theme.choices; track choice) {
-        <option [value]="choice" [selected]="choice === theme.preference()">{{ themeName(choice) }}</option>
+      <option value="system" [selected]="theme.preference() === 'system'">{{ themeName('system') }}</option>
+      @for (tone of tones; track tone) {
+        <optgroup [label]="('site.themeTones' | translate)[tone]">
+          @for (choice of siteThemesByTone[tone]; track choice) {
+            <option [value]="choice" [selected]="choice === theme.preference()">{{ themeName(choice) }}</option>
+          }
+        </optgroup>
       }
     </select>
   </div>
@@ -47,10 +52,14 @@
       [style.--swatch-accent]="selectedBoardTheme().palette['main-accent']"
     ></span>
     <select id="setting-game-colours" (change)="chooseBoardColours($event)">
-      @for (theme of gameThemes; track theme.id) {
-        <option [value]="theme.id" [selected]="theme.id === boardColours.selected()">
-          {{ ('site.boardThemes' | translate)[theme.id].name }}
-        </option>
+      @for (tone of tones; track tone) {
+        <optgroup [label]="('site.themeTones' | translate)[tone]">
+          @for (theme of gameThemesByTone[tone]; track theme.id) {
+            <option [value]="theme.id" [selected]="theme.id === boardColours.selected()">
+              {{ ('site.boardThemes' | translate)[theme.id].name }}
+            </option>
+          }
+        </optgroup>
       }
     </select>
   </div>

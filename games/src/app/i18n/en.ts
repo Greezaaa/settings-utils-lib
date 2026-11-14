@@ -106,7 +106,12 @@ export const EN: SiteMessages = {
     install: 'Install the games',
     installButton: 'Install',
     installSteps: 'Tap Share, then Add to Home Screen',
-    wordGender: 'Talk to me as',
+    wordGender: 'Gender',
+    fullscreen: 'Full screen',
+    exitFullscreen: 'Leave full screen',
+    themeTones: { light: 'Light', dark: 'Dark' },
+    backOnline: 'You’re back online.',
+    wentOffline: 'You’re offline. The games still work, and what you send will wait until you’re back.',
     wordGenders: { boy: 'a boy', girl: 'a girl' },
     wordGenderQuestion: 'How should we talk to you? You can change it any time in the settings.',
     wordGenderAnswers: { boy: 'As a boy', girl: 'As a girl' },
@@ -385,9 +390,14 @@ export const EN: SiteMessages = {
         why: 'So we don’t ask again',
       },
       {
-        what: 'Plays, ratings and reported words waiting to be sent',
+        what: 'Plays, ratings, reported words and ideas for the suggestion box waiting to be sent',
         where: 'Local storage',
         why: 'When there’s no internet they wait here, and are sent once you’re back online',
+      },
+      {
+        what: 'When you sent ideas to the suggestion box in the last hour',
+        where: 'Local storage',
+        why: 'So you know how many more you can send; older times are forgotten',
       },
       {
         what: 'Which games and options are open',
@@ -597,12 +607,17 @@ export const EN: SiteMessages = {
     imageTypes:
       'Photos and drawings from your phone or computer (JPG, PNG, HEIC…)',
     imageAlt: 'The picture you chose',
-    imageError: 'That picture can’t be used. Try another one.',
+    imageError: 'We couldn’t open that picture. Try a photo or drawing in JPG, PNG or HEIC.',
     removeImage: 'Remove',
     send: 'Send',
     sending: 'Sending…',
     sent: 'Thanks! Your idea was sent.',
-    failed: 'It didn’t send. Try again later.',
+    saved: 'No connection right now: your idea is saved on this device and will be sent as soon as you’re back online.',
+    savedSent: 'Your saved idea has been sent. Thanks!',
+    tooMany: 'You’ve sent a lot of ideas in a short time. Wait a little and try again later.',
+    refused: 'Your idea couldn’t be accepted. Check the text and try again.',
+    sendsLeft: (sends) => (sends === 1 ? 'You can send 1 more idea this hour.' : `You can send ${sends} more ideas this hour.`),
+    waitMinutes: (minutes) => (minutes === 1 ? 'You’ve sent 3 ideas this hour. You can send another in 1 minute.' : `You’ve sent 3 ideas this hour. You can send another in ${minutes} minutes.`),
   },
 
   feedback: {
@@ -1129,6 +1144,7 @@ export const EN: SiteMessages = {
       'sticker-drag': 'Move room stickers by holding them',
       offline: 'Play offline: the games keep working without internet',
       'install-app': 'Install button: add the games to the home screen or desktop',
+      fullscreen: 'Full screen button on game pages',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:

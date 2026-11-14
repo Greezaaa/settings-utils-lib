@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, output, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, output, signal } from '@angular/core';
 import { dockAt, Reaction, REACTION_GAP_MS, reactionPicture, REACTIONS, Reactions } from '../../../core/reactions';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
@@ -42,7 +42,17 @@ export class RoomReactions {
   private wasDragged = false;
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => this.endPress());
+    const host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+    const keepPageStill = (event: TouchEvent): void => {
+      if (this.press) {
+        event.preventDefault();
+      }
+    };
+    afterNextRender(() => host.addEventListener('touchmove', keepPageStill, { passive: false }));
+    inject(DestroyRef).onDestroy(() => {
+      host.removeEventListener('touchmove', keepPageStill);
+      this.endPress();
+    });
   }
 
   protected send(reaction: Reaction): void {

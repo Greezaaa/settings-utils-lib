@@ -28,7 +28,6 @@ export const envSchema = z.object({
   COOKIE_DOMAIN: z.string().min(1).optional(),
   ROOM_NAME_SECRET: optionalSecret,
   UPLOADS_DIR: z.string().default('/data/uploads'),
-  TURNSTILE_SECRET: z.string().optional(),
   TRUST_CLOUDFLARE: z
     .enum(['true', 'false'])
     .default('false')

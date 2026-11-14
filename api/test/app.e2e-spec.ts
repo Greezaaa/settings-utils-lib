@@ -528,6 +528,16 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(200, { features: [{ feature: 'rooms', enabled: true }] });
   });
 
+  it('quietly drops suggestions that fill the hidden field only bots see', async () => {
+    const before = await request(app.getHttpServer()).get('/admin/suggestions?status=new').set(admin).expect(200);
+    await request(app.getHttpServer())
+      .post('/v1/suggestions')
+      .field({ category: 'other', text: 'Buy cheap things', language: 'en', website: 'https://spam.test' })
+      .expect(204);
+    const after = await request(app.getHttpServer()).get('/admin/suggestions?status=new').set(admin).expect(200);
+    expect(after.body).toEqual(before.body);
+  });
+
   it('keeps suggestions with a cleaned picture for moderators', async () => {
     const photo = await sharp({
       create: { width: 20, height: 20, channels: 3, background: '#ff0000' },

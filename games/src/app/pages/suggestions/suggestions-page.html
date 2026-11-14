@@ -67,16 +67,22 @@
         </label>
       }
       <small class="muted">{{ 'suggestions.imageHint' | translate }}</small>
-      @if (imageError()) {
-        <small class="error">{{ 'suggestions.imageError' | translate }}</small>
-      }
     </div>
 
-    @if (sending() === 'failed') {
-      <p class="error" role="alert">{{ 'suggestions.failed' | translate }}</p>
-    }
+    <label class="trap" aria-hidden="true">
+      <span>Website</span>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+
     <button type="submit" class="button start" [disabled]="!canSend()">
-      {{ sending() === 'sending' ? ('suggestions.sending' | translate) : ('suggestions.send' | translate) }}
+      {{ isSending() ? ('suggestions.sending' | translate) : ('suggestions.send' | translate) }}
     </button>
+    <p class="muted sends-left" aria-live="polite">
+      {{
+        sender.remaining() > 0
+          ? ('suggestions.sendsLeft' | translate: sender.remaining())
+          : ('suggestions.waitMinutes' | translate: sender.minutesToWait())
+      }}
+    </p>
   </form>
 </section>

@@ -40,10 +40,6 @@ textarea {
   }
 }
 
-.error {
-  color: var(--red-text);
-}
-
 .start {
   justify-self: center;
 }
@@ -90,4 +86,17 @@ textarea {
   stroke-linejoin: round;
   stroke-width: 1.75;
   width: 2.5rem;
+}
+
+.trap {
+  height: 1px;
+  left: -10000px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}
+
+.sends-left {
+  font-size: 0.8125rem;
+  margin: 0;
 }

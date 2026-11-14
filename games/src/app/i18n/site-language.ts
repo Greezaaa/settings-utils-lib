@@ -2,7 +2,7 @@ import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, signal
 import { readStored, writeStored } from '../core/site-storage';
 import { PlayerGender } from '../core/player-gender';
 import { spanish } from './es';
-import { LANGUAGE_IDS, LanguageId, SiteMessages } from './site-messages';
+import { isLanguageId, LANGUAGE_IDS, LanguageId, SiteMessages } from './site-messages';
 import { WordGender } from './word-gender';
 
 type MessagesFor = (gender: WordGender) => SiteMessages;
@@ -31,8 +31,6 @@ export const PRERENDER_LANGUAGE: LanguageId = 'es';
 
 export const PRERENDER_MESSAGES: SiteMessages = spanish('boy');
 
-const isLanguageId = (value: unknown): value is LanguageId =>
-  LANGUAGE_IDS.some(id => id === value);
 
 @Injectable({ providedIn: 'root' })
 export class SiteLanguage {

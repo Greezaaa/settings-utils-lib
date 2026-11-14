@@ -8,6 +8,7 @@ import { GameCategory, GameSlug } from '../core/games';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { MenuAnimationChoice } from '../core/menu-animation';
 import { OfflineChoice } from '../core/offline-mode';
+import { Tone } from '../core/theme-tone';
 import { PictureId } from '../core/pictures';
 import { AccountProblem } from '../core/player-account';
 import { Reaction, ReactionSide, StickerDragChoice } from '../core/reactions';
@@ -29,6 +30,7 @@ import { WordGender } from './word-gender';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
 export const LANGUAGE_IDS: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
+export const isLanguageId = (value: unknown): value is LanguageId => LANGUAGE_IDS.some((id) => id === value);
 
 export interface SudokuText {
   readonly lead: string;
@@ -97,6 +99,11 @@ export interface SiteMessages {
     readonly installSteps: string;
     readonly stickerDragChoices: Readonly<Record<StickerDragChoice, string>>;
     readonly wordGender: string;
+    readonly fullscreen: string;
+    readonly exitFullscreen: string;
+    readonly themeTones: Readonly<Record<Tone, string>>;
+    readonly backOnline: string;
+    readonly wentOffline: string;
     readonly wordGenders: Readonly<Record<WordGender, string>>;
     readonly wordGenderQuestion: string;
     readonly wordGenderAnswers: Readonly<Record<WordGender, string>>;
@@ -335,7 +342,12 @@ export interface SiteMessages {
     readonly send: string;
     readonly sending: string;
     readonly sent: string;
-    readonly failed: string;
+    readonly saved: string;
+    readonly savedSent: string;
+    readonly tooMany: string;
+    readonly refused: string;
+    readonly sendsLeft: (sends: number) => string;
+    readonly waitMinutes: (minutes: number) => string;
   };
 
   readonly feedback: {

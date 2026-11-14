@@ -39,9 +39,6 @@
             <input name="password" type="password" autocomplete="current-password" />
           </label>
         }
-        @if (details.error(); as error) {
-          <p class="error" role="alert">{{ error }}</p>
-        }
         <button type="submit" class="button" [disabled]="details.isBusy()">{{ 'account.save' | translate }}</button>
       </form>
 
@@ -60,9 +57,6 @@
           />
           <span class="track" aria-hidden="true"></span>
         </label>
-        @if (visibility.error(); as error) {
-          <p class="error" role="alert">{{ error }}</p>
-        }
       </div>
 
       <form class="card account-card" (submit)="$event.preventDefault(); changePassword(passwordForm)" #passwordForm>
@@ -89,18 +83,12 @@
           <span>{{ 'account.repeatPassword' | translate }}</span>
           <input name="repeat" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
         </label>
-        @if (password.error(); as error) {
-          <p class="error" role="alert">{{ error }}</p>
-        }
         <button type="submit" class="button" [disabled]="password.isBusy()">{{ 'account.changePassword' | translate }}</button>
       </form>
 
       <div class="card account-card">
         <h2 class="card-title">{{ 'account.resultsTitle' | translate }}</h2>
         <p class="muted">{{ 'account.resultsLead' | translate }}</p>
-        @if (results.error(); as error) {
-          <p class="error" role="alert">{{ error }}</p>
-        }
         <button
           type="button"
           class="button button-secondary danger"
@@ -118,9 +106,6 @@
           <span>{{ 'account.currentPassword' | translate }}</span>
           <input name="password" type="password" autocomplete="current-password" required />
         </label>
-        @if (deletion.error(); as error) {
-          <p class="error" role="alert">{{ error }}</p>
-        }
         <button type="submit" class="button button-secondary danger" [disabled]="deletion.isBusy()">
           {{ 'account.deleteAccount' | translate }}
         </button>
@@ -161,9 +146,6 @@
             <input name="password" type="password" autocomplete="current-password" required />
           </label>
           <p class="muted">{{ 'account.syncNote' | translate }}</p>
-          @if (entry.error(); as error) {
-            <p class="error" role="alert">{{ error }}</p>
-          }
           <button type="submit" class="button" [disabled]="entry.isBusy()">{{ 'account.signIn' | translate }}</button>
         </form>
       }
@@ -219,9 +201,6 @@
             <p class="warning" role="note">{{ 'account.noEmailWarning' | translate }}</p>
           }
           <p class="muted">{{ 'account.syncNote' | translate }}</p>
-          @if (entry.error(); as error) {
-            <p class="error" role="alert">{{ error }}</p>
-          }
           <button type="submit" class="button" [disabled]="entry.isBusy()">{{ 'account.signUp' | translate }}</button>
         </form>
       }
@@ -232,9 +211,6 @@
             <span>{{ 'account.email' | translate }}</span>
             <input name="email" type="email" autocomplete="email" maxlength="254" required />
           </label>
-          @if (entry.error(); as error) {
-            <p class="error" role="alert">{{ error }}</p>
-          }
           <button type="submit" class="button" [disabled]="entry.isBusy()">
             {{ entry.isBusy() ? ('account.sending' | translate) : ('account.sendLink' | translate) }}
           </button>

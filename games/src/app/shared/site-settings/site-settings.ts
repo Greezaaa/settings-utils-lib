@@ -7,6 +7,7 @@ import { BoardColours } from '../../core/board-colours';
 import { AppInstall } from '../../core/app-install';
 import { FeatureFlags } from '../../core/feature-flags';
 import { GAME_THEMES, getGameTheme, isGameThemeId } from '../../core/game-themes';
+import { byTone, TONES } from '../../core/theme-tone';
 import { MENU_ANIMATION_CHOICES, MenuAnimation } from '../../core/menu-animation';
 import { OFFLINE_CHOICES, OfflineMode } from '../../core/offline-mode';
 import { PlayerGender } from '../../core/player-gender';
@@ -45,7 +46,12 @@ export class SiteSettings {
   protected readonly menuAnimationChoices = MENU_ANIMATION_CHOICES;
   protected readonly offlineChoices = OFFLINE_CHOICES;
   protected readonly wordGenders = WORD_GENDERS;
-  protected readonly gameThemes = GAME_THEMES;
+  protected readonly tones = TONES;
+  protected readonly gameThemesByTone = byTone(GAME_THEMES, ({ palette }) => palette.background);
+  protected readonly siteThemesByTone = byTone(
+    this.theme.choices.filter((choice) => choice !== 'system'),
+    (choice) => this.theme.coloursOf(choice).background,
+  );
   protected readonly selectedBoardTheme = computed(() => getGameTheme(this.boardColours.selected()));
   protected readonly themeSwatch = computed(() => this.theme.coloursOf(this.theme.preference()));
 

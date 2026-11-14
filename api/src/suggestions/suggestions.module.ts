@@ -3,11 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Suggestion } from './suggestion.entity.js';
 import { SuggestionsAdminController, SuggestionsController } from './suggestions.controller.js';
 import { SuggestionsService } from './suggestions.service.js';
-import { TurnstileService } from './turnstile.service.js';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Suggestion])],
   controllers: [SuggestionsController, SuggestionsAdminController],
-  providers: [SuggestionsService, TurnstileService],
+  providers: [SuggestionsService],
 })
 export class SuggestionsModule {}

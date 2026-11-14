@@ -50,7 +50,6 @@ export class AccountPage {
 
   protected show(view: SignedOutView): void {
     this.view.set(view);
-    this.entry.clear();
   }
 
   protected viewName(view: SignedOutView): string {

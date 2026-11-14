@@ -22,9 +22,6 @@
       <span>{{ 'account.repeatPassword' | translate }}</span>
       <input name="repeat" type="password" autocomplete="new-password" [attr.minlength]="minLength" required />
     </label>
-    @if (form.error(); as error) {
-      <p class="error" role="alert">{{ error }}</p>
-    }
     <button type="submit" class="button" [disabled]="form.isBusy()">{{ 'account.resetSave' | translate }}</button>
   </form>
 </section>

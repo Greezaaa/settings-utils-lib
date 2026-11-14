@@ -109,7 +109,12 @@ export const EU: SiteMessages = {
     install: 'Instalatu jokoak',
     installButton: 'Instalatu',
     installSteps: 'Sakatu Partekatu, eta gero Gehitu hasierako pantailara',
-    wordGender: 'Nola hitz egin?',
+    wordGender: 'Generoa',
+    fullscreen: 'Pantaila osoa',
+    exitFullscreen: 'Irten pantaila osotik',
+    themeTones: { light: 'Argiak', dark: 'Ilunak' },
+    backOnline: 'Berriro konexioa duzu.',
+    wentOffline: 'Konexiorik gabe zaude. Jokoek funtzionatzen jarraitzen dute, eta bidaltzen duzuna internet itzuli arte itxarongo du.',
     wordGenders: { boy: 'mutila', girl: 'neska' },
     wordGenderQuestion: 'Nola hitz egitea nahi duzu? Nahi duzunean alda dezakezu ezarpenetan.',
     wordGenderAnswers: { boy: 'Mutil gisa', girl: 'Neska gisa' },
@@ -391,9 +396,14 @@ export const EU: SiteMessages = {
         why: 'Berriro ez galdetzeko',
       },
       {
-        what: 'Bidaltzeko zain dauden partidak, balorazioak eta salatutako hitzak',
+        what: 'Bidaltzeko zain dauden partidak, balorazioak, salatutako hitzak eta postontziko ideiak',
         where: 'Biltegiratze lokala',
         why: 'Internetik ez dagoenean hemen itxaroten dute, eta konexioa itzultzean bidaltzen dira',
+      },
+      {
+        what: 'Azken orduan postontzira noiz bidali dituzun ideiak',
+        where: 'Biltegiratze lokala',
+        why: 'Zenbat gehiago bidal ditzakezun jakiteko; aurreko orduak ahazten dira',
       },
       {
         what: 'Zein joko eta aukera dauden irekita',
@@ -611,12 +621,17 @@ export const EU: SiteMessages = {
     imageTypes:
       'Mugikorreko edo ordenagailuko argazkiak eta marrazkiak (JPG, PNG, HEIC…)',
     imageAlt: 'Aukeratu duzun irudia',
-    imageError: 'Irudi hori ezin da erabili. Saiatu beste batekin.',
+    imageError: 'Ezin izan dugu irudi hori ireki. Probatu JPG, PNG edo HEIC formatuko argazki edo marrazki batekin.',
     removeImage: 'Kendu',
     send: 'Bidali',
     sending: 'Bidaltzen…',
     sent: 'Eskerrik asko! Zure ideia bidali da.',
-    failed: 'Ez da bidali. Saiatu geroago.',
+    saved: 'Orain ez dago konexiorik: zure ideia gailu honetan gorde da eta internet itzultzean bidaliko da.',
+    savedSent: 'Gordetako zure ideia bidali da. Eskerrik asko!',
+    tooMany: 'Ideia asko bidali dituzu denbora gutxian. Itxaron pixka bat eta saiatu berriro geroago.',
+    refused: 'Ezin izan da zure ideia onartu. Begiratu testua eta saiatu berriro.',
+    sendsLeft: (sends) => (sends === 1 ? 'Ideia bat gehiago bidal dezakezu ordu honetan.' : `${sends} ideia gehiago bidal ditzakezu ordu honetan.`),
+    waitMinutes: (minutes) => (minutes === 1 ? '3 ideia bidali dituzu ordu honetan. Minutu 1 barru beste bat bidal dezakezu.' : `3 ideia bidali dituzu ordu honetan. ${minutes} minutu barru beste bat bidal dezakezu.`),
   },
 
   feedback: {
@@ -1154,6 +1169,7 @@ export const EU: SiteMessages = {
       'sticker-drag': 'Mugitu gelako pegatinak sakatuta edukiz',
       offline: 'Konexiorik gabe jolastu: jokoek internetik gabe ere funtzionatzen dute',
       'install-app': 'Instalatzeko botoia: gehitu jokoak hasierako pantailara edo mahaigainera',
+      fullscreen: 'Pantaila osoko botoia jokoetan',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
