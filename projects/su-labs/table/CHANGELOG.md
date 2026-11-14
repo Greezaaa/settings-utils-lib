@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `--su-table-pinned-background` and `--su-table-pinned-shadow`
 - Pagination: `pageSize` and `pageSizes` show the rows a page at a time, with a paginator under the table (rows per page, the range on screen, previous and next, announced); `pageChange` emits `{ page, pageSize }`
 - The select-all checkbox selects the rows of the current page; the selection is kept across pages
+- Pinned rows: `rowPinning` adds a Pin button to each row (a toggle, announced) that keeps it above the others on every page, tinted and set off by a line; `pinnedRows` sets the starting pins and `pinnedRowsChange` emits their ids
+- `--su-table-pinned-row-background` and `--su-table-pinned-row-border`
 
 ### Fixed
 - The table shrinks to fit inside grid and flex layouts, scrolling its columns instead of widening the page

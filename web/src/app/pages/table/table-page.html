@@ -33,6 +33,8 @@
       [reorderable]="reorderable()"
       [pageSize]="5"
       [pageSizes]="[5, 10, 'all']"
+      [pinnedRows]="[103]"
+      rowPinning
       (edited)="onEdited($event)"
       (reordered)="onReordered($event)"
       (action)="onAction($event)"

@@ -146,6 +146,10 @@ export interface SuTableLabels {
   readonly page: (page: number, count: number) => string;
   readonly previousPage: string;
   readonly nextPage: string;
+  /** The label of each row's pin button */
+  readonly pinRow: string;
+  readonly rowPinned: (rowLabel: string) => string;
+  readonly rowUnpinned: (rowLabel: string) => string;
 }
 
 /** What the table is set up with; `configure` changes any of it later */
@@ -163,6 +167,8 @@ export interface SuTableOptions<TRow extends object> {
   readonly pageSize?: SuTablePageSize;
   /** The page sizes to choose from, e.g. `[10, 25, 50, 'all']`; none by default */
   readonly pageSizes?: readonly SuTablePageSize[];
+  /** The ids of the rows pinned above the others; `pinRow` changes them later */
+  readonly pinnedRows?: readonly SuTableRowId[];
 }
 
 /** The current sort */
@@ -214,6 +220,8 @@ export interface SuTableRowView<TRow extends object> {
   readonly label: string;
   readonly cells: readonly SuTableCell<TRow>[];
   readonly selected: boolean;
+  /** Shown above the other rows, on every page */
+  readonly pinned: boolean;
   readonly actions: readonly SuTableActionView[];
 }
 
@@ -242,6 +250,8 @@ export interface SuTableState<TRow extends object> {
   readonly columns: readonly SuTableColumnView<TRow>[];
   /** The rows of the current page, in display order: sorted, or as reordered */
   readonly rows: readonly SuTableRowView<TRow>[];
+  /** The pinned rows, above the others on every page, in the order they were pinned */
+  readonly pinnedRows: readonly SuTableRowView<TRow>[];
   /** The field that names each row (the first column), to render as the row's header cell */
   readonly rowHeaderKey: keyof TRow | null;
   readonly sort: SuTableSort<TRow> | null;

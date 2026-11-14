@@ -157,6 +157,7 @@ export class SuTableController<TRow extends object> {
   private announcement = '';
   private columnOptions: SuTableColumns<TRow> = [];
   private readonly pins = new Map<keyof TRow, SuTablePin | null>();
+  private pinnedIds: readonly SuTableRowId[] = [];
   private pageSize: SuTablePageSize = 'all';
   private pageSizes: readonly SuTablePageSize[] = [];
   private page = 0;
@@ -184,6 +185,7 @@ export class SuTableController<TRow extends object> {
     this.actions = options.actions ?? this.actions;
     this.rowIdOf = options.rowId ?? this.rowIdOf;
     this.pageSizes = options.pageSizes ?? this.pageSizes;
+    this.pinnedIds = options.pinnedRows ?? this.pinnedIds;
     if (options.pageSize !== undefined) {
       this.pageSize = normalizePageSize(options.pageSize);
       this.page = 0;
@@ -198,6 +200,7 @@ export class SuTableController<TRow extends object> {
     [...this.selected]
       .filter(id => !ids.has(id))
       .forEach(id => this.selected.delete(id));
+    this.pinnedIds = this.pinnedIds.filter(id => ids.has(id));
     if (this.draft?.ids.some(id => !ids.has(id))) {
       this.draft = null;
     }
@@ -262,9 +265,14 @@ export class SuTableController<TRow extends object> {
     this.announceSelection();
   }
 
-  /** Selects or deselects every row of the current page; without `selected`, selects them unless all are selected */
+  /**
+   * Selects or deselects the rows on screen (the pinned ones and the current page); without `selected`, selects them
+   * unless all are selected
+   */
   selectAll(selected?: boolean): void {
-    const ids = this.pageRows().map(row => this.idOf(row));
+    const ids = [...this.pinnedRows(), ...this.pageRows()].map(row =>
+      this.idOf(row)
+    );
     const select = selected ?? ids.some(id => !this.selected.has(id));
     ids.forEach(id =>
       select ? this.selected.add(id) : this.selected.delete(id)
@@ -302,11 +310,12 @@ export class SuTableController<TRow extends object> {
 
   /**
    * Moves a row to a position on the current page, e.g. on a drop. A sorted table keeps its sorted order as the new
-   * order.
+   * order. Pinned rows don't move.
    * @returns The ids in their new order, or null when nothing moved
    */
   move(id: SuTableRowId, toIndex: number): readonly SuTableRowId[] | null {
-    const rows = this.displayed();
+    const base = this.displayed();
+    const rows = this.unpinned(base);
     const { start, end } = this.pageBounds(rows.length);
     const from = rows.findIndex(row => this.idOf(row) === id);
     const to = Math.max(start, Math.min(start + toIndex, end - 1));
@@ -314,23 +323,26 @@ export class SuTableController<TRow extends object> {
       return null;
     }
     this.sort = null;
-    this.order = moveItem(rows, from, to);
+    this.order = this.withUnpinned(base, moveItem(rows, from, to));
     this.announcement = this.labels.dropped(to + 1, rows.length);
     this.publish();
     return this.ids();
   }
 
-  /** Picks a row up to move it with the keyboard */
+  /** Picks a row up to move it with the keyboard; pinned rows can't be moved */
   grab(id: SuTableRowId): void {
-    const rows = this.displayed();
-    const index = rows.findIndex(row => this.idOf(row) === id);
+    const base = this.displayed();
+    const index = this.unpinned(base).findIndex(row => this.idOf(row) === id);
     if (index === -1) {
       return;
     }
     this.sort = null;
-    this.order = rows;
-    this.grabbed = { id, original: rows };
-    this.announcement = this.labels.grabbed(index + 1, rows.length);
+    this.order = base;
+    this.grabbed = { id, original: base };
+    this.announcement = this.labels.grabbed(
+      index + 1,
+      this.unpinned(base).length
+    );
     this.publish();
   }
 
@@ -340,11 +352,12 @@ export class SuTableController<TRow extends object> {
     if (!grabbed) {
       return;
     }
-    const from = this.order.findIndex(row => this.idOf(row) === grabbed.id);
-    const to = Math.max(0, Math.min(from + offset, this.order.length - 1));
-    this.order = moveItem(this.order, from, to);
+    const rows = this.unpinned(this.order);
+    const from = rows.findIndex(row => this.idOf(row) === grabbed.id);
+    const to = Math.max(0, Math.min(from + offset, rows.length - 1));
+    this.order = this.withUnpinned(this.order, moveItem(rows, from, to));
     this.followRow(to);
-    this.announcement = this.labels.moved(to + 1, this.order.length);
+    this.announcement = this.labels.moved(to + 1, rows.length);
     this.publish();
   }
 
@@ -358,9 +371,9 @@ export class SuTableController<TRow extends object> {
       return null;
     }
     this.grabbed = null;
-    const position =
-      this.order.findIndex(row => this.idOf(row) === grabbed.id) + 1;
-    this.announcement = this.labels.dropped(position, this.order.length);
+    const rows = this.unpinned(this.order);
+    const position = rows.findIndex(row => this.idOf(row) === grabbed.id) + 1;
+    this.announcement = this.labels.dropped(position, rows.length);
     this.publish();
     const unchanged = this.order.every(
       (row, index) => row === grabbed.original[index]
@@ -376,8 +389,28 @@ export class SuTableController<TRow extends object> {
     const { id, original } = this.grabbed;
     this.order = original;
     this.grabbed = null;
-    this.followRow(original.findIndex(row => this.idOf(row) === id));
+    this.followRow(
+      this.unpinned(original).findIndex(row => this.idOf(row) === id)
+    );
     this.announcement = this.labels.moveCancelled;
+    this.publish();
+  }
+
+  /** Pins a row above the others, on every page, or unpins it; without `pinned`, toggles it */
+  pinRow(id: SuTableRowId, pinned = !this.pinnedIds.includes(id)): void {
+    const row = this.order.find(item => this.idOf(item) === id);
+    if (!row || this.pinnedIds.includes(id) === pinned) {
+      return;
+    }
+    this.cancelMove();
+    this.pinnedIds = pinned
+      ? [...this.pinnedIds, id]
+      : this.pinnedIds.filter(item => item !== id);
+    this.page = this.pageBounds().page;
+    const label = this.rowLabel(row, id);
+    this.announcement = pinned
+      ? this.labels.rowPinned(label)
+      : this.labels.rowUnpinned(label);
     this.publish();
   }
 
@@ -554,7 +587,36 @@ export class SuTableController<TRow extends object> {
     }
   }
 
-  private pageBounds(total = this.order.length): {
+  private isPinned(row: TRow): boolean {
+    return this.pinnedIds.includes(this.idOf(row));
+  }
+
+  private unpinned(rows: readonly TRow[]): readonly TRow[] {
+    return rows.filter(row => !this.isPinned(row));
+  }
+
+  /** The base rows with their unpinned ones replaced, in order, by `rows`; pinned rows keep their places */
+  private withUnpinned(
+    base: readonly TRow[],
+    rows: readonly TRow[]
+  ): readonly TRow[] {
+    let next = 0;
+    return base.map(row => (this.isPinned(row) ? row : rows[next++]));
+  }
+
+  /** The pinned rows, in the order they were pinned */
+  private pinnedRows(): readonly TRow[] {
+    return this.pinnedIds.flatMap(id => {
+      const row = this.order.find(item => this.idOf(item) === id);
+      return row ? [row] : [];
+    });
+  }
+
+  private rowLabel(row: TRow, id: SuTableRowId): string {
+    return this.columns[0]?.text(row) || String(id);
+  }
+
+  private pageBounds(total = this.unpinned(this.order).length): {
     readonly page: number;
     readonly count: number;
     readonly start: number;
@@ -568,7 +630,7 @@ export class SuTableController<TRow extends object> {
   }
 
   private pageRows(): readonly TRow[] {
-    const rows = this.displayed();
+    const rows = this.unpinned(this.displayed());
     const { start, end } = this.pageBounds(rows.length);
     return rows.slice(start, end);
   }
@@ -595,9 +657,14 @@ export class SuTableController<TRow extends object> {
   private build(): SuTableState<TRow> {
     const columns = this.displayColumns();
     const all = this.displayed();
-    const { page, count, start, end } = this.pageBounds(all.length);
-    const rows = all.slice(start, end).map(row => this.rowView(row, columns));
-    const selectedCount = rows.filter(row => row.selected).length;
+    const unpinned = this.unpinned(all);
+    const { page, count, start, end } = this.pageBounds(unpinned.length);
+    const rows = unpinned
+      .slice(start, end)
+      .map(row => this.rowView(row, columns));
+    const pinnedRows = this.pinnedRows().map(row => this.rowView(row, columns));
+    const onScreen = [...pinnedRows, ...rows];
+    const selectedCount = onScreen.filter(row => row.selected).length;
     return {
       columns: columns.map(column => ({
         ...column.view,
@@ -605,6 +672,7 @@ export class SuTableController<TRow extends object> {
         sort: this.sort?.key === column.key ? this.sort.direction : 'none',
       })),
       rows,
+      pinnedRows,
       rowHeaderKey: this.columns[0]?.key ?? null,
       sort: this.sort,
       selectedIds: all
@@ -613,7 +681,7 @@ export class SuTableController<TRow extends object> {
       selection:
         selectedCount === 0
           ? 'none'
-          : selectedCount === rows.length
+          : selectedCount === onScreen.length
             ? 'all'
             : 'some',
       pagination: {
@@ -621,8 +689,8 @@ export class SuTableController<TRow extends object> {
         pageCount: count,
         pageSize: this.pageSize,
         pageSizes: this.pageSizes,
-        totalRows: all.length,
-        rangeStart: all.length > 0 ? start + 1 : 0,
+        totalRows: unpinned.length,
+        rangeStart: unpinned.length > 0 ? start + 1 : 0,
         rangeEnd: end,
       },
       bulkActions: this.actions
@@ -660,9 +728,10 @@ export class SuTableController<TRow extends object> {
     return {
       id,
       data: row,
-      label: this.columns[0]?.text(row) || String(id),
+      label: this.rowLabel(row, id),
       cells,
       selected: this.selected.has(id),
+      pinned: this.pinnedIds.includes(id),
       actions,
     };
   }

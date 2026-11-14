@@ -88,6 +88,10 @@ export class SuTableComponent<TRow extends object> {
   readonly pageSize = input<SuTablePageSize>();
   /** The page sizes people choose from under the table, e.g. `[10, 25, 50, 'all']` */
   readonly pageSizes = input<readonly SuTablePageSize[]>([]);
+  /** A Pin button on each row, keeping it above the others on every page @default false */
+  readonly rowPinning = input(false, { transform: booleanAttribute });
+  /** The ids of the rows pinned to start with */
+  readonly pinnedRows = input<readonly SuTableRowId[]>();
   /** Texts to replace, e.g. in the page's language */
   readonly labels = input<Partial<SuTableLabels>>({});
 
@@ -97,6 +101,8 @@ export class SuTableComponent<TRow extends object> {
   readonly action = output<SuTableActionEvent<TRow>>();
   readonly sortChange = output<SuTableSort<TRow> | null>();
   readonly selectionChange = output<readonly TRow[]>();
+  /** The pinned rows changed: their ids, in pin order */
+  readonly pinnedRowsChange = output<readonly SuTableRowId[]>();
   /** The page or the page size changed */
   readonly pageChange = output<SuTablePageEvent>();
 
@@ -128,7 +134,14 @@ export class SuTableComponent<TRow extends object> {
     const draft = this.state().draft;
     return draft?.bulk ? draft : null;
   });
-  protected readonly hasActions = computed(() => this.actions().length > 0);
+  protected readonly hasActions = computed(
+    () => this.actions().length > 0 || this.rowPinning()
+  );
+  /** The pinned rows, then the current page */
+  protected readonly bodyRows = computed(() => {
+    const { pinnedRows, rows } = this.state();
+    return [...pinnedRows, ...rows];
+  });
   protected readonly columnsOpen = signal(false);
   protected readonly scrolledFromStart = signal(false);
   protected readonly moreAtEnd = signal(false);
@@ -217,6 +230,12 @@ export class SuTableComponent<TRow extends object> {
     effect(() => {
       const rows = this.rows();
       untracked(() => this.controller.setRows(rows));
+    });
+    effect(() => {
+      const pinnedRows = this.pinnedRows();
+      if (pinnedRows !== undefined) {
+        untracked(() => this.controller.configure({ pinnedRows }));
+      }
     });
     effect(() => {
       const pageSize = this.pageSize();
@@ -315,6 +334,11 @@ export class SuTableComponent<TRow extends object> {
   protected selectAll(selected?: boolean): void {
     this.controller.selectAll(selected);
     this.selectionChange.emit(this.controller.selectedRows());
+  }
+
+  protected pinRow(id: SuTableRowId): void {
+    this.controller.pinRow(id);
+    this.pinnedRowsChange.emit(this.state().pinnedRows.map(row => row.id));
   }
 
   protected runAction(

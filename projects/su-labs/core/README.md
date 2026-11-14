@@ -304,7 +304,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 
 | Member | Description |
 |--------|-------------|
-| `state` | Read-only store of everything to render: `columns`, `rows` (the current page), `pagination`, `sort`, `selectedIds`, `selection`, `bulkActions`, `editable`, `draft`, `grabbedId`, `announcement` |
+| `state` | Read-only store of everything to render: `columns`, `rows` (the current page), `pinnedRows`, `pagination`, `sort`, `selectedIds`, `selection`, `bulkActions`, `editable`, `draft`, `grabbedId`, `announcement` |
 | `configure(options)` | Changes the `columns`, `rowId`, `actions` or `labels` |
 | `setRows(rows)` | New rows, e.g. the API's answer; the selection keeps the rows still there |
 | `sortBy(key)` | Ascending, then descending, then the rows' own order |
@@ -318,6 +318,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `save()` | `{ ok: true, rows }` with the edited rows in the API's shape, or `{ ok: false, errors }` |
 | `cancelEdit()` | Stops editing |
 | `pinColumn(key, pin)` | Pins a column to `'start'` or `'end'`, or unpins it with `null` |
+| `pinRow(id, pinned?)` | Pins a row above the others on every page, or unpins it; without `pinned`, toggles. Start with the `pinnedRows` option |
 | `setPage(page)` / `setPageSize(size)` | Shows a page (from 0), or changes the rows per page (a number or `'all'`) keeping the first row in view; set them up with the `pageSize` and `pageSizes` options |
 
 `suTableDropIndex(pointerY, rowMiddles, fromIndex)` gives where a row dragged with the pointer lands, and

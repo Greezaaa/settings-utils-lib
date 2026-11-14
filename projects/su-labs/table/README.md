@@ -140,6 +140,8 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `columnControls` | `false` | A Columns button that opens a panel to pin or unpin each column |
 | `pageSize` | `'all'` | Rows per page |
 | `pageSizes` | `[]` | Page sizes to choose from under the table, e.g. `[10, 25, 50, 'all']` |
+| `rowPinning` | `false` | A Pin button on each row, keeping it above the others on every page |
+| `pinnedRows` | — | The ids of the rows pinned to start with |
 | `labels` | English | `Partial<SuTableLabels>`: any text, e.g. in the page's language |
 
 ### Outputs
@@ -152,6 +154,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `sortChange` | `{ key, direction } \| null` |
 | `selectionChange` | `readonly TRow[]` |
 | `pageChange` | `{ page, pageSize }`, the page from 0 |
+| `pinnedRowsChange` | The ids of the pinned rows, in pin order |
 
 The table shows your changes right away; update `rows` with the API's answer to keep them, or to undo a failed save.
 
@@ -204,6 +207,16 @@ pinned to the start, and the actions with those pinned to the end. A soft shadow
 columns scroll under it. With `columnControls`, people pin and unpin columns themselves from the Columns panel. If the
 pinned columns would leave too little room for the rest, they stop sticking until there's room again.
 
+## Pinned rows
+
+With `rowPinning`, each row gets a Pin button. Pinned rows stay above the others on every page, in the order they were
+pinned, and aren't counted in the pages or moved by sorting and reordering; unpinning puts a row back where it was.
+Start with some pinned, and keep track of them, e.g. to save them:
+
+```html
+<su-lib-table … rowPinning [pinnedRows]="[103]" (pinnedRowsChange)="savePins($event)" />
+```
+
 ## Pagination
 
 ```html
@@ -247,6 +260,7 @@ su-lib-table {
 | `--su-table-hover-background` / `--su-table-selected-background` / `--su-table-editing-background` | faint tints |
 | `--su-table-grabbed-background` / `--su-table-grabbed-outline` | blue tints |
 | `--su-table-dragging-background` / `--su-table-dragging-shadow` | `Canvas` / `0 8px 24px rgb(0 0 0 / 0.18)` (the row being dragged) |
+| `--su-table-pinned-row-background` / `--su-table-pinned-row-border` | a faint blue tint / `2px solid` blue at 40% (pinned rows, and the line under them) |
 | `--su-table-pinned-background` / `--su-table-pinned-shadow` | `Canvas` / `rgb(0 0 0 / 0.14)` (pinned cells, and the shadow on their edge) |
 | `--su-table-accent` | `#2563eb` (checkboxes) |
 | `--su-table-button-background` / `--su-table-button-border` / `--su-table-button-color` | `transparent` / `1px solid rgb(0 0 0 / 0.2)` / `inherit` |

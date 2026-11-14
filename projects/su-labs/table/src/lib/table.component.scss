@@ -65,6 +65,14 @@ tbody tr {
     --su-table-row-tint: var(--su-table-editing-background, color-mix(in srgb, #2563eb 5%, transparent));
   }
 
+  &.is-pinned-row {
+    --su-table-row-tint: var(--su-table-pinned-row-background, color-mix(in srgb, #2563eb 6%, transparent));
+  }
+
+  &.is-last-pinned-row > * {
+    border-bottom: var(--su-table-pinned-row-border, 2px solid color-mix(in srgb, #2563eb 40%, transparent));
+  }
+
   &.is-grabbed,
   &.is-dragging {
     --su-table-row-tint: var(--su-table-grabbed-background, color-mix(in srgb, #2563eb 14%, transparent));
@@ -235,6 +243,26 @@ tbody tr {
   &.is-danger {
     border-color: var(--su-table-danger-border, color-mix(in srgb, #b42318 35%, transparent));
     color: var(--su-table-danger-color, #b42318);
+  }
+
+  &.su-table-pin-button {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.3rem;
+
+    svg {
+      fill: currentColor;
+      opacity: 0.5;
+    }
+
+    &[aria-pressed='true'] {
+      border-color: var(--su-table-accent, #2563eb);
+      color: var(--su-table-accent, #2563eb);
+
+      svg {
+        opacity: 1;
+      }
+    }
   }
 
   &.is-quiet {

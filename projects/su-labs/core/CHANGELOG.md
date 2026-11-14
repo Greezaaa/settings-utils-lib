@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pinned columns in `@su-labs/core/table`: `pinned: 'start' | 'end'` on a column (`SuTablePin`), `pinColumn(key, pin)` to change it, announced; `state.columns` lists pinned columns first or last with their `pinned` side, and `state.rowHeaderKey` names the field that heads each row wherever it's pinned
 - Pagination: `pageSize` and `pageSizes` options (`SuTablePageSize`), `setPage(page)` and `setPageSize(size)` (keeping the first row on screen in view), announced; `state.rows` holds the current page and `state.pagination` its page, page count, sizes and range
 - A row moved with the keyboard takes the page with it; a dropped row moves within the current page
+- Pinned rows: `pinRow(id, pinned?)` and the `pinnedRows` option keep rows above the others on every page, outside the paging and the sort, announced; `state.pinnedRows` lists them and each row has `pinned`. Pinned rows don't move, and unpinning puts a row back where it was
 
 ### Changed
-- `selectAll()` selects the rows of the current page (every row without pagination), and `selectedIds` lists the selected rows on every page
+- `selectAll()` selects the rows on screen: the pinned ones and the current page (every row without pagination), and `selectedIds` lists the selected rows on every page
 
 ## [1.7.0] - 2026-11-14
 

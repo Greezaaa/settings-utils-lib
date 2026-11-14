@@ -127,10 +127,13 @@
       </tr>
     </thead>
     <tbody>
-      @for (row of current.rows; track row.id; let index = $index) {
+      @for (row of bodyRows(); track row.id; let rowIndex = $index) {
         @let editing = inlineDraft()?.ids?.[0] === row.id;
+        @let index = rowIndex - current.pinnedRows.length;
         <tr
-          data-su-row
+          [attr.data-su-row]="row.pinned ? null : ''"
+          [class.is-pinned-row]="row.pinned"
+          [class.is-last-pinned-row]="index === -1"
           [class.is-selected]="row.selected"
           [class.is-editing]="editing"
           [class.is-grabbed]="current.grabbedId === row.id"
@@ -140,20 +143,22 @@
         >
           @if (reorderable()) {
             <td class="su-table-handle-cell" [suTablePin]="pins[0]">
-              <button
-                type="button"
-                class="su-table-handle"
-                [attr.data-su-handle]="row.id"
-                [attr.aria-label]="t.moveRow(row.label)"
-                [attr.aria-pressed]="current.grabbedId === row.id"
-                (keydown)="onHandleKey($event, row.id)"
-                (pointerdown)="onHandleDown($event, row.id, index)"
-                (pointermove)="onHandleMove($event)"
-                (pointerup)="onHandleUp()"
-                (pointercancel)="onHandleCancel()"
-              >
-                <span class="su-table-grip" aria-hidden="true"></span>
-              </button>
+              @if (!row.pinned) {
+                <button
+                  type="button"
+                  class="su-table-handle"
+                  [attr.data-su-handle]="row.id"
+                  [attr.aria-label]="t.moveRow(row.label)"
+                  [attr.aria-pressed]="current.grabbedId === row.id"
+                  (keydown)="onHandleKey($event, row.id)"
+                  (pointerdown)="onHandleDown($event, row.id, index)"
+                  (pointermove)="onHandleMove($event)"
+                  (pointerup)="onHandleUp()"
+                  (pointercancel)="onHandleCancel()"
+                >
+                  <span class="su-table-grip" aria-hidden="true"></span>
+                </button>
+              }
             </td>
           }
           @if (selectable()) {
@@ -202,6 +207,20 @@
                   <button type="button" class="su-table-button is-primary" (click)="save()">{{ t.save }}</button>
                   <button type="button" class="su-table-button" (click)="cancelEdit()">{{ t.cancel }}</button>
                 } @else {
+                  @if (rowPinning()) {
+                    <button
+                      type="button"
+                      class="su-table-button su-table-pin-button"
+                      [attr.aria-pressed]="row.pinned"
+                      [attr.aria-label]="t.pinRow + ', ' + row.label"
+                      (click)="pinRow(row.id)"
+                    >
+                      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+                        <path d="M10 1.5 14.5 6l-1.6 1.6-1-.3-2.4 2.4.2 2.8-1.3 1.3L6 11 2.5 14.5 1.5 13.5 5 10 2.2 7.6l1.3-1.3 2.8.2 2.4-2.4-.3-1z" />
+                      </svg>
+                      {{ t.pinRow }}
+                    </button>
+                  }
                   @for (action of row.actions; track action.id) {
                     <button
                       type="button"

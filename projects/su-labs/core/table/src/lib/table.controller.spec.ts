@@ -583,3 +583,94 @@ describe('SuTableController pagination', () => {
     expect(names(table)[4]).toBe('User 5');
   });
 });
+
+describe('SuTableController row pinning', () => {
+  const MANY: readonly User[] = Array.from({ length: 8 }, (_, index) => ({
+    id: index + 1,
+    name: `User ${index + 1}`,
+    age: 40 - index,
+    admin: false,
+    status: 'active',
+    joined: '2024-01-01',
+  }));
+
+  const createPaged = () =>
+    new SuTableController<User>({
+      columns: COLUMNS,
+      rowId: user => user.id,
+      rows: MANY,
+      pageSize: 3,
+    });
+
+  const pinnedNames = (table: SuTableController<User>) =>
+    table.state.get().pinnedRows.map(row => row.data.name);
+
+  it('shows pinned rows above every page, outside the paging', () => {
+    const table = createPaged();
+    table.pinRow(5);
+    table.pinRow(2);
+
+    expect(pinnedNames(table)).toEqual(['User 5', 'User 2']);
+    expect(table.state.get().pinnedRows[0].pinned).toBe(true);
+    expect(names(table)).toEqual(['User 1', 'User 3', 'User 4']);
+    expect(table.state.get().pagination).toMatchObject({
+      totalRows: 6,
+      pageCount: 2,
+    });
+    expect(table.state.get().announcement).toBe('User 2 pinned to the top');
+
+    table.setPage(1);
+    expect(pinnedNames(table)).toEqual(['User 5', 'User 2']);
+    expect(names(table)).toEqual(['User 6', 'User 7', 'User 8']);
+  });
+
+  it('keeps pinned rows in pin order when sorting, and puts a row back where it was when unpinned', () => {
+    const table = createPaged();
+    table.pinRow(1);
+    table.sortBy('age');
+
+    expect(pinnedNames(table)).toEqual(['User 1']);
+    expect(names(table)).toEqual(['User 8', 'User 7', 'User 6']);
+
+    table.sortBy('age');
+    table.sortBy('age');
+    table.pinRow(1);
+    expect(table.state.get().pinnedRows).toEqual([]);
+    expect(names(table)[0]).toBe('User 1');
+    expect(table.state.get().announcement).toBe('User 1 unpinned');
+  });
+
+  it('starts with the pinned rows given, and forgets rows that are gone', () => {
+    const table = new SuTableController<User>({
+      columns: COLUMNS,
+      rowId: user => user.id,
+      rows: MANY,
+      pinnedRows: [3],
+    });
+    expect(pinnedNames(table)).toEqual(['User 3']);
+
+    table.setRows(MANY.filter(user => user.id !== 3));
+    expect(table.state.get().pinnedRows).toEqual([]);
+  });
+
+  it('moves only unpinned rows, keeping pinned ones in place', () => {
+    const table = createPaged();
+    table.pinRow(2);
+
+    expect(table.moveKey(2, ' ')).toEqual({ handled: true, order: null });
+    expect(table.state.get().grabbedId).toBeNull();
+
+    expect(table.move(1, 2)).toEqual([3, 2, 4, 1, 5, 6, 7, 8]);
+    table.pinRow(2);
+    expect(names(table)).toEqual(['User 3', 'User 2', 'User 4']);
+  });
+
+  it('selects the pinned rows and the page together', () => {
+    const table = createPaged();
+    table.pinRow(8);
+    table.selectAll();
+
+    expect(table.state.get().selectedIds).toEqual([1, 2, 3, 8]);
+    expect(table.state.get().selection).toBe('all');
+  });
+});

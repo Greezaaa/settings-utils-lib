@@ -47,4 +47,7 @@ export const SU_TABLE_LABELS: SuTableLabels = {
   page: (page, count) => `Page ${page} of ${count}`,
   previousPage: 'Previous page',
   nextPage: 'Next page',
+  pinRow: 'Pin',
+  rowPinned: rowLabel => `${rowLabel} pinned to the top`,
+  rowUnpinned: rowLabel => `${rowLabel} unpinned`,
 };
