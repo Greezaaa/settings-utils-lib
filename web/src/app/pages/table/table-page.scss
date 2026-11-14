@@ -1,0 +1,35 @@
+.table-demo {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.table-demo-controls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+
+  .button {
+    margin-left: auto;
+  }
+}
+
+.table-demo-title {
+  color: var(--heading);
+  font-size: 0.9375rem;
+  margin: 0 0 0.5rem;
+}
+
+.table-demo-json {
+  summary {
+    color: var(--heading);
+    cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  p {
+    font-size: 0.875rem;
+    margin: 0.75rem 0;
+  }
+}

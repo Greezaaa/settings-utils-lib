@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Vue, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services with signals.
 
 ## Table of Contents
 
@@ -17,6 +17,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Font Size](#font-size)
 - [Notifications](#notifications)
 - [Dialog](#dialog)
+- [Table](#table)
 - [Scroll Spy](#scroll-spy)
 - [Visit Tracker](#visit-tracker)
 - [Storage](#storage)
@@ -52,6 +53,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/font-size` | `SuFontSizeController` and font size types |
 | `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
 | `@su-labs/core/dialog` | `SuDialogController`, `suDialogBackdropColor` and dialog types |
+| `@su-labs/core/table` | `SuTableController`, the editors (`suTextEditor`, `suNumberEditor`, …), `SU_TABLE_LABELS` and table types |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 | `@su-labs/core/visit-tracker` | `SuVisitTrackerController` and visit types |
 
@@ -262,6 +264,77 @@ if (await dialogs.confirm({ title: 'Delete your results?', danger: true })) {
 | `backdropColor` / `backdropOpacity` | from the stylesheet | The tint's colour and how much it covers (0 to 1); `current.backdropColor` is ready for CSS |
 | `dismissible` | `true` | Whether Escape and a click outside close it as cancel |
 | `cssClass` | — | Extra class, to style one dialog its own way |
+
+## Table
+
+A data table's state, from your API's JSON: typed columns map each field to a cell, with sorting, selection,
+reordering and editing (one row, or many at once), all in one `state` store. Edited rows come back in the API's own
+shape. Your app renders the table (Angular: [`@su-labs/table`](https://www.npmjs.com/package/@su-labs/table)).
+
+```ts
+import { suNumberEditor, SuTableColumns, SuTableController, suTextEditor } from '@su-labs/core/table';
+
+interface User {
+  readonly id: number;
+  readonly name: string;
+  readonly age: number;
+}
+
+const columns: SuTableColumns<User> = [
+  { key: 'name', header: 'Name', sortable: true, edit: suTextEditor({ requiredMessage: 'Enter a name' }) },
+  { key: 'age', header: 'Age', sortable: true, format: (age) => `${age} years`, edit: suNumberEditor({ min: 0 }) },
+];
+
+const table = new SuTableController<User>({ columns, rowId: (user) => user.id, rows: await fetchUsers() });
+table.state.subscribe((state) => render(state)); // columns, rows (with their cell texts), draft, announcement…
+
+table.sortBy('age');
+table.startEdit([2]);
+table.setDraft('age', '33'); // the control's value, as typed
+const result = table.save();
+if (result.ok) {
+  await saveUsers(result.rows); // [{ id: 2, name: '…', age: 33 }]
+}
+```
+
+Render the table as a `<table>` with a caption, put `aria-sort` on sorted headings (`column.sort`), and read
+`state.announcement` out in a live region (`role="status"`).
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `state` | Read-only store of everything to render: `columns`, `rows`, `sort`, `selectedIds`, `selection`, `bulkActions`, `editable`, `draft`, `grabbedId`, `announcement` |
+| `configure(options)` | Changes the `columns`, `rowId`, `actions` or `labels` |
+| `setRows(rows)` | New rows, e.g. the API's answer; the selection keeps the rows still there |
+| `sortBy(key)` | Ascending, then descending, then the rows' own order |
+| `select(id, selected?)` / `selectAll(selected?)` / `clearSelection()` | Selection; without `selected`, toggles |
+| `selectedRows()` / `rowsOf(ids)` / `idOf(row)` | The rows behind ids, in display order |
+| `move(id, toIndex)` | Moves a row, e.g. on a drop; returns the new order of ids, or `null` |
+| `moveKey(id, key)` | Keyboard moves on a row's handle: Space or Enter picks up and drops, arrows, Home and End move, Escape or Tab put back; returns `{ handled, order }` |
+| `grab(id)` / `moveGrabbed(offset)` / `drop()` / `cancelMove()` | The same moves, one by one |
+| `startEdit(ids?)` | Edits these rows (by default the selected ones); many rows apply only the changed fields to all |
+| `setDraft(key, value)` | A field's value as typed in its control (`string`, or `boolean` for a checkbox) |
+| `save()` | `{ ok: true, rows }` with the edited rows in the API's shape, or `{ ok: false, errors }` |
+| `cancelEdit()` | Stops editing |
+
+`suTableDropIndex(pointerY, rowMiddles, fromIndex)` gives where a row dragged with the pointer lands, and
+`suCompareValues(a, b)` is the default comparison.
+
+### Columns and editors
+
+| Column field | Description |
+|--------------|-------------|
+| `key` / `header` | The field in the row, and the heading |
+| `format(value, row)` | The cell's text; by default the value (booleans as the `yes` and `no` labels) |
+| `sortable` | `true`, or how two values compare |
+| `edit` | `suTextEditor`, `suNumberEditor`, `suCheckboxEditor`, `suDateEditor`, `suSelectEditor`, or your own `{ input, toInput, parse, validate? }` |
+| `validate(value, row)` | A message when an edited value isn't valid for the row, or `null` |
+| `align` | `'start'`, `'center'` or `'end'` |
+
+Actions (`{ id, label, danger?, bulk?, hidden?(row), disabled?(row) }`) are resolved for each row in `rows[].actions`,
+and the bulk ones in `bulkActions`. Every text the table announces or shows is in `SU_TABLE_LABELS`; pass any of them
+as `labels`, e.g. in the page's language.
 
 ## Scroll Spy
 

@@ -49,6 +49,13 @@ export const UTILITIES: readonly SuUtility[] = [
     summary: 'Accessible confirm and message dialogs, answered with a promise and styled with CSS variables.',
   },
   {
+    slug: 'table',
+    name: 'Table',
+    packageName: '@su-labs/table',
+    coreEntry: '@su-labs/core/table',
+    summary: 'Data tables from your API’s JSON: sorting, inline and bulk editing, reordering and row actions.',
+  },
+  {
     slug: 'scroll-spy',
     name: 'Scroll spy',
     packageName: '@su-labs/scroll-spy',

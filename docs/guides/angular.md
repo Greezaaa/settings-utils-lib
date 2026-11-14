@@ -14,6 +14,7 @@ npm install @su-labs/font-size
 npm install @su-labs/notifications
 npm install @su-labs/scroll-spy
 npm install @su-labs/visit-tracker
+npm install @su-labs/table
 ```
 
 Requires Angular 22 or later.
@@ -27,6 +28,7 @@ Requires Angular 22 or later.
 | `@su-labs/notifications` | Toast notifications | [README](../../projects/su-labs/notifications/README.md) |
 | `@su-labs/scroll-spy` | Active section tracking while scrolling | [README](../../projects/su-labs/scroll-spy/README.md) |
 | `@su-labs/visit-tracker` | Visit counts and milestones | [README](../../projects/su-labs/visit-tracker/README.md) |
+| `@su-labs/table` | Data tables with sorting, selection, inline and bulk editing, reordering and row actions | [README](../../projects/su-labs/table/README.md) |
 
 ## Theme quick start
 
@@ -65,8 +67,53 @@ export class ThemeSwitcherComponent {
 }
 ```
 
-`@su-labs/theme`, `@su-labs/font-size`, `@su-labs/notifications`, `@su-labs/scroll-spy` and `@su-labs/visit-tracker` use `@su-labs/core` internally and install it automatically.
+`@su-labs/theme`, `@su-labs/font-size`, `@su-labs/notifications`, `@su-labs/scroll-spy`, `@su-labs/visit-tracker` and `@su-labs/table` use `@su-labs/core` internally and install it automatically.
+
+## Table quick start
+
+Map each field of your API's rows to a column; the table renders, sorts, selects, edits and reorders them:
+
+```ts
+import { Component, signal } from '@angular/core';
+import { suNumberEditor, SuTableColumns, SuTableComponent, suTextEditor } from '@su-labs/table';
+
+interface User {
+  readonly id: number;
+  readonly name: string;
+  readonly age: number;
+}
+
+@Component({
+  selector: 'app-users',
+  imports: [SuTableComponent],
+  template: `
+    <su-lib-table
+      caption="Users"
+      selectable
+      reorderable
+      [columns]="columns"
+      [rows]="users()"
+      [rowId]="userId"
+      [actions]="[{ id: 'edit', label: 'Edit' }]"
+      (edited)="save($event)"
+    />
+  `,
+})
+export class UsersComponent {
+  protected readonly users = signal<readonly User[]>([]);
+  protected readonly userId = (user: User) => user.id;
+  protected readonly columns: SuTableColumns<User> = [
+    { key: 'name', header: 'Name', sortable: true, edit: suTextEditor() },
+    { key: 'age', header: 'Age', sortable: true, edit: suNumberEditor({ min: 0 }) },
+  ];
+
+  protected save(rows: readonly User[]): void {
+    // the rows in the API's shape, ready to send
+  }
+}
+```
 
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/theme/README.md)
+- [Table setup and full API](../../projects/su-labs/table/README.md)

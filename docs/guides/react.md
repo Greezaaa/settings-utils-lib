@@ -269,6 +269,115 @@ export function Welcome() {
 
 Keep `init()` at module level, not in a component or effect. React Strict Mode runs effects twice in development, which would count two visits.
 
+## Table
+
+The controller keeps a data table's state from your API's rows: the cell texts, sorting, selection, order and
+editing. You render it as a real `<table>`, with `aria-sort` on the sorted heading and the announcement in a live
+region.
+
+### Setup
+
+```ts
+// src/table.ts
+import { suNumberEditor, SuTableColumns, SuTableController, suTextEditor } from '@su-labs/core/table';
+
+export interface User {
+  readonly id: number;
+  readonly name: string;
+  readonly age: number;
+}
+
+const columns: SuTableColumns<User> = [
+  { key: 'name', header: 'Name', sortable: true, edit: suTextEditor({ requiredMessage: 'Enter a name' }) },
+  { key: 'age', header: 'Age', sortable: true, edit: suNumberEditor({ min: 0 }) },
+];
+
+export const usersTable = new SuTableController<User>({ columns, rowId: (user) => user.id });
+```
+
+### Rendering the table
+
+```tsx
+import { useEffect, useSyncExternalStore } from 'react';
+import { usersTable } from './table';
+
+export function UsersTable() {
+  const state = useSyncExternalStore(usersTable.state.subscribe, usersTable.state.get, usersTable.state.get);
+
+  useEffect(() => {
+    fetch('/api/users')
+      .then((response) => response.json())
+      .then((users) => usersTable.setRows(users));
+  }, []);
+
+  return (
+    <>
+      <table>
+        <caption>Users</caption>
+        <thead>
+          <tr>
+            <th scope="col">
+              <input
+                type="checkbox"
+                aria-label="Select all rows"
+                checked={state.selection === 'all'}
+                onChange={() => usersTable.selectAll()}
+              />
+            </th>
+            {state.columns.map((column) => (
+              <th key={String(column.key)} scope="col" aria-sort={column.sort === 'none' ? undefined : column.sort}>
+                <button type="button" onClick={() => usersTable.sortBy(column.key)}>
+                  {column.header}
+                </button>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {state.rows.map((row) => (
+            <tr key={row.id}>
+              <td>
+                <input
+                  type="checkbox"
+                  aria-label={`Select ${row.label}`}
+                  checked={row.selected}
+                  onChange={() => usersTable.select(row.id)}
+                />
+              </td>
+              {row.cells.map((cell, index) =>
+                index === 0 ? (
+                  <th key={String(cell.key)} scope="row">{cell.text}</th>
+                ) : (
+                  <td key={String(cell.key)}>{cell.text}</td>
+                ),
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div role="status" className="visually-hidden">{state.announcement}</div>
+    </>
+  );
+}
+```
+
+### Editing
+
+`startEdit` edits one row (every field) or many (only the fields that change apply to all). Bind each control of
+`state.draft.fields` to `setDraft`, then `save()` returns the rows in the API's shape:
+
+```ts
+usersTable.startEdit([user.id]); // or startEdit() for the selected rows
+usersTable.setDraft('age', '33'); // the control's value as typed: text, or a boolean for a checkbox
+const result = usersTable.save();
+if (result.ok) {
+  await api.saveUsers(result.rows);
+} // otherwise each field of state.draft has its error message
+```
+
+Moving a row with the keyboard is one call on its handle's keydown:
+`if (usersTable.moveKey(row.id, event.key).handled) event.preventDefault();`
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -276,4 +385,5 @@ Keep `init()` at module level, not in a component or effect. React Strict Mode r
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
+- [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Node and server-side rendering](node.md)

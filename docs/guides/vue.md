@@ -246,6 +246,111 @@ const visit = useStore(visitTracker.visit);
 </template>
 ```
 
+## Table
+
+The controller keeps a data table's state from your API's rows: the cell texts, sorting, selection, order and
+editing. You render it as a real `<table>`, with `aria-sort` on the sorted heading and the announcement in a live
+region.
+
+### Setup
+
+```ts
+// src/lib/users-table.ts
+import { suNumberEditor, SuTableColumns, SuTableController, suTextEditor } from '@su-labs/core/table';
+
+export interface User {
+  readonly id: number;
+  readonly name: string;
+  readonly age: number;
+}
+
+const columns: SuTableColumns<User> = [
+  { key: 'name', header: 'Name', sortable: true, edit: suTextEditor({ requiredMessage: 'Enter a name' }) },
+  { key: 'age', header: 'Age', sortable: true, edit: suNumberEditor({ min: 0 }) },
+];
+
+export const usersTable = new SuTableController<User>({ columns, rowId: (user) => user.id });
+```
+
+### Rendering the table
+
+```vue
+<!-- src/components/UsersTable.vue -->
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { useStore } from '@/composables/use-store';
+import { usersTable } from '@/lib/users-table';
+
+const state = useStore(usersTable.state);
+
+onMounted(async () => usersTable.setRows(await fetch('/api/users').then((response) => response.json())));
+</script>
+
+<template>
+  <table>
+    <caption>Users</caption>
+    <thead>
+      <tr>
+        <th scope="col">
+          <input
+            type="checkbox"
+            aria-label="Select all rows"
+            :checked="state.selection === 'all'"
+            @change="usersTable.selectAll()"
+          />
+        </th>
+        <th
+          v-for="column in state.columns"
+          :key="String(column.key)"
+          scope="col"
+          :aria-sort="column.sort === 'none' ? undefined : column.sort"
+        >
+          <button type="button" @click="usersTable.sortBy(column.key)">{{ column.header }}</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="row in state.rows" :key="row.id">
+        <td>
+          <input
+            type="checkbox"
+            :aria-label="`Select ${row.label}`"
+            :checked="row.selected"
+            @change="usersTable.select(row.id)"
+          />
+        </td>
+        <component
+          :is="index === 0 ? 'th' : 'td'"
+          v-for="(cell, index) in row.cells"
+          :key="String(cell.key)"
+          :scope="index === 0 ? 'row' : undefined"
+        >
+          {{ cell.text }}
+        </component>
+      </tr>
+    </tbody>
+  </table>
+  <div role="status" class="visually-hidden">{{ state.announcement }}</div>
+</template>
+```
+
+### Editing
+
+`startEdit` edits one row (every field) or many (only the fields that change apply to all). Bind each control of
+`state.draft.fields` to `setDraft`, then `save()` returns the rows in the API's shape:
+
+```ts
+usersTable.startEdit([user.id]); // or startEdit() for the selected rows
+usersTable.setDraft('age', '33'); // the control's value as typed: text, or a boolean for a checkbox
+const result = usersTable.save();
+if (result.ok) {
+  await api.saveUsers(result.rows);
+} // otherwise each field of state.draft has its error message
+```
+
+Moving a row with the keyboard is one call on its handle's keydown:
+`if (usersTable.moveKey(row.id, event.key).handled) event.preventDefault();`
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -253,4 +358,5 @@ const visit = useStore(visitTracker.visit);
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
+- [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Node and server-side rendering](node.md)

@@ -46,6 +46,7 @@ npm install @su-labs/core
 - Theme management (`@su-labs/core/theme`)
 - Font size controls (`@su-labs/core/font-size`)
 - Toast notifications (`@su-labs/core/notifications`)
+- Data tables (`@su-labs/core/table`)
 - Scroll spy (`@su-labs/core/scroll-spy`)
 - Visit tracking (`@su-labs/core/visit-tracker`)
 - Works in any framework or none
@@ -77,6 +78,26 @@ npm install @su-labs/visit-tracker
 - Reactive signals API
 
 [Documentation](https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/visit-tracker#readme)
+
+---
+
+### [@su-labs/table](https://www.npmjs.com/package/@su-labs/table)
+Accessible data tables mapped from your API's JSON with typed columns.
+
+[![npm](https://img.shields.io/npm/v/@su-labs/table?style=flat-square)](https://www.npmjs.com/package/@su-labs/table)
+[![downloads](https://img.shields.io/npm/dt/@su-labs/table?style=flat-square)](https://www.npmjs.com/package/@su-labs/table)
+
+```bash
+npm install @su-labs/table
+```
+
+**Features:**
+- Typed columns from your API's rows
+- Sorting, selection, inline and bulk editing
+- Drag-and-drop and keyboard reordering
+- Row and bulk actions, announced changes
+
+[Documentation](https://github.com/Greezaaa/settings-utils-lib/tree/main/projects/su-labs/table#readme)
 
 ---
 
@@ -251,6 +272,7 @@ settings-utils-lib/
 │       ├── theme/
 │       ├── notifications/
 │       ├── scroll-spy/
+│       ├── table/
 │       └── font-size/
 ├── web/                # Website with live demos (su-labs.dev)
 ├── dist/               # Build output
@@ -272,6 +294,7 @@ npm run build:visit-tracker
 npm run build:theme
 npm run build:notifications
 npm run build:scroll-spy
+npm run build:table
 npm run build:font-size
 ```
 

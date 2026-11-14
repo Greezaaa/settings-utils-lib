@@ -1,0 +1,192 @@
+@let current = state();
+@let t = text();
+@let selectedCount = current.selectedIds.length;
+@if (selectable() && selectedCount > 0) {
+  <div class="su-table-toolbar" role="toolbar" [attr.aria-label]="t.selected(selectedCount)">
+    <span class="su-table-toolbar-count">{{ t.selected(selectedCount) }}</span>
+    @if (current.editable && !current.draft) {
+      <button type="button" class="su-table-button" (click)="editSelected()">
+        {{ t.editSelected(selectedCount) }}
+      </button>
+    }
+    @for (action of current.bulkActions; track action.id) {
+      <button type="button" class="su-table-button" [class.is-danger]="action.danger" (click)="runBulkAction(action)">
+        {{ action.label }}
+      </button>
+    }
+    <button type="button" class="su-table-button is-quiet" (click)="selectAll(false)">{{ t.clearSelection }}</button>
+  </div>
+}
+
+@if (bulkDraft(); as draft) {
+  <form
+    class="su-table-bulk"
+    [attr.aria-labelledby]="tableId + '-bulk-title'"
+    (submit)="save($event)"
+    (keydown.escape)="cancelEdit()"
+  >
+    <h3 class="su-table-bulk-title" [id]="tableId + '-bulk-title'">{{ t.editing(draft.ids.length) }}</h3>
+    <div class="su-table-bulk-fields">
+      @for (field of draft.fields; track field.key) {
+        <div class="su-table-bulk-field">
+          <label class="su-table-label" [for]="controlId('bulk', field.key)">{{ field.header }}</label>
+          <su-lib-table-field
+            [field]="field"
+            [controlId]="controlId('bulk', field.key)"
+            [mixedLabel]="t.mixed"
+            (valueChange)="setDraft(field.key, $event)"
+          />
+        </div>
+      }
+    </div>
+    <div class="su-table-bulk-actions">
+      <button type="submit" class="su-table-button is-primary">{{ t.save }}</button>
+      <button type="button" class="su-table-button" (click)="cancelEdit()">{{ t.cancel }}</button>
+    </div>
+  </form>
+}
+
+<div class="su-table-scroll">
+  <table class="su-table-grid" [class.is-dragging-rows]="drag() !== null">
+    <caption [class.su-table-visually-hidden]="!showCaption()">{{ caption() }}</caption>
+    <thead>
+      <tr>
+        @if (reorderable()) {
+          <th scope="col" class="su-table-handle-cell">
+            <span class="su-table-visually-hidden">{{ t.order }}</span>
+          </th>
+        }
+        @if (selectable()) {
+          <th scope="col" class="su-table-select-cell">
+            <input
+              type="checkbox"
+              class="su-table-checkbox"
+              [checked]="current.selection === 'all'"
+              [indeterminate]="current.selection === 'some'"
+              [disabled]="current.rows.length === 0"
+              [attr.aria-label]="t.selectAll"
+              (change)="selectAll()"
+            />
+          </th>
+        }
+        @for (column of current.columns; track column.key) {
+          <th
+            scope="col"
+            class="su-table-align-{{ column.align }}"
+            [attr.aria-sort]="column.sort === 'none' ? null : column.sort"
+          >
+            @if (column.sortable) {
+              <button type="button" class="su-table-sort" (click)="sortBy(column.key)">
+                {{ column.header }}
+                <span class="su-table-sort-icon is-{{ column.sort }}" aria-hidden="true"></span>
+              </button>
+            } @else {
+              {{ column.header }}
+            }
+          </th>
+        }
+        @if (hasActions()) {
+          <th scope="col" class="su-table-actions-cell">{{ t.actions }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of current.rows; track row.id; let index = $index) {
+        @let editing = inlineDraft()?.ids?.[0] === row.id;
+        <tr
+          data-su-row
+          [class.is-selected]="row.selected"
+          [class.is-editing]="editing"
+          [class.is-grabbed]="current.grabbedId === row.id"
+          [class.is-dragging]="drag()?.id === row.id"
+          [style.transform]="dragTransform(index)"
+          (keydown)="editing && onEditKey($event)"
+        >
+          @if (reorderable()) {
+            <td class="su-table-handle-cell">
+              <button
+                type="button"
+                class="su-table-handle"
+                [attr.data-su-handle]="row.id"
+                [attr.aria-label]="t.moveRow(row.label)"
+                [attr.aria-pressed]="current.grabbedId === row.id"
+                (keydown)="onHandleKey($event, row.id)"
+                (pointerdown)="onHandleDown($event, row.id, index)"
+                (pointermove)="onHandleMove($event)"
+                (pointerup)="onHandleUp()"
+                (pointercancel)="onHandleCancel()"
+              >
+                <span class="su-table-grip" aria-hidden="true"></span>
+              </button>
+            </td>
+          }
+          @if (selectable()) {
+            <td class="su-table-select-cell">
+              <input
+                type="checkbox"
+                class="su-table-checkbox"
+                [checked]="row.selected"
+                [attr.aria-label]="t.selectRow(row.label)"
+                (change)="select(row.id)"
+              />
+            </td>
+          }
+          @for (cell of row.cells; track cell.key; let first = $first, cellIndex = $index) {
+            @let column = current.columns[cellIndex];
+            <ng-template #content>
+              @if (editing && inlineField(cell.key); as field) {
+                <su-lib-table-field
+                  [field]="field"
+                  [controlId]="controlId(row.id, cell.key)"
+                  [ariaLabel]="column.header"
+                  [mixedLabel]="t.mixed"
+                  (valueChange)="setDraft(cell.key, $event)"
+                />
+              } @else if (cellTemplate(cell.key); as template) {
+                <ng-container *ngTemplateOutlet="template; context: { $implicit: row.data, text: cell.text }" />
+              } @else {
+                {{ cell.text }}
+              }
+            </ng-template>
+            @if (first) {
+              <th scope="row" class="su-table-align-{{ column.align }}">
+                <ng-container *ngTemplateOutlet="content" />
+              </th>
+            } @else {
+              <td class="su-table-align-{{ column.align }}"><ng-container *ngTemplateOutlet="content" /></td>
+            }
+          }
+          @if (hasActions()) {
+            <td class="su-table-actions-cell">
+              <div class="su-table-actions">
+                @if (editing) {
+                  <button type="button" class="su-table-button is-primary" (click)="save()">{{ t.save }}</button>
+                  <button type="button" class="su-table-button" (click)="cancelEdit()">{{ t.cancel }}</button>
+                } @else {
+                  @for (action of row.actions; track action.id) {
+                    <button
+                      type="button"
+                      class="su-table-button"
+                      [class.is-danger]="action.danger"
+                      [disabled]="action.disabled"
+                      [attr.aria-label]="action.label + ', ' + row.label"
+                      (click)="runAction(action, row)"
+                    >
+                      {{ action.label }}
+                    </button>
+                  }
+                }
+              </div>
+            </td>
+          }
+        </tr>
+      } @empty {
+        <tr>
+          <td class="su-table-empty" [attr.colspan]="columnCount()">{{ t.empty }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<div class="su-table-visually-hidden" role="status">{{ current.announcement }}</div>

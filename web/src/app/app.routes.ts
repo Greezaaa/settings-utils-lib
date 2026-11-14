@@ -45,6 +45,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/dialog/dialog-page').then((m) => m.DialogPage),
   },
   {
+    path: 'table',
+    title: `Table · ${SITE_NAME}`,
+    data: utilityMeta('table'),
+    loadComponent: () => import('./pages/table/table-page').then((m) => m.TablePage),
+  },
+  {
     path: 'scroll-spy',
     title: `Scroll spy · ${SITE_NAME}`,
     data: utilityMeta('scroll-spy'),

@@ -230,6 +230,80 @@ Greet returning visitors:
 
 Call `init()` once per page load; every call counts as a visit.
 
+## Table
+
+The controller keeps a data table's state from your API's rows: the cell texts, sorting, selection, order and
+editing. You render it as a real `<table>`, with `aria-sort` on the sorted heading and the announcement in a live
+region.
+
+```html
+<table>
+  <caption>Users</caption>
+  <thead><tr id="headings"></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<div role="status" class="visually-hidden" id="announcement"></div>
+
+<script type="module">
+  import { suNumberEditor, SuTableController, suTextEditor } from 'https://esm.sh/@su-labs/core@1.7.0/table';
+
+  const table = new SuTableController({
+    columns: [
+      { key: 'name', header: 'Name', sortable: true, edit: suTextEditor() },
+      { key: 'age', header: 'Age', sortable: true, edit: suNumberEditor({ min: 0 }) },
+    ],
+    rowId: (user) => user.id,
+    rows: await fetch('/api/users').then((response) => response.json()),
+  });
+
+  table.state.subscribe((state) => {
+    document.querySelector('#headings').replaceChildren(
+      ...state.columns.map((column) => {
+        const heading = document.createElement('th');
+        heading.scope = 'col';
+        if (column.sort !== 'none') heading.ariaSort = column.sort;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = column.header;
+        button.addEventListener('click', () => table.sortBy(column.key));
+        heading.append(button);
+        return heading;
+      }),
+    );
+    document.querySelector('#rows').replaceChildren(
+      ...state.rows.map((row) => {
+        const tr = document.createElement('tr');
+        row.cells.forEach((cell, index) => {
+          const td = document.createElement(index === 0 ? 'th' : 'td');
+          if (index === 0) td.scope = 'row';
+          td.textContent = cell.text;
+          tr.append(td);
+        });
+        return tr;
+      }),
+    );
+    document.querySelector('#announcement').textContent = state.announcement;
+  });
+</script>
+```
+
+### Editing
+
+`startEdit` edits one row (every field) or many (only the fields that change apply to all). Bind each control of
+`state.draft.fields` to `setDraft`, then `save()` returns the rows in the API's shape:
+
+```ts
+table.startEdit([user.id]); // or startEdit() for the selected rows
+table.setDraft('age', '33'); // the control's value as typed: text, or a boolean for a checkbox
+const result = table.save();
+if (result.ok) {
+  await fetch('/api/users', { method: 'PUT', body: JSON.stringify(result.rows) });
+} // otherwise each field of state.draft has its error message
+```
+
+Moving a row with the keyboard is one call on its handle's keydown:
+`if (table.moveKey(row.id, event.key).handled) event.preventDefault();`
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -237,4 +311,5 @@ Call `init()` once per page load; every call counts as a visit.
 - [Notification options and full API](../../projects/su-labs/core/README.md#notifications)
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
+- [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Node and server-side rendering](node.md)

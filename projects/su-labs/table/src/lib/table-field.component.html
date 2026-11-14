@@ -1,0 +1,70 @@
+@let item = field();
+@let attributes = item.editor.attributes;
+@switch (item.editor.input) {
+  @case ('checkbox') {
+    <input
+      type="checkbox"
+      class="su-table-checkbox"
+      [id]="controlId()"
+      [checked]="item.value === true"
+      [indeterminate]="item.mixed"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-invalid]="item.error ? true : null"
+      [attr.aria-describedby]="item.error ? errorId() : null"
+      (change)="onChange($event)"
+    />
+  }
+  @case ('select') {
+    <select
+      class="su-table-control"
+      [id]="controlId()"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-invalid]="item.error ? true : null"
+      [attr.aria-describedby]="item.error ? errorId() : null"
+      (change)="onChange($event)"
+    >
+      @if (item.mixed) {
+        <option value="" disabled selected>{{ mixedLabel() }}</option>
+      }
+      @for (option of item.editor.options; track option.value) {
+        <option [value]="option.value" [selected]="!item.mixed && option.value === item.value">
+          {{ option.label }}
+        </option>
+      }
+    </select>
+  }
+  @case ('textarea') {
+    <textarea
+      class="su-table-control"
+      rows="2"
+      [id]="controlId()"
+      [value]="item.value"
+      [attr.placeholder]="placeholder()"
+      [attr.maxlength]="attributes.maxLength ?? null"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-invalid]="item.error ? true : null"
+      [attr.aria-describedby]="item.error ? errorId() : null"
+      (input)="onChange($event)"
+    ></textarea>
+  }
+  @default {
+    <input
+      class="su-table-control"
+      [type]="item.editor.input"
+      [id]="controlId()"
+      [value]="item.value"
+      [attr.placeholder]="placeholder()"
+      [attr.min]="attributes.min ?? null"
+      [attr.max]="attributes.max ?? null"
+      [attr.step]="attributes.step ?? null"
+      [attr.maxlength]="attributes.maxLength ?? null"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-invalid]="item.error ? true : null"
+      [attr.aria-describedby]="item.error ? errorId() : null"
+      (input)="onChange($event)"
+    />
+  }
+}
+@if (item.error) {
+  <span class="su-table-error" [id]="errorId()">{{ item.error }}</span>
+}

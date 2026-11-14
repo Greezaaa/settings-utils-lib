@@ -1,0 +1,70 @@
+<app-utility-page [utility]="utility" [usage]="usage">
+  <div class="card table-demo">
+    <div class="table-demo-controls">
+      <label class="checkbox">
+        <input type="checkbox" [checked]="selectable()" (change)="setFlag(selectable.set, $event)" />
+        Select rows (bulk edit and delete)
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="reorderable()" (change)="setFlag(reorderable.set, $event)" />
+        Reorder rows (drag the handle, or Space and the arrow keys)
+      </label>
+      <button type="button" class="button button-small" (click)="restore()">Restore the products</button>
+    </div>
+
+    <details class="table-demo-json">
+      <summary>The products JSON, as the API sends it</summary>
+      <p class="muted">
+        Each column maps one of these fields, and every change keeps their shape.
+        <br />
+        Edit, reorder or delete a row to see it change here.
+      </p>
+      <app-code-block [code]="productsJson()" />
+    </details>
+
+    <su-lib-table
+      caption="Products"
+      [columns]="columns"
+      [rows]="products()"
+      [rowId]="productId"
+      [actions]="actions"
+      [selectable]="selectable()"
+      [reorderable]="reorderable()"
+      (edited)="onEdited($event)"
+      (reordered)="onReordered($event)"
+      (action)="onAction($event)"
+      (sortChange)="onSort($event)"
+      (selectionChange)="selectedCount.set($event.length)"
+    >
+      <ng-template suTableCell="inStock" [suTableCellOf]="products()" let-product let-text="text">
+        <span class="tag" [class.tag-green]="product.inStock">{{ text }}</span>
+      </ng-template>
+    </su-lib-table>
+
+    <div class="demo-grid">
+      <div>
+        <h3 class="table-demo-title">What the app would send to the API</h3>
+        <app-code-block [code]="request()" />
+      </div>
+      <dl class="state-list">
+        <div>
+          <dt>Rows</dt>
+          <dd>{{ products().length }}</dd>
+        </div>
+        <div>
+          <dt>Selected</dt>
+          <dd>{{ selectable() ? selectedCount() : '—' }}</dd>
+        </div>
+        <div>
+          <dt>Sorted by</dt>
+          <dd>{{ sort() }}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  <p class="muted">
+    Every edit comes back in the API’s own shape, so the app sends it as it is.
+    <br />
+    Try it: click Edit on a row, or select a few rows and edit them together.
+  </p>
+</app-utility-page>

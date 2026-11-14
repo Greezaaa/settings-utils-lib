@@ -1,0 +1,290 @@
+:host {
+  color: var(--su-table-text-color, inherit);
+  display: block;
+  font-family: var(--su-table-font-family, inherit);
+  font-size: var(--su-table-font-size, 0.95rem);
+}
+
+.su-table-scroll {
+  border: var(--su-table-border, 1px solid rgb(0 0 0 / 0.12));
+  border-radius: var(--su-table-radius, 10px);
+  overflow-x: auto;
+}
+
+.su-table-grid {
+  background: var(--su-table-background, transparent);
+  border-collapse: collapse;
+  min-width: 100%;
+}
+
+caption {
+  caption-side: top;
+  font-weight: 600;
+  padding: var(--su-table-cell-padding, 0.6rem 0.75rem);
+  text-align: start;
+}
+
+th,
+td {
+  border-bottom: var(--su-table-row-border, 1px solid rgb(0 0 0 / 0.08));
+  padding: var(--su-table-cell-padding, 0.6rem 0.75rem);
+  text-align: start;
+  vertical-align: middle;
+}
+
+thead th {
+  background: var(--su-table-header-background, rgb(0 0 0 / 0.03));
+  color: var(--su-table-header-color, inherit);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+tbody th {
+  font-weight: var(--su-table-row-header-weight, 600);
+}
+
+tbody tr:last-child > * {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: var(--su-table-hover-background, rgb(0 0 0 / 0.025));
+}
+
+tr.is-selected {
+  background: var(--su-table-selected-background, color-mix(in srgb, #2563eb 8%, transparent));
+}
+
+tr.is-editing {
+  background: var(--su-table-editing-background, color-mix(in srgb, #2563eb 5%, transparent));
+}
+
+tr.is-grabbed,
+tr.is-dragging {
+  background: var(--su-table-grabbed-background, color-mix(in srgb, #2563eb 14%, transparent));
+  outline: var(--su-table-grabbed-outline, 2px solid color-mix(in srgb, #2563eb 60%, transparent));
+  outline-offset: -2px;
+}
+
+tr.is-dragging {
+  --su-table-row-tint: var(--su-table-grabbed-background, color-mix(in srgb, #2563eb 14%, transparent));
+  background: linear-gradient(var(--su-table-row-tint), var(--su-table-row-tint)),
+    var(--su-table-dragging-background, Canvas);
+  box-shadow: var(--su-table-dragging-shadow, 0 8px 24px rgb(0 0 0 / 0.18));
+  cursor: grabbing;
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-dragging-rows tbody tr:not(.is-dragging) {
+    transition: transform 150ms ease-out;
+  }
+}
+
+.su-table-align-start {
+  text-align: start;
+}
+
+.su-table-align-center {
+  text-align: center;
+}
+
+.su-table-align-end {
+  text-align: end;
+}
+
+.su-table-handle-cell,
+.su-table-select-cell {
+  text-align: center;
+  width: 1%;
+}
+
+.su-table-actions-cell {
+  text-align: end;
+  width: 1%;
+}
+
+.su-table-actions {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
+.su-table-sort {
+  align-items: center;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  gap: 0.35rem;
+  margin: -0.2rem -0.35rem;
+  padding: 0.2rem 0.35rem;
+}
+
+.su-table-sort-icon {
+  border-left: 0.3rem solid transparent;
+  border-right: 0.3rem solid transparent;
+  height: 0;
+  opacity: 0.35;
+  width: 0;
+
+  &.is-none,
+  &.is-ascending {
+    border-bottom: 0.4rem solid currentColor;
+  }
+
+  &.is-descending {
+    border-top: 0.4rem solid currentColor;
+  }
+
+  &.is-ascending,
+  &.is-descending {
+    opacity: 1;
+  }
+}
+
+.su-table-handle {
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: inherit;
+  cursor: grab;
+  display: inline-flex;
+  padding: 0.35rem 0.3rem;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.su-table-grip {
+  background-image: radial-gradient(currentColor 1.2px, transparent 1.4px);
+  background-size: 6px 6px;
+  display: block;
+  height: 18px;
+  opacity: 0.6;
+  width: 12px;
+}
+
+.su-table-button {
+  background: var(--su-table-button-background, transparent);
+  border: var(--su-table-button-border, 1px solid rgb(0 0 0 / 0.2));
+  border-radius: var(--su-table-button-radius, 6px);
+  color: var(--su-table-button-color, inherit);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875em;
+  padding: var(--su-table-button-padding, 0.3rem 0.7rem);
+  white-space: nowrap;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  &.is-primary {
+    background: var(--su-table-primary-background, #111);
+    border-color: transparent;
+    color: var(--su-table-primary-color, #fff);
+  }
+
+  &.is-danger {
+    border-color: var(--su-table-danger-border, color-mix(in srgb, #b42318 35%, transparent));
+    color: var(--su-table-danger-color, #b42318);
+  }
+
+  &.is-quiet {
+    border-color: transparent;
+  }
+}
+
+.su-table-sort,
+.su-table-handle,
+.su-table-button,
+.su-table-checkbox {
+  &:focus-visible {
+    outline: var(--su-table-focus-outline, 2px solid currentColor);
+    outline-offset: 2px;
+  }
+}
+
+.su-table-checkbox {
+  accent-color: var(--su-table-accent, #2563eb);
+  height: 1rem;
+  margin: 0;
+  width: 1rem;
+}
+
+.su-table-toolbar,
+.su-table-bulk {
+  background: var(--su-table-panel-background, rgb(0 0 0 / 0.03));
+  border-radius: var(--su-table-radius, 10px);
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.su-table-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.su-table-toolbar-count {
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.su-table-bulk-title {
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.su-table-bulk-fields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+}
+
+.su-table-bulk-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.su-table-label {
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.su-table-bulk-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.su-table-empty {
+  opacity: 0.7;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.su-table-visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  tbody tr {
+    transition: background-color 120ms ease-out;
+  }
+}

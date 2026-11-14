@@ -27,14 +27,16 @@ Every utility is available in `@su-labs/core` for any environment, and as an Ang
 | Notifications | `@su-labs/core/notifications` | `@su-labs/notifications` |
 | Scroll spy | `@su-labs/core/scroll-spy` | `@su-labs/scroll-spy` |
 | Visit tracker | `@su-labs/core/visit-tracker` | `@su-labs/visit-tracker` |
+| Table | `@su-labs/core/table` | `@su-labs/table` |
 
 ## API reference
 
 The full API of each utility is documented in its package README:
 
-- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, scroll spy, visit tracker)
+- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, dialog, table, scroll spy, visit tracker)
 - [`@su-labs/theme`](../projects/su-labs/theme/README.md)
 - [`@su-labs/font-size`](../projects/su-labs/font-size/README.md)
 - [`@su-labs/notifications`](../projects/su-labs/notifications/README.md)
 - [`@su-labs/scroll-spy`](../projects/su-labs/scroll-spy/README.md)
 - [`@su-labs/visit-tracker`](../projects/su-labs/visit-tracker/README.md)
+- [`@su-labs/table`](../projects/su-labs/table/README.md)

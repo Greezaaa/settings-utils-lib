@@ -45,6 +45,9 @@
       "@su-labs/visit-tracker": [
         "./dist/su-labs/visit-tracker"
       ],
+      "@su-labs/table": [
+        "./dist/su-labs/table"
+      ],
     }
   },
   "angularCompilerOptions": {
@@ -79,6 +82,9 @@
     },
     {
       "path": "./projects/su-labs/theme/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/table/tsconfig.lib.json"
     },
     {
       "path": "./web/tsconfig.app.json"

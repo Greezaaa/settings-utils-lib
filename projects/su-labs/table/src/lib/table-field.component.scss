@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.su-table-control {
+  background: var(--su-table-input-background, transparent);
+  border: var(--su-table-input-border, 1px solid rgb(0 0 0 / 0.25));
+  border-radius: var(--su-table-input-radius, 6px);
+  box-sizing: border-box;
+  color: inherit;
+  font: inherit;
+  min-height: 2rem;
+  min-width: 6rem;
+  padding: 0.3rem 0.45rem;
+  width: 100%;
+
+  &[aria-invalid='true'] {
+    border-color: var(--su-table-danger-color, #b42318);
+  }
+
+  &:focus-visible {
+    outline: var(--su-table-focus-outline, 2px solid currentColor);
+    outline-offset: 2px;
+  }
+}
+
+.su-table-checkbox {
+  accent-color: var(--su-table-accent, #2563eb);
+  height: 1rem;
+  margin: 0;
+  width: 1rem;
+
+  &:focus-visible {
+    outline: var(--su-table-focus-outline, 2px solid currentColor);
+    outline-offset: 2px;
+  }
+}
+
+.su-table-error {
+  color: var(--su-table-danger-color, #b42318);
+  font-size: 0.8em;
+  font-weight: 400;
+}

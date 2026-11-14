@@ -64,6 +64,29 @@
   --su-dialog-danger-color: var(--red-text);
   --su-dialog-danger-border: 1px solid color-mix(in srgb, var(--red-text) 35%, transparent);
 
+  --su-table-background: var(--surface);
+  --su-table-dragging-background: var(--surface);
+  --su-table-text-color: var(--text);
+  --su-table-border: 1px solid var(--border);
+  --su-table-row-border: 1px solid var(--border);
+  --su-table-radius: var(--radius-large);
+  --su-table-header-background: var(--subtle);
+  --su-table-header-color: var(--heading);
+  --su-table-hover-background: color-mix(in srgb, var(--subtle) 60%, transparent);
+  --su-table-selected-background: var(--blue-bg);
+  --su-table-editing-background: var(--subtle);
+  --su-table-panel-background: var(--subtle);
+  --su-table-accent: var(--accent);
+  --su-table-button-border: 1px solid var(--border);
+  --su-table-button-color: var(--heading);
+  --su-table-button-radius: var(--radius);
+  --su-table-primary-background: var(--button-bg);
+  --su-table-primary-color: var(--button-text);
+  --su-table-danger-color: var(--red-text);
+  --su-table-danger-border: color-mix(in srgb, var(--red-text) 35%, transparent);
+  --su-table-input-background: var(--surface);
+  --su-table-input-border: 1px solid var(--border);
+
   color-scheme: light;
 }
 

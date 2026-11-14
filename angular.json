@@ -1,198 +1,198 @@
 {
-	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-	"version": 1,
-	"newProjectRoot": "projects",
-	"projects": {
-		"web": {
-			"projectType": "application",
-			"root": "web",
-			"sourceRoot": "web/src",
-			"prefix": "app",
-			"architect": {
-				"build": {
-					"builder": "@angular/build:application",
-					"options": {
-						"browser": "web/src/main.ts",
-						"server": "web/src/main.server.ts",
-						"outputMode": "static",
-						"tsConfig": "web/tsconfig.app.json",
-						"inlineStyleLanguage": "scss",
-						"assets": [
-							{
-								"glob": "**/*",
-								"input": "web/public"
-							}
-						],
-						"styles": [
-							"web/src/styles.scss"
-						]
-					},
-					"configurations": {
-						"production": {
-							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "500kB",
-									"maximumError": "1MB"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "4kB",
-									"maximumError": "8kB"
-								}
-							],
-							"outputHashing": "all"
-						},
-						"development": {
-							"optimization": false,
-							"extractLicenses": false,
-							"sourceMap": true
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"serve": {
-					"builder": "@angular/build:dev-server",
-					"configurations": {
-						"production": {
-							"buildTarget": "web:build:production"
-						},
-						"development": {
-							"buildTarget": "web:build:development"
-						}
-					},
-					"defaultConfiguration": "development"
-				}
-			}
-		},
-		"games": {
-			"projectType": "application",
-			"root": "games",
-			"sourceRoot": "games/src",
-			"prefix": "app",
-			"architect": {
-				"build": {
-					"builder": "@angular/build:application",
-					"options": {
-						"browser": "games/src/main.ts",
-						"server": "games/src/main.server.ts",
-						"outputMode": "static",
-						"tsConfig": "games/tsconfig.app.json",
-						"inlineStyleLanguage": "scss",
-						"assets": [
-							{
-								"glob": "**/*",
-								"input": "games/public"
-							}
-						],
-						"styles": [
-							"games/src/styles.scss"
-						]
-					},
-					"configurations": {
-						"production": {
-							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "550kB",
-									"maximumError": "1MB"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "4kB",
-									"maximumError": "8kB"
-								}
-							],
-							"outputHashing": "all",
-							"serviceWorker": "games/ngsw-config.json"
-						},
-						"development": {
-							"optimization": false,
-							"extractLicenses": false,
-							"sourceMap": true
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"serve": {
-					"builder": "@angular/build:dev-server",
-					"configurations": {
-						"production": {
-							"buildTarget": "games:build:production"
-						},
-						"development": {
-							"buildTarget": "games:build:development"
-						}
-					},
-					"defaultConfiguration": "development"
-				}
-			}
-		},
-		"@su-labs/core": {
-			"projectType": "library",
-			"root": "projects/su-labs/core",
-			"sourceRoot": "projects/su-labs/core/src",
-			"prefix": "lib",
-			"architect": {
-				"build": {
-					"builder": "@angular/build:ng-packagr",
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/su-labs/core/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/su-labs/core/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				}
-			}
-		},
-		"settings-utils": {
-			"projectType": "library",
-			"root": "projects/settings-utils",
-			"sourceRoot": "projects/settings-utils/src",
-			"prefix": "lib",
-			"architect": {
-				"build": {
-					"builder": "@angular/build:ng-packagr",
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/settings-utils/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/settings-utils/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				},
-				"test": {
-					"builder": "@angular/build:karma",
-					"options": {
-						"tsConfig": "projects/settings-utils/tsconfig.spec.json"
-					}
-				}
-			}
-		},
-		"@su-labs/font-size": {
-			"projectType": "library",
-			"root": "projects/su-labs/font-size",
-			"sourceRoot": "projects/su-labs/font-size/src",
-			"prefix": "lib",
-			"architect": {
-				"build": {
-					"builder": "@angular/build:ng-packagr",
-					"configurations": {
-						"production": {
-							"tsConfig": "projects/su-labs/font-size/tsconfig.lib.prod.json"
-						},
-						"development": {
-							"tsConfig": "projects/su-labs/font-size/tsconfig.lib.json"
-						}
-					},
-					"defaultConfiguration": "production"
-				}
-			}
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "web": {
+      "projectType": "application",
+      "root": "web",
+      "sourceRoot": "web/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "web/src/main.ts",
+            "server": "web/src/main.server.ts",
+            "outputMode": "static",
+            "tsConfig": "web/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "web/public"
+              }
+            ],
+            "styles": [
+              "web/src/styles.scss"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "web:build:production"
+            },
+            "development": {
+              "buildTarget": "web:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    },
+    "games": {
+      "projectType": "application",
+      "root": "games",
+      "sourceRoot": "games/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "games/src/main.ts",
+            "server": "games/src/main.server.ts",
+            "outputMode": "static",
+            "tsConfig": "games/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "games/public"
+              }
+            ],
+            "styles": [
+              "games/src/styles.scss"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "550kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "serviceWorker": "games/ngsw-config.json"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "games:build:production"
+            },
+            "development": {
+              "buildTarget": "games:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    },
+    "@su-labs/core": {
+      "projectType": "library",
+      "root": "projects/su-labs/core",
+      "sourceRoot": "projects/su-labs/core/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/core/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/core/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    },
+    "settings-utils": {
+      "projectType": "library",
+      "root": "projects/settings-utils",
+      "sourceRoot": "projects/settings-utils/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/settings-utils/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/settings-utils/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/settings-utils/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "@su-labs/font-size": {
+      "projectType": "library",
+      "root": "projects/su-labs/font-size",
+      "sourceRoot": "projects/su-labs/font-size/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/font-size/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/font-size/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
     },
     "@su-labs/scroll-spy": {
       "projectType": "library",
@@ -346,6 +346,32 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "projects/su-labs/theme/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "@su-labs/table": {
+      "projectType": "library",
+      "root": "projects/su-labs/table",
+      "sourceRoot": "projects/su-labs/table/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/table/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/table/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/su-labs/table/tsconfig.spec.json"
           }
         }
       }
