@@ -304,6 +304,34 @@ if (result.ok) {
 Moving a row with the keyboard is one call on its handle's keydown:
 `if (table.moveKey(row.id, event.key).handled) event.preventDefault();`
 
+### Paging, search, pinning and columns
+
+Turn them on with options, then call the controller from your controls. `state.pagination`, `state.pinnedRows`,
+`state.allColumns` (every column with `visible` and `pinned`) and `state.query` hold what to render:
+
+```ts
+const table = new SuTableController<User>({
+  columns: [
+    { key: 'name', header: 'Name', pinned: 'start' }, // stays in view while the row scrolls sideways
+    { key: 'age', header: 'Age', align: 'end', pinnable: true }, // a pin in its heading
+    { key: 'email', header: 'Email', hidden: true, searchable: false },
+  ],
+  rowId: (user) => user.id,
+  pageSize: 10,
+  pageSizes: [10, 25, 'all'],
+  pinnedRows: [1],
+});
+
+table.setPage(1); // pages count from 0
+table.setPageSize(25);
+table.search('ana'); // every word, ignoring case and accents; '' clears it
+table.pinRow(2); // above the other rows on every page
+table.pinColumn('age', 'end'); // or null to unpin
+table.setColumnVisible('email', true); // the field stays in the row data either way
+```
+
+Render pinned cells with `position: sticky` and pinned rows first in `<tbody>`.
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)

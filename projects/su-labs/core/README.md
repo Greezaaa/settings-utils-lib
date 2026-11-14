@@ -268,7 +268,8 @@ if (await dialogs.confirm({ title: 'Delete your results?', danger: true })) {
 ## Table
 
 A data table's state, from your API's JSON: typed columns map each field to a cell, with sorting, selection,
-reordering and editing (one row, or many at once), all in one `state` store. Edited rows come back in the API's own
+reordering, editing (one row, or many at once), paging, search, pinned rows and columns, and columns to show or hide,
+all in one `state` store. Edited rows come back in the API's own
 shape. Your app renders the table (Angular: [`@su-labs/table`](https://www.npmjs.com/package/@su-labs/table)).
 
 ```ts
@@ -304,8 +305,8 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 
 | Member | Description |
 |--------|-------------|
-| `state` | Read-only store of everything to render: `columns`, `rows` (the current page), `pinnedRows`, `pagination`, `sort`, `selectedIds`, `selection`, `bulkActions`, `editable`, `draft`, `grabbedId`, `announcement` |
-| `configure(options)` | Changes the `columns`, `rowId`, `actions` or `labels` |
+| `state` | Read-only store of everything to render: `columns`, `rows` (the current page), `pinnedRows`, `allColumns`, `pagination`, `query`, `searching`, `sort`, `selectedIds`, `selection`, `bulkActions`, `editable`, `draft`, `grabbedId`, `announcement` |
+| `configure(options)` | Changes the `columns`, `rowId`, `actions`, `labels`, `pageSize`, `pageSizes` or `pinnedRows` |
 | `setRows(rows)` | New rows, e.g. the API's answer; the selection keeps the rows still there |
 | `sortBy(key)` | Ascending, then descending, then the rows' own order |
 | `select(id, selected?)` / `selectAll(selected?)` / `clearSelection()` | Selection; without `selected`, toggles; `selectAll` works on the current page, `clearSelection` on every page |
@@ -341,6 +342,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `searchable` | `false` to leave the column out of `search` (default `true`) |
 | `hidden` | `true` to start out of view; `state.allColumns` lists every column with `visible` and `pinned`, for a column menu |
 | `pinned` | `'start'` or `'end'`: render those cells with `position: sticky`; `state.columns` lists them first or last |
+| `pinnable` | Shows a pin in the heading to pin and unpin the column; by default only on columns that start `pinned` |
 
 Actions (`{ id, label, danger?, bulk?, hidden?(row), disabled?(row) }`) are resolved for each row in `rows[].actions`,
 and the bulk ones in `bulkActions`. Every text the table announces or shows is in `SU_TABLE_LABELS`; pass any of them

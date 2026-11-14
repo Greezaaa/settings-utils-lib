@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [22.1.0] - 2026-11-14
 
 ### Added
 - `su-lib-email-field`: an email input that checks the address the way people mistype it, says what's wrong once the field is left, shows a tick when it looks right, and suggests a common domain for a likely typo (`gmial.com` → `gmail.com`) applied with one tap; `required`, your own `domains` and `messages`, `validityChange`. The check is exported as `suCheckEmail`

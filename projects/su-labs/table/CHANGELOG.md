@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [22.1.0]
 
 ### Added
 - Pinned columns: `pinned: 'start' | 'end'` on a column keeps it in view while the others scroll, with a soft shadow on its edge while columns pass under it; the move handles and checkboxes stay with columns pinned to the start, the actions with those pinned to the end
@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Theming: CSS variables for the header (font size and weight, letter spacing, text transform, padding, border), rows (background, text colour, stripes), the selected row's text, the sorted column, hovered editable cells, the caption, checkbox size, the move handle and a drop line showing where a dragged row will land (`--su-table-drop-line-color`, `--su-table-drop-line-width`)
 - `rowClass` adds your own classes to rows; `is-muted` and `is-highlighted` come styled, with their own variables
 - `columnsChange` emits every column's state (`SuTableColumnState`: shown, pinned) after a change in the Columns menu, e.g. to save it
+
+### Changed
+- The cell that heads each row is a `<td role="rowheader">` instead of a `<th scope="row">`, styled through `.su-table-row-header` and `--su-table-row-header-weight`
 
 ### Fixed
 - The table shrinks to fit inside grid and flex layouts, scrolling its columns instead of widening the page

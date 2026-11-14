@@ -25,9 +25,11 @@ Every utility is available in `@su-labs/core` for any environment, and as an Ang
 | Theme | `@su-labs/core/theme` | `@su-labs/theme` |
 | Font size | `@su-labs/core/font-size` | `@su-labs/font-size` |
 | Notifications | `@su-labs/core/notifications` | `@su-labs/notifications` |
+| Dialog | `@su-labs/core/dialog` | `@su-labs/dialog` |
 | Scroll spy | `@su-labs/core/scroll-spy` | `@su-labs/scroll-spy` |
 | Visit tracker | `@su-labs/core/visit-tracker` | `@su-labs/visit-tracker` |
 | Table | `@su-labs/core/table` | `@su-labs/table` |
+| Form fields | - | `@su-labs/fields` |
 
 ## API reference
 
@@ -37,6 +39,8 @@ The full API of each utility is documented in its package README:
 - [`@su-labs/theme`](../projects/su-labs/theme/README.md)
 - [`@su-labs/font-size`](../projects/su-labs/font-size/README.md)
 - [`@su-labs/notifications`](../projects/su-labs/notifications/README.md)
+- [`@su-labs/dialog`](../projects/su-labs/dialog/README.md)
 - [`@su-labs/scroll-spy`](../projects/su-labs/scroll-spy/README.md)
 - [`@su-labs/visit-tracker`](../projects/su-labs/visit-tracker/README.md)
 - [`@su-labs/table`](../projects/su-labs/table/README.md)
+- [`@su-labs/fields`](../projects/su-labs/fields/README.md)

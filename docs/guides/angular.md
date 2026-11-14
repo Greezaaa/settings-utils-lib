@@ -12,9 +12,11 @@ Install only the utilities you need:
 npm install @su-labs/theme
 npm install @su-labs/font-size
 npm install @su-labs/notifications
+npm install @su-labs/dialog
 npm install @su-labs/scroll-spy
 npm install @su-labs/visit-tracker
 npm install @su-labs/table
+npm install @su-labs/fields
 ```
 
 Requires Angular 22 or later.
@@ -26,9 +28,11 @@ Requires Angular 22 or later.
 | `@su-labs/theme` | Light, dark, contrast and system themes with CSS variables | [README](../../projects/su-labs/theme/README.md) |
 | `@su-labs/font-size` | Accessible font size controls | [README](../../projects/su-labs/font-size/README.md) |
 | `@su-labs/notifications` | Toast notifications | [README](../../projects/su-labs/notifications/README.md) |
+| `@su-labs/dialog` | Confirm and message dialogs on the native `<dialog>` | [README](../../projects/su-labs/dialog/README.md) |
 | `@su-labs/scroll-spy` | Active section tracking while scrolling | [README](../../projects/su-labs/scroll-spy/README.md) |
 | `@su-labs/visit-tracker` | Visit counts and milestones | [README](../../projects/su-labs/visit-tracker/README.md) |
-| `@su-labs/table` | Data tables with sorting, selection, inline and bulk editing, reordering and row actions | [README](../../projects/su-labs/table/README.md) |
+| `@su-labs/table` | Data tables with sorting, selection, inline and bulk editing, reordering, row actions, paging, search, pinned rows and columns, and a Columns menu | [README](../../projects/su-labs/table/README.md) |
+| `@su-labs/fields` | Code boxes, password strength meter, auto-grow textarea, switch, email field, checkbox and chips | [README](../../projects/su-labs/fields/README.md) |
 
 ## Theme quick start
 
