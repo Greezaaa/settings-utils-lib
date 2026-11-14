@@ -3,6 +3,7 @@ import { SuStorage } from '@su-labs/core';
 import { SuThemeController } from '@su-labs/core/theme';
 import { BoardColours } from '../core/board-colours';
 import { GameThemeId, getGameTheme } from '../core/game-themes';
+import { Fullscreen } from '../core/fullscreen';
 
 const UNSAVED: SuStorage = { getItem: () => null, setItem: () => undefined, removeItem: () => undefined };
 
@@ -22,6 +23,7 @@ export class GameBoard {
 
   constructor() {
     const colours = inject(BoardColours);
+    const fullscreen = inject(Fullscreen);
     effect(() => {
       const id = this.theme() ?? colours.chosen();
       if (id) {
@@ -35,12 +37,14 @@ export class GameBoard {
     });
     const stopZoom = (event: Event): void => event.preventDefault();
     afterNextRender(() => {
+      fullscreen.register(this.element);
       for (const gesture of SAFARI_ZOOM_GESTURES) {
         this.element.addEventListener(gesture, stopZoom, { passive: false });
       }
     });
     inject(DestroyRef).onDestroy(() => {
       this.controller.destroy();
+      fullscreen.unregister(this.element);
       for (const gesture of SAFARI_ZOOM_GESTURES) {
         this.element.removeEventListener(gesture, stopZoom);
       }

@@ -13,9 +13,11 @@ const port = 4399;
 const debugPort = 9399;
 const width = 480;
 
-const slugs = [...readFileSync(join(root, 'games', 'src', 'app', 'core', 'games.ts'), 'utf8').matchAll(/slug: '([a-z-]+)'/g)].map(
+const allSlugs = [...readFileSync(join(root, 'games', 'src', 'app', 'core', 'games.ts'), 'utf8').matchAll(/slug: '([a-z-]+)'/g)].map(
   ([, slug]) => slug,
 );
+const chosen = process.argv.slice(2);
+const slugs = chosen.length > 0 ? allSlugs.filter((slug) => chosen.includes(slug)) : allSlugs;
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.txt': 'text/plain' };
 
 function fileFor(url) {
@@ -42,6 +44,69 @@ const profile = mkdtempSync(join(tmpdir(), 'thumbnails-'));
 const chrome = spawn(chromePath, ['--headless=new', `--remote-debugging-port=${debugPort}`, `--user-data-dir=${profile}`, '--no-first-run', 'about:blank']);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 await sleep(2500);
+
+function stageWordSearch() {
+  const filler = 'GCNRMGBLGAZNKUIBHMWDCIRRQBETHFXYVJPO';
+  const words = [
+    { word: 'SOPA', row: 1, column: 0 },
+    { word: 'DE', row: 2, column: 4 },
+    { word: 'LETRAS', row: 3, column: 0 },
+  ];
+  const cells = [...document.querySelectorAll('.letters .letter')];
+  const size = Math.sqrt(cells.length);
+  cells.forEach((cell, index) => {
+    cell.textContent = filler[index % filler.length];
+    cell.removeAttribute('data-found');
+  });
+  words.forEach(({ word, row, column }, colour) => {
+    [...word].forEach((letter, offset) => {
+      const cell = cells[row * size + column + offset];
+      cell.textContent = letter;
+      cell.setAttribute('data-found', String(colour));
+    });
+  });
+  const list = document.querySelector('.words');
+  list.replaceChildren(
+    ...words.map(({ word }) => {
+      const item = document.createElement('li');
+      item.className = 'word is-found';
+      item.textContent = word;
+      return item;
+    }),
+  );
+}
+
+function stageSecretWord() {
+  const secret = 'STAR';
+  const guesses = ['BIRD', 'SEAT', 'STAR'];
+  const markOf = (guess, index) => (secret[index] === guess[index] ? 'right' : secret.includes(guess[index]) ? 'present' : 'absent');
+  const keyMarks = new Map();
+  [...document.querySelectorAll('.tries .try')].forEach((row, rowIndex) => {
+    const guess = guesses[rowIndex];
+    [...row.querySelectorAll('.tile')].forEach((tile, index) => {
+      tile.classList.remove('is-typed');
+      if (!guess) {
+        tile.textContent = '';
+        tile.removeAttribute('data-mark');
+        return;
+      }
+      const mark = markOf(guess, index);
+      tile.textContent = guess[index];
+      tile.setAttribute('data-mark', mark);
+      if (keyMarks.get(guess[index]) !== 'right') {
+        keyMarks.set(guess[index], mark);
+      }
+    });
+  });
+  for (const key of document.querySelectorAll('.keyboard .key:not(.key-wide)')) {
+    const mark = keyMarks.get(key.textContent.trim().toUpperCase());
+    if (mark) {
+      key.setAttribute('data-mark', mark);
+    }
+  }
+}
+
+const stages = { 'word-search': stageWordSearch, 'secret-word': stageSecretWord };
 
 const targets = await (await fetch(`http://127.0.0.1:${debugPort}/json/list`)).json();
 const socket = new WebSocket(targets.find((target) => target.type === 'page').webSocketDebuggerUrl);
@@ -74,6 +139,10 @@ for (const slug of slugs) {
   await sleep(3500);
   if (await evaluate(`(() => { const start = document.querySelector('.page-section .card button.start'); start?.click(); return !!start; })()`)) {
     await sleep(2000);
+  }
+  if (stages[slug]) {
+    await evaluate(`(${stages[slug]})()`);
+    await sleep(300);
   }
   const box = await evaluate(`(() => {
     const board = document.querySelector('.card.play .play-main') ?? document.querySelector('.page-section .card');

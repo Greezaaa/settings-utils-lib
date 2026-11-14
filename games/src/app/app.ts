@@ -89,7 +89,11 @@ export class App {
   protected readonly admin = inject(AdminApi);
   protected readonly fullscreen = inject(Fullscreen);
   protected readonly canGoFullscreen = computed(
-    () => this.pageGame() !== null && this.fullscreen.isSupported() && this.features.canUse('fullscreen'),
+    () =>
+      this.pageGame() !== null &&
+      this.fullscreen.hasBoard() &&
+      this.fullscreen.isSupported() &&
+      this.features.canUse('fullscreen'),
   );
 
   protected readonly menuOpen = signal(false);
