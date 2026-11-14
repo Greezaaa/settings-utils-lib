@@ -23,6 +23,8 @@
 
 caption {
   caption-side: top;
+  color: var(--su-table-caption-color, inherit);
+  font-size: var(--su-table-caption-font-size, inherit);
   font-weight: 600;
   padding: var(--su-table-cell-padding, 0.6rem 0.75rem);
   text-align: start;
@@ -30,17 +32,32 @@ caption {
 
 th,
 td {
+  background-image: linear-gradient(var(--su-table-cell-tint, transparent), var(--su-table-cell-tint, transparent));
   border-bottom: var(--su-table-row-border, 1px solid rgb(0 0 0 / 0.08));
   padding: var(--su-table-cell-padding, 0.6rem 0.75rem);
   text-align: start;
-  vertical-align: middle;
+  vertical-align: var(--su-table-cell-vertical-align, middle);
 }
 
 thead th {
   --su-table-row-tint: var(--su-table-header-background, rgb(0 0 0 / 0.03));
+  border-bottom: var(--su-table-header-border, var(--su-table-row-border, 1px solid rgb(0 0 0 / 0.08)));
   color: var(--su-table-header-color, inherit);
-  font-weight: 600;
+  font-size: var(--su-table-header-font-size, inherit);
+  font-weight: var(--su-table-header-font-weight, 600);
+  letter-spacing: var(--su-table-header-letter-spacing, normal);
+  padding: var(--su-table-header-padding, var(--su-table-cell-padding, 0.6rem 0.75rem));
+  text-transform: var(--su-table-header-text-transform, none);
   white-space: nowrap;
+}
+
+.is-sorted {
+  --su-table-cell-tint: var(--su-table-sorted-background, transparent);
+}
+
+td.is-editable:hover,
+th.is-editable:hover {
+  --su-table-cell-tint: var(--su-table-editable-hover-background, color-mix(in srgb, currentColor 6%, transparent));
 }
 
 tbody th {
@@ -52,7 +69,22 @@ tbody tr:last-child > * {
 }
 
 tbody tr {
-  background: var(--su-table-row-tint, transparent);
+  --su-table-row-tint: var(--su-table-row-background, transparent);
+  background: var(--su-table-row-tint);
+  color: var(--su-table-row-color, inherit);
+
+  &:nth-child(even) {
+    --su-table-row-tint: var(--su-table-stripe-background, var(--su-table-row-background, transparent));
+  }
+
+  &.is-muted {
+    --su-table-row-tint: var(--su-table-muted-background, transparent);
+    color: color-mix(in srgb, currentColor var(--su-table-muted-text, 55%), transparent);
+  }
+
+  &.is-highlighted {
+    --su-table-row-tint: var(--su-table-highlight-background, color-mix(in srgb, #f59e0b 14%, transparent));
+  }
 
   &:hover {
     --su-table-row-tint: var(--su-table-hover-background, rgb(0 0 0 / 0.025));
@@ -60,6 +92,7 @@ tbody tr {
 
   &.is-selected {
     --su-table-row-tint: var(--su-table-selected-background, color-mix(in srgb, #2563eb 8%, transparent));
+    color: var(--su-table-selected-color, inherit);
   }
 
   &.is-editing {
@@ -89,13 +122,23 @@ tbody tr {
     position: relative;
     z-index: 3;
   }
+
+  &.is-drop-before > * {
+    box-shadow: inset 0 var(--su-table-drop-line-width, 2px) 0 var(--su-table-drop-line-color, #2563eb);
+  }
+
+  &.is-drop-after > * {
+    box-shadow: inset 0 calc(-1 * var(--su-table-drop-line-width, 2px)) 0 var(--su-table-drop-line-color, #2563eb);
+  }
 }
 
 thead th,
 tbody tr.is-pinned-row > *,
 .is-pinned-start,
 .is-pinned-end {
-  background: linear-gradient(var(--su-table-row-tint, transparent), var(--su-table-row-tint, transparent)),
+  background:
+    linear-gradient(var(--su-table-cell-tint, transparent), var(--su-table-cell-tint, transparent)),
+    linear-gradient(var(--su-table-row-tint, transparent), var(--su-table-row-tint, transparent)),
     var(--su-table-pinned-background, Canvas);
   position: sticky;
   z-index: 1;
@@ -236,6 +279,8 @@ th.is-editable {
   cursor: pointer;
   display: inline-flex;
   font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
   gap: 0.35rem;
   margin: -0.2rem -0.35rem;
   padding: 0.2rem 0.35rem;
@@ -267,7 +312,7 @@ th.is-editable {
   background: none;
   border: none;
   border-radius: 4px;
-  color: inherit;
+  color: var(--su-table-handle-color, inherit);
   cursor: grab;
   display: inline-flex;
   padding: 0.35rem 0.3rem;
@@ -318,9 +363,9 @@ th.is-editable {
 
 .su-table-checkbox {
   accent-color: var(--su-table-accent, #2563eb);
-  height: 1rem;
+  height: var(--su-table-checkbox-size, 1rem);
   margin: 0;
-  width: 1rem;
+  width: var(--su-table-checkbox-size, 1rem);
 }
 
 .su-table-toolbar,

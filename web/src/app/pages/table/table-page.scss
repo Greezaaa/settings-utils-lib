@@ -44,3 +44,20 @@
   --su-table-font-size: 0.875rem;
   --su-table-cell-padding: 0.45rem 0.6rem;
 }
+
+.themed-table {
+  --su-table-border: 1px solid #10b98155;
+  --su-table-row-border: 1px solid #10b98122;
+  --su-table-header-background: #0f3d2e;
+  --su-table-header-color: #d1fae5;
+  --su-table-header-font-size: 0.75rem;
+  --su-table-header-letter-spacing: 0.06em;
+  --su-table-header-text-transform: uppercase;
+  --su-table-stripe-background: rgb(16 185 129 / 0.06);
+  --su-table-hover-background: rgb(16 185 129 / 0.12);
+  --su-table-sorted-background: rgb(16 185 129 / 0.1);
+  --su-table-drop-line-color: #10b981;
+  --su-table-grabbed-background: rgb(16 185 129 / 0.18);
+  --su-table-grabbed-outline: 2px solid #10b981;
+  --su-table-accent: #10b981;
+}

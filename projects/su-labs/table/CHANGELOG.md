@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show and hide columns: `hidden: true` starts a column out of view (its field stays in the row data and comes back on save), with a checkbox for each column in the Columns menu; the last column on view stays shown, and hidden columns are left out of the search
 - Sticky headers: `maxHeight` (any CSS length) lets the table scroll inside; the header stays at the top and the pinned rows stay under it, with a soft shadow while rows scroll beneath; `--su-table-sticky-shadow`
 - Double-click editing: a double-click on an editable cell edits its row, starting in that field with its text selected; while a row is being edited, a double-click elsewhere never drops its changes. `editOnDoubleClick` turns it off. Without other actions, an actions column shows for Save and Cancel while a row is edited
+- Theming: CSS variables for the header (font size and weight, letter spacing, text transform, padding, border), rows (background, text colour, stripes), the selected row's text, the sorted column, hovered editable cells, the caption, checkbox size, the move handle and a drop line showing where a dragged row will land (`--su-table-drop-line-color`, `--su-table-drop-line-width`)
+- `rowClass` adds your own classes to rows; `is-muted` and `is-highlighted` come styled, with their own variables
 - `columnsChange` emits every column's state (`SuTableColumnState`: shown, pinned) after a change in the Columns menu, e.g. to save it
 
 ### Fixed

@@ -192,6 +192,27 @@ columns: SuTableColumns<Product> = [
   </span>
 </ng-template>`,
   },
+  theming: {
+    title: 'Your own look',
+    description:
+      'Every colour, border, size and state is a CSS variable: the header, stripes, the sorted column, hovered and ' +
+      'selected rows, editable cells, the drop line while dragging, and more. Mark rows with your own states, like ' +
+      'muted for inactive rows, with rowClass.',
+    code: `su-lib-table {
+  --su-table-header-background: #0f3d2e;
+  --su-table-header-color: #d1fae5;
+  --su-table-header-text-transform: uppercase;
+  --su-table-stripe-background: rgb(16 185 129 / 0.06);
+  --su-table-sorted-background: rgb(16 185 129 / 0.1);
+  --su-table-drop-line-color: #10b981;
+}
+
+<su-lib-table … reorderable
+  [rowClass]="mutedWhenOutOfStock" />
+
+mutedWhenOutOfStock = (product: Product) =>
+  product.inStock ? null : 'is-muted';`,
+  },
   labels: {
     title: 'In any language, for everyone',
     description:

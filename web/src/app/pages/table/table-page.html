@@ -232,6 +232,18 @@
     </su-lib-table>
   </ng-template>
 
+  <ng-template [appPageFeature]="features.theming">
+    <su-lib-table
+      class="mini-table themed-table"
+      caption="Products, in a theme of their own"
+      reorderable
+      [columns]="examples.theming"
+      [rows]="sample"
+      [rowId]="productId"
+      [rowClass]="mutedWhenOutOfStock"
+    />
+  </ng-template>
+
   <ng-template [appPageFeature]="features.labels">
     <su-lib-table
       class="mini-table"

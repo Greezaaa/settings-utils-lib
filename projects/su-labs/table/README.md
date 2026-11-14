@@ -147,6 +147,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `searchable` | `false` | A search box above the table that narrows the rows by their text |
 | `rowPinning` | `false` | A Pin button on each row, keeping it above the others on every page |
 | `pinnedRows` | — | The ids of the rows pinned to start with |
+| `rowClass` | — | Extra classes for a row, e.g. `(row) => (row.active ? null : 'is-muted')` |
 | `labels` | English | `Partial<SuTableLabels>`: any text, e.g. in the page's language |
 
 ### Outputs
@@ -276,40 +277,103 @@ and the select-all checkbox selects the rows of the page on screen while the sel
 
 ## Styling
 
-Set the variables on `:root` (your theme) or on `su-lib-table`:
+Every colour, border, size and state is a CSS variable. Set them on `:root` (your theme), on `su-lib-table`, or on a
+class for one table:
 
 ```css
 su-lib-table {
-  --su-table-border: 1px solid var(--border);
-  --su-table-header-background: var(--surface);
-  --su-table-accent: var(--accent);
+  --su-table-header-background: #0f3d2e;
+  --su-table-header-color: #d1fae5;
+  --su-table-header-text-transform: uppercase;
+  --su-table-stripe-background: rgb(16 185 129 / 0.06);
+  --su-table-sorted-background: rgb(16 185 129 / 0.1);
+  --su-table-drop-line-color: #10b981;
 }
 ```
+
+### Row states
+
+`rowClass` adds your own classes to a row, e.g. to mark inactive rows. The table styles two of them:
+
+```ts
+rowClass = (user: User) => (user.active ? null : 'is-muted');
+```
+
+| Class | Variables |
+|-------|-----------|
+| `is-muted` | `--su-table-muted-background` (`transparent`), `--su-table-muted-text` (`55%`, how much of the text colour shows) |
+| `is-highlighted` | `--su-table-highlight-background` (a soft amber tint) |
+
+Other classes are yours to style from a global stylesheet.
+
+### Variables
+
+Defaults are in brackets; "tint" means the accent blue at a low opacity.
+
+**Table**
 
 | Variable | Default |
 |----------|---------|
 | `--su-table-font-family` / `--su-table-font-size` / `--su-table-text-color` | `inherit` / `0.95rem` / `inherit` |
 | `--su-table-background` | `transparent` |
 | `--su-table-border` / `--su-table-radius` | `1px solid rgb(0 0 0 / 0.12)` / `10px` |
-| `--su-table-row-border` / `--su-table-cell-padding` | `1px solid rgb(0 0 0 / 0.08)` / `0.6rem 0.75rem` |
-| `--su-table-header-background` / `--su-table-header-color` | a faint tint / `inherit` |
-| `--su-table-row-header-weight` | `600` |
-| `--su-table-hover-background` / `--su-table-selected-background` / `--su-table-editing-background` | faint tints |
-| `--su-table-grabbed-background` / `--su-table-grabbed-outline` | blue tints |
-| `--su-table-dragging-background` / `--su-table-dragging-shadow` | `Canvas` / `0 8px 24px rgb(0 0 0 / 0.18)` (the row being dragged) |
-| `--su-table-pinned-row-background` / `--su-table-pinned-row-border` | a faint blue tint / `2px solid` blue at 40% (pinned rows, and the line under them) |
-| `--su-table-pinned-border` | `1px solid rgb(0 0 0 / 0.14)` (the line on a pinned column's edge) |
-| `--su-table-menu-background` / `--su-table-menu-shadow` | `Canvas` / `0 12px 32px rgb(0 0 0 / 0.18)` (the Columns menu) |
-| `--su-table-sticky-shadow` | `0 6px 8px -6px rgb(0 0 0 / 0.25)` (under the header and pinned rows while rows scroll beneath) |
-| `--su-table-pinned-background` / `--su-table-pinned-shadow` | `Canvas` / `rgb(0 0 0 / 0.22)` (pinned cells, and the shadow on their edge) |
-| `--su-table-accent` | `#2563eb` (checkboxes) |
+| `--su-table-cell-padding` / `--su-table-cell-vertical-align` | `0.6rem 0.75rem` / `middle` |
+| `--su-table-caption-color` / `--su-table-caption-font-size` | `inherit` |
+| `--su-table-accent` | `#2563eb` (checkboxes, pressed pins) |
+| `--su-table-checkbox-size` | `1rem` |
+| `--su-table-focus-outline` | `2px solid currentColor` |
+
+**Header**
+
+| Variable | Default |
+|----------|---------|
+| `--su-table-header-background` / `--su-table-header-color` | a faint grey / `inherit` |
+| `--su-table-header-font-size` / `--su-table-header-font-weight` | `inherit` / `600` |
+| `--su-table-header-text-transform` / `--su-table-header-letter-spacing` | `none` / `normal` |
+| `--su-table-header-padding` / `--su-table-header-border` | the cell padding / the row border |
+| `--su-table-sticky-shadow` | `0 6px 8px -6px rgb(0 0 0 / 0.25)` (under a sticky header while rows scroll beneath) |
+
+**Rows and cells**
+
+| Variable | Default |
+|----------|---------|
+| `--su-table-row-background` / `--su-table-row-color` | `transparent` / `inherit` |
+| `--su-table-stripe-background` | the row background (set it for striped rows) |
+| `--su-table-row-border` / `--su-table-row-header-weight` | `1px solid rgb(0 0 0 / 0.08)` / `600` |
+| `--su-table-hover-background` | a faint grey |
+| `--su-table-selected-background` / `--su-table-selected-color` | a tint / `inherit` |
+| `--su-table-sorted-background` | `transparent` (the sorted column's cells and heading) |
+| `--su-table-editable-hover-background` | the text colour at 6% (an editable cell under the pointer) |
+| `--su-table-editing-background` | a tint (the row being edited) |
+
+**Reordering**
+
+| Variable | Default |
+|----------|---------|
+| `--su-table-handle-color` | `inherit` |
+| `--su-table-grabbed-background` / `--su-table-grabbed-outline` | a tint / `2px solid` blue at 60% |
+| `--su-table-dragging-background` / `--su-table-dragging-shadow` | `Canvas` / `0 8px 24px rgb(0 0 0 / 0.18)` |
+| `--su-table-drop-line-color` / `--su-table-drop-line-width` | `#2563eb` / `2px` (where the dragged row will land) |
+
+**Pinned columns and rows**
+
+| Variable | Default |
+|----------|---------|
+| `--su-table-pinned-background` | `Canvas` (behind pinned and sticky cells) |
+| `--su-table-pinned-border` / `--su-table-pinned-shadow` | `1px solid rgb(0 0 0 / 0.14)` / `rgb(0 0 0 / 0.22)` |
+| `--su-table-pinned-row-background` / `--su-table-pinned-row-border` | a tint / `2px solid` blue at 40% |
+
+**Buttons, inputs and panels**
+
+| Variable | Default |
+|----------|---------|
 | `--su-table-button-background` / `--su-table-button-border` / `--su-table-button-color` | `transparent` / `1px solid rgb(0 0 0 / 0.2)` / `inherit` |
 | `--su-table-button-radius` / `--su-table-button-padding` | `6px` / `0.3rem 0.7rem` |
 | `--su-table-primary-background` / `--su-table-primary-color` | `#111` / `#fff` (Save) |
 | `--su-table-danger-color` / `--su-table-danger-border` | `#b42318` / a soft red line |
 | `--su-table-input-background` / `--su-table-input-border` / `--su-table-input-radius` | `transparent` / `1px solid rgb(0 0 0 / 0.25)` / `6px` |
-| `--su-table-panel-background` | a faint tint (selection toolbar and bulk edit) |
-| `--su-table-focus-outline` | `2px solid currentColor` |
+| `--su-table-panel-background` | a faint grey (selection toolbar and bulk edit) |
+| `--su-table-menu-background` / `--su-table-menu-shadow` | `Canvas` / `0 12px 32px rgb(0 0 0 / 0.18)` (the Columns menu) |
 
 ## Browser Compatibility
 

@@ -97,6 +97,7 @@
           <th
             scope="col"
             class="su-table-align-{{ column.align }}"
+            [class.is-sorted]="column.sort !== 'none'"
             [suTablePin]="pins[firstColumnSlot + columnIndex]"
             [attr.aria-sort]="column.sort === 'none' ? null : column.sort"
           >
@@ -140,7 +141,10 @@
           [class.is-selected]="row.selected"
           [class.is-editing]="editing"
           [class.is-grabbed]="current.grabbedId === row.id"
+          [class]="rowClassOf(row)"
           [class.is-dragging]="drag()?.id === row.id"
+          [class.is-drop-before]="dropSide(index) === 'before'"
+          [class.is-drop-after]="dropSide(index) === 'after'"
           [style.transform]="dragTransform(index)"
           (keydown)="editing && onEditKey($event)"
         >
@@ -197,6 +201,7 @@
               <th
                 scope="row"
                 class="su-table-align-{{ column.align }}"
+                [class.is-sorted]="column.sort !== 'none'"
                 [class.is-editable]="!editing && editsOnDoubleClick(cell.key)"
                 [suTablePin]="pin"
                 (mousedown)="keepTextUnselected($event, cell.key)"
@@ -207,6 +212,7 @@
             } @else {
               <td
                 class="su-table-align-{{ column.align }}"
+                [class.is-sorted]="column.sort !== 'none'"
                 [class.is-editable]="!editing && editsOnDoubleClick(cell.key)"
                 [suTablePin]="pin"
                 (mousedown)="keepTextUnselected($event, cell.key)"

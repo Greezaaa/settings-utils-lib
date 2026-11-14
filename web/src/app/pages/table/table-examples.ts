@@ -43,6 +43,7 @@ export const EXAMPLE_COLUMNS = {
   pages: columns([NAME, CATEGORY, PRICE_COLUMN]),
   sticky: columns([NAME, CATEGORY, SUPPLIER, PRICE_COLUMN]),
   customCells: columns([NAME, PRICE_COLUMN, IN_STOCK]),
+  theming: columns([NAME, CATEGORY, PRICE_COLUMN, IN_STOCK]),
   labels: columns([
     { ...EDITABLE.name, header: 'Producto' },
     { ...CATEGORY, header: 'Categoría' },
@@ -78,3 +79,6 @@ export const SPANISH: Partial<SuTableLabels> = {
   noMatches: (query) => `Ninguna fila coincide con “${query}”`,
   empty: 'Sin filas',
 };
+
+/** The theming example: out-of-stock products are muted */
+export const mutedWhenOutOfStock = (product: Product): string | null => (product.inStock ? null : 'is-muted');

@@ -98,6 +98,11 @@ export class SuTableComponent<TRow extends object> {
    * rows stay in view while the rows scroll under them
    */
   readonly maxHeight = input<string>();
+  /**
+   * Extra classes for a row, e.g. `(user) => (user.active ? null : 'is-muted')`. The table styles `is-muted` and
+   * `is-highlighted`; other classes are yours to style
+   */
+  readonly rowClass = input<(row: TRow) => string | null>();
   /** A double-click on an editable cell edits its row, starting in that field @default true */
   readonly editOnDoubleClick = input(true, { transform: booleanAttribute });
   /** Rows per page; without it, every row shows @default 'all' */
@@ -590,6 +595,19 @@ export class SuTableComponent<TRow extends object> {
   }
 
   /** While dragging, the dragged row follows the pointer and the rows it passes slide aside to open its place */
+  protected rowClassOf(row: SuTableRowView<TRow>): string | null {
+    return this.rowClass()?.(row.data) ?? null;
+  }
+
+  /** Where the drop line shows while dragging: on the edge of the gap the dragged row will land in */
+  protected dropSide(index: number): 'before' | 'after' | null {
+    const drag = this.drag();
+    if (!drag || drag.to === drag.from || drag.to !== index) {
+      return null;
+    }
+    return drag.to > drag.from ? 'after' : 'before';
+  }
+
   protected dragTransform(index: number): string | null {
     const drag = this.drag();
     if (!drag) {
