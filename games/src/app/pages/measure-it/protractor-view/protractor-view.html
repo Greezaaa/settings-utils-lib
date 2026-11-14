@@ -1,8 +1,20 @@
 <svg
+  #drawing
   class="drawing protractor"
+  [class.is-editable]="editable()"
   viewBox="0 0 240 132"
-  role="img"
-  aria-hidden="true">
+  [attr.role]="editable() ? 'slider' : null"
+  [attr.aria-hidden]="editable() ? null : 'true'"
+  [attr.aria-label]="editable() ? label() : null"
+  [attr.aria-valuemin]="editable() ? 0 : null"
+  [attr.aria-valuemax]="editable() ? 180 : null"
+  [attr.aria-valuenow]="editable() ? angle() : null"
+  [attr.tabindex]="editable() ? 0 : null"
+  (pointerdown)="onPointerDown($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointercancel)="onPointerUp($event)"
+  (keydown)="onKey($event)">
   <path class="plate" [attr.d]="arc + ' Z'" />
   <path class="outline" [attr.d]="arc" />
   <line
@@ -47,4 +59,7 @@
       [attr.y2]="checked.y" />
   }
   <circle class="pivot" [attr.cx]="center.x" [attr.cy]="center.y" r="3" />
+  @if (editable()) {
+    <circle class="knob" [attr.cx]="knob().x" [attr.cy]="knob().y" r="9" />
+  }
 </svg>

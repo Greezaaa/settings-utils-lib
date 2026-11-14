@@ -27,7 +27,6 @@ export interface AngleLevel {
   readonly tolerance: number;
   readonly marksEvery: number;
   readonly markLabels: boolean;
-  readonly step: number;
 }
 
 export const ANGLE_LEVELS: Readonly<Record<MeasureLevelId, AngleLevel>> = {
@@ -36,28 +35,24 @@ export const ANGLE_LEVELS: Readonly<Record<MeasureLevelId, AngleLevel>> = {
     tolerance: 5,
     marksEvery: 30,
     markLabels: true,
-    step: 5,
   },
   normal: {
     multipleOf: 10,
     tolerance: 5,
     marksEvery: 30,
     markLabels: false,
-    step: 5,
   },
   hard: {
     multipleOf: 5,
     tolerance: 3,
     marksEvery: 90,
     markLabels: false,
-    step: 5,
   },
   expert: {
     multipleOf: 1,
     tolerance: 2,
     marksEvery: 0,
     markLabels: false,
-    step: 1,
   },
 };
 

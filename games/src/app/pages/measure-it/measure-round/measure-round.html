@@ -5,7 +5,10 @@
       [angle]="value()"
       [marksEvery]="angle.level.marksEvery"
       [labels]="angle.level.markLabels"
-      [checked]="checkedRay()" />
+      [checked]="checkedRay()"
+      [editable]="!isDone()"
+      [label]="'measureIt.yourAnswer' | translate"
+      (angleChange)="value.set($event)" />
   } @else {
     <p class="question">{{ 'measureIt.whichAngle' | translate }}</p>
     <app-protractor-view
@@ -13,21 +16,17 @@
       [marksEvery]="angle.level.marksEvery"
       [labels]="angle.level.markLabels"
       [checked]="checkedRay()" />
-  }
-  <label class="slider">
-    @if (mode() === 'read-angle') {
+    <div class="dial">
       <span class="value mono">{{ value() }}°</span>
-    }
-    <input
-      type="range"
-      min="0"
-      max="180"
-      [step]="step()"
-      [value]="value()"
-      [disabled]="isDone()"
-      [attr.aria-label]="'measureIt.yourAnswer' | translate"
-      (input)="slide($event)" />
-  </label>
+      <app-protractor-view
+        [angle]="value()"
+        [marksEvery]="0"
+        [labels]="false"
+        [editable]="!isDone()"
+        [label]="'measureIt.yourAnswer' | translate"
+        (angleChange)="value.set($event)" />
+    </div>
+  }
 }
 
 @if (glass(); as glass) {
@@ -61,7 +60,7 @@
       type="range"
       [min]="line.slider.min"
       [max]="line.slider.max"
-      [step]="step()"
+      [step]="line.step / 10"
       [value]="value()"
       [disabled]="isDone()"
       [attr.aria-label]="'measureIt.yourAnswer' | translate"

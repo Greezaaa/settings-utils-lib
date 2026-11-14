@@ -62,9 +62,6 @@ export class MeasureRound {
   protected readonly angle = computed(() => this.asAngle(this.exercise()));
   protected readonly glass = computed(() => this.asGlass(this.exercise()));
   protected readonly line = computed(() => this.asLine(this.exercise()));
-  protected readonly step = computed(
-    () => this.angle()?.level.step ?? this.line()?.step ?? 1
-  );
 
   protected readonly checkedRay = computed((): CheckedRay | null => {
     const angle = this.angle();

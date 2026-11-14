@@ -12,6 +12,27 @@
 
 .protractor {
   width: min(100%, 26rem);
+
+  &.is-editable {
+    cursor: grab;
+    touch-action: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--button-bg);
+      outline-offset: 4px;
+      border-radius: var(--radius);
+    }
+  }
+}
+
+.knob {
+  fill: var(--button-bg);
+  stroke: var(--surface);
+  stroke-width: 2;
 }
 
 .number-line {
