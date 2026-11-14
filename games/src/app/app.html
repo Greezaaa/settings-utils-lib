@@ -96,6 +96,9 @@
       }
       <a routerLink="/account" routerLinkActive="active">{{ account.account()?.screenName ?? ('account.navLink' | translate) }}</a>
     }
+    @if (admin.isSignedIn()) {
+      <a [routerLink]="['/', adminPath]" routerLinkActive="active">{{ 'admin.navLink' | translate }}</a>
+    }
   </nav>
 </header>
 

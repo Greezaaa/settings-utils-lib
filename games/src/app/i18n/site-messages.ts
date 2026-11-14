@@ -566,6 +566,7 @@ export interface SiteMessages {
       >
     >;
     readonly previewTitle: string;
+    readonly navLink: string;
     readonly gameCategories: (game: string) => string;
     readonly newsHelp: string;
     readonly addNews: string;

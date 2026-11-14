@@ -1063,6 +1063,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     errorColumns: { when: 'Último', code: 'Código', title: 'Título', problem: 'Problema', page: 'Página', count: 'Veces', actions: 'Acciones' },
     loading: 'Cargando…',
     previewTitle: 'Modo vista previa',
+    navLink: 'Admin',
     gameCategories: game => `Categorías de ${game}`,
     uploadThumbnail: 'Subir imagen',
     automaticThumbnail: 'Usar automática',

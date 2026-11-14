@@ -1050,6 +1050,7 @@ export const EU: SiteMessages = {
     errorColumns: { when: 'Azkena', code: 'Kodea', title: 'Izenburua', problem: 'Arazoa', page: 'Orria', count: 'Aldiz', actions: 'Ekintzak' },
     loading: 'Kargatzen…',
     previewTitle: 'Aurrebista modua',
+    navLink: 'Admin',
     gameCategories: game => `${game} jokoaren kategoriak`,
     uploadThumbnail: 'Igo irudia',
     automaticThumbnail: 'Erabili automatikoa',

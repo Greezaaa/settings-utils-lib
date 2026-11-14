@@ -1080,6 +1080,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     errorColumns: { when: 'Востаннє', code: 'Код', title: 'Назва', problem: 'Проблема', page: 'Сторінка', count: 'Разів', actions: 'Дії' },
     loading: 'Завантаження…',
     previewTitle: 'Режим перегляду',
+    navLink: 'Адмін',
     gameCategories: game => `Категорії гри ${game}`,
     uploadThumbnail: 'Завантажити картинку',
     automaticThumbnail: 'Автоматична',

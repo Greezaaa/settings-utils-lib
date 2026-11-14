@@ -1027,6 +1027,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
     },
     loading: 'Caricamento…',
     previewTitle: 'Modalità anteprima',
+    navLink: 'Admin',
     gameCategories: (game) => `Categorie di ${game}`,
     uploadThumbnail: 'Carica immagine',
     automaticThumbnail: 'Usa automatica',

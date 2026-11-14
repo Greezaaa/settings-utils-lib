@@ -1029,6 +1029,7 @@ export const EN: SiteMessages = {
     errorColumns: { when: 'Last seen', code: 'Code', title: 'Title', problem: 'Problem', page: 'Page', count: 'Times', actions: 'Actions' },
     loading: 'Loading…',
     previewTitle: 'Preview mode',
+    navLink: 'Admin',
     gameCategories: game => `Categories of ${game}`,
     uploadThumbnail: 'Upload picture',
     automaticThumbnail: 'Use automatic',

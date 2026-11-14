@@ -6,7 +6,9 @@ import { SuNotificationComponent } from '@su-labs/notifications';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { byCategory, gameInfo, gameOfPath } from './core/games';
+import { AdminApi } from './core/admin-api';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
+import { wasSignedIn } from './core/session-hint';
 import { MenuAnimation } from './core/menu-animation';
 import { PlayerAccount } from './core/player-account';
 import { AppInstall } from './core/app-install';
@@ -77,6 +79,7 @@ export class App {
   });
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
+  protected readonly admin = inject(AdminApi);
 
   protected readonly menuOpen = signal(false);
   private readonly menuToggle =
@@ -105,6 +108,9 @@ export class App {
       void this.availability.ready();
       void this.features.ready();
       choiceRing.start();
+      if (wasSignedIn('admin')) {
+        void this.admin.restore();
+      }
     });
     const router = inject(Router);
     router.events.pipe(takeUntilDestroyed()).subscribe(event => {

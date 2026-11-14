@@ -1,5 +1,8 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { SuDialogService } from '@su-labs/dialog';
+import { Router } from '@angular/router';
+import { AdminApi } from '../../core/admin-api';
+import { ADMIN_PATH } from '../../core/links';
 import { MIN_PASSWORD_LENGTH } from '../../core/passwords';
 import { PlayerAccount } from '../../core/player-account';
 import { SiteLanguage } from '../../i18n/site-language';
@@ -21,6 +24,8 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 })
 export class AccountPage {
   protected readonly account = inject(PlayerAccount);
+  private readonly admin = inject(AdminApi);
+  private readonly router = inject(Router);
   private readonly dialog = inject(SuDialogService);
   protected readonly t = inject(SiteLanguage).messages;
   protected readonly minLength = MIN_PASSWORD_LENGTH;
@@ -60,7 +65,20 @@ export class AccountPage {
   }
 
   protected signIn(form: HTMLFormElement): void {
-    void this.entry.run(() => this.account.signIn(formText(form, 'loginName'), formText(form, 'password')), null);
+    const [name, password] = [formText(form, 'loginName').trim(), formText(form, 'password')];
+    void this.entry.run(async () => {
+      if (name.includes('@')) {
+        const asAdmin = await this.admin.signIn(name, password);
+        if (asAdmin === 'right') {
+          void this.router.navigateByUrl(`/${ADMIN_PATH}`);
+          return 'done';
+        }
+        if (asAdmin !== 'wrong') {
+          return asAdmin;
+        }
+      }
+      return this.account.signIn(name, password);
+    }, null);
   }
 
   protected signUp(form: HTMLFormElement): void {
