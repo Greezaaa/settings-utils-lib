@@ -4,6 +4,7 @@ import { SuNotificationService } from '@su-labs/notifications';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 import { SHARED_SETTINGS } from './shared-settings';
 import { isSavingAllowed } from './site-storage';
+import { SiteMotion } from './site-motion';
 import { SiteTheme } from './site-theme';
 
 export const VISIT_STORAGE_KEY = 'su-labs-site:visits';
@@ -12,6 +13,7 @@ export const VISIT_MILESTONES = [3, 10, 50, 100];
 
 export function setUpSite(): void {
   inject(SiteTheme).init();
+  inject(SiteMotion).init();
 
   const fontSize = inject(FontSizeService);
   fontSize.configure({

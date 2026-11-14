@@ -43,20 +43,18 @@
       </form>
 
       <div class="card account-card">
-        <label class="switch switch-row">
+        <su-lib-switch
+          labelPosition="start"
+          size="small"
+          [checked]="player.showOnLeaderboard"
+          [busy]="visibility.isBusy()"
+          (checkedChange)="setShowOnLeaderboard($event)"
+        >
           <span class="switch-text">
             <strong>{{ 'account.showOnLeaderboard' | translate }}</strong>
             <small class="muted">{{ 'account.showOnLeaderboardHint' | translate }}</small>
           </span>
-          <input
-            type="checkbox"
-            role="switch"
-            [checked]="player.showOnLeaderboard"
-            [attr.aria-busy]="visibility.isBusy()"
-            (change)="setShowOnLeaderboard($event)"
-          />
-          <span class="track" aria-hidden="true"></span>
-        </label>
+        </su-lib-switch>
       </div>
 
       <form class="card account-card" (submit)="$event.preventDefault(); changePassword(passwordForm)" #passwordForm>

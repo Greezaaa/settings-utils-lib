@@ -1,0 +1,33 @@
+@let result = check();
+@let t = text();
+<label class="su-email-label" [for]="id">{{ label() }}</label>
+<div class="su-email-box" [class.is-valid]="result.valid" [class.is-invalid]="problem() !== null">
+  <input
+    class="su-email-input"
+    type="email"
+    inputmode="email"
+    autocomplete="email"
+    autocapitalize="off"
+    spellcheck="false"
+    [id]="id"
+    [value]="value()"
+    [required]="required()"
+    [attr.placeholder]="placeholder() ?? null"
+    [attr.aria-invalid]="problem() !== null ? true : null"
+    [attr.aria-describedby]="id + '-message'"
+    (input)="onInput($event)"
+    (blur)="touched.set(true)"
+  />
+  <span class="su-email-tick" aria-hidden="true"></span>
+</div>
+<p class="su-email-message" aria-live="polite" [id]="id + '-message'">
+  @if (problem(); as problem) {
+    <span class="su-email-problem">{{ t[problem] }}</span>
+  }
+  @if (result.suggestion; as suggestion) {
+    <span class="su-email-suggestion">
+      {{ t.suggestion }}
+      <button type="button" class="su-email-fix" (click)="apply(suggestion)">{{ suggestion }}</button>?
+    </span>
+  }
+</p>

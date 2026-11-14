@@ -52,7 +52,11 @@
             </details>
           </div>
           <div class="feature-example">
-            <ng-container *ngTemplateOutlet="example.template" />
+            @defer (on viewport) {
+              <ng-container *ngTemplateOutlet="example.template" />
+            } @placeholder {
+              <div class="feature-placeholder"></div>
+            }
           </div>
         </article>
       }

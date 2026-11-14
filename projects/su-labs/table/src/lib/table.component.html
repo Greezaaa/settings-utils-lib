@@ -182,7 +182,16 @@
           @for (cell of row.cells; track cell.key; let cellIndex = $index) {
             @let column = current.columns[cellIndex];
             @let pin = pins[firstColumnSlot + cellIndex];
-            <ng-template #content>
+            <td
+              class="su-table-align-{{ column.align }}"
+              [attr.role]="cell.key === current.rowHeaderKey ? 'rowheader' : null"
+              [class.su-table-row-header]="cell.key === current.rowHeaderKey"
+              [class.is-sorted]="column.sort !== 'none'"
+              [class.is-editable]="!editing && editsOnDoubleClick(cell.key)"
+              [suTablePin]="pin"
+              (mousedown)="keepTextUnselected($event, cell.key)"
+              (dblclick)="editCell(row, cell.key)"
+            >
               @if (editing && inlineField(cell.key); as field) {
                 <su-lib-table-field
                   [field]="field"
@@ -196,31 +205,7 @@
               } @else {
                 {{ cell.text }}
               }
-            </ng-template>
-            @if (cell.key === current.rowHeaderKey) {
-              <th
-                scope="row"
-                class="su-table-align-{{ column.align }}"
-                [class.is-sorted]="column.sort !== 'none'"
-                [class.is-editable]="!editing && editsOnDoubleClick(cell.key)"
-                [suTablePin]="pin"
-                (mousedown)="keepTextUnselected($event, cell.key)"
-                (dblclick)="editCell(row, cell.key)"
-              >
-                <ng-container *ngTemplateOutlet="content" />
-              </th>
-            } @else {
-              <td
-                class="su-table-align-{{ column.align }}"
-                [class.is-sorted]="column.sort !== 'none'"
-                [class.is-editable]="!editing && editsOnDoubleClick(cell.key)"
-                [suTablePin]="pin"
-                (mousedown)="keepTextUnselected($event, cell.key)"
-                (dblclick)="editCell(row, cell.key)"
-              >
-                <ng-container *ngTemplateOutlet="content" />
-              </td>
-            }
+            </td>
           }
           @if (hasActions()) {
             <td class="su-table-actions-cell" [suTablePin]="pins[pins.length - 1]">

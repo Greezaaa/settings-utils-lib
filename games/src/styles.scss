@@ -40,6 +40,14 @@ html {
   --su-field-warning: var(--yellow-text);
   --su-field-danger: var(--red-text);
   --su-field-track: var(--subtle);
+  --su-switch-on: var(--button-bg);
+  --su-switch-tick: var(--button-text);
+  --su-switch-knob-off: var(--muted);
+  --su-switch-track-off: var(--subtle);
+  --su-switch-track-on: color-mix(in srgb, var(--button-bg) 35%, var(--surface));
+  --su-switch-border: var(--border);
+  --su-switch-focus-outline: 2px solid var(--heading);
+  --su-checkbox-tick: var(--button-text);
   --su-field-font-mono: var(--font-mono);
 }
 

@@ -1,5 +1,7 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { SuSwitchComponent } from '@su-labs/fields';
 import { SuNotificationService } from '@su-labs/notifications';
+import { SuTableColumns, SuTableComponent } from '@su-labs/table';
 import { forgetSharedSettings } from '../../core/shared-settings';
 import { deleteSaved, isSavingAllowed, setSavingAllowed } from '../../core/site-storage';
 
@@ -11,7 +13,7 @@ interface SavedItem {
 
 const SAVED: readonly SavedItem[] = [
   {
-    what: 'Theme and text size',
+    what: 'Theme, text size and motion',
     where: 'A cookie for su-labs.dev',
     why: 'So su-labs.dev and games.su-labs.dev look the way you chose',
   },
@@ -39,12 +41,19 @@ const NEVER: readonly string[] = [
   'Nothing is sold or shared with anyone',
 ];
 
+const SAVED_COLUMNS: SuTableColumns<SavedItem> = [
+  { key: 'what', header: 'What' },
+  { key: 'where', header: 'Where' },
+  { key: 'why', header: 'Why' },
+];
+
 /**
  * Privacy: what su-labs.dev saves, where and why, and a switch to stop saving anything. The switch is shared with
  * games.su-labs.dev, as both sites share the theme and text size. Turning it off deletes what was saved.
  */
 @Component({
   selector: 'app-privacy-page',
+  imports: [SuSwitchComponent, SuTableComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './privacy-page.html',
   styleUrls: ['../../shared/utility-page.scss', './privacy-page.scss'],
@@ -52,6 +61,8 @@ const NEVER: readonly string[] = [
 export class PrivacyPage {
   private readonly notifications = inject(SuNotificationService);
   protected readonly saved = SAVED;
+  protected readonly savedColumns = SAVED_COLUMNS;
+  protected readonly savedId = (item: SavedItem): string => item.what;
   protected readonly never = NEVER;
 
   protected readonly savingAllowed = signal(true);
@@ -68,10 +79,8 @@ export class PrivacyPage {
     });
   }
 
-  protected onChange(event: Event): void {
-    if (event.target instanceof HTMLInputElement) {
-      setSavingAllowed(event.target.checked, forgetSharedSettings);
-      this.savingAllowed.set(event.target.checked);
-    }
+  protected onChange(allowed: boolean): void {
+    setSavingAllowed(allowed, forgetSharedSettings);
+    this.savingAllowed.set(allowed);
   }
 }

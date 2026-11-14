@@ -1,0 +1,13 @@
+<label class="su-switch su-switch-{{ size() }}" [class.is-label-start]="labelPosition() === 'start'">
+  <input
+    type="checkbox"
+    role="switch"
+    [checked]="shown()"
+    [disabled]="disabled()"
+    [attr.aria-busy]="busy() ? true : null"
+    (click)="onClick($event)"
+    (change)="onChange($event)"
+  />
+  <span class="su-switch-track" aria-hidden="true"></span>
+  <span class="su-switch-label"><ng-content /></span>
+</label>

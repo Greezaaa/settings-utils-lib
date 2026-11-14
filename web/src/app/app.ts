@@ -3,6 +3,7 @@ import { afterNextRender, afterRenderEffect, ChangeDetectionStrategy, Component,
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SuDialogComponent } from '@su-labs/dialog';
+import { SuSwitchComponent } from '@su-labs/fields';
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
@@ -13,6 +14,7 @@ import { CORE_PACKAGE } from './core/packages';
 import { PageTransition } from './core/page-transition';
 import { PrivacyNotice } from './core/privacy-notice';
 import { readStored, writeStored } from './core/site-storage';
+import { SiteMotion } from './core/site-motion';
 import { SiteTheme } from './core/site-theme';
 import { MenuLinks } from './shared/menu-links';
 import { SiteIcon } from './shared/site-icon';
@@ -42,6 +44,7 @@ type MenuSheet = 'packages' | 'extensions' | 'more';
     SiteIcon,
     SuDialogComponent,
     SuNotificationComponent,
+    SuSwitchComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
@@ -49,12 +52,14 @@ type MenuSheet = 'packages' | 'extensions' | 'more';
   host: {
     '[class.menu-collapsed]': 'collapsed()',
     '(document:pointerdown)': 'closeSettingsOutside($event)',
+    '(document:keydown.escape)': 'closeSheet()',
   },
 })
 export class App {
   protected readonly theme = inject(SiteTheme);
   protected readonly fontSize = inject(FontSizeService);
   protected readonly menuOrder = inject(MenuOrder);
+  protected readonly motion = inject(SiteMotion);
   /** Started with the shell, so the privacy notice shows on whichever page the visitor lands */
   private readonly privacyNotice = inject(PrivacyNotice);
   /** Started with the shell, so it hears the first click on a link and the first page can fly out of it */
@@ -101,7 +106,9 @@ export class App {
   private readonly openSections = signal<ReadonlySet<string>>(
     new Set(this.sections().filter((section) => section.openByDefault).map((section) => section.id)),
   );
-  private readonly sheetDialog = viewChild<ElementRef<HTMLDialogElement>>('sheetDialog');
+  /** The tab that opened the sheet, to give focus back when it closes */
+  private sheetOpener: HTMLElement | null = null;
+  private sheetWasOpen = false;
 
   constructor() {
     const destroyRef = inject(DestroyRef);
@@ -127,13 +134,11 @@ export class App {
     });
 
     afterRenderEffect(() => {
-      const dialog = this.sheetDialog()?.nativeElement;
       const open = this.sheet() !== null;
-      if (dialog && open && !dialog.open) {
-        dialog.showModal();
-      } else if (dialog && !open && dialog.open) {
-        dialog.close();
+      if (open && !this.sheetWasOpen) {
+        document.getElementById('sheet-title')?.focus();
       }
+      this.sheetWasOpen = open;
     });
 
     this.router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
@@ -175,26 +180,32 @@ export class App {
     }
   }
 
-  protected openSheet(sheet: MenuSheet): void {
+  /**
+   * The bottom bar stays usable over a sheet: its tab opens the sheet, another tab swaps the sheet's content in
+   * place, and the same tab closes it
+   */
+  protected openSheet(sheet: MenuSheet, event: MouseEvent): void {
     this.customising.set(false);
-    this.sheet.update((current) => (current === sheet ? null : sheet));
+    if (this.sheet() === sheet) {
+      this.closeSheet();
+      return;
+    }
+    if (event.currentTarget instanceof HTMLElement) {
+      this.sheetOpener = event.currentTarget;
+    }
+    this.sheet.set(sheet);
   }
 
+  /** Closes the sheet; focus goes back to its tab when it was inside the sheet */
   protected closeSheet(): void {
+    if (this.sheet() === null) {
+      return;
+    }
+    const focusInside = (document.activeElement?.closest('.sheet') ?? null) !== null;
     this.customising.set(false);
     this.sheet.set(null);
-  }
-
-  /** Escape: the browser would close the dialog by itself; closing it through the state keeps them in step */
-  protected onSheetCancel(event: Event): void {
-    event.preventDefault();
-    this.closeSheet();
-  }
-
-  /** A click on the dialog element itself (not its content) is a click on the backdrop */
-  protected onSheetClick(event: MouseEvent): void {
-    if (event.target === this.sheetDialog()?.nativeElement) {
-      this.closeSheet();
+    if (focusInside) {
+      this.sheetOpener?.focus();
     }
   }
 

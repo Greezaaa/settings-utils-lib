@@ -1,0 +1,14 @@
+<div class="su-chips" role="group" [attr.aria-label]="label()">
+  @for (option of options(); track option.value) {
+    <button
+      type="button"
+      class="su-chip"
+      [attr.aria-pressed]="isPicked(option.value)"
+      [disabled]="option.disabled ?? false"
+      (click)="toggle(option)"
+    >
+      <span class="su-chip-tick" aria-hidden="true"></span>
+      {{ option.label }}
+    </button>
+  }
+</div>

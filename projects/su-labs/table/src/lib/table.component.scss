@@ -60,7 +60,7 @@ th.is-editable:hover {
   --su-table-cell-tint: var(--su-table-editable-hover-background, color-mix(in srgb, currentColor 6%, transparent));
 }
 
-tbody th {
+.su-table-row-header {
   font-weight: var(--su-table-row-header-weight, 600);
 }
 

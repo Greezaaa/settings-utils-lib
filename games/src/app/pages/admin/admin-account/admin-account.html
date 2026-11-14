@@ -1,13 +1,11 @@
 @if (admin.canPreview()) {
   <div class="card admin-card">
-    <label class="switch switch-row">
+    <su-lib-switch labelPosition="start" size="small" [checked]="availability.isPreview()" (checkedChange)="togglePreview()">
       <span class="switch-text">
         <strong>{{ 'admin.previewTitle' | translate }}</strong>
         <small class="muted">{{ 'admin.previewHelp' | translate: ('page.hidden' | translate) }}</small>
       </span>
-      <input type="checkbox" role="switch" [checked]="availability.isPreview()" (change)="togglePreview()" />
-      <span class="track" aria-hidden="true"></span>
-    </label>
+    </su-lib-switch>
   </div>
 }
 

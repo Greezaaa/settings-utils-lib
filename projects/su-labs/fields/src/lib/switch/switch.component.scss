@@ -1,9 +1,12 @@
-// A real checkbox drawn as a sliding switch, for the privacy and admin pages:
-.switch {
+:host {
+  display: block;
+}
+
+.su-switch {
   align-items: center;
   cursor: pointer;
   display: inline-flex;
-  font-weight: 500;
+  font-weight: var(--su-switch-label-weight, 500);
   gap: 0.75rem;
 
   input {
@@ -12,11 +15,32 @@
     position: absolute;
     width: 1px;
   }
+
+  &.is-label-start {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 
-.track {
-  --switch-width: 3rem;
-  --switch-height: 1.75rem;
+.su-switch-label {
+  display: grid;
+  gap: 0.125rem;
+
+  .is-label-start & {
+    flex: 1;
+  }
+
+  &:empty {
+    display: none;
+  }
+}
+
+.su-switch-track {
+  --switch-width: var(--su-switch-width, 3rem);
+  --switch-height: var(--su-switch-height, 1.75rem);
   --switch-inset: 0.1875rem;
   --switch-knob: calc(var(--switch-height) - 2 * var(--switch-inset));
   --switch-travel: calc(var(--switch-width) - var(--switch-height));
@@ -24,11 +48,11 @@
   --knob-width: var(--switch-knob);
   --knob-move: 0rem;
   --knob-scale: 0.7;
-  --knob-colour: var(--muted);
+  --knob-colour: var(--su-switch-knob-off, #9b9a97);
 
-  background: var(--subtle);
+  background: var(--su-switch-track-off, rgb(0 0 0 / 0.06));
   border-radius: 9999px;
-  box-shadow: inset 0 0 0 2px var(--border);
+  box-shadow: inset 0 0 0 2px var(--su-switch-border, rgb(0 0 0 / 0.14));
   flex-shrink: 0;
   height: var(--switch-height);
   position: relative;
@@ -37,10 +61,15 @@
     box-shadow 200ms ease;
   width: var(--switch-width);
 
+  .su-switch-small & {
+    --switch-width: var(--su-switch-small-width, 2.125rem);
+    --switch-height: var(--su-switch-small-height, 1.25rem);
+  }
+
   &::after {
     background: var(--knob-colour);
     border-radius: 9999px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
     content: '';
     height: var(--switch-knob);
     left: var(--switch-inset);
@@ -57,7 +86,7 @@
   }
 
   &::before {
-    background: var(--button-text);
+    background: var(--su-switch-tick, #fff);
     content: '';
     height: var(--switch-knob);
     left: calc(var(--switch-inset) + var(--switch-travel));
@@ -75,16 +104,16 @@
   }
 }
 
-.switch:active input + .track {
+.su-switch:active input:not(:disabled) + .su-switch-track {
   --knob-scale: 1;
   --knob-width: calc(var(--switch-knob) + var(--switch-stretch));
 }
 
-.switch input:checked + .track {
+.su-switch input:checked + .su-switch-track {
   --knob-move: var(--switch-travel);
   --knob-scale: 1;
-  --knob-colour: var(--button-bg);
-  background: color-mix(in srgb, var(--button-bg) 35%, var(--surface));
+  --knob-colour: var(--su-switch-on, #111);
+  background: var(--su-switch-track-on, color-mix(in srgb, var(--su-switch-on, #111) 35%, Canvas));
   box-shadow: none;
 
   &::before {
@@ -93,7 +122,7 @@
   }
 }
 
-.switch:active input:checked + .track {
+.su-switch:active input:checked:not(:disabled) + .su-switch-track {
   --knob-move: calc(var(--switch-travel) - var(--switch-stretch));
 
   &::before {
@@ -101,20 +130,23 @@
   }
 }
 
-.switch input:focus-visible + .track {
-  outline: 2px solid var(--heading);
+.su-switch input:focus-visible + .su-switch-track {
+  outline: var(--su-switch-focus-outline, 2px solid currentColor);
   outline-offset: 2px;
 }
 
-.switch input:disabled + .track {
+.su-switch:has(input:disabled) {
   cursor: not-allowed;
+}
+
+.su-switch input:disabled + .su-switch-track {
   opacity: 0.5;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .track,
-  .track::after,
-  .track::before {
+  .su-switch-track,
+  .su-switch-track::after,
+  .su-switch-track::before {
     transition: none;
   }
 }

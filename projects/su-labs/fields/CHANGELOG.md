@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `su-lib-email-field`: an email input that checks the address the way people mistype it, says what's wrong once the field is left, shows a tick when it looks right, and suggests a common domain for a likely typo (`gmial.com` → `gmail.com`) applied with one tap; `required`, your own `domains` and `messages`, `validityChange`. The check is exported as `suCheckEmail`
+- `su-lib-checkbox`: a real checkbox whose tick draws itself in, with a squash when pressed and a dash when partly checked; `[(checked)]`, `indeterminate`, `disabled`
+- `su-lib-chips`: toggle chips to pick several options or one (`multiple`), each popping a tick in when picked; typed `[(value)]`, disabled options
+- `su-lib-switch`: a real checkbox (`role="switch"`) drawn as a sliding switch, with a stretching knob, a spring and a tick when on; `[(checked)]`, the label before or after it (`labelPosition`), `small` or `medium`, `disabled`, and `busy` (ignores clicks while saving, then shows the saved value); themed with `--su-switch-*` variables
+
 ## [22.0.0] - 2026-11-11
 
 ### Added

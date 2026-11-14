@@ -1,7 +1,7 @@
 {
 	"name": "@su-labs/fields",
 	"version": "22.0.0",
-	"description": "Animated Angular form fields: code boxes that fill one by one, a password strength meter, and a text box that grows as you type.",
+	"description": "Animated Angular form fields: code boxes that fill one by one, a password strength meter, an email field that catches typos, a sliding switch, checkboxes, chips, and a text box that grows as you type.",
 	"keywords": [
 		"angular",
 		"form",
@@ -11,6 +11,11 @@
 		"password-strength",
 		"textarea",
 		"auto-grow",
+		"switch",
+		"toggle",
+		"checkbox",
+		"chips",
+		"email",
 		"animation",
 		"ui"
 	],

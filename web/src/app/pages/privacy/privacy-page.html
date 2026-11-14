@@ -9,11 +9,9 @@
 
 <section class="container page-section" aria-labelledby="privacy-choice">
   <h2 id="privacy-choice" class="section-title">Your choice</h2>
-  <label class="switch">
-    <input type="checkbox" role="switch" [checked]="savingAllowed()" (change)="onChange($event)" />
-    <span class="track" aria-hidden="true"></span>
-    <span>Remember my preferences on this device</span>
-  </label>
+  <su-lib-switch [checked]="savingAllowed()" (checkedChange)="onChange($event)">
+    Remember my preferences on this device
+  </su-lib-switch>
   <p class="muted" aria-live="polite">
     @if (savingAllowed()) {
       Your preferences are saved on this device.
@@ -29,26 +27,17 @@
 
 <section class="container page-section" aria-labelledby="privacy-saved">
   <h2 id="privacy-saved" class="section-title">What we save</h2>
-  <div class="table-scroll">
-    <table class="saved">
-      <thead>
-        <tr>
-          <th scope="col">What</th>
-          <th scope="col">Where</th>
-          <th scope="col">Why</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of saved; track row.what) {
-          <tr>
-            <th scope="row">{{ row.what }}</th>
-            <td>{{ row.where }}</td>
-            <td class="muted">{{ row.why }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+  @defer (on viewport) {
+    <su-lib-table
+      class="saved"
+      caption="What su-labs.dev saves"
+      [columns]="savedColumns"
+      [rows]="saved"
+      [rowId]="savedId"
+    />
+  } @placeholder {
+    <div class="saved-placeholder"></div>
+  }
 </section>
 
 <section class="container page-section" aria-labelledby="privacy-difference">

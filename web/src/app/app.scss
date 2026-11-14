@@ -1,3 +1,7 @@
+:host {
+  --tab-bar-height: calc(3.75rem + env(safe-area-inset-bottom));
+}
+
 .skip-link {
   background: var(--button-bg);
   border-radius: 6px;
@@ -120,6 +124,10 @@
   width: 100%;
 }
 
+.setting-switch {
+  font-size: 0.875rem;
+}
+
 .theme-dot {
   background: linear-gradient(90deg, var(--heading) 50%, var(--bg) 50%);
   border: 1px solid var(--heading);
@@ -166,11 +174,6 @@
   display: grid;
   gap: 1rem;
   padding-top: 1.25rem;
-}
-
-.github-link {
-  gap: 0.5rem;
-  justify-self: start;
 }
 
 .text-button {
@@ -223,7 +226,9 @@
   border-top: 1px solid var(--border);
   bottom: 0;
   display: grid;
+  box-sizing: border-box;
   grid-template-columns: repeat(5, 1fr);
+  height: var(--tab-bar-height);
   left: 0;
   padding: 0.3rem 0.5rem calc(0.3rem + env(safe-area-inset-bottom));
   position: fixed;
@@ -260,27 +265,37 @@
   }
 }
 
+.sheet-backdrop {
+  background: rgb(0 0 0 / 0.45);
+  bottom: var(--tab-bar-height);
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 84;
+}
+
 .sheet {
   background: var(--surface);
   border: 1px solid var(--border);
+  border-bottom: 0;
   border-radius: 18px 18px 0 0;
+  bottom: var(--tab-bar-height);
+  box-shadow: 0 -12px 32px rgb(0 0 0 / 0.18);
   box-sizing: border-box;
   color: var(--text);
-  margin: auto 0 0;
-  max-height: 85dvh;
-  max-width: none;
-  padding: 0;
-  width: 100%;
-
-  &::backdrop {
-    background: rgb(0 0 0 / 0.45);
-  }
+  left: 0;
+  max-height: calc(85dvh - var(--tab-bar-height));
+  overflow-y: auto;
+  position: fixed;
+  right: 0;
+  z-index: 85;
 }
 
 .sheet-content {
   display: grid;
   gap: 1rem;
-  padding: 1rem var(--gutter) calc(1.5rem + env(safe-area-inset-bottom));
+  padding: 1rem var(--gutter) 1.25rem;
 }
 
 .sheet-head {
@@ -326,8 +341,20 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .sheet[open] {
-    animation: sheet-in 220ms ease-out;
+  .sheet.is-sliding-in {
+    animation: sheet-in 260ms var(--ease-out, ease-out);
+  }
+
+  .sheet.is-sliding-out {
+    animation: sheet-in 200ms ease-in reverse forwards;
+  }
+
+  .sheet-backdrop.is-fading-in {
+    animation: backdrop-in 200ms ease-out;
+  }
+
+  .sheet-backdrop.is-fading-out {
+    animation: backdrop-in 200ms ease-in reverse forwards;
   }
 
   :host {
@@ -363,13 +390,19 @@
   }
 }
 
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 63.99rem) {
   .menu-collapse {
     display: none;
   }
 
   .page {
-    padding-bottom: calc(3.75rem + env(safe-area-inset-bottom));
+    padding-bottom: var(--tab-bar-height);
   }
 }
 
@@ -417,7 +450,8 @@
   }
 
   .tab-bar,
-  .sheet {
+  .sheet,
+  .sheet-backdrop {
     display: none;
   }
 

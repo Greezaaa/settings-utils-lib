@@ -1,3 +1,4 @@
+import { SuSwitchComponent } from '@su-labs/fields';
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AdminApi } from '../../../core/admin-api';
 import { GameAvailability } from '../../../core/game-availability';
@@ -11,10 +12,10 @@ type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
 @Component({
   selector: 'app-admin-account',
   host: { class: 'admin-tab' },
-  imports: [TranslatePipe, RevealPassword],
+  imports: [RevealPassword, SuSwitchComponent, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-account.html',
-  styleUrls: ['../admin.scss', '../../../shared/switch.scss'],
+  styleUrls: ['../admin.scss'],
 })
 export class AdminAccount {
   protected readonly admin = inject(AdminApi);

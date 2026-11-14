@@ -11,16 +11,16 @@ import { ScreenNameField } from './screen-name-field/screen-name-field';
 import { RevealPassword } from '../../shared/reveal-password';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { FeatureFlags } from '../../core/feature-flags';
-import { SuStrengthMeterComponent } from '@su-labs/fields';
+import { SuStrengthMeterComponent, SuSwitchComponent } from '@su-labs/fields';
 
 type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 
 @Component({
   selector: 'app-account-page',
-  imports: [TranslatePipe, RevealPassword, SuStrengthMeterComponent, ScreenNameField],
+  imports: [TranslatePipe, RevealPassword, SuStrengthMeterComponent, SuSwitchComponent, ScreenNameField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', '../admin/admin.scss', './account.scss'],
+  styleUrls: ['../../shared/utility-page.scss', '../admin/admin.scss', './account.scss'],
 })
 export class AccountPage {
   protected readonly account = inject(PlayerAccount);
@@ -133,18 +133,11 @@ export class AccountPage {
     );
   }
 
-  protected async setShowOnLeaderboard(event: Event): Promise<void> {
-    const box = event.target instanceof HTMLInputElement ? event.target : null;
-    const saved = () => this.account.account()?.showOnLeaderboard ?? false;
-    if (!box || this.visibility.isBusy()) {
-      if (box) {
-        box.checked = saved();
-      }
+  protected async setShowOnLeaderboard(showOnLeaderboard: boolean): Promise<void> {
+    if (this.visibility.isBusy()) {
       return;
     }
-    const showOnLeaderboard = box.checked;
     await this.visibility.run(() => this.account.setShowOnLeaderboard(showOnLeaderboard), this.t().account.saved);
-    box.checked = saved();
   }
 
   protected async removeResults(): Promise<void> {

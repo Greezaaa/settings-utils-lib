@@ -21,6 +21,37 @@
         <span>A note that grows as you type</span>
         <textarea class="text-input" suAutoGrow rows="2" placeholder="Add a note…"></textarea>
       </label>
+
+      <su-lib-email-field
+        label="Email"
+        placeholder="name@example.com"
+        required
+        [(value)]="email"
+        (validityChange)="emailOk.set($event)"
+      />
+
+      <div class="field">
+        <span>Topics</span>
+        <su-lib-chips label="Topics" [options]="topics" [(value)]="pickedTopics" />
+      </div>
+
+      <div class="field">
+        <span>Emails you’d like</span>
+        <su-lib-checkbox [checked]="allNews()" [indeterminate]="someNews()" (checkedChange)="setAllNews($event)">
+          All of them
+        </su-lib-checkbox>
+        @for (item of news; track item) {
+          <su-lib-checkbox class="nested-check" [checked]="newsPicked().has(item)" (checkedChange)="setNews(item, $event)">
+            {{ item }}
+          </su-lib-checkbox>
+        }
+      </div>
+
+      <div class="field">
+        <span>Switches</span>
+        <su-lib-switch [(checked)]="notify">Email me about new games</su-lib-switch>
+        <su-lib-switch labelPosition="start" size="small" [(checked)]="compact">Compact rows</su-lib-switch>
+      </div>
     </div>
 
     <dl class="state-list">
@@ -31,6 +62,18 @@
       <div>
         <dt>complete</dt>
         <dd>{{ isCodeComplete() }}</dd>
+      </div>
+      <div>
+        <dt>email valid</dt>
+        <dd>{{ emailOk() }}</dd>
+      </div>
+      <div>
+        <dt>topics</dt>
+        <dd>{{ pickedTopics().join(', ') || '—' }}</dd>
+      </div>
+      <div>
+        <dt>notify / compact</dt>
+        <dd>{{ notify() }} / {{ compact() }}</dd>
       </div>
     </dl>
   </div>

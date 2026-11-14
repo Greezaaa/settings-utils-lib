@@ -1,3 +1,4 @@
+import { SuSwitchComponent } from '@su-labs/fields';
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, DOCUMENT, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FeatureFlags } from '../../../core/feature-flags';
@@ -30,6 +31,7 @@ const TICK_MS = 100;
 @Component({
   selector: 'app-room-page',
   imports: [
+    SuSwitchComponent,
     TranslatePipe,
     GameBoard,
     RoomLettersRound,
@@ -48,7 +50,6 @@ const TICK_MS = 100;
   styleUrls: [
     '../../../shared/utility-page.scss',
     '../../../shared/game-settings.scss',
-    '../../../shared/switch.scss',
     '../rooms.scss',
   ],
 })

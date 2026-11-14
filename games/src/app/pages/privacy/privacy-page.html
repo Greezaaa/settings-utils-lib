@@ -5,11 +5,9 @@
 
 <section class="container page-section" aria-labelledby="privacy-choice">
   <h2 id="privacy-choice" class="section-title">{{ 'privacy.choiceTitle' | translate }}</h2>
-  <label class="switch">
-    <input type="checkbox" role="switch" [checked]="savingAllowed()" (change)="onChange($event)" />
-    <span class="track" aria-hidden="true"></span>
-    <span>{{ 'privacy.choiceLabel' | translate }}</span>
-  </label>
+  <su-lib-switch [checked]="savingAllowed()" (checkedChange)="onChange($event)">
+    {{ 'privacy.choiceLabel' | translate }}
+  </su-lib-switch>
   <p class="muted" aria-live="polite">{{ savingAllowed() ? ('privacy.choiceOn' | translate) : ('privacy.choiceOff' | translate) }}</p>
   <div class="delete">
     <button type="button" class="button button-secondary" (click)="deleteSaved()">{{ 'privacy.deleteSaved' | translate }}</button>

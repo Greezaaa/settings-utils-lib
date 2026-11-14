@@ -1,0 +1,16 @@
+<label class="su-checkbox" [class.is-mixed]="indeterminate() && !shown()">
+  <input
+    type="checkbox"
+    [checked]="shown()"
+    [indeterminate]="indeterminate() && !shown()"
+    [disabled]="disabled()"
+    (change)="onChange($event)"
+  />
+  <span class="su-checkbox-box" aria-hidden="true">
+    <svg viewBox="0 0 24 24">
+      <path class="su-checkbox-tick" d="M5 12.5l4.5 4.5L19 7.5" />
+      <path class="su-checkbox-dash" d="M6 12h12" />
+    </svg>
+  </span>
+  <span class="su-checkbox-label"><ng-content /></span>
+</label>

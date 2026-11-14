@@ -73,7 +73,7 @@ export const UTILITIES: readonly SuUtility[] = [
     slug: 'fields',
     name: 'Fields',
     packageName: '@su-labs/fields',
-    summary: 'Animated form fields: code boxes, a password strength meter and a text box that grows as you type.',
+    summary: 'Animated form fields: code boxes, password strength, an email field that catches typos, switches, checkboxes and chips.',
   },
 ];
 

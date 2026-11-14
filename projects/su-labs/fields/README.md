@@ -65,6 +65,91 @@ The rule is exported too: `suPasswordStrength(password, minLength)` gives 0 to 4
 
 It also shrinks back when its form is reset.
 
+## Switch
+
+A real checkbox (`role="switch"`) drawn as a sliding switch: the knob stretches while pressed, springs across, and a
+tick pops in when it's on. The label goes inside.
+
+```html
+<su-lib-switch [(checked)]="notify">Email me about new games</su-lib-switch>
+
+<su-lib-switch labelPosition="start" size="small" [checked]="isPublic()" [busy]="saving()" (checkedChange)="save($event)">
+  <strong>Show me on the leaderboard</strong>
+  <small>Others see your screen name and best scores</small>
+</su-lib-switch>
+```
+
+| Input / output | Default | Description |
+|---|---|---|
+| `checked` / `checkedChange` | `false` | Whether it's on; `[(checked)]` binds both ways |
+| `labelPosition` | `'end'` | `'end'`: label after the switch; `'start'`: label first, switch at the end of the row |
+| `size` | `'medium'` | `'small'` or `'medium'` |
+| `disabled` | `false` | |
+| `busy` | `false` | While saving: clicks are ignored and `aria-busy` is set; once done it shows `checked` again, so a change that failed to save flips back |
+
+| Variable | Default |
+|---|---|
+| `--su-switch-on` / `--su-switch-tick` | `#111` / `#fff` (the knob and the tick when on) |
+| `--su-switch-track-on` | the on colour at 35% |
+| `--su-switch-knob-off` / `--su-switch-track-off` / `--su-switch-border` | grey / a faint tint / a soft line |
+| `--su-switch-width` / `--su-switch-height` | `3rem` / `1.75rem` (`--su-switch-small-width`, `--su-switch-small-height`: `2.125rem` / `1.25rem`) |
+| `--su-switch-label-weight` / `--su-switch-focus-outline` | `500` / `2px solid currentColor` |
+
+## Email field
+
+An email input that checks the address the way people mistype it: no @, nothing before or after it, no dot in the
+domain, spaces, or a one-letter ending. It stays quiet while you type and says what's wrong once you leave the field;
+a tick shows when the address looks right. For a likely typo in a common domain it offers the fix, applied with one tap:
+`jo@gmial.com` → "Did you mean jo@gmail.com?"
+
+```html
+<su-lib-email-field label="Email" required [(value)]="email" (validityChange)="emailOk.set($event)" />
+```
+
+| Input / output | Default | Description |
+|---|---|---|
+| `value` | `''` | The address; `[(value)]` binds both ways |
+| `label` | — | The visible label |
+| `placeholder` | — | |
+| `required` | `false` | An empty field counts as a problem |
+| `domains` | common providers | Domains to suggest for a typo, e.g. your company's |
+| `messages` | English | `Partial<SuEmailMessages>`: the problem texts and "Did you mean" |
+| `validityChange` | — | Whether the address is valid, on every change |
+
+The check itself is exported: `suCheckEmail(value, domains?)` gives `{ valid, problem, suggestion }`.
+
+## Checkbox
+
+A real checkbox whose tick draws itself in, with a small squash when pressed and a dash when partly checked.
+
+```html
+<su-lib-checkbox [(checked)]="agree">I agree to the terms</su-lib-checkbox>
+<su-lib-checkbox [checked]="all()" [indeterminate]="some()" (checkedChange)="selectAll($event)">Select all</su-lib-checkbox>
+```
+
+Inputs: `checked` / `checkedChange` (`[(checked)]`), `indeterminate`, `disabled`. Size and tick colour:
+`--su-checkbox-size` (`1.25rem`), `--su-checkbox-tick` (`#fff`); the box uses `--su-field-accent` when checked.
+
+## Chips
+
+Toggle chips to pick several options, or one with `multiple` off. Each is a button (`aria-pressed`) that pops a tick in
+when picked; the value keeps the options' order and type.
+
+```ts
+categories: readonly SuChipOption<Category>[] = [
+  { value: 'tools', label: 'Tools' },
+  { value: 'garden', label: 'Garden' },
+];
+picked = signal<readonly Category[]>([]);
+```
+
+```html
+<su-lib-chips label="Categories" [options]="categories" [(value)]="picked" />
+```
+
+Inputs: `options` (`{ value, label, disabled? }`), `value` (`[(value)]`), `label` (the group's name for screen readers),
+`multiple` (`true`). Spacing: `--su-chips-gap` (`0.5rem`).
+
 ## Theming
 
 Set these CSS variables (each has a fallback):

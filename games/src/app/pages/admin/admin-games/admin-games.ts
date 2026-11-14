@@ -1,5 +1,6 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SuSwitchComponent } from '@su-labs/fields';
 import { AdminApi } from '../../../core/admin-api';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { FEATURES, FeatureId } from '../../../core/features';
@@ -11,7 +12,6 @@ import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 interface SwitchActions {
-  readonly isOpen: () => boolean;
   readonly setOpen: (open: boolean) => void;
   readonly request: (open: boolean) => Promise<boolean>;
 }
@@ -19,10 +19,10 @@ interface SwitchActions {
 @Component({
   selector: 'app-admin-games',
   host: { class: 'admin-tab' },
-  imports: [TranslatePipe, RouterLink],
+  imports: [RouterLink, SuSwitchComponent, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-games.html',
-  styleUrls: ['../admin.scss', '../../../shared/switch.scss'],
+  styleUrls: ['../admin.scss'],
 })
 export class AdminGames {
   protected readonly admin = inject(AdminApi);
@@ -40,9 +40,8 @@ export class AdminGames {
     afterNextRender(() => Promise.all([this.availability.refresh(), this.flags.refresh()]));
   }
 
-  protected toggle(game: GameSlug, event: Event): Promise<void> {
-    return this.save(game, event, {
-      isOpen: () => this.availability.isOpen(game),
+  protected toggle(game: GameSlug, open: boolean): Promise<void> {
+    return this.save(game, open, {
       setOpen: (open) => this.availability.setOpen(game, open),
       request: (open) => this.admin.setGameEnabled(game, open),
     });
@@ -101,31 +100,22 @@ export class AdminGames {
     this.saving.update((saving) => new Set([...saving].filter((other) => other !== id)));
   }
 
-  protected toggleFeature(feature: FeatureId, event: Event): Promise<void> {
-    return this.save(feature, event, {
-      isOpen: () => this.flags.isOpen(feature),
+  protected toggleFeature(feature: FeatureId, open: boolean): Promise<void> {
+    return this.save(feature, open, {
       setOpen: (open) => this.flags.setOpen(feature, open),
       request: (open) => this.admin.setFeatureEnabled(feature, open),
     });
   }
 
-  private async save(id: GameSlug | FeatureId, event: Event, { isOpen, setOpen, request }: SwitchActions): Promise<void> {
-    const box = event.target instanceof HTMLInputElement ? event.target : null;
+  private async save(id: GameSlug | FeatureId, open: boolean, { setOpen, request }: SwitchActions): Promise<void> {
     if (this.saving().has(id)) {
-      if (box) {
-        box.checked = isOpen();
-      }
       return;
     }
-    const open = !isOpen();
     this.saving.update((saving) => new Set(saving).add(id));
     setOpen(open);
     if (!(await request(open))) {
       setOpen(!open);
       this.notifySaveFailed();
-    }
-    if (box) {
-      box.checked = isOpen();
     }
     this.saving.update((saving) => new Set([...saving].filter((other) => other !== id)));
   }

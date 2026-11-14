@@ -89,6 +89,12 @@
   min-width: 0;
 }
 
+.feature-placeholder {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-large);
+  min-height: 14rem;
+}
+
 .feature-code {
   margin-top: 0.75rem;
 

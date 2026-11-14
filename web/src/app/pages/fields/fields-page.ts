@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { SuAutoGrowDirective, SuCodeBoxesComponent, SuStrengthLevel, SuStrengthMeterComponent } from '@su-labs/fields';
+import { SuAutoGrowDirective, SuCheckboxComponent, SuChipOption, SuChipsComponent, SuCodeBoxesComponent, SuEmailFieldComponent, SuStrengthLevel, SuStrengthMeterComponent, SuSwitchComponent } from '@su-labs/fields';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { UtilityPage } from '../../shared/utility-page';
@@ -13,6 +13,17 @@ const LEVEL_NAMES: Readonly<Record<SuStrengthLevel, string>> = {
   good: 'Good',
   strong: 'Strong',
 };
+
+type Topic = 'logic' | 'words' | 'numbers' | 'music';
+
+const TOPICS: readonly SuChipOption<Topic>[] = [
+  { value: 'logic', label: 'Logic' },
+  { value: 'words', label: 'Words' },
+  { value: 'numbers', label: 'Numbers' },
+  { value: 'music', label: 'Music' },
+];
+
+const NEWS = ['New games', 'Weekly scores', 'Tips'] as const;
 
 const USAGE: readonly CodeTab[] = [
   {
@@ -38,6 +49,39 @@ protected readonly isComplete = computed(() => /^[A-Z0-9]{6}$/.test(this.code())
     code: `<textarea suAutoGrow rows="2"></textarea>`,
   },
   {
+    label: 'Email',
+    code: `<su-lib-email-field label="Email" required [(value)]="email" (validityChange)="emailOk.set($event)" />
+
+// suggests a common domain for a typo: jo@gmial.com → jo@gmail.com`,
+  },
+  {
+    label: 'Checkbox',
+    code: `<su-lib-checkbox [(checked)]="agree">I agree to the terms</su-lib-checkbox>
+<su-lib-checkbox [checked]="all()" [indeterminate]="some()" (checkedChange)="selectAll($event)">
+  Select all
+</su-lib-checkbox>`,
+  },
+  {
+    label: 'Chips',
+    code: `topics: readonly SuChipOption<Topic>[] = [
+  { value: 'logic', label: 'Logic' },
+  { value: 'words', label: 'Words' },
+];
+picked = signal<readonly Topic[]>([]);
+
+<su-lib-chips label="Topics" [options]="topics" [(value)]="picked" />`,
+  },
+  {
+    label: 'Switch',
+    code: `<su-lib-switch [(checked)]="notify">Email me about new games</su-lib-switch>
+
+<!-- label first, small, while saving -->
+<su-lib-switch labelPosition="start" size="small" [checked]="isPublic()" [busy]="saving()"
+  (checkedChange)="save($event)">
+  Show me on the leaderboard
+</su-lib-switch>`,
+  },
+  {
     label: 'CSS',
     code: `:root {
   --su-field-accent: #3b82f6;
@@ -51,7 +95,16 @@ protected readonly isComplete = computed(() => /^[A-Z0-9]{6}$/.test(this.code())
 
 @Component({
   selector: 'app-fields-page',
-  imports: [SuAutoGrowDirective, SuCodeBoxesComponent, SuStrengthMeterComponent, UtilityPage],
+  imports: [
+    SuAutoGrowDirective,
+    SuCheckboxComponent,
+    SuChipsComponent,
+    SuCodeBoxesComponent,
+    SuEmailFieldComponent,
+    SuStrengthMeterComponent,
+    SuSwitchComponent,
+    UtilityPage,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './fields-page.html',
   styleUrl: './fields-page.scss',
@@ -63,4 +116,30 @@ export class FieldsPage {
   protected readonly levelNames = LEVEL_NAMES;
   protected readonly code = signal('');
   protected readonly isCodeComplete = computed(() => CODE_PATTERN.test(this.code()));
+  protected readonly notify = signal(true);
+  protected readonly compact = signal(false);
+  protected readonly email = signal('');
+  protected readonly emailOk = signal(false);
+  protected readonly topics = TOPICS;
+  protected readonly pickedTopics = signal<readonly Topic[]>(['logic']);
+  protected readonly news = NEWS;
+  protected readonly newsPicked = signal<ReadonlySet<string>>(new Set(['New games']));
+  protected readonly allNews = computed(() => this.newsPicked().size === NEWS.length);
+  protected readonly someNews = computed(() => this.newsPicked().size > 0 && !this.allNews());
+
+  protected setNews(item: string, picked: boolean): void {
+    this.newsPicked.update((current) => {
+      const next = new Set(current);
+      if (picked) {
+        next.add(item);
+      } else {
+        next.delete(item);
+      }
+      return next;
+    });
+  }
+
+  protected setAllNews(picked: boolean): void {
+    this.newsPicked.set(new Set(picked ? NEWS : []));
+  }
 }

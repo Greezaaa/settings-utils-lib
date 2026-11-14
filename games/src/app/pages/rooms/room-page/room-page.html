@@ -120,29 +120,23 @@
                     }
                   </div>
                 </div>
-                <label class="switch score-switch">
-                  <input
-                    type="checkbox"
-                    role="switch"
-                    [checked]="room.settings.showScores"
-                    [disabled]="!client.isHost()"
-                    (change)="toggleSetting('showScores')"
-                  />
-                  <span class="track" aria-hidden="true"></span>
-                  <span>{{ 'rooms.showScores' | translate }}</span>
-                </label>
+                <su-lib-switch
+                  class="score-switch"
+                  [checked]="room.settings.showScores"
+                  [disabled]="!client.isHost()"
+                  (checkedChange)="toggleSetting('showScores')"
+                >
+                  {{ 'rooms.showScores' | translate }}
+                </su-lib-switch>
                 @if (hasOwnNames()) {
-                  <label class="switch score-switch">
-                    <input
-                      type="checkbox"
-                      role="switch"
-                      [checked]="room.settings.ownNames"
-                      [disabled]="!client.isHost()"
-                      (change)="toggleSetting('ownNames')"
-                    />
-                    <span class="track" aria-hidden="true"></span>
-                    <span>{{ 'rooms.ownNames' | translate }}</span>
-                  </label>
+                  <su-lib-switch
+                    class="score-switch"
+                    [checked]="room.settings.ownNames"
+                    [disabled]="!client.isHost()"
+                    (checkedChange)="toggleSetting('ownNames')"
+                  >
+                    {{ 'rooms.ownNames' | translate }}
+                  </su-lib-switch>
                 }
               </div>
             </div>

@@ -72,7 +72,7 @@ describe('SuTableComponent', () => {
       return found;
     };
     const rowHeaders = () =>
-      query('tbody th[scope="row"]').map(cell => cell.textContent?.trim());
+      query('tbody [role="rowheader"]').map(cell => cell.textContent?.trim());
     const settle = () => fixture.whenStable();
     return { fixture, element, query, button, rowHeaders, settle };
   };
@@ -160,7 +160,7 @@ describe('SuTableComponent', () => {
   it('edits a row from a double-clicked cell, starting in its field', async () => {
     const { fixture, query, settle } = await render();
 
-    const ageCell = query<HTMLElement>('tbody tr')[0].querySelectorAll('td')[2];
+    const ageCell = query<HTMLElement>('tbody tr')[0].querySelectorAll('td')[3];
     ageCell.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
     await settle();
     await settle();

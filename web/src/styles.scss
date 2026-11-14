@@ -68,6 +68,14 @@
   --su-table-dragging-background: var(--surface);
   --su-table-pinned-background: var(--surface);
   --su-table-menu-background: var(--surface);
+  --su-switch-on: var(--button-bg);
+  --su-switch-tick: var(--button-text);
+  --su-switch-knob-off: var(--muted);
+  --su-switch-track-off: var(--subtle);
+  --su-switch-track-on: color-mix(in srgb, var(--button-bg) 35%, var(--surface));
+  --su-switch-border: var(--border);
+  --su-switch-focus-outline: 2px solid var(--heading);
+  --su-checkbox-tick: var(--button-text);
   --su-table-sorted-background: color-mix(in srgb, var(--blue-text) 7%, transparent);
   --su-table-drop-line-color: var(--blue-text);
   --su-table-text-color: var(--text);
@@ -620,4 +628,14 @@ html.page-from-link::view-transition-new(page) {
       min-height: 0;
     }
   }
+}
+
+/* Motion turned down on this site (SiteMotion): every animation and transition ends at once, in the libraries too */
+html[data-reduce-motion] *,
+html[data-reduce-motion] *::before,
+html[data-reduce-motion] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
 }

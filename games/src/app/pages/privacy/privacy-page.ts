@@ -1,3 +1,4 @@
+import { SuSwitchComponent } from '@su-labs/fields';
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { SuNotificationService } from '@su-labs/notifications';
 import { GameAvailability } from '../../core/game-availability';
@@ -15,10 +16,10 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
  */
 @Component({
   selector: 'app-privacy-page',
-  imports: [TranslatePipe],
+  imports: [SuSwitchComponent, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './privacy-page.html',
-  styleUrls: ['../../shared/utility-page.scss', '../../shared/switch.scss', './privacy-page.scss'],
+  styleUrls: ['../../shared/utility-page.scss', './privacy-page.scss'],
 })
 export class PrivacyPage {
   private readonly language = inject(SiteLanguage);
@@ -55,10 +56,8 @@ export class PrivacyPage {
     this.notifications.show({ type: 'success', message: this.t().privacy.deleted });
   }
 
-  protected onChange(event: Event): void {
-    if (event.target instanceof HTMLInputElement) {
-      setSavingAllowed(event.target.checked, forgetSharedSettings);
-      this.savingAllowed.set(event.target.checked);
-    }
+  protected onChange(allowed: boolean): void {
+    setSavingAllowed(allowed, forgetSharedSettings);
+    this.savingAllowed.set(allowed);
   }
 }

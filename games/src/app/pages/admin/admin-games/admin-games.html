@@ -6,7 +6,14 @@
       <ul class="card admin-card plain-list">
         @for (slug of group.games; track slug) {
           <li>
-            <label class="switch switch-row">
+            <su-lib-switch
+              labelPosition="start"
+              size="small"
+              [checked]="availability.isOpen(slug)"
+              [disabled]="!admin.isSuper()"
+              [busy]="saving().has(slug)"
+              (checkedChange)="toggle(slug, $event)"
+            >
               <span class="switch-text">
                 <a [routerLink]="['/', slug]">{{ ('games' | translate)[slug].name }}</a>
                 <small class="muted">
@@ -14,16 +21,7 @@
                   · {{ 'admin.byDefault' | translate: gameInfo(slug).openByDefault }}
                 </small>
               </span>
-              <input
-                type="checkbox"
-                role="switch"
-                [checked]="availability.isOpen(slug)"
-                [disabled]="!admin.isSuper()"
-                [attr.aria-busy]="saving().has(slug)"
-                (change)="toggle(slug, $event)"
-              />
-              <span class="track" aria-hidden="true"></span>
-            </label>
+            </su-lib-switch>
             <div class="thumbnail-row">
               <img class="thumbnail-preview" [src]="availability.thumbnailOf(slug)" alt="" loading="lazy" />
               @if (admin.isSuper()) {
@@ -63,7 +61,14 @@
     <ul class="card admin-card plain-list">
       @for (feature of features; track feature.id) {
         <li>
-          <label class="switch switch-row">
+          <su-lib-switch
+            labelPosition="start"
+            size="small"
+            [checked]="flags.isOpen(feature.id)"
+            [disabled]="!admin.isSuper()"
+            [busy]="saving().has(feature.id)"
+            (checkedChange)="toggleFeature(feature.id, $event)"
+          >
             <span class="switch-text">
               <strong>{{ ('admin.featureNames' | translate)[feature.id] }}</strong>
               <small class="muted">
@@ -71,16 +76,7 @@
                 · {{ 'admin.byDefault' | translate: feature.openByDefault }}
               </small>
             </span>
-            <input
-              type="checkbox"
-              role="switch"
-              [checked]="flags.isOpen(feature.id)"
-              [disabled]="!admin.isSuper()"
-              [attr.aria-busy]="saving().has(feature.id)"
-              (change)="toggleFeature(feature.id, $event)"
-            />
-            <span class="track" aria-hidden="true"></span>
-          </label>
+          </su-lib-switch>
         </li>
       }
     </ul>
@@ -91,7 +87,14 @@
     <ul class="card admin-card plain-list">
       @for (feature of roomGames; track feature.id) {
         <li>
-          <label class="switch switch-row">
+          <su-lib-switch
+            labelPosition="start"
+            size="small"
+            [checked]="flags.isOpen(feature.id)"
+            [disabled]="!admin.isSuper()"
+            [busy]="saving().has(feature.id)"
+            (checkedChange)="toggleFeature(feature.id, $event)"
+          >
             <span class="switch-text">
               <strong>{{ ('admin.featureNames' | translate)[feature.id] }}</strong>
               <small class="muted">
@@ -99,16 +102,7 @@
                 · {{ 'admin.byDefault' | translate: feature.openByDefault }}
               </small>
             </span>
-            <input
-              type="checkbox"
-              role="switch"
-              [checked]="flags.isOpen(feature.id)"
-              [disabled]="!admin.isSuper()"
-              [attr.aria-busy]="saving().has(feature.id)"
-              (change)="toggleFeature(feature.id, $event)"
-            />
-            <span class="track" aria-hidden="true"></span>
-          </label>
+          </su-lib-switch>
         </li>
       }
     </ul>

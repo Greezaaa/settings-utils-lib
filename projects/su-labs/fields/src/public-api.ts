@@ -2,3 +2,8 @@ export * from './lib/code-boxes/code-boxes.component';
 export * from './lib/strength-meter/password-strength';
 export * from './lib/strength-meter/strength-meter.component';
 export * from './lib/auto-grow/auto-grow.directive';
+export * from './lib/switch/switch.component';
+export * from './lib/email-field/email-check';
+export * from './lib/email-field/email-field.component';
+export * from './lib/checkbox/checkbox.component';
+export * from './lib/chips/chips.component';

@@ -1,6 +1,7 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { flyOutTransform, ScreenBox } from './page-fly-out';
+import { SiteMotion } from './site-motion';
 
 /** How long after a click its link still counts as where the next page comes from */
 const ORIGIN_LIFETIME = 1000;
@@ -19,12 +20,13 @@ interface Origin {
  * Lets a new page open from the link that was clicked: it remembers the link, and once the router has put the new
  * page in place it sets the transform that lays the page over that link (`--page-fly-from`), so the page flies from
  * there to its place. The new page opens at its top before the browser pictures it (the router would scroll only
- * afterwards, making the page jump). Without a recent click (back and forward) the page cross-fades; with reduced
- * motion there's no transition.
+ * afterwards, making the page jump). Without a recent click (back and forward) the page cross-fades; with motion
+ * turned down (here or in the system) there's no transition.
  */
 @Injectable({ providedIn: 'root' })
 export class PageTransition {
   private readonly document = inject(DOCUMENT);
+  private readonly motion = inject(SiteMotion);
   private origin: Origin | null = null;
 
   constructor() {
@@ -35,7 +37,8 @@ export class PageTransition {
 
   /** Called by the router for each view transition */
   prepare(transition: ViewTransition): void {
-    if (this.document.defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (this.motion.shouldReduce()) {
+      transition.ready.catch(() => null);
       transition.skipTransition();
       return;
     }
