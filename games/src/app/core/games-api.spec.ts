@@ -72,7 +72,7 @@ describe('GamesApi', () => {
     expect(init?.body).toBe(JSON.stringify({ game: 'letter-games', vote: 'up', language: 'eu', reason: 'fun' }));
   });
 
-  it('reads game switches, keeping known games only', async () => {
+  it('reads game switches and categories, keeping known games and categories only', async () => {
     vi.stubGlobal(
       'fetch',
       answer({
@@ -80,8 +80,16 @@ describe('GamesApi', () => {
           { game: 'hit-the-note', enabled: false },
           { game: 'chess', enabled: true },
         ],
+        categories: [
+          { game: 'letter-sudoku', categories: ['letters', 'sports', 'puzzles'] },
+          { game: 'word-search', categories: ['sports'] },
+          { game: 'chess', categories: ['puzzles'] },
+        ],
       }),
     );
-    expect(await api.gameSwitches()).toEqual([{ game: 'hit-the-note', enabled: false }]);
+    expect(await api.gameSettings()).toEqual({
+      switches: [{ game: 'hit-the-note', enabled: false }],
+      categories: [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }],
+    });
   });
 });

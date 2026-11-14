@@ -54,7 +54,7 @@ export class App {
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = this.availability.visibleGames;
-  protected readonly categories = computed(() => byCategory(this.games()));
+  protected readonly categories = computed(() => byCategory(this.games(), (game) => this.availability.categoriesOf(game)));
   protected readonly features = inject(FeatureFlags);
   protected readonly account = inject(PlayerAccount);
   private readonly pagePath = signal(inject(DOCUMENT).location.pathname);

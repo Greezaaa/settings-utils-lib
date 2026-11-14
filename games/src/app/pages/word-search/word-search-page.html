@@ -21,7 +21,7 @@
             [class.is-done]="phase() === 'done'"
             [style.--size]="search.size"
             role="group"
-            data-board
+            data-no-ring
             [attr.aria-label]="'wordSearch.board' | translate"
             (pointerdown)="onPointerDown($event)"
             (pointermove)="onPointerMove($event)"

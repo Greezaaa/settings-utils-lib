@@ -1049,6 +1049,7 @@ export const EU: SiteMessages = {
     errorColumns: { when: 'Azkena', code: 'Kodea', title: 'Izenburua', problem: 'Arazoa', page: 'Orria', count: 'Aldiz', actions: 'Ekintzak' },
     loading: 'Kargatzen…',
     previewTitle: 'Aurrebista modua',
+    gameCategories: game => `${game} jokoaren kategoriak`,
     offlineTitle: 'Konexiorik gabeko jokoa gailu honetan',
     offlineActive: megabytes => `Aktibatuta: jokoak hemen gordetzen dira (${megabytes} MB guztira)`,
     offlineInactive: 'Desaktibatuta: aktibatu ezarpenen menuan jokoak hemen gordetzeko',

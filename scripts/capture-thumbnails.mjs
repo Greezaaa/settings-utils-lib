@@ -72,6 +72,9 @@ mkdirSync(output, { recursive: true });
 for (const slug of slugs) {
   await send('Page.navigate', { url: `http://localhost:${port}/${slug}` });
   await sleep(3500);
+  if (await evaluate(`(() => { const start = document.querySelector('.page-section .card button.start'); start?.click(); return !!start; })()`)) {
+    await sleep(2000);
+  }
   const box = await evaluate(`(() => {
     const board = document.querySelector('.card.play .play-main') ?? document.querySelector('.page-section .card');
     if (!board) return null;

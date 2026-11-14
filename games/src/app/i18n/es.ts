@@ -1062,6 +1062,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     errorColumns: { when: 'Último', code: 'Código', title: 'Título', problem: 'Problema', page: 'Página', count: 'Veces', actions: 'Acciones' },
     loading: 'Cargando…',
     previewTitle: 'Modo vista previa',
+    gameCategories: game => `Categorías de ${game}`,
     offlineTitle: 'Juego sin conexión en este dispositivo',
     offlineActive: megabytes => `Activado: los juegos se guardan aquí (${megabytes} MB en total)`,
     offlineInactive: 'Desactivado: actívalo en el menú de ajustes para guardar aquí los juegos',

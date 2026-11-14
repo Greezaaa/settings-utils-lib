@@ -201,7 +201,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(204);
     await request(app.getHttpServer())
       .get('/v1/games')
-      .expect(200, { games: [] });
+      .expect(200, { games: [], categories: [] });
     await request(app.getHttpServer())
       .put('/admin/games/hit-the-note')
       .send({ enabled: false })
@@ -223,7 +223,21 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(204);
     await request(app.getHttpServer())
       .get('/v1/games')
-      .expect(200, { games: [{ game: 'hit-the-note', enabled: true }] });
+      .expect(200, { games: [{ game: 'hit-the-note', enabled: true }], categories: [] });
+  });
+
+  it('lets the super admin give a game one or more known categories', async () => {
+    const server = app.getHttpServer();
+    await request(server).put('/admin/games/letter-sudoku/categories').send({ categories: ['letters'] }).expect(401);
+    await request(server).put('/admin/games/letter-sudoku/categories').set(admin).send({ categories: [] }).expect(400);
+    await request(server).put('/admin/games/letter-sudoku/categories').set(admin).send({ categories: ['sports'] }).expect(400);
+    await request(server)
+      .put('/admin/games/letter-sudoku/categories')
+      .set(admin)
+      .send({ categories: ['letters', 'puzzles', 'letters'] })
+      .expect(204);
+    const { body } = await request(server).get('/v1/games').expect(200);
+    expect(body.categories).toEqual([{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }]);
   });
 
   it('signs in the super admin, who adds moderators by password or invite and turns them off', async () => {

@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AdminApi, AdminRole, canPreview } from './admin-api';
 import { GameAvailability } from './game-availability';
 import { GAMES } from './games';
-import { GamesApi, GameSwitch } from './games-api';
+import { GameCategoryList, GamesApi, GameSwitch } from './games-api';
 
 function adminAs(role?: AdminRole): Pick<AdminApi, 'restore' | 'canPreview'> {
   return {
@@ -12,8 +12,14 @@ function adminAs(role?: AdminRole): Pick<AdminApi, 'restore' | 'canPreview'> {
   };
 }
 
-function availabilityWith(switches: GameSwitch[] | null, role?: AdminRole): GameAvailability {
-  const api: Pick<GamesApi, 'gameSwitches'> = { gameSwitches: vi.fn(async () => switches) };
+function availabilityWith(
+  switches: GameSwitch[] | null,
+  role?: AdminRole,
+  categories: GameCategoryList[] = [],
+): GameAvailability {
+  const api: Pick<GamesApi, 'gameSettings'> = {
+    gameSettings: vi.fn(async () => (switches ? { switches, categories } : null)),
+  };
   const injector = Injector.create({
     providers: [
       { provide: DOCUMENT, useValue: document },
@@ -26,6 +32,17 @@ function availabilityWith(switches: GameSwitch[] | null, role?: AdminRole): Game
 
 describe('GameAvailability', () => {
   afterEach(() => localStorage.clear());
+
+  it('uses the admin\'s categories over the built-in one, and remembers them for offline visits', async () => {
+    const online = availabilityWith([], undefined, [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }]);
+    expect(online.categoriesOf('letter-sudoku')).toEqual(['letters']);
+    await online.ready();
+    expect(online.categoriesOf('letter-sudoku')).toEqual(['letters', 'puzzles']);
+    expect(online.categoriesOf('math-games')).toEqual(['numbers']);
+    const offline = availabilityWith(null);
+    await offline.ready();
+    expect(offline.categoriesOf('letter-sudoku')).toEqual(['letters', 'puzzles']);
+  });
 
   it('opens the games open by default until the admin switches them', async () => {
     const availability = availabilityWith([{ game: 'sliding-puzzle', enabled: false }]);

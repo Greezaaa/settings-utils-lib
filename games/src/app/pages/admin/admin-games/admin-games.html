@@ -24,6 +24,20 @@
               />
               <span class="track" aria-hidden="true"></span>
             </label>
+            <div class="category-chips" role="group" data-no-ring [attr.aria-label]="'admin.gameCategories' | translate: ('games' | translate)[slug].name">
+              @for (category of allCategories; track category) {
+                @let isChosen = availability.categoriesOf(slug).includes(category);
+                <button
+                  type="button"
+                  class="button button-secondary button-small"
+                  [attr.aria-pressed]="isChosen"
+                  [disabled]="!admin.isSuper() || saving().has(slug) || (isChosen && availability.categoriesOf(slug).length === 1)"
+                  (click)="toggleCategory(slug, category)"
+                >
+                  {{ ('categories' | translate)[category] }}
+                </button>
+              }
+            </div>
           </li>
         }
       </ul>

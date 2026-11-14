@@ -4,7 +4,7 @@ import { FavoriteGames } from '../../core/favorite-games';
 import { FeatureFlags } from '../../core/feature-flags';
 import { GameAvailability } from '../../core/game-availability';
 import { CategoryFilter, filterGames } from '../../core/game-filter';
-import { GAME_CATEGORIES, gameInfo } from '../../core/games';
+import { GAME_CATEGORIES } from '../../core/games';
 import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { GameCard } from '../../shared/game-card/game-card';
@@ -30,7 +30,7 @@ export class HomePage {
 
   protected readonly categoryOptions = computed(() =>
     GAME_CATEGORIES.filter((category) =>
-      this.availability.visibleGames().some((game) => gameInfo(game).category === category),
+      this.availability.visibleGames().some((game) => this.availability.categoriesOf(game).includes(category)),
     ),
   );
   protected readonly canFilterFavorites = computed(
@@ -42,7 +42,7 @@ export class HomePage {
       this.availability.visibleGames(),
       { query: this.query(), category: this.category(), favoritesOnly: this.favoritesOnly() && this.canFilterFavorites() },
       {
-        categoriesOf: (game) => [gameInfo(game).category],
+        categoriesOf: (game) => this.availability.categoriesOf(game),
         textOf: (game) => `${games[game].name} ${games[game].subtitle}`,
         favorites: this.favorites(),
       },

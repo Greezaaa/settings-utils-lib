@@ -5,7 +5,7 @@
   [class.is-preview]="phase() === 'preview'"
   [style.--columns]="shape().columns"
   role="group"
-  data-board
+  data-no-ring
   [attr.aria-label]="'placePieces.board' | translate"
 >
   @for (piece of arrangement(); track piece; let cell = $index) {

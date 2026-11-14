@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { FEATURE_IDS, GAME_SLUGS, LANGUAGE_IDS } from './catalog.js';
+import { FEATURE_IDS, GAME_CATEGORIES, GAME_SLUGS, LANGUAGE_IDS } from './catalog.js';
 
 const gamesApp = join(
   import.meta.dirname,
@@ -23,6 +23,12 @@ describe('catalog', () => {
   it('knows the same games as the games site', () => {
     expect([...GAME_SLUGS].sort()).toEqual(
       unionValues('core/games.ts', 'GameSlug').sort(),
+    );
+  });
+
+  it('knows the same categories as the games site', () => {
+    expect([...GAME_CATEGORIES].sort()).toEqual(
+      unionValues('core/games.ts', 'GameCategory').sort(),
     );
   });
 

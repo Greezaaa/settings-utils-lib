@@ -7,6 +7,7 @@ import { ErrorLog } from '../error-logs/error-log.entity.js';
 import { Admin } from '../auth/admin.entity.js';
 import { FeatureFlag } from '../feature-flags/feature-flag.entity.js';
 import { Feedback } from '../feedback/feedback.entity.js';
+import { GameCategories } from '../game-settings/game-categories.entity.js';
 import { GameSetting } from '../game-settings/game-setting.entity.js';
 import { PlayCount } from '../plays/play-count.entity.js';
 import { Suggestion } from '../suggestions/suggestion.entity.js';
@@ -22,6 +23,7 @@ import { SignInMoved1794800000000 } from './migrations/1794800000000-sign-in-mov
 import { PlayerApps1794900000000 } from './migrations/1794900000000-player-apps.js';
 import { BoardModeration1795000000000 } from './migrations/1795000000000-board-moderation.js';
 import { NameApproval1795100000000 } from './migrations/1795100000000-name-approval.js';
+import { GameCategories1795200000000 } from './migrations/1795200000000-game-categories.js';
 
 export const databaseOptions = (
   url: string,
@@ -35,6 +37,7 @@ export const databaseOptions = (
     ErrorLog,
     FeatureFlag,
     Feedback,
+    GameCategories,
     GameSetting,
     PlayCount,
     Player,
@@ -55,6 +58,7 @@ export const databaseOptions = (
     PlayerApps1794900000000,
     BoardModeration1795000000000,
     NameApproval1795100000000,
+    GameCategories1795200000000,
   ],
   migrationsRun: runMigrations,
   synchronize: false,

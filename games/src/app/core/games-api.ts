@@ -2,7 +2,7 @@ import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
 import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FEATURE_IDS, FeatureId } from './features';
-import { GAME_SLUGS, GameSlug } from './games';
+import { GAME_CATEGORIES, GAME_SLUGS, GameCategory, GameSlug } from './games';
 import { OutboxItem, readOutbox, SendResult, withItem, writeOutbox } from './outbox';
 
 export const FEEDBACK_REASONS = {
@@ -20,6 +20,16 @@ export interface GameSwitch {
   readonly enabled: boolean;
 }
 
+export interface GameCategoryList {
+  readonly game: GameSlug;
+  readonly categories: readonly GameCategory[];
+}
+
+export interface GameSettings {
+  readonly switches: readonly GameSwitch[];
+  readonly categories: readonly GameCategoryList[];
+}
+
 export interface SiteError {
   readonly code: string;
   readonly title: string;
@@ -34,6 +44,9 @@ export interface GamePlays {
 
 export const isGameSlug = (value: unknown): value is GameSlug => GAME_SLUGS.some((game) => game === value);
 
+export const isGameCategory = (value: unknown): value is GameCategory =>
+  GAME_CATEGORIES.some((category) => category === value);
+
 export function parseGamePlays(item: unknown): GamePlays[] {
   const game = field(item, 'game');
   const plays = field(item, 'plays');
@@ -45,16 +58,26 @@ function parsePlays(body: unknown): GamePlays[] {
   return Array.isArray(games) ? games.flatMap((item: unknown) => parseGamePlays(item)) : [];
 }
 
-function parseSwitches(body: unknown): GameSwitch[] | null {
+function parseCategories(item: unknown): GameCategoryList[] {
+  const game = field(item, 'game');
+  const categories = field(item, 'categories');
+  const known = Array.isArray(categories) ? categories.filter((category: unknown) => isGameCategory(category)) : [];
+  return isGameSlug(game) && known.length > 0 ? [{ game, categories: known }] : [];
+}
+
+function parseGameSettings(body: unknown): GameSettings | null {
   const games = field(body, 'games');
   if (!Array.isArray(games)) {
     return null;
   }
-  return games.flatMap((item: unknown) => {
+  const switches = games.flatMap((item: unknown) => {
     const game = field(item, 'game');
     const enabled = field(item, 'enabled');
     return isGameSlug(game) && typeof enabled === 'boolean' ? [{ game, enabled }] : [];
   });
+  const lists = field(body, 'categories');
+  const categories = Array.isArray(lists) ? lists.flatMap((item: unknown) => parseCategories(item)) : [];
+  return { switches, categories };
 }
 
 export interface FeatureSwitch {
@@ -122,8 +145,8 @@ export class GamesApi {
     return parseFeatureSwitches(await this.read('/v1/features'));
   }
 
-  async gameSwitches(): Promise<GameSwitch[] | null> {
-    return parseSwitches(await this.read('/v1/games'));
+  async gameSettings(): Promise<GameSettings | null> {
+    return parseGameSettings(await this.read('/v1/games'));
   }
 
   private async read(path: string): Promise<unknown> {

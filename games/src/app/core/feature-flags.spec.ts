@@ -4,15 +4,15 @@ import { Connection } from './connection';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FeatureFlags } from './feature-flags';
 import { GameAvailability } from './game-availability';
-import { FeatureSwitch, GamesApi, GameSwitch } from './games-api';
+import { FeatureSwitch, GameSettings, GamesApi } from './games-api';
 
 const online = signal(true);
 
 function flagsWith(features: FeatureSwitch[] | null): { flags: FeatureFlags; availability: GameAvailability } {
   const connection: Pick<Connection, 'isOnline'> = { isOnline: online.asReadonly() };
-  const api: Pick<GamesApi, 'featureSwitches' | 'gameSwitches'> = {
+  const api: Pick<GamesApi, 'featureSwitches' | 'gameSettings'> = {
     featureSwitches: vi.fn(async () => features),
-    gameSwitches: vi.fn(async (): Promise<GameSwitch[] | null> => []),
+    gameSettings: vi.fn(async (): Promise<GameSettings | null> => ({ switches: [], categories: [] })),
   };
   const injector = Injector.create({
     providers: [

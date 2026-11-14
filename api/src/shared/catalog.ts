@@ -20,6 +20,8 @@ export const GAME_SLUGS = [
   'word-search',
   'secret-word',
 ] as const;
+export const GAME_CATEGORIES = ['numbers', 'letters', 'music', 'puzzles'] as const;
+export type GameCategory = (typeof GAME_CATEGORIES)[number];
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'it', 'uk'] as const;
 export const FEATURE_IDS = [
   'rooms',
@@ -116,5 +118,6 @@ export type LanguageId = (typeof LANGUAGE_IDS)[number];
 export type FeatureId = (typeof FEATURE_IDS)[number];
 
 export const gameSchema = z.enum(GAME_SLUGS);
+export const categorySchema = z.enum(GAME_CATEGORIES);
 export const languageSchema = z.enum(LANGUAGE_IDS);
 export const featureSchema = z.enum(FEATURE_IDS);

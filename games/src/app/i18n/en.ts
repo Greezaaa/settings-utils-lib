@@ -1028,6 +1028,7 @@ export const EN: SiteMessages = {
     errorColumns: { when: 'Last seen', code: 'Code', title: 'Title', problem: 'Problem', page: 'Page', count: 'Times', actions: 'Actions' },
     loading: 'Loading…',
     previewTitle: 'Preview mode',
+    gameCategories: game => `Categories of ${game}`,
     offlineTitle: 'Playing offline on this device',
     offlineActive: megabytes => `On: the games are kept here (${megabytes} MB in all)`,
     offlineInactive: 'Off: turn it on in the settings menu to keep the games here',

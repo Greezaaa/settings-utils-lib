@@ -2,7 +2,7 @@ import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
 import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FeatureId } from './features';
-import { GameSlug } from './games';
+import { GameCategory, GameSlug } from './games';
 import { GamePlays, isGameSlug, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
 import { rememberSignedIn } from './session-hint';
 
@@ -320,6 +320,10 @@ export class AdminApi {
 
   setGameEnabled(game: GameSlug, enabled: boolean): Promise<boolean> {
     return this.change('PUT', `/admin/games/${game}`, { enabled });
+  }
+
+  setGameCategories(game: GameSlug, categories: readonly GameCategory[]): Promise<boolean> {
+    return this.change('PUT', `/admin/games/${game}/categories`, { categories });
   }
 
   async suggestions(status: SuggestionStatus, offset: number): Promise<AdminSuggestion[]> {

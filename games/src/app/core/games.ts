@@ -148,10 +148,15 @@ export interface CategoryGames {
   readonly games: readonly GameSlug[];
 }
 
-export function byCategory(games: readonly GameSlug[]): CategoryGames[] {
+export const defaultCategories = (game: GameSlug): readonly GameCategory[] => [gameInfo(game).category];
+
+export function byCategory(
+  games: readonly GameSlug[],
+  categoriesOf: (game: GameSlug) => readonly GameCategory[] = defaultCategories,
+): CategoryGames[] {
   return GAME_CATEGORIES.map(category => ({
     category,
-    games: games.filter(game => gameInfo(game).category === category),
+    games: games.filter(game => categoriesOf(game).includes(category)),
   })).filter(group => group.games.length > 0);
 }
 

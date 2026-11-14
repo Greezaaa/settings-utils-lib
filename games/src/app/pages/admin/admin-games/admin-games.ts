@@ -4,7 +4,7 @@ import { AdminApi } from '../../../core/admin-api';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { FEATURES, FeatureId } from '../../../core/features';
 import { GameAvailability } from '../../../core/game-availability';
-import { byCategory, GAME_SLUGS, gameInfo, GameSlug } from '../../../core/games';
+import { byCategory, GAME_CATEGORIES, GAME_SLUGS, GameCategory, gameInfo, GameSlug } from '../../../core/games';
 
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
@@ -30,6 +30,7 @@ export class AdminGames {
   protected readonly features = FEATURES.filter(({ roomGame }) => !roomGame);
   protected readonly roomGames = FEATURES.filter(({ roomGame }) => roomGame);
   protected readonly categories = byCategory(GAME_SLUGS);
+  protected readonly allCategories = GAME_CATEGORIES;
   protected readonly gameInfo = gameInfo;
   protected readonly saving = signal<ReadonlySet<GameSlug | FeatureId>>(new Set());
   private readonly notifySaveFailed = saveFailedNotice();
@@ -44,6 +45,23 @@ export class AdminGames {
       setOpen: (open) => this.availability.setOpen(game, open),
       request: (open) => this.admin.setGameEnabled(game, open),
     });
+  }
+
+  protected async toggleCategory(game: GameSlug, category: GameCategory): Promise<void> {
+    const before = this.availability.categoriesOf(game);
+    const after = before.includes(category)
+      ? before.filter((chosen) => chosen !== category)
+      : GAME_CATEGORIES.filter((known) => known === category || before.includes(known));
+    if (after.length === 0 || this.saving().has(game)) {
+      return;
+    }
+    this.saving.update((saving) => new Set(saving).add(game));
+    this.availability.setCategories(game, after);
+    if (!(await this.admin.setGameCategories(game, after))) {
+      this.availability.setCategories(game, before);
+      this.notifySaveFailed();
+    }
+    this.saving.update((saving) => new Set([...saving].filter((other) => other !== game)));
   }
 
   protected toggleFeature(feature: FeatureId, event: Event): Promise<void> {
