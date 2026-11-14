@@ -157,6 +157,24 @@ describe('SuTableComponent', () => {
     });
   });
 
+  it('edits a row from a double-clicked cell, starting in its field', async () => {
+    const { fixture, query, settle } = await render();
+
+    const ageCell = query<HTMLElement>('tbody tr')[0].querySelectorAll('td')[2];
+    ageCell.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+    await settle();
+    await settle();
+
+    const age = query<HTMLInputElement>('input[aria-label="Age"]')[0];
+    expect(document.activeElement).toBe(age);
+    age.value = '27';
+    age.dispatchEvent(new Event('input'));
+    age.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await settle();
+
+    expect(fixture.componentInstance.edited()).toEqual([{ id: 1, name: 'Bo', age: 27 }]);
+  });
+
   it('reorders rows with the keyboard on the move handle', async () => {
     const { fixture, query, rowHeaders, settle } = await render();
     const press = (key: string) => {

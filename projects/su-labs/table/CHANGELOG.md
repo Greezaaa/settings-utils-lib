@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The search box and the Columns button share a bar above the table
 - Show and hide columns: `hidden: true` starts a column out of view (its field stays in the row data and comes back on save), and the Columns panel has a checkbox to show each column beside its pin choice; the last column on view stays shown, and hidden columns are left out of the search
 - Sticky headers: `maxHeight` (any CSS length) lets the table scroll inside; the header stays at the top and the pinned rows stay under it, with a soft shadow while rows scroll beneath; `--su-table-sticky-shadow`
+- Double-click editing: a double-click on an editable cell edits its row, starting in that field with its text selected; while a row is being edited, a double-click elsewhere never drops its changes. `editOnDoubleClick` turns it off. An editable table always has an actions column, for Save and Cancel
 - `columnsChange` emits every column's state (`SuTableColumnState`: shown, pinned) after a change in the Columns panel, e.g. to save it
 
 ### Fixed

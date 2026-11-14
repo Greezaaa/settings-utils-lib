@@ -180,11 +180,24 @@
               }
             </ng-template>
             @if (cell.key === current.rowHeaderKey) {
-              <th scope="row" class="su-table-align-{{ column.align }}" [suTablePin]="pin">
+              <th
+                scope="row"
+                class="su-table-align-{{ column.align }}"
+                [class.is-editable]="!editing && editsOnDoubleClick(cell.key)"
+                [suTablePin]="pin"
+                (mousedown)="keepTextUnselected($event, cell.key)"
+                (dblclick)="editCell(row, cell.key)"
+              >
                 <ng-container *ngTemplateOutlet="content" />
               </th>
             } @else {
-              <td class="su-table-align-{{ column.align }}" [suTablePin]="pin">
+              <td
+                class="su-table-align-{{ column.align }}"
+                [class.is-editable]="!editing && editsOnDoubleClick(cell.key)"
+                [suTablePin]="pin"
+                (mousedown)="keepTextUnselected($event, cell.key)"
+                (dblclick)="editCell(row, cell.key)"
+              >
                 <ng-container *ngTemplateOutlet="content" />
               </td>
             }

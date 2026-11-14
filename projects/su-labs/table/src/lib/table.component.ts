@@ -96,6 +96,8 @@ export class SuTableComponent<TRow extends object> {
    * rows stay in view while the rows scroll under them
    */
   readonly maxHeight = input<string>();
+  /** A double-click on an editable cell edits its row, starting in that field @default true */
+  readonly editOnDoubleClick = input(true, { transform: booleanAttribute });
   /** Rows per page; without it, every row shows @default 'all' */
   readonly pageSize = input<SuTablePageSize>();
   /** The page sizes people choose from under the table, e.g. `[10, 25, 50, 'all']` */
@@ -126,6 +128,8 @@ export class SuTableComponent<TRow extends object> {
   private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly cellTemplates = contentChildren(SuTableCellDirective);
   private readonly focusHandleId = signal<SuTableRowId | null>(null);
+  /** The id of the field to focus once it renders, after a double-click */
+  private readonly focusFieldId = signal<string | null>(null);
   private searchTimer: ReturnType<typeof setTimeout> | undefined;
   private readonly headerWidths = signal<readonly number[]>([]);
   private readonly scrollerWidth = signal(0);
@@ -155,8 +159,12 @@ export class SuTableComponent<TRow extends object> {
     const draft = this.state().draft;
     return draft?.bulk ? draft : null;
   });
+  /** The actions column also holds Save and Cancel for a row edited by double-click */
   protected readonly hasActions = computed(
-    () => this.actions().length > 0 || this.rowPinning()
+    () =>
+      this.actions().length > 0 ||
+      this.rowPinning() ||
+      (this.editOnDoubleClick() && this.state().editable)
   );
   /** The pinned rows, then the current page */
   protected readonly bodyRows = computed(() => {
@@ -319,6 +327,22 @@ export class SuTableComponent<TRow extends object> {
       onCleanup(() => observer.disconnect());
     });
     afterRenderEffect(() => {
+      const id = this.focusFieldId();
+      const field = id ? document.getElementById(id) : null;
+      if (
+        field instanceof HTMLInputElement ||
+        field instanceof HTMLTextAreaElement
+      ) {
+        field.focus();
+        field.select();
+      } else {
+        field?.focus();
+      }
+      if (field) {
+        this.focusFieldId.set(null);
+      }
+    });
+    afterRenderEffect(() => {
       const id = this.focusHandleId();
       this.state();
       const handle = this.host.nativeElement.querySelector<HTMLElement>(
@@ -418,6 +442,38 @@ export class SuTableComponent<TRow extends object> {
   protected setPageSize(pageSize: SuTablePageSize): void {
     this.controller.setPageSize(pageSize);
     this.emitPage();
+  }
+
+  /** Whether a double-click on this cell edits its row */
+  protected editsOnDoubleClick(key: keyof TRow): boolean {
+    return (
+      this.editOnDoubleClick() &&
+      this.state().columns.some(column => column.key === key && column.editor)
+    );
+  }
+
+  /**
+   * Edits the row of a double-clicked cell, starting in its field. While another row (or several) is being edited,
+   * only a cell of that same row moves the focus, so unsaved changes are never dropped.
+   */
+  protected editCell(row: SuTableRowView<TRow>, key: keyof TRow): void {
+    if (!this.editsOnDoubleClick(key)) {
+      return;
+    }
+    const draft = this.state().draft;
+    if (!draft) {
+      this.controller.startEdit([row.id]);
+    } else if (draft.bulk || draft.ids[0] !== row.id) {
+      return;
+    }
+    this.focusFieldId.set(this.controlId(row.id, key));
+  }
+
+  /** The second click of a double-click doesn't select the word under it */
+  protected keepTextUnselected(event: MouseEvent, key: keyof TRow): void {
+    if (event.detail > 1 && this.editsOnDoubleClick(key)) {
+      event.preventDefault();
+    }
   }
 
   protected editSelected(): void {

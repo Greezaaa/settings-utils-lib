@@ -108,7 +108,9 @@ export class UsersPage {
 }
 ```
 
-The `edit` action is handled by the table: it edits that row inline (Enter saves, Escape cancels). Selecting rows
+The `edit` action is handled by the table: it edits that row inline (Enter saves, Escape cancels). A double-click on
+an editable cell does the same, starting in that field (`editOnDoubleClick` turns it off); the Edit button stays as the
+way in for keyboards. Selecting rows
 shows a toolbar to edit them together or run the bulk actions.
 
 ### Custom cells
@@ -141,6 +143,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `pageSize` | `'all'` | Rows per page |
 | `pageSizes` | `[]` | Page sizes to choose from under the table, e.g. `[10, 25, 50, 'all']` |
 | `maxHeight` | — | Any CSS length, e.g. `'28rem'`: the table scrolls inside, keeping the header and pinned rows in view |
+| `editOnDoubleClick` | `true` | A double-click on an editable cell edits its row, starting in that field |
 | `searchable` | `false` | A search box above the table that narrows the rows by their text |
 | `rowPinning` | `false` | A Pin button on each row, keeping it above the others on every page |
 | `pinnedRows` | — | The ids of the rows pinned to start with |

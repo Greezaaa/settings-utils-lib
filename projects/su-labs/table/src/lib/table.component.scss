@@ -157,6 +157,11 @@ tbody tr.is-pinned-row > * {
   }
 }
 
+td.is-editable,
+th.is-editable {
+  cursor: text;
+}
+
 .su-table-align-start {
   text-align: start;
 }
