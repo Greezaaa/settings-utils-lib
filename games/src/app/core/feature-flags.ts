@@ -15,6 +15,7 @@ export class FeatureFlags {
   private readonly connection = inject(Connection);
   private readonly switches = signal<ReadonlyMap<FeatureId, boolean>>(new Map());
   private loading: Promise<void> | null = null;
+  private hasRemembered = false;
 
 
   readonly openFeatures = computed<readonly FeatureId[]>(() =>
@@ -47,13 +48,15 @@ export class FeatureFlags {
   }
 
   private async load(): Promise<void> {
+    if (!this.hasRemembered) {
+      this.hasRemembered = true;
+      this.switches.set(readSwitches(SWITCHES_STORAGE, isFeatureId) ?? this.switches());
+    }
     const [switches] = await Promise.all([this.api.featureSwitches(), this.availability.ready()]);
     if (switches) {
       const known = new Map(switches.map(({ feature, enabled }) => [feature, enabled]));
       this.switches.set(known);
       writeSwitches(SWITCHES_STORAGE, known);
-    } else {
-      this.switches.set(readSwitches(SWITCHES_STORAGE, isFeatureId) ?? this.switches());
     }
   }
 }

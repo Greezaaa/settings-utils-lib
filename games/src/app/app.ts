@@ -12,6 +12,7 @@ import { wasSignedIn } from './core/session-hint';
 import { MenuAnimation } from './core/menu-animation';
 import { PlayerAccount } from './core/player-account';
 import { AppInstall } from './core/app-install';
+import { LiveSettings } from './core/live-settings';
 import { OfflineMode } from './core/offline-mode';
 import { OutboxSender } from './core/outbox-sender';
 import { SiteNotices } from './core/site-notices';
@@ -104,10 +105,12 @@ export class App {
       })
     );
     const choiceRing = inject(ChoiceRing);
+    const liveSettings = inject(LiveSettings);
     afterNextRender(() => {
       void this.availability.ready();
       void this.features.ready();
       choiceRing.start();
+      liveSettings.start();
       if (wasSignedIn('admin')) {
         void this.admin.restore();
       }

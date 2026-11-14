@@ -197,7 +197,7 @@ export class GamesApi {
   private async read(path: string): Promise<unknown> {
     try {
       const response = await fetch(apiUrl(this.document, path), {
-        cache: 'no-store',
+        cache: 'no-cache',
         signal: AbortSignal.timeout(READ_TIMEOUT_MS),
       });
       return response.ok ? await response.json() : null;

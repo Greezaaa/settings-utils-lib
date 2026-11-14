@@ -13,7 +13,7 @@ export class FeatureFlagsController {
   constructor(private readonly flags: FeatureFlagsService) {}
 
   @Get()
-  @Header('Cache-Control', 'no-store')
+  @Header('Cache-Control', 'no-cache')
   async list(): Promise<{ features: FeatureSwitch[] }> {
     return { features: await this.flags.list() };
   }

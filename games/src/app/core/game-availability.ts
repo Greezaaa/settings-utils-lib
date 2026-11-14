@@ -20,6 +20,7 @@ export class GameAvailability {
   private readonly thumbnails = signal<ReadonlyMap<GameSlug, number>>(new Map());
   private readonly document = inject(DOCUMENT);
   private loading: Promise<void> | null = null;
+  private hasRemembered = false;
 
   readonly isPreview = signal(false);
   readonly isKnown = signal(false);
@@ -89,6 +90,7 @@ export class GameAvailability {
   }
 
   private async load(): Promise<void> {
+    this.useRemembered();
     const wantsPreview = readStored(PREVIEW_STORAGE) === true;
     const [settings, previewAllowed] = await Promise.all([
       this.api.gameSettings(),
@@ -106,12 +108,18 @@ export class GameAvailability {
       writeStored(CATEGORIES_STORAGE, settings.categories);
       this.thumbnails.set(new Map(settings.thumbnails.map(({ game, version }) => [game, version])));
       writeStored(THUMBNAILS_STORAGE, settings.thumbnails);
-    } else {
-      this.switches.set(readSwitches(SWITCHES_STORAGE, isGameSlug) ?? this.switches());
-      this.categories.set(new Map(readCategories().map(({ game, categories }) => [game, categories])));
-      this.thumbnails.set(new Map(parseThumbnails(readStored(THUMBNAILS_STORAGE)).map(({ game, version }) => [game, version])));
     }
     this.isKnown.set(true);
+  }
+
+  private useRemembered(): void {
+    if (this.hasRemembered) {
+      return;
+    }
+    this.hasRemembered = true;
+    this.switches.set(readSwitches(SWITCHES_STORAGE, isGameSlug) ?? this.switches());
+    this.categories.set(new Map(readCategories().map(({ game, categories }) => [game, categories])));
+    this.thumbnails.set(new Map(parseThumbnails(readStored(THUMBNAILS_STORAGE)).map(({ game, version }) => [game, version])));
   }
 
   private async previewAllowed(): Promise<boolean> {

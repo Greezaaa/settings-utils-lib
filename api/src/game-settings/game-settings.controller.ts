@@ -22,7 +22,7 @@ export class GameSettingsController {
   ) {}
 
   @Get()
-  @Header('Cache-Control', 'no-store')
+  @Header('Cache-Control', 'no-cache')
   async list(): Promise<{ games: GameSwitch[]; categories: GameCategoryList[]; thumbnails: ThumbnailVersion[] }> {
     const [games, categories, thumbnails] = await Promise.all([
       this.settings.list(),

@@ -285,6 +285,19 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     expect((await request(server).get('/v1/news').expect(200)).body.news).toHaveLength(22);
   });
 
+  it('answers 304 when the games, features or news have not changed since the browser last asked', async () => {
+    const server = app.getHttpServer();
+    for (const path of ['/v1/games', '/v1/features', '/v1/news']) {
+      const first = await request(server).get(path).expect(200).expect('Cache-Control', 'no-cache');
+      const tag = first.headers['etag'];
+      expect(tag).toBeTruthy();
+      await request(server).get(path).set('If-None-Match', tag).expect(304);
+    }
+    const before = (await request(server).get('/v1/games').expect(200)).headers['etag'];
+    await request(server).put('/admin/games/how-many').set(admin).send({ enabled: true }).expect(204);
+    await request(server).get('/v1/games').set('If-None-Match', before).expect(200);
+  });
+
   it('lets the super admin give a game one or more known categories', async () => {
     const server = app.getHttpServer();
     await request(server).put('/admin/games/letter-sudoku/categories').send({ categories: ['letters'] }).expect(401);

@@ -45,6 +45,15 @@ describe('GameAvailability', () => {
     expect(availability.thumbnailOf('math-games')).toBe('/thumbnails/math-games.webp');
   });
 
+  it('starts from the switches saved on the last visit while it asks the API again', async () => {
+    await availabilityWith([{ game: 'how-many', enabled: true }]).ready();
+    const next = availabilityWith([{ game: 'how-many', enabled: false }]);
+    const loading = next.ready();
+    expect(next.isOpen('how-many')).toBe(true);
+    await loading;
+    expect(next.isOpen('how-many')).toBe(false);
+  });
+
   it('uses the admin\'s categories over the built-in one, and remembers them for offline visits', async () => {
     const online = availabilityWith([], undefined, [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }]);
     expect(online.categoriesOf('letter-sudoku')).toEqual(['letters']);

@@ -10,7 +10,7 @@ export class NewsController {
   constructor(private readonly news: NewsService) {}
 
   @Get()
-  @Header('Cache-Control', 'no-store')
+  @Header('Cache-Control', 'no-cache')
   async list(): Promise<{ news: NewsView[] }> {
     return { news: await this.news.list() };
   }

@@ -27,14 +27,15 @@ export class SiteNews {
   }
 
   private async load(): Promise<void> {
+    if (this.items().length === 0) {
+      const stored = readStored(NEWS_STORAGE);
+      this.items.set(Array.isArray(stored) ? stored.flatMap((item: unknown) => parseNewsItem(item)) : []);
+    }
     const news = await this.api.news();
     if (news) {
       this.items.set(news);
       writeStored(NEWS_STORAGE, news.map(toStored));
-      return;
     }
-    const stored = readStored(NEWS_STORAGE);
-    this.items.set(Array.isArray(stored) ? stored.flatMap((item: unknown) => parseNewsItem(item)) : []);
   }
 }
 
