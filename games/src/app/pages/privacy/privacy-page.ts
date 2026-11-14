@@ -4,7 +4,8 @@ import { GameAvailability } from '../../core/game-availability';
 import { PlayerAccount } from '../../core/player-account';
 import { forgetSharedSettings } from '../../core/shared-settings';
 import { deleteSaved, isSavingAllowed, setSavingAllowed } from '../../core/site-storage';
-import { formatMoment, LATEST_PUBLISHED } from '../../core/site-updates';
+import { SiteNews } from '../../core/site-news';
+import { formatMoment } from '../../core/site-updates';
 import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
@@ -25,6 +26,7 @@ export class PrivacyPage {
   private readonly notifications = inject(SuNotificationService);
   private readonly account = inject(PlayerAccount);
   private readonly availability = inject(GameAvailability);
+  private readonly news = inject(SiteNews);
   protected readonly accountsOpen = this.account.isAvailable;
   protected readonly canEmail = signal(false);
   protected readonly isSingClosed = computed(
@@ -34,12 +36,14 @@ export class PrivacyPage {
   protected readonly savingAllowed = signal(true);
 
   private readonly inBrowser = signal(false);
-  protected readonly lastUpdate = computed(() =>
-    this.inBrowser() ? formatMoment(LATEST_PUBLISHED, this.language.language()) : null,
-  );
+  protected readonly lastUpdate = computed(() => {
+    const published = this.news.latestPublished();
+    return this.inBrowser() && published ? formatMoment(published, this.language.language()) : null;
+  });
 
   constructor() {
     afterNextRender(async () => {
+      void this.news.ready();
       this.savingAllowed.set(isSavingAllowed());
       this.inBrowser.set(true);
       this.canEmail.set(await this.account.canEmail());

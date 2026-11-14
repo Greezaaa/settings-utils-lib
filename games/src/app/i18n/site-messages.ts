@@ -28,6 +28,7 @@ import { SearchLevelId } from '../games/word-search';
 import { WordGender } from './word-gender';
 
 export type LanguageId = 'en' | 'es' | 'eu' | 'it' | 'uk';
+export const LANGUAGE_IDS: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
 
 export interface SudokuText {
   readonly lead: string;
@@ -540,6 +541,7 @@ export interface SiteMessages {
     readonly signOut: string;
     readonly tabs: {
       readonly games: string;
+      readonly news: string;
       readonly plays: string;
       readonly suggestions: string;
       readonly words: string;
@@ -565,6 +567,20 @@ export interface SiteMessages {
     >;
     readonly previewTitle: string;
     readonly gameCategories: (game: string) => string;
+    readonly newsHelp: string;
+    readonly addNews: string;
+    readonly editNews: string;
+    readonly deleteNews: string;
+    readonly confirmDeleteNews: string;
+    readonly newsKind: string;
+    readonly newsPublished: string;
+    readonly newsGame: string;
+    readonly newsFeature: string;
+    readonly newsNone: string;
+    readonly newsPrivacy: string;
+    readonly newsPrivacyShort: string;
+    readonly newsFallback: string;
+    readonly newsSave: string;
     readonly uploadThumbnail: string;
     readonly automaticThumbnail: string;
     readonly offlineTitle: string;

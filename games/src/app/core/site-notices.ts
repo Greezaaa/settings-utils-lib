@@ -6,7 +6,7 @@ import { WORD_GENDERS } from '../i18n/word-gender';
 import { FeatureFlags } from './feature-flags';
 import { PlayerGender } from './player-gender';
 import { isSavingAllowed, readStored, writeStored } from './site-storage';
-import { LATEST_PRIVACY_VERSION, LATEST_VERSION } from './site-updates';
+import { SiteNews } from './site-news';
 
 /** The version whose privacy notice the visitor closed */
 const PRIVACY_SEEN_STORAGE = 'privacy-notice-version';
@@ -43,18 +43,20 @@ export class SiteNotices {
   private readonly injector = inject(Injector);
   private readonly features = inject(FeatureFlags);
   private readonly gender = inject(PlayerGender);
+  private readonly news = inject(SiteNews);
 
   constructor() {
-    afterNextRender(() => this.showDue());
+    afterNextRender(() => void this.showDue());
   }
 
-  private showDue(): void {
+  private async showDue(): Promise<void> {
     if (!isSavingAllowed()) {
       return;
     }
+    await this.news.ready();
     const oldDismissed = readStored(OLD_PRIVACY_STORAGE) === true;
     const privacySeen = readVersion(PRIVACY_SEEN_STORAGE) ?? (oldDismissed ? 1 : 0);
-    if (privacySeen >= LATEST_PRIVACY_VERSION) {
+    if (privacySeen >= this.news.latestPrivacyVersion()) {
       void this.askGender();
       return;
     }
@@ -70,7 +72,7 @@ export class SiteNotices {
         };
       }),
       () => {
-        writeStored(PRIVACY_SEEN_STORAGE, LATEST_VERSION);
+        writeStored(PRIVACY_SEEN_STORAGE, Math.max(this.news.latestVersion(), this.news.latestPrivacyVersion()));
         void this.askGender();
       },
     );

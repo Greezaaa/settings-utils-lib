@@ -8,6 +8,7 @@ import { Admin } from '../auth/admin.entity.js';
 import { FeatureFlag } from '../feature-flags/feature-flag.entity.js';
 import { Feedback } from '../feedback/feedback.entity.js';
 import { GameCategories } from '../game-settings/game-categories.entity.js';
+import { NewsItem } from '../news/news-item.entity.js';
 import { GameThumbnail } from '../game-settings/game-thumbnail.entity.js';
 import { GameSetting } from '../game-settings/game-setting.entity.js';
 import { PlayCount } from '../plays/play-count.entity.js';
@@ -26,6 +27,7 @@ import { BoardModeration1795000000000 } from './migrations/1795000000000-board-m
 import { NameApproval1795100000000 } from './migrations/1795100000000-name-approval.js';
 import { GameCategories1795200000000 } from './migrations/1795200000000-game-categories.js';
 import { GameThumbnails1795300000000 } from './migrations/1795300000000-game-thumbnails.js';
+import { News1795400000000 } from './migrations/1795400000000-news.js';
 
 export const databaseOptions = (
   url: string,
@@ -42,6 +44,7 @@ export const databaseOptions = (
     GameCategories,
     GameSetting,
     GameThumbnail,
+    NewsItem,
     PlayCount,
     Player,
     PlayerResult,
@@ -63,6 +66,7 @@ export const databaseOptions = (
     NameApproval1795100000000,
     GameCategories1795200000000,
     GameThumbnails1795300000000,
+    News1795400000000,
   ],
   migrationsRun: runMigrations,
   synchronize: false,

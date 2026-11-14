@@ -1,6 +1,6 @@
 import { DOCUMENT, Injector, runInInjectionContext } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { GamesApi } from './games-api';
+import { GamesApi, parseNewsItem } from './games-api';
 import { readOutbox } from './outbox';
 
 function answer(body: unknown, ok = true, status = ok ? 200 : 500) {
@@ -70,6 +70,29 @@ describe('GamesApi', () => {
     const [url, init] = fetchMock.mock.calls[0];
     expect(String(url)).toBe('http://localhost:3000/v1/feedback');
     expect(init?.body).toBe(JSON.stringify({ game: 'letter-games', vote: 'up', language: 'eu', reason: 'fun' }));
+  });
+
+  it('reads news, showing the Spanish text in languages left empty and ignoring unknown games', () => {
+    const [item] = parseNewsItem({
+      version: 16,
+      published: '2026-11-20T11:00:00.000Z',
+      kind: 'game',
+      game: 'chess',
+      feature: 'offline',
+      privacy: true,
+      text: { es: 'Nuevo juego', en: 'New game', eu: '  ' },
+    });
+    expect(item).toEqual({
+      version: 16,
+      published: '2026-11-20T11:00:00.000Z',
+      privacy: true,
+      change: {
+        kind: 'game',
+        feature: 'offline',
+        text: { es: 'Nuevo juego', en: 'New game', eu: 'Nuevo juego', it: 'Nuevo juego', uk: 'Nuevo juego' },
+      },
+    });
+    expect(parseNewsItem({ version: 1, published: 'x', kind: 'gossip', text: { es: 'Hola' } })).toEqual([]);
   });
 
   it('reads game switches and categories, keeping known games and categories only', async () => {

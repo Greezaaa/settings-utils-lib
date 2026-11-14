@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { FEATURE_IDS, GAME_CATEGORIES, GAME_SLUGS, LANGUAGE_IDS } from './catalog.js';
+import { FEATURE_IDS, GAME_CATEGORIES, GAME_SLUGS, LANGUAGE_IDS, UPDATE_KINDS } from './catalog.js';
 
 const gamesApp = join(
   import.meta.dirname,
@@ -30,6 +30,12 @@ describe('catalog', () => {
     expect([...GAME_CATEGORIES].sort()).toEqual(
       unionValues('core/games.ts', 'GameCategory').sort(),
     );
+  });
+
+  it('knows the same kinds of news as the games site', () => {
+    const source = readFileSync(join(gamesApp, 'core/site-updates.ts'), 'utf8');
+    const list = /UPDATE_KINDS = \[([^\]]+)\]/.exec(source)?.[1] ?? '';
+    expect([...UPDATE_KINDS]).toEqual([...list.matchAll(/'([^']+)'/g)].map(([, value]) => value));
   });
 
   it('knows the same languages as the games site', () => {

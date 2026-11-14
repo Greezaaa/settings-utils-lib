@@ -5,6 +5,7 @@ import { wasSignedIn } from '../../core/session-hint';
 import { AdminAccount } from './admin-account/admin-account';
 import { AdminErrors } from './admin-errors/admin-errors';
 import { AdminGames } from './admin-games/admin-games';
+import { AdminNewsTab } from './admin-news/admin-news';
 import { AdminPlayers } from './admin-players/admin-players';
 import { AdminPlays } from './admin-plays/admin-plays';
 import { AdminSuggestions } from './admin-suggestions/admin-suggestions';
@@ -16,13 +17,13 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 
 type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offline';
 
-const TABS = ['games', 'plays', 'suggestions', 'words', 'players', 'errors', 'team', 'account'] as const;
+const TABS = ['games', 'news', 'plays', 'suggestions', 'words', 'players', 'errors', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];
-const SUPER_TABS: readonly Tab[] = ['games', 'errors', 'team'];
+const SUPER_TABS: readonly Tab[] = ['games', 'news', 'errors', 'team'];
 
 @Component({
   selector: 'app-admin-page',
-  imports: [TranslatePipe, RevealPassword, ScrollToActive, AdminAccount, AdminErrors, AdminGames, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
+  imports: [TranslatePipe, RevealPassword, ScrollToActive, AdminAccount, AdminErrors, AdminGames, AdminNewsTab, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],

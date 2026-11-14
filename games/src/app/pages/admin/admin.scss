@@ -102,7 +102,10 @@ input[type='password'] {
 }
 
 input[type='email'],
-input[type='text'] {
+input[type='text'],
+input[type='datetime-local'],
+select,
+textarea {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -110,6 +113,28 @@ input[type='text'] {
   font: inherit;
   min-height: 2.5rem;
   padding: 0.375rem 0.75rem;
+}
+
+.news-fields {
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 40rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+
+.news-fields select {
+  min-width: 0;
+  width: 100%;
+}
+
+.add-news {
+  justify-self: start;
 }
 
 .copy-row {

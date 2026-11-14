@@ -3,7 +3,8 @@ import { RouterLink } from '@angular/router';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { GameAvailability } from '../../../core/game-availability';
 import { readStored, writeStored } from '../../../core/site-storage';
-import { LAST_SEEN_STORAGE, LATEST_VERSION, recentChanges, UPDATE_KIND_TAGS } from '../../../core/site-updates';
+import { SiteNews } from '../../../core/site-news';
+import { LAST_SEEN_STORAGE, recentChanges, UPDATE_KIND_TAGS } from '../../../core/site-updates';
 import { SiteLanguage } from '../../../i18n/site-language';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
@@ -21,6 +22,7 @@ export class WhatsNew {
   private readonly language = inject(SiteLanguage);
   private readonly availability = inject(GameAvailability);
   private readonly features = inject(FeatureFlags);
+  private readonly news = inject(SiteNews);
   protected readonly t = this.language.messages;
 
   protected readonly isExpanded = signal(false);
@@ -28,7 +30,7 @@ export class WhatsNew {
   private readonly inBrowser = signal(false);
 
   private readonly changes = computed(() =>
-    recentChanges().filter(
+    recentChanges(this.news.updates()).filter(
       ({ change }) =>
         (!change.game || this.availability.canPlay(change.game)) &&
         (!change.feature || this.features.canUse(change.feature)),
@@ -55,10 +57,12 @@ export class WhatsNew {
       const stored = readStored(LAST_SEEN_STORAGE);
       this.lastSeen.set(typeof stored === 'number' && Number.isInteger(stored) ? stored : null);
       this.inBrowser.set(true);
+      void this.news.ready();
     });
     inject(DestroyRef).onDestroy(() => {
-      if (this.inBrowser()) {
-        writeStored(LAST_SEEN_STORAGE, LATEST_VERSION);
+      const latest = this.news.latestVersion();
+      if (this.inBrowser() && latest > 0) {
+        writeStored(LAST_SEEN_STORAGE, latest);
       }
     });
   }

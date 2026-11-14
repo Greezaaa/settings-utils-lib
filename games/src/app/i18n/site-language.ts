@@ -2,7 +2,7 @@ import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, signal
 import { readStored, writeStored } from '../core/site-storage';
 import { PlayerGender } from '../core/player-gender';
 import { spanish } from './es';
-import { LanguageId, SiteMessages } from './site-messages';
+import { LANGUAGE_IDS, LanguageId, SiteMessages } from './site-messages';
 import { WordGender } from './word-gender';
 
 type MessagesFor = (gender: WordGender) => SiteMessages;
@@ -23,13 +23,7 @@ const LANGUAGE_LABELS: Readonly<Record<LanguageId, { readonly name: string; read
   uk: { name: 'Українська', code: 'УКР' },
 };
 
-export const LANGUAGE_IDS: readonly LanguageId[] = [
-  'en',
-  'es',
-  'eu',
-  'it',
-  'uk',
-];
+export { LANGUAGE_IDS };
 
 const LANGUAGE_STORAGE = 'language';
 

@@ -2,6 +2,7 @@ import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
 import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FEATURE_IDS, FeatureId } from './features';
+import { NewsItem, UPDATE_KINDS, UpdateKind } from './site-updates';
 import { GAME_CATEGORIES, GAME_SLUGS, GameCategory, GameSlug } from './games';
 import { OutboxItem, readOutbox, SendResult, withItem, writeOutbox } from './outbox';
 
@@ -115,6 +116,29 @@ function parseFeatureSwitches(body: unknown): FeatureSwitch[] | null {
   });
 }
 
+export const isUpdateKind = (value: unknown): value is UpdateKind => UPDATE_KINDS.some((kind) => kind === value);
+
+export function parseNewsItem(item: unknown): NewsItem[] {
+  const [version, published, kind, game, feature, privacy, text] = ['version', 'published', 'kind', 'game', 'feature', 'privacy', 'text'].map(
+    (name) => field(item, name),
+  );
+  const spanish = field(text, 'es');
+  if (typeof version !== 'number' || typeof published !== 'string' || !isUpdateKind(kind) || typeof spanish !== 'string') {
+    return [];
+  }
+  const inLanguage = (language: LanguageId): string => {
+    const own = field(text, language);
+    return typeof own === 'string' && own.trim() ? own : spanish;
+  };
+  const change = {
+    kind,
+    text: { en: inLanguage('en'), es: spanish, eu: inLanguage('eu'), it: inLanguage('it'), uk: inLanguage('uk') },
+    ...(isGameSlug(game) ? { game } : {}),
+    ...(isFeatureId(feature) ? { feature } : {}),
+  };
+  return [{ version, published, privacy: privacy === true, change }];
+}
+
 function parseWords(body: unknown): string[] {
   const words = field(body, 'words');
   return Array.isArray(words) ? words.filter((word: unknown): word is string => typeof word === 'string') : [];
@@ -159,6 +183,11 @@ export class GamesApi {
 
   async featureSwitches(): Promise<FeatureSwitch[] | null> {
     return parseFeatureSwitches(await this.read('/v1/features'));
+  }
+
+  async news(): Promise<NewsItem[] | null> {
+    const news = field(await this.read('/v1/news'), 'news');
+    return Array.isArray(news) ? news.flatMap((item: unknown) => parseNewsItem(item)) : null;
   }
 
   async gameSettings(): Promise<GameSettings | null> {

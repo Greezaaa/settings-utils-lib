@@ -255,6 +255,36 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     await request(server).get('/v1/games/word-search/thumbnail').expect(404);
   });
 
+  it('keeps the earlier news and lets the super admin add, change and remove news in every language', async () => {
+    const server = app.getHttpServer();
+    const earlier = (await request(server).get('/v1/news').expect(200)).body.news;
+    expect(earlier).toHaveLength(22);
+    expect(earlier[0].version).toBe(15);
+    const news = {
+      kind: 'game',
+      game: 'word-search',
+      published: '2026-11-20T12:00:00+01:00',
+      text: { es: 'Nuevo juego: Sopa de letras', en: 'New game: Word search', eu: '' },
+    };
+    await request(server).post('/admin/news').send(news).expect(401);
+    await request(server).post('/admin/news').set(admin).send({ ...news, text: { en: 'Only English' } }).expect(400);
+    await request(server).post('/admin/news').set(admin).send({ ...news, kind: 'gossip' }).expect(400);
+    const added = (await request(server).post('/admin/news').set(admin).send(news).expect(201)).body;
+    expect(added).toMatchObject({ version: 16, game: 'word-search', feature: null, privacy: false });
+    expect(added.text).toEqual({ es: 'Nuevo juego: Sopa de letras', en: 'New game: Word search' });
+    const changed = (
+      await request(server)
+        .put(`/admin/news/${added.id}`)
+        .set(admin)
+        .send({ ...news, text: { es: 'Nuevo: Sopa de letras' } })
+        .expect(200)
+    ).body;
+    expect(changed).toMatchObject({ id: added.id, version: 16, text: { es: 'Nuevo: Sopa de letras' } });
+    expect((await request(server).get('/v1/news').expect(200)).body.news[0].id).toBe(added.id);
+    await request(server).delete(`/admin/news/${added.id}`).set(admin).expect(204);
+    expect((await request(server).get('/v1/news').expect(200)).body.news).toHaveLength(22);
+  });
+
   it('lets the super admin give a game one or more known categories', async () => {
     const server = app.getHttpServer();
     await request(server).put('/admin/games/letter-sudoku/categories').send({ categories: ['letters'] }).expect(401);

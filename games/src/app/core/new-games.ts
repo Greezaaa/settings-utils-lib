@@ -1,7 +1,8 @@
 import { afterNextRender, computed, inject, Injectable, signal } from '@angular/core';
 import { GameAvailability } from './game-availability';
 import { GameSlug } from './games';
-import { SITE_UPDATES, SiteUpdate } from './site-updates';
+import { SiteNews } from './site-news';
+import { SiteUpdate } from './site-updates';
 
 export const NEW_GAME_DAYS = 14;
 export const NEW_GAMES_LIMIT = 2;
@@ -10,7 +11,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 export function newGames(
   now: Date,
-  updates: readonly SiteUpdate[] = SITE_UPDATES,
+  updates: readonly SiteUpdate[],
   days = NEW_GAME_DAYS,
   limit = NEW_GAMES_LIMIT,
   isPublic: (game: GameSlug) => boolean = () => true,
@@ -33,7 +34,7 @@ function addedTimes(updates: readonly SiteUpdate[]): Map<GameSlug, number> {
   return added;
 }
 
-export function recentlyAdded(updates: readonly SiteUpdate[] = SITE_UPDATES): GameSlug[] {
+export function recentlyAdded(updates: readonly SiteUpdate[]): GameSlug[] {
   const added = addedTimes(updates);
   return [...added.keys()].reverse().sort((first, second) => (added.get(second) ?? 0) - (added.get(first) ?? 0));
 }
@@ -41,16 +42,20 @@ export function recentlyAdded(updates: readonly SiteUpdate[] = SITE_UPDATES): Ga
 @Injectable({ providedIn: 'root' })
 export class NewGames {
   private readonly availability = inject(GameAvailability);
+  private readonly news = inject(SiteNews);
   private readonly now = signal<Date | null>(null);
 
   readonly games = computed<readonly GameSlug[]>(() => {
     const now = this.now();
     return now
-      ? newGames(now, SITE_UPDATES, NEW_GAME_DAYS, NEW_GAMES_LIMIT, (game) => this.availability.isOpen(game))
+      ? newGames(now, this.news.updates(), NEW_GAME_DAYS, NEW_GAMES_LIMIT, (game) => this.availability.isOpen(game))
       : [];
   });
 
   constructor() {
-    afterNextRender(() => this.now.set(new Date()));
+    afterNextRender(() => {
+      this.now.set(new Date());
+      void this.news.ready();
+    });
   }
 }

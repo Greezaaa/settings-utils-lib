@@ -1,9 +1,10 @@
 import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
-import { LanguageId } from '../i18n/site-messages';
+import { LANGUAGE_IDS, LanguageId } from '../i18n/site-messages';
 import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FeatureId } from './features';
 import { GameCategory, GameSlug } from './games';
-import { GamePlays, isGameSlug, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
+import { GamePlays, isFeatureId, isGameSlug, isUpdateKind, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
+import { UpdateKind } from './site-updates';
 import { rememberSignedIn } from './session-hint';
 
 const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
@@ -239,6 +240,48 @@ const pageQuery = (status: string, offset: number): string =>
 const listOf = <T>(body: unknown, parse: (item: unknown) => T[]): T[] =>
   Array.isArray(body) ? body.flatMap((item: unknown) => parse(item)) : [];
 
+export interface NewsDraft {
+  readonly kind: UpdateKind;
+  readonly game: GameSlug | null;
+  readonly feature: FeatureId | null;
+  readonly privacy: boolean;
+  readonly published: string;
+  readonly text: Partial<Record<LanguageId, string>>;
+}
+
+export interface AdminNews extends NewsDraft {
+  readonly id: number;
+  readonly version: number;
+}
+
+function parseAdminNews(item: unknown): AdminNews[] {
+  const [id, version, published, kind, game, feature, privacy, text] = ['id', 'version', 'published', 'kind', 'game', 'feature', 'privacy', 'text'].map(
+    (name) => field(item, name),
+  );
+  if (typeof id !== 'number' || typeof version !== 'number' || typeof published !== 'string' || !isUpdateKind(kind)) {
+    return [];
+  }
+  const texts: Partial<Record<LanguageId, string>> = {};
+  for (const language of LANGUAGE_IDS) {
+    const value = field(text, language);
+    if (typeof value === 'string') {
+      texts[language] = value;
+    }
+  }
+  return [
+    {
+      id,
+      version,
+      published,
+      kind,
+      game: isGameSlug(game) ? game : null,
+      feature: isFeatureId(feature) ? feature : null,
+      privacy: privacy === true,
+      text: texts,
+    },
+  ];
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminApi {
   private readonly document = inject(DOCUMENT);
@@ -334,6 +377,22 @@ export class AdminApi {
 
   removeGameThumbnail(game: GameSlug): Promise<boolean> {
     return this.change('DELETE', `/admin/games/${game}/thumbnail`);
+  }
+
+  async news(): Promise<AdminNews[]> {
+    return listOf(field(await this.read('/v1/news'), 'news'), parseAdminNews);
+  }
+
+  addNews(draft: NewsDraft): Promise<boolean> {
+    return this.change('POST', '/admin/news', draft);
+  }
+
+  changeNews(id: number, draft: NewsDraft): Promise<boolean> {
+    return this.change('PUT', `/admin/news/${id}`, draft);
+  }
+
+  removeNews(id: number): Promise<boolean> {
+    return this.change('DELETE', `/admin/news/${id}`);
   }
 
   async suggestions(status: SuggestionStatus, offset: number): Promise<AdminSuggestion[]> {

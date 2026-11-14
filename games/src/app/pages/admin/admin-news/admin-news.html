@@ -1,0 +1,86 @@
+<p class="muted">{{ 'admin.newsHelp' | translate }}</p>
+
+@if (editing(); as editing) {
+  <form class="card admin-card" (submit)="save($event, form)" #form>
+    <h2 class="card-title">{{ (editing.id === null ? 'admin.addNews' : 'admin.editNews') | translate }}</h2>
+    <div class="news-fields">
+      <label class="field">
+        <span>{{ 'admin.newsKind' | translate }}</span>
+        <select name="kind">
+          @for (kind of kinds; track kind) {
+            <option [value]="kind" [selected]="kind === editing.draft.kind">{{ ('home.updateKinds' | translate)[kind] }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>{{ 'admin.newsPublished' | translate }}</span>
+        <input type="datetime-local" name="published" required [value]="localTime(editing.draft.published)" />
+      </label>
+      <label class="field">
+        <span>{{ 'admin.newsGame' | translate }}</span>
+        <select name="game">
+          <option value="">{{ 'admin.newsNone' | translate }}</option>
+          @for (game of games; track game) {
+            <option [value]="game" [selected]="game === editing.draft.game">{{ ('games' | translate)[game].name }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>{{ 'admin.newsFeature' | translate }}</span>
+        <select name="feature">
+          <option value="">{{ 'admin.newsNone' | translate }}</option>
+          @for (feature of features; track feature) {
+            <option [value]="feature" [selected]="feature === editing.draft.feature">{{ ('admin.featureNames' | translate)[feature] }}</option>
+          }
+        </select>
+      </label>
+    </div>
+    <label class="checkbox">
+      <input type="checkbox" name="privacy" [checked]="editing.draft.privacy" />
+      {{ 'admin.newsPrivacy' | translate }}
+    </label>
+    @for (code of languages; track code) {
+      <label class="field">
+        <span>{{ language.nameOf(code) }}{{ code === 'es' ? ' *' : '' }}</span>
+        <textarea [name]="'text-' + code" rows="2" maxlength="300" [required]="code === 'es'">{{ editing.draft.text[code] ?? '' }}</textarea>
+      </label>
+    }
+    <small class="muted">{{ 'admin.newsFallback' | translate }}</small>
+    <div class="actions">
+      <button type="submit" class="button" [disabled]="isSaving()">{{ 'admin.newsSave' | translate }}</button>
+      <button type="button" class="button button-secondary" (click)="cancel()">{{ 'site.cancel' | translate }}</button>
+    </div>
+  </form>
+} @else {
+  <button type="button" class="button add-news" (click)="startNew()">{{ 'admin.addNews' | translate }}</button>
+}
+
+@if (isLoading()) {
+  <p class="muted">{{ 'admin.loading' | translate }}</p>
+} @else {
+  <ul class="card plain-list">
+    @for (item of items(); track item.id) {
+      <li class="switch-row">
+        <span>
+          <strong>{{ item.text.es }}</strong>
+          <small class="muted">
+            {{ ('home.updateKinds' | translate)[item.kind] }} · {{ moment(item.published) }} · v{{ item.version }}
+            @if (item.privacy) {
+              · {{ 'admin.newsPrivacyShort' | translate }}
+            }
+          </small>
+        </span>
+        <span class="actions">
+          <button type="button" class="button button-secondary button-small" (click)="startEdit(item)">{{ 'admin.editNews' | translate }}</button>
+          <button
+            type="button"
+            class="button button-secondary button-small danger"
+            (click)="remove(item)"
+          >
+            {{ 'admin.deleteNews' | translate }}
+          </button>
+        </span>
+      </li>
+    }
+  </ul>
+}
