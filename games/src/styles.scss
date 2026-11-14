@@ -19,7 +19,8 @@ html {
   touch-action: pan-x pan-y;
 }
 
-.game-board:fullscreen {
+.game-board:fullscreen,
+.game-board.is-filled {
   align-content: center;
   background: var(--surface);
   border: 0;
@@ -31,6 +32,38 @@ html {
     margin-inline: auto;
     max-width: 58rem;
   }
+}
+
+/* Phones without the Fullscreen API (iPhone Safari) fill the window instead; !important beats the scoped card width */
+.game-board.is-filled {
+  height: 100dvh;
+  inset: 0;
+  margin: 0;
+  max-width: none !important;
+  position: fixed;
+  z-index: 1000;
+}
+
+html.is-filled {
+  overflow: hidden;
+
+  main {
+    view-transition-name: none;
+  }
+}
+
+.game-board > .board-exit {
+  display: none;
+}
+
+.game-board:fullscreen > .board-exit,
+.game-board.is-filled > .board-exit {
+  background: var(--surface);
+  display: inline-flex;
+  position: fixed;
+  right: 0.75rem;
+  top: 0.75rem;
+  z-index: 1;
 }
 
 .game-board[data-theme] {
