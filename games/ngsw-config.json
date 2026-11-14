@@ -18,7 +18,8 @@
           "/icon-*.png",
           "/apple-touch-icon.png",
           "/pictures/**",
-          "/reactions/**"
+          "/reactions/**",
+          "/thumbnails/**"
         ]
       }
     },

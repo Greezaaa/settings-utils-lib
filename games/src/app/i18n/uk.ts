@@ -129,6 +129,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     reactionSides: { left: 'Ліворуч', right: 'Праворуч', bottom: 'Знизу' },
     stickerDrag: 'Переміщати наліпки утриманням',
     stickerDragChoices: { on: 'Так', off: 'Ні' },
+    homeCrumb: 'головна',
     showPassword: 'Показати пароль',
     hidePassword: 'Сховати пароль',
     offlinePlay: 'Грати без мережі',
@@ -286,26 +287,23 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     title: 'Розумні ігри для кмітливих дітей',
     lead: 'Мініігри, що тренують логіку, пам’ять і швидкість мислення.',
     rule: 'Вони безкоштовні, без реєстрації й працюють на комп’ютерах, планшетах і телефонах.',
-    betaLabel: 'Бета',
-    betaText:
-      'Ігри в бета-версії: це ще не остаточна версія, і вони змінюватимуться. Незабаром можна буде підписатися на розсилку електронною поштою, щоб дізнаватися про нові ігри та зміни.',
     whatsNewTitle: 'Що нового',
     updateKinds: { game: 'Ігри', language: 'Мови', settings: 'Налаштування', feature: 'Функції', privacy: 'Приватність' },
     showMore: 'Показати більше новин',
     showFewer: 'Показати менше',
-    madeByTitle: 'Для дітей, разом із дітьми',
-    madeByText:
-      'Нові ігри вже в дорозі. Я створюю їх разом із моєю малою Лусією, яка малює картинки.',
-    favoritesTitle: 'Твої улюблені',
-    popularTitle: 'Найпопулярніші',
-    recentTitle: 'Нещодавно додані',
-    categoriesTitle: 'Усі ігри',
     categoryGames: games => `${games} ${plural(games, 'гра', 'гри', 'ігор')}`,
+    gamesTitle: 'Ігри',
+    searchLabel: 'Пошук ігор',
+    searchPlaceholder: 'Шукай гру…',
+    categoryGroup: 'Категорії',
+    allCategories: 'Усі',
+    favoritesOnly: 'Улюблені',
+    noGames: 'Жодна гра не підходить. Спробуй інше слово чи категорію.',
   },
 
   slidingPuzzle: {
     lead: 'Торкнися плитки поруч із порожнім місцем, щоб пересунути її туди. Розстав усі плитки, щоб лінії склалися в один малюнок.',
-    rule: 'Порожня клітинка щоразу в новому місці!',
+    rule: 'На рівнях «Важко» й «Експерт» порожня клітинка щоразу інша: ціль показує, де вона.',
     board: 'Пазл',
     levelGroup: 'Рівень',
     levels: {
@@ -1144,7 +1142,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     featuresHelp:
       'Нові функції спершу вимкнені: спробуй їх у режимі перегляду, а потім відкрий для всіх.',
     featureNames: {
-      rooms: 'Грати разом (кімнати)',
+      rooms: 'Мультиплеєр (кімнати)',
       'rooms-math-games': 'Математика в кімнатах',
       'rooms-measure-it': 'Виміряй у кімнатах',
       'rooms-letter-games': 'Ігри з буквами в кімнатах',
@@ -1217,8 +1215,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
   },
 
   rooms: {
-    navLink: 'Грати разом',
-    title: 'Грати разом',
+    navLink: 'Мультиплеєр',
+    title: 'Мультиплеєр',
     lead: 'Грайте в ту саму гру одночасно, до 4 гравців, кожен на своєму пристрої.',
     rule: 'Створи кімнату й поділися її кодом або увійди в кімнату за кодом.',
     create: 'Створити',
@@ -1226,7 +1224,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     joinTitle: 'Увійти в кімнату',
     codeLabel: 'Код кімнати',
     join: 'Увійти',
-    homeTitle: 'Грати разом',
+    homeTitle: 'Мультиплеєр',
     homeText:
       'До 4 гравців, ті самі вправи одночасно. Хто відповість правильно найбільше разів?',
     homeLink: 'До кімнат',

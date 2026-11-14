@@ -1,4 +1,10 @@
 <article class="card game-card">
+  <span class="thumbnail" aria-hidden="true">
+    <span class="thumbnail-icon">{{ icon() }}</span>
+    @if (hasThumbnail()) {
+      <img [src]="thumbnail()" alt="" loading="lazy" (error)="hasThumbnail.set(false)" />
+    }
+  </span>
   <span class="tags">
     <span class="tag">{{ 'page.ages' | translate: minAge() }}</span>
     @if (isNew()) {
@@ -14,7 +20,7 @@
   <h3 class="game-name">
     <a class="game-link" [routerLink]="['/', game()]">{{ ('games' | translate)[game()].name }}</a>
   </h3>
-  <p class="muted">{{ ('games' | translate)[game()].summary }}</p>
+  <p class="muted subtitle">{{ ('games' | translate)[game()].subtitle }}</p>
   @if (canFavorite()) {
     <button
       type="button"

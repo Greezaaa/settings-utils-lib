@@ -1,17 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { FavoriteGames } from '../../core/favorite-games';
 import { FeatureFlags } from '../../core/feature-flags';
 import { GameAvailability } from '../../core/game-availability';
-import { FavoriteGames } from '../../core/favorite-games';
-import { byCategory, GameSlug } from '../../core/games';
-import { recentlyAdded } from '../../core/new-games';
-import { PopularGames, toppedUp } from '../../core/popular-games';
-import { GameCard } from '../../shared/game-card/game-card';
-import { RouterLink } from '@angular/router';
-import { WhatsNew } from './whats-new/whats-new';
-import { Reveal } from '../../shared/reveal';
+import { CategoryFilter, filterGames } from '../../core/game-filter';
+import { GAME_CATEGORIES, gameInfo } from '../../core/games';
+import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-
-const RECENT_LIMIT = 4;
+import { GameCard } from '../../shared/game-card/game-card';
+import { Reveal } from '../../shared/reveal';
+import { WhatsNew } from './whats-new/whats-new';
 
 @Component({
   selector: 'app-home-page',
@@ -22,20 +20,36 @@ const RECENT_LIMIT = 4;
 })
 export class HomePage {
   private readonly availability = inject(GameAvailability);
+  private readonly favorites = inject(FavoriteGames).games;
+  private readonly messages = inject(SiteLanguage).messages;
   protected readonly features = inject(FeatureFlags);
-  protected readonly categories = computed(() => byCategory(this.availability.visibleGames()));
-  protected readonly hasCategoryMenu = computed(() => this.features.canUse('category-menu'));
 
-  private readonly favoriteGames = inject(FavoriteGames).games;
-  private readonly mostPlayed = inject(PopularGames).mostPlayed;
-  protected readonly favorites = computed(() => this.visible(this.favoriteGames()));
-  protected readonly popular = computed(() =>
-    toppedUp(this.visible(this.mostPlayed()), this.availability.visibleGames()),
+  protected readonly query = signal('');
+  protected readonly category = signal<CategoryFilter>('all');
+  protected readonly favoritesOnly = signal(false);
+
+  protected readonly categoryOptions = computed(() =>
+    GAME_CATEGORIES.filter((category) =>
+      this.availability.visibleGames().some((game) => gameInfo(game).category === category),
+    ),
   );
-  protected readonly recent = computed(() => this.visible(recentlyAdded()).slice(0, RECENT_LIMIT));
+  protected readonly canFilterFavorites = computed(
+    () => this.features.canUse('category-menu') && this.favorites().length > 0,
+  );
+  protected readonly shownGames = computed(() => {
+    const { games } = this.messages();
+    return filterGames(
+      this.availability.visibleGames(),
+      { query: this.query(), category: this.category(), favoritesOnly: this.favoritesOnly() && this.canFilterFavorites() },
+      {
+        categoriesOf: (game) => [gameInfo(game).category],
+        textOf: (game) => `${games[game].name} ${games[game].subtitle}`,
+        favorites: this.favorites(),
+      },
+    );
+  });
 
-  private visible(games: readonly GameSlug[]): GameSlug[] {
-    const open = this.availability.visibleGames();
-    return games.filter((game) => open.includes(game));
+  protected searchText(event: Event): string {
+    return event.target instanceof HTMLInputElement ? event.target.value : '';
   }
 }

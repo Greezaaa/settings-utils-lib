@@ -85,6 +85,7 @@ export interface SiteMessages {
     readonly reactionSide: string;
     readonly reactionSides: Readonly<Record<ReactionSide, string>>;
     readonly stickerDrag: string;
+    readonly homeCrumb: string;
     readonly showPassword: string;
     readonly hidePassword: string;
     readonly offlinePlay: string;
@@ -128,19 +129,18 @@ export interface SiteMessages {
     readonly title: string;
     readonly lead: string;
     readonly rule: string;
-    readonly betaLabel: string;
-    readonly betaText: string;
     readonly whatsNewTitle: string;
     readonly updateKinds: Readonly<Record<UpdateKind, string>>;
     readonly showMore: string;
     readonly showFewer: string;
-    readonly madeByTitle: string;
-    readonly madeByText: string;
-    readonly favoritesTitle: string;
-    readonly popularTitle: string;
-    readonly recentTitle: string;
-    readonly categoriesTitle: string;
     readonly categoryGames: (games: number) => string;
+    readonly gamesTitle: string;
+    readonly searchLabel: string;
+    readonly searchPlaceholder: string;
+    readonly categoryGroup: string;
+    readonly allCategories: string;
+    readonly favoritesOnly: string;
+    readonly noGames: string;
   };
 
   readonly categoryIntros: Readonly<Record<GameCategory, string>>;

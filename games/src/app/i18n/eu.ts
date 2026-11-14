@@ -100,6 +100,7 @@ export const EU: SiteMessages = {
     reactionSides: { left: 'Ezkerrean', right: 'Eskuinean', bottom: 'Behean' },
     stickerDrag: 'Mugitu pegatinak sakatuta edukiz',
     stickerDragChoices: { on: 'Bai', off: 'Ez' },
+    homeCrumb: 'hasiera',
     showPassword: 'Erakutsi pasahitza',
     hidePassword: 'Ezkutatu pasahitza',
     offlinePlay: 'Konexiorik gabe jolastu',
@@ -257,26 +258,23 @@ export const EU: SiteMessages = {
     title: 'Joko adimentsuak, haur adimentsuentzat',
     lead: 'Logika, oroimena eta azkartasuna lantzeko minijokoak.',
     rule: 'Doan dira, ez dute izena ematea eskatzen, eta ordenagailuetan, tabletetan eta mugikorretan dabiltza.',
-    betaLabel: 'Beta',
-    betaText:
-      'Jokoak beta fasean daude: oraindik ez da azken bertsioa, eta aldatzen jarraituko dute. Laster posta elektronikoz harpidetu ahal izango zara joko berrien eta berritasunen berri izateko.',
     whatsNewTitle: 'Berritasunak',
     updateKinds: { game: 'Jokoak', language: 'Hizkuntzak', settings: 'Ezarpenak', feature: 'Funtzioak', privacy: 'Pribatutasuna' },
     showMore: 'Ikusi berritasun gehiago',
     showFewer: 'Ikusi gutxiago',
-    madeByTitle: 'Haurrentzat eginak, haurrek eginak',
-    madeByText:
-      'Joko gehiago prestatzen ari gara. Nire txikiarekin, Lucíarekin, egiten ditut; berak marrazten ditu irudiak.',
-    favoritesTitle: 'Zure gogokoak',
-    popularTitle: 'Jokatuenak',
-    recentTitle: 'Azken gehitutakoak',
-    categoriesTitle: 'Joko guztiak',
     categoryGames: games => `${games} joko`,
+    gamesTitle: 'Jokoak',
+    searchLabel: 'Bilatu jokoak',
+    searchPlaceholder: 'Bilatu joko bat…',
+    categoryGroup: 'Kategoriak',
+    allCategories: 'Denak',
+    favoritesOnly: 'Gogokoak',
+    noGames: 'Ez dago bat datorren jokorik. Probatu beste hitz edo kategoria bat.',
   },
 
   slidingPuzzle: {
     lead: 'Sakatu hutsunearen ondoko pieza bat hara mugitzeko. Jarri pieza guztiak beren lekuan lerroek marrazki bakarra osa dezaten.',
-    rule: 'Hutsunea leku berrian dago partida bakoitzean!',
+    rule: 'Zaila eta Aditua mailetan hutsunea aldatu egiten da partida bakoitzean: helburuak erakusten du non doan.',
     board: 'Puzzlea',
     levelGroup: 'Maila',
     levels: {
@@ -1114,7 +1112,7 @@ export const EU: SiteMessages = {
     featuresHelp:
       'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
     featureNames: {
-      rooms: 'Elkarrekin jokatu (gelak)',
+      rooms: 'Jokalari anitz (gelak)',
       'rooms-math-games': 'Matematika geletan',
       'rooms-measure-it': 'Neurtu geletan',
       'rooms-letter-games': 'Letra jokoak geletan',
@@ -1189,8 +1187,8 @@ export const EU: SiteMessages = {
   },
 
   rooms: {
-    navLink: 'Elkarrekin jokatu',
-    title: 'Elkarrekin jokatu',
+    navLink: 'Jokalari anitz',
+    title: 'Jokalari anitz',
     lead: 'Jokatu joko bera aldi berean, 4 jokalari arte, bakoitza bere gailuan.',
     rule: 'Sortu gela bat eta partekatu bere kodea, edo sartu batean kode batekin.',
     create: 'Sortu',
@@ -1198,7 +1196,7 @@ export const EU: SiteMessages = {
     joinTitle: 'Sartu gela batean',
     codeLabel: 'Gelaren kodea',
     join: 'Sartu',
-    homeTitle: 'Elkarrekin jokatu',
+    homeTitle: 'Jokalari anitz',
     homeText:
       '4 jokalari arte, ariketa berak aldi berean. Nork asmatzen du gehien?',
     homeLink: 'Ikusi gelak',

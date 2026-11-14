@@ -18,6 +18,10 @@
         su-labs
         <span class="brand-separator" aria-hidden="true">/</span>
         <span class="brand-section">games</span>
+        @if (crumb(); as crumb) {
+          <span class="brand-separator brand-crumb" aria-hidden="true">/</span>
+          <span class="brand-section brand-crumb">{{ crumb }}</span>
+        }
     </a>
 
     <div class="header-controls">

@@ -51,6 +51,14 @@
   color: var(--muted);
 }
 
+.brand-crumb {
+  text-transform: lowercase;
+
+  @media (max-width: 39.99rem) {
+    display: none;
+  }
+}
+
 .brand:hover .brand-section {
   color: var(--heading);
 }

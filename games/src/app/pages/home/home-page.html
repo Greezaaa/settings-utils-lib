@@ -5,53 +5,48 @@
     <br />
     {{ 'home.rule' | translate }}
   </p>
-  <p class="beta" role="note">
-    <span class="beta-label">{{ 'home.betaLabel' | translate }}</span>
-    {{ 'home.betaText' | translate }}
-  </p>
 </header>
 
-@if (hasCategoryMenu()) {
-  @for (list of [
-    { id: 'favorites', title: ('home.favoritesTitle' | translate), games: favorites() },
-    { id: 'popular', title: ('home.popularTitle' | translate), games: popular() },
-    { id: 'recent', title: ('home.recentTitle' | translate), games: recent() }
-  ]; track list.id) {
-    @if (list.games.length > 0) {
-      <section class="container page-section" [attr.aria-labelledby]="'list-' + list.id">
-        <h2 class="section-title" [id]="'list-' + list.id">{{ list.title }}</h2>
-        <div class="games">
-          @for (game of list.games; track game; let index = $index) {
-            <app-game-card [game]="game" appReveal [style.--index]="index" />
-          }
-        </div>
-      </section>
-    }
-  }
-  <section class="container page-section" aria-labelledby="categories-title">
-    <h2 class="section-title" id="categories-title">{{ 'home.categoriesTitle' | translate }}</h2>
-    <div class="games">
-      @for (group of categories(); track group.category; let index = $index) {
-        <a class="card category-card" [routerLink]="['/category', group.category]" appReveal [style.--index]="index">
-          <span class="tag">{{ 'home.categoryGames' | translate: group.games.length }}</span>
-          <h3 class="category-name">{{ ('categories' | translate)[group.category] }}</h3>
-          <p class="muted">{{ ('categoryIntros' | translate)[group.category] }}</p>
-        </a>
+<section class="container page-section" aria-labelledby="games-title">
+  <h2 class="section-title visually-hidden" id="games-title">{{ 'home.gamesTitle' | translate }}</h2>
+  <div class="game-filters">
+    <label class="search">
+      <span class="visually-hidden">{{ 'home.searchLabel' | translate }}</span>
+      <input
+        type="search"
+        autocomplete="off"
+        [placeholder]="'home.searchPlaceholder' | translate"
+        [value]="query()"
+        (input)="query.set(searchText($event))"
+      />
+    </label>
+    <div class="chips" role="group" [attr.aria-label]="'home.categoryGroup' | translate">
+      <button type="button" class="chip" [attr.aria-pressed]="category() === 'all'" (click)="category.set('all')">
+        {{ 'home.allCategories' | translate }}
+      </button>
+      @for (option of categoryOptions(); track option) {
+        <button type="button" class="chip" [attr.aria-pressed]="category() === option" (click)="category.set(option)">
+          {{ ('categories' | translate)[option] }}
+        </button>
+      }
+      @if (canFilterFavorites()) {
+        <button type="button" class="chip chip-favorites" [attr.aria-pressed]="favoritesOnly()" (click)="favoritesOnly.set(!favoritesOnly())">
+          ♥ {{ 'home.favoritesOnly' | translate }}
+        </button>
       }
     </div>
-  </section>
-} @else {
-  @for (group of categories(); track group.category) {
-    <section class="container page-section" [attr.aria-labelledby]="'category-' + group.category">
-      <h2 class="section-title" [id]="'category-' + group.category">{{ ('categories' | translate)[group.category] }}</h2>
-      <div class="games">
-        @for (game of group.games; track game; let index = $index) {
-          <app-game-card [game]="game" appReveal [style.--index]="index" />
-        }
-      </div>
-    </section>
+  </div>
+
+  @if (shownGames().length > 0) {
+    <div class="games" aria-live="polite">
+      @for (game of shownGames(); track game; let index = $index) {
+        <app-game-card [game]="game" appReveal [style.--index]="index" />
+      }
+    </div>
+  } @else {
+    <p class="muted no-games" role="status">{{ 'home.noGames' | translate }}</p>
   }
-}
+</section>
 
 @if (features.canUse('rooms')) {
   <section class="container page-section play-together" aria-labelledby="play-together-title">
@@ -64,9 +59,4 @@
 <section class="container page-section" aria-labelledby="whats-new-title">
   <h2 id="whats-new-title" class="section-title">{{ 'home.whatsNewTitle' | translate }}</h2>
   <app-whats-new />
-</section>
-
-<section class="container page-section made-by" aria-labelledby="made-by-title">
-  <h2 id="made-by-title" class="section-title">{{ 'home.madeByTitle' | translate }}</h2>
-  <p class="lead">{{ 'home.madeByText' | translate }}</p>
 </section>

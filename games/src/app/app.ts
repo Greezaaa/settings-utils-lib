@@ -57,9 +57,16 @@ export class App {
   protected readonly categories = computed(() => byCategory(this.games()));
   protected readonly features = inject(FeatureFlags);
   protected readonly account = inject(PlayerAccount);
-  private readonly pageGame = signal(
-    gameOfPath(inject(DOCUMENT).location.pathname)
-  );
+  private readonly pagePath = signal(inject(DOCUMENT).location.pathname);
+  private readonly pageGame = computed(() => gameOfPath(this.pagePath()));
+  protected readonly crumb = computed(() => {
+    const { site, games } = this.siteLanguage.messages();
+    const game = this.pageGame();
+    if (game) {
+      return games[game].name;
+    }
+    return this.pagePath() === '/' ? site.homeCrumb : null;
+  });
   protected readonly isCheckingGame = computed(() => {
     const game = this.pageGame();
     return (
@@ -102,7 +109,7 @@ export class App {
     const router = inject(Router);
     router.events.pipe(takeUntilDestroyed()).subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.pageGame.set(gameOfPath(event.urlAfterRedirects));
+        this.pagePath.set(event.urlAfterRedirects.split(/[?#]/)[0]);
         this.menuOpen.set(false);
       }
     });

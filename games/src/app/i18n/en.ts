@@ -97,6 +97,7 @@ export const EN: SiteMessages = {
     reactionSides: { left: 'Left', right: 'Right', bottom: 'Bottom' },
     stickerDrag: 'Move stickers by holding them',
     stickerDragChoices: { on: 'Yes', off: 'No' },
+    homeCrumb: 'home',
     showPassword: 'Show password',
     hidePassword: 'Hide password',
     offlinePlay: 'Play offline',
@@ -253,26 +254,23 @@ export const EN: SiteMessages = {
     title: 'Smart games, for smart kids',
     lead: 'Mini games that train logic, memory and quick thinking.',
     rule: 'They’re free, need no sign-up, and work on computers, tablets and phones.',
-    betaLabel: 'Beta',
-    betaText:
-      'These games are in beta: this isn’t the final version yet, and things will keep changing. Soon you’ll be able to subscribe by email to hear about new games and updates.',
     whatsNewTitle: 'What’s new',
     updateKinds: { game: 'Games', language: 'Languages', settings: 'Settings', feature: 'Features', privacy: 'Privacy' },
     showMore: 'Show more updates',
     showFewer: 'Show fewer',
-    madeByTitle: 'Made for kids, by kids',
-    madeByText:
-      'More games are on the way. I make them together with my little one, Lucía, who draws the pictures.',
-    favoritesTitle: 'Your favourites',
-    popularTitle: 'Most popular',
-    recentTitle: 'Recently added',
-    categoriesTitle: 'All games',
     categoryGames: games => (games === 1 ? '1 game' : `${games} games`),
+    gamesTitle: 'Games',
+    searchLabel: 'Search games',
+    searchPlaceholder: 'Search a game…',
+    categoryGroup: 'Categories',
+    allCategories: 'All',
+    favoritesOnly: 'Favourites',
+    noGames: 'No games match. Try another word or category.',
   },
 
   slidingPuzzle: {
     lead: 'Tap a tile next to the gap to slide it there. Put every tile back so the lines join into one picture.',
-    rule: 'The gap is somewhere new every game!',
+    rule: 'On Hard and Expert the gap moves every game: the goal shows where it goes.',
     board: 'Puzzle',
     levelGroup: 'Level',
     levels: {
@@ -1089,7 +1087,7 @@ export const EN: SiteMessages = {
     featuresHelp:
       'New features start switched off: try them in preview, then open them to everyone.',
     featureNames: {
-      rooms: 'Play together (rooms)',
+      rooms: 'Multiplayer (rooms)',
       'rooms-math-games': 'Math games in rooms',
       'rooms-measure-it': 'Measure it in rooms',
       'rooms-letter-games': 'Letter games in rooms',
@@ -1159,8 +1157,8 @@ export const EN: SiteMessages = {
   },
 
   rooms: {
-    navLink: 'Play together',
-    title: 'Play together',
+    navLink: 'Multiplayer',
+    title: 'Multiplayer',
     lead: 'Play the same game at the same time with up to 3 friends, each on their own device.',
     rule: 'Create a room and share its code, or join one with a code.',
     create: 'Create',
@@ -1168,7 +1166,7 @@ export const EN: SiteMessages = {
     joinTitle: 'Join a room',
     codeLabel: 'Room code',
     join: 'Join',
-    homeTitle: 'Play together',
+    homeTitle: 'Multiplayer',
     homeText:
       'Up to 4 players, the same exercises at the same time. Who gets the most right?',
     homeLink: 'See rooms',

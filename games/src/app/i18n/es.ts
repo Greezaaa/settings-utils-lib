@@ -101,6 +101,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     reactionSides: { left: 'Izquierda', right: 'Derecha', bottom: 'Abajo' },
     stickerDrag: 'Mover las pegatinas manteniéndolas pulsadas',
     stickerDragChoices: { on: 'Sí', off: 'No' },
+    homeCrumb: 'inicio',
     showPassword: 'Mostrar contraseña',
     hidePassword: 'Ocultar contraseña',
     offlinePlay: 'Jugar sin conexión',
@@ -258,26 +259,23 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     title: 'Juegos inteligentes para mentes despiertas',
     lead: 'Minijuegos para entrenar la lógica, la memoria y la rapidez.',
     rule: 'Son gratis, sin registro y funcionan en ordenadores, tabletas y móviles.',
-    betaLabel: 'Beta',
-    betaText:
-      'Los juegos están en fase beta: todavía no es la versión final y seguirán cambiando. Pronto podrás suscribirte por correo para que te avisemos de los juegos nuevos y de cada cambio.',
     whatsNewTitle: 'Novedades',
     updateKinds: { game: 'Juegos', language: 'Idiomas', settings: 'Ajustes', feature: 'Funciones', privacy: 'Privacidad' },
     showMore: 'Ver más novedades',
     showFewer: 'Ver menos',
-    madeByTitle: 'Hecho para peques, por peques',
-    madeByText:
-      'Estamos creando más juegos. Los hago junto a mi peque, Lucía, que dibuja las imágenes.',
-    favoritesTitle: 'Tus favoritos',
-    popularTitle: 'Los más jugados',
-    recentTitle: 'Recién añadidos',
-    categoriesTitle: 'Todos los juegos',
     categoryGames: games => (games === 1 ? '1 juego' : `${games} juegos`),
+    gamesTitle: 'Juegos',
+    searchLabel: 'Buscar juegos',
+    searchPlaceholder: 'Busca un juego…',
+    categoryGroup: 'Categorías',
+    allCategories: 'Todos',
+    favoritesOnly: 'Favoritos',
+    noGames: 'Ningún juego coincide. Prueba con otra palabra o categoría.',
   },
 
   slidingPuzzle: {
     lead: 'Toca una pieza junto al hueco para moverla allí. Coloca todas las piezas para que las líneas formen un solo dibujo.',
-    rule: '¡El hueco cambia de sitio en cada partida!',
+    rule: 'En Difícil y Experto el hueco cambia en cada partida: el objetivo muestra dónde va.',
     board: 'Puzle',
     levelGroup: 'Nivel',
     levels: {
@@ -1127,7 +1125,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     featuresHelp:
       'Las funciones nuevas empiezan desactivadas: pruébalas en vista previa y luego ábrelas a todos.',
     featureNames: {
-      rooms: 'Jugar juntos (salas)',
+      rooms: 'Multijugador (salas)',
       'rooms-math-games': 'Matemáticas en salas',
       'rooms-measure-it': 'A medir en salas',
       'rooms-letter-games': 'Juegos de letras en salas',
@@ -1201,8 +1199,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
   },
 
   rooms: {
-    navLink: 'Jugar juntos',
-    title: 'Jugar juntos',
+    navLink: 'Multijugador',
+    title: 'Multijugador',
     lead: 'Jugad al mismo juego a la vez, hasta 4 jugadores, cada uno en su dispositivo.',
     rule: 'Crea una sala y comparte su código, o entra en una con un código.',
     create: 'Crear',
@@ -1210,7 +1208,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     joinTitle: 'Entrar en una sala',
     codeLabel: 'Código de la sala',
     join: 'Entrar',
-    homeTitle: 'Jugar juntos',
+    homeTitle: 'Multijugador',
     homeText:
       'Hasta 4 jugadores, los mismos ejercicios a la vez. ¿Quién acierta más?',
     homeLink: 'Ver las salas',
