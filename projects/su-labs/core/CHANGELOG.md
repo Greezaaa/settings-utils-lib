@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-11-14
+
 ### Added
 - `@su-labs/core/table`: `SuTableController` for data tables from API rows, with typed columns (`SuTableColumns<TRow>`), sorting, selection, reordering by pointer or keyboard (`move`, `moveKey`), row and bulk actions, and editing of one row or many at once that returns the rows in the API's shape (`startEdit`, `setDraft`, `save`); ready-made editors (`suTextEditor`, `suNumberEditor`, `suCheckboxEditor`, `suDateEditor`, `suSelectEditor`), announcements for screen readers and replaceable `SU_TABLE_LABELS`
 
