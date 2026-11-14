@@ -11,7 +11,7 @@
 .su-table-scroll {
   border: var(--su-table-border, 1px solid rgb(0 0 0 / 0.12));
   border-radius: var(--su-table-radius, 10px);
-  overflow-x: auto;
+  overflow: auto;
 }
 
 .su-table-grid {
@@ -38,7 +38,6 @@ td {
 
 thead th {
   --su-table-row-tint: var(--su-table-header-background, rgb(0 0 0 / 0.03));
-  background: var(--su-table-row-tint);
   color: var(--su-table-header-color, inherit);
   font-weight: 600;
   white-space: nowrap;
@@ -92,12 +91,39 @@ tbody tr {
   }
 }
 
+thead th,
+tbody tr.is-pinned-row > *,
 .is-pinned-start,
 .is-pinned-end {
   background: linear-gradient(var(--su-table-row-tint, transparent), var(--su-table-row-tint, transparent)),
     var(--su-table-pinned-background, Canvas);
   position: sticky;
   z-index: 1;
+}
+
+thead th {
+  top: 0;
+  z-index: 4;
+
+  &.is-pinned-start,
+  &.is-pinned-end {
+    z-index: 5;
+  }
+}
+
+tbody tr.is-pinned-row > * {
+  top: var(--su-table-row-top, 0);
+  z-index: 2;
+
+  &.is-pinned-start,
+  &.is-pinned-end {
+    z-index: 3;
+  }
+}
+
+.is-scrolled-top:not(.has-pinned-rows) thead th,
+.is-scrolled-top tr.is-last-pinned-row > * {
+  box-shadow: var(--su-table-sticky-shadow, 0 6px 8px -6px rgb(0 0 0 / 0.25));
 }
 
 .is-pinned-edge::after {

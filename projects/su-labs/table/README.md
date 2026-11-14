@@ -140,6 +140,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `columnControls` | `false` | A Columns button that opens a panel to show, hide, pin or unpin each column |
 | `pageSize` | `'all'` | Rows per page |
 | `pageSizes` | `[]` | Page sizes to choose from under the table, e.g. `[10, 25, 50, 'all']` |
+| `maxHeight` | — | Any CSS length, e.g. `'28rem'`: the table scrolls inside, keeping the header and pinned rows in view |
 | `searchable` | `false` | A search box above the table that narrows the rows by their text |
 | `rowPinning` | `false` | A Pin button on each row, keeping it above the others on every page |
 | `pinnedRows` | — | The ids of the rows pinned to start with |
@@ -212,6 +213,18 @@ pinned to the start, and the actions with those pinned to the end. A soft shadow
 columns scroll under it. With `columnControls`, people pin and unpin columns themselves from the Columns panel. If the
 pinned columns would leave too little room for the rest, they stop sticking until there's room again.
 
+## Sticky header
+
+Give the table a `maxHeight` and it scrolls inside that height, keeping the header at the top and the pinned rows just
+under it, with a soft shadow once rows scroll beneath them:
+
+```html
+<su-lib-table caption="Products" [columns]="columns" [rows]="products()" maxHeight="28rem" />
+```
+
+Without a `maxHeight` the table grows with its rows and the page scrolls instead. A header can't stick to the page
+itself while the table scrolls sideways, which it needs to do on narrow screens.
+
 ## Showing and hiding columns
 
 Load all of the API's fields and show only some: `hidden: true` starts a column out of view, and with `columnControls`
@@ -280,6 +293,7 @@ su-lib-table {
 | `--su-table-grabbed-background` / `--su-table-grabbed-outline` | blue tints |
 | `--su-table-dragging-background` / `--su-table-dragging-shadow` | `Canvas` / `0 8px 24px rgb(0 0 0 / 0.18)` (the row being dragged) |
 | `--su-table-pinned-row-background` / `--su-table-pinned-row-border` | a faint blue tint / `2px solid` blue at 40% (pinned rows, and the line under them) |
+| `--su-table-sticky-shadow` | `0 6px 8px -6px rgb(0 0 0 / 0.25)` (under the header and pinned rows while rows scroll beneath) |
 | `--su-table-pinned-background` / `--su-table-pinned-shadow` | `Canvas` / `rgb(0 0 0 / 0.14)` (pinned cells, and the shadow on their edge) |
 | `--su-table-accent` | `#2563eb` (checkboxes) |
 | `--su-table-button-background` / `--su-table-button-border` / `--su-table-button-color` | `transparent` / `1px solid rgb(0 0 0 / 0.2)` / `inherit` |

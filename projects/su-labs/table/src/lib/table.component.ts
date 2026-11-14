@@ -91,6 +91,11 @@ export class SuTableComponent<TRow extends object> {
   readonly columnControls = input(false, { transform: booleanAttribute });
   /** A search box above the table that narrows the rows by their text @default false */
   readonly searchable = input(false, { transform: booleanAttribute });
+  /**
+   * The most the table grows before it scrolls inside, any CSS length (e.g. `'28rem'`); the header and the pinned
+   * rows stay in view while the rows scroll under them
+   */
+  readonly maxHeight = input<string>();
   /** Rows per page; without it, every row shows @default 'all' */
   readonly pageSize = input<SuTablePageSize>();
   /** The page sizes people choose from under the table, e.g. `[10, 25, 50, 'all']` */
@@ -128,8 +133,12 @@ export class SuTableComponent<TRow extends object> {
     () =>
       `${this.state()
         .columns.map(column => `${String(column.key)}:${column.pinned}`)
-        .join()}|${this.reorderable()}|${this.selectable()}|${this.hasActions()}`
+        .join()}|${this.reorderable()}|${this.selectable()}|${this.hasActions()}|${this.state()
+        .pinnedRows.map(row => row.id)
+        .join()}`
   );
+  private readonly headerHeight = signal(0);
+  private readonly pinnedRowHeights = signal<readonly number[]>([]);
 
   protected readonly tableId = `su-table-${nextTableId++}`;
   protected readonly state = signal(this.controller.state.get());
@@ -156,6 +165,16 @@ export class SuTableComponent<TRow extends object> {
   });
   protected readonly scrolledFromStart = signal(false);
   protected readonly moreAtEnd = signal(false);
+  protected readonly scrolledFromTop = signal(false);
+  /** Where each pinned row sticks: under the header and the pinned rows above it */
+  protected readonly pinnedRowTops = computed(() => {
+    let top = this.headerHeight();
+    return this.pinnedRowHeights().map(height => {
+      const rowTop = top;
+      top += height;
+      return rowTop;
+    });
+  });
   protected readonly columnSlot = computed(
     () => Number(this.reorderable()) + Number(this.selectable())
   );
@@ -265,7 +284,22 @@ export class SuTableComponent<TRow extends object> {
       const host = this.host.nativeElement;
       const scroller = host.querySelector<HTMLElement>('.su-table-scroll');
       const headers = [...host.querySelectorAll<HTMLElement>('thead th')];
+      const head = host.querySelector<HTMLElement>('thead');
+      const pinnedRows = [
+        ...host.querySelectorAll<HTMLElement>('tbody > tr.is-pinned-row'),
+      ];
       const observer = new ResizeObserver(() => {
+        this.headerHeight.set(head?.getBoundingClientRect().height ?? 0);
+        const heights = pinnedRows.map(
+          row => row.getBoundingClientRect().height
+        );
+        const currentHeights = untracked(() => this.pinnedRowHeights());
+        if (
+          heights.length !== currentHeights.length ||
+          heights.some((height, index) => height !== currentHeights[index])
+        ) {
+          this.pinnedRowHeights.set(heights);
+        }
         const widths = headers.map(
           header => header.getBoundingClientRect().width
         );
@@ -278,7 +312,7 @@ export class SuTableComponent<TRow extends object> {
           this.updateScrollEdges(scroller);
         }
       });
-      headers.forEach(header => observer.observe(header));
+      [...headers, ...pinnedRows].forEach(element => observer.observe(element));
       if (scroller) {
         observer.observe(scroller);
       }
@@ -499,8 +533,9 @@ export class SuTableComponent<TRow extends object> {
       : null;
   }
 
-  /** Shadows show on the pinned edges only while columns are scrolled under them */
+  /** Shadows show on the pinned edges only while columns or rows are scrolled under them */
   private updateScrollEdges(scroller: HTMLElement): void {
+    this.scrolledFromTop.set(scroller.scrollTop > 1);
     const position = Math.abs(scroller.scrollLeft);
     this.scrolledFromStart.set(position > 1);
     this.moreAtEnd.set(

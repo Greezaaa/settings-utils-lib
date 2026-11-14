@@ -65,6 +65,9 @@
   class="su-table-scroll"
   [class.is-scrolled-start]="scrolledFromStart()"
   [class.has-more-end]="moreAtEnd()"
+  [class.is-scrolled-top]="scrolledFromTop()"
+  [class.has-pinned-rows]="current.pinnedRows.length > 0"
+  [style.max-height]="maxHeight()"
   (scroll)="onScroll($event)"
 >
   <table class="su-table-grid" [class.is-dragging-rows]="drag() !== null">
@@ -119,6 +122,7 @@
           [attr.data-su-row]="row.pinned ? null : ''"
           [class.is-pinned-row]="row.pinned"
           [class.is-last-pinned-row]="index === -1"
+          [style.--su-table-row-top]="row.pinned ? pinnedRowTops()[rowIndex] + 'px' : null"
           [class.is-selected]="row.selected"
           [class.is-editing]="editing"
           [class.is-grabbed]="current.grabbedId === row.id"
