@@ -140,8 +140,16 @@ export function shuffle(
   return current;
 }
 
-export function createPuzzle(shape: Shape, random: Random = Math.random): Puzzle {
-  const gap = between({ min: 0, max: cellCount(shape) - 1 }, random);
+const RANDOM_GAP_LEVELS: ReadonlySet<BoardLevelId> = new Set(['hard', 'expert']);
+
+export function gapFor(level: BoardLevel, random: Random = Math.random): number {
+  const last = cellCount(level) - 1;
+  return RANDOM_GAP_LEVELS.has(level.id) ? between({ min: 0, max: last }, random) : last;
+}
+
+export function createPuzzle(level: BoardLevel, random: Random = Math.random): Puzzle {
+  const gap = gapFor(level, random);
+  const shape: Shape = { rows: level.rows, columns: level.columns };
   return {
     shape,
     gap,

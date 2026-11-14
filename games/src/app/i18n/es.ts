@@ -287,6 +287,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       expert: { name: 'Experto', summary: '5 × 5 · 24 piezas' },
     },
     goal: 'Objetivo',
+    goalLarger: 'Ver el objetivo más grande',
+    goalSmaller: 'Ver el objetivo más pequeño',
     pictureGroup: 'Imagen',
     pictureModes: { lines: 'Líneas', drawing: 'Dibujo' },
     moves: moves => `Movimientos ${moves}`,

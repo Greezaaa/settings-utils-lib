@@ -154,6 +154,8 @@ export interface SiteMessages {
     readonly pictureGroup: string;
     readonly pictureModes: Readonly<Record<PuzzlePictureMode, string>>;
     readonly goal: string;
+    readonly goalLarger: string;
+    readonly goalSmaller: string;
     readonly moves: (moves: number) => string;
     readonly tile: (number: number) => string;
     readonly newPuzzle: string;

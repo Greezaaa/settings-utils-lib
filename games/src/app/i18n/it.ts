@@ -279,6 +279,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
       expert: { name: 'Esperto', summary: '5 × 5 · 24 tessere' },
     },
     goal: 'Obiettivo',
+    goalLarger: 'Mostra l’obiettivo più grande',
+    goalSmaller: 'Mostra l’obiettivo più piccolo',
     pictureGroup: 'Immagine',
     pictureModes: { lines: 'Linee', drawing: 'Disegno' },
     moves: (moves) => `Mosse ${moves}`,

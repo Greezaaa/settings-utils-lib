@@ -69,26 +69,32 @@
         <div class="footer-row">
           @if (puzzle(); as puzzle) {
             <figure class="goal">
-              @if (pictureMode() === 'drawing' && picture(); as drawing) {
-                <img
-                  class="goal-board goal-drawing"
-                  [src]="drawing.src"
-                  [alt]="('pictures' | translate)[drawing.id]"
-                  [style.--rows]="puzzle.shape.rows"
-                  [style.--columns]="puzzle.shape.columns"
-                />
-              } @else {
-                <div
-                  class="goal-board"
-                  [style.--rows]="puzzle.shape.rows"
-                  [style.--columns]="puzzle.shape.columns"
+              <button
+                type="button"
+                class="goal-board"
+                [class.is-large]="isGoalLarge()"
+                [style.--rows]="puzzle.shape.rows"
+                [style.--columns]="puzzle.shape.columns"
+                [attr.aria-expanded]="isGoalLarge()"
+                [attr.aria-label]="(isGoalLarge() ? 'slidingPuzzle.goalSmaller' : 'slidingPuzzle.goalLarger') | translate"
+                (click)="isGoalLarge.set(!isGoalLarge())"
+              >
+                @if (pictureMode() === 'drawing' && picture(); as drawing) {
+                  <img class="goal-drawing" [src]="drawing.src" [alt]="('pictures' | translate)[drawing.id]" />
+                } @else {
+                  <span class="goal-tiles" aria-hidden="true">
+                    @for (lines of puzzle.picture; track $index) {
+                      <app-puzzle-tile [lines]="lines" />
+                    }
+                  </span>
+                }
+                <span
+                  class="goal-hole"
                   aria-hidden="true"
-                >
-                  @for (lines of puzzle.picture; track $index) {
-                    <app-puzzle-tile [lines]="lines" />
-                  }
-                </div>
-              }
+                  [style.--row]="holeRow(puzzle)"
+                  [style.--column]="holeColumn(puzzle)"
+                ></span>
+              </button>
               <figcaption class="muted">{{ 'slidingPuzzle.goal' | translate }}</figcaption>
             </figure>
           }

@@ -282,6 +282,8 @@ export const EN: SiteMessages = {
       expert: { name: 'Expert', summary: '5 × 5 · 24 tiles' },
     },
     goal: 'Goal',
+    goalLarger: 'Show the goal bigger',
+    goalSmaller: 'Show the goal smaller',
     pictureGroup: 'Picture',
     pictureModes: { lines: 'Lines', drawing: 'Drawing' },
     moves: moves => `Moves ${moves}`,

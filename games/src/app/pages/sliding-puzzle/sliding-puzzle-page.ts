@@ -50,6 +50,7 @@ export class SlidingPuzzlePage {
   private readonly bestMovesByLevel = signal<BestMoves>({});
   protected readonly bestMoves = computed(() => this.bestMovesByLevel()[this.levelId()] ?? null);
   protected readonly isNewBest = signal(false);
+  protected readonly isGoalLarge = signal(false);
 
   protected readonly isSolved = computed(() => {
     const puzzle = this.puzzle();
@@ -67,6 +68,14 @@ export class SlidingPuzzlePage {
   protected choosePictureMode(mode: PuzzlePictureMode): void {
     this.pictureMode.set(mode);
     this.newPuzzle();
+  }
+
+  protected holeRow({ gap, shape }: Puzzle): number {
+    return Math.floor(gap / shape.columns);
+  }
+
+  protected holeColumn({ gap, shape }: Puzzle): number {
+    return gap % shape.columns;
   }
 
   protected chooseLevel(id: BoardLevelId): void {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { cellCount, Shape } from './board';
-import { canMove, cellForArrow, createPicture, createPuzzle, Direction, getPuzzleLevel, isSolved, move, neighbour, Picture, PUZZLE_LEVELS, shuffle, solvedBoard, tileNumber } from './sliding-puzzle';
+import { canMove, cellForArrow, createPicture, createPuzzle, Direction, gapFor, getPuzzleLevel, isSolved, move, neighbour, Picture, PUZZLE_LEVELS, shuffle, solvedBoard, tileNumber } from './sliding-puzzle';
 
 const RUNS = 200;
 const THREE: Shape = { rows: 3, columns: 3 };
@@ -98,8 +98,17 @@ describe('sliding puzzle rules', () => {
     },
   );
 
-  it('puts the gap of new puzzles in different cells', () => {
-    const gaps = new Set(Array.from({ length: RUNS }, () => createPuzzle(THREE).gap));
-    expect(gaps.size).toBe(9);
+  it('keeps the gap in the last cell on Easy and Normal', () => {
+    for (const id of ['easy', 'normal'] as const) {
+      const level = getPuzzleLevel(id);
+      const gaps = new Set(Array.from({ length: RUNS }, () => createPuzzle(level).gap));
+      expect([...gaps]).toEqual([cellCount(level) - 1]);
+    }
+  });
+
+  it('puts the gap anywhere on Hard and Expert', () => {
+    const hard = getPuzzleLevel('hard');
+    const gaps = new Set(Array.from({ length: RUNS * 2 }, () => gapFor(hard)));
+    expect(gaps.size).toBe(cellCount(hard));
   });
 });

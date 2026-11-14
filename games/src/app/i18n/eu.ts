@@ -286,6 +286,8 @@ export const EU: SiteMessages = {
       expert: { name: 'Aditua', summary: '5 × 5 · 24 pieza' },
     },
     goal: 'Helburua',
+    goalLarger: 'Ikusi helburua handiago',
+    goalSmaller: 'Ikusi helburua txikiago',
     pictureGroup: 'Irudia',
     pictureModes: { lines: 'Lerroak', drawing: 'Marrazkia' },
     moves: moves => `Mugimenduak ${moves}`,

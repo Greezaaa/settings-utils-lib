@@ -315,6 +315,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       expert: { name: 'Експерт', summary: '5 × 5 · 24 плитки' },
     },
     goal: 'Мета',
+    goalLarger: 'Показати ціль більшою',
+    goalSmaller: 'Показати ціль меншою',
     pictureGroup: 'Малюнок',
     pictureModes: { lines: 'Лінії', drawing: 'Малюнок' },
     moves: moves => `Ходи: ${moves}`,

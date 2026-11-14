@@ -60,18 +60,55 @@
   margin: 0;
 }
 
+.goal-board {
+  aspect-ratio: var(--columns) / var(--rows);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: zoom-in;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  transition: width 200ms ease;
+  width: 7rem;
+
+  &.is-large {
+    cursor: zoom-out;
+    width: min(100%, 16rem);
+  }
+}
+
+.goal-drawing,
+.goal-tiles {
+  height: 100%;
+  width: 100%;
+}
+
 .goal-drawing {
+  display: block;
   object-fit: cover;
 }
 
-.goal-board {
-  aspect-ratio: var(--columns) / var(--rows);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+.goal-tiles {
   display: grid;
   grid-template-columns: repeat(var(--columns), 1fr);
-  overflow: hidden;
-  width: 5.5rem;
+}
+
+.goal-hole {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+  height: calc(100% / var(--rows));
+  left: calc(100% / var(--columns) * var(--column));
+  position: absolute;
+  top: calc(100% / var(--rows) * var(--row));
+  width: calc(100% / var(--columns));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goal-board {
+    transition: none;
+  }
 }
 
 .goal figcaption,
