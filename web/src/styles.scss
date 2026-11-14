@@ -548,3 +548,76 @@ input[type='checkbox'] {
   white-space: nowrap;
   width: 1px;
 }
+
+/* Page changes: the menu and the bottom bar stay still while the page changes; a page opened from a link flies out
+   of that link to its place (see PageTransition) as the old page fades, any other change cross-fades */
+::view-transition-group(site-menu),
+::view-transition-old(site-menu),
+::view-transition-new(site-menu),
+::view-transition-group(tab-bar),
+::view-transition-old(tab-bar),
+::view-transition-new(tab-bar),
+::view-transition-group(page) {
+  animation: none;
+}
+
+::view-transition-old(page) {
+  animation: page-fade-out 200ms ease-out both;
+}
+
+::view-transition-new(page) {
+  animation: page-fade-in 260ms ease-out both;
+}
+
+html.page-from-link::view-transition-old(page) {
+  animation: page-fade-out 160ms ease-out both;
+}
+
+html.page-from-link::view-transition-group(page) {
+  z-index: 1;
+}
+
+html.page-from-link::view-transition-new(page) {
+  animation: page-fly-out 480ms var(--ease-out) both;
+  transform-origin: 0 0;
+}
+
+@keyframes page-fly-out {
+  from {
+    border-radius: 10px;
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.3);
+    transform: var(--page-fly-from);
+  }
+
+  to {
+    border-radius: 0;
+    box-shadow: 0 0 0 rgb(0 0 0 / 0);
+  }
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The changelog scrolls its lists inside the screen: its page is exactly the screen's height, the footer included,
+   and the changelog fills what's left above the footer */
+@media (min-width: 48rem) {
+  .page:has(> main > app-changelog-page) {
+    height: calc(100dvh - var(--header-offset));
+    min-height: 40rem;
+
+    > main {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+  }
+}

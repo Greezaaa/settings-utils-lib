@@ -10,6 +10,7 @@ import { AUTHOR_EMAIL_URL, GAMES_URL, GITHUB_REPO_URL, GUIDES_URL, npmUrl } from
 import { sectionHasRoute } from './core/menu';
 import { MenuOrder } from './core/menu-order';
 import { CORE_PACKAGE } from './core/packages';
+import { PageTransition } from './core/page-transition';
 import { PrivacyNotice } from './core/privacy-notice';
 import { readStored, writeStored } from './core/site-storage';
 import { SiteTheme } from './core/site-theme';
@@ -56,6 +57,8 @@ export class App {
   protected readonly menuOrder = inject(MenuOrder);
   /** Started with the shell, so the privacy notice shows on whichever page the visitor lands */
   private readonly privacyNotice = inject(PrivacyNotice);
+  /** Started with the shell, so it hears the first click on a link and the first page can fly out of it */
+  private readonly pageTransition = inject(PageTransition);
   private readonly router = inject(Router);
 
   protected readonly sections = this.menuOrder.sections;

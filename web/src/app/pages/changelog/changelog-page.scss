@@ -1,9 +1,9 @@
 @media (min-width: 48rem) {
   :host {
     display: flex;
+    flex: 1;
     flex-direction: column;
-    height: calc(100dvh - var(--header-offset));
-    min-height: 32rem;
+    min-height: 0;
   }
 
   .changelog-layout {
