@@ -5,7 +5,7 @@
 </header>
 
 <div class="container changelog-layout">
-  <nav class="package-nav" aria-label="Packages">
+  <nav class="package-nav" aria-label="Packages" data-page-part=".releases">
     @for (item of packages; track item.slug) {
       <a [routerLink]="['/changelog', item.slug]" routerLinkActive="active">{{ item.name }}</a>
     }

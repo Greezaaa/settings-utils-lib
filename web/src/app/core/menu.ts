@@ -10,6 +10,7 @@ export type SiteMenuLink = { readonly key: string; readonly label: string; reado
 export interface SiteMenuSection {
   readonly id: string;
   readonly title: string;
+  readonly railTitle?: string;
   readonly links: readonly SiteMenuLink[];
   readonly openByDefault?: boolean;
 }
@@ -43,6 +44,7 @@ export const SITE_MENU: readonly SiteMenuSection[] = [
   {
     id: 'extensions',
     title: 'Extensions & tools',
+    railTitle: 'Tools',
     links: [{ key: 'one-line-imports', label: 'One-line imports', icon: 'imports', route: '/one-line-imports' }],
   },
   {

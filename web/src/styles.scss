@@ -590,6 +590,29 @@ html.page-from-link::view-transition-new(page) {
   transform-origin: 0 0;
 }
 
+html.page-part-flying::view-transition-old(page) {
+  animation: none;
+  opacity: 0;
+}
+
+html.page-part-flying::view-transition-new(page) {
+  animation: none;
+}
+
+::view-transition-group(page-part) {
+  animation: none;
+  z-index: 1;
+}
+
+::view-transition-old(page-part) {
+  animation: page-fade-out 160ms ease-out both;
+}
+
+::view-transition-new(page-part) {
+  animation: page-fly-out 480ms var(--ease-out) both;
+  transform-origin: 0 0;
+}
+
 @keyframes page-fly-out {
   from {
     border-radius: 10px;

@@ -162,6 +162,20 @@
   }
 }
 
+.rail-heading {
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .nav-heading-sign {
   font-size: 0.875rem;
   font-weight: 400;
@@ -464,13 +478,7 @@
   }
 
   .header-bar {
-    padding: 1.5rem 1.25rem 1rem;
-    transition: padding 260ms var(--ease-out, ease-out);
-  }
-
-  :host(.menu-collapsed) .header-bar {
-    justify-content: center;
-    padding-inline: 0.5rem;
+    padding: 1.5rem 1rem 1rem 1.375rem;
   }
 
   .brand-name {
@@ -495,12 +503,21 @@
     flex-direction: column;
     gap: 1.25rem;
     min-height: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     padding: 0 0.75rem 1.5rem;
   }
 
+  :host(:not(.menu-collapsed)) .site-menu > * {
+    min-width: calc(var(--sidebar-width) - 1.5rem);
+  }
+
   :host(.menu-collapsed) .site-menu {
     overflow: visible;
+  }
+
+  :host(.menu-collapsed) .site-menu > * {
+    width: calc(var(--rail-width, 4.5rem) - 1rem);
   }
 
   .site-nav,

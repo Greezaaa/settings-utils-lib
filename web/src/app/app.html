@@ -85,7 +85,7 @@
       @for (section of sections(); track section.id) {
         <div class="nav-section">
           @if (collapsed()) {
-            <h2 class="visually-hidden">{{ section.title }}</h2>
+            <h2 class="rail-heading" [attr.aria-label]="section.title">{{ section.railTitle ?? section.title }}</h2>
           } @else {
             <button
               type="button"

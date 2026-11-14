@@ -2,7 +2,7 @@ import '@angular/compiler';
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
-import { suNumberEditor, SuTableColumns, suTextEditor } from '@su-labs/core/table';
+import { suNumberEditor, SuTableColumns, SuTableColumnState, suTextEditor } from '@su-labs/core/table';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { SuTableComponent } from '../../../../../dist/su-labs/table/fesm2022/su-labs-table.mjs';
 import type { SuTableActionEvent, SuTableReorderEvent } from './table.component';
@@ -46,6 +46,20 @@ class HostComponent {
   readonly edited = signal<readonly User[]>([]);
   readonly reordered = signal<SuTableReorderEvent<User> | null>(null);
   readonly action = signal<SuTableActionEvent<User> | null>(null);
+}
+
+@Component({
+  imports: [SuTableComponent],
+  template: `<su-lib-table caption="Users" [columns]="columns" [rows]="users" [rowId]="rowId" (columnsChange)="columnStates.set($event)" />`,
+})
+class PinnedEndHostComponent {
+  readonly columns: SuTableColumns<User> = [
+    { key: 'name', header: 'Name' },
+    { key: 'age', header: 'Age', pinned: 'end' },
+  ];
+  readonly users: readonly User[] = [{ id: 1, name: 'Bo', age: 25 }];
+  readonly rowId = (user: User) => user.id;
+  readonly columnStates = signal<readonly SuTableColumnState<User>[]>([]);
 }
 
 describe('SuTableComponent', () => {
@@ -199,5 +213,21 @@ describe('SuTableComponent', () => {
 
     expect(rowHeaders()).toEqual(['Ana', 'Bo']);
     expect(fixture.componentInstance.reordered()?.ids).toEqual([2, 1]);
+  });
+
+  it('pins a column back to the end it was set up with from its heading pin', async () => {
+    const fixture = TestBed.createComponent(PinnedEndHostComponent);
+    await fixture.whenStable();
+    const element: HTMLElement = fixture.nativeElement;
+    const pin = () => element.querySelector<HTMLButtonElement>('[aria-label="Pin Age"]');
+    const agePin = () => fixture.componentInstance.columnStates().find(column => column.key === 'age')?.pinned;
+
+    pin()?.click();
+    await fixture.whenStable();
+    expect(agePin()).toBeNull();
+    pin()?.click();
+    await fixture.whenStable();
+
+    expect(agePin()).toBe('end');
   });
 });
