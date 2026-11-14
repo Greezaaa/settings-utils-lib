@@ -43,11 +43,16 @@ export const SU_TABLE_LABELS: SuTableLabels = {
   pagination: 'Pagination',
   rowsPerPage: 'Rows per page',
   allRows: 'All',
-  range: (start, end, total) => `${start}–${end} of ${total}`,
+  range: (start, end, total) =>
+    total === 0 ? '0 of 0' : `${start}–${end} of ${total}`,
   page: (page, count) => `Page ${page} of ${count}`,
   previousPage: 'Previous page',
   nextPage: 'Next page',
   pinRow: 'Pin',
   rowPinned: rowLabel => `${rowLabel} pinned to the top`,
   rowUnpinned: rowLabel => `${rowLabel} unpinned`,
+  search: 'Search',
+  matches: count => (count === 1 ? '1 row matches' : `${count} rows match`),
+  searchCleared: 'Search cleared',
+  noMatches: query => `No rows match “${query}”`,
 };

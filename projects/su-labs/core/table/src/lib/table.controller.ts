@@ -7,6 +7,7 @@ interface ResolvedColumn<TRow extends object> {
   readonly key: keyof TRow;
   readonly view: Omit<SuTableColumnView<TRow>, 'sort'>;
   readonly compare: ((a: TRow, b: TRow) => number) | null;
+  readonly searchable: boolean;
   text(row: TRow): string;
   toInput(row: TRow): SuTableInputValue;
   apply(
@@ -106,6 +107,7 @@ function resolveColumn<TRow extends object, TKey extends keyof TRow>(
       sortable: sortable !== false,
       editor,
     },
+    searchable: column.searchable ?? true,
     compare:
       sortable === false ? null : (a, b) => compareValues(a[key], b[key]),
     text: row =>
@@ -123,6 +125,11 @@ function resolveColumn<TRow extends object, TKey extends keyof TRow>(
       return { row: { ...row, [key]: value }, error };
     },
   };
+}
+
+/** Lowercase text without accents, for searching */
+function normalizeText(text: string): string {
+  return text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase();
 }
 
 function normalizePageSize(pageSize: SuTablePageSize): SuTablePageSize {
@@ -158,6 +165,8 @@ export class SuTableController<TRow extends object> {
   private columnOptions: SuTableColumns<TRow> = [];
   private readonly pins = new Map<keyof TRow, SuTablePin | null>();
   private pinnedIds: readonly SuTableRowId[] = [];
+  private query = '';
+  private terms: readonly string[] = [];
   private pageSize: SuTablePageSize = 'all';
   private pageSizes: readonly SuTablePageSize[] = [];
   private page = 0;
@@ -314,6 +323,9 @@ export class SuTableController<TRow extends object> {
    * @returns The ids in their new order, or null when nothing moved
    */
   move(id: SuTableRowId, toIndex: number): readonly SuTableRowId[] | null {
+    if (this.terms.length > 0) {
+      return null;
+    }
     const base = this.displayed();
     const rows = this.unpinned(base);
     const { start, end } = this.pageBounds(rows.length);
@@ -331,6 +343,9 @@ export class SuTableController<TRow extends object> {
 
   /** Picks a row up to move it with the keyboard; pinned rows can't be moved */
   grab(id: SuTableRowId): void {
+    if (this.terms.length > 0) {
+      return;
+    }
     const base = this.displayed();
     const index = this.unpinned(base).findIndex(row => this.idOf(row) === id);
     if (index === -1) {
@@ -393,6 +408,25 @@ export class SuTableController<TRow extends object> {
       this.unpinned(original).findIndex(row => this.idOf(row) === id)
     );
     this.announcement = this.labels.moveCancelled;
+    this.publish();
+  }
+
+  /**
+   * Shows only the rows whose text (as shown, in the searchable columns) holds every word of the query, ignoring case
+   * and accents. Pinned rows stay. Reordering is off while searching.
+   */
+  search(query: string): void {
+    if (query === this.query) {
+      return;
+    }
+    this.cancelMove();
+    this.query = query;
+    this.terms = normalizeText(query).split(/\s+/).filter(Boolean);
+    this.page = 0;
+    this.announcement =
+      this.terms.length > 0
+        ? this.labels.matches(this.listed(this.order).length)
+        : this.labels.searchCleared;
     this.publish();
   }
 
@@ -616,7 +650,25 @@ export class SuTableController<TRow extends object> {
     return this.columns[0]?.text(row) || String(id);
   }
 
-  private pageBounds(total = this.unpinned(this.order).length): {
+  /** The unpinned rows that match the search */
+  private listed(rows: readonly TRow[]): readonly TRow[] {
+    const unpinned = this.unpinned(rows);
+    return this.terms.length > 0
+      ? unpinned.filter(row => this.matches(row))
+      : unpinned;
+  }
+
+  private matches(row: TRow): boolean {
+    const text = normalizeText(
+      this.columns
+        .filter(column => column.searchable)
+        .map(column => column.text(row))
+        .join(' ')
+    );
+    return this.terms.every(term => text.includes(term));
+  }
+
+  private pageBounds(total = this.listed(this.order).length): {
     readonly page: number;
     readonly count: number;
     readonly start: number;
@@ -630,7 +682,7 @@ export class SuTableController<TRow extends object> {
   }
 
   private pageRows(): readonly TRow[] {
-    const rows = this.unpinned(this.displayed());
+    const rows = this.listed(this.displayed());
     const { start, end } = this.pageBounds(rows.length);
     return rows.slice(start, end);
   }
@@ -657,7 +709,7 @@ export class SuTableController<TRow extends object> {
   private build(): SuTableState<TRow> {
     const columns = this.displayColumns();
     const all = this.displayed();
-    const unpinned = this.unpinned(all);
+    const unpinned = this.listed(all);
     const { page, count, start, end } = this.pageBounds(unpinned.length);
     const rows = unpinned
       .slice(start, end)
@@ -705,6 +757,8 @@ export class SuTableController<TRow extends object> {
       draft: this.draftView(),
       grabbedId: this.grabbed?.id ?? null,
       announcement: this.announcement,
+      query: this.query,
+      searching: this.terms.length > 0,
     };
   }
 

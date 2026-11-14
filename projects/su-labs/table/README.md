@@ -140,6 +140,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `columnControls` | `false` | A Columns button that opens a panel to pin or unpin each column |
 | `pageSize` | `'all'` | Rows per page |
 | `pageSizes` | `[]` | Page sizes to choose from under the table, e.g. `[10, 25, 50, 'all']` |
+| `searchable` | `false` | A search box above the table that narrows the rows by their text |
 | `rowPinning` | `false` | A Pin button on each row, keeping it above the others on every page |
 | `pinnedRows` | — | The ids of the rows pinned to start with |
 | `labels` | English | `Partial<SuTableLabels>`: any text, e.g. in the page's language |
@@ -154,6 +155,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `sortChange` | `{ key, direction } \| null` |
 | `selectionChange` | `readonly TRow[]` |
 | `pageChange` | `{ page, pageSize }`, the page from 0 |
+| `searchChange` | The query, once typing pauses |
 | `pinnedRowsChange` | The ids of the pinned rows, in pin order |
 
 The table shows your changes right away; update `rows` with the API's answer to keep them, or to undo a failed save.
@@ -170,6 +172,7 @@ The table shows your changes right away; update `rows` with the API's answer to 
 | `validate(value, row)` | A message when an edited value isn't valid, or `null` |
 | `align` | `'start'`, `'center'` or `'end'` |
 | `pinned` | `'start'` or `'end'`: stays in view at that edge while the other columns scroll |
+| `searchable` | `false` to leave the column out of the search (default `true`) |
 
 ### Editors
 
@@ -206,6 +209,13 @@ Pinned columns move to their edge in the order you list them. The move handles a
 pinned to the start, and the actions with those pinned to the end. A soft shadow shows on the pinned edge while other
 columns scroll under it. With `columnControls`, people pin and unpin columns themselves from the Columns panel. If the
 pinned columns would leave too little room for the rest, they stop sticking until there's room again.
+
+## Search
+
+`searchable` adds a search box above the table. It matches the text people see (so `€18.50` and `Garden` match, not
+`18.5` and `garden`), ignores case and accents, and needs every word typed to match somewhere in the row. It runs once
+typing pauses and announces how many rows match; Escape clears it. Pinned rows stay, the pages cover the matches, and
+reordering is off while searching. Leave a column out with `searchable: false`.
 
 ## Pinned rows
 

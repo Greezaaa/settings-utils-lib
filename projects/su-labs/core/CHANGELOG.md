@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pagination: `pageSize` and `pageSizes` options (`SuTablePageSize`), `setPage(page)` and `setPageSize(size)` (keeping the first row on screen in view), announced; `state.rows` holds the current page and `state.pagination` its page, page count, sizes and range
 - A row moved with the keyboard takes the page with it; a dropped row moves within the current page
 - Pinned rows: `pinRow(id, pinned?)` and the `pinnedRows` option keep rows above the others on every page, outside the paging and the sort, announced; `state.pinnedRows` lists them and each row has `pinned`. Pinned rows don't move, and unpinning puts a row back where it was
+- Search: `search(query)` keeps the rows whose shown text, in the searchable columns, holds every word of the query, ignoring case and accents; announced, with `searchable: false` to leave a column out; `state.query` and `state.searching`, pinned rows stay and reordering is off while searching
 
 ### Changed
 - `selectAll()` selects the rows on screen: the pinned ones and the current page (every row without pagination), and `selectedIds` lists the selected rows on every page

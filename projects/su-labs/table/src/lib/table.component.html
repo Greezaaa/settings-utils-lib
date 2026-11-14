@@ -3,33 +3,17 @@
 @let selectedCount = current.selectedIds.length;
 @let pins = placements();
 @let firstColumnSlot = columnSlot();
-@if (columnControls()) {
-  <div class="su-table-bar">
-    <button
-      type="button"
-      class="su-table-button"
-      [attr.aria-expanded]="columnsOpen()"
-      [attr.aria-controls]="tableId + '-columns'"
-      (click)="columnsOpen.set(!columnsOpen())"
-    >
-      {{ t.columns }}
-    </button>
-  </div>
-  @if (columnsOpen()) {
-    <div class="su-table-panel su-table-bulk-fields" role="group" [id]="tableId + '-columns'" [attr.aria-label]="t.columns">
-      @for (column of columns(); track column.key) {
-        @let pin = columnPin(column.key);
-        <div class="su-table-bulk-field">
-          <label class="su-table-label" [for]="controlId('pin', column.key)">{{ column.header }}</label>
-          <select class="su-table-select" [id]="controlId('pin', column.key)" (change)="onPinChange(column.key, $event)">
-            <option value="" [selected]="pin === null">{{ t.pinNone }}</option>
-            <option value="start" [selected]="pin === 'start'">{{ t.pinStart }}</option>
-            <option value="end" [selected]="pin === 'end'">{{ t.pinEnd }}</option>
-          </select>
-        </div>
-      }
-    </div>
-  }
+@if (searchable() || columnControls()) {
+  <su-lib-table-toolbar
+    [labels]="t"
+    [controlId]="tableId"
+    [searchable]="searchable()"
+    [query]="current.query"
+    [columnControls]="columnControls()"
+    [columns]="toolbarColumns()"
+    (queryChange)="search($event)"
+    (pinChange)="pinColumn($event)"
+  />
 }
 @if (selectable() && selectedCount > 0) {
   <div class="su-table-toolbar" role="toolbar" [attr.aria-label]="t.selected(selectedCount)">
@@ -143,7 +127,7 @@
         >
           @if (reorderable()) {
             <td class="su-table-handle-cell" [suTablePin]="pins[0]">
-              @if (!row.pinned) {
+              @if (!row.pinned && !current.searching) {
                 <button
                   type="button"
                   class="su-table-handle"
@@ -238,9 +222,12 @@
             </td>
           }
         </tr>
-      } @empty {
+      }
+      @if (current.rows.length === 0) {
         <tr>
-          <td class="su-table-empty" [attr.colspan]="columnCount()">{{ t.empty }}</td>
+          <td class="su-table-empty" [attr.colspan]="columnCount()">
+            {{ current.searching ? t.noMatches(current.query) : t.empty }}
+          </td>
         </tr>
       }
     </tbody>

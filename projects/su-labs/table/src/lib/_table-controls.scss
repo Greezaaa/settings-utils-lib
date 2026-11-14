@@ -1,0 +1,75 @@
+// Shared looks of the table's parts, included by each component so they match
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: var(--su-table-focus-outline, 2px solid currentColor);
+    outline-offset: 2px;
+  }
+}
+
+@mixin control {
+  background: var(--su-table-input-background, transparent);
+  border: var(--su-table-input-border, 1px solid rgb(0 0 0 / 0.25));
+  border-radius: var(--su-table-input-radius, 6px);
+  box-sizing: border-box;
+  color: inherit;
+  font: inherit;
+  @include focus-ring;
+}
+
+@mixin button {
+  background: var(--su-table-button-background, transparent);
+  border: var(--su-table-button-border, 1px solid rgb(0 0 0 / 0.2));
+  border-radius: var(--su-table-button-radius, 6px);
+  color: var(--su-table-button-color, inherit);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875em;
+  padding: var(--su-table-button-padding, 0.3rem 0.7rem);
+  white-space: nowrap;
+  @include focus-ring;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  &.is-primary {
+    background: var(--su-table-primary-background, #111);
+    border-color: transparent;
+    color: var(--su-table-primary-color, #fff);
+  }
+
+  &.is-danger {
+    border-color: var(--su-table-danger-border, color-mix(in srgb, #b42318 35%, transparent));
+    color: var(--su-table-danger-color, #b42318);
+  }
+
+  &.is-quiet {
+    border-color: transparent;
+  }
+}
+
+@mixin panel {
+  background: var(--su-table-panel-background, rgb(0 0 0 / 0.03));
+  border-radius: var(--su-table-radius, 10px);
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 0.75rem;
+}
+
+@mixin fields {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+}
+
+@mixin field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+@mixin label {
+  font-size: 0.85em;
+  font-weight: 600;
+}

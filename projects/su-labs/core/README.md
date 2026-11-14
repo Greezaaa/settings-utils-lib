@@ -318,6 +318,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `save()` | `{ ok: true, rows }` with the edited rows in the API's shape, or `{ ok: false, errors }` |
 | `cancelEdit()` | Stops editing |
 | `pinColumn(key, pin)` | Pins a column to `'start'` or `'end'`, or unpins it with `null` |
+| `search(query)` | Keeps the rows whose shown text holds every word of the query (case and accents ignored); `''` clears it |
 | `pinRow(id, pinned?)` | Pins a row above the others on every page, or unpins it; without `pinned`, toggles. Start with the `pinnedRows` option |
 | `setPage(page)` / `setPageSize(size)` | Shows a page (from 0), or changes the rows per page (a number or `'all'`) keeping the first row in view; set them up with the `pageSize` and `pageSizes` options |
 
@@ -334,6 +335,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `edit` | `suTextEditor`, `suNumberEditor`, `suCheckboxEditor`, `suDateEditor`, `suSelectEditor`, or your own `{ input, toInput, parse, validate? }` |
 | `validate(value, row)` | A message when an edited value isn't valid for the row, or `null` |
 | `align` | `'start'`, `'center'` or `'end'` |
+| `searchable` | `false` to leave the column out of `search` (default `true`) |
 | `pinned` | `'start'` or `'end'`: render those cells with `position: sticky`; `state.columns` lists them first or last |
 
 Actions (`{ id, label, danger?, bulk?, hidden?(row), disabled?(row) }`) are resolved for each row in `rows[].actions`,

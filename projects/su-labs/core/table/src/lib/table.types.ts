@@ -84,6 +84,8 @@ export interface SuTableColumn<TRow extends object, TKey extends keyof TRow> {
   readonly align?: SuTableAlign;
   /** Keeps the column in view at one edge while the others scroll; `pinColumn` changes it later */
   readonly pinned?: SuTablePin;
+  /** Whether `search` looks in this column's text @default true */
+  readonly searchable?: boolean;
 }
 
 /** Every column of a table, each typed by its own field */
@@ -150,6 +152,10 @@ export interface SuTableLabels {
   readonly pinRow: string;
   readonly rowPinned: (rowLabel: string) => string;
   readonly rowUnpinned: (rowLabel: string) => string;
+  readonly search: string;
+  readonly matches: (count: number) => string;
+  readonly searchCleared: string;
+  readonly noMatches: (query: string) => string;
 }
 
 /** What the table is set up with; `configure` changes any of it later */
@@ -268,6 +274,10 @@ export interface SuTableState<TRow extends object> {
   readonly grabbedId: SuTableRowId | null;
   /** The latest change, for a live region */
   readonly announcement: string;
+  /** The search as typed */
+  readonly query: string;
+  /** A search is narrowing the rows (reordering is off meanwhile) */
+  readonly searching: boolean;
 }
 
 /** The outcome of `save` */

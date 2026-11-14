@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The select-all checkbox selects the rows of the current page; the selection is kept across pages
 - Pinned rows: `rowPinning` adds a Pin button to each row (a toggle, announced) that keeps it above the others on every page, tinted and set off by a line; `pinnedRows` sets the starting pins and `pinnedRowsChange` emits their ids
 - `--su-table-pinned-row-background` and `--su-table-pinned-row-border`
+- Search: `searchable` adds a search box above the table that narrows the rows by the text they show, ignoring case and accents (every word must match), once typing pauses; the number of matches is announced, Escape clears it, pinned rows stay, and reordering is off meanwhile; `searchChange` emits the query
+- The search box and the Columns button share a bar above the table
 
 ### Fixed
 - The table shrinks to fit inside grid and flex layouts, scrolling its columns instead of widening the page

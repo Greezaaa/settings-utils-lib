@@ -1,0 +1,59 @@
+@use './table-controls' as controls;
+
+:host {
+  display: block;
+}
+
+.su-table-bar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.su-table-search {
+  align-items: center;
+  display: flex;
+  flex: 1 1 14rem;
+  margin-inline-end: auto;
+  max-width: 22rem;
+  position: relative;
+}
+
+.su-table-search-icon {
+  inset-inline-start: 0.6rem;
+  opacity: 0.55;
+  pointer-events: none;
+  position: absolute;
+}
+
+.su-table-search-input {
+  @include controls.control;
+  min-height: 2.1rem;
+  padding: 0.3rem 0.6rem 0.3rem 2rem;
+  width: 100%;
+}
+
+.su-table-button {
+  @include controls.button;
+}
+
+.su-table-panel {
+  @include controls.panel;
+  @include controls.fields;
+}
+
+.su-table-field {
+  @include controls.field;
+}
+
+.su-table-label {
+  @include controls.label;
+}
+
+.su-table-select {
+  @include controls.control;
+  padding: 0.3rem 0.45rem;
+}

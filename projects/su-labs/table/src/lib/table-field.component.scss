@@ -1,3 +1,5 @@
+@use './table-controls' as controls;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -5,12 +7,7 @@
 }
 
 .su-table-control {
-  background: var(--su-table-input-background, transparent);
-  border: var(--su-table-input-border, 1px solid rgb(0 0 0 / 0.25));
-  border-radius: var(--su-table-input-radius, 6px);
-  box-sizing: border-box;
-  color: inherit;
-  font: inherit;
+  @include controls.control;
   min-height: 2rem;
   min-width: 6rem;
   padding: 0.3rem 0.45rem;
@@ -19,11 +16,6 @@
   &[aria-invalid='true'] {
     border-color: var(--su-table-danger-color, #b42318);
   }
-
-  &:focus-visible {
-    outline: var(--su-table-focus-outline, 2px solid currentColor);
-    outline-offset: 2px;
-  }
 }
 
 .su-table-checkbox {
@@ -31,11 +23,7 @@
   height: 1rem;
   margin: 0;
   width: 1rem;
-
-  &:focus-visible {
-    outline: var(--su-table-focus-outline, 2px solid currentColor);
-    outline-offset: 2px;
-  }
+  @include controls.focus-ring;
 }
 
 .su-table-error {

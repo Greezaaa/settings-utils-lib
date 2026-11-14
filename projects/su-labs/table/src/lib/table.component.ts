@@ -5,6 +5,7 @@ import { SuTableCellContext, SuTableCellDirective } from './table-cell.directive
 import { SuTableFieldComponent } from './table-field.component';
 import { SuTablePaginatorComponent } from './table-paginator.component';
 import { SuTablePinDirective, SuTablePinPlacement } from './table-pin.directive';
+import { SuTablePinChange, SuTableToolbarColumn, SuTableToolbarComponent } from './table-toolbar.component';
 
 /** The action id the table handles itself: it edits the row inline */
 export const SU_TABLE_EDIT_ACTION = 'edit';
@@ -49,6 +50,9 @@ let nextTableId = 0;
 /** The room, in pixels, the pinned columns leave for the scrolling ones before they stop sticking */
 const MIN_SCROLLING_WIDTH = 96;
 
+/** How long typing pauses, in milliseconds, before the search runs */
+const SEARCH_DELAY = 200;
+
 /**
  * An accessible data table over `SuTableController` from `@su-labs/core/table`: typed columns map the API's rows,
  * with sorting, selection, inline and bulk editing, drag-and-drop and keyboard reordering, row actions and announced
@@ -62,6 +66,7 @@ const MIN_SCROLLING_WIDTH = 96;
     SuTableFieldComponent,
     SuTablePaginatorComponent,
     SuTablePinDirective,
+    SuTableToolbarComponent,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -84,6 +89,8 @@ export class SuTableComponent<TRow extends object> {
   readonly reorderable = input(false, { transform: booleanAttribute });
   /** A Columns button that opens a panel to pin columns @default false */
   readonly columnControls = input(false, { transform: booleanAttribute });
+  /** A search box above the table that narrows the rows by their text @default false */
+  readonly searchable = input(false, { transform: booleanAttribute });
   /** Rows per page; without it, every row shows @default 'all' */
   readonly pageSize = input<SuTablePageSize>();
   /** The page sizes people choose from under the table, e.g. `[10, 25, 50, 'all']` */
@@ -101,6 +108,8 @@ export class SuTableComponent<TRow extends object> {
   readonly action = output<SuTableActionEvent<TRow>>();
   readonly sortChange = output<SuTableSort<TRow> | null>();
   readonly selectionChange = output<readonly TRow[]>();
+  /** The search changed, after typing paused */
+  readonly searchChange = output<string>();
   /** The pinned rows changed: their ids, in pin order */
   readonly pinnedRowsChange = output<readonly SuTableRowId[]>();
   /** The page or the page size changed */
@@ -110,6 +119,7 @@ export class SuTableComponent<TRow extends object> {
   private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly cellTemplates = contentChildren(SuTableCellDirective);
   private readonly focusHandleId = signal<SuTableRowId | null>(null);
+  private searchTimer: ReturnType<typeof setTimeout> | undefined;
   private readonly headerWidths = signal<readonly number[]>([]);
   private readonly scrollerWidth = signal(0);
   private readonly headerLayout = computed(
@@ -142,7 +152,19 @@ export class SuTableComponent<TRow extends object> {
     const { pinnedRows, rows } = this.state();
     return [...pinnedRows, ...rows];
   });
-  protected readonly columnsOpen = signal(false);
+  /** The columns for the Columns panel, in the order they were set up */
+  protected readonly toolbarColumns = computed<
+    readonly SuTableToolbarColumn<TRow>[]
+  >(() => {
+    const pins = new Map(
+      this.state().columns.map(column => [column.key, column.pinned])
+    );
+    return this.columns().map(({ key, header }) => ({
+      key,
+      header,
+      pinned: pins.get(key) ?? null,
+    }));
+  });
   protected readonly scrolledFromStart = signal(false);
   protected readonly moreAtEnd = signal(false);
   protected readonly columnSlot = computed(
@@ -216,7 +238,10 @@ export class SuTableComponent<TRow extends object> {
     const unsubscribe = this.controller.state.subscribe(state =>
       this.state.set(state)
     );
-    inject(DestroyRef).onDestroy(unsubscribe);
+    inject(DestroyRef).onDestroy(() => {
+      unsubscribe();
+      clearTimeout(this.searchTimer);
+    });
     effect(() => {
       const options = {
         columns: this.columns(),
@@ -299,20 +324,17 @@ export class SuTableComponent<TRow extends object> {
     return `${this.tableId}-${id}-${String(key)}`;
   }
 
-  protected columnPin(key: keyof TRow): SuTablePin | null {
-    return (
-      this.state().columns.find(column => column.key === key)?.pinned ?? null
-    );
+  protected pinColumn({ key, pin }: SuTablePinChange<TRow>): void {
+    this.controller.pinColumn(key, pin);
   }
 
-  protected onPinChange(key: keyof TRow, event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      const { value } = event.target;
-      this.controller.pinColumn(
-        key,
-        value === 'start' || value === 'end' ? value : null
-      );
-    }
+  /** Narrows the rows once typing pauses, so each keystroke isn't announced */
+  protected search(query: string): void {
+    clearTimeout(this.searchTimer);
+    this.searchTimer = setTimeout(() => {
+      this.controller.search(query);
+      this.searchChange.emit(query);
+    }, SEARCH_DELAY);
   }
 
   protected onScroll(event: Event): void {

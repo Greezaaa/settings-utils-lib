@@ -674,3 +674,118 @@ describe('SuTableController row pinning', () => {
     expect(table.state.get().selection).toBe('all');
   });
 });
+
+describe('SuTableController search', () => {
+  const PEOPLE: readonly User[] = [
+    {
+      id: 1,
+      name: 'José Núñez',
+      age: 31,
+      admin: false,
+      status: 'active',
+      joined: '2024-03-01',
+    },
+    {
+      id: 2,
+      name: 'Bo Lind',
+      age: 25,
+      admin: true,
+      status: 'paused',
+      joined: '2023-11-20',
+    },
+    {
+      id: 3,
+      name: 'Cy Jones',
+      age: 40,
+      admin: false,
+      status: 'active',
+      joined: '2025-01-15',
+    },
+    {
+      id: 4,
+      name: 'Di Jose',
+      age: 22,
+      admin: false,
+      status: 'paused',
+      joined: '2025-02-01',
+    },
+  ];
+
+  const createSearchable = () =>
+    new SuTableController<User>({
+      columns: [
+        { key: 'name', header: 'Name' },
+        { key: 'age', header: 'Age', format: age => `${age} years` },
+        {
+          key: 'status',
+          header: 'Status',
+          format: status => (status === 'active' ? 'Active' : 'Paused'),
+        },
+        { key: 'joined', header: 'Joined', searchable: false },
+      ],
+      rowId: user => user.id,
+      rows: PEOPLE,
+      pageSize: 2,
+    });
+
+  it('matches the shown text, ignoring case and accents, and announces the count', () => {
+    const table = createSearchable();
+
+    table.search('JOSE');
+    expect(names(table)).toEqual(['José Núñez', 'Di Jose']);
+    expect(table.state.get()).toMatchObject({
+      query: 'JOSE',
+      searching: true,
+      announcement: '2 rows match',
+    });
+
+    table.search('40 years');
+    expect(names(table)).toEqual(['Cy Jones']);
+    expect(table.state.get().announcement).toBe('1 row matches');
+  });
+
+  it('needs every word to match, skips columns that aren’t searchable, and pages the matches', () => {
+    const table = createSearchable();
+
+    table.search('paused jose');
+    expect(names(table)).toEqual(['Di Jose']);
+
+    table.search('2025');
+    expect(names(table)).toEqual([]);
+
+    table.search('a');
+    expect(table.state.get().pagination).toMatchObject({
+      totalRows: 4,
+      pageCount: 2,
+    });
+  });
+
+  it('keeps pinned rows, goes back to the first page, and clears', () => {
+    const table = createSearchable();
+    table.pinRow(2);
+    table.setPage(1);
+
+    table.search('jones');
+    expect(table.state.get().pinnedRows.map(row => row.data.name)).toEqual([
+      'Bo Lind',
+    ]);
+    expect(names(table)).toEqual(['Cy Jones']);
+    expect(table.state.get().pagination.page).toBe(0);
+
+    table.search('');
+    expect(table.state.get()).toMatchObject({
+      searching: false,
+      announcement: 'Search cleared',
+    });
+    expect(table.state.get().pagination.totalRows).toBe(3);
+  });
+
+  it('turns reordering off while searching', () => {
+    const table = createSearchable();
+    table.search('jose');
+
+    expect(table.move(1, 1)).toBeNull();
+    table.moveKey(1, ' ');
+    expect(table.state.get().grabbedId).toBeNull();
+  });
+});

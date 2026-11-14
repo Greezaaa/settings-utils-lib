@@ -1,3 +1,5 @@
+@use './table-controls' as controls;
+
 :host {
   color: var(--su-table-text-color, inherit);
   display: block;
@@ -219,31 +221,7 @@ tbody tr {
 }
 
 .su-table-button {
-  background: var(--su-table-button-background, transparent);
-  border: var(--su-table-button-border, 1px solid rgb(0 0 0 / 0.2));
-  border-radius: var(--su-table-button-radius, 6px);
-  color: var(--su-table-button-color, inherit);
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.875em;
-  padding: var(--su-table-button-padding, 0.3rem 0.7rem);
-  white-space: nowrap;
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-  }
-
-  &.is-primary {
-    background: var(--su-table-primary-background, #111);
-    border-color: transparent;
-    color: var(--su-table-primary-color, #fff);
-  }
-
-  &.is-danger {
-    border-color: var(--su-table-danger-border, color-mix(in srgb, #b42318 35%, transparent));
-    color: var(--su-table-danger-color, #b42318);
-  }
+  @include controls.button;
 
   &.su-table-pin-button {
     align-items: center;
@@ -264,20 +242,12 @@ tbody tr {
       }
     }
   }
-
-  &.is-quiet {
-    border-color: transparent;
-  }
 }
 
 .su-table-sort,
 .su-table-handle,
-.su-table-button,
 .su-table-checkbox {
-  &:focus-visible {
-    outline: var(--su-table-focus-outline, 2px solid currentColor);
-    outline-offset: 2px;
-  }
+  @include controls.focus-ring;
 }
 
 .su-table-checkbox {
@@ -288,12 +258,8 @@ tbody tr {
 }
 
 .su-table-toolbar,
-.su-table-bulk,
-.su-table-panel {
-  background: var(--su-table-panel-background, rgb(0 0 0 / 0.03));
-  border-radius: var(--su-table-radius, 10px);
-  margin-bottom: 0.75rem;
-  padding: 0.6rem 0.75rem;
+.su-table-bulk {
+  @include controls.panel;
 }
 
 .su-table-toolbar {
@@ -314,20 +280,15 @@ tbody tr {
 }
 
 .su-table-bulk-fields {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  @include controls.fields;
 }
 
 .su-table-bulk-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  @include controls.field;
 }
 
 .su-table-label {
-  font-size: 0.85em;
-  font-weight: 600;
+  @include controls.label;
 }
 
 .su-table-bulk-actions {
@@ -355,19 +316,4 @@ tbody tr {
   tbody tr {
     transition: background-color 120ms ease-out;
   }
-}
-
-.su-table-bar {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 0.75rem;
-}
-
-.su-table-select {
-  background: var(--su-table-input-background, transparent);
-  border: var(--su-table-input-border, 1px solid rgb(0 0 0 / 0.25));
-  border-radius: var(--su-table-input-radius, 6px);
-  color: inherit;
-  font: inherit;
-  padding: 0.3rem 0.45rem;
 }

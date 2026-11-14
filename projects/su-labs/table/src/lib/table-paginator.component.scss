@@ -1,3 +1,5 @@
+@use './table-controls' as controls;
+
 :host {
   display: block;
   margin-top: 0.75rem;
@@ -26,11 +28,7 @@
 
 .su-table-paginator-select,
 .su-table-paginator-button {
-  background: var(--su-table-input-background, transparent);
-  border: var(--su-table-input-border, 1px solid rgb(0 0 0 / 0.25));
-  border-radius: var(--su-table-input-radius, 6px);
-  color: inherit;
-  font: inherit;
+  @include controls.control;
   min-height: 2rem;
 }
 
@@ -47,13 +45,5 @@
   &[aria-disabled='true'] {
     cursor: not-allowed;
     opacity: 0.4;
-  }
-}
-
-.su-table-paginator-select,
-.su-table-paginator-button {
-  &:focus-visible {
-    outline: var(--su-table-focus-outline, 2px solid currentColor);
-    outline-offset: 2px;
   }
 }
