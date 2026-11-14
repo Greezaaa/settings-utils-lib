@@ -30,6 +30,12 @@ const PRODUCTS: readonly Product[] = [
   { id: 104, name: 'Pruning shears', category: 'garden', price: 22.75, inStock: true, restocked: '2026-09-14' },
   { id: 105, name: 'Cordless drill', category: 'tools', price: 119, inStock: false, restocked: '2026-07-30' },
   { id: 106, name: 'Cast-iron pan', category: 'kitchen', price: 39.95, inStock: true, restocked: '2026-10-21' },
+  { id: 107, name: 'Spirit level', category: 'tools', price: 14.2, inStock: true, restocked: '2026-09-03' },
+  { id: 108, name: 'Garden hose', category: 'garden', price: 29.99, inStock: true, restocked: '2026-10-12' },
+  { id: 109, name: 'Pepper mill', category: 'kitchen', price: 24.5, inStock: false, restocked: '2026-06-27' },
+  { id: 110, name: 'Tape measure', category: 'tools', price: 9.8, inStock: true, restocked: '2026-11-05' },
+  { id: 111, name: 'Seed tray', category: 'garden', price: 6.45, inStock: true, restocked: '2026-10-30' },
+  { id: 112, name: 'Mixing bowls', category: 'kitchen', price: 32, inStock: false, restocked: '2026-08-08' },
 ];
 
 const PRICE = new Intl.NumberFormat('en', { style: 'currency', currency: 'EUR' });

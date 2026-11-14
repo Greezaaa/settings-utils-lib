@@ -464,3 +464,122 @@ describe('SuTableController column pinning', () => {
     expect(table.state.get().draft?.fields[0].key).toBe('status');
   });
 });
+
+describe('SuTableController pagination', () => {
+  const MANY: readonly User[] = Array.from({ length: 12 }, (_, index) => ({
+    id: index + 1,
+    name: `User ${index + 1}`,
+    age: 20 + index,
+    admin: false,
+    status: 'active',
+    joined: '2024-01-01',
+  }));
+
+  const createPaged = () =>
+    new SuTableController<User>({
+      columns: COLUMNS,
+      rowId: user => user.id,
+      rows: MANY,
+      pageSize: 5,
+      pageSizes: [5, 10, 'all'],
+    });
+
+  it('shows one page at a time, with its range', () => {
+    const table = createPaged();
+
+    expect(names(table)).toEqual([
+      'User 1',
+      'User 2',
+      'User 3',
+      'User 4',
+      'User 5',
+    ]);
+    expect(table.state.get().pagination).toEqual({
+      page: 0,
+      pageCount: 3,
+      pageSize: 5,
+      pageSizes: [5, 10, 'all'],
+      totalRows: 12,
+      rangeStart: 1,
+      rangeEnd: 5,
+    });
+
+    table.setPage(2);
+    expect(names(table)).toEqual(['User 11', 'User 12']);
+    expect(table.state.get().pagination).toMatchObject({
+      rangeStart: 11,
+      rangeEnd: 12,
+    });
+    expect(table.state.get().announcement).toBe('Page 3 of 3');
+
+    table.setPage(9);
+    expect(table.state.get().pagination.page).toBe(2);
+  });
+
+  it('keeps the first row in view when the page size changes', () => {
+    const table = createPaged();
+    table.setPage(2);
+
+    table.setPageSize(10);
+    expect(table.state.get().pagination).toMatchObject({
+      page: 1,
+      pageCount: 2,
+    });
+
+    table.setPageSize('all');
+    expect(table.state.get().rows).toHaveLength(12);
+    expect(table.state.get().pagination).toMatchObject({
+      page: 0,
+      pageCount: 1,
+    });
+  });
+
+  it('goes back to the first page on sorting, and stays within the pages when rows go', () => {
+    const table = createPaged();
+    table.setPage(2);
+    table.sortBy('age');
+    expect(table.state.get().pagination.page).toBe(0);
+
+    table.setPage(2);
+    table.setRows(MANY.slice(0, 6));
+    expect(table.state.get().pagination).toMatchObject({
+      page: 1,
+      pageCount: 2,
+    });
+  });
+
+  it('selects the rows of the current page, and keeps the selection across pages', () => {
+    const table = createPaged();
+
+    table.selectAll();
+    expect(table.state.get().selection).toBe('all');
+    table.setPage(1);
+    expect(table.state.get().selection).toBe('none');
+    table.select(6);
+
+    expect(table.state.get().selectedIds).toEqual([1, 2, 3, 4, 5, 6]);
+    table.clearSelection();
+    expect(table.state.get().selectedIds).toEqual([]);
+  });
+
+  it('moves a dropped row within the current page', () => {
+    const table = createPaged();
+    table.setPage(1);
+
+    const order = table.move(6, 2);
+    expect(order?.slice(5, 10)).toEqual([7, 8, 6, 9, 10]);
+  });
+
+  it('turns the page with a row moved by keyboard, and back when cancelled', () => {
+    const table = createPaged();
+
+    table.moveKey(5, ' ');
+    table.moveKey(5, 'ArrowDown');
+    expect(table.state.get().pagination.page).toBe(1);
+    expect(names(table)[0]).toBe('User 5');
+
+    table.moveKey(5, 'Escape');
+    expect(table.state.get().pagination.page).toBe(0);
+    expect(names(table)[4]).toBe('User 5');
+  });
+});

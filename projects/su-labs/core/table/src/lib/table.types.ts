@@ -26,6 +26,9 @@ export type SuTableAlign = 'start' | 'center' | 'end';
 /** Which edge a column is pinned to, staying in view while the others scroll */
 export type SuTablePin = 'start' | 'end';
 
+/** How many rows a page shows: a number, or every row */
+export type SuTablePageSize = number | 'all';
+
 /** One choice of a `select` editor */
 export interface SuTableOption {
   /** The control's value, turned back into the API value by the editor's `parse` */
@@ -136,6 +139,13 @@ export interface SuTableLabels {
   readonly pinEnd: string;
   readonly columnPinned: (header: string, pin: SuTablePin) => string;
   readonly columnUnpinned: (header: string) => string;
+  readonly pagination: string;
+  readonly rowsPerPage: string;
+  readonly allRows: string;
+  readonly range: (start: number, end: number, total: number) => string;
+  readonly page: (page: number, count: number) => string;
+  readonly previousPage: string;
+  readonly nextPage: string;
 }
 
 /** What the table is set up with; `configure` changes any of it later */
@@ -149,6 +159,10 @@ export interface SuTableOptions<TRow extends object> {
   readonly actions?: readonly SuTableAction<TRow>[];
   /** Any texts to replace, see `SU_TABLE_LABELS` */
   readonly labels?: Partial<SuTableLabels>;
+  /** Rows per page; `setPageSize` changes it later @default 'all' */
+  readonly pageSize?: SuTablePageSize;
+  /** The page sizes to choose from, e.g. `[10, 25, 50, 'all']`; none by default */
+  readonly pageSizes?: readonly SuTablePageSize[];
 }
 
 /** The current sort */
@@ -226,13 +240,16 @@ export interface SuTableDraft<TRow extends object> {
 /** Everything needed to render the table */
 export interface SuTableState<TRow extends object> {
   readonly columns: readonly SuTableColumnView<TRow>[];
-  /** In display order: sorted, or as reordered */
+  /** The rows of the current page, in display order: sorted, or as reordered */
   readonly rows: readonly SuTableRowView<TRow>[];
   /** The field that names each row (the first column), to render as the row's header cell */
   readonly rowHeaderKey: keyof TRow | null;
   readonly sort: SuTableSort<TRow> | null;
+  /** Every selected row, on any page */
   readonly selectedIds: readonly SuTableRowId[];
+  /** How many rows of the current page are selected, for the select-all checkbox */
   readonly selection: SuTableSelection;
+  readonly pagination: SuTablePagination;
   /** The actions offered for the selected rows */
   readonly bulkActions: readonly SuTableActionView[];
   readonly editable: boolean;
@@ -252,3 +269,16 @@ export type SuTableSaveResult<TRow extends object> =
 export type SuTableMoveKeyResult =
   | { readonly handled: false }
   | { readonly handled: true; readonly order: readonly SuTableRowId[] | null };
+
+/** Where the rows on screen sit among all of them */
+export interface SuTablePagination {
+  /** The current page, from 0 */
+  readonly page: number;
+  readonly pageCount: number;
+  readonly pageSize: SuTablePageSize;
+  readonly pageSizes: readonly SuTablePageSize[];
+  readonly totalRows: number;
+  /** The first and last row on the page, from 1 (0 when there are none) */
+  readonly rangeStart: number;
+  readonly rangeEnd: number;
+}

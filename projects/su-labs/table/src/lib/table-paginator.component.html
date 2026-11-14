@@ -1,0 +1,38 @@
+@let paging = pagination();
+@let t = labels();
+<nav class="su-table-paginator" [attr.aria-label]="t.pagination">
+  @if (paging.pageSizes.length > 0) {
+    <div class="su-table-paginator-size">
+      <label [for]="controlId()">{{ t.rowsPerPage }}</label>
+      <select class="su-table-paginator-select" [id]="controlId()" (change)="onPageSize($event)">
+        @for (size of paging.pageSizes; track size) {
+          <option [value]="size" [selected]="size === paging.pageSize">{{ size === 'all' ? t.allRows : size }}</option>
+        }
+      </select>
+    </div>
+  }
+  <span class="su-table-paginator-range">{{ t.range(paging.rangeStart, paging.rangeEnd, paging.totalRows) }}</span>
+  @if (paging.pageCount > 1) {
+    <div class="su-table-paginator-pages">
+      <button
+        type="button"
+        class="su-table-paginator-button"
+        [attr.aria-label]="t.previousPage"
+        [attr.aria-disabled]="paging.page === 0"
+        (click)="turn(paging.page - 1)"
+      >
+        <span aria-hidden="true">‹</span>
+      </button>
+      <span class="su-table-paginator-page">{{ t.page(paging.page + 1, paging.pageCount) }}</span>
+      <button
+        type="button"
+        class="su-table-paginator-button"
+        [attr.aria-label]="t.nextPage"
+        [attr.aria-disabled]="paging.page === paging.pageCount - 1"
+        (click)="turn(paging.page + 1)"
+      >
+        <span aria-hidden="true">›</span>
+      </button>
+    </div>
+  }
+</nav>

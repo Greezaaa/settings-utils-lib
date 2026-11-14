@@ -1,8 +1,9 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { afterRenderEffect, booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChildren, DestroyRef, effect, ElementRef, inject, input, output, signal, TemplateRef, untracked } from '@angular/core';
-import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTablePin, SuTableRowId, SuTableRowView, SuTableSort } from '@su-labs/core/table';
+import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSort } from '@su-labs/core/table';
 import { SuTableCellContext, SuTableCellDirective } from './table-cell.directive';
 import { SuTableFieldComponent } from './table-field.component';
+import { SuTablePaginatorComponent } from './table-paginator.component';
 import { SuTablePinDirective, SuTablePinPlacement } from './table-pin.directive';
 
 /** The action id the table handles itself: it edits the row inline */
@@ -20,6 +21,13 @@ export interface SuTableReorderEvent<TRow extends object> {
   readonly ids: readonly SuTableRowId[];
   /** Every row in its new order */
   readonly rows: readonly TRow[];
+}
+
+/** The page on screen and how many rows it shows */
+export interface SuTablePageEvent {
+  /** From 0 */
+  readonly page: number;
+  readonly pageSize: SuTablePageSize;
 }
 
 /** A row being dragged with the pointer */
@@ -49,7 +57,12 @@ const MIN_SCROLLING_WIDTH = 96;
 @Component({
   selector: 'su-lib-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, SuTableFieldComponent, SuTablePinDirective],
+  imports: [
+    NgTemplateOutlet,
+    SuTableFieldComponent,
+    SuTablePaginatorComponent,
+    SuTablePinDirective,
+  ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
   host: { class: 'su-table' },
@@ -71,6 +84,10 @@ export class SuTableComponent<TRow extends object> {
   readonly reorderable = input(false, { transform: booleanAttribute });
   /** A Columns button that opens a panel to pin columns @default false */
   readonly columnControls = input(false, { transform: booleanAttribute });
+  /** Rows per page; without it, every row shows @default 'all' */
+  readonly pageSize = input<SuTablePageSize>();
+  /** The page sizes people choose from under the table, e.g. `[10, 25, 50, 'all']` */
+  readonly pageSizes = input<readonly SuTablePageSize[]>([]);
   /** Texts to replace, e.g. in the page's language */
   readonly labels = input<Partial<SuTableLabels>>({});
 
@@ -80,6 +97,8 @@ export class SuTableComponent<TRow extends object> {
   readonly action = output<SuTableActionEvent<TRow>>();
   readonly sortChange = output<SuTableSort<TRow> | null>();
   readonly selectionChange = output<readonly TRow[]>();
+  /** The page or the page size changed */
+  readonly pageChange = output<SuTablePageEvent>();
 
   private readonly controller = new SuTableController<TRow>();
   private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
@@ -191,12 +210,19 @@ export class SuTableComponent<TRow extends object> {
         rowId: this.rowId(),
         actions: this.actions(),
         labels: this.labels(),
+        pageSizes: this.pageSizes(),
       };
       untracked(() => this.controller.configure(options));
     });
     effect(() => {
       const rows = this.rows();
       untracked(() => this.controller.setRows(rows));
+    });
+    effect(() => {
+      const pageSize = this.pageSize();
+      if (pageSize !== undefined) {
+        untracked(() => this.controller.configure({ pageSize }));
+      }
     });
     afterRenderEffect(onCleanup => {
       this.headerLayout();
@@ -304,6 +330,16 @@ export class SuTableComponent<TRow extends object> {
 
   protected runBulkAction(action: SuTableActionView): void {
     this.action.emit({ id: action.id, rows: this.controller.selectedRows() });
+  }
+
+  protected setPage(page: number): void {
+    this.controller.setPage(page);
+    this.emitPage();
+  }
+
+  protected setPageSize(pageSize: SuTablePageSize): void {
+    this.controller.setPageSize(pageSize);
+    this.emitPage();
   }
 
   protected editSelected(): void {
@@ -426,6 +462,11 @@ export class SuTableComponent<TRow extends object> {
     this.moreAtEnd.set(
       position < scroller.scrollWidth - scroller.clientWidth - 1
     );
+  }
+
+  private emitPage(): void {
+    const { page, pageSize } = this.state().pagination;
+    this.pageChange.emit({ page, pageSize });
   }
 
   private emitReorder(ids: readonly SuTableRowId[]): void {

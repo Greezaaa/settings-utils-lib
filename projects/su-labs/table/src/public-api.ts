@@ -19,6 +19,8 @@ export type {
   SuTableInputValue,
   SuTableLabels,
   SuTableOption,
+  SuTablePageSize,
+  SuTablePagination,
   SuTablePin,
   SuTableRowId,
   SuTableSort,
@@ -27,5 +29,6 @@ export type {
 } from '@su-labs/core/table';
 export * from './lib/table-cell.directive';
 export * from './lib/table-field.component';
+export * from './lib/table-paginator.component';
 export * from './lib/table-pin.directive';
 export * from './lib/table.component';

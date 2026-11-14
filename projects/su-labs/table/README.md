@@ -138,6 +138,8 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `selectable` | `false` | Checkboxes to select rows, with a toolbar for the selection |
 | `reorderable` | `false` | A move handle on each row |
 | `columnControls` | `false` | A Columns button that opens a panel to pin or unpin each column |
+| `pageSize` | `'all'` | Rows per page |
+| `pageSizes` | `[]` | Page sizes to choose from under the table, e.g. `[10, 25, 50, 'all']` |
 | `labels` | English | `Partial<SuTableLabels>`: any text, e.g. in the page's language |
 
 ### Outputs
@@ -149,6 +151,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `action` | `{ id, rows }`: the clicked row, or the selected rows for a bulk action |
 | `sortChange` | `{ key, direction } \| null` |
 | `selectionChange` | `readonly TRow[]` |
+| `pageChange` | `{ page, pageSize }`, the page from 0 |
 
 The table shows your changes right away; update `rows` with the API's answer to keep them, or to undo a failed save.
 
@@ -200,6 +203,16 @@ Pinned columns move to their edge in the order you list them. The move handles a
 pinned to the start, and the actions with those pinned to the end. A soft shadow shows on the pinned edge while other
 columns scroll under it. With `columnControls`, people pin and unpin columns themselves from the Columns panel. If the
 pinned columns would leave too little room for the rest, they stop sticking until there's room again.
+
+## Pagination
+
+```html
+<su-lib-table caption="Products" [columns]="columns" [rows]="products()" [pageSize]="25" [pageSizes]="[10, 25, 50, 'all']" />
+```
+
+Under the table: a rows-per-page choice, the range on screen ("26–50 of 132") and previous and next buttons; each page
+change is announced. Changing the page size keeps the first row on screen in view, sorting goes back to the first page,
+and the select-all checkbox selects the rows of the page on screen while the selection is kept across pages.
 
 ## Keyboard
 

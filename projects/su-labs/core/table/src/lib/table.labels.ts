@@ -40,4 +40,11 @@ export const SU_TABLE_LABELS: SuTableLabels = {
   pinEnd: 'Pinned to the end',
   columnPinned: (header, pin) => `${header} pinned to the ${pin}`,
   columnUnpinned: header => `${header} unpinned`,
+  pagination: 'Pagination',
+  rowsPerPage: 'Rows per page',
+  allRows: 'All',
+  range: (start, end, total) => `${start}–${end} of ${total}`,
+  page: (page, count) => `Page ${page} of ${count}`,
+  previousPage: 'Previous page',
+  nextPage: 'Next page',
 };

@@ -304,11 +304,11 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 
 | Member | Description |
 |--------|-------------|
-| `state` | Read-only store of everything to render: `columns`, `rows`, `sort`, `selectedIds`, `selection`, `bulkActions`, `editable`, `draft`, `grabbedId`, `announcement` |
+| `state` | Read-only store of everything to render: `columns`, `rows` (the current page), `pagination`, `sort`, `selectedIds`, `selection`, `bulkActions`, `editable`, `draft`, `grabbedId`, `announcement` |
 | `configure(options)` | Changes the `columns`, `rowId`, `actions` or `labels` |
 | `setRows(rows)` | New rows, e.g. the API's answer; the selection keeps the rows still there |
 | `sortBy(key)` | Ascending, then descending, then the rows' own order |
-| `select(id, selected?)` / `selectAll(selected?)` / `clearSelection()` | Selection; without `selected`, toggles |
+| `select(id, selected?)` / `selectAll(selected?)` / `clearSelection()` | Selection; without `selected`, toggles; `selectAll` works on the current page, `clearSelection` on every page |
 | `selectedRows()` / `rowsOf(ids)` / `idOf(row)` | The rows behind ids, in display order |
 | `move(id, toIndex)` | Moves a row, e.g. on a drop; returns the new order of ids, or `null` |
 | `moveKey(id, key)` | Keyboard moves on a row's handle: Space or Enter picks up and drops, arrows, Home and End move, Escape or Tab put back; returns `{ handled, order }` |
@@ -318,6 +318,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `save()` | `{ ok: true, rows }` with the edited rows in the API's shape, or `{ ok: false, errors }` |
 | `cancelEdit()` | Stops editing |
 | `pinColumn(key, pin)` | Pins a column to `'start'` or `'end'`, or unpins it with `null` |
+| `setPage(page)` / `setPageSize(size)` | Shows a page (from 0), or changes the rows per page (a number or `'all'`) keeping the first row in view; set them up with the `pageSize` and `pageSizes` options |
 
 `suTableDropIndex(pointerY, rowMiddles, fromIndex)` gives where a row dragged with the pointer lands, and
 `suCompareValues(a, b)` is the default comparison.

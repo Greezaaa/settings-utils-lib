@@ -1,0 +1,59 @@
+:host {
+  display: block;
+  margin-top: 0.75rem;
+}
+
+.su-table-paginator {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.875em;
+  gap: 0.5rem 1.25rem;
+  justify-content: flex-end;
+}
+
+.su-table-paginator-size,
+.su-table-paginator-pages {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.su-table-paginator-range,
+.su-table-paginator-page {
+  font-variant-numeric: tabular-nums;
+}
+
+.su-table-paginator-select,
+.su-table-paginator-button {
+  background: var(--su-table-input-background, transparent);
+  border: var(--su-table-input-border, 1px solid rgb(0 0 0 / 0.25));
+  border-radius: var(--su-table-input-radius, 6px);
+  color: inherit;
+  font: inherit;
+  min-height: 2rem;
+}
+
+.su-table-paginator-select {
+  padding: 0.2rem 0.4rem;
+}
+
+.su-table-paginator-button {
+  cursor: pointer;
+  font-size: 1.1em;
+  line-height: 1;
+  min-width: 2rem;
+
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+}
+
+.su-table-paginator-select,
+.su-table-paginator-button {
+  &:focus-visible {
+    outline: var(--su-table-focus-outline, 2px solid currentColor);
+    outline-offset: 2px;
+  }
+}

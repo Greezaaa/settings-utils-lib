@@ -1,6 +1,6 @@
 import { createSuStore, SuReadableStore } from '@su-labs/core';
 import { SU_TABLE_LABELS } from './table.labels';
-import { SuTableAction, SuTableActionView, SuTableColumn, SuTableColumns, SuTableColumnView, SuTableDraft, SuTableEditorView, SuTableInputValue, SuTableLabels, SuTableMoveKeyResult, SuTableOptions, SuTablePin, SuTableRowId, SuTableRowView, SuTableSaveResult, SuTableSort, SuTableState } from './table.types';
+import { SuTableAction, SuTableActionView, SuTableColumn, SuTableColumns, SuTableColumnView, SuTableDraft, SuTableEditorView, SuTableInputValue, SuTableLabels, SuTableMoveKeyResult, SuTableOptions, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSaveResult, SuTableSort, SuTableState } from './table.types';
 
 /** A column with its field mapping turned into functions of the whole row */
 interface ResolvedColumn<TRow extends object> {
@@ -125,6 +125,10 @@ function resolveColumn<TRow extends object, TKey extends keyof TRow>(
   };
 }
 
+function normalizePageSize(pageSize: SuTablePageSize): SuTablePageSize {
+  return pageSize === 'all' ? pageSize : Math.max(1, Math.floor(pageSize));
+}
+
 function moveItem<T>(items: readonly T[], from: number, to: number): T[] {
   const next = [...items];
   const [item] = next.splice(from, 1);
@@ -153,6 +157,9 @@ export class SuTableController<TRow extends object> {
   private announcement = '';
   private columnOptions: SuTableColumns<TRow> = [];
   private readonly pins = new Map<keyof TRow, SuTablePin | null>();
+  private pageSize: SuTablePageSize = 'all';
+  private pageSizes: readonly SuTablePageSize[] = [];
+  private page = 0;
   private readonly store = createSuStore<SuTableState<TRow>>(this.build());
 
   /** Everything needed to render the table */
@@ -167,7 +174,7 @@ export class SuTableController<TRow extends object> {
     }
   }
 
-  /** Changes the columns, row identity, actions or labels */
+  /** Changes the columns, row identity, actions, labels or paging */
   configure(options: SuTableOptions<TRow>): void {
     this.labels = { ...this.labels, ...options.labels };
     this.columnOptions = options.columns ?? this.columnOptions;
@@ -176,6 +183,11 @@ export class SuTableController<TRow extends object> {
     );
     this.actions = options.actions ?? this.actions;
     this.rowIdOf = options.rowId ?? this.rowIdOf;
+    this.pageSizes = options.pageSizes ?? this.pageSizes;
+    if (options.pageSize !== undefined) {
+      this.pageSize = normalizePageSize(options.pageSize);
+      this.page = 0;
+    }
     this.publish();
   }
 
@@ -190,6 +202,7 @@ export class SuTableController<TRow extends object> {
       this.draft = null;
     }
     this.grabbed = null;
+    this.page = this.pageBounds().page;
     this.publish();
   }
 
@@ -223,10 +236,12 @@ export class SuTableController<TRow extends object> {
     const direction = this.sort?.key === key ? this.sort.direction : null;
     if (direction === 'descending') {
       this.sort = null;
+      this.page = 0;
       this.announcement = this.labels.sortCleared;
     } else {
       const next = direction === 'ascending' ? 'descending' : 'ascending';
       this.sort = { key, direction: next };
+      this.page = 0;
       const header = column.view.header;
       const { sortedAscending, sortedDescending } = this.labels;
       this.announcement =
@@ -247,27 +262,54 @@ export class SuTableController<TRow extends object> {
     this.announceSelection();
   }
 
-  /** Selects or deselects every row; without `selected`, selects all unless all are selected */
-  selectAll(selected = this.selected.size < this.order.length): void {
-    this.selected.clear();
-    if (selected) {
-      this.order.forEach(row => this.selected.add(this.idOf(row)));
-    }
+  /** Selects or deselects every row of the current page; without `selected`, selects them unless all are selected */
+  selectAll(selected?: boolean): void {
+    const ids = this.pageRows().map(row => this.idOf(row));
+    const select = selected ?? ids.some(id => !this.selected.has(id));
+    ids.forEach(id =>
+      select ? this.selected.add(id) : this.selected.delete(id)
+    );
     this.announceSelection();
   }
 
+  /** Deselects every row, on every page */
   clearSelection(): void {
-    this.selectAll(false);
+    this.selected.clear();
+    this.announceSelection();
+  }
+
+  /** Shows a page, from 0; kept within the pages there are */
+  setPage(page: number): void {
+    const { count } = this.pageBounds();
+    const next = Math.max(0, Math.min(Math.floor(page), count - 1));
+    if (next === this.page) {
+      return;
+    }
+    this.page = next;
+    this.announcement = this.labels.page(next + 1, count);
+    this.publish();
+  }
+
+  /** Changes how many rows a page shows, keeping the first row on screen in view */
+  setPageSize(pageSize: SuTablePageSize): void {
+    const { start } = this.pageBounds();
+    this.pageSize = normalizePageSize(pageSize);
+    this.page = this.pageSize === 'all' ? 0 : Math.floor(start / this.pageSize);
+    const { page, count } = this.pageBounds();
+    this.announcement = this.labels.page(page + 1, count);
+    this.publish();
   }
 
   /**
-   * Moves a row to a position, e.g. on a drop. A sorted table keeps its sorted order as the new order.
+   * Moves a row to a position on the current page, e.g. on a drop. A sorted table keeps its sorted order as the new
+   * order.
    * @returns The ids in their new order, or null when nothing moved
    */
   move(id: SuTableRowId, toIndex: number): readonly SuTableRowId[] | null {
     const rows = this.displayed();
+    const { start, end } = this.pageBounds(rows.length);
     const from = rows.findIndex(row => this.idOf(row) === id);
-    const to = Math.max(0, Math.min(toIndex, rows.length - 1));
+    const to = Math.max(start, Math.min(start + toIndex, end - 1));
     if (from === -1 || from === to) {
       return null;
     }
@@ -301,6 +343,7 @@ export class SuTableController<TRow extends object> {
     const from = this.order.findIndex(row => this.idOf(row) === grabbed.id);
     const to = Math.max(0, Math.min(from + offset, this.order.length - 1));
     this.order = moveItem(this.order, from, to);
+    this.followRow(to);
     this.announcement = this.labels.moved(to + 1, this.order.length);
     this.publish();
   }
@@ -330,8 +373,10 @@ export class SuTableController<TRow extends object> {
     if (!this.grabbed) {
       return;
     }
-    this.order = this.grabbed.original;
+    const { id, original } = this.grabbed;
+    this.order = original;
     this.grabbed = null;
+    this.followRow(original.findIndex(row => this.idOf(row) === id));
     this.announcement = this.labels.moveCancelled;
     this.publish();
   }
@@ -502,6 +547,32 @@ export class SuTableController<TRow extends object> {
     this.publish();
   }
 
+  /** Turns to the page that holds the row at this position */
+  private followRow(index: number): void {
+    if (this.pageSize !== 'all') {
+      this.page = Math.floor(index / this.pageSize);
+    }
+  }
+
+  private pageBounds(total = this.order.length): {
+    readonly page: number;
+    readonly count: number;
+    readonly start: number;
+    readonly end: number;
+  } {
+    const size = this.pageSize === 'all' ? Math.max(total, 1) : this.pageSize;
+    const count = Math.max(1, Math.ceil(total / size));
+    const page = Math.min(this.page, count - 1);
+    const start = page * size;
+    return { page, count, start, end: Math.min(start + size, total) };
+  }
+
+  private pageRows(): readonly TRow[] {
+    const rows = this.displayed();
+    const { start, end } = this.pageBounds(rows.length);
+    return rows.slice(start, end);
+  }
+
   private pinOf(column: ResolvedColumn<TRow>): SuTablePin | null {
     return this.pins.has(column.key)
       ? (this.pins.get(column.key) ?? null)
@@ -523,7 +594,9 @@ export class SuTableController<TRow extends object> {
 
   private build(): SuTableState<TRow> {
     const columns = this.displayColumns();
-    const rows = this.displayed().map(row => this.rowView(row, columns));
+    const all = this.displayed();
+    const { page, count, start, end } = this.pageBounds(all.length);
+    const rows = all.slice(start, end).map(row => this.rowView(row, columns));
     const selectedCount = rows.filter(row => row.selected).length;
     return {
       columns: columns.map(column => ({
@@ -534,13 +607,24 @@ export class SuTableController<TRow extends object> {
       rows,
       rowHeaderKey: this.columns[0]?.key ?? null,
       sort: this.sort,
-      selectedIds: rows.filter(row => row.selected).map(row => row.id),
+      selectedIds: all
+        .map(row => this.idOf(row))
+        .filter(id => this.selected.has(id)),
       selection:
         selectedCount === 0
           ? 'none'
           : selectedCount === rows.length
             ? 'all'
             : 'some',
+      pagination: {
+        page,
+        pageCount: count,
+        pageSize: this.pageSize,
+        pageSizes: this.pageSizes,
+        totalRows: all.length,
+        rangeStart: all.length > 0 ? start + 1 : 0,
+        rangeEnd: end,
+      },
       bulkActions: this.actions
         .filter(action => action.bulk)
         .map(action => ({

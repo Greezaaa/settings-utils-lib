@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `columnControls`: a Columns button that opens a panel to pin or unpin each column
 - When the pinned columns would leave too little room to scroll the rest (e.g. on a phone), they stop sticking until there's room
 - `--su-table-pinned-background` and `--su-table-pinned-shadow`
+- Pagination: `pageSize` and `pageSizes` show the rows a page at a time, with a paginator under the table (rows per page, the range on screen, previous and next, announced); `pageChange` emits `{ page, pageSize }`
+- The select-all checkbox selects the rows of the current page; the selection is kept across pages
 
 ### Fixed
 - The table shrinks to fit inside grid and flex layouts, scrolling its columns instead of widening the page

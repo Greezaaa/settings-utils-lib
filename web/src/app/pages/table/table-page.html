@@ -31,6 +31,8 @@
       [actions]="actions"
       [selectable]="selectable()"
       [reorderable]="reorderable()"
+      [pageSize]="5"
+      [pageSizes]="[5, 10, 'all']"
       (edited)="onEdited($event)"
       (reordered)="onReordered($event)"
       (action)="onAction($event)"

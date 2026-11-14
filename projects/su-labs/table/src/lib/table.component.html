@@ -228,4 +228,14 @@
   </table>
 </div>
 
+@if (current.pagination.pageSizes.length > 0 || current.pagination.pageSize !== 'all') {
+  <su-lib-table-paginator
+    [pagination]="current.pagination"
+    [labels]="t"
+    [controlId]="tableId + '-page-size'"
+    (pageChange)="setPage($event)"
+    (pageSizeChange)="setPageSize($event)"
+  />
+}
+
 <div class="su-table-visually-hidden" role="status">{{ current.announcement }}</div>
