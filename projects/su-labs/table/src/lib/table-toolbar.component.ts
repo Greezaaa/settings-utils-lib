@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
-import { SuTableLabels, SuTablePin } from '@su-labs/core/table';
-
-/** A column as the Columns panel lists it */
-export interface SuTableToolbarColumn<TRow extends object> {
-  readonly key: keyof TRow;
-  readonly header: string;
-  readonly pinned: SuTablePin | null;
-}
+import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { SuTableColumnState, SuTableLabels, SuTablePin } from '@su-labs/core/table';
 
 /** A column was pinned or unpinned from the Columns panel */
 export interface SuTablePinChange<TRow extends object> {
   readonly key: keyof TRow;
   readonly pin: SuTablePin | null;
+}
+
+/** A column was shown or hidden from the Columns panel */
+export interface SuTableVisibilityChange<TRow extends object> {
+  readonly key: keyof TRow;
+  readonly visible: boolean;
 }
 
 /** The bar above a table: the search box and the Columns button with its panel */
@@ -29,14 +28,22 @@ export class SuTableToolbarComponent<TRow extends object> {
   readonly query = input('');
   readonly columnControls = input(false);
   /** The columns in the order they were set up */
-  readonly columns = input<readonly SuTableToolbarColumn<TRow>[]>([]);
+  readonly columns = input<readonly SuTableColumnState<TRow>[]>([]);
   readonly queryChange = output<string>();
   readonly pinChange = output<SuTablePinChange<TRow>>();
+  readonly visibilityChange = output<SuTableVisibilityChange<TRow>>();
 
   protected readonly columnsOpen = signal(false);
 
-  protected fieldId(key: keyof TRow): string {
-    return `${this.controlId()}-pin-${String(key)}`;
+  /** The last column on view can't be hidden */
+  protected readonly lastShown = computed(
+    () => this.columns().filter(column => column.visible).length === 1
+  );
+
+  protected onVisible(key: keyof TRow, event: Event): void {
+    if (event.target instanceof HTMLInputElement) {
+      this.visibilityChange.emit({ key, visible: event.target.checked });
+    }
   }
 
   protected onQuery(event: Event): void {

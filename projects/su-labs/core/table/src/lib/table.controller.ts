@@ -8,6 +8,7 @@ interface ResolvedColumn<TRow extends object> {
   readonly view: Omit<SuTableColumnView<TRow>, 'sort'>;
   readonly compare: ((a: TRow, b: TRow) => number) | null;
   readonly searchable: boolean;
+  readonly hidden: boolean;
   text(row: TRow): string;
   toInput(row: TRow): SuTableInputValue;
   apply(
@@ -108,6 +109,7 @@ function resolveColumn<TRow extends object, TKey extends keyof TRow>(
       editor,
     },
     searchable: column.searchable ?? true,
+    hidden: column.hidden ?? false,
     compare:
       sortable === false ? null : (a, b) => compareValues(a[key], b[key]),
     text: row =>
@@ -164,6 +166,7 @@ export class SuTableController<TRow extends object> {
   private announcement = '';
   private columnOptions: SuTableColumns<TRow> = [];
   private readonly pins = new Map<keyof TRow, SuTablePin | null>();
+  private readonly visibility = new Map<keyof TRow, boolean>();
   private pinnedIds: readonly SuTableRowId[] = [];
   private query = '';
   private terms: readonly string[] = [];
@@ -482,6 +485,29 @@ export class SuTableController<TRow extends object> {
     return { handled: true, order: null };
   }
 
+  /**
+   * Shows or hides a column; its field stays in the row data either way. The last column on view stays shown, and
+   * hidden columns are left out of the search.
+   */
+  setColumnVisible(key: keyof TRow, visible: boolean): void {
+    const column = this.columns.find(item => item.key === key);
+    if (!column || this.isVisible(column) === visible) {
+      return;
+    }
+    if (
+      !visible &&
+      this.columns.filter(item => this.isVisible(item)).length === 1
+    ) {
+      return;
+    }
+    this.visibility.set(key, visible);
+    const { header } = column.view;
+    this.announcement = visible
+      ? this.labels.columnShown(header)
+      : this.labels.columnHidden(header);
+    this.publish();
+  }
+
   /** Pins a column to an edge, keeping it in view while the others scroll, or unpins it with null */
   pinColumn(key: keyof TRow, pin: SuTablePin | null): void {
     const column = this.columns.find(item => item.key === key);
@@ -661,7 +687,7 @@ export class SuTableController<TRow extends object> {
   private matches(row: TRow): boolean {
     const text = normalizeText(
       this.columns
-        .filter(column => column.searchable)
+        .filter(column => column.searchable && this.isVisible(column))
         .map(column => column.text(row))
         .join(' ')
     );
@@ -694,12 +720,18 @@ export class SuTableController<TRow extends object> {
   }
 
   /** The columns in display order: pinned to the start, the rest, then pinned to the end */
+  private isVisible(column: ResolvedColumn<TRow>): boolean {
+    return this.visibility.get(column.key) ?? !column.hidden;
+  }
+
   private displayColumns(): readonly ResolvedColumn<TRow>[] {
     const rank = (column: ResolvedColumn<TRow>): number => {
       const pin = this.pinOf(column);
       return pin === 'start' ? 0 : pin === 'end' ? 2 : 1;
     };
-    return [...this.columns].sort((a, b) => rank(a) - rank(b));
+    return this.columns
+      .filter(column => this.isVisible(column))
+      .sort((a, b) => rank(a) - rank(b));
   }
 
   private publish(): void {
@@ -725,7 +757,14 @@ export class SuTableController<TRow extends object> {
       })),
       rows,
       pinnedRows,
-      rowHeaderKey: this.columns[0]?.key ?? null,
+      allColumns: this.columns.map(column => ({
+        key: column.key,
+        header: column.view.header,
+        visible: this.isVisible(column),
+        pinned: this.pinOf(column),
+      })),
+      rowHeaderKey:
+        this.columns.find(column => this.isVisible(column))?.key ?? null,
       sort: this.sort,
       selectedIds: all
         .map(row => this.idOf(row))

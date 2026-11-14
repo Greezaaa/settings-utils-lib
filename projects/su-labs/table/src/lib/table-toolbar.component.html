@@ -34,8 +34,21 @@
   <div class="su-table-panel" role="group" [id]="controlId() + '-columns'" [attr.aria-label]="t.columns">
     @for (column of columns(); track column.key) {
       <div class="su-table-field">
-        <label class="su-table-label" [for]="fieldId(column.key)">{{ column.header }}</label>
-        <select class="su-table-select" [id]="fieldId(column.key)" (change)="onPin(column.key, $event)">
+        <label class="su-table-check">
+          <input
+            type="checkbox"
+            [checked]="column.visible"
+            [disabled]="column.visible && lastShown()"
+            (change)="onVisible(column.key, $event)"
+          />
+          {{ column.header }}
+        </label>
+        <select
+          class="su-table-select"
+          [attr.aria-label]="t.pinColumn(column.header)"
+          [disabled]="!column.visible"
+          (change)="onPin(column.key, $event)"
+        >
           <option value="" [selected]="column.pinned === null">{{ t.pinNone }}</option>
           <option value="start" [selected]="column.pinned === 'start'">{{ t.pinStart }}</option>
           <option value="end" [selected]="column.pinned === 'end'">{{ t.pinEnd }}</option>

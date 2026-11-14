@@ -789,3 +789,74 @@ describe('SuTableController search', () => {
     expect(table.state.get().grabbedId).toBeNull();
   });
 });
+
+describe('SuTableController column visibility', () => {
+  it('starts with hidden columns out of view, keeping their fields in the rows', () => {
+    const table = new SuTableController<User>({
+      columns: [
+        { key: 'name', header: 'Name' },
+        { key: 'age', header: 'Age', hidden: true },
+        { key: 'status', header: 'Status' },
+      ],
+      rowId: user => user.id,
+      rows: USERS,
+    });
+    const state = table.state.get();
+
+    expect(state.columns.map(column => column.key)).toEqual(['name', 'status']);
+    expect(state.rows[0].cells.map(cell => cell.key)).toEqual([
+      'name',
+      'status',
+    ]);
+    expect(state.rows[0].data.age).toBe(31);
+    expect(state.allColumns).toEqual([
+      { key: 'name', header: 'Name', visible: true, pinned: null },
+      { key: 'age', header: 'Age', visible: false, pinned: null },
+      { key: 'status', header: 'Status', visible: true, pinned: null },
+    ]);
+  });
+
+  it('shows and hides columns, announced, keeping the last one shown', () => {
+    const table = new SuTableController<User>({
+      columns: [
+        { key: 'name', header: 'Name' },
+        { key: 'age', header: 'Age' },
+      ],
+      rows: USERS,
+    });
+
+    table.setColumnVisible('name', false);
+    expect(table.state.get().columns.map(column => column.key)).toEqual([
+      'age',
+    ]);
+    expect(table.state.get().rowHeaderKey).toBe('age');
+    expect(table.state.get().rows[0].label).toBe('Ana');
+    expect(table.state.get().announcement).toBe('Name hidden');
+
+    table.setColumnVisible('age', false);
+    expect(table.state.get().columns).toHaveLength(1);
+
+    table.setColumnVisible('name', true);
+    expect(table.state.get().announcement).toBe('Name shown');
+  });
+
+  it('leaves hidden columns out of the search and the edit fields, and keeps their values on save', () => {
+    const table = createTable();
+    table.setColumnVisible('status', false);
+
+    table.search('paused');
+    expect(names(table)).toEqual([]);
+    table.search('');
+
+    table.startEdit([2]);
+    expect(
+      table.state.get().draft?.fields.map(field => field.key)
+    ).not.toContain('status');
+    table.setDraft('age', '30');
+    const result = table.save();
+    expect(result.ok && result.rows[0]).toMatchObject({
+      age: 30,
+      status: 'paused',
+    });
+  });
+});

@@ -69,6 +69,7 @@ const COLUMNS: SuTableColumns<Product> = [
     key: 'restocked',
     header: 'Restocked',
     sortable: true,
+    hidden: true,
     format: (day) => DAY.format(new Date(day)),
     edit: suDateEditor(),
   },

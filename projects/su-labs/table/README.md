@@ -137,7 +137,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `actions` | `[]` | `SuTableAction<TRow>[]`, buttons on each row |
 | `selectable` | `false` | Checkboxes to select rows, with a toolbar for the selection |
 | `reorderable` | `false` | A move handle on each row |
-| `columnControls` | `false` | A Columns button that opens a panel to pin or unpin each column |
+| `columnControls` | `false` | A Columns button that opens a panel to show, hide, pin or unpin each column |
 | `pageSize` | `'all'` | Rows per page |
 | `pageSizes` | `[]` | Page sizes to choose from under the table, e.g. `[10, 25, 50, 'all']` |
 | `searchable` | `false` | A search box above the table that narrows the rows by their text |
@@ -156,6 +156,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `selectionChange` | `readonly TRow[]` |
 | `pageChange` | `{ page, pageSize }`, the page from 0 |
 | `searchChange` | The query, once typing pauses |
+| `columnsChange` | Every column's state (`{ key, header, visible, pinned }`) after a change in the Columns panel |
 | `pinnedRowsChange` | The ids of the pinned rows, in pin order |
 
 The table shows your changes right away; update `rows` with the API's answer to keep them, or to undo a failed save.
@@ -173,6 +174,7 @@ The table shows your changes right away; update `rows` with the API's answer to 
 | `align` | `'start'`, `'center'` or `'end'` |
 | `pinned` | `'start'` or `'end'`: stays in view at that edge while the other columns scroll |
 | `searchable` | `false` to leave the column out of the search (default `true`) |
+| `hidden` | `true` to start out of view; the field stays in the row data and comes back on save |
 
 ### Editors
 
@@ -209,6 +211,13 @@ Pinned columns move to their edge in the order you list them. The move handles a
 pinned to the start, and the actions with those pinned to the end. A soft shadow shows on the pinned edge while other
 columns scroll under it. With `columnControls`, people pin and unpin columns themselves from the Columns panel. If the
 pinned columns would leave too little room for the rest, they stop sticking until there's room again.
+
+## Showing and hiding columns
+
+Load all of the API's fields and show only some: `hidden: true` starts a column out of view, and with `columnControls`
+the Columns panel has a checkbox for each column beside its pin choice. Hidden fields stay in each row, so a saved row
+still comes back whole; they're left out of the search and the edit fields, and the last column on view can't be
+hidden. Keep the layout with `columnsChange`.
 
 ## Search
 

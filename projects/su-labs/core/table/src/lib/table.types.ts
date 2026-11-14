@@ -86,6 +86,8 @@ export interface SuTableColumn<TRow extends object, TKey extends keyof TRow> {
   readonly pinned?: SuTablePin;
   /** Whether `search` looks in this column's text @default true */
   readonly searchable?: boolean;
+  /** Starts hidden: the field stays in the row data, out of view; `setColumnVisible` shows it */
+  readonly hidden?: boolean;
 }
 
 /** Every column of a table, each typed by its own field */
@@ -141,6 +143,10 @@ export interface SuTableLabels {
   readonly pinEnd: string;
   readonly columnPinned: (header: string, pin: SuTablePin) => string;
   readonly columnUnpinned: (header: string) => string;
+  /** The name of a column's pin choice in a column menu */
+  readonly pinColumn: (header: string) => string;
+  readonly columnShown: (header: string) => string;
+  readonly columnHidden: (header: string) => string;
   readonly pagination: string;
   readonly rowsPerPage: string;
   readonly allRows: string;
@@ -258,6 +264,8 @@ export interface SuTableState<TRow extends object> {
   readonly rows: readonly SuTableRowView<TRow>[];
   /** The pinned rows, above the others on every page, in the order they were pinned */
   readonly pinnedRows: readonly SuTableRowView<TRow>[];
+  /** Every column in the order they were set up, shown or not, e.g. for a column menu */
+  readonly allColumns: readonly SuTableColumnState<TRow>[];
   /** The field that names each row (the first column), to render as the row's header cell */
   readonly rowHeaderKey: keyof TRow | null;
   readonly sort: SuTableSort<TRow> | null;
@@ -301,4 +309,12 @@ export interface SuTablePagination {
   /** The first and last row on the page, from 1 (0 when there are none) */
   readonly rangeStart: number;
   readonly rangeEnd: number;
+}
+
+/** A column's place in a column menu: whether it's shown, and where it's pinned */
+export interface SuTableColumnState<TRow extends object> {
+  readonly key: keyof TRow;
+  readonly header: string;
+  readonly visible: boolean;
+  readonly pinned: SuTablePin | null;
 }

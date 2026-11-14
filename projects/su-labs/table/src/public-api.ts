@@ -13,6 +13,7 @@ export type {
   SuTableAlign,
   SuTableColumn,
   SuTableColumns,
+  SuTableColumnState,
   SuTableEditor,
   SuTableInput,
   SuTableInputAttributes,

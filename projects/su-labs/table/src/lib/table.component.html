@@ -10,9 +10,10 @@
     [searchable]="searchable()"
     [query]="current.query"
     [columnControls]="columnControls()"
-    [columns]="toolbarColumns()"
+    [columns]="current.allColumns"
     (queryChange)="search($event)"
     (pinChange)="pinColumn($event)"
+    (visibilityChange)="setColumnVisible($event)"
   />
 }
 @if (selectable() && selectedCount > 0) {

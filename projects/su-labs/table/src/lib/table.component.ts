@@ -1,11 +1,11 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { afterRenderEffect, booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChildren, DestroyRef, effect, ElementRef, inject, input, output, signal, TemplateRef, untracked } from '@angular/core';
-import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSort } from '@su-labs/core/table';
+import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableColumnState, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSort } from '@su-labs/core/table';
 import { SuTableCellContext, SuTableCellDirective } from './table-cell.directive';
 import { SuTableFieldComponent } from './table-field.component';
 import { SuTablePaginatorComponent } from './table-paginator.component';
 import { SuTablePinDirective, SuTablePinPlacement } from './table-pin.directive';
-import { SuTablePinChange, SuTableToolbarColumn, SuTableToolbarComponent } from './table-toolbar.component';
+import { SuTablePinChange, SuTableToolbarComponent, SuTableVisibilityChange } from './table-toolbar.component';
 
 /** The action id the table handles itself: it edits the row inline */
 export const SU_TABLE_EDIT_ACTION = 'edit';
@@ -112,6 +112,8 @@ export class SuTableComponent<TRow extends object> {
   readonly searchChange = output<string>();
   /** The pinned rows changed: their ids, in pin order */
   readonly pinnedRowsChange = output<readonly SuTableRowId[]>();
+  /** A column was shown, hidden, pinned or unpinned from the Columns panel: every column's state, e.g. to save it */
+  readonly columnsChange = output<readonly SuTableColumnState<TRow>[]>();
   /** The page or the page size changed */
   readonly pageChange = output<SuTablePageEvent>();
 
@@ -151,19 +153,6 @@ export class SuTableComponent<TRow extends object> {
   protected readonly bodyRows = computed(() => {
     const { pinnedRows, rows } = this.state();
     return [...pinnedRows, ...rows];
-  });
-  /** The columns for the Columns panel, in the order they were set up */
-  protected readonly toolbarColumns = computed<
-    readonly SuTableToolbarColumn<TRow>[]
-  >(() => {
-    const pins = new Map(
-      this.state().columns.map(column => [column.key, column.pinned])
-    );
-    return this.columns().map(({ key, header }) => ({
-      key,
-      header,
-      pinned: pins.get(key) ?? null,
-    }));
   });
   protected readonly scrolledFromStart = signal(false);
   protected readonly moreAtEnd = signal(false);
@@ -326,6 +315,15 @@ export class SuTableComponent<TRow extends object> {
 
   protected pinColumn({ key, pin }: SuTablePinChange<TRow>): void {
     this.controller.pinColumn(key, pin);
+    this.columnsChange.emit(this.state().allColumns);
+  }
+
+  protected setColumnVisible({
+    key,
+    visible,
+  }: SuTableVisibilityChange<TRow>): void {
+    this.controller.setColumnVisible(key, visible);
+    this.columnsChange.emit(this.state().allColumns);
   }
 
   /** Narrows the rows once typing pauses, so each keystroke isn't announced */

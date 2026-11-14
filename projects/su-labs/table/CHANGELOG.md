@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `--su-table-pinned-row-background` and `--su-table-pinned-row-border`
 - Search: `searchable` adds a search box above the table that narrows the rows by the text they show, ignoring case and accents (every word must match), once typing pauses; the number of matches is announced, Escape clears it, pinned rows stay, and reordering is off meanwhile; `searchChange` emits the query
 - The search box and the Columns button share a bar above the table
+- Show and hide columns: `hidden: true` starts a column out of view (its field stays in the row data and comes back on save), and the Columns panel has a checkbox to show each column beside its pin choice; the last column on view stays shown, and hidden columns are left out of the search
+- `columnsChange` emits every column's state (`SuTableColumnState`: shown, pinned) after a change in the Columns panel, e.g. to save it
 
 ### Fixed
 - The table shrinks to fit inside grid and flex layouts, scrolling its columns instead of widening the page

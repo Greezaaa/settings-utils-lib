@@ -49,11 +49,24 @@
   @include controls.field;
 }
 
-.su-table-label {
+.su-table-check {
   @include controls.label;
+  align-items: center;
+  display: flex;
+  gap: 0.45rem;
+
+  input {
+    accent-color: var(--su-table-accent, #2563eb);
+    margin: 0;
+    @include controls.focus-ring;
+  }
 }
 
 .su-table-select {
   @include controls.control;
   padding: 0.3rem 0.45rem;
+
+  &:disabled {
+    opacity: 0.5;
+  }
 }
