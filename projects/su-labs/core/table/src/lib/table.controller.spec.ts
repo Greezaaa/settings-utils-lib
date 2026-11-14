@@ -15,19 +15,45 @@ interface User {
 }
 
 const USERS: readonly User[] = [
-  { id: 1, name: 'Ana', age: 31, admin: false, status: 'active', joined: '2024-03-01' },
-  { id: 2, name: 'Bo', age: 25, admin: true, status: 'paused', joined: '2023-11-20' },
-  { id: 3, name: 'Cy', age: 40, admin: false, status: 'active', joined: '2025-01-15' },
+  {
+    id: 1,
+    name: 'Ana',
+    age: 31,
+    admin: false,
+    status: 'active',
+    joined: '2024-03-01',
+  },
+  {
+    id: 2,
+    name: 'Bo',
+    age: 25,
+    admin: true,
+    status: 'paused',
+    joined: '2023-11-20',
+  },
+  {
+    id: 3,
+    name: 'Cy',
+    age: 40,
+    admin: false,
+    status: 'active',
+    joined: '2025-01-15',
+  },
 ];
 
 const COLUMNS: SuTableColumns<User> = [
-  { key: 'name', header: 'Name', sortable: true, edit: suTextEditor({ requiredMessage: 'Required' }) },
+  {
+    key: 'name',
+    header: 'Name',
+    sortable: true,
+    edit: suTextEditor({ requiredMessage: 'Required' }),
+  },
   {
     key: 'age',
     header: 'Age',
     sortable: true,
     align: 'end',
-    format: (age) => `${age} y`,
+    format: age => `${age} y`,
     edit: suNumberEditor({ min: 0, max: 130 }),
   },
   { key: 'admin', header: 'Admin', edit: suCheckboxEditor() },
@@ -46,37 +72,72 @@ const COLUMNS: SuTableColumns<User> = [
 const createTable = () =>
   new SuTableController<User>({
     columns: COLUMNS,
-    rowId: (user) => user.id,
+    rowId: user => user.id,
     rows: USERS,
     actions: [
       { id: 'edit', label: 'Edit' },
-      { id: 'delete', label: 'Delete', danger: true, bulk: true, disabled: (user) => user.admin },
-      { id: 'promote', label: 'Promote', hidden: (user) => user.admin },
+      {
+        id: 'delete',
+        label: 'Delete',
+        danger: true,
+        bulk: true,
+        disabled: user => user.admin,
+      },
+      { id: 'promote', label: 'Promote', hidden: user => user.admin },
     ],
   });
 
-const names = (table: SuTableController<User>) => table.state.get().rows.map((row) => row.data.name);
+const names = (table: SuTableController<User>) =>
+  table.state.get().rows.map(row => row.data.name);
 
 describe('SuTableController', () => {
   it('maps API fields to cells, with formats and default texts', () => {
     const state = createTable().state.get();
 
-    expect(state.columns.map((column) => column.header)).toEqual(['Name', 'Age', 'Admin', 'Status', 'Joined']);
-    expect(state.columns[1]).toMatchObject({ align: 'end', sortable: true, sort: 'none' });
+    expect(state.columns.map(column => column.header)).toEqual([
+      'Name',
+      'Age',
+      'Admin',
+      'Status',
+      'Joined',
+    ]);
+    expect(state.columns[1]).toMatchObject({
+      align: 'end',
+      sortable: true,
+      sort: 'none',
+    });
     expect(state.columns[2].sortable).toBe(false);
-    expect(state.rows[1].cells.map((cell) => cell.text)).toEqual(['Bo', '25 y', 'Yes', 'paused', '2023-11-20']);
-    expect(state.rows[0]).toMatchObject({ id: 1, label: 'Ana', selected: false });
+    expect(state.rows[1].cells.map(cell => cell.text)).toEqual([
+      'Bo',
+      '25 y',
+      'Yes',
+      'paused',
+      '2023-11-20',
+    ]);
+    expect(state.rows[0]).toMatchObject({
+      id: 1,
+      label: 'Ana',
+      selected: false,
+    });
   });
 
   it('resolves each row’s actions', () => {
     const [ana, bo] = createTable().state.get().rows;
 
-    expect(ana.actions.map((action) => action.id)).toEqual(['edit', 'delete', 'promote']);
+    expect(ana.actions.map(action => action.id)).toEqual([
+      'edit',
+      'delete',
+      'promote',
+    ]);
     expect(bo.actions).toEqual([
       { id: 'edit', label: 'Edit', danger: false, disabled: false },
       { id: 'delete', label: 'Delete', danger: true, disabled: true },
     ]);
-    expect(createTable().state.get().bulkActions.map((action) => action.id)).toEqual(['delete']);
+    expect(
+      createTable()
+        .state.get()
+        .bulkActions.map(action => action.id)
+    ).toEqual(['delete']);
   });
 
   it('sorts ascending, descending, then back to the original order, and announces it', () => {
@@ -103,18 +164,29 @@ describe('SuTableController', () => {
     expect(names(table)).toEqual(['Bo', 'Ana', 'Cy']);
 
     table.sortBy('admin');
-    expect(table.state.get().sort).toEqual({ key: 'status', direction: 'descending' });
+    expect(table.state.get().sort).toEqual({
+      key: 'status',
+      direction: 'descending',
+    });
   });
 
   it('selects rows one by one or all at once', () => {
     const table = createTable();
 
     table.select(2);
-    expect(table.state.get()).toMatchObject({ selectedIds: [2], selection: 'some', announcement: '1 row selected' });
+    expect(table.state.get()).toMatchObject({
+      selectedIds: [2],
+      selection: 'some',
+      announcement: '1 row selected',
+    });
 
     table.selectAll();
     expect(table.state.get().selection).toBe('all');
-    expect(table.selectedRows().map((user) => user.name)).toEqual(['Ana', 'Bo', 'Cy']);
+    expect(table.selectedRows().map(user => user.name)).toEqual([
+      'Ana',
+      'Bo',
+      'Cy',
+    ]);
 
     table.selectAll();
     expect(table.state.get().selection).toBe('none');
@@ -124,7 +196,9 @@ describe('SuTableController', () => {
     const table = createTable();
     table.selectAll(true);
 
-    table.setRows(USERS.filter((user) => user.id !== 2).map((user) => ({ ...user })));
+    table.setRows(
+      USERS.filter(user => user.id !== 2).map(user => ({ ...user }))
+    );
     expect(table.state.get().selectedIds).toEqual([1, 3]);
   });
 
@@ -134,7 +208,9 @@ describe('SuTableController', () => {
 
     expect(table.move(1, 2)).toEqual([2, 3, 1]);
     expect(table.state.get().sort).toBeNull();
-    expect(table.state.get().announcement).toBe('Row dropped at position 3 of 3');
+    expect(table.state.get().announcement).toBe(
+      'Row dropped at position 3 of 3'
+    );
     expect(table.move(1, 2)).toBeNull();
   });
 
@@ -148,7 +224,10 @@ describe('SuTableController', () => {
     expect(names(table)).toEqual(['Bo', 'Ana', 'Cy']);
     expect(table.state.get().announcement).toBe('Position 2 of 3');
     table.moveKey(1, 'End');
-    expect(table.moveKey(1, 'Enter')).toEqual({ handled: true, order: [2, 3, 1] });
+    expect(table.moveKey(1, 'Enter')).toEqual({
+      handled: true,
+      order: [2, 3, 1],
+    });
     expect(table.state.get().grabbedId).toBeNull();
 
     table.moveKey(3, ' ');
@@ -170,7 +249,13 @@ describe('SuTableController', () => {
 
     const draft = table.state.get().draft;
     expect(draft).toMatchObject({ ids: [2], bulk: false });
-    expect(draft?.fields.map((field) => field.value)).toEqual(['Bo', '25', true, 'paused', '2023-11-20']);
+    expect(draft?.fields.map(field => field.value)).toEqual([
+      'Bo',
+      '25',
+      true,
+      'paused',
+      '2023-11-20',
+    ]);
 
     table.setDraft('age', '26');
     table.setDraft('status', 'active');
@@ -179,7 +264,16 @@ describe('SuTableController', () => {
 
     expect(result).toEqual({
       ok: true,
-      rows: [{ id: 2, name: 'Bo', age: 26, admin: false, status: 'active', joined: '2023-11-20' }],
+      rows: [
+        {
+          id: 2,
+          name: 'Bo',
+          age: 26,
+          admin: false,
+          status: 'active',
+          joined: '2023-11-20',
+        },
+      ],
     });
     expect(table.state.get().draft).toBeNull();
     expect(table.state.get().rows[1].cells[1].text).toBe('26 y');
@@ -193,13 +287,21 @@ describe('SuTableController', () => {
 
     const fields = table.state.get().draft?.fields ?? [];
     expect(table.state.get().draft?.bulk).toBe(true);
-    expect(fields.find((field) => field.key === 'name')).toMatchObject({ value: '', mixed: true });
-    expect(fields.find((field) => field.key === 'admin')).toMatchObject({ value: false, mixed: true });
+    expect(fields.find(field => field.key === 'name')).toMatchObject({
+      value: '',
+      mixed: true,
+    });
+    expect(fields.find(field => field.key === 'admin')).toMatchObject({
+      value: false,
+      mixed: true,
+    });
 
     table.setDraft('status', 'paused');
     const result = table.save();
 
-    expect(result.ok && result.rows.map((user) => [user.name, user.status])).toEqual([
+    expect(
+      result.ok && result.rows.map(user => [user.name, user.status])
+    ).toEqual([
       ['Ana', 'paused'],
       ['Bo', 'paused'],
       ['Cy', 'paused'],
@@ -214,13 +316,22 @@ describe('SuTableController', () => {
 
     expect(table.save()).toEqual({ ok: false, errors: 2 });
     const fields = table.state.get().draft?.fields ?? [];
-    expect(fields.map((field) => field.error)).toEqual(['Required', 'Enter a number', null, null, null]);
+    expect(fields.map(field => field.error)).toEqual([
+      'Required',
+      'Enter a number',
+      null,
+      null,
+      null,
+    ]);
     expect(table.state.get().announcement).toBe('2 fields need fixing');
 
     table.setDraft('name', 'Ann');
     expect(table.state.get().draft?.fields[0].error).toBeNull();
     table.cancelEdit();
-    expect(table.state.get()).toMatchObject({ draft: null, announcement: 'Editing cancelled' });
+    expect(table.state.get()).toMatchObject({
+      draft: null,
+      announcement: 'Editing cancelled',
+    });
     expect(names(table)[0]).toBe('Ana');
   });
 
@@ -231,7 +342,8 @@ describe('SuTableController', () => {
           key: 'age',
           header: 'Age',
           edit: suNumberEditor(),
-          validate: (age, user) => (user.admin && age < 30 ? 'Too young' : null),
+          validate: (age, user) =>
+            user.admin && age < 30 ? 'Too young' : null,
         },
       ],
       rows: USERS,
@@ -242,19 +354,28 @@ describe('SuTableController', () => {
   });
 
   it('gives rows an identity of their own without a rowId, kept through edits', () => {
-    const table = new SuTableController<User>({ columns: COLUMNS, rows: USERS });
+    const table = new SuTableController<User>({
+      columns: COLUMNS,
+      rows: USERS,
+    });
     const [first] = table.state.get().rows;
     table.select(first.id);
     table.startEdit();
     table.setDraft('name', 'Anna');
     table.save();
 
-    expect(table.state.get().rows[0]).toMatchObject({ id: first.id, selected: true, label: 'Anna' });
+    expect(table.state.get().rows[0]).toMatchObject({
+      id: first.id,
+      selected: true,
+      label: 'Anna',
+    });
   });
 
   it('applies custom labels', () => {
     const table = createTable();
-    table.configure({ labels: { selected: (count) => `${count} seleccionadas`, yes: 'Sí' } });
+    table.configure({
+      labels: { selected: count => `${count} seleccionadas`, yes: 'Sí' },
+    });
     table.select(1);
 
     expect(table.state.get().announcement).toBe('1 seleccionadas');
@@ -266,7 +387,9 @@ describe('suCompareValues', () => {
   it('compares numbers, booleans, dates and text, with empty values last', () => {
     expect(suCompareValues(2, 10)).toBeLessThan(0);
     expect(suCompareValues(true, false)).toBeGreaterThan(0);
-    expect(suCompareValues(new Date(2020, 0), new Date(2021, 0))).toBeLessThan(0);
+    expect(suCompareValues(new Date(2020, 0), new Date(2021, 0))).toBeLessThan(
+      0
+    );
     expect(suCompareValues('item 2', 'item 10')).toBeLessThan(0);
     expect(suCompareValues(null, 'a')).toBeGreaterThan(0);
     expect(suCompareValues('', '')).toBe(0);
@@ -280,5 +403,64 @@ describe('suTableDropIndex', () => {
     expect(suTableDropIndex(35, middles, 0)).toBe(1);
     expect(suTableDropIndex(55, middles, 2)).toBe(2);
     expect(suTableDropIndex(99, middles, 1)).toBe(3);
+  });
+});
+
+describe('SuTableController column pinning', () => {
+  it('orders pinned columns first or last, and keeps the row named by the first column', () => {
+    const table = new SuTableController<User>({
+      columns: [
+        { key: 'name', header: 'Name' },
+        { key: 'age', header: 'Age', pinned: 'end' },
+        { key: 'admin', header: 'Admin' },
+        { key: 'status', header: 'Status', pinned: 'start' },
+      ],
+      rows: USERS,
+    });
+    const state = table.state.get();
+
+    expect(state.columns.map(column => [column.key, column.pinned])).toEqual([
+      ['status', 'start'],
+      ['name', null],
+      ['admin', null],
+      ['age', 'end'],
+    ]);
+    expect(state.rows[0].cells.map(cell => cell.key)).toEqual([
+      'status',
+      'name',
+      'admin',
+      'age',
+    ]);
+    expect(state.rows[0].label).toBe('Ana');
+    expect(state.rowHeaderKey).toBe('name');
+  });
+
+  it('pins and unpins at runtime, and announces it', () => {
+    const table = createTable();
+
+    table.pinColumn('joined', 'start');
+    expect(table.state.get().columns[0]).toMatchObject({
+      key: 'joined',
+      pinned: 'start',
+    });
+    expect(table.state.get().announcement).toBe('Joined pinned to the start');
+
+    table.pinColumn('joined', null);
+    expect(table.state.get().columns.map(column => column.key)).toEqual([
+      'name',
+      'age',
+      'admin',
+      'status',
+      'joined',
+    ]);
+    expect(table.state.get().announcement).toBe('Joined unpinned');
+  });
+
+  it('keeps the edit fields in display order', () => {
+    const table = createTable();
+    table.pinColumn('status', 'start');
+    table.startEdit([1]);
+
+    expect(table.state.get().draft?.fields[0].key).toBe('status');
   });
 });

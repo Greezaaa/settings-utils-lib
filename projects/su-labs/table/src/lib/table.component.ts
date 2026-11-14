@@ -1,8 +1,9 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { afterRenderEffect, booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChildren, DestroyRef, effect, ElementRef, inject, input, output, signal, TemplateRef, untracked } from '@angular/core';
-import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTableRowId, SuTableRowView, SuTableSort } from '@su-labs/core/table';
+import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTablePin, SuTableRowId, SuTableRowView, SuTableSort } from '@su-labs/core/table';
 import { SuTableCellContext, SuTableCellDirective } from './table-cell.directive';
 import { SuTableFieldComponent } from './table-field.component';
+import { SuTablePinDirective, SuTablePinPlacement } from './table-pin.directive';
 
 /** The action id the table handles itself: it edits the row inline */
 export const SU_TABLE_EDIT_ACTION = 'edit';
@@ -37,6 +38,9 @@ interface DragState {
 
 let nextTableId = 0;
 
+/** The room, in pixels, the pinned columns leave for the scrolling ones before they stop sticking */
+const MIN_SCROLLING_WIDTH = 96;
+
 /**
  * An accessible data table over `SuTableController` from `@su-labs/core/table`: typed columns map the API's rows,
  * with sorting, selection, inline and bulk editing, drag-and-drop and keyboard reordering, row actions and announced
@@ -45,7 +49,7 @@ let nextTableId = 0;
 @Component({
   selector: 'su-lib-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, SuTableFieldComponent],
+  imports: [NgTemplateOutlet, SuTableFieldComponent, SuTablePinDirective],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
   host: { class: 'su-table' },
@@ -65,6 +69,8 @@ export class SuTableComponent<TRow extends object> {
   readonly selectable = input(false, { transform: booleanAttribute });
   /** Rows can be reordered, by dragging or with the keyboard @default false */
   readonly reorderable = input(false, { transform: booleanAttribute });
+  /** A Columns button that opens a panel to pin columns @default false */
+  readonly columnControls = input(false, { transform: booleanAttribute });
   /** Texts to replace, e.g. in the page's language */
   readonly labels = input<Partial<SuTableLabels>>({});
 
@@ -79,6 +85,14 @@ export class SuTableComponent<TRow extends object> {
   private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly cellTemplates = contentChildren(SuTableCellDirective);
   private readonly focusHandleId = signal<SuTableRowId | null>(null);
+  private readonly headerWidths = signal<readonly number[]>([]);
+  private readonly scrollerWidth = signal(0);
+  private readonly headerLayout = computed(
+    () =>
+      `${this.state()
+        .columns.map(column => `${String(column.key)}:${column.pinned}`)
+        .join()}|${this.reorderable()}|${this.selectable()}|${this.hasActions()}`
+  );
 
   protected readonly tableId = `su-table-${nextTableId++}`;
   protected readonly state = signal(this.controller.state.get());
@@ -96,6 +110,68 @@ export class SuTableComponent<TRow extends object> {
     return draft?.bulk ? draft : null;
   });
   protected readonly hasActions = computed(() => this.actions().length > 0);
+  protected readonly columnsOpen = signal(false);
+  protected readonly scrolledFromStart = signal(false);
+  protected readonly moreAtEnd = signal(false);
+  protected readonly columnSlot = computed(
+    () => Number(this.reorderable()) + Number(this.selectable())
+  );
+  /**
+   * Where each header slot sticks, in order: the move handles, the checkboxes, the columns and the actions. The
+   * handles and checkboxes stay with columns pinned to the start, the actions with columns pinned to the end.
+   * When the pinned cells would leave too little room to scroll the rest (e.g. on a phone), nothing sticks.
+   */
+  protected readonly placements = computed<
+    readonly (SuTablePinPlacement | null)[]
+  >(() => {
+    const columns = this.state().columns;
+    const utilityPin: SuTablePin | null = columns.some(
+      column => column.pinned === 'start'
+    )
+      ? 'start'
+      : null;
+    const actionsPin: SuTablePin | null = columns.some(
+      column => column.pinned === 'end'
+    )
+      ? 'end'
+      : null;
+    const pins: readonly (SuTablePin | null)[] = [
+      ...(this.reorderable() ? [utilityPin] : []),
+      ...(this.selectable() ? [utilityPin] : []),
+      ...columns.map(column => column.pinned),
+      ...(this.hasActions() ? [actionsPin] : []),
+    ];
+    const widths = this.headerWidths();
+    const pinnedWidth = pins.reduce(
+      (sum, pin, index) => (pin ? sum + (widths[index] ?? 0) : sum),
+      0
+    );
+    if (pinnedWidth > this.scrollerWidth() - MIN_SCROLLING_WIDTH) {
+      return pins.map(() => null);
+    }
+    const lastStart = pins.lastIndexOf('start');
+    const firstEnd = pins.indexOf('end');
+    const widthOf = (pin: SuTablePin, from: number, to: number): number =>
+      pins
+        .slice(from, to)
+        .reduce(
+          (sum, slotPin, index) =>
+            slotPin === pin ? sum + (widths[from + index] ?? 0) : sum,
+          0
+        );
+    return pins.map((pin, index) =>
+      pin
+        ? {
+            pin,
+            offset:
+              pin === 'start'
+                ? widthOf(pin, 0, index)
+                : widthOf(pin, index + 1, pins.length),
+            edge: index === (pin === 'start' ? lastStart : firstEnd),
+          }
+        : null
+    );
+  });
   protected readonly columnCount = computed(
     () =>
       this.state().columns.length +
@@ -122,6 +198,33 @@ export class SuTableComponent<TRow extends object> {
       const rows = this.rows();
       untracked(() => this.controller.setRows(rows));
     });
+    afterRenderEffect(onCleanup => {
+      this.headerLayout();
+      if (typeof ResizeObserver === 'undefined') {
+        return;
+      }
+      const host = this.host.nativeElement;
+      const scroller = host.querySelector<HTMLElement>('.su-table-scroll');
+      const headers = [...host.querySelectorAll<HTMLElement>('thead th')];
+      const observer = new ResizeObserver(() => {
+        const widths = headers.map(
+          header => header.getBoundingClientRect().width
+        );
+        const current = untracked(() => this.headerWidths());
+        if (widths.some((width, index) => width !== current[index])) {
+          this.headerWidths.set(widths);
+        }
+        if (scroller) {
+          this.scrollerWidth.set(scroller.clientWidth);
+          this.updateScrollEdges(scroller);
+        }
+      });
+      headers.forEach(header => observer.observe(header));
+      if (scroller) {
+        observer.observe(scroller);
+      }
+      onCleanup(() => observer.disconnect());
+    });
     afterRenderEffect(() => {
       const id = this.focusHandleId();
       this.state();
@@ -147,8 +250,30 @@ export class SuTableComponent<TRow extends object> {
     return this.inlineDraft()?.fields.find(field => field.key === key) ?? null;
   }
 
-  protected controlId(id: SuTableRowId | 'bulk', key: keyof TRow): string {
+  protected controlId(id: SuTableRowId, key: keyof TRow): string {
     return `${this.tableId}-${id}-${String(key)}`;
+  }
+
+  protected columnPin(key: keyof TRow): SuTablePin | null {
+    return (
+      this.state().columns.find(column => column.key === key)?.pinned ?? null
+    );
+  }
+
+  protected onPinChange(key: keyof TRow, event: Event): void {
+    if (event.target instanceof HTMLSelectElement) {
+      const { value } = event.target;
+      this.controller.pinColumn(
+        key,
+        value === 'start' || value === 'end' ? value : null
+      );
+    }
+  }
+
+  protected onScroll(event: Event): void {
+    if (event.target instanceof HTMLElement) {
+      this.updateScrollEdges(event.target);
+    }
   }
 
   protected sortBy(key: keyof TRow): void {
@@ -292,6 +417,15 @@ export class SuTableComponent<TRow extends object> {
     return slidesUp || slidesDown
       ? `translateY(${slidesUp ? -drag.height : drag.height}px)`
       : null;
+  }
+
+  /** Shadows show on the pinned edges only while columns are scrolled under them */
+  private updateScrollEdges(scroller: HTMLElement): void {
+    const position = Math.abs(scroller.scrollLeft);
+    this.scrolledFromStart.set(position > 1);
+    this.moreAtEnd.set(
+      position < scroller.scrollWidth - scroller.clientWidth - 1
+    );
   }
 
   private emitReorder(ids: readonly SuTableRowId[]): void {

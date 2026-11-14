@@ -137,6 +137,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `actions` | `[]` | `SuTableAction<TRow>[]`, buttons on each row |
 | `selectable` | `false` | Checkboxes to select rows, with a toolbar for the selection |
 | `reorderable` | `false` | A move handle on each row |
+| `columnControls` | `false` | A Columns button that opens a panel to pin or unpin each column |
 | `labels` | English | `Partial<SuTableLabels>`: any text, e.g. in the page's language |
 
 ### Outputs
@@ -162,6 +163,7 @@ The table shows your changes right away; update `rows` with the API's answer to 
 | `edit` | How the field is edited; without it the column is read-only |
 | `validate(value, row)` | A message when an edited value isn't valid, or `null` |
 | `align` | `'start'`, `'center'` or `'end'` |
+| `pinned` | `'start'` or `'end'`: stays in view at that edge while the other columns scroll |
 
 ### Editors
 
@@ -184,6 +186,20 @@ back to the API value, and an optional `validate(value)`.
 | `danger` | Styled as something that can't be undone |
 | `bulk` | Also offered for the selected rows |
 | `hidden(row)` / `disabled(row)` | Leaves the button out, or disables it, for a row |
+
+## Pinned columns
+
+Pin a column to keep it in view while the others scroll, e.g. the product name on a phone:
+
+```ts
+{ key: 'name', header: 'Product', pinned: 'start' },
+{ key: 'price', header: 'Price', pinned: 'end' },
+```
+
+Pinned columns move to their edge in the order you list them. The move handles and checkboxes stay with the columns
+pinned to the start, and the actions with those pinned to the end. A soft shadow shows on the pinned edge while other
+columns scroll under it. With `columnControls`, people pin and unpin columns themselves from the Columns panel. If the
+pinned columns would leave too little room for the rest, they stop sticking until there's room again.
 
 ## Keyboard
 
@@ -218,6 +234,7 @@ su-lib-table {
 | `--su-table-hover-background` / `--su-table-selected-background` / `--su-table-editing-background` | faint tints |
 | `--su-table-grabbed-background` / `--su-table-grabbed-outline` | blue tints |
 | `--su-table-dragging-background` / `--su-table-dragging-shadow` | `Canvas` / `0 8px 24px rgb(0 0 0 / 0.18)` (the row being dragged) |
+| `--su-table-pinned-background` / `--su-table-pinned-shadow` | `Canvas` / `rgb(0 0 0 / 0.14)` (pinned cells, and the shadow on their edge) |
 | `--su-table-accent` | `#2563eb` (checkboxes) |
 | `--su-table-button-background` / `--su-table-button-border` / `--su-table-button-color` | `transparent` / `1px solid rgb(0 0 0 / 0.2)` / `inherit` |
 | `--su-table-button-radius` / `--su-table-button-padding` | `6px` / `0.3rem 0.7rem` |

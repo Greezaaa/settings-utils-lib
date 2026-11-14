@@ -36,7 +36,13 @@ const PRICE = new Intl.NumberFormat('en', { style: 'currency', currency: 'EUR' }
 const DAY = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' });
 
 const COLUMNS: SuTableColumns<Product> = [
-  { key: 'name', header: 'Product', sortable: true, edit: suTextEditor({ requiredMessage: 'Enter a name' }) },
+  {
+    key: 'name',
+    header: 'Product',
+    sortable: true,
+    pinned: 'start',
+    edit: suTextEditor({ requiredMessage: 'Enter a name' }),
+  },
   {
     key: 'category',
     header: 'Category',

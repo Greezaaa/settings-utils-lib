@@ -1,6 +1,6 @@
 import { createSuStore, SuReadableStore } from '@su-labs/core';
 import { SU_TABLE_LABELS } from './table.labels';
-import { SuTableAction, SuTableActionView, SuTableColumn, SuTableColumns, SuTableColumnView, SuTableDraft, SuTableEditorView, SuTableInputValue, SuTableLabels, SuTableMoveKeyResult, SuTableOptions, SuTableRowId, SuTableRowView, SuTableSaveResult, SuTableSort, SuTableState } from './table.types';
+import { SuTableAction, SuTableActionView, SuTableColumn, SuTableColumns, SuTableColumnView, SuTableDraft, SuTableEditorView, SuTableInputValue, SuTableLabels, SuTableMoveKeyResult, SuTableOptions, SuTablePin, SuTableRowId, SuTableRowView, SuTableSaveResult, SuTableSort, SuTableState } from './table.types';
 
 /** A column with its field mapping turned into functions of the whole row */
 interface ResolvedColumn<TRow extends object> {
@@ -102,6 +102,7 @@ function resolveColumn<TRow extends object, TKey extends keyof TRow>(
       key,
       header: column.header,
       align: column.align ?? 'start',
+      pinned: column.pinned ?? null,
       sortable: sortable !== false,
       editor,
     },
@@ -151,6 +152,7 @@ export class SuTableController<TRow extends object> {
   private grabbed: GrabState<TRow> | null = null;
   private announcement = '';
   private columnOptions: SuTableColumns<TRow> = [];
+  private readonly pins = new Map<keyof TRow, SuTablePin | null>();
   private readonly store = createSuStore<SuTableState<TRow>>(this.build());
 
   /** Everything needed to render the table */
@@ -368,6 +370,20 @@ export class SuTableController<TRow extends object> {
     return { handled: true, order: null };
   }
 
+  /** Pins a column to an edge, keeping it in view while the others scroll, or unpins it with null */
+  pinColumn(key: keyof TRow, pin: SuTablePin | null): void {
+    const column = this.columns.find(item => item.key === key);
+    if (!column || this.pinOf(column) === pin) {
+      return;
+    }
+    this.pins.set(key, pin);
+    const { header } = column.view;
+    this.announcement = pin
+      ? this.labels.columnPinned(header, pin)
+      : this.labels.columnUnpinned(header);
+    this.publish();
+  }
+
   /** Starts editing rows: one row edits every field, many rows apply only the fields that change to all of them */
   startEdit(ids: readonly SuTableRowId[] = [...this.selected]): void {
     const rows = this.rowsOf(ids);
@@ -486,20 +502,37 @@ export class SuTableController<TRow extends object> {
     this.publish();
   }
 
+  private pinOf(column: ResolvedColumn<TRow>): SuTablePin | null {
+    return this.pins.has(column.key)
+      ? (this.pins.get(column.key) ?? null)
+      : column.view.pinned;
+  }
+
+  /** The columns in display order: pinned to the start, the rest, then pinned to the end */
+  private displayColumns(): readonly ResolvedColumn<TRow>[] {
+    const rank = (column: ResolvedColumn<TRow>): number => {
+      const pin = this.pinOf(column);
+      return pin === 'start' ? 0 : pin === 'end' ? 2 : 1;
+    };
+    return [...this.columns].sort((a, b) => rank(a) - rank(b));
+  }
+
   private publish(): void {
     this.store.set(this.build());
   }
 
   private build(): SuTableState<TRow> {
-    const columns = this.columns;
-    const rows = this.displayed().map(row => this.rowView(row));
+    const columns = this.displayColumns();
+    const rows = this.displayed().map(row => this.rowView(row, columns));
     const selectedCount = rows.filter(row => row.selected).length;
     return {
       columns: columns.map(column => ({
         ...column.view,
+        pinned: this.pinOf(column),
         sort: this.sort?.key === column.key ? this.sort.direction : 'none',
       })),
       rows,
+      rowHeaderKey: this.columns[0]?.key ?? null,
       sort: this.sort,
       selectedIds: rows.filter(row => row.selected).map(row => row.id),
       selection:
@@ -523,9 +556,12 @@ export class SuTableController<TRow extends object> {
     };
   }
 
-  private rowView(row: TRow): SuTableRowView<TRow> {
+  private rowView(
+    row: TRow,
+    columns: readonly ResolvedColumn<TRow>[]
+  ): SuTableRowView<TRow> {
     const id = this.idOf(row);
-    const cells = this.columns.map(column => ({
+    const cells = columns.map(column => ({
       key: column.key,
       text: column.text(row),
     }));
@@ -540,7 +576,7 @@ export class SuTableController<TRow extends object> {
     return {
       id,
       data: row,
-      label: cells[0]?.text || String(id),
+      label: this.columns[0]?.text(row) || String(id),
       cells,
       selected: this.selected.has(id),
       actions,
@@ -552,7 +588,7 @@ export class SuTableController<TRow extends object> {
     if (!draft) {
       return null;
     }
-    const fields = this.columns.flatMap(({ key, view }) =>
+    const fields = this.displayColumns().flatMap(({ key, view }) =>
       view.editor
         ? [
             {

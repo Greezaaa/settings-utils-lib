@@ -1,6 +1,12 @@
 .table-demo {
   display: grid;
   gap: 1.5rem;
+  min-width: 0;
+
+  > *,
+  .demo-grid > * {
+    min-width: 0;
+  }
 }
 
 .table-demo-controls {

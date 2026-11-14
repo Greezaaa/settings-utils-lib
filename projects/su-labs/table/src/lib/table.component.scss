@@ -1,6 +1,7 @@
 :host {
   color: var(--su-table-text-color, inherit);
   display: block;
+  min-width: 0;
   font-family: var(--su-table-font-family, inherit);
   font-size: var(--su-table-font-size, 0.95rem);
 }
@@ -13,7 +14,8 @@
 
 .su-table-grid {
   background: var(--su-table-background, transparent);
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   min-width: 100%;
 }
 
@@ -33,7 +35,8 @@ td {
 }
 
 thead th {
-  background: var(--su-table-header-background, rgb(0 0 0 / 0.03));
+  --su-table-row-tint: var(--su-table-header-background, rgb(0 0 0 / 0.03));
+  background: var(--su-table-row-tint);
   color: var(--su-table-header-color, inherit);
   font-weight: 600;
   white-space: nowrap;
@@ -47,33 +50,69 @@ tbody tr:last-child > * {
   border-bottom: none;
 }
 
-tbody tr:hover {
-  background: var(--su-table-hover-background, rgb(0 0 0 / 0.025));
+tbody tr {
+  background: var(--su-table-row-tint, transparent);
+
+  &:hover {
+    --su-table-row-tint: var(--su-table-hover-background, rgb(0 0 0 / 0.025));
+  }
+
+  &.is-selected {
+    --su-table-row-tint: var(--su-table-selected-background, color-mix(in srgb, #2563eb 8%, transparent));
+  }
+
+  &.is-editing {
+    --su-table-row-tint: var(--su-table-editing-background, color-mix(in srgb, #2563eb 5%, transparent));
+  }
+
+  &.is-grabbed,
+  &.is-dragging {
+    --su-table-row-tint: var(--su-table-grabbed-background, color-mix(in srgb, #2563eb 14%, transparent));
+    outline: var(--su-table-grabbed-outline, 2px solid color-mix(in srgb, #2563eb 60%, transparent));
+    outline-offset: -2px;
+  }
+
+  &.is-dragging {
+    background: linear-gradient(var(--su-table-row-tint), var(--su-table-row-tint)),
+      var(--su-table-dragging-background, Canvas);
+    box-shadow: var(--su-table-dragging-shadow, 0 8px 24px rgb(0 0 0 / 0.18));
+    cursor: grabbing;
+    position: relative;
+    z-index: 3;
+  }
 }
 
-tr.is-selected {
-  background: var(--su-table-selected-background, color-mix(in srgb, #2563eb 8%, transparent));
-}
-
-tr.is-editing {
-  background: var(--su-table-editing-background, color-mix(in srgb, #2563eb 5%, transparent));
-}
-
-tr.is-grabbed,
-tr.is-dragging {
-  background: var(--su-table-grabbed-background, color-mix(in srgb, #2563eb 14%, transparent));
-  outline: var(--su-table-grabbed-outline, 2px solid color-mix(in srgb, #2563eb 60%, transparent));
-  outline-offset: -2px;
-}
-
-tr.is-dragging {
-  --su-table-row-tint: var(--su-table-grabbed-background, color-mix(in srgb, #2563eb 14%, transparent));
-  background: linear-gradient(var(--su-table-row-tint), var(--su-table-row-tint)),
-    var(--su-table-dragging-background, Canvas);
-  box-shadow: var(--su-table-dragging-shadow, 0 8px 24px rgb(0 0 0 / 0.18));
-  cursor: grabbing;
-  position: relative;
+.is-pinned-start,
+.is-pinned-end {
+  background: linear-gradient(var(--su-table-row-tint, transparent), var(--su-table-row-tint, transparent)),
+    var(--su-table-pinned-background, Canvas);
+  position: sticky;
   z-index: 1;
+}
+
+.is-pinned-edge::after {
+  content: '';
+  inset-block: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 150ms ease-out;
+  width: 0.75rem;
+}
+
+.is-pinned-start.is-pinned-edge::after {
+  background: linear-gradient(to right, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.14)), transparent);
+  inset-inline-start: 100%;
+}
+
+.is-pinned-end.is-pinned-edge::after {
+  background: linear-gradient(to left, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.14)), transparent);
+  inset-inline-end: 100%;
+}
+
+.is-scrolled-start .is-pinned-start.is-pinned-edge::after,
+.has-more-end .is-pinned-end.is-pinned-edge::after {
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -221,7 +260,8 @@ tr.is-dragging {
 }
 
 .su-table-toolbar,
-.su-table-bulk {
+.su-table-bulk,
+.su-table-panel {
   background: var(--su-table-panel-background, rgb(0 0 0 / 0.03));
   border-radius: var(--su-table-radius, 10px);
   margin-bottom: 0.75rem;
@@ -287,4 +327,19 @@ tr.is-dragging {
   tbody tr {
     transition: background-color 120ms ease-out;
   }
+}
+
+.su-table-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.su-table-select {
+  background: var(--su-table-input-background, transparent);
+  border: var(--su-table-input-border, 1px solid rgb(0 0 0 / 0.25));
+  border-radius: var(--su-table-input-radius, 6px);
+  color: inherit;
+  font: inherit;
+  padding: 0.3rem 0.45rem;
 }

@@ -20,7 +20,9 @@ export class SuTableFieldComponent<TRow extends object> {
   protected readonly errorId = computed(() => `${this.controlId()}-error`);
   protected readonly placeholder = computed(() => {
     const field = this.field();
-    return field.mixed ? this.mixedLabel() : (field.editor.attributes.placeholder ?? null);
+    return field.mixed
+      ? this.mixedLabel()
+      : (field.editor.attributes.placeholder ?? null);
   });
 
   protected onChange(event: Event): void {

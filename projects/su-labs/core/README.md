@@ -317,6 +317,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `setDraft(key, value)` | A field's value as typed in its control (`string`, or `boolean` for a checkbox) |
 | `save()` | `{ ok: true, rows }` with the edited rows in the API's shape, or `{ ok: false, errors }` |
 | `cancelEdit()` | Stops editing |
+| `pinColumn(key, pin)` | Pins a column to `'start'` or `'end'`, or unpins it with `null` |
 
 `suTableDropIndex(pointerY, rowMiddles, fromIndex)` gives where a row dragged with the pointer lands, and
 `suCompareValues(a, b)` is the default comparison.
@@ -331,6 +332,7 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `edit` | `suTextEditor`, `suNumberEditor`, `suCheckboxEditor`, `suDateEditor`, `suSelectEditor`, or your own `{ input, toInput, parse, validate? }` |
 | `validate(value, row)` | A message when an edited value isn't valid for the row, or `null` |
 | `align` | `'start'`, `'center'` or `'end'` |
+| `pinned` | `'start'` or `'end'`: render those cells with `position: sticky`; `state.columns` lists them first or last |
 
 Actions (`{ id, label, danger?, bulk?, hidden?(row), disabled?(row) }`) are resolved for each row in `rows[].actions`,
 and the bulk ones in `bulkActions`. Every text the table announces or shows is in `SU_TABLE_LABELS`; pass any of them

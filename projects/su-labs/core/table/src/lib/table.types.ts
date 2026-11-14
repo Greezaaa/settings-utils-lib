@@ -2,7 +2,14 @@
 export type SuTableRowId = string | number;
 
 /** The kind of form control a column is edited with */
-export type SuTableInput = 'text' | 'number' | 'email' | 'date' | 'checkbox' | 'select' | 'textarea';
+export type SuTableInput =
+  | 'text'
+  | 'number'
+  | 'email'
+  | 'date'
+  | 'checkbox'
+  | 'select'
+  | 'textarea';
 
 /** A form control's value: a boolean for `checkbox`, text for every other input */
 export type SuTableInputValue = string | boolean;
@@ -15,6 +22,9 @@ export type SuTableSelection = 'none' | 'some' | 'all';
 
 /** Text alignment of a column's cells */
 export type SuTableAlign = 'start' | 'center' | 'end';
+
+/** Which edge a column is pinned to, staying in view while the others scroll */
+export type SuTablePin = 'start' | 'end';
 
 /** One choice of a `select` editor */
 export interface SuTableOption {
@@ -69,6 +79,8 @@ export interface SuTableColumn<TRow extends object, TKey extends keyof TRow> {
   validate?(value: TRow[TKey], row: TRow): string | null;
   /** @default 'start' */
   readonly align?: SuTableAlign;
+  /** Keeps the column in view at one edge while the others scroll; `pinColumn` changes it later */
+  readonly pinned?: SuTablePin;
 }
 
 /** Every column of a table, each typed by its own field */
@@ -118,6 +130,12 @@ export interface SuTableLabels {
   readonly editSelected: (count: number) => string;
   readonly clearSelection: string;
   readonly mixed: string;
+  readonly columns: string;
+  readonly pinNone: string;
+  readonly pinStart: string;
+  readonly pinEnd: string;
+  readonly columnPinned: (header: string, pin: SuTablePin) => string;
+  readonly columnUnpinned: (header: string) => string;
 }
 
 /** What the table is set up with; `configure` changes any of it later */
@@ -151,6 +169,8 @@ export interface SuTableColumnView<TRow extends object> {
   readonly key: keyof TRow;
   readonly header: string;
   readonly align: SuTableAlign;
+  /** Pinned columns come first (`start`) or last (`end`), in their own order */
+  readonly pinned: SuTablePin | null;
   readonly sortable: boolean;
   /** For `aria-sort` */
   readonly sort: SuTableSortDirection | 'none';
@@ -176,7 +196,7 @@ export interface SuTableRowView<TRow extends object> {
   readonly id: SuTableRowId;
   /** The row as the API sent it (or as edited) */
   readonly data: TRow;
-  /** The first column's text, to name the row in labels */
+  /** The first column's text (as configured, wherever it's pinned), to name the row in labels */
   readonly label: string;
   readonly cells: readonly SuTableCell<TRow>[];
   readonly selected: boolean;
@@ -208,6 +228,8 @@ export interface SuTableState<TRow extends object> {
   readonly columns: readonly SuTableColumnView<TRow>[];
   /** In display order: sorted, or as reordered */
   readonly rows: readonly SuTableRowView<TRow>[];
+  /** The field that names each row (the first column), to render as the row's header cell */
+  readonly rowHeaderKey: keyof TRow | null;
   readonly sort: SuTableSort<TRow> | null;
   readonly selectedIds: readonly SuTableRowId[];
   readonly selection: SuTableSelection;

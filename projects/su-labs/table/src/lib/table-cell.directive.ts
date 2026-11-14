@@ -17,11 +17,12 @@ export class SuTableCellDirective<TRow extends object> {
   readonly key = input.required<string>({ alias: 'suTableCell' });
   /** The table's rows, to type the template's row */
   readonly rowsOf = input<readonly TRow[]>([], { alias: 'suTableCellOf' });
-  readonly template: TemplateRef<SuTableCellContext<TRow>> = inject(TemplateRef);
+  readonly template: TemplateRef<SuTableCellContext<TRow>> =
+    inject(TemplateRef);
 
   static ngTemplateContextGuard<TRow extends object>(
     _directive: SuTableCellDirective<TRow>,
-    context: unknown,
+    context: unknown
   ): context is SuTableCellContext<TRow> {
     return true;
   }

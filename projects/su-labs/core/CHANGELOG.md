@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Pinned columns in `@su-labs/core/table`: `pinned: 'start' | 'end'` on a column (`SuTablePin`), `pinColumn(key, pin)` to change it, announced; `state.columns` lists pinned columns first or last with their `pinned` side, and `state.rowHeaderKey` names the field that heads each row wherever it's pinned
+
 ## [1.7.0] - 2026-11-14
 
 ### Added

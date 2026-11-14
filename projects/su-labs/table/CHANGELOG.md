@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Pinned columns: `pinned: 'start' | 'end'` on a column keeps it in view while the others scroll, with a soft shadow on its edge while columns pass under it; the move handles and checkboxes stay with columns pinned to the start, the actions with those pinned to the end
+- `columnControls`: a Columns button that opens a panel to pin or unpin each column
+- When the pinned columns would leave too little room to scroll the rest (e.g. on a phone), they stop sticking until there's room
+- `--su-table-pinned-background` and `--su-table-pinned-shadow`
+
+### Fixed
+- The table shrinks to fit inside grid and flex layouts, scrolling its columns instead of widening the page
+
 ## [22.0.0]
 
 ### Added

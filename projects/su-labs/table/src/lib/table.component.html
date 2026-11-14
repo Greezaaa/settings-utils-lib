@@ -1,6 +1,36 @@
 @let current = state();
 @let t = text();
 @let selectedCount = current.selectedIds.length;
+@let pins = placements();
+@let firstColumnSlot = columnSlot();
+@if (columnControls()) {
+  <div class="su-table-bar">
+    <button
+      type="button"
+      class="su-table-button"
+      [attr.aria-expanded]="columnsOpen()"
+      [attr.aria-controls]="tableId + '-columns'"
+      (click)="columnsOpen.set(!columnsOpen())"
+    >
+      {{ t.columns }}
+    </button>
+  </div>
+  @if (columnsOpen()) {
+    <div class="su-table-panel su-table-bulk-fields" role="group" [id]="tableId + '-columns'" [attr.aria-label]="t.columns">
+      @for (column of columns(); track column.key) {
+        @let pin = columnPin(column.key);
+        <div class="su-table-bulk-field">
+          <label class="su-table-label" [for]="controlId('pin', column.key)">{{ column.header }}</label>
+          <select class="su-table-select" [id]="controlId('pin', column.key)" (change)="onPinChange(column.key, $event)">
+            <option value="" [selected]="pin === null">{{ t.pinNone }}</option>
+            <option value="start" [selected]="pin === 'start'">{{ t.pinStart }}</option>
+            <option value="end" [selected]="pin === 'end'">{{ t.pinEnd }}</option>
+          </select>
+        </div>
+      }
+    </div>
+  }
+}
 @if (selectable() && selectedCount > 0) {
   <div class="su-table-toolbar" role="toolbar" [attr.aria-label]="t.selected(selectedCount)">
     <span class="su-table-toolbar-count">{{ t.selected(selectedCount) }}</span>
@@ -46,18 +76,23 @@
   </form>
 }
 
-<div class="su-table-scroll">
+<div
+  class="su-table-scroll"
+  [class.is-scrolled-start]="scrolledFromStart()"
+  [class.has-more-end]="moreAtEnd()"
+  (scroll)="onScroll($event)"
+>
   <table class="su-table-grid" [class.is-dragging-rows]="drag() !== null">
     <caption [class.su-table-visually-hidden]="!showCaption()">{{ caption() }}</caption>
     <thead>
       <tr>
         @if (reorderable()) {
-          <th scope="col" class="su-table-handle-cell">
+          <th scope="col" class="su-table-handle-cell" [suTablePin]="pins[0]">
             <span class="su-table-visually-hidden">{{ t.order }}</span>
           </th>
         }
         @if (selectable()) {
-          <th scope="col" class="su-table-select-cell">
+          <th scope="col" class="su-table-select-cell" [suTablePin]="pins[firstColumnSlot - 1]">
             <input
               type="checkbox"
               class="su-table-checkbox"
@@ -69,10 +104,11 @@
             />
           </th>
         }
-        @for (column of current.columns; track column.key) {
+        @for (column of current.columns; track column.key; let columnIndex = $index) {
           <th
             scope="col"
             class="su-table-align-{{ column.align }}"
+            [suTablePin]="pins[firstColumnSlot + columnIndex]"
             [attr.aria-sort]="column.sort === 'none' ? null : column.sort"
           >
             @if (column.sortable) {
@@ -86,7 +122,7 @@
           </th>
         }
         @if (hasActions()) {
-          <th scope="col" class="su-table-actions-cell">{{ t.actions }}</th>
+          <th scope="col" class="su-table-actions-cell" [suTablePin]="pins[pins.length - 1]">{{ t.actions }}</th>
         }
       </tr>
     </thead>
@@ -103,7 +139,7 @@
           (keydown)="editing && onEditKey($event)"
         >
           @if (reorderable()) {
-            <td class="su-table-handle-cell">
+            <td class="su-table-handle-cell" [suTablePin]="pins[0]">
               <button
                 type="button"
                 class="su-table-handle"
@@ -121,7 +157,7 @@
             </td>
           }
           @if (selectable()) {
-            <td class="su-table-select-cell">
+            <td class="su-table-select-cell" [suTablePin]="pins[firstColumnSlot - 1]">
               <input
                 type="checkbox"
                 class="su-table-checkbox"
@@ -131,8 +167,9 @@
               />
             </td>
           }
-          @for (cell of row.cells; track cell.key; let first = $first, cellIndex = $index) {
+          @for (cell of row.cells; track cell.key; let cellIndex = $index) {
             @let column = current.columns[cellIndex];
+            @let pin = pins[firstColumnSlot + cellIndex];
             <ng-template #content>
               @if (editing && inlineField(cell.key); as field) {
                 <su-lib-table-field
@@ -148,16 +185,18 @@
                 {{ cell.text }}
               }
             </ng-template>
-            @if (first) {
-              <th scope="row" class="su-table-align-{{ column.align }}">
+            @if (cell.key === current.rowHeaderKey) {
+              <th scope="row" class="su-table-align-{{ column.align }}" [suTablePin]="pin">
                 <ng-container *ngTemplateOutlet="content" />
               </th>
             } @else {
-              <td class="su-table-align-{{ column.align }}"><ng-container *ngTemplateOutlet="content" /></td>
+              <td class="su-table-align-{{ column.align }}" [suTablePin]="pin">
+                <ng-container *ngTemplateOutlet="content" />
+              </td>
             }
           }
           @if (hasActions()) {
-            <td class="su-table-actions-cell">
+            <td class="su-table-actions-cell" [suTablePin]="pins[pins.length - 1]">
               <div class="su-table-actions">
                 @if (editing) {
                   <button type="button" class="su-table-button is-primary" (click)="save()">{{ t.save }}</button>
