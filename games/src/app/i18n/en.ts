@@ -53,6 +53,7 @@ export const EN: SiteMessages = {
     theme: 'Theme',
     smallerText: 'Smaller text',
     largerText: 'Larger text',
+    reduceMotion: 'Reduce motion',
     themeNames: {
       system: 'System',
       light: 'Light',
@@ -99,13 +100,14 @@ export const EN: SiteMessages = {
     stickerDragChoices: { on: 'Yes', off: 'No' },
     homeCrumb: 'home',
     showPassword: 'Show password',
+    emailSuggestion: 'Did you mean',
     hidePassword: 'Hide password',
     offlinePlay: 'Play offline',
     offlinePlayChoices: { on: 'Yes', off: 'No' },
     offlinePlayHelp: 'Keeps the games on this device (about 2 MB) so they work without internet',
     install: 'Install the games',
     installButton: 'Install',
-    installSteps: 'Tap Share, then Add to Home Screen',
+    installGuide: 'How to install',
     wordGender: 'Gender',
     fullscreen: 'Full screen',
     exitFullscreen: 'Leave full screen',
@@ -137,7 +139,7 @@ export const EN: SiteMessages = {
       'Free mini games for kids that train logic, memory and quick thinking. No sign-up, for computers, tablets and phones.',
     notFoundTitle: 'Page not found',
     notFoundDescription: 'This page doesn’t exist.',
-    previewImageAlt: 'su-labs games: Smart games, for smart kids',
+    previewImageAlt: 'SG Smart Games: Smart games, for smart kids',
   },
 
   games: {
@@ -355,7 +357,7 @@ export const EN: SiteMessages = {
     columns: { what: 'What', where: 'Where', why: 'Why' },
     saved: [
       {
-        what: 'Theme and text size',
+        what: 'Theme, text size and motion',
         where: 'A cookie for su-labs.dev',
         why: 'So su-labs.dev and these games look the way you chose',
       },
@@ -422,7 +424,7 @@ export const EN: SiteMessages = {
     ],
     differenceTitle: 'Cookies and local storage',
     difference:
-      'A cookie is sent to our server with every visit; local storage stays in this browser and is never sent anywhere. We use one cookie, only to share your theme and text size with su-labs.dev, and the server doesn’t read it.',
+      'A cookie is sent to our server with every visit; local storage stays in this browser and is never sent anywhere. We use one cookie, only to share your theme, text size and motion setting with su-labs.dev, and the server doesn’t read it.',
     sentTitle: 'What the games send',
     sentLead:
       'To show what’s popular and to improve the games, they send a few things to our servers. None of it says who you are.',
@@ -1117,6 +1119,24 @@ export const EN: SiteMessages = {
     takeOff: 'Take off',
     putBack: 'Put back',
     loadMore: 'Load more',
+    tableLabels: {
+      search: 'Search',
+      matches: count => (count === 1 ? '1 row matches' : `${count} rows match`),
+      noMatches: query => `No rows match “${query}”`,
+      searchCleared: 'Search cleared',
+      empty: 'Nothing here',
+      actions: 'Actions',
+      pagination: 'Pages',
+      rowsPerPage: 'Rows per page',
+      allRows: 'All',
+      range: (start, end, total) => (total === 0 ? '0 of 0' : `${start}–${end} of ${total}`),
+      page: (page, count) => `Page ${page} of ${count}`,
+      previousPage: 'Previous page',
+      nextPage: 'Next page',
+      sortedAscending: header => `Sorted by ${header}, ascending`,
+      sortedDescending: header => `Sorted by ${header}, descending`,
+      sortCleared: 'Sort cleared',
+    },
     featuresTitle: 'Features',
     featuresHelp:
       'New features start switched off: try them in preview, then open them to everyone.',
@@ -1145,6 +1165,10 @@ export const EN: SiteMessages = {
       offline: 'Play offline: the games keep working without internet',
       'install-app': 'Install button: add the games to the home screen or desktop',
       fullscreen: 'Full screen button on game pages',
+      'page-fly-out': 'Pages fly out of the clicked link',
+      'email-hints': 'Email typo hints (gmial.com → gmail.com)',
+      'admin-tables': 'Admin lists as tables with search and pages',
+      'menu-sheet': 'Phone menu as a sheet that slides up',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:
@@ -1353,6 +1377,58 @@ export const EN: SiteMessages = {
     rule: 'Tap Use to play with it.',
     use: 'Use',
     inUse: 'In use',
+  },
+  install: {
+    title: 'Install Smart Games',
+    lead: 'Play from your Dock or home screen, like an app. No app store, nothing to pay, and it updates by itself.',
+    rule: 'Pick your device and follow the steps.',
+    installNow: 'Install now',
+    installNowHelp: 'Your browser can install the games in one click.',
+    platformGroup: 'Device',
+    platforms: {
+      computer: 'Mac or PC',
+      android: 'Android',
+      'apple-touch': 'iPhone or iPad',
+    },
+    guides: {
+      'computer-chrome': {
+        title: 'With Chrome or Edge',
+        steps: [
+          'Open games.su-labs.dev in Chrome or Edge.',
+          'Click the install icon at the right end of the address bar.',
+          'Click Install.',
+          'Smart Games opens in its own window. Find it in the Dock, Launchpad or Start menu.',
+        ],
+      },
+      'computer-safari': {
+        title: 'With Safari on a Mac',
+        steps: [
+          'Open games.su-labs.dev in Safari.',
+          'In the menu bar, choose File, then Add to Dock.',
+          'Click Add.',
+          'Smart Games is now in your Dock and Launchpad.',
+        ],
+      },
+      'android-chrome': {
+        title: 'With Chrome',
+        steps: [
+          'Open games.su-labs.dev in Chrome.',
+          'Tap the menu with three dots, top right.',
+          'Tap Add to home screen, then Install.',
+          'Smart Games is on your home screen.',
+        ],
+      },
+      'apple-touch-safari': {
+        title: 'With Safari',
+        steps: [
+          'Open games.su-labs.dev in Safari.',
+          'Tap the Share button.',
+          'Scroll down and tap Add to Home Screen.',
+          'Tap Add: Smart Games is on your home screen.',
+        ],
+      },
+    },
+    afterwards: 'Your favourites, results and settings stay the same in the app.',
   },
   leaderboard: {
     navLink: 'Leaderboard',

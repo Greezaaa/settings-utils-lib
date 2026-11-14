@@ -8,6 +8,28 @@
   <p class="muted">{{ 'admin.loading' | translate }}</p>
 } @else if (list.items().length === 0) {
   <p class="muted">{{ 'admin.noPlayers' | translate }}</p>
+} @else if (useTable()) {
+  @defer (on viewport) {
+    <su-lib-table
+      [caption]="'admin.tabs.players' | translate"
+      [columns]="columns()"
+      [rows]="list.items()"
+      [rowId]="playerId"
+      [actions]="actions()"
+      [labels]="t().admin.tableLabels"
+      [pageSize]="pageSize"
+      [pageSizes]="pageSizes"
+      searchable
+      (action)="onAction($event)"
+    />
+  } @placeholder {
+    <div class="card table-placeholder"></div>
+  }
+  @if (list.hasMore()) {
+    <button type="button" class="button button-secondary load-more" (click)="list.loadMore()">
+      {{ 'admin.loadMore' | translate }}
+    </button>
+  }
 } @else {
   <div class="card table-scroll">
     <table>

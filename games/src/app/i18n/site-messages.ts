@@ -1,9 +1,11 @@
 import { SuStrengthLevel } from '@su-labs/fields';
+import { SuTableLabels } from '@su-labs/table';
 import { SuBaseThemeName } from '@su-labs/theme';
 import { ErrorSource, ReportStatus, StatsPeriod, SuggestionStatus } from '../core/admin-api';
 import { AnswerStyle } from '../core/answer-words';
 import { FeatureId } from '../core/features';
 import { GameThemeId } from '../core/game-themes';
+import { InstallGuideId, InstallPlatform } from '../core/install-guides';
 import { GameCategory, GameSlug } from '../core/games';
 import { FeedbackReason, SuggestionCategory } from '../core/games-api';
 import { MenuAnimationChoice } from '../core/menu-animation';
@@ -72,6 +74,7 @@ export interface SiteMessages {
     readonly theme: string;
     readonly smallerText: string;
     readonly largerText: string;
+    readonly reduceMotion: string;
     readonly themeNames: Readonly<Record<SuBaseThemeName, string>>;
     readonly menu: string;
     readonly closeMenu: string;
@@ -90,13 +93,14 @@ export interface SiteMessages {
     readonly stickerDrag: string;
     readonly homeCrumb: string;
     readonly showPassword: string;
+    readonly emailSuggestion: string;
     readonly hidePassword: string;
     readonly offlinePlay: string;
     readonly offlinePlayChoices: Readonly<Record<OfflineChoice, string>>;
     readonly offlinePlayHelp: string;
     readonly install: string;
     readonly installButton: string;
-    readonly installSteps: string;
+    readonly installGuide: string;
     readonly stickerDragChoices: Readonly<Record<StickerDragChoice, string>>;
     readonly wordGender: string;
     readonly fullscreen: string;
@@ -652,6 +656,7 @@ export interface SiteMessages {
     readonly takeOff: string;
     readonly putBack: string;
     readonly loadMore: string;
+    readonly tableLabels: Partial<SuTableLabels>;
     readonly featuresTitle: string;
     readonly featuresHelp: string;
     readonly featureNames: Readonly<Record<FeatureId, string>>;
@@ -825,6 +830,18 @@ export interface SiteMessages {
     readonly rule: string;
     readonly use: string;
     readonly inUse: string;
+  };
+
+  readonly install: {
+    readonly title: string;
+    readonly lead: string;
+    readonly rule: string;
+    readonly installNow: string;
+    readonly installNowHelp: string;
+    readonly platformGroup: string;
+    readonly platforms: Readonly<Record<InstallPlatform, string>>;
+    readonly guides: Readonly<Record<InstallGuideId, { readonly title: string; readonly steps: readonly string[] }>>;
+    readonly afterwards: string;
   };
 
   readonly leaderboard: {

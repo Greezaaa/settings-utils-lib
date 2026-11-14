@@ -82,6 +82,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     theme: 'Тема',
     smallerText: 'Менший текст',
     largerText: 'Більший текст',
+    reduceMotion: 'Зменшити рух',
     themeNames: {
       system: 'Системна',
       light: 'Світла',
@@ -131,13 +132,14 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     stickerDragChoices: { on: 'Так', off: 'Ні' },
     homeCrumb: 'головна',
     showPassword: 'Показати пароль',
+    emailSuggestion: 'Ви мали на увазі',
     hidePassword: 'Сховати пароль',
     offlinePlay: 'Грати без мережі',
     offlinePlayChoices: { on: 'Так', off: 'Ні' },
     offlinePlayHelp: 'Зберігає ігри на цьому пристрої (близько 2 МБ), щоб вони працювали без інтернету',
     install: 'Встановити ігри',
     installButton: 'Встановити',
-    installSteps: 'Торкнися «Поділитися», а потім «На початковий екран»',
+    installGuide: 'Як встановити',
     wordGender: 'Стать',
     fullscreen: 'На весь екран',
     exitFullscreen: 'Вийти з повноекранного режиму',
@@ -169,7 +171,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'Безкоштовні мініігри для дітей, що тренують логіку, пам’ять і швидкість мислення. Без реєстрації, для комп’ютерів, планшетів і телефонів.',
     notFoundTitle: 'Сторінку не знайдено',
     notFoundDescription: 'Такої сторінки не існує.',
-    previewImageAlt: 'su-labs games: Розумні ігри для кмітливих дітей',
+    previewImageAlt: 'SG Smart Games: Розумні ігри для кмітливих дітей',
   },
 
   games: {
@@ -388,7 +390,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     columns: { what: 'Що', where: 'Де', why: 'Навіщо' },
     saved: [
       {
-        what: 'Тема й розмір тексту',
+        what: 'Тема, розмір тексту й рух',
         where: 'Cookie для su-labs.dev',
         why: 'Щоб su-labs.dev і ці ігри виглядали так, як ви обрали',
       },
@@ -455,7 +457,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     ],
     differenceTitle: 'Cookie та локальне сховище',
     difference:
-      'Cookie надсилається на наш сервер під час кожного візиту; локальне сховище залишається в цьому браузері й нікуди не надсилається. Ми використовуємо один cookie лише для того, щоб поділитися темою й розміром тексту з su-labs.dev, і сервер його не читає.',
+      'Cookie надсилається на наш сервер під час кожного візиту; локальне сховище залишається в цьому браузері й нікуди не надсилається. Ми використовуємо один cookie лише для того, щоб поділитися темою, розміром тексту й налаштуванням руху з su-labs.dev, і сервер його не читає.',
     sentTitle: 'Що надсилають ігри',
     sentLead:
       'Щоб показувати, що популярне, і покращувати ігри, вони надсилають кілька речей на наші сервери. Ніщо з цього не каже, хто ти.',
@@ -1172,6 +1174,24 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     takeOff: 'Прибрати',
     putBack: 'Повернути',
     loadMore: 'Завантажити ще',
+    tableLabels: {
+      search: 'Пошук',
+      matches: count => (count === 1 ? 'Збігається 1 рядок' : `Збігається рядків: ${count}`),
+      noMatches: query => `Жоден рядок не збігається з «${query}»`,
+      searchCleared: 'Пошук очищено',
+      empty: 'Тут нічого немає',
+      actions: 'Дії',
+      pagination: 'Сторінки',
+      rowsPerPage: 'Рядків на сторінці',
+      allRows: 'Усі',
+      range: (start, end, total) => (total === 0 ? '0 з 0' : `${start}–${end} з ${total}`),
+      page: (page, count) => `Сторінка ${page} з ${count}`,
+      previousPage: 'Попередня сторінка',
+      nextPage: 'Наступна сторінка',
+      sortedAscending: header => `Упорядковано за ${header}, за зростанням`,
+      sortedDescending: header => `Упорядковано за ${header}, за спаданням`,
+      sortCleared: 'Упорядкування знято',
+    },
     featuresTitle: 'Функції',
     featuresHelp:
       'Нові функції спершу вимкнені: спробуй їх у режимі перегляду, а потім відкрий для всіх.',
@@ -1200,6 +1220,10 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       offline: 'Грати без мережі: ігри працюють і без інтернету',
       'install-app': 'Кнопка встановлення: додати ігри на початковий екран чи робочий стіл',
       fullscreen: 'Кнопка повноекранного режиму в іграх',
+      'page-fly-out': 'Сторінки вилітають із натиснутого посилання',
+      'email-hints': 'Підказки щодо помилок в email (gmial.com → gmail.com)',
+      'admin-tables': 'Адмін-списки як таблиці з пошуком і сторінками',
+      'menu-sheet': 'Меню на телефоні як панель, що висувається',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:
@@ -1410,6 +1434,58 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     rule: 'Торкнися «Вибрати», щоб грати з ними.',
     use: 'Вибрати',
     inUse: 'Вибрано',
+  },
+  install: {
+    title: 'Встановіть Smart Games',
+    lead: 'Грайте з Dock або головного екрана, як у застосунку. Без магазину застосунків, безкоштовно, і оновлюється саме.',
+    rule: 'Оберіть свій пристрій і виконайте кроки.',
+    installNow: 'Встановити зараз',
+    installNowHelp: 'Ваш браузер може встановити ігри одним кліком.',
+    platformGroup: 'Пристрій',
+    platforms: {
+      computer: 'Mac або ПК',
+      android: 'Android',
+      'apple-touch': 'iPhone або iPad',
+    },
+    guides: {
+      'computer-chrome': {
+        title: 'У Chrome або Edge',
+        steps: [
+          'Відкрийте games.su-labs.dev у Chrome або Edge.',
+          'Натисніть значок встановлення в кінці адресного рядка.',
+          'Натисніть «Встановити».',
+          'Smart Games відкриється у власному вікні. Знайдіть його в Dock, Launchpad або меню «Пуск».',
+        ],
+      },
+      'computer-safari': {
+        title: 'У Safari на Mac',
+        steps: [
+          'Відкрийте games.su-labs.dev у Safari.',
+          'У рядку меню виберіть «Файл», потім «Додати в Dock».',
+          'Натисніть «Додати».',
+          'Smart Games тепер у Dock і Launchpad.',
+        ],
+      },
+      'android-chrome': {
+        title: 'У Chrome',
+        steps: [
+          'Відкрийте games.su-labs.dev у Chrome.',
+          'Торкніться меню з трьома крапками вгорі праворуч.',
+          'Торкніться «Додати на головний екран», потім «Встановити».',
+          'Smart Games на вашому головному екрані.',
+        ],
+      },
+      'apple-touch-safari': {
+        title: 'У Safari',
+        steps: [
+          'Відкрийте games.su-labs.dev у Safari.',
+          'Торкніться кнопки «Поділитися».',
+          'Прокрутіть униз і торкніться «На початковий екран».',
+          'Торкніться «Додати»: Smart Games на вашому головному екрані.',
+        ],
+      },
+    },
+    afterwards: 'Ваші улюблені ігри, результати й налаштування в застосунку залишаються такими самими.',
   },
   leaderboard: {
     navLink: 'Лідери',

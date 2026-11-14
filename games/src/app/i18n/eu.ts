@@ -53,6 +53,7 @@ export const EU: SiteMessages = {
     theme: 'Gaia',
     smallerText: 'Testu txikiagoa',
     largerText: 'Testu handiagoa',
+    reduceMotion: 'Mugimendua murriztu',
     themeNames: {
       system: 'Sistema',
       light: 'Argia',
@@ -102,13 +103,14 @@ export const EU: SiteMessages = {
     stickerDragChoices: { on: 'Bai', off: 'Ez' },
     homeCrumb: 'hasiera',
     showPassword: 'Erakutsi pasahitza',
+    emailSuggestion: 'Hau esan nahi zenuen:',
     hidePassword: 'Ezkutatu pasahitza',
     offlinePlay: 'Konexiorik gabe jolastu',
     offlinePlayChoices: { on: 'Bai', off: 'Ez' },
     offlinePlayHelp: 'Jokoak gailu honetan gordetzen ditu (2 MB inguru), internetik gabe funtziona dezaten',
     install: 'Instalatu jokoak',
     installButton: 'Instalatu',
-    installSteps: 'Sakatu Partekatu, eta gero Gehitu hasierako pantailara',
+    installGuide: 'Nola instalatu',
     wordGender: 'Generoa',
     fullscreen: 'Pantaila osoa',
     exitFullscreen: 'Irten pantaila osotik',
@@ -140,7 +142,7 @@ export const EU: SiteMessages = {
       'Haurrek logika, oroimena eta azkartasuna lantzeko minijoko doakoak. Izena eman gabe, ordenagailu, tableta eta mugikorretarako.',
     notFoundTitle: 'Orria ez da aurkitu',
     notFoundDescription: 'Orri hau ez dago.',
-    previewImageAlt: 'su-labs games: Joko adimentsuak, haur adimentsuentzat',
+    previewImageAlt: 'SG Smart Games: Joko adimentsuak, haur adimentsuentzat',
   },
 
   games: {
@@ -361,7 +363,7 @@ export const EU: SiteMessages = {
     columns: { what: 'Zer', where: 'Non', why: 'Zertarako' },
     saved: [
       {
-        what: 'Gaia eta testuaren tamaina',
+        what: 'Gaia, testuaren tamaina eta mugimendua',
         where: 'su-labs.dev-en cookie bat',
         why: 'su-labs.dev eta joko hauek zuk aukeratu bezala ikus daitezen',
       },
@@ -428,7 +430,7 @@ export const EU: SiteMessages = {
     ],
     differenceTitle: 'Cookieak eta biltegiratze lokala',
     difference:
-      'Cookie bat gure zerbitzarira bidaltzen da bisita bakoitzean; biltegiratze lokala nabigatzaile honetan geratzen da eta ez da inora bidaltzen. Cookie bakarra erabiltzen dugu, zure gaia eta testuaren tamaina su-labs.dev-ekin partekatzeko, eta zerbitzariak ez du irakurtzen.',
+      'Cookie bat gure zerbitzarira bidaltzen da bisita bakoitzean; biltegiratze lokala nabigatzaile honetan geratzen da eta ez da inora bidaltzen. Cookie bakarra erabiltzen dugu, zure gaia, testuaren tamaina eta mugimenduaren ezarpena su-labs.dev-ekin partekatzeko, eta zerbitzariak ez du irakurtzen.',
     sentTitle: 'Zer bidaltzen duten jokoek',
     sentLead:
       'Zer den ezaguna erakusteko eta jokoak hobetzeko, gauza gutxi batzuk bidaltzen dituzte gure zerbitzarietara. Horietako ezerk ez du esaten nor zaren.',
@@ -1142,6 +1144,24 @@ export const EU: SiteMessages = {
     takeOff: 'Atera',
     putBack: 'Itzuli',
     loadMore: 'Gehiago kargatu',
+    tableLabels: {
+      search: 'Bilatu',
+      matches: count => (count === 1 ? 'Errenkada 1 bat dator' : `${count} errenkada bat datoz`),
+      noMatches: query => `Ez dago «${query}»-rekin bat datorren errenkadarik`,
+      searchCleared: 'Bilaketa garbituta',
+      empty: 'Ez dago ezer',
+      actions: 'Ekintzak',
+      pagination: 'Orriak',
+      rowsPerPage: 'Errenkadak orriko',
+      allRows: 'Denak',
+      range: (start, end, total) => (total === 0 ? '0 / 0' : `${start}–${end} / ${total}`),
+      page: (page, count) => `${page}. orria / ${count}`,
+      previousPage: 'Aurreko orria',
+      nextPage: 'Hurrengo orria',
+      sortedAscending: header => `${header} arabera ordenatuta, gorantz`,
+      sortedDescending: header => `${header} arabera ordenatuta, beherantz`,
+      sortCleared: 'Ordena kenduta',
+    },
     featuresTitle: 'Funtzioak',
     featuresHelp:
       'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
@@ -1170,6 +1190,10 @@ export const EU: SiteMessages = {
       offline: 'Konexiorik gabe jolastu: jokoek internetik gabe ere funtzionatzen dute',
       'install-app': 'Instalatzeko botoia: gehitu jokoak hasierako pantailara edo mahaigainera',
       fullscreen: 'Pantaila osoko botoia jokoetan',
+      'page-fly-out': 'Orriak sakatutako estekatik ateratzen dira',
+      'email-hints': 'Posta elektronikoko akatsen iradokizunak (gmial.com → gmail.com)',
+      'admin-tables': 'Administrazio-zerrendak bilaketa eta orriak dituzten taula gisa',
+      'menu-sheet': 'Mugikorreko menua irristatzen den panel gisa',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1384,6 +1408,58 @@ export const EU: SiteMessages = {
     rule: 'Sakatu Erabili haiekin jolasteko.',
     use: 'Erabili',
     inUse: 'Erabiltzen',
+  },
+  install: {
+    title: 'Instalatu Smart Games',
+    lead: 'Jokatu Docketik edo hasierako pantailatik, aplikazio bat bezala. Aplikazio-dendarik gabe, doan, eta bere kabuz eguneratzen da.',
+    rule: 'Aukeratu zure gailua eta jarraitu urratsak.',
+    installNow: 'Instalatu orain',
+    installNowHelp: 'Zure nabigatzaileak klik batean instala ditzake jokoak.',
+    platformGroup: 'Gailua',
+    platforms: {
+      computer: 'Mac edo PCa',
+      android: 'Android',
+      'apple-touch': 'iPhone edo iPad',
+    },
+    guides: {
+      'computer-chrome': {
+        title: 'Chrome edo Edgerekin',
+        steps: [
+          'Ireki games.su-labs.dev Chrome edo Edgen.',
+          'Egin klik instalatzeko ikonoan, helbide-barraren amaieran.',
+          'Egin klik Instalatu aukeran.',
+          'Smart Games bere leihoan irekitzen da. Docken, Launchpaden edo Hasi menuan aurkituko duzu.',
+        ],
+      },
+      'computer-safari': {
+        title: 'Safarirekin Mac batean',
+        steps: [
+          'Ireki games.su-labs.dev Safarin.',
+          'Menu-barran, aukeratu Fitxategia eta gero Gehitu Dockera.',
+          'Egin klik Gehitu aukeran.',
+          'Smart Games zure Docken eta Launchpaden dago orain.',
+        ],
+      },
+      'android-chrome': {
+        title: 'Chromerekin',
+        steps: [
+          'Ireki games.su-labs.dev Chromen.',
+          'Sakatu hiru puntuko menua, goian eskuinean.',
+          'Sakatu Gehitu hasierako pantailan eta gero Instalatu.',
+          'Smart Games zure hasierako pantailan dago.',
+        ],
+      },
+      'apple-touch-safari': {
+        title: 'Safarirekin',
+        steps: [
+          'Ireki games.su-labs.dev Safarin.',
+          'Sakatu Partekatu botoia.',
+          'Joan behera eta sakatu Gehitu hasierako pantailan.',
+          'Sakatu Gehitu: Smart Games zure hasierako pantailan dago.',
+        ],
+      },
+    },
+    afterwards: 'Zure gogokoak, emaitzak eta ezarpenak berdin geratzen dira aplikazioan.',
   },
   leaderboard: {
     navLink: 'Sailkapena',

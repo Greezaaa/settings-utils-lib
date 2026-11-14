@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+svg {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.frame,
+.line,
+.faint,
+.spot-outline,
+.spot-ring,
+.on-spot {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.frame,
+.line {
+  stroke: var(--text);
+}
+
+.frame {
+  fill: var(--surface);
+}
+
+.faint {
+  stroke: var(--border);
+  stroke-width: 3;
+}
+
+.dot,
+.faint-fill {
+  fill: var(--border);
+}
+
+.spot-fill {
+  fill: var(--button-bg);
+}
+
+.spot-outline,
+.spot-ring {
+  stroke: var(--button-bg);
+  stroke-width: 2.5;
+}
+
+.on-spot {
+  stroke: var(--button-text);
+}
+
+.on-spot-dot {
+  fill: var(--button-text);
+}
+
+.logo {
+  fill: var(--heading);
+}
+
+.logo-square {
+  fill: var(--bg);
+}

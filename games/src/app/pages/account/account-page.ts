@@ -8,6 +8,7 @@ import { PlayerAccount } from '../../core/player-account';
 import { SiteLanguage } from '../../i18n/site-language';
 import { AccountForm, formText } from './account-form';
 import { ScreenNameField } from './screen-name-field/screen-name-field';
+import { EmailHint } from '../../shared/email-hint';
 import { RevealPassword } from '../../shared/reveal-password';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { FeatureFlags } from '../../core/feature-flags';
@@ -17,7 +18,7 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 
 @Component({
   selector: 'app-account-page',
-  imports: [TranslatePipe, RevealPassword, SuStrengthMeterComponent, SuSwitchComponent, ScreenNameField],
+  imports: [TranslatePipe, EmailHint, RevealPassword, SuStrengthMeterComponent, SuSwitchComponent, ScreenNameField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../admin/admin.scss', './account.scss'],

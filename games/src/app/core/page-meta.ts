@@ -14,7 +14,7 @@ export interface PageMeta {
   readonly game?: GameSlug;
 }
 
-export const SITE_NAME = 'su-labs games';
+export const SITE_NAME = 'SG Smart Games';
 
 export const PREVIEW_MESSAGES: SiteMessages = PRERENDER_MESSAGES;
 

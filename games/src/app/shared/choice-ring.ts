@@ -1,5 +1,6 @@
 import { DOCUMENT, effect, inject, Injectable } from '@angular/core';
 import { MenuAnimation } from '../core/menu-animation';
+import { SiteMotion } from '../core/site-motion';
 import { DriftShape } from './drift-shape';
 
 const GROUP = '[role="group"]:not([data-no-ring]), [role="tablist"]';
@@ -10,11 +11,12 @@ const PRESSED = 'button[aria-pressed="true"]';
 export class ChoiceRing {
   private readonly document = inject(DOCUMENT);
   private readonly menuAnimation = inject(MenuAnimation);
+  private readonly motion = inject(SiteMotion);
   private readonly shapes = new Map<HTMLElement, DriftShape>();
 
   constructor() {
     effect(() => {
-      if (!this.menuAnimation.isOn()) {
+      if (!this.menuAnimation.isOn() || this.motion.reduced()) {
         this.detachAll();
       }
     });
@@ -55,7 +57,7 @@ export class ChoiceRing {
       !window ||
       !group ||
       !this.menuAnimation.isOn() ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      this.motion.shouldReduce()
     ) {
       return null;
     }

@@ -54,6 +54,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     theme: 'Tema',
     smallerText: 'Texto más pequeño',
     largerText: 'Texto más grande',
+    reduceMotion: 'Reducir movimiento',
     themeNames: {
       system: 'Sistema',
       light: 'Claro',
@@ -103,13 +104,14 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     stickerDragChoices: { on: 'Sí', off: 'No' },
     homeCrumb: 'inicio',
     showPassword: 'Mostrar contraseña',
+    emailSuggestion: '¿Querías decir',
     hidePassword: 'Ocultar contraseña',
     offlinePlay: 'Jugar sin conexión',
     offlinePlayChoices: { on: 'Sí', off: 'No' },
     offlinePlayHelp: 'Guarda los juegos en este dispositivo (unos 2 MB) para que funcionen sin internet',
     install: 'Instalar los juegos',
     installButton: 'Instalar',
-    installSteps: 'Toca Compartir y luego Añadir a pantalla de inicio',
+    installGuide: 'Cómo instalar',
     wordGender: 'Género',
     fullscreen: 'Pantalla completa',
     exitFullscreen: 'Salir de pantalla completa',
@@ -142,7 +144,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     notFoundTitle: 'Página no encontrada',
     notFoundDescription: 'Esta página no existe.',
     previewImageAlt:
-      'su-labs games: Juegos inteligentes para mentes despiertas',
+      'SG Smart Games: Juegos inteligentes para mentes despiertas',
   },
 
   games: {
@@ -371,7 +373,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     columns: { what: 'Qué', where: 'Dónde', why: 'Para qué' },
     saved: [
       {
-        what: 'Tema y tamaño del texto',
+        what: 'Tema, tamaño del texto y movimiento',
         where: 'Una cookie de su-labs.dev',
         why: 'Para que su-labs.dev y estos juegos se vean como elegiste',
       },
@@ -438,7 +440,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     ],
     differenceTitle: 'Cookies y almacenamiento local',
     difference:
-      'Una cookie se envía a nuestro servidor en cada visita; el almacenamiento local se queda en este navegador y nunca se envía a ningún sitio. Solo usamos una cookie, para compartir tu tema y tamaño de texto con su-labs.dev, y el servidor no la lee.',
+      'Una cookie se envía a nuestro servidor en cada visita; el almacenamiento local se queda en este navegador y nunca se envía a ningún sitio. Solo usamos una cookie, para compartir tu tema, tamaño de texto y ajuste de movimiento con su-labs.dev, y el servidor no la lee.',
     sentTitle: 'Qué envían los juegos',
     sentLead:
       'Para mostrar qué es popular y mejorar los juegos, envían unas pocas cosas a nuestros servidores. Nada de ello dice quién eres.',
@@ -1155,6 +1157,24 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     takeOff: 'Sacar',
     putBack: 'Volver a poner',
     loadMore: 'Cargar más',
+    tableLabels: {
+      search: 'Buscar',
+      matches: count => (count === 1 ? '1 fila coincide' : `${count} filas coinciden`),
+      noMatches: query => `Ninguna fila coincide con «${query}»`,
+      searchCleared: 'Búsqueda borrada',
+      empty: 'No hay nada',
+      actions: 'Acciones',
+      pagination: 'Páginas',
+      rowsPerPage: 'Filas por página',
+      allRows: 'Todas',
+      range: (start, end, total) => (total === 0 ? '0 de 0' : `${start}–${end} de ${total}`),
+      page: (page, count) => `Página ${page} de ${count}`,
+      previousPage: 'Página anterior',
+      nextPage: 'Página siguiente',
+      sortedAscending: header => `Ordenado por ${header}, ascendente`,
+      sortedDescending: header => `Ordenado por ${header}, descendente`,
+      sortCleared: 'Orden quitado',
+    },
     featuresTitle: 'Funciones',
     featuresHelp:
       'Las funciones nuevas empiezan desactivadas: pruébalas en vista previa y luego ábrelas a todos.',
@@ -1183,6 +1203,10 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       offline: 'Jugar sin conexión: los juegos siguen funcionando sin internet',
       'install-app': 'Botón de instalar: añadir los juegos a la pantalla de inicio o al escritorio',
       fullscreen: 'Botón de pantalla completa en los juegos',
+      'page-fly-out': 'Las páginas salen del enlace pulsado',
+      'email-hints': 'Avisos de errores en el correo (gmial.com → gmail.com)',
+      'admin-tables': 'Listas de administración como tablas con búsqueda y páginas',
+      'menu-sheet': 'Menú del móvil como panel que se desliza',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:
@@ -1396,6 +1420,58 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     rule: 'Toca Usar para jugar con ellos.',
     use: 'Usar',
     inUse: 'En uso',
+  },
+  install: {
+    title: 'Instala Smart Games',
+    lead: 'Juega desde el Dock o la pantalla de inicio, como una app. Sin tienda de apps, gratis y se actualiza sola.',
+    rule: 'Elige tu dispositivo y sigue los pasos.',
+    installNow: 'Instalar ahora',
+    installNowHelp: 'Tu navegador puede instalar los juegos con un clic.',
+    platformGroup: 'Dispositivo',
+    platforms: {
+      computer: 'Mac o PC',
+      android: 'Android',
+      'apple-touch': 'iPhone o iPad',
+    },
+    guides: {
+      'computer-chrome': {
+        title: 'Con Chrome o Edge',
+        steps: [
+          'Abre games.su-labs.dev en Chrome o Edge.',
+          'Haz clic en el icono de instalar, al final de la barra de direcciones.',
+          'Haz clic en Instalar.',
+          'Smart Games se abre en su propia ventana. Lo encontrarás en el Dock, el Launchpad o el menú Inicio.',
+        ],
+      },
+      'computer-safari': {
+        title: 'Con Safari en un Mac',
+        steps: [
+          'Abre games.su-labs.dev en Safari.',
+          'En la barra de menús, elige Archivo y luego Añadir al Dock.',
+          'Haz clic en Añadir.',
+          'Smart Games ya está en tu Dock y en el Launchpad.',
+        ],
+      },
+      'android-chrome': {
+        title: 'Con Chrome',
+        steps: [
+          'Abre games.su-labs.dev en Chrome.',
+          'Toca el menú de tres puntos, arriba a la derecha.',
+          'Toca Añadir a pantalla de inicio y luego Instalar.',
+          'Smart Games ya está en tu pantalla de inicio.',
+        ],
+      },
+      'apple-touch-safari': {
+        title: 'Con Safari',
+        steps: [
+          'Abre games.su-labs.dev en Safari.',
+          'Toca el botón Compartir.',
+          'Baja y toca Añadir a pantalla de inicio.',
+          'Toca Añadir: Smart Games ya está en tu pantalla de inicio.',
+        ],
+      },
+    },
+    afterwards: 'Tus favoritos, resultados y ajustes siguen igual en la app.',
   },
   leaderboard: {
     navLink: 'Clasificación',

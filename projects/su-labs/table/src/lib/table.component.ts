@@ -378,9 +378,10 @@ export class SuTableComponent<TRow extends object> {
     return `${this.tableId}-${id}-${String(key)}`;
   }
 
-  /** The pin in a heading pins its column to the start, or unpins it */
+  /** The pin in a heading unpins its column, or pins it back to the side it was set up with (by default the start) */
   protected toggleColumnPin(key: keyof TRow, pinned: SuTablePin | null): void {
-    this.controller.pinColumn(key, pinned ? null : 'start');
+    const setUpPin = this.columns().find(column => column.key === key)?.pinned;
+    this.controller.pinColumn(key, pinned ? null : (setUpPin ?? 'start'));
     this.columnsChange.emit(this.state().allColumns);
   }
 

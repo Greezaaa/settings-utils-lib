@@ -1,4 +1,5 @@
 import { afterNextRender, afterRenderEffect, DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, signal } from '@angular/core';
+import { SiteMotion } from '../core/site-motion';
 import { DriftShape } from './drift-shape';
 
 @Directive({
@@ -17,11 +18,12 @@ export class MenuRing {
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
+  private readonly motion = inject(SiteMotion);
   private readonly suits = signal(false);
   private shape: DriftShape | null = null;
 
   protected isOn(): boolean {
-    return this.enabled() && this.suits();
+    return this.enabled() && this.suits() && !this.motion.reduced();
   }
 
   constructor() {

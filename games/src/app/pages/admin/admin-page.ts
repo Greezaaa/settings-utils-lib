@@ -12,6 +12,7 @@ import { AdminSuggestions } from './admin-suggestions/admin-suggestions';
 import { AdminTeam } from './admin-team/admin-team';
 import { AdminWordReports } from './admin-word-reports/admin-word-reports';
 import { ScrollToActive } from '../../shared/scroll-to-active';
+import { EmailHint } from '../../shared/email-hint';
 import { RevealPassword } from '../../shared/reveal-password';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
@@ -23,7 +24,7 @@ const SUPER_TABS: readonly Tab[] = ['games', 'news', 'errors', 'team'];
 
 @Component({
   selector: 'app-admin-page',
-  imports: [TranslatePipe, RevealPassword, ScrollToActive, AdminAccount, AdminErrors, AdminGames, AdminNewsTab, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
+  imports: [TranslatePipe, EmailHint, RevealPassword, ScrollToActive, AdminAccount, AdminErrors, AdminGames, AdminNewsTab, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],

@@ -17,9 +17,11 @@ export const SHARED_SETTINGS = {
   storage: consentedCookies,
   themeKey: 'su-labs:theme',
   fontSizeKey: 'su-labs:font-size',
+  motionKey: 'su-labs:motion',
 } as const;
 
 export function forgetSharedSettings(): void {
   cookies.removeItem(SHARED_SETTINGS.themeKey);
   cookies.removeItem(SHARED_SETTINGS.fontSizeKey);
+  cookies.removeItem(SHARED_SETTINGS.motionKey);
 }

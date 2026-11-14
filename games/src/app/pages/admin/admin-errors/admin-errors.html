@@ -12,6 +12,23 @@
 
 @if (!loading() && errors().length === 0) {
   <p class="muted">{{ 'admin.noErrors' | translate }}</p>
+} @else if (useTable()) {
+  @defer (on viewport) {
+    <su-lib-table
+      [caption]="'admin.tabs.errors' | translate"
+      [columns]="columns()"
+      [rows]="errors()"
+      [rowId]="errorId"
+      [actions]="actions()"
+      [labels]="t().admin.tableLabels"
+      [pageSize]="pageSize"
+      [pageSizes]="pageSizes"
+      searchable
+      (action)="onAction($event)"
+    />
+  } @placeholder {
+    <div class="card table-placeholder"></div>
+  }
 } @else {
   <div class="card table-scroll">
     <table>

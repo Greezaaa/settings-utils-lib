@@ -30,7 +30,11 @@ export type FeatureId =
   | 'sticker-drag'
   | 'offline'
   | 'install-app'
-  | 'fullscreen';
+  | 'fullscreen'
+  | 'page-fly-out'
+  | 'email-hints'
+  | 'admin-tables'
+  | 'menu-sheet';
 
 export type RoomGame = Extract<
   GameSlug,
@@ -74,6 +78,10 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'offline', openByDefault: false },
   { id: 'install-app', openByDefault: false },
   { id: 'fullscreen', openByDefault: false },
+  { id: 'page-fly-out', openByDefault: false },
+  { id: 'email-hints', openByDefault: false },
+  { id: 'admin-tables', openByDefault: false },
+  { id: 'menu-sheet', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

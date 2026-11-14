@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SuSwitchComponent } from '@su-labs/fields';
 import { FontSizeService } from '@su-labs/font-size';
 import { isSuBaseThemeName, SuThemeName } from '@su-labs/theme';
 import { ANSWER_STYLES, AnswerWords } from '../../core/answer-words';
@@ -12,6 +13,7 @@ import { MENU_ANIMATION_CHOICES, MenuAnimation } from '../../core/menu-animation
 import { OFFLINE_CHOICES, OfflineMode } from '../../core/offline-mode';
 import { PlayerGender } from '../../core/player-gender';
 import { REACTION_SIDES, Reactions, STICKER_DRAG_CHOICES } from '../../core/reactions';
+import { SiteMotion } from '../../core/site-motion';
 import { SiteTheme } from '../../core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -19,7 +21,7 @@ import { WORD_GENDERS } from '../../i18n/word-gender';
 
 @Component({
   selector: 'app-site-settings',
-  imports: [TranslatePipe, RouterLink],
+  imports: [TranslatePipe, RouterLink, SuSwitchComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './site-settings.html',
   styleUrl: './site-settings.scss',
@@ -29,6 +31,7 @@ export class SiteSettings {
 
   protected readonly theme = inject(SiteTheme);
   protected readonly fontSize = inject(FontSizeService);
+  protected readonly motion = inject(SiteMotion);
   protected readonly siteLanguage = inject(SiteLanguage);
   protected readonly boardColours = inject(BoardColours);
   protected readonly answerWords = inject(AnswerWords);

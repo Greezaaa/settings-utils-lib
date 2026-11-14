@@ -11,11 +11,12 @@ interface ShownInvite {
 
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
+import { EmailHint } from '../../../shared/email-hint';
 
 @Component({
   selector: 'app-admin-team',
   host: { class: 'admin-tab' },
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, EmailHint],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-team.html',
   styleUrl: '../admin.scss',

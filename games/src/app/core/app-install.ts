@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { afterNextRender, computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { FeatureFlags } from './feature-flags';
+import { InstallPlatform } from './install-guides';
 
 interface InstallPrompt extends Event {
   prompt(): Promise<void>;
@@ -15,13 +16,11 @@ export class AppInstall {
   private readonly features = inject(FeatureFlags);
   private readonly prompt = signal<InstallPrompt | null>(null);
   private readonly isInstalled = signal(false);
-  private readonly needsSteps = signal(false);
+  private readonly platformSignal = signal<InstallPlatform>('computer');
 
   readonly canPrompt = computed(() => this.prompt() !== null);
-  readonly needsManualSteps = computed(() => !this.canPrompt() && this.needsSteps());
-  readonly isAvailable = computed(
-    () => this.features.canUse('install-app') && !this.isInstalled() && (this.canPrompt() || this.needsSteps()),
-  );
+  readonly platform = this.platformSignal.asReadonly();
+  readonly isAvailable = computed(() => this.features.canUse('install-app') && !this.isInstalled());
 
   constructor() {
     if (!isPlatformBrowser(inject(PLATFORM_ID))) {
@@ -33,7 +32,7 @@ export class AppInstall {
       const isAppleTouch =
         /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1);
       this.isInstalled.set(isStandalone);
-      this.needsSteps.set(isAppleTouch);
+      this.platformSignal.set(isAppleTouch ? 'apple-touch' : /Android/.test(navigator.userAgent) ? 'android' : 'computer');
     });
     window.addEventListener('beforeinstallprompt', (event) => {
       if (isInstallPrompt(event)) {

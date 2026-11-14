@@ -222,7 +222,7 @@ export class AccountsService {
     );
     await this.mailer.send(
       email,
-      'su-labs games: new password',
+      'SG Smart Games: new password',
       [
         `Hi ${player.screenName},`,
         '',

@@ -50,6 +50,10 @@ export const FEATURE_IDS = [
   'offline',
   'install-app',
   'fullscreen',
+  'page-fly-out',
+  'email-hints',
+  'admin-tables',
+  'menu-sheet',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

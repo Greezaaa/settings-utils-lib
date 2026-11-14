@@ -33,7 +33,7 @@ export const envSchema = z.object({
     .default('false')
     .transform((value) => value === 'true'),
   SMTP_URL: z.url().optional(),
-  MAIL_FROM: z.string().default('su-labs games <games@su-labs.dev>'),
+  MAIL_FROM: z.string().default('SG Smart Games <games@su-labs.dev>'),
   GAMES_URL: z.url().default('https://games.su-labs.dev'),
 });
 

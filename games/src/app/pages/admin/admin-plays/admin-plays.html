@@ -27,33 +27,50 @@
   }
 </div>
 
-<div class="card table-scroll">
-  <table>
-    <thead>
-      <tr>
-        <th scope="col">{{ 'admin.playsColumns.game' | translate }}</th>
-        <th scope="col" class="number">{{ 'admin.playsColumns.plays' | translate }}</th>
-        <th scope="col" class="number">👍</th>
-        <th scope="col" class="number">👎</th>
-        <th scope="col">{{ 'admin.playsColumns.reasons' | translate }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (row of rows(); track row.game) {
+@if (useTable()) {
+  @defer (on viewport) {
+    <su-lib-table
+      [caption]="'admin.tabs.plays' | translate"
+      [columns]="columns()"
+      [rows]="rows()"
+      [rowId]="gameId"
+      [labels]="t().admin.tableLabels"
+      [pageSize]="pageSize"
+      [pageSizes]="pageSizes"
+      searchable
+    />
+  } @placeholder {
+    <div class="card table-placeholder"></div>
+  }
+} @else {
+  <div class="card table-scroll">
+    <table>
+      <thead>
         <tr>
-          <th scope="row">{{ ('games' | translate)[row.game].name }}</th>
-          <td class="number">{{ row.plays }}</td>
-          <td class="number">{{ row.up }}</td>
-          <td class="number">{{ row.down }}</td>
-          <td class="muted">
-            @for (reason of row.reasons; track reason[0]; let last = $last) {
-              {{ reasonName(reason[0]) }} ({{ reason[1] }}){{ last ? '' : ', ' }}
-            } @empty {
-              —
-            }
-          </td>
+          <th scope="col">{{ 'admin.playsColumns.game' | translate }}</th>
+          <th scope="col" class="number">{{ 'admin.playsColumns.plays' | translate }}</th>
+          <th scope="col" class="number">👍</th>
+          <th scope="col" class="number">👎</th>
+          <th scope="col">{{ 'admin.playsColumns.reasons' | translate }}</th>
         </tr>
-      }
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.game) {
+          <tr>
+            <th scope="row">{{ ('games' | translate)[row.game].name }}</th>
+            <td class="number">{{ row.plays }}</td>
+            <td class="number">{{ row.up }}</td>
+            <td class="number">{{ row.down }}</td>
+            <td class="muted">
+              @for (reason of row.reasons; track reason[0]; let last = $last) {
+                {{ reasonName(reason[0]) }} ({{ reason[1] }}){{ last ? '' : ', ' }}
+              } @empty {
+                —
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

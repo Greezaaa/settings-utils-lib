@@ -5,6 +5,7 @@ import { SuDialogComponent, SuDialogService } from '@su-labs/dialog';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
+import { PageTransition } from './core/page-transition';
 import { byCategory, gameInfo, gameOfPath } from './core/games';
 import { AdminApi } from './core/admin-api';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
@@ -98,6 +99,7 @@ export class App {
     viewChild.required<ElementRef<HTMLElement>>('siteNav');
   private readonly injector = inject(Injector);
   private readonly document = inject(DOCUMENT);
+  private readonly pageTransition = inject(PageTransition);
 
   protected readonly settingsOpen = signal(false);
   private readonly settings =

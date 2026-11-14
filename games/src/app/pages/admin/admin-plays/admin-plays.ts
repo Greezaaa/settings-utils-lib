@@ -1,17 +1,28 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { SuDialogService } from '@su-labs/dialog';
 import { SuNotificationService } from '@su-labs/notifications';
+import { SuTableColumns, SuTableComponent } from '@su-labs/table';
 import { AdminApi, GameFeedback, STATS_PERIODS, StatsPeriod } from '../../../core/admin-api';
-import { GAMES } from '../../../core/games';
+import { FeatureFlags } from '../../../core/feature-flags';
+import { GAMES, GameSlug } from '../../../core/games';
 import { GamePlays } from '../../../core/games-api';
 import { SiteLanguage } from '../../../i18n/site-language';
+import { ADMIN_TABLE_PAGE_SIZE, ADMIN_TABLE_PAGE_SIZES } from '../admin-table';
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
+
+interface PlaysRow {
+  readonly game: GameSlug;
+  readonly plays: number;
+  readonly up: number;
+  readonly down: number;
+  readonly reasons: readonly (readonly [string, number])[];
+}
 
 @Component({
   selector: 'app-admin-plays',
   host: { class: 'admin-tab' },
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, SuTableComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-plays.html',
   styleUrl: '../admin.scss',
@@ -29,8 +40,8 @@ export class AdminPlays {
   private readonly feedback = signal<readonly GameFeedback[]>([]);
   protected readonly loading = signal(true);
 
-  protected readonly rows = computed(() =>
-    GAMES.map(({ slug }) => {
+  protected readonly rows = computed<readonly PlaysRow[]>(() =>
+    GAMES.map(({ slug }): PlaysRow => {
       const feedback = this.feedback().find(({ game }) => game === slug);
       return {
         game: slug,
@@ -41,6 +52,26 @@ export class AdminPlays {
       };
     }).sort((first, second) => second.plays - first.plays),
   );
+  private readonly features = inject(FeatureFlags);
+  protected readonly useTable = computed(() => this.features.canUse('admin-tables'));
+  protected readonly pageSize = ADMIN_TABLE_PAGE_SIZE;
+  protected readonly pageSizes = ADMIN_TABLE_PAGE_SIZES;
+  protected readonly gameId = (row: PlaysRow): string => row.game;
+  protected readonly columns = computed<SuTableColumns<PlaysRow>>(() => {
+    const { admin, games } = this.t();
+    return [
+      { key: 'game', header: admin.playsColumns.game, sortable: true, format: game => games[game].name },
+      { key: 'plays', header: admin.playsColumns.plays, sortable: true, align: 'end' },
+      { key: 'up', header: '👍', sortable: true, align: 'end' },
+      { key: 'down', header: '👎', sortable: true, align: 'end' },
+      {
+        key: 'reasons',
+        header: admin.playsColumns.reasons,
+        format: reasons =>
+          reasons.length === 0 ? '—' : reasons.map(([reason, count]) => `${this.reasonName(reason)} (${count})`).join(', '),
+      },
+    ];
+  });
   protected readonly totalPlays = computed(() => this.rows().reduce((total, row) => total + row.plays, 0));
 
   constructor() {

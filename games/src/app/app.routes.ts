@@ -18,6 +18,7 @@ const {
   account,
   leaderboard,
   colours,
+  install,
 } = PREVIEW_MESSAGES;
 
 function gameMeta(
@@ -196,6 +197,14 @@ export const routes: Routes = [
     canActivate: [featureGuard('colours-page')],
     loadComponent: () =>
       import('./pages/colours/colours-page').then(m => m.ColoursPage),
+  },
+  {
+    path: 'install',
+    title: `${install.title} · ${SITE_NAME}`,
+    data: { description: install.lead },
+    canActivate: [featureGuard('install-app')],
+    loadComponent: () =>
+      import('./pages/install/install-page').then(m => m.InstallPage),
   },
   {
     path: 'privacy',

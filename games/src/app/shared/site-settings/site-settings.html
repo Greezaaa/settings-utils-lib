@@ -22,6 +22,11 @@
   </div>
 </div>
 <div class="setting">
+  <su-lib-switch labelPosition="start" size="small" [checked]="motion.reduced()" (checkedChange)="motion.set($event)">
+    <span class="setting-label">{{ 'site.reduceMotion' | translate }}</span>
+  </su-lib-switch>
+</div>
+<div class="setting">
   <label class="setting-label" for="setting-theme">{{ 'site.theme' | translate }}</label>
   <div class="board-colours">
     <span
@@ -64,7 +69,7 @@
     </select>
   </div>
   @if (features.canUse('colours-page')) {
-    <a class="all-colours" routerLink="/colours" (click)="navigated.emit()">{{ 'site.allColours' | translate }}</a>
+    <a class="setting-link" routerLink="/colours" (click)="navigated.emit()">{{ 'site.allColours' | translate }}</a>
   }
 </div>
 @if (answerWords.isAvailable()) {
@@ -125,9 +130,8 @@
     <p class="setting-label">{{ 'site.install' | translate }}</p>
     @if (appInstall.canPrompt()) {
       <button type="button" class="icon-button" (click)="appInstall.install()">{{ 'site.installButton' | translate }}</button>
-    } @else {
-      <small class="muted">{{ 'site.installSteps' | translate }}</small>
     }
+    <a class="setting-link" routerLink="/install" (click)="navigated.emit()">{{ 'site.installGuide' | translate }}</a>
   </div>
 }
 @if (reactions.isAvailable()) {

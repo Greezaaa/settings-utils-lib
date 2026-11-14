@@ -1,23 +1,20 @@
 <a class="skip-link" [routerLink]="[]" fragment="main">{{ 'site.skipToContent' | translate }}</a>
 
-<header class="site-header" #siteHeader appShareHeight="--site-header-height">
+<header class="site-header" #siteHeader appShareHeight="--site-header-height" [class.has-menu-sheet]="features.canUse('menu-sheet')">
   <div class="container header-bar">
     <a routerLink="/" class="brand">
         <svg class="brand-logo" viewBox="0 0 128 128" aria-hidden="true">
           <rect class="brand-tile" width="128" height="128" rx="28" />
-          <g class="brand-mark" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M40 32C31 32 30 38 30 48v8c0 5-3 8-8 8 5 0 8 3 8 8v8c0 10 1 16 10 16" />
-            <path d="M88 32c9 0 10 6 10 16v8c0 5 3 8 8 8-5 0-8 3-8 8v8c0 10-1 16-10 16" />
+          <rect class="brand-square" x="18" y="18" width="43" height="43" rx="10" />
+          <rect class="brand-ghost" x="67" y="18" width="43" height="43" rx="10" />
+          <rect class="brand-ghost" x="18" y="67" width="43" height="43" rx="10" />
+          <rect class="brand-square" x="67" y="67" width="43" height="43" rx="10" />
+          <g class="brand-letter" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M49 30c-2-3-5-5-9-5-5 0-8 3-8 7 0 9 17 5 17 15 0 5-4 8-9 8-4 0-8-2-10-6" />
+            <path d="M100 81c-2-4-5-6-9-6-6 0-10 5-10 15s4 15 10 15c5 0 9-4 9-9v-3h-8" />
           </g>
-          <g class="brand-ghost" stroke-width="7" stroke-linecap="round">
-            <path d="M48 44h20" />
-            <path d="M48 84h26" />
-          </g>
-          <path class="brand-mark" d="M48 64h32" stroke-width="9" stroke-linecap="round" />
         </svg>
-        su-labs
-        <span class="brand-separator" aria-hidden="true">/</span>
-        <span class="brand-section">games</span>
+        Smart <span class="brand-section">Games</span>
         @if (crumb(); as crumb) {
           <span class="brand-separator brand-crumb" aria-hidden="true">/</span>
           <span class="brand-section brand-crumb">{{ crumb }}</span>

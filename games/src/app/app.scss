@@ -1,3 +1,32 @@
+@mixin phone-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: calc(100dvh - 4.5rem);
+  overflow-y: auto;
+  padding-bottom: 1rem;
+
+  a {
+    border-top: 1px solid var(--border);
+    font-size: 1rem;
+    padding-block: 0.75rem;
+  }
+
+  .menu-games {
+    border-left: 1px solid var(--border);
+    display: grid;
+    margin-bottom: 0.25rem;
+    margin-left: 0.25rem;
+    padding-left: 1rem;
+
+    a {
+      border-top: 0;
+      font-size: 0.9375rem;
+      padding-block: 0.375rem;
+    }
+  }
+}
+
 .skip-link {
   background: var(--button-bg);
   border-radius: 6px;
@@ -20,6 +49,7 @@
   box-shadow: 0 6px 18px rgb(0 0 0 / 8%);
   position: sticky;
   top: 0;
+  view-transition-name: site-header;
   z-index: 90;
 }
 
@@ -74,12 +104,16 @@
   fill: var(--heading);
 }
 
-.brand-mark {
-  stroke: var(--bg);
+.brand-square {
+  fill: var(--bg);
 }
 
 .brand-ghost {
-  stroke: color-mix(in srgb, var(--bg) 25%, var(--heading));
+  fill: color-mix(in srgb, var(--bg) 25%, var(--heading));
+}
+
+.brand-letter {
+  stroke: var(--heading);
 }
 
 .header-controls {
@@ -144,32 +178,7 @@
     display: none;
 
     &.is-open {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      max-height: calc(100dvh - 4.5rem);
-      overflow-y: auto;
-      padding-bottom: 1rem;
-
-      a {
-        border-top: 1px solid var(--border);
-        font-size: 1rem;
-        padding-block: 0.75rem;
-      }
-
-      .menu-games {
-        border-left: 1px solid var(--border);
-        display: grid;
-        margin-bottom: 0.25rem;
-        margin-left: 0.25rem;
-        padding-left: 1rem;
-
-        a {
-          border-top: 0;
-          font-size: 0.9375rem;
-          padding-block: 0.375rem;
-        }
-      }
+      @include phone-menu;
     }
   }
 
@@ -191,6 +200,49 @@
       text-decoration: underline;
       text-decoration-color: currentColor;
       text-underline-offset: 0.45em;
+    }
+  }
+}
+
+.site-header.has-menu-sheet {
+  @media (max-width: 55.99rem) {
+    .settings {
+      position: static;
+    }
+
+    .site-nav {
+      @include phone-menu;
+    }
+
+    .site-nav,
+    .settings-panel {
+      background: var(--surface);
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0 0 var(--radius-large) var(--radius-large);
+      box-shadow: 0 12px 24px rgb(0 0 0 / 12%);
+      display: flex;
+      left: 0;
+      max-height: calc(100dvh - var(--site-header-height, 4.5rem) - 1rem);
+      opacity: 0;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      transform: translateY(-0.75rem);
+      transition:
+        opacity 180ms ease-out,
+        transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 220ms;
+      visibility: hidden;
+      width: auto;
+      z-index: 99;
+
+      &.is-open {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0s;
+        visibility: visible;
+      }
     }
   }
 }
@@ -219,6 +271,7 @@
 
 main {
   flex: 1;
+  view-transition-name: page;
 }
 
 .site-footer {
