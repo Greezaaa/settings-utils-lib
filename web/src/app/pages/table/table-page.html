@@ -74,4 +74,174 @@
     <br />
     Try it: click Edit on a row, or select a few rows and edit them together.
   </p>
+
+  <ng-template [appPageFeature]="features.sticky">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, with a sticky header"
+      maxHeight="15rem"
+      [columns]="examples.sticky"
+      [rows]="allProducts"
+      [rowId]="productId"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.columns">
+    <su-lib-table class="mini-table" caption="Products, typed columns" [columns]="examples.columns" [rows]="sample" />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.sorting">
+    <su-lib-table class="mini-table" caption="Products, sortable" [columns]="examples.sorting" [rows]="sample" />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.editing">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, editable"
+      [columns]="examples.editing"
+      [rows]="sample"
+      [rowId]="productId"
+      [actions]="editAction"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.doubleClick">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, edited by double-click"
+      [columns]="examples.doubleClick"
+      [rows]="sample"
+      [rowId]="productId"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.editors">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, with an editor for each field"
+      [columns]="examples.editors"
+      [rows]="sample"
+      [rowId]="productId"
+      [actions]="editAction"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.bulk">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, edited together"
+      selectable
+      [columns]="examples.bulk"
+      [rows]="sample"
+      [rowId]="productId"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.actions">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, with row actions"
+      [columns]="examples.actions"
+      [rows]="actionExampleRows()"
+      [rowId]="productId"
+      [actions]="rowActions"
+      (action)="onExampleAction($event)"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.reordering">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, in your own order"
+      reorderable
+      [columns]="examples.reordering"
+      [rows]="sample"
+      [rowId]="productId"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.pinnedColumns">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, with pinned columns"
+      [columns]="examples.pinnedColumns"
+      [rows]="sample"
+      [rowId]="productId"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.pinnedRows">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, with pinned rows"
+      rowPinning
+      [columns]="examples.pinnedRows"
+      [rows]="allProducts"
+      [rowId]="productId"
+      [pinnedRows]="[103]"
+      [pageSize]="4"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.search">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, searchable"
+      searchable
+      [columns]="examples.search"
+      [rows]="allProducts"
+      [rowId]="productId"
+      [pageSize]="5"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.hiding">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, with columns to show or hide"
+      columnControls
+      [columns]="examples.hiding"
+      [rows]="sample"
+      [rowId]="productId"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.pages">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, a page at a time"
+      [columns]="examples.pages"
+      [rows]="allProducts"
+      [rowId]="productId"
+      [pageSize]="4"
+      [pageSizes]="[4, 8, 'all']"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.customCells">
+    <su-lib-table
+      class="mini-table"
+      caption="Products, with custom cells"
+      [columns]="examples.customCells"
+      [rows]="sample"
+      [rowId]="productId"
+    >
+      <ng-template suTableCell="inStock" [suTableCellOf]="sample" let-product let-text="text">
+        <span class="tag" [class.tag-green]="product.inStock">{{ text }}</span>
+      </ng-template>
+    </su-lib-table>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.labels">
+    <su-lib-table
+      class="mini-table"
+      caption="Productos"
+      selectable
+      searchable
+      [columns]="examples.labels"
+      [rows]="sample"
+      [rowId]="productId"
+      [labels]="spanish"
+    />
+  </ng-template>
 </app-utility-page>

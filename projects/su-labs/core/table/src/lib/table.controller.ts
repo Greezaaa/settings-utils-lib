@@ -9,6 +9,7 @@ interface ResolvedColumn<TRow extends object> {
   readonly compare: ((a: TRow, b: TRow) => number) | null;
   readonly searchable: boolean;
   readonly hidden: boolean;
+  readonly pinnable: boolean;
   text(row: TRow): string;
   toInput(row: TRow): SuTableInputValue;
   apply(
@@ -105,11 +106,13 @@ function resolveColumn<TRow extends object, TKey extends keyof TRow>(
       header: column.header,
       align: column.align ?? 'start',
       pinned: column.pinned ?? null,
+      pinnable: column.pinnable ?? column.pinned !== undefined,
       sortable: sortable !== false,
       editor,
     },
     searchable: column.searchable ?? true,
     hidden: column.hidden ?? false,
+    pinnable: column.pinnable ?? column.pinned !== undefined,
     compare:
       sortable === false ? null : (a, b) => compareValues(a[key], b[key]),
     text: row =>
@@ -167,6 +170,7 @@ export class SuTableController<TRow extends object> {
   private columnOptions: SuTableColumns<TRow> = [];
   private readonly pins = new Map<keyof TRow, SuTablePin | null>();
   private readonly visibility = new Map<keyof TRow, boolean>();
+  private readonly pinnability = new Map<keyof TRow, boolean>();
   private pinnedIds: readonly SuTableRowId[] = [];
   private query = '';
   private terms: readonly string[] = [];
@@ -508,6 +512,42 @@ export class SuTableController<TRow extends object> {
     this.publish();
   }
 
+  /**
+   * Shows or hides the pin in a column's heading, which pins and unpins it. Taking the pin away also unpins the
+   * column, so nothing stays pinned without a way back.
+   */
+  setColumnPinnable(key: keyof TRow, pinnable: boolean): void {
+    const column = this.columns.find(item => item.key === key);
+    if (!column || this.isPinnable(column) === pinnable) {
+      return;
+    }
+    this.pinnability.set(key, pinnable);
+    if (!pinnable && this.pinOf(column)) {
+      this.pins.set(key, null);
+      this.announcement = this.labels.columnUnpinned(column.view.header);
+    }
+    this.publish();
+  }
+
+  /** Shows every column, or hides all but the first one on view */
+  setColumnsVisible(visible: boolean): void {
+    const shown = this.columns.filter(column => this.isVisible(column));
+    const keep = this.displayColumns()[0];
+    this.columns.forEach(column =>
+      this.visibility.set(column.key, visible || column === keep)
+    );
+    const changed = visible
+      ? shown.length < this.columns.length
+      : shown.length > 1;
+    if (!changed) {
+      return;
+    }
+    this.announcement = visible
+      ? this.labels.allColumnsShown
+      : this.labels.columnsHidden;
+    this.publish();
+  }
+
   /** Pins a column to an edge, keeping it in view while the others scroll, or unpins it with null */
   pinColumn(key: keyof TRow, pin: SuTablePin | null): void {
     const column = this.columns.find(item => item.key === key);
@@ -720,6 +760,10 @@ export class SuTableController<TRow extends object> {
   }
 
   /** The columns in display order: pinned to the start, the rest, then pinned to the end */
+  private isPinnable(column: ResolvedColumn<TRow>): boolean {
+    return this.pinnability.get(column.key) ?? column.pinnable;
+  }
+
   private isVisible(column: ResolvedColumn<TRow>): boolean {
     return this.visibility.get(column.key) ?? !column.hidden;
   }
@@ -753,6 +797,7 @@ export class SuTableController<TRow extends object> {
       columns: columns.map(column => ({
         ...column.view,
         pinned: this.pinOf(column),
+        pinnable: this.isPinnable(column),
         sort: this.sort?.key === column.key ? this.sort.direction : 'none',
       })),
       rows,
@@ -762,6 +807,7 @@ export class SuTableController<TRow extends object> {
         header: column.view.header,
         visible: this.isVisible(column),
         pinned: this.pinOf(column),
+        pinnable: this.isPinnable(column),
       })),
       rowHeaderKey:
         this.columns.find(column => this.isVisible(column))?.key ?? null,

@@ -456,6 +456,31 @@ describe('SuTableController column pinning', () => {
     expect(table.state.get().announcement).toBe('Joined unpinned');
   });
 
+  it('shows the heading pin on pinned or pinnable columns, and unpins a column when its pin goes', () => {
+    const table = new SuTableController<User>({
+      columns: [
+        { key: 'name', header: 'Name', pinned: 'start' },
+        { key: 'age', header: 'Age', pinnable: true },
+        { key: 'status', header: 'Status' },
+      ],
+      rows: USERS,
+    });
+    const pinnable = () =>
+      table.state.get().allColumns.map(column => column.pinnable);
+
+    expect(pinnable()).toEqual([true, true, false]);
+    table.setColumnPinnable('status', true);
+    expect(pinnable()).toEqual([true, true, true]);
+
+    table.setColumnPinnable('name', false);
+    expect(table.state.get().columns[0]).toMatchObject({
+      key: 'name',
+      pinned: null,
+      pinnable: false,
+    });
+    expect(table.state.get().announcement).toBe('Name unpinned');
+  });
+
   it('keeps the edit fields in display order', () => {
     const table = createTable();
     table.pinColumn('status', 'start');
@@ -810,9 +835,27 @@ describe('SuTableController column visibility', () => {
     ]);
     expect(state.rows[0].data.age).toBe(31);
     expect(state.allColumns).toEqual([
-      { key: 'name', header: 'Name', visible: true, pinned: null },
-      { key: 'age', header: 'Age', visible: false, pinned: null },
-      { key: 'status', header: 'Status', visible: true, pinned: null },
+      {
+        key: 'name',
+        header: 'Name',
+        visible: true,
+        pinned: null,
+        pinnable: false,
+      },
+      {
+        key: 'age',
+        header: 'Age',
+        visible: false,
+        pinned: null,
+        pinnable: false,
+      },
+      {
+        key: 'status',
+        header: 'Status',
+        visible: true,
+        pinned: null,
+        pinnable: false,
+      },
     ]);
   });
 
@@ -838,6 +881,20 @@ describe('SuTableController column visibility', () => {
 
     table.setColumnVisible('name', true);
     expect(table.state.get().announcement).toBe('Name shown');
+  });
+
+  it('shows every column, or hides all but the first one on view', () => {
+    const table = createTable();
+
+    table.setColumnsVisible(false);
+    expect(table.state.get().columns.map(column => column.key)).toEqual([
+      'name',
+    ]);
+    expect(table.state.get().announcement).toBe('Columns hidden but one');
+
+    table.setColumnsVisible(true);
+    expect(table.state.get().columns).toHaveLength(5);
+    expect(table.state.get().announcement).toBe('Every column shown');
   });
 
   it('leaves hidden columns out of the search and the edit fields, and keeps their values on save', () => {

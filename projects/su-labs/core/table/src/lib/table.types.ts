@@ -88,6 +88,8 @@ export interface SuTableColumn<TRow extends object, TKey extends keyof TRow> {
   readonly searchable?: boolean;
   /** Starts hidden: the field stays in the row data, out of view; `setColumnVisible` shows it */
   readonly hidden?: boolean;
+  /** Shows a pin in the heading to pin and unpin the column; by default only on columns that start `pinned` */
+  readonly pinnable?: boolean;
 }
 
 /** Every column of a table, each typed by its own field */
@@ -138,15 +140,18 @@ export interface SuTableLabels {
   readonly clearSelection: string;
   readonly mixed: string;
   readonly columns: string;
-  readonly pinNone: string;
-  readonly pinStart: string;
-  readonly pinEnd: string;
   readonly columnPinned: (header: string, pin: SuTablePin) => string;
   readonly columnUnpinned: (header: string) => string;
   /** The name of a column's pin choice in a column menu */
   readonly pinColumn: (header: string) => string;
   readonly columnShown: (header: string) => string;
   readonly columnHidden: (header: string) => string;
+  /** The name of the switch that shows a column's pin in its heading */
+  readonly showPin: (header: string) => string;
+  readonly searchColumns: string;
+  readonly allColumns: string;
+  readonly allColumnsShown: string;
+  readonly columnsHidden: string;
   readonly pagination: string;
   readonly rowsPerPage: string;
   readonly allRows: string;
@@ -203,6 +208,8 @@ export interface SuTableColumnView<TRow extends object> {
   readonly align: SuTableAlign;
   /** Pinned columns come first (`start`) or last (`end`), in their own order */
   readonly pinned: SuTablePin | null;
+  /** Its heading shows a pin to pin and unpin it */
+  readonly pinnable: boolean;
   readonly sortable: boolean;
   /** For `aria-sort` */
   readonly sort: SuTableSortDirection | 'none';
@@ -317,4 +324,6 @@ export interface SuTableColumnState<TRow extends object> {
   readonly header: string;
   readonly visible: boolean;
   readonly pinned: SuTablePin | null;
+  /** Its heading shows a pin to pin and unpin it */
+  readonly pinnable: boolean;
 }

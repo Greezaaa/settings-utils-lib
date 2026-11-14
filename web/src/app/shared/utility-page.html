@@ -31,6 +31,35 @@
   <ng-content />
 </section>
 
+@if (features().length > 0) {
+  <section class="container page-section" appReveal aria-labelledby="features-title">
+    <h2 id="features-title" class="section-title">What it does</h2>
+    <p class="muted section-intro">
+      Each feature on a small table of its own.
+      <br />
+      Try them right here, and open the code to see what turns them on.
+    </p>
+    <div class="feature-list">
+      @for (example of features(); track example.feature().title) {
+        @let feature = example.feature();
+        <article class="feature">
+          <div class="feature-text">
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+            <details class="feature-code">
+              <summary>Show the code</summary>
+              <app-code-block [code]="feature.code" />
+            </details>
+          </div>
+          <div class="feature-example">
+            <ng-container *ngTemplateOutlet="example.template" />
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+}
+
 <section class="container page-section" appReveal aria-labelledby="install-title">
   <h2 id="install-title" class="section-title">Install</h2>
   <app-code-tabs [tabs]="install()" />

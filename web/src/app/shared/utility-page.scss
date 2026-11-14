@@ -47,6 +47,63 @@
   margin-top: -0.5rem;
 }
 
+.feature-list {
+  display: grid;
+  gap: 2.5rem;
+
+  @media (min-width: 48rem) {
+    gap: 3.5rem;
+  }
+}
+
+.feature {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 48rem) {
+    gap: 2.5rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+
+    &:nth-child(odd) {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+
+      .feature-example {
+        order: -1;
+      }
+    }
+  }
+
+  h3 {
+    color: var(--heading);
+    font-size: 1.125rem;
+    margin: 0 0 0.5rem;
+  }
+
+  > .feature-text > p {
+    margin: 0;
+  }
+}
+
+.feature-example {
+  min-width: 0;
+}
+
+.feature-code {
+  margin-top: 0.75rem;
+
+  summary {
+    color: var(--heading);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  app-code-block {
+    margin-top: 0.75rem;
+  }
+}
+
 .all-releases {
   font-size: 0.9375rem;
 }

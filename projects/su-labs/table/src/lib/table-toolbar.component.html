@@ -19,41 +19,76 @@
     </div>
   }
   @if (columnControls()) {
-    <button
-      type="button"
-      class="su-table-button"
-      [attr.aria-expanded]="columnsOpen()"
-      [attr.aria-controls]="controlId() + '-columns'"
-      (click)="columnsOpen.set(!columnsOpen())"
-    >
-      {{ t.columns }}
-    </button>
+    <div #menu class="su-table-columns">
+      <button
+        #menuButton
+        type="button"
+        class="su-table-button"
+        [attr.aria-expanded]="columnsOpen()"
+        [attr.aria-controls]="controlId() + '-columns'"
+        (click)="toggleMenu()"
+      >
+        {{ t.columns }}
+      </button>
+      @if (columnsOpen()) {
+        <div
+          class="su-table-menu"
+          role="group"
+          [id]="controlId() + '-columns'"
+          [attr.aria-labelledby]="controlId() + '-columns-title'"
+          (keydown.escape)="closeMenu()"
+        >
+          <p class="su-table-menu-title" [id]="controlId() + '-columns-title'">{{ t.columns }}</p>
+          <div class="su-table-search">
+            <svg class="su-table-search-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6" />
+              <path d="m10.5 10.5 3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+            <input
+              type="search"
+              class="su-table-search-input"
+              [value]="columnQuery()"
+              [attr.aria-label]="t.searchColumns"
+              [attr.placeholder]="t.search"
+              (input)="onColumnQuery($event)"
+            />
+          </div>
+          <label class="su-table-menu-item is-all">
+            <input
+              type="checkbox"
+              [checked]="shownCount() === columns().length"
+              [indeterminate]="shownCount() > 0 && shownCount() < columns().length"
+              (change)="onAllVisible($event)"
+            />
+            <span>{{ t.allColumns }}</span>
+          </label>
+          <ul class="su-table-menu-list">
+            @for (column of listedColumns(); track column.key) {
+              <li class="su-table-menu-item">
+                <label>
+                  <input
+                    type="checkbox"
+                    [checked]="column.visible"
+                    [disabled]="column.visible && shownCount() === 1"
+                    (change)="onVisible(column.key, $event)"
+                  />
+                  <span>{{ column.header }}</span>
+                </label>
+                <button
+                  type="button"
+                  class="su-table-menu-pin"
+                  [attr.aria-label]="t.showPin(column.header)"
+                  [attr.aria-pressed]="column.pinnable"
+                  [disabled]="!column.visible"
+                  (click)="togglePinnable(column)"
+                >
+                  <svg suTablePinIcon width="13" height="13"></svg>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
   }
 </div>
-@if (columnControls() && columnsOpen()) {
-  <div class="su-table-panel" role="group" [id]="controlId() + '-columns'" [attr.aria-label]="t.columns">
-    @for (column of columns(); track column.key) {
-      <div class="su-table-field">
-        <label class="su-table-check">
-          <input
-            type="checkbox"
-            [checked]="column.visible"
-            [disabled]="column.visible && lastShown()"
-            (change)="onVisible(column.key, $event)"
-          />
-          {{ column.header }}
-        </label>
-        <select
-          class="su-table-select"
-          [attr.aria-label]="t.pinColumn(column.header)"
-          [disabled]="!column.visible"
-          (change)="onPin(column.key, $event)"
-        >
-          <option value="" [selected]="column.pinned === null">{{ t.pinNone }}</option>
-          <option value="start" [selected]="column.pinned === 'start'">{{ t.pinStart }}</option>
-          <option value="end" [selected]="column.pinned === 'end'">{{ t.pinEnd }}</option>
-        </select>
-      </div>
-    }
-  </div>
-}

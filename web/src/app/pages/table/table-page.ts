@@ -1,79 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { SuDialogService } from '@su-labs/dialog';
-import { suCheckboxEditor, suDateEditor, suNumberEditor, suSelectEditor, SuTableAction, SuTableActionEvent, SuTableCellDirective, SuTableColumns, SuTableComponent, SuTableReorderEvent, SuTableSort, suTextEditor } from '@su-labs/table';
+import { SuTableAction, SuTableActionEvent, SuTableCellDirective, SuTableComponent, SuTableReorderEvent, SuTableSort } from '@su-labs/table';
 import { getUtility } from '../../core/packages';
 import { CodeBlock } from '../../shared/code-block';
 import { CodeTab } from '../../shared/code-tabs';
+import { PageFeatureExample } from '../../shared/page-feature';
 import { UtilityPage } from '../../shared/utility-page';
-
-type Category = 'tools' | 'garden' | 'kitchen';
-
-interface Product {
-  readonly id: number;
-  readonly name: string;
-  readonly category: Category;
-  readonly price: number;
-  readonly inStock: boolean;
-  readonly restocked: string;
-}
-
-const CATEGORIES = [
-  { value: 'tools', label: 'Tools' },
-  { value: 'garden', label: 'Garden' },
-  { value: 'kitchen', label: 'Kitchen' },
-] as const satisfies readonly { value: Category; label: string }[];
-
-const PRODUCTS: readonly Product[] = [
-  { id: 101, name: 'Claw hammer', category: 'tools', price: 18.5, inStock: true, restocked: '2026-10-02' },
-  { id: 102, name: 'Watering can', category: 'garden', price: 12, inStock: false, restocked: '2026-08-19' },
-  { id: 103, name: 'Chef’s knife', category: 'kitchen', price: 64.9, inStock: true, restocked: '2026-11-01' },
-  { id: 104, name: 'Pruning shears', category: 'garden', price: 22.75, inStock: true, restocked: '2026-09-14' },
-  { id: 105, name: 'Cordless drill', category: 'tools', price: 119, inStock: false, restocked: '2026-07-30' },
-  { id: 106, name: 'Cast-iron pan', category: 'kitchen', price: 39.95, inStock: true, restocked: '2026-10-21' },
-  { id: 107, name: 'Spirit level', category: 'tools', price: 14.2, inStock: true, restocked: '2026-09-03' },
-  { id: 108, name: 'Garden hose', category: 'garden', price: 29.99, inStock: true, restocked: '2026-10-12' },
-  { id: 109, name: 'Pepper mill', category: 'kitchen', price: 24.5, inStock: false, restocked: '2026-06-27' },
-  { id: 110, name: 'Tape measure', category: 'tools', price: 9.8, inStock: true, restocked: '2026-11-05' },
-  { id: 111, name: 'Seed tray', category: 'garden', price: 6.45, inStock: true, restocked: '2026-10-30' },
-  { id: 112, name: 'Mixing bowls', category: 'kitchen', price: 32, inStock: false, restocked: '2026-08-08' },
-];
-
-const PRICE = new Intl.NumberFormat('en', { style: 'currency', currency: 'EUR' });
-const DAY = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' });
-
-const COLUMNS: SuTableColumns<Product> = [
-  {
-    key: 'name',
-    header: 'Product',
-    sortable: true,
-    pinned: 'start',
-    edit: suTextEditor({ requiredMessage: 'Enter a name' }),
-  },
-  {
-    key: 'category',
-    header: 'Category',
-    sortable: true,
-    format: (category) => CATEGORIES.find((item) => item.value === category)?.label ?? category,
-    edit: suSelectEditor<Category>(CATEGORIES),
-  },
-  {
-    key: 'price',
-    header: 'Price',
-    sortable: true,
-    align: 'end',
-    format: (price) => PRICE.format(price),
-    edit: suNumberEditor({ min: 0, step: 0.01, invalidMessage: 'Enter a price of 0 or more' }),
-  },
-  { key: 'inStock', header: 'In stock', sortable: true, align: 'center', edit: suCheckboxEditor() },
-  {
-    key: 'restocked',
-    header: 'Restocked',
-    sortable: true,
-    hidden: true,
-    format: (day) => DAY.format(new Date(day)),
-    edit: suDateEditor(),
-  },
-];
+import { TABLE_FEATURES } from './table-features';
+import { EDIT_ACTION, EXAMPLE_COLUMNS, ROW_ACTIONS, SAMPLE, SPANISH } from './table-examples';
+import { Product, PRODUCT_COLUMNS, productId, PRODUCTS } from './table-products';
 
 const ACTIONS: readonly SuTableAction<Product>[] = [
   { id: 'edit', label: 'Edit' },
@@ -140,7 +75,7 @@ const result = table.save(); // { ok: true, rows: [{ id: 101, name: '…', price
 
 @Component({
   selector: 'app-table-page',
-  imports: [UtilityPage, SuTableComponent, SuTableCellDirective, CodeBlock],
+  imports: [UtilityPage, SuTableComponent, SuTableCellDirective, CodeBlock, PageFeatureExample],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './table-page.html',
   styleUrl: './table-page.scss',
@@ -150,9 +85,17 @@ export class TablePage {
   private nextId = Math.max(...PRODUCTS.map((product) => product.id)) + 1;
   protected readonly utility = getUtility('table');
   protected readonly usage = USAGE;
-  protected readonly columns = COLUMNS;
+  protected readonly features = TABLE_FEATURES;
+  protected readonly examples = EXAMPLE_COLUMNS;
+  protected readonly sample = SAMPLE;
+  protected readonly allProducts = PRODUCTS;
+  protected readonly editAction = EDIT_ACTION;
+  protected readonly rowActions = ROW_ACTIONS;
+  protected readonly spanish = SPANISH;
+  protected readonly actionExampleRows = signal<readonly Product[]>(SAMPLE);
+  protected readonly columns = PRODUCT_COLUMNS;
   protected readonly actions = ACTIONS;
-  protected readonly productId = (product: Product) => product.id;
+  protected readonly productId = productId;
 
   protected readonly products = signal<readonly Product[]>(PRODUCTS);
   protected readonly productsJson = computed(
@@ -189,6 +132,17 @@ export class TablePage {
       const ids = new Set(rows.map((row) => row.id));
       this.products.update((products) => products.filter((product) => !ids.has(product.id)));
       this.send(`DELETE /api/products?ids=${[...ids].join(',')}`, null);
+    }
+  }
+
+  /** The row actions example: duplicate or delete, right away */
+  protected onExampleAction({ id, rows }: SuTableActionEvent<Product>): void {
+    const ids = new Set(rows.map((row) => row.id));
+    if (id === 'delete') {
+      this.actionExampleRows.update((products) => products.filter((product) => !ids.has(product.id)));
+    } else if (id === 'duplicate') {
+      const copies = rows.map((row) => ({ ...row, id: this.nextId++, name: `${row.name} (copy)` }));
+      this.actionExampleRows.update((products) => [...products, ...copies]);
     }
   }
 

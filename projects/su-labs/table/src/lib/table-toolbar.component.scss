@@ -40,33 +40,110 @@
   @include controls.button;
 }
 
-.su-table-panel {
-  @include controls.panel;
-  @include controls.fields;
+.su-table-columns {
+  position: relative;
 }
 
-.su-table-field {
-  @include controls.field;
-}
+.su-table-menu {
+  background: var(--su-table-menu-background, Canvas);
+  border: var(--su-table-border, 1px solid rgb(0 0 0 / 0.12));
+  border-radius: var(--su-table-radius, 10px);
+  box-shadow: var(--su-table-menu-shadow, 0 12px 32px rgb(0 0 0 / 0.18));
+  box-sizing: border-box;
+  display: grid;
+  gap: 0.6rem;
+  inset-inline-end: 0;
+  max-height: 22rem;
+  max-width: calc(100vw - 2rem);
+  overflow: auto;
+  padding: 0.85rem;
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  width: 16rem;
+  z-index: 10;
 
-.su-table-check {
-  @include controls.label;
-  align-items: center;
-  display: flex;
-  gap: 0.45rem;
-
-  input {
-    accent-color: var(--su-table-accent, #2563eb);
+  .su-table-search {
+    flex: none;
     margin: 0;
-    @include controls.focus-ring;
+    max-width: none;
   }
 }
 
-.su-table-select {
-  @include controls.control;
-  padding: 0.3rem 0.45rem;
+.su-table-menu-title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.su-table-menu-list {
+  display: grid;
+  gap: 0.15rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.su-table-menu-item {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+
+  label {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+    gap: 0.55rem;
+    min-width: 0;
+    padding: 0.3rem 0;
+  }
+
+  input {
+    accent-color: var(--su-table-accent, #2563eb);
+    flex: none;
+    height: 1rem;
+    margin: 0;
+    width: 1rem;
+    @include controls.focus-ring;
+  }
+
+  &.is-all {
+    border-bottom: var(--su-table-row-border, 1px solid rgb(0 0 0 / 0.08));
+    cursor: pointer;
+    gap: 0.55rem;
+    justify-content: flex-start;
+    padding: 0.3rem 0 0.5rem;
+  }
+}
+
+.su-table-menu-pin {
+  @include controls.focus-ring;
+  align-items: center;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  height: 1.75rem;
+  justify-content: center;
+  width: 1.75rem;
+
+  svg {
+    opacity: 0.35;
+  }
+
+  &[aria-pressed='true'] {
+    border-color: var(--su-table-accent, #2563eb);
+    color: var(--su-table-accent, #2563eb);
+
+    svg {
+      opacity: 1;
+    }
+  }
 
   &:disabled {
-    opacity: 0.5;
+    cursor: not-allowed;
+    opacity: 0.4;
   }
 }

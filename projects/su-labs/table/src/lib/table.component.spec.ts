@@ -169,10 +169,14 @@ describe('SuTableComponent', () => {
     expect(document.activeElement).toBe(age);
     age.value = '27';
     age.dispatchEvent(new Event('input'));
-    age.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    age.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })
+    );
     await settle();
 
-    expect(fixture.componentInstance.edited()).toEqual([{ id: 1, name: 'Bo', age: 27 }]);
+    expect(fixture.componentInstance.edited()).toEqual([
+      { id: 1, name: 'Bo', age: 27 },
+    ]);
   });
 
   it('reorders rows with the keyboard on the move handle', async () => {

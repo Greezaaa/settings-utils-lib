@@ -317,6 +317,8 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 | `setDraft(key, value)` | A field's value as typed in its control (`string`, or `boolean` for a checkbox) |
 | `save()` | `{ ok: true, rows }` with the edited rows in the API's shape, or `{ ok: false, errors }` |
 | `cancelEdit()` | Stops editing |
+| `setColumnPinnable(key, pinnable)` | Shows or hides the pin in a column's heading; taking it away unpins the column |
+| `setColumnsVisible(visible)` | Shows every column, or hides all but the first one on view (a Select all checkbox) |
 | `setColumnVisible(key, visible)` | Shows or hides a column; its field stays in the row data, and the last column on view stays shown |
 | `pinColumn(key, pin)` | Pins a column to `'start'` or `'end'`, or unpins it with `null` |
 | `search(query)` | Keeps the rows whose shown text holds every word of the query (case and accents ignored); `''` clears it |

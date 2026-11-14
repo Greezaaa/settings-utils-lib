@@ -12,8 +12,9 @@
     [columnControls]="columnControls()"
     [columns]="current.allColumns"
     (queryChange)="search($event)"
-    (pinChange)="pinColumn($event)"
+    (pinnableChange)="setColumnPinnable($event)"
     (visibilityChange)="setColumnVisible($event)"
+    (allVisibilityChange)="setColumnsVisible($event)"
   />
 }
 @if (selectable() && selectedCount > 0) {
@@ -106,6 +107,19 @@
               </button>
             } @else {
               {{ column.header }}
+            }
+            @if (column.pinnable) {
+              <button
+                type="button"
+                class="su-table-header-pin"
+                [attr.aria-label]="t.pinColumn(column.header)"
+                [attr.aria-pressed]="column.pinned !== null"
+                (click)="toggleColumnPin(column.key, column.pinned)"
+              >
+                <svg suTablePinIcon width="12" height="12"></svg>
+              </button>
+            } @else if (pins[firstColumnSlot + columnIndex]) {
+              <svg suTablePinIcon class="su-table-pinned-icon" width="11" height="11"></svg>
             }
           </th>
         }
@@ -217,9 +231,7 @@
                       [attr.aria-label]="t.pinRow + ', ' + row.label"
                       (click)="pinRow(row.id)"
                     >
-                      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
-                        <path d="M10 1.5 14.5 6l-1.6 1.6-1-.3-2.4 2.4.2 2.8-1.3 1.3L6 11 2.5 14.5 1.5 13.5 5 10 2.2 7.6l1.3-1.3 2.8.2 2.4-2.4-.3-1z" />
-                      </svg>
+                      <svg suTablePinIcon width="12" height="12"></svg>
                       {{ t.pinRow }}
                     </button>
                   }

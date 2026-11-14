@@ -133,16 +133,52 @@ tbody tr.is-pinned-row > * {
   pointer-events: none;
   position: absolute;
   transition: opacity 150ms ease-out;
-  width: 0.75rem;
+  width: 1rem;
+}
+
+.is-pinned-start.is-pinned-edge {
+  border-inline-end: var(--su-table-pinned-border, 1px solid rgb(0 0 0 / 0.14));
+}
+
+.is-pinned-end.is-pinned-edge {
+  border-inline-start: var(--su-table-pinned-border, 1px solid rgb(0 0 0 / 0.14));
+}
+
+.su-table-pinned-icon {
+  margin-inline-start: 0.35rem;
+  opacity: 0.45;
+  vertical-align: -1px;
+}
+
+.su-table-header-pin {
+  @include controls.focus-ring;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  margin-inline-start: 0.2rem;
+  opacity: 0.3;
+  padding: 0.2rem;
+  vertical-align: middle;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &[aria-pressed='true'] {
+    color: var(--su-table-accent, #2563eb);
+    opacity: 1;
+  }
 }
 
 .is-pinned-start.is-pinned-edge::after {
-  background: linear-gradient(to right, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.14)), transparent);
+  background: linear-gradient(to right, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.22)), transparent);
   inset-inline-start: 100%;
 }
 
 .is-pinned-end.is-pinned-edge::after {
-  background: linear-gradient(to left, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.14)), transparent);
+  background: linear-gradient(to left, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.22)), transparent);
   inset-inline-end: 100%;
 }
 
@@ -260,7 +296,6 @@ th.is-editable {
     gap: 0.3rem;
 
     svg {
-      fill: currentColor;
       opacity: 0.5;
     }
 

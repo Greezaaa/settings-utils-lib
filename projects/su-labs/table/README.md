@@ -139,7 +139,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `actions` | `[]` | `SuTableAction<TRow>[]`, buttons on each row |
 | `selectable` | `false` | Checkboxes to select rows, with a toolbar for the selection |
 | `reorderable` | `false` | A move handle on each row |
-| `columnControls` | `false` | A Columns button that opens a panel to show, hide, pin or unpin each column |
+| `columnControls` | `false` | A Columns button with a menu: search, Select all, a checkbox to show each column, and a toggle for the pin in its heading |
 | `pageSize` | `'all'` | Rows per page |
 | `pageSizes` | `[]` | Page sizes to choose from under the table, e.g. `[10, 25, 50, 'all']` |
 | `maxHeight` | — | Any CSS length, e.g. `'28rem'`: the table scrolls inside, keeping the header and pinned rows in view |
@@ -160,7 +160,7 @@ Put anything in a column's cells with a template; `suTableCellOf` only types the
 | `selectionChange` | `readonly TRow[]` |
 | `pageChange` | `{ page, pageSize }`, the page from 0 |
 | `searchChange` | The query, once typing pauses |
-| `columnsChange` | Every column's state (`{ key, header, visible, pinned }`) after a change in the Columns panel |
+| `columnsChange` | Every column's state (`{ key, header, visible, pinned }`) after a change in the Columns menu |
 | `pinnedRowsChange` | The ids of the pinned rows, in pin order |
 
 The table shows your changes right away; update `rows` with the API's answer to keep them, or to undo a failed save.
@@ -177,6 +177,7 @@ The table shows your changes right away; update `rows` with the API's answer to 
 | `validate(value, row)` | A message when an edited value isn't valid, or `null` |
 | `align` | `'start'`, `'center'` or `'end'` |
 | `pinned` | `'start'` or `'end'`: stays in view at that edge while the other columns scroll |
+| `pinnable` | `true` to show the pin in its heading (default: only on pinned columns) |
 | `searchable` | `false` to leave the column out of the search (default `true`) |
 | `hidden` | `true` to start out of view; the field stays in the row data and comes back on save |
 
@@ -213,7 +214,8 @@ Pin a column to keep it in view while the others scroll, e.g. the product name o
 
 Pinned columns move to their edge in the order you list them. The move handles and checkboxes stay with the columns
 pinned to the start, and the actions with those pinned to the end. A soft shadow shows on the pinned edge while other
-columns scroll under it. With `columnControls`, people pin and unpin columns themselves from the Columns panel. If the
+columns scroll under it. Pinned columns, and columns marked `pinnable: true`, show a pin in their heading: tapping it pins or
+unpins the column. The Columns menu (`columnControls`) chooses which headings show that pin. If the
 pinned columns would leave too little room for the rest, they stop sticking until there's room again.
 
 ## Sticky header
@@ -231,7 +233,7 @@ itself while the table scrolls sideways, which it needs to do on narrow screens.
 ## Showing and hiding columns
 
 Load all of the API's fields and show only some: `hidden: true` starts a column out of view, and with `columnControls`
-the Columns panel has a checkbox for each column beside its pin choice. Hidden fields stay in each row, so a saved row
+the Columns menu has a checkbox for each column beside its pin choice. Hidden fields stay in each row, so a saved row
 still comes back whole; they're left out of the search and the edit fields, and the last column on view can't be
 hidden. Keep the layout with `columnsChange`.
 
@@ -296,8 +298,10 @@ su-lib-table {
 | `--su-table-grabbed-background` / `--su-table-grabbed-outline` | blue tints |
 | `--su-table-dragging-background` / `--su-table-dragging-shadow` | `Canvas` / `0 8px 24px rgb(0 0 0 / 0.18)` (the row being dragged) |
 | `--su-table-pinned-row-background` / `--su-table-pinned-row-border` | a faint blue tint / `2px solid` blue at 40% (pinned rows, and the line under them) |
+| `--su-table-pinned-border` | `1px solid rgb(0 0 0 / 0.14)` (the line on a pinned column's edge) |
+| `--su-table-menu-background` / `--su-table-menu-shadow` | `Canvas` / `0 12px 32px rgb(0 0 0 / 0.18)` (the Columns menu) |
 | `--su-table-sticky-shadow` | `0 6px 8px -6px rgb(0 0 0 / 0.25)` (under the header and pinned rows while rows scroll beneath) |
-| `--su-table-pinned-background` / `--su-table-pinned-shadow` | `Canvas` / `rgb(0 0 0 / 0.14)` (pinned cells, and the shadow on their edge) |
+| `--su-table-pinned-background` / `--su-table-pinned-shadow` | `Canvas` / `rgb(0 0 0 / 0.22)` (pinned cells, and the shadow on their edge) |
 | `--su-table-accent` | `#2563eb` (checkboxes) |
 | `--su-table-button-background` / `--su-table-button-border` / `--su-table-button-color` | `transparent` / `1px solid rgb(0 0 0 / 0.2)` / `inherit` |
 | `--su-table-button-radius` / `--su-table-button-padding` | `6px` / `0.3rem 0.7rem` |

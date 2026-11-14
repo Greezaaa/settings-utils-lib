@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { changelogResource } from '../changelog/changelog.resource';
 import { ReleaseList } from '../changelog/release-list';
 import { ENVIRONMENTS } from '../core/environments';
 import { changelogUrl, npmUrl, readmeUrl } from '../core/links';
 import { SuUtility } from '../core/packages';
+import { CodeBlock } from './code-block';
 import { CodeTab, CodeTabs } from './code-tabs';
+import { PageFeatureExample } from './page-feature';
 import { Reveal } from './reveal';
 
 @Component({
   selector: 'app-utility-page',
-  imports: [CodeTabs, ReleaseList, RouterLink, Reveal],
+  imports: [CodeBlock, CodeTabs, NgTemplateOutlet, ReleaseList, RouterLink, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './utility-page.html',
   styleUrl: './utility-page.scss',
@@ -18,6 +21,8 @@ import { Reveal } from './reveal';
 export class UtilityPage {
   readonly utility = input.required<SuUtility>();
   readonly usage = input.required<readonly CodeTab[]>();
+  /** Features shown one by one under the demo, each beside its live example, alternating sides */
+  protected readonly features = contentChildren(PageFeatureExample);
 
   protected readonly environments = ENVIRONMENTS;
 

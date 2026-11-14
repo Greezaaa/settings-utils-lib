@@ -4,8 +4,9 @@ import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTa
 import { SuTableCellContext, SuTableCellDirective } from './table-cell.directive';
 import { SuTableFieldComponent } from './table-field.component';
 import { SuTablePaginatorComponent } from './table-paginator.component';
+import { SuTablePinIconComponent } from './table-pin-icon.component';
 import { SuTablePinDirective, SuTablePinPlacement } from './table-pin.directive';
-import { SuTablePinChange, SuTableToolbarComponent, SuTableVisibilityChange } from './table-toolbar.component';
+import { SuTablePinnableChange, SuTableToolbarComponent, SuTableVisibilityChange } from './table-toolbar.component';
 
 /** The action id the table handles itself: it edits the row inline */
 export const SU_TABLE_EDIT_ACTION = 'edit';
@@ -66,6 +67,7 @@ const SEARCH_DELAY = 200;
     SuTableFieldComponent,
     SuTablePaginatorComponent,
     SuTablePinDirective,
+    SuTablePinIconComponent,
     SuTableToolbarComponent,
   ],
   templateUrl: './table.component.html',
@@ -87,7 +89,7 @@ export class SuTableComponent<TRow extends object> {
   readonly selectable = input(false, { transform: booleanAttribute });
   /** Rows can be reordered, by dragging or with the keyboard @default false */
   readonly reorderable = input(false, { transform: booleanAttribute });
-  /** A Columns button that opens a panel to pin columns @default false */
+  /** A Columns button with a menu to show or hide columns and the pin in their headings @default false */
   readonly columnControls = input(false, { transform: booleanAttribute });
   /** A search box above the table that narrows the rows by their text @default false */
   readonly searchable = input(false, { transform: booleanAttribute });
@@ -119,7 +121,7 @@ export class SuTableComponent<TRow extends object> {
   readonly searchChange = output<string>();
   /** The pinned rows changed: their ids, in pin order */
   readonly pinnedRowsChange = output<readonly SuTableRowId[]>();
-  /** A column was shown, hidden, pinned or unpinned from the Columns panel: every column's state, e.g. to save it */
+  /** A column was shown, hidden, pinned or unpinned from the Columns menu: every column's state, e.g. to save it */
   readonly columnsChange = output<readonly SuTableColumnState<TRow>[]>();
   /** The page or the page size changed */
   readonly pageChange = output<SuTablePageEvent>();
@@ -159,12 +161,12 @@ export class SuTableComponent<TRow extends object> {
     const draft = this.state().draft;
     return draft?.bulk ? draft : null;
   });
-  /** The actions column also holds Save and Cancel for a row edited by double-click */
+  /** The actions column also shows, for Save and Cancel, while a row is edited by double-click */
   protected readonly hasActions = computed(
     () =>
       this.actions().length > 0 ||
       this.rowPinning() ||
-      (this.editOnDoubleClick() && this.state().editable)
+      this.inlineDraft() !== null
   );
   /** The pinned rows, then the current page */
   protected readonly bodyRows = computed(() => {
@@ -371,8 +373,22 @@ export class SuTableComponent<TRow extends object> {
     return `${this.tableId}-${id}-${String(key)}`;
   }
 
-  protected pinColumn({ key, pin }: SuTablePinChange<TRow>): void {
-    this.controller.pinColumn(key, pin);
+  /** The pin in a heading pins its column to the start, or unpins it */
+  protected toggleColumnPin(key: keyof TRow, pinned: SuTablePin | null): void {
+    this.controller.pinColumn(key, pinned ? null : 'start');
+    this.columnsChange.emit(this.state().allColumns);
+  }
+
+  protected setColumnPinnable({
+    key,
+    pinnable,
+  }: SuTablePinnableChange<TRow>): void {
+    this.controller.setColumnPinnable(key, pinnable);
+    this.columnsChange.emit(this.state().allColumns);
+  }
+
+  protected setColumnsVisible(visible: boolean): void {
+    this.controller.setColumnsVisible(visible);
     this.columnsChange.emit(this.state().allColumns);
   }
 
