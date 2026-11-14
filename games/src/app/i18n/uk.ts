@@ -1080,6 +1080,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     loading: 'Завантаження…',
     previewTitle: 'Режим перегляду',
     gameCategories: game => `Категорії гри ${game}`,
+    uploadThumbnail: 'Завантажити картинку',
+    automaticThumbnail: 'Автоматична',
     offlineTitle: 'Гра без мережі на цьому пристрої',
     offlineActive: megabytes => `Увімкнено: ігри зберігаються тут (усього ${megabytes} МБ)`,
     offlineInactive: 'Вимкнено: увімкни це в меню налаштувань, щоб зберегти ігри тут',

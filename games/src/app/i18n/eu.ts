@@ -1050,6 +1050,8 @@ export const EU: SiteMessages = {
     loading: 'Kargatzen…',
     previewTitle: 'Aurrebista modua',
     gameCategories: game => `${game} jokoaren kategoriak`,
+    uploadThumbnail: 'Igo irudia',
+    automaticThumbnail: 'Erabili automatikoa',
     offlineTitle: 'Konexiorik gabeko jokoa gailu honetan',
     offlineActive: megabytes => `Aktibatuta: jokoak hemen gordetzen dira (${megabytes} MB guztira)`,
     offlineInactive: 'Desaktibatuta: aktibatu ezarpenen menuan jokoak hemen gordetzeko',

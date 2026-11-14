@@ -25,9 +25,15 @@ export interface GameCategoryList {
   readonly categories: readonly GameCategory[];
 }
 
+export interface ThumbnailVersion {
+  readonly game: GameSlug;
+  readonly version: number;
+}
+
 export interface GameSettings {
   readonly switches: readonly GameSwitch[];
   readonly categories: readonly GameCategoryList[];
+  readonly thumbnails: readonly ThumbnailVersion[];
 }
 
 export interface SiteError {
@@ -65,6 +71,16 @@ function parseCategories(item: unknown): GameCategoryList[] {
   return isGameSlug(game) && known.length > 0 ? [{ game, categories: known }] : [];
 }
 
+export function parseThumbnails(list: unknown): ThumbnailVersion[] {
+  return Array.isArray(list)
+    ? list.flatMap((item: unknown) => {
+        const game = field(item, 'game');
+        const version = field(item, 'version');
+        return isGameSlug(game) && typeof version === 'number' && Number.isInteger(version) ? [{ game, version }] : [];
+      })
+    : [];
+}
+
 function parseGameSettings(body: unknown): GameSettings | null {
   const games = field(body, 'games');
   if (!Array.isArray(games)) {
@@ -77,7 +93,7 @@ function parseGameSettings(body: unknown): GameSettings | null {
   });
   const lists = field(body, 'categories');
   const categories = Array.isArray(lists) ? lists.flatMap((item: unknown) => parseCategories(item)) : [];
-  return { switches, categories };
+  return { switches, categories, thumbnails: parseThumbnails(field(body, 'thumbnails')) };
 }
 
 export interface FeatureSwitch {

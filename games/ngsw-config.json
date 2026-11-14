@@ -28,7 +28,9 @@
       "installMode": "lazy",
       "updateMode": "lazy",
       "resources": {
-        "files": ["/dictionaries/**"]
+        "files": [
+          "/dictionaries/**"
+        ]
       }
     },
     {
@@ -36,7 +38,23 @@
       "installMode": "lazy",
       "updateMode": "lazy",
       "resources": {
-        "urls": ["https://fonts.googleapis.com/**", "https://fonts.gstatic.com/**"]
+        "urls": [
+          "https://fonts.googleapis.com/**",
+          "https://fonts.gstatic.com/**"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "game-thumbnails",
+      "urls": [
+        "https://api.su-labs.dev/v1/games/*/thumbnail*"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 40,
+        "maxAge": "30d"
       }
     }
   ]

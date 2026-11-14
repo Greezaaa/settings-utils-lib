@@ -4,7 +4,7 @@ import { Throttle } from '@nestjs/throttler';
 import { z } from 'zod';
 import { AdminGuard } from '../security/admin.guard.js';
 import { limitSchema, offsetSchema } from '../shared/page.js';
-import { IMAGE_MAX_BYTES } from './clean-image.js';
+import { IMAGE_MAX_BYTES } from '../shared/clean-image.js';
 import { Suggestion } from './suggestion.entity.js';
 import type { StatusInput, SuggestionInput, SuggestionStatus } from './suggestions.schema.js';
 import { statusSchema, SUGGESTION_STATUSES, suggestionSchema } from './suggestions.schema.js';

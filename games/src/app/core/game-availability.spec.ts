@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AdminApi, AdminRole, canPreview } from './admin-api';
 import { GameAvailability } from './game-availability';
 import { GAMES } from './games';
-import { GameCategoryList, GamesApi, GameSwitch } from './games-api';
+import { GameCategoryList, GamesApi, GameSwitch, ThumbnailVersion } from './games-api';
 
 function adminAs(role?: AdminRole): Pick<AdminApi, 'restore' | 'canPreview'> {
   return {
@@ -16,9 +16,10 @@ function availabilityWith(
   switches: GameSwitch[] | null,
   role?: AdminRole,
   categories: GameCategoryList[] = [],
+  thumbnails: ThumbnailVersion[] = [],
 ): GameAvailability {
   const api: Pick<GamesApi, 'gameSettings'> = {
-    gameSettings: vi.fn(async () => (switches ? { switches, categories } : null)),
+    gameSettings: vi.fn(async () => (switches ? { switches, categories, thumbnails } : null)),
   };
   const injector = Injector.create({
     providers: [
@@ -32,6 +33,17 @@ function availabilityWith(
 
 describe('GameAvailability', () => {
   afterEach(() => localStorage.clear());
+
+  it('shows an uploaded thumbnail, with its version so a new upload replaces the old one, and the automatic one otherwise', async () => {
+    const availability = availabilityWith([], undefined, [], [{ game: 'word-search', version: 1700 }]);
+    await availability.ready();
+    expect(availability.thumbnailOf('word-search')).toBe('http://localhost:3000/v1/games/word-search/thumbnail?v=1700');
+    expect(availability.thumbnailOf('math-games')).toBe('/thumbnails/math-games.webp');
+    availability.setThumbnail('math-games', 1800);
+    expect(availability.thumbnailOf('math-games')).toBe('http://localhost:3000/v1/games/math-games/thumbnail?v=1800');
+    availability.setThumbnail('math-games', null);
+    expect(availability.thumbnailOf('math-games')).toBe('/thumbnails/math-games.webp');
+  });
 
   it('uses the admin\'s categories over the built-in one, and remembers them for offline visits', async () => {
     const online = availabilityWith([], undefined, [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }]);

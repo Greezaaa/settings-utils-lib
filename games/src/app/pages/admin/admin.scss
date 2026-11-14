@@ -141,6 +141,27 @@ input[type='text'] {
   }
 }
 
+.thumbnail-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  label.is-busy {
+    opacity: 0.6;
+  }
+}
+
+.thumbnail-preview {
+  aspect-ratio: 4 / 3;
+  background: color-mix(in srgb, var(--text) 6%, var(--surface));
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  object-fit: cover;
+  width: 4rem;
+}
+
 .category-chips {
   display: flex;
   flex-wrap: wrap;

@@ -6,6 +6,7 @@ import { FEATURES, FeatureId } from '../../../core/features';
 import { GameAvailability } from '../../../core/game-availability';
 import { byCategory, GAME_CATEGORIES, GAME_SLUGS, GameCategory, gameInfo, GameSlug } from '../../../core/games';
 
+import { shrinkImage } from '../../../core/shrink-image';
 import { saveFailedNotice } from '../save-failed-notice';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
@@ -62,6 +63,42 @@ export class AdminGames {
       this.notifySaveFailed();
     }
     this.saving.update((saving) => new Set([...saving].filter((other) => other !== game)));
+  }
+
+  protected async uploadThumbnail(game: GameSlug, event: Event): Promise<void> {
+    const input = event.target instanceof HTMLInputElement ? event.target : null;
+    const file = input?.files?.[0];
+    if (!input || !file) {
+      return;
+    }
+    await this.whileSaving(game, async () => {
+      const saved = await shrinkImage(file).then((picture) => this.admin.setGameThumbnail(game, picture), () => false);
+      if (saved) {
+        this.availability.setThumbnail(game, Date.now());
+      } else {
+        this.notifySaveFailed();
+      }
+    });
+    input.value = '';
+  }
+
+  protected removeThumbnail(game: GameSlug): Promise<void> {
+    return this.whileSaving(game, async () => {
+      if (await this.admin.removeGameThumbnail(game)) {
+        this.availability.setThumbnail(game, null);
+      } else {
+        this.notifySaveFailed();
+      }
+    });
+  }
+
+  private async whileSaving(id: GameSlug, work: () => Promise<void>): Promise<void> {
+    if (this.saving().has(id)) {
+      return;
+    }
+    this.saving.update((saving) => new Set(saving).add(id));
+    await work();
+    this.saving.update((saving) => new Set([...saving].filter((other) => other !== id)));
   }
 
   protected toggleFeature(feature: FeatureId, event: Event): Promise<void> {

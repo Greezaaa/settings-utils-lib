@@ -201,7 +201,7 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(204);
     await request(app.getHttpServer())
       .get('/v1/games')
-      .expect(200, { games: [], categories: [] });
+      .expect(200, { games: [], categories: [], thumbnails: [] });
     await request(app.getHttpServer())
       .put('/admin/games/hit-the-note')
       .send({ enabled: false })
@@ -223,7 +223,36 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(204);
     await request(app.getHttpServer())
       .get('/v1/games')
-      .expect(200, { games: [{ game: 'hit-the-note', enabled: true }], categories: [] });
+      .expect(200, { games: [{ game: 'hit-the-note', enabled: true }], categories: [], thumbnails: [] });
+  });
+
+  it('lets the super admin upload a thumbnail for a game, served as a small WebP picture, and remove it', async () => {
+    const server = app.getHttpServer();
+    const picture = await sharp({ create: { width: 1600, height: 1200, channels: 3, background: '#88ccee' } }).png().toBuffer();
+    await request(server).put('/admin/games/word-search/thumbnail').attach('image', picture, 'drawing.png').expect(401);
+    await request(server).put('/admin/games/word-search/thumbnail').set(admin).expect(400);
+    await request(server)
+      .put('/admin/games/word-search/thumbnail')
+      .set(admin)
+      .attach('image', Buffer.from('not a picture'), 'drawing.png')
+      .expect(400);
+    await request(server).put('/admin/games/word-search/thumbnail').set(admin).attach('image', picture, 'drawing.png').expect(204);
+    const { body } = await request(server).get('/v1/games').expect(200);
+    expect(body.thumbnails).toEqual([{ game: 'word-search', version: expect.any(Number) }]);
+    const thumbnail = await request(server)
+      .get('/v1/games/word-search/thumbnail')
+      .buffer(true)
+      .parse((response, done) => {
+        const chunks: Buffer[] = [];
+        response.on('data', (chunk: Buffer) => chunks.push(chunk));
+        response.on('end', () => done(null, Buffer.concat(chunks)));
+      })
+      .expect(200)
+      .expect('Content-Type', 'image/webp');
+    const { width, height, format } = await sharp(thumbnail.body).metadata();
+    expect({ width, height, format }).toEqual({ width: 640, height: 480, format: 'webp' });
+    await request(server).delete('/admin/games/word-search/thumbnail').set(admin).expect(204);
+    await request(server).get('/v1/games/word-search/thumbnail').expect(404);
   });
 
   it('lets the super admin give a game one or more known categories', async () => {

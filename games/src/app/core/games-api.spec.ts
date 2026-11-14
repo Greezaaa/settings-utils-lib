@@ -90,6 +90,7 @@ describe('GamesApi', () => {
     expect(await api.gameSettings()).toEqual({
       switches: [{ game: 'hit-the-note', enabled: false }],
       categories: [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }],
+      thumbnails: [],
     });
   });
 });

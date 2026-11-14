@@ -6,7 +6,7 @@ const MAX_SIDE = 1600;
 const ACCEPTED_FORMATS = ['jpeg', 'png', 'webp'];
 const MAX_INPUT_PIXELS = 40_000_000;
 
-export async function cleanImage(input: Buffer): Promise<Buffer> {
+export async function cleanImage(input: Buffer, maxSide = MAX_SIDE): Promise<Buffer> {
   try {
     const image = sharp(input, {
       failOn: 'error',
@@ -19,8 +19,8 @@ export async function cleanImage(input: Buffer): Promise<Buffer> {
     return await image
       .rotate()
       .resize({
-        width: MAX_SIDE,
-        height: MAX_SIDE,
+        width: maxSide,
+        height: maxSide,
         fit: 'inside',
         withoutEnlargement: true,
       })

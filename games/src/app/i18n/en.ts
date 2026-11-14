@@ -1029,6 +1029,8 @@ export const EN: SiteMessages = {
     loading: 'Loading…',
     previewTitle: 'Preview mode',
     gameCategories: game => `Categories of ${game}`,
+    uploadThumbnail: 'Upload picture',
+    automaticThumbnail: 'Use automatic',
     offlineTitle: 'Playing offline on this device',
     offlineActive: megabytes => `On: the games are kept here (${megabytes} MB in all)`,
     offlineInactive: 'Off: turn it on in the settings menu to keep the games here',

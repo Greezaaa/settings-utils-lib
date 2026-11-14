@@ -12,7 +12,7 @@ function flagsWith(features: FeatureSwitch[] | null): { flags: FeatureFlags; ava
   const connection: Pick<Connection, 'isOnline'> = { isOnline: online.asReadonly() };
   const api: Pick<GamesApi, 'featureSwitches' | 'gameSettings'> = {
     featureSwitches: vi.fn(async () => features),
-    gameSettings: vi.fn(async (): Promise<GameSettings | null> => ({ switches: [], categories: [] })),
+    gameSettings: vi.fn(async (): Promise<GameSettings | null> => ({ switches: [], categories: [], thumbnails: [] })),
   };
   const injector = Injector.create({
     providers: [

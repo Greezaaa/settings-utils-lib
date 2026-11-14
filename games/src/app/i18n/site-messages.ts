@@ -565,6 +565,8 @@ export interface SiteMessages {
     >;
     readonly previewTitle: string;
     readonly gameCategories: (game: string) => string;
+    readonly uploadThumbnail: string;
+    readonly automaticThumbnail: string;
     readonly offlineTitle: string;
     readonly offlineActive: (megabytes: string) => string;
     readonly offlineInactive: string;

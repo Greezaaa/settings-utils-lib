@@ -1027,6 +1027,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     loading: 'Caricamento…',
     previewTitle: 'Modalità anteprima',
     gameCategories: (game) => `Categorie di ${game}`,
+    uploadThumbnail: 'Carica immagine',
+    automaticThumbnail: 'Usa automatica',
     offlineTitle: 'Gioco offline su questo dispositivo',
     offlineActive: (megabytes) => `Attivo: i giochi sono salvati qui (${megabytes} MB in tutto)`,
     offlineInactive: 'Disattivo: attivalo nel menu delle impostazioni per salvare qui i giochi',

@@ -24,6 +24,20 @@
               />
               <span class="track" aria-hidden="true"></span>
             </label>
+            <div class="thumbnail-row">
+              <img class="thumbnail-preview" [src]="availability.thumbnailOf(slug)" alt="" loading="lazy" />
+              @if (admin.isSuper()) {
+                <label class="button button-secondary button-small" [class.is-busy]="saving().has(slug)">
+                  {{ 'admin.uploadThumbnail' | translate }}
+                  <input type="file" accept="image/png,image/jpeg,image/webp" class="visually-hidden" [disabled]="saving().has(slug)" (change)="uploadThumbnail(slug, $event)" />
+                </label>
+                @if (availability.hasOwnThumbnail(slug)) {
+                  <button type="button" class="button button-secondary button-small" [disabled]="saving().has(slug)" (click)="removeThumbnail(slug)">
+                    {{ 'admin.automaticThumbnail' | translate }}
+                  </button>
+                }
+              }
+            </div>
             <div class="category-chips" role="group" data-no-ring [attr.aria-label]="'admin.gameCategories' | translate: ('games' | translate)[slug].name">
               @for (category of allCategories; track category) {
                 @let isChosen = availability.categoriesOf(slug).includes(category);

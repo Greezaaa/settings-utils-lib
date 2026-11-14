@@ -326,6 +326,16 @@ export class AdminApi {
     return this.change('PUT', `/admin/games/${game}/categories`, { categories });
   }
 
+  setGameThumbnail(game: GameSlug, picture: Blob): Promise<boolean> {
+    const form = new FormData();
+    form.append('image', picture, 'thumbnail.webp');
+    return this.change('PUT', `/admin/games/${game}/thumbnail`, form);
+  }
+
+  removeGameThumbnail(game: GameSlug): Promise<boolean> {
+    return this.change('DELETE', `/admin/games/${game}/thumbnail`);
+  }
+
   async suggestions(status: SuggestionStatus, offset: number): Promise<AdminSuggestion[]> {
     return listOf(await this.read(`/admin/suggestions?${pageQuery(status, offset)}`), parseSuggestion);
   }
@@ -407,10 +417,11 @@ export class AdminApi {
   private async change(
     method: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
-    body?: object,
+    body?: object | FormData,
     service: ApiService = 'api',
   ): Promise<boolean> {
-    return (await this.fetch(path, body ? jsonInit(method, body) : { method }, SEND_TIMEOUT_MS, service))?.ok ?? false;
+    const init: RequestInit = body instanceof FormData ? { method, body } : body ? jsonInit(method, body) : { method };
+    return (await this.fetch(path, init, SEND_TIMEOUT_MS, service))?.ok ?? false;
   }
 
   private async startSession(response: Response | null): Promise<SignInAnswer> {

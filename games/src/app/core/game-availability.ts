@@ -1,13 +1,15 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { AdminApi } from './admin-api';
-import { defaultCategories, GameCategory, GAMES, GameSlug } from './games';
-import { GameCategoryList, GamesApi, isGameCategory, isGameSlug } from './games-api';
+import { apiUrl } from './api-url';
+import { defaultCategories, GameCategory, GAMES, GameSlug, gameThumbnail } from './games';
+import { GameCategoryList, GamesApi, isGameCategory, isGameSlug, parseThumbnails } from './games-api';
 import { readSwitches, writeSwitches } from './remembered-switches';
 import { readStored, writeStored } from './site-storage';
 
 const PREVIEW_STORAGE = 'admin-preview';
 const SWITCHES_STORAGE = 'game-switches';
 const CATEGORIES_STORAGE = 'game-categories';
+const THUMBNAILS_STORAGE = 'game-thumbnails';
 
 @Injectable({ providedIn: 'root' })
 export class GameAvailability {
@@ -15,6 +17,8 @@ export class GameAvailability {
   private readonly admin = inject(AdminApi);
   private readonly switches = signal<ReadonlyMap<GameSlug, boolean>>(new Map());
   private readonly categories = signal<ReadonlyMap<GameSlug, readonly GameCategory[]>>(new Map());
+  private readonly thumbnails = signal<ReadonlyMap<GameSlug, number>>(new Map());
+  private readonly document = inject(DOCUMENT);
   private loading: Promise<void> | null = null;
 
   readonly isPreview = signal(false);
@@ -42,6 +46,27 @@ export class GameAvailability {
 
   setCategories(game: GameSlug, categories: readonly GameCategory[]): void {
     this.categories.update((known) => new Map(known).set(game, categories));
+  }
+
+  thumbnailOf(game: GameSlug): string {
+    const version = this.thumbnails().get(game);
+    return version === undefined ? gameThumbnail(game) : apiUrl(this.document, `/v1/games/${game}/thumbnail?v=${version}`);
+  }
+
+  hasOwnThumbnail(game: GameSlug): boolean {
+    return this.thumbnails().has(game);
+  }
+
+  setThumbnail(game: GameSlug, version: number | null): void {
+    this.thumbnails.update((known) => {
+      const next = new Map(known);
+      if (version === null) {
+        next.delete(game);
+      } else {
+        next.set(game, version);
+      }
+      return next;
+    });
   }
 
   ready(): Promise<void> {
@@ -79,9 +104,12 @@ export class GameAvailability {
       writeSwitches(SWITCHES_STORAGE, known);
       this.categories.set(new Map(settings.categories.map(({ game, categories }) => [game, categories])));
       writeStored(CATEGORIES_STORAGE, settings.categories);
+      this.thumbnails.set(new Map(settings.thumbnails.map(({ game, version }) => [game, version])));
+      writeStored(THUMBNAILS_STORAGE, settings.thumbnails);
     } else {
       this.switches.set(readSwitches(SWITCHES_STORAGE, isGameSlug) ?? this.switches());
       this.categories.set(new Map(readCategories().map(({ game, categories }) => [game, categories])));
+      this.thumbnails.set(new Map(parseThumbnails(readStored(THUMBNAILS_STORAGE)).map(({ game, version }) => [game, version])));
     }
     this.isKnown.set(true);
   }
