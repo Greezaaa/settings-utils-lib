@@ -25,7 +25,7 @@ function find(url) {
 
 createServer((request, response) => {
   const file = find(request.url ?? '/');
-  const served = file ?? join(ROOT, '404/index.html');
+  const served = file ?? join(ROOT, '404.html');
   response.writeHead(file ? 200 : 404, { 'Content-Type': TYPES[extname(served)] ?? 'application/octet-stream' });
   createReadStream(served).pipe(response);
 }).listen(PORT);

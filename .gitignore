@@ -57,5 +57,5 @@ Thumbs.db
 /backups/
 
 # Playwright
-games/e2e/test-results/
-games/e2e/playwright-report/
+test-results/
+playwright-report/
