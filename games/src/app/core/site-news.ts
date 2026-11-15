@@ -17,12 +17,12 @@ export class SiteNews {
   readonly latestPrivacyVersion = computed(() => latestPrivacyVersion(this.updates()));
   readonly latestPublished = computed(() => latestPublished(this.updates()));
 
-  ready(): Promise<void> {
+  whenLoaded(): Promise<void> {
     this.loading ??= this.load();
     return this.loading;
   }
 
-  async refresh(): Promise<void> {
+  async reload(): Promise<void> {
     this.loading = this.load();
     await this.loading;
   }

@@ -56,24 +56,24 @@ export class PlayerAccount {
   private readonly favorites = inject(FavoriteGames);
   private readonly connection = inject(Connection);
   private readonly signedIn = signal<Account | null>(null);
-  private readonly isKnown = signal(false);
+  private readonly loaded = signal(false);
   private savedFavorites: readonly GameSlug[] = [];
 
   readonly account = this.signedIn.asReadonly();
   readonly isSignedIn = computed(() => this.signedIn() !== null);
   readonly isAvailable = computed(() => this.features.canUse('accounts'));
-  readonly isRestored = this.isKnown.asReadonly();
+  readonly isLoaded = this.loaded.asReadonly();
 
   constructor() {
     afterNextRender(async () => {
       if (!wasSignedIn('player')) {
-        this.isKnown.set(true);
+        this.loaded.set(true);
       }
-      await this.features.ready();
+      await this.features.whenLoaded();
       if (this.isAvailable()) {
         await this.restore();
       }
-      this.isKnown.set(true);
+      this.loaded.set(true);
     });
     let wasOnline = true;
     effect(() => {

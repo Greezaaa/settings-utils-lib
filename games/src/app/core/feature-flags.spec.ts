@@ -44,7 +44,7 @@ describe('FeatureFlags', () => {
   });
 
   it('lets a page open at once when the last visit saved its feature on, without waiting for the API', async () => {
-    await flagsWith([{ feature: 'rooms', enabled: true }]).flags.ready();
+    await flagsWith([{ feature: 'rooms', enabled: true }]).flags.whenLoaded();
     const { flags } = flagsFrom({ site: () => new Promise(() => undefined) });
     await expect(flags.canEnter('rooms')).resolves.toBe(true);
   });
@@ -56,7 +56,7 @@ describe('FeatureFlags', () => {
 
   it('turns rooms off without a connection, and keeps features that work offline', async () => {
     const { flags } = flagsWith([]);
-    await flags.ready();
+    await flags.whenLoaded();
     online.set(false);
     expect(flags.canUse('rooms')).toBe(false);
     expect(flags.canUse('rooms-math-games')).toBe(false);
@@ -66,22 +66,22 @@ describe('FeatureFlags', () => {
   });
 
   it('keeps the last known switches when the API cannot be reached', async () => {
-    await flagsWith([{ feature: 'offline', enabled: true }]).flags.ready();
+    await flagsWith([{ feature: 'offline', enabled: true }]).flags.whenLoaded();
     const { flags } = flagsWith(null);
-    await flags.ready();
+    await flags.whenLoaded();
     expect(flags.isOpen('offline')).toBe(true);
   });
 
   it("shows the defaults until the switches arrive, then the admin's choice", async () => {
     const closed = flagsWith([{ feature: 'rooms', enabled: false }]);
     expect(closed.flags.canUse('rooms')).toBe(true);
-    await closed.flags.ready();
+    await closed.flags.whenLoaded();
     expect(closed.flags.canUse('rooms')).toBe(false);
   });
 
   it('lets testers and the super admin use closed features in preview', async () => {
     const { flags, availability } = flagsWith([{ feature: 'rooms', enabled: false }]);
-    await flags.ready();
+    await flags.whenLoaded();
     availability.setPreview(true);
     expect(flags.canUse('rooms')).toBe(true);
     expect(flags.isOpen('rooms')).toBe(false);
@@ -89,7 +89,7 @@ describe('FeatureFlags', () => {
 
   it('keeps a game in rooms apart from rooms themselves', async () => {
     const { flags } = flagsWith([{ feature: 'rooms-math-games', enabled: false }]);
-    await flags.ready();
+    await flags.whenLoaded();
     expect(flags.canUse('rooms')).toBe(true);
     expect(flags.canUse('rooms-math-games')).toBe(false);
   });

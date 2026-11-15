@@ -28,6 +28,7 @@ import { NameApproval1795100000000 } from './migrations/1795100000000-name-appro
 import { GameCategories1795200000000 } from './migrations/1795200000000-game-categories.js';
 import { GameThumbnails1795300000000 } from './migrations/1795300000000-game-thumbnails.js';
 import { News1795400000000 } from './migrations/1795400000000-news.js';
+import { SessionIndexes1795500000000 } from './migrations/1795500000000-session-indexes.js';
 
 export const databaseOptions = (
   url: string,
@@ -67,6 +68,7 @@ export const databaseOptions = (
     GameCategories1795200000000,
     GameThumbnails1795300000000,
     News1795400000000,
+    SessionIndexes1795500000000,
   ],
   migrationsRun: runMigrations,
   synchronize: false,

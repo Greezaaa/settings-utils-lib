@@ -55,3 +55,7 @@ Thumbs.db
 
 # Copies of the server's backups (npm run backup:pull); never commit them
 /backups/
+
+# Playwright
+games/e2e/test-results/
+games/e2e/playwright-report/

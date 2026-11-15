@@ -44,7 +44,7 @@ describe('GameAvailability', () => {
 
   it('shows an uploaded thumbnail, with its version so a new upload replaces the old one, and the automatic one otherwise', async () => {
     const availability = availabilityWith([], undefined, [], [{ game: 'word-search', version: 1700 }]);
-    await availability.ready();
+    await availability.whenLoaded();
     expect(availability.thumbnailOf('word-search')).toBe('http://localhost:3000/v1/games/word-search/thumbnail?v=1700');
     expect(availability.thumbnailOf('math-games')).toBe('/thumbnails/math-games.webp');
     availability.setThumbnail('math-games', 1800);
@@ -54,16 +54,16 @@ describe('GameAvailability', () => {
   });
 
   it('starts from the switches saved on the last visit while it asks the API again', async () => {
-    await availabilityWith([{ game: 'how-many', enabled: true }]).ready();
+    await availabilityWith([{ game: 'how-many', enabled: true }]).whenLoaded();
     const next = availabilityWith([{ game: 'how-many', enabled: false }]);
-    const loading = next.ready();
+    const loading = next.whenLoaded();
     expect(next.isOpen('how-many')).toBe(true);
     await loading;
     expect(next.isOpen('how-many')).toBe(false);
   });
 
   it('lets a game open at once when the last visit saved it open, without waiting for the API', async () => {
-    await availabilityWith([{ game: 'how-many', enabled: true }]).ready();
+    await availabilityWith([{ game: 'how-many', enabled: true }]).whenLoaded();
     const next = availabilityFrom({ site: () => new Promise(() => undefined) });
     await expect(next.canEnter('how-many')).resolves.toBe(true);
   });
@@ -78,11 +78,11 @@ describe('GameAvailability', () => {
   it("uses the admin's categories over the built-in one, and remembers them for offline visits", async () => {
     const online = availabilityWith([], undefined, [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }]);
     expect(online.categoriesOf('letter-sudoku')).toEqual(['letters']);
-    await online.ready();
+    await online.whenLoaded();
     expect(online.categoriesOf('letter-sudoku')).toEqual(['letters', 'puzzles']);
     expect(online.categoriesOf('math-games')).toEqual(['numbers']);
     const offline = availabilityWith(null);
-    await offline.ready();
+    await offline.whenLoaded();
     expect(offline.categoriesOf('letter-sudoku')).toEqual(['letters', 'puzzles']);
   });
 
@@ -90,7 +90,7 @@ describe('GameAvailability', () => {
     const availability = availabilityWith([{ game: 'sliding-puzzle', enabled: false }]);
     expect(availability.canPlay('sliding-puzzle')).toBe(true);
     expect(availability.canPlay('how-many')).toBe(false);
-    await availability.ready();
+    await availability.whenLoaded();
     expect(availability.canPlay('math-games')).toBe(true);
     expect(availability.isOpen('sliding-puzzle')).toBe(false);
     expect(availability.canPlay('sliding-puzzle')).toBe(false);
@@ -99,31 +99,31 @@ describe('GameAvailability', () => {
 
   it('falls back to the defaults when the API gives no switches', async () => {
     const availability = availabilityWith(null);
-    await availability.ready();
+    await availability.whenLoaded();
     expect(availability.visibleGames()).toEqual(GAMES.filter((game) => game.openByDefault).map(({ slug }) => slug));
   });
 
   it('shows every game in preview to testers, and remembers it for them', async () => {
     const availability = availabilityWith([{ game: 'sliding-puzzle', enabled: false }], 'tester');
-    await availability.ready();
+    await availability.whenLoaded();
     availability.setPreview(true);
     expect(availability.canPlay('sliding-puzzle')).toBe(true);
     expect(availability.isOpen('sliding-puzzle')).toBe(false);
 
     const later = availabilityWith([], 'tester');
-    await later.ready();
+    await later.whenLoaded();
     expect(later.isPreview()).toBe(true);
   });
 
   it('turns preview off for anyone else, even with the flag set in the browser', async () => {
     availabilityWith([], 'tester').setPreview(true);
     const moderator = availabilityWith([], 'moderator');
-    await moderator.ready();
+    await moderator.whenLoaded();
     expect(moderator.isPreview()).toBe(false);
 
     availabilityWith([], 'super').setPreview(true);
     const signedOut = availabilityWith([]);
-    await signedOut.ready();
+    await signedOut.whenLoaded();
     expect(signedOut.isPreview()).toBe(false);
   });
 });

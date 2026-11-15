@@ -54,7 +54,7 @@ export class SiteNotices {
     if (!isSavingAllowed()) {
       return;
     }
-    await this.news.ready();
+    await this.news.whenLoaded();
     const oldDismissed = readStored(OLD_PRIVACY_STORAGE) === true;
     const privacySeen = readVersion(PRIVACY_SEEN_STORAGE) ?? (oldDismissed ? 1 : 0);
     if (privacySeen >= this.news.latestPrivacyVersion()) {
@@ -80,7 +80,7 @@ export class SiteNotices {
   }
 
   private async askGender(): Promise<void> {
-    await this.features.ready();
+    await this.features.whenLoaded();
     if (!this.gender.isAvailable() || this.gender.choice() !== null || readStored(GENDER_ASKED_STORAGE) === true) {
       return;
     }

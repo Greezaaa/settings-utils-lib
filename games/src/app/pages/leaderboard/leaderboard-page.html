@@ -8,7 +8,7 @@
 </header>
 
 <section class="container page-section">
-  @if (!account.isRestored()) {
+  @if (!account.isLoaded()) {
     <p class="muted">{{ 'leaderboard.loading' | translate }}</p>
   } @else if (!canSee()) {
     <p>{{ 'leaderboard.signInFirst' | translate }}</p>

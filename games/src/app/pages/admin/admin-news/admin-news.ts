@@ -107,7 +107,7 @@ export class AdminNewsTab {
   private async reload(): Promise<void> {
     this.items.set(await this.admin.news());
     this.isLoading.set(false);
-    await this.siteNews.refresh();
+    await this.siteNews.reload();
   }
 }
 

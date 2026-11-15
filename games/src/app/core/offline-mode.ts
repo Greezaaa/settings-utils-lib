@@ -41,7 +41,7 @@ export class OfflineMode {
           this.notices.announceUpdate(() => this.document.location.reload());
         }
       });
-      await this.features.ready();
+      await this.features.whenLoaded();
       isReady.set(true);
     });
     effect(() => {

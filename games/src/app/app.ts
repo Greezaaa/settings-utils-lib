@@ -82,7 +82,7 @@ export class App {
   });
   protected readonly isCheckingGame = computed(() => {
     const game = this.pageGame();
-    return game !== null && !this.availability.isKnown() && !this.availability.canPlay(game);
+    return game !== null && !this.availability.isLoaded() && !this.availability.canPlay(game);
   });
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
@@ -118,8 +118,8 @@ export class App {
     const choiceRing = inject(ChoiceRing);
     const liveSettings = inject(LiveSettings);
     afterNextRender(() => {
-      void this.availability.ready();
-      void this.features.ready();
+      void this.availability.whenLoaded();
+      void this.features.whenLoaded();
       choiceRing.start();
       liveSettings.start();
       if (wasSignedIn('admin')) {

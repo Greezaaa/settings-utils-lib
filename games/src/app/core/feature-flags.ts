@@ -1,9 +1,9 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { Connection } from './connection';
 import { FeatureId, FEATURES } from './features';
 import { GameAvailability } from './game-availability';
 import { GamesApi, isFeatureId } from './games-api';
-import { readSwitches, writeSwitches } from './remembered-switches';
+import { RememberedSwitches } from './remembered-switches';
 
 const SWITCHES_STORAGE = 'feature-switches';
 const NEEDS_CONNECTION: ReadonlySet<FeatureId> = new Set(
@@ -15,13 +15,11 @@ export class FeatureFlags {
   private readonly api = inject(GamesApi);
   private readonly availability = inject(GameAvailability);
   private readonly connection = inject(Connection);
-  private readonly switches = signal<ReadonlyMap<FeatureId, boolean>>(new Map());
+  private readonly switches = new RememberedSwitches<FeatureId>(SWITCHES_STORAGE, isFeatureId);
   private loading: Promise<void> | null = null;
-  private hasRemembered = false;
-  private hasStoredSwitches = false;
 
   readonly openFeatures = computed<readonly FeatureId[]>(() =>
-    FEATURES.filter(({ id, openByDefault }) => this.switches().get(id) ?? openByDefault).map(({ id }) => id),
+    FEATURES.filter(({ id, openByDefault }) => this.switches.all().get(id) ?? openByDefault).map(({ id }) => id),
   );
 
   isOpen(feature: FeatureId): boolean {
@@ -36,41 +34,34 @@ export class FeatureFlags {
   }
 
   async canEnter(feature: FeatureId): Promise<boolean> {
-    const loading = this.ready();
-    if (this.hasStoredSwitches && this.canUse(feature)) {
+    const loading = this.whenLoaded();
+    if (this.switches.wasStored && this.canUse(feature)) {
       return true;
     }
     await loading;
     return this.canUse(feature);
   }
 
-  ready(): Promise<void> {
+  whenLoaded(): Promise<void> {
     this.loading ??= this.load();
     return this.loading;
   }
 
   setOpen(feature: FeatureId, open: boolean): void {
-    this.switches.update((switches) => new Map(switches).set(feature, open));
+    this.switches.set(feature, open);
   }
 
-  async refresh(): Promise<void> {
+  async reload(): Promise<void> {
     this.loading = this.load();
     await this.loading;
   }
 
   private async load(): Promise<void> {
-    if (!this.hasRemembered) {
-      this.hasRemembered = true;
-      const stored = readSwitches(SWITCHES_STORAGE, isFeatureId);
-      this.hasStoredSwitches = stored !== null;
-      this.switches.set(stored ?? this.switches());
-    }
-    const [site] = await Promise.all([this.api.site(), this.availability.ready()]);
+    this.switches.restore();
+    const [site] = await Promise.all([this.api.site(), this.availability.whenLoaded()]);
     const switches = site?.features;
     if (switches) {
-      const known = new Map(switches.map(({ feature, enabled }) => [feature, enabled]));
-      this.switches.set(known);
-      writeSwitches(SWITCHES_STORAGE, known);
+      this.switches.replace(new Map(switches.map(({ feature, enabled }) => [feature, enabled])));
     }
   }
 }

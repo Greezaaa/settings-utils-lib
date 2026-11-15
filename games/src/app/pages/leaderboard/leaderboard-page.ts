@@ -71,7 +71,7 @@ export class LeaderboardPage {
   constructor() {
     effect(() => {
       const game = this.game();
-      if (this.account.isRestored() && this.canSee()) {
+      if (this.account.isLoaded() && this.canSee()) {
         void this.load(game);
       }
     });

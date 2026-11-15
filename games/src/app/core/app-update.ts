@@ -1,5 +1,6 @@
 import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, isDevMode, signal, untracked } from '@angular/core';
 import { field } from './api-url';
+import { BackgroundChecks } from './background-checks';
 import { FeatureFlags } from './feature-flags';
 import { SiteNotices } from './site-notices';
 
@@ -7,6 +8,7 @@ declare const GAMES_VERSION: string | undefined;
 
 const VERSION_FILE = '/version.json';
 const CHECK_EVERY_MS = 30 * 60 * 1000;
+const MIN_CHECK_GAP_MS = 60_000;
 const CHECK_FOR_UPDATES = 'CHECK_FOR_UPDATES';
 
 export type UpdateState = 'idle' | 'checking' | 'latest' | 'ready' | 'failed';
@@ -21,6 +23,7 @@ export class AppUpdate {
   private readonly document = inject(DOCUMENT);
   private readonly features = inject(FeatureFlags);
   private readonly notices = inject(SiteNotices);
+  private readonly checks = inject(BackgroundChecks);
   private readonly stateSignal = signal<UpdateState>('idle');
   private readonly latestSignal = signal<string | null>(null);
 
@@ -36,19 +39,8 @@ export class AppUpdate {
       if (!isReady() || !this.isAvailable() || isDevMode()) {
         return;
       }
-      const view = this.document.defaultView;
-      const onVisible = (): void => {
-        if (this.document.visibilityState === 'visible') {
-          void this.check();
-        }
-      };
       untracked(() => void this.check());
-      this.document.addEventListener('visibilitychange', onVisible);
-      const timer = view?.setInterval(() => void this.check(), CHECK_EVERY_MS);
-      onCleanup(() => {
-        this.document.removeEventListener('visibilitychange', onVisible);
-        view?.clearInterval(timer);
-      });
+      onCleanup(this.checks.add(() => void this.check(), { everyMs: CHECK_EVERY_MS, minGapMs: MIN_CHECK_GAP_MS }));
     });
   }
 

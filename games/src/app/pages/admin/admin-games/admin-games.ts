@@ -39,7 +39,7 @@ export class AdminGames {
   private readonly notifySaveFailed = saveFailedNotice();
 
   constructor() {
-    afterNextRender(() => Promise.all([this.availability.refresh(), this.flags.refresh()]));
+    afterNextRender(() => Promise.all([this.availability.reload(), this.flags.reload()]));
   }
 
   protected toggle(game: GameSlug, open: boolean): Promise<void> {

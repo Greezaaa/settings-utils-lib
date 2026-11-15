@@ -4,7 +4,7 @@
 </header>
 
 <section class="container page-section">
-  @if (signIn() === 'restoring') {
+  @if (signInState() === 'restoring') {
     <p class="muted">{{ 'admin.loading' | translate }}</p>
   } @else if (!admin.isSignedIn()) {
     <form class="card admin-card" (submit)="submit($event, emailInput, passwordInput)">
@@ -16,7 +16,7 @@
         <span>{{ 'admin.password' | translate }}</span>
         <input #passwordInput type="password" autocomplete="current-password" required />
       </label>
-      @switch (signIn()) {
+      @switch (signInState()) {
         @case ('wrong') {
           <p class="error" role="alert">{{ 'admin.wrongCredentials' | translate }}</p>
         }
@@ -27,8 +27,8 @@
           <p class="error" role="alert">{{ 'admin.offline' | translate }}</p>
         }
       }
-      <button type="submit" class="button" [disabled]="signIn() === 'checking'">
-        {{ signIn() === 'checking' ? ('admin.checking' | translate) : ('admin.signIn' | translate) }}
+      <button type="submit" class="button" [disabled]="signInState() === 'checking'">
+        {{ signInState() === 'checking' ? ('admin.checking' | translate) : ('admin.signIn' | translate) }}
       </button>
     </form>
   } @else {

@@ -57,7 +57,7 @@ export class WhatsNew {
       const stored = readStored(LAST_SEEN_STORAGE);
       this.lastSeen.set(typeof stored === 'number' && Number.isInteger(stored) ? stored : null);
       this.inBrowser.set(true);
-      void this.news.ready();
+      void this.news.whenLoaded();
     });
     inject(DestroyRef).onDestroy(() => {
       const latest = this.news.latestVersion();

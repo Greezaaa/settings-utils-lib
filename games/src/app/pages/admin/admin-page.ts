@@ -16,7 +16,7 @@ import { EmailHint } from '../../shared/email-hint';
 import { RevealPassword } from '../../shared/reveal-password';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 
-type SignIn = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offline';
+type SignInState = 'restoring' | 'idle' | 'checking' | 'wrong' | 'too-many' | 'offline';
 
 const TABS = ['games', 'news', 'plays', 'suggestions', 'words', 'players', 'errors', 'team', 'account'] as const;
 type Tab = (typeof TABS)[number];
@@ -47,18 +47,18 @@ export class AdminPage {
   protected readonly admin = inject(AdminSession);
   private readonly availability = inject(GameAvailability);
 
-  protected readonly signIn = signal<SignIn>('restoring');
+  protected readonly signInState = signal<SignInState>('restoring');
   protected readonly tab = signal<Tab>('plays');
   protected readonly tabs = computed(() => TABS.filter((tab) => this.admin.isSuper() || !SUPER_TABS.includes(tab)));
 
   constructor() {
     afterNextRender(async () => {
       if (!wasSignedIn('admin')) {
-        this.signIn.set('idle');
+        this.signInState.set('idle');
       }
       const restored = await this.admin.restore();
-      if (this.signIn() === 'restoring') {
-        this.signIn.set(restored === 'offline' ? 'offline' : 'idle');
+      if (this.signInState() === 'restoring') {
+        this.signInState.set(restored === 'offline' ? 'offline' : 'idle');
       }
       if (this.admin.isSuper()) {
         this.tab.set('games');
@@ -68,9 +68,9 @@ export class AdminPage {
 
   protected async submit(event: Event, email: HTMLInputElement, password: HTMLInputElement): Promise<void> {
     event.preventDefault();
-    this.signIn.set('checking');
+    this.signInState.set('checking');
     const answer = await this.admin.signIn(email.value.trim(), password.value);
-    this.signIn.set(answer === 'right' ? 'idle' : answer);
+    this.signInState.set(answer === 'right' ? 'idle' : answer);
     if (answer === 'right') {
       this.tab.set(this.admin.isSuper() ? 'games' : 'plays');
       this.availability.setPreview(this.admin.canPreview());

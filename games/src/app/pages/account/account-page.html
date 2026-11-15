@@ -8,7 +8,7 @@
 </header>
 
 <section class="container page-section">
-  @if (!account.isRestored()) {
+  @if (!account.isLoaded()) {
     <p class="muted">{{ 'account.loading' | translate }}</p>
   } @else if (account.account(); as player) {
     <div class="signed-in-bar">

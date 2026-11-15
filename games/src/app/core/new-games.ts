@@ -55,7 +55,7 @@ export class NewGames {
   constructor() {
     afterNextRender(() => {
       this.now.set(new Date());
-      void this.news.ready();
+      void this.news.whenLoaded();
     });
   }
 }

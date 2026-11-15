@@ -2,8 +2,8 @@ import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
 import { AdminSession } from './admin-session';
 import { apiUrl } from './api-url';
 import { defaultCategories, GameCategory, GAMES, GameSlug, gameThumbnail } from './games';
-import { GameCategoryList, GamesApi, isGameCategory, isGameSlug, parseThumbnails } from './games-api';
-import { readSwitches, writeSwitches } from './remembered-switches';
+import { GamesApi, isGameSlug, parseCategoryLists, parseThumbnails } from './games-api';
+import { RememberedSwitches } from './remembered-switches';
 import { readStored, writeStored } from './site-storage';
 
 const PREVIEW_STORAGE = 'admin-preview';
@@ -15,19 +15,18 @@ const THUMBNAILS_STORAGE = 'game-thumbnails';
 export class GameAvailability {
   private readonly api = inject(GamesApi);
   private readonly admin = inject(AdminSession);
-  private readonly switches = signal<ReadonlyMap<GameSlug, boolean>>(new Map());
+  private readonly switches = new RememberedSwitches<GameSlug>(SWITCHES_STORAGE, isGameSlug);
   private readonly categories = signal<ReadonlyMap<GameSlug, readonly GameCategory[]>>(new Map());
   private readonly thumbnails = signal<ReadonlyMap<GameSlug, number>>(new Map());
   private readonly document = inject(DOCUMENT);
   private loading: Promise<void> | null = null;
   private hasRemembered = false;
-  private hasStoredSwitches = false;
 
   readonly isPreview = signal(false);
-  readonly isKnown = signal(false);
+  readonly isLoaded = signal(false);
 
   readonly openGames = computed<readonly GameSlug[]>(() =>
-    GAMES.filter(({ slug, openByDefault }) => this.switches().get(slug) ?? openByDefault).map(({ slug }) => slug),
+    GAMES.filter(({ slug, openByDefault }) => this.switches.all().get(slug) ?? openByDefault).map(({ slug }) => slug),
   );
 
   readonly visibleGames = computed<readonly GameSlug[]>(() =>
@@ -43,8 +42,8 @@ export class GameAvailability {
   }
 
   async canEnter(game: GameSlug): Promise<boolean> {
-    const loading = this.ready();
-    if (this.hasStoredSwitches && this.canPlay(game)) {
+    const loading = this.whenLoaded();
+    if (this.switches.wasStored && this.canPlay(game)) {
       return true;
     }
     await loading;
@@ -82,16 +81,16 @@ export class GameAvailability {
     });
   }
 
-  ready(): Promise<void> {
+  whenLoaded(): Promise<void> {
     this.loading ??= this.load();
     return this.loading;
   }
 
   setOpen(game: GameSlug, open: boolean): void {
-    this.switches.update((switches) => new Map(switches).set(game, open));
+    this.switches.set(game, open);
   }
 
-  async refresh(): Promise<void> {
+  async reload(): Promise<void> {
     this.loading = this.load();
     await this.loading;
   }
@@ -114,15 +113,13 @@ export class GameAvailability {
     }
     const settings = site?.games;
     if (settings) {
-      const known = new Map(settings.switches.map(({ game, enabled }) => [game, enabled]));
-      this.switches.set(known);
-      writeSwitches(SWITCHES_STORAGE, known);
+      this.switches.replace(new Map(settings.switches.map(({ game, enabled }) => [game, enabled])));
       this.categories.set(new Map(settings.categories.map(({ game, categories }) => [game, categories])));
       writeStored(CATEGORIES_STORAGE, settings.categories);
       this.thumbnails.set(new Map(settings.thumbnails.map(({ game, version }) => [game, version])));
       writeStored(THUMBNAILS_STORAGE, settings.thumbnails);
     }
-    this.isKnown.set(true);
+    this.isLoaded.set(true);
   }
 
   private useRemembered(): void {
@@ -130,10 +127,10 @@ export class GameAvailability {
       return;
     }
     this.hasRemembered = true;
-    const stored = readSwitches(SWITCHES_STORAGE, isGameSlug);
-    this.hasStoredSwitches = stored !== null;
-    this.switches.set(stored ?? this.switches());
-    this.categories.set(new Map(readCategories().map(({ game, categories }) => [game, categories])));
+    this.switches.restore();
+    this.categories.set(
+      new Map(parseCategoryLists(readStored(CATEGORIES_STORAGE)).map(({ game, categories }) => [game, categories])),
+    );
     this.thumbnails.set(
       new Map(parseThumbnails(readStored(THUMBNAILS_STORAGE)).map(({ game, version }) => [game, version])),
     );
@@ -143,17 +140,4 @@ export class GameAvailability {
     const session = await this.admin.restore();
     return session === 'offline' || this.admin.canPreview();
   }
-}
-
-function readCategories(): GameCategoryList[] {
-  const stored = readStored(CATEGORIES_STORAGE);
-  if (!Array.isArray(stored)) {
-    return [];
-  }
-  return stored.flatMap((item: unknown) => {
-    const game: unknown = Reflect.get(Object(item), 'game');
-    const categories: unknown = Reflect.get(Object(item), 'categories');
-    const known = Array.isArray(categories) ? categories.filter((category: unknown) => isGameCategory(category)) : [];
-    return isGameSlug(game) && known.length > 0 ? [{ game, categories: known }] : [];
-  });
 }

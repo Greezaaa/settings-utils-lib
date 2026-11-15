@@ -79,6 +79,10 @@ function parsePlays(body: unknown): GamePlays[] {
   return Array.isArray(games) ? games.flatMap((item: unknown) => parseGamePlays(item)) : [];
 }
 
+export function parseCategoryLists(list: unknown): GameCategoryList[] {
+  return Array.isArray(list) ? list.flatMap((item: unknown) => parseCategories(item)) : [];
+}
+
 function parseCategories(item: unknown): GameCategoryList[] {
   const game = wireField<CategoryListWire>(item, 'game');
   const categories = wireField<CategoryListWire>(item, 'categories');
@@ -106,8 +110,7 @@ function parseGameSettings(body: unknown): GameSettings | null {
     const enabled = wireField<GameSwitchWire>(item, 'enabled');
     return isGameSlug(game) && typeof enabled === 'boolean' ? [{ game, enabled }] : [];
   });
-  const lists = wireField<SiteView>(body, 'categories');
-  const categories = Array.isArray(lists) ? lists.flatMap((item: unknown) => parseCategories(item)) : [];
+  const categories = parseCategoryLists(wireField<SiteView>(body, 'categories'));
   return { switches, categories, thumbnails: parseThumbnails(wireField<SiteView>(body, 'thumbnails')) };
 }
 

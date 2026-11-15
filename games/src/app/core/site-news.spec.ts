@@ -27,14 +27,14 @@ describe('SiteNews', () => {
 
   it('downloads the news only when their version changed since the last visit', async () => {
     const first = newsWith('a');
-    await first.news.ready();
+    await first.news.whenLoaded();
     expect(first.api.news).toHaveBeenCalledTimes(1);
     const same = newsWith('a');
-    await same.news.ready();
+    await same.news.whenLoaded();
     expect(same.api.news).not.toHaveBeenCalled();
     expect(same.news.latestVersion()).toBe(1);
     const changed = newsWith('b');
-    await changed.news.ready();
+    await changed.news.whenLoaded();
     expect(changed.api.news).toHaveBeenCalledTimes(1);
   });
 });

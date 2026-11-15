@@ -31,7 +31,7 @@ export class PrivacyPage {
   protected readonly accountsOpen = this.account.isAvailable;
   protected readonly canEmail = signal(false);
   protected readonly isSingClosed = computed(
-    () => this.availability.isKnown() && !this.availability.isOpen('hit-the-note'),
+    () => this.availability.isLoaded() && !this.availability.isOpen('hit-the-note'),
   );
 
   protected readonly savingAllowed = signal(true);
@@ -44,7 +44,7 @@ export class PrivacyPage {
 
   constructor() {
     afterNextRender(async () => {
-      void this.news.ready();
+      void this.news.whenLoaded();
       this.savingAllowed.set(isSavingAllowed());
       this.inBrowser.set(true);
       this.canEmail.set(await this.account.canEmail());
