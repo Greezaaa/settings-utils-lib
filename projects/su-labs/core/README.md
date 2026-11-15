@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Vue, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
 
 ## Table of Contents
 
@@ -18,6 +18,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Notifications](#notifications)
 - [Dialog](#dialog)
 - [Table](#table)
+- [Skeleton](#skeleton)
 - [Scroll Spy](#scroll-spy)
 - [Visit Tracker](#visit-tracker)
 - [Storage](#storage)
@@ -54,6 +55,8 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
 | `@su-labs/core/dialog` | `SuDialogController`, `suDialogBackdropColor` and dialog types |
 | `@su-labs/core/table` | `SuTableController`, the editors (`suTextEditor`, `suNumberEditor`, …), `SU_TABLE_LABELS` and table types |
+| `@su-labs/core/skeleton` | `setSuSkeletonBusy` |
+| `@su-labs/core/skeleton.css` | The skeleton stylesheet |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 | `@su-labs/core/visit-tracker` | `SuVisitTrackerController` and visit types |
 
@@ -347,6 +350,53 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 Actions (`{ id, label, danger?, bulk?, hidden?(row), disabled?(row) }`) are resolved for each row in `rows[].actions`,
 and the bulk ones in `bulkActions`. Every text the table announces or shows is in `SU_TABLE_LABELS`; pass any of them
 as `labels`, e.g. in the page's language.
+
+## Skeleton
+
+Placeholders drawn with your own HTML and CSS, so they keep the real layout, with one shimmer sweeping across every shape. Every element inside `.su-skeleton` becomes a grey shape, except wrappers with the `su-skeleton-layout` class, which only lay shapes out. `.su-skeleton` itself takes no room (`display: contents`).
+
+```ts
+import '@su-labs/core/skeleton.css';
+import { setSuSkeletonBusy } from '@su-labs/core/skeleton';
+
+const region = document.querySelector('.profile');
+setSuSkeletonBusy(region, true);
+const user = await loadUser();
+region.replaceChildren(renderProfile(user));
+setSuSkeletonBusy(region, false);
+```
+
+```html
+<section class="profile">
+  <div class="su-skeleton" aria-hidden="true">
+    <div class="avatar"></div>
+    <div class="lines su-skeleton-layout">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</section>
+```
+
+Without a bundler that handles CSS imports, link the file instead: `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.9.0/skeleton/skeleton.css">`.
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `setSuSkeletonBusy(region, busy)` | Sets `aria-busy` on the region and `aria-live="polite"`, so screen readers wait while it loads and read the content once it's ready |
+
+### CSS Variables
+
+| Variable | Default | |
+|---|---|---|
+| `--su-skeleton-color` | `#e8e8e8` | The shapes |
+| `--su-skeleton-shimmer` | `#ffffff` | The shine that sweeps across |
+| `--su-skeleton-radius` | `0.375rem` | Corner radius of every shape; a shape's own `border-radius` wins |
+| `--su-skeleton-duration` | `2s` | One sweep |
+| `--su-skeleton-angle` | `100deg` | Tilt of the shine |
+
+The shine is fixed to the window so it runs across every shape together; iOS Safari doesn't support that, so there each shape shines on its own. It stops for visitors who ask for less motion.
 
 ## Scroll Spy
 

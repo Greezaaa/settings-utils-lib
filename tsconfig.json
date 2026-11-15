@@ -48,6 +48,9 @@
       "@su-labs/table": [
         "./dist/su-labs/table"
       ],
+      "@su-labs/skeleton": [
+        "./dist/su-labs/skeleton"
+      ],
     }
   },
   "angularCompilerOptions": {
@@ -85,6 +88,9 @@
     },
     {
       "path": "./projects/su-labs/table/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/skeleton/tsconfig.lib.json"
     },
     {
       "path": "./web/tsconfig.app.json"

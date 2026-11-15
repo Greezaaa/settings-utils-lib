@@ -24,6 +24,7 @@ const PACKAGE_ICONS: Readonly<Record<string, SiteIconName>> = {
   notifications: 'notifications',
   dialog: 'dialog',
   table: 'table',
+  skeleton: 'skeleton',
   'scroll-spy': 'scroll-spy',
   'visit-tracker': 'visit-tracker',
   fields: 'fields',

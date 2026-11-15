@@ -51,6 +51,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/table/table-page').then((m) => m.TablePage),
   },
   {
+    path: 'skeleton',
+    title: `Skeleton · ${SITE_NAME}`,
+    data: utilityMeta('skeleton'),
+    loadComponent: () => import('./pages/skeleton/skeleton-page').then((m) => m.SkeletonPage),
+  },
+  {
     path: 'scroll-spy',
     title: `Scroll spy · ${SITE_NAME}`,
     data: utilityMeta('scroll-spy'),

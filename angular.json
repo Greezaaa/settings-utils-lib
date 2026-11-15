@@ -375,6 +375,32 @@
           }
         }
       }
+    },
+    "@su-labs/skeleton": {
+      "projectType": "library",
+      "root": "projects/su-labs/skeleton",
+      "sourceRoot": "projects/su-labs/skeleton/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/skeleton/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/skeleton/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/su-labs/skeleton/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {

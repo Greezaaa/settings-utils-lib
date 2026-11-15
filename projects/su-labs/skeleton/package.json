@@ -1,0 +1,39 @@
+{
+	"name": "@su-labs/skeleton",
+	"version": "22.0.0",
+	"description": "Angular skeleton loaders drawn with your own HTML and CSS, so they keep the real layout, with one shimmer across every shape and screen reader support.",
+	"keywords": [
+		"angular",
+		"skeleton",
+		"skeleton-loader",
+		"placeholder",
+		"loading",
+		"shimmer",
+		"aria-busy",
+		"accessibility",
+		"ui"
+	],
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/skeleton"
+	},
+	"homepage": "https://su-labs.dev/skeleton/",
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"peerDependencies": {
+		"@angular/common": "^22.0.0",
+		"@angular/core": "^22.0.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

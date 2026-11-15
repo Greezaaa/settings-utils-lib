@@ -332,6 +332,36 @@ table.setColumnVisible('email', true); // the field stays in the row data either
 
 Render pinned cells with `position: sticky` and pinned rows first in `<tbody>`.
 
+## Skeleton
+
+Draw the placeholder with your own elements inside `.su-skeleton`, laid out like the real content. Wrappers with `su-skeleton-layout` only lay shapes out and aren't drawn:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.9.0/skeleton/skeleton.css" />
+
+<section class="profile">
+  <div class="su-skeleton" aria-hidden="true">
+    <div class="avatar"></div>
+    <div class="lines su-skeleton-layout">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import { setSuSkeletonBusy } from 'https://esm.sh/@su-labs/core@1.9.0/skeleton';
+
+  const region = document.querySelector('.profile');
+  setSuSkeletonBusy(region, true);
+  const user = await fetch('/api/user').then((response) => response.json());
+  region.replaceChildren(renderProfile(user));
+  setSuSkeletonBusy(region, false);
+</script>
+```
+
+With a bundler, `import '@su-labs/core/skeleton.css';` instead of the link.
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -340,4 +370,5 @@ Render pinned cells with `position: sticky` and pinned rows first in `<tbody>`.
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
+- [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Node and server-side rendering](node.md)

@@ -56,6 +56,13 @@ export const UTILITIES: readonly SuUtility[] = [
     summary: 'Data tables from your API’s JSON: sorting, inline and bulk editing, reordering and row actions.',
   },
   {
+    slug: 'skeleton',
+    name: 'Skeleton',
+    packageName: '@su-labs/skeleton',
+    coreEntry: '@su-labs/core/skeleton',
+    summary: 'Loading placeholders drawn with your own HTML and CSS, with one shimmer and screen reader support.',
+  },
+  {
     slug: 'scroll-spy',
     name: 'Scroll spy',
     packageName: '@su-labs/scroll-spy',

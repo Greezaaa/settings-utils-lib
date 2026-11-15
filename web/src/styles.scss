@@ -76,6 +76,9 @@
   --su-switch-border: var(--border);
   --su-switch-focus-outline: 2px solid var(--heading);
   --su-checkbox-tick: var(--button-text);
+  --su-skeleton-color: color-mix(in srgb, var(--text) 9%, var(--surface));
+  --su-skeleton-shimmer: color-mix(in srgb, var(--text) 3%, var(--surface));
+  --su-skeleton-radius: var(--radius);
   --su-table-sorted-background: color-mix(in srgb, var(--blue-text) 7%, transparent);
   --su-table-drop-line-color: var(--blue-text);
   --su-table-text-color: var(--text);

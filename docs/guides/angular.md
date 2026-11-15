@@ -17,6 +17,7 @@ npm install @su-labs/scroll-spy
 npm install @su-labs/visit-tracker
 npm install @su-labs/table
 npm install @su-labs/fields
+npm install @su-labs/skeleton
 ```
 
 Requires Angular 22 or later.
@@ -33,6 +34,7 @@ Requires Angular 22 or later.
 | `@su-labs/visit-tracker` | Visit counts and milestones | [README](../../projects/su-labs/visit-tracker/README.md) |
 | `@su-labs/table` | Data tables with sorting, selection, inline and bulk editing, reordering, row actions, paging, search, pinned rows and columns, and a Columns menu | [README](../../projects/su-labs/table/README.md) |
 | `@su-labs/fields` | Code boxes, password strength meter, auto-grow textarea, switch, email field, checkbox and chips | [README](../../projects/su-labs/fields/README.md) |
+| `@su-labs/skeleton` | Skeleton loaders drawn with your own HTML and CSS, with one shimmer and screen reader support | [README](../../projects/su-labs/skeleton/README.md) |
 
 ## Theme quick start
 

@@ -8,6 +8,7 @@ export const SITE_ICONS = {
   notifications: ['M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15z', 'M10 20.5a2 2 0 0 0 4 0'],
   dialog: ['M4 5h16v14H4z', 'M4 9h16', 'M12 15h2.5', 'M16 15h1.5'],
   table: ['M4 5h16v14H4z', 'M4 10h16', 'M4 14.5h16', 'M10 10v9'],
+  skeleton: ['M4 5h16v5H4z', 'M4 14h10', 'M4 18h6'],
   'scroll-spy': ['M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z', 'M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z'],
   'visit-tracker': ['M4 19h16', 'M5 15l4.5-4.5 3.5 3.5 6-6.5', 'M15 7.5h4v4'],
   fields: ['M3 8h18v8H3z', 'M7 10.5v3', 'M10 12h7'],

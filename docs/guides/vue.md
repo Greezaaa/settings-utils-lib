@@ -379,6 +379,31 @@ usersTable.setColumnVisible('email', true); // the field stays in the row data e
 
 Render pinned cells with `position: sticky` and pinned rows first in `<tbody>`.
 
+## Skeleton
+
+Import the stylesheet once, then bind `aria-busy` on the region and draw the placeholder with your own elements, laid out like the real content:
+
+```vue
+<script setup lang="ts">
+import '@su-labs/core/skeleton.css';
+
+defineProps<{ user?: User }>();
+</script>
+
+<template>
+  <section class="profile" aria-live="polite" :aria-busy="!user">
+    <ProfileCard v-if="user" :user="user" />
+    <div v-else class="su-skeleton" aria-hidden="true">
+      <div class="avatar"></div>
+      <div class="lines su-skeleton-layout">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </section>
+</template>
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -387,4 +412,5 @@ Render pinned cells with `position: sticky` and pinned rows first in `<tbody>`.
 - [Scroll spy API](../../projects/su-labs/core/README.md#scroll-spy)
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
+- [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Node and server-side rendering](node.md)
