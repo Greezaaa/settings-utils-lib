@@ -7,9 +7,9 @@ describe('outbox', () => {
   beforeEach(() => localStorage.clear());
 
   it('keeps only well-formed items for the API', () => {
-    expect(parseOutbox([play('math-games'), { path: 'https://elsewhere.test/v1/x', body: {} }, { path: '/v1/plays' }, 3])).toEqual([
-      play('math-games'),
-    ]);
+    expect(
+      parseOutbox([play('math-games'), { path: 'https://elsewhere.test/v1/x', body: {} }, { path: '/v1/plays' }, 3]),
+    ).toEqual([play('math-games')]);
     expect(parseOutbox('nope')).toEqual([]);
   });
 

@@ -2,13 +2,7 @@ import { LanguageId } from '../i18n/site-messages';
 import { FeatureId } from './features';
 import { GameSlug } from './games';
 
-export const UPDATE_KINDS = [
-  'game',
-  'language',
-  'settings',
-  'feature',
-  'privacy',
-] as const;
+export const UPDATE_KINDS = ['game', 'language', 'settings', 'feature', 'privacy'] as const;
 export type UpdateKind = (typeof UPDATE_KINDS)[number];
 
 export const UPDATE_KIND_TAGS: Readonly<Record<UpdateKind, string>> = {
@@ -65,8 +59,10 @@ export const latestPrivacyVersion = (updates: readonly SiteUpdate[]): number =>
   Math.max(1, ...updates.filter(({ privacy }) => privacy).map(({ version }) => version));
 
 export const latestPublished = (updates: readonly SiteUpdate[]): string | null =>
-  updates.reduce<SiteUpdate | null>((latest, update) => (!latest || update.version > latest.version ? update : latest), null)
-    ?.published ?? null;
+  updates.reduce<SiteUpdate | null>(
+    (latest, update) => (!latest || update.version > latest.version ? update : latest),
+    null,
+  )?.published ?? null;
 
 export interface DatedChange {
   readonly change: UpdateChange;
@@ -77,9 +73,7 @@ export interface DatedChange {
 export function recentChanges(updates: readonly SiteUpdate[]): DatedChange[] {
   return [...updates]
     .sort((first, second) => second.version - first.version)
-    .flatMap(({ version, published, changes }) =>
-      changes.map(change => ({ change, version, published }))
-    );
+    .flatMap(({ version, published, changes }) => changes.map((change) => ({ change, version, published })));
 }
 
 export function formatMoment(iso: string, language: LanguageId): string {

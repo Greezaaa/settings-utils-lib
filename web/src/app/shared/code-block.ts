@@ -14,8 +14,7 @@ import { SuNotificationService } from '@su-labs/notifications';
             d="M11 3.5V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h.5"
             fill="none"
             stroke="currentColor"
-            stroke-width="1.6"
-          />
+            stroke-width="1.6" />
         </svg>
       </button>
     </div>

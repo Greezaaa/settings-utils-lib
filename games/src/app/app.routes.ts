@@ -21,9 +21,7 @@ const {
   install,
 } = PREVIEW_MESSAGES;
 
-function gameMeta(
-  slug: GameSlug
-): Pick<Route, 'title' | 'data' | 'canActivate'> {
+function gameMeta(slug: GameSlug): Pick<Route, 'title' | 'data' | 'canActivate'> {
   const { name, subtitle, intro, summary } = games[slug];
   return {
     title: `${name}: ${subtitle} · ${SITE_NAME}`,
@@ -35,17 +33,15 @@ function gameMeta(
 const notFound = {
   title: `${seo.notFoundTitle} · ${SITE_NAME}`,
   data: { description: seo.notFoundDescription, noIndex: true },
-  loadComponent: () =>
-    import('./pages/not-found/not-found-page').then(m => m.NotFoundPage),
+  loadComponent: () => import('./pages/not-found/not-found-page').then((m) => m.NotFoundPage),
 } satisfies Omit<Route, 'path'>;
 
-const categoryRoutes: Routes = GAME_CATEGORIES.map(category => ({
+const categoryRoutes: Routes = GAME_CATEGORIES.map((category) => ({
   path: `category/${category}`,
   title: `${categories[category]} · ${SITE_NAME}`,
   data: { description: categoryIntros[category], category },
   canActivate: [featureGuard('category-menu')],
-  loadComponent: () =>
-    import('./pages/category/category-page').then(m => m.CategoryPage),
+  loadComponent: () => import('./pages/category/category-page').then((m) => m.CategoryPage),
 }));
 
 export const routes: Routes = [
@@ -53,99 +49,77 @@ export const routes: Routes = [
     path: '',
     title: `${home.title} · ${SITE_NAME}`,
     data: SITE_META,
-    loadComponent: () => import('./pages/home/home-page').then(m => m.HomePage),
+    loadComponent: () => import('./pages/home/home-page').then((m) => m.HomePage),
   },
   {
     path: 'math-games',
     ...gameMeta('math-games'),
-    loadComponent: () =>
-      import('./pages/math-games/math-games-page').then(m => m.MathGamesPage),
+    loadComponent: () => import('./pages/math-games/math-games-page').then((m) => m.MathGamesPage),
   },
   {
     path: 'measure-it',
     ...gameMeta('measure-it'),
-    loadComponent: () =>
-      import('./pages/measure-it/measure-it-page').then(m => m.MeasureItPage),
+    loadComponent: () => import('./pages/measure-it/measure-it-page').then((m) => m.MeasureItPage),
   },
   {
     path: 'climb-tower',
     ...gameMeta('climb-tower'),
-    loadComponent: () =>
-      import('./pages/climb-tower/climb-tower-page').then(
-        m => m.ClimbTowerPage
-      ),
+    loadComponent: () => import('./pages/climb-tower/climb-tower-page').then((m) => m.ClimbTowerPage),
   },
   {
     path: 'letter-games',
     ...gameMeta('letter-games'),
-    loadComponent: () =>
-      import('./pages/letter-games/letter-games-page').then(
-        m => m.LetterGamesPage
-      ),
+    loadComponent: () => import('./pages/letter-games/letter-games-page').then((m) => m.LetterGamesPage),
   },
   {
     path: 'hit-the-note',
     ...gameMeta('hit-the-note'),
-    loadComponent: () =>
-      import('./pages/hit-the-note/hit-the-note-page').then(
-        m => m.HitTheNotePage
-      ),
+    loadComponent: () => import('./pages/hit-the-note/hit-the-note-page').then((m) => m.HitTheNotePage),
   },
   {
     path: 'sliding-puzzle',
     ...gameMeta('sliding-puzzle'),
-    loadComponent: () =>
-      import('./pages/sliding-puzzle/sliding-puzzle-page').then(
-        m => m.SlidingPuzzlePage
-      ),
+    loadComponent: () => import('./pages/sliding-puzzle/sliding-puzzle-page').then((m) => m.SlidingPuzzlePage),
   },
   {
     path: 'turn-picture',
     ...gameMeta('turn-picture'),
-    loadComponent: () =>
-      import('./pages/turn-picture/turn-picture-page').then(
-        m => m.TurnPicturePage
-      ),
+    loadComponent: () => import('./pages/turn-picture/turn-picture-page').then((m) => m.TurnPicturePage),
   },
   {
     path: 'place-pieces',
     ...gameMeta('place-pieces'),
-    loadComponent: () =>
-      import('./pages/place-pieces/place-pieces-page').then(
-        m => m.PlacePiecesPage
-      ),
+    loadComponent: () => import('./pages/place-pieces/place-pieces-page').then((m) => m.PlacePiecesPage),
   },
   {
     path: 'find-pairs',
     ...gameMeta('find-pairs'),
-    loadComponent: () =>
-      import('./pages/find-pairs/find-pairs-page').then(m => m.FindPairsPage),
+    loadComponent: () => import('./pages/find-pairs/find-pairs-page').then((m) => m.FindPairsPage),
   },
   {
     path: 'how-many',
     ...gameMeta('how-many'),
-    loadComponent: () =>
-      import('./pages/how-many/how-many-page').then(m => m.HowManyPage),
+    loadComponent: () => import('./pages/how-many/how-many-page').then((m) => m.HowManyPage),
   },
   {
     path: 'letter-sudoku',
     ...gameMeta('letter-sudoku'),
-    loadComponent: () => import('./pages/sudoku/sudoku-page').then(m => m.SudokuPage),
+    loadComponent: () => import('./pages/sudoku/sudoku-page').then((m) => m.SudokuPage),
   },
   {
     path: 'number-sudoku',
     ...gameMeta('number-sudoku'),
-    loadComponent: () => import('./pages/sudoku/sudoku-page').then(m => m.SudokuPage),
+    loadComponent: () => import('./pages/sudoku/sudoku-page').then((m) => m.SudokuPage),
   },
   {
     path: 'word-search',
     ...gameMeta('word-search'),
-    loadComponent: () => import('./pages/word-search/word-search-page').then(m => m.WordSearchPage),
+    loadComponent: () => import('./pages/word-search/word-search-page').then((m) => m.WordSearchPage),
   },
   {
     path: 'secret-word',
     ...gameMeta('secret-word'),
-    loadComponent: () => import('./pages/secret-word/secret-word-page').then(m => m.SecretWordPage),
+    loadComponent: () => import('./pages/secret-word/secret-word-page').then((m) => m.SecretWordPage),
   },
   ...categoryRoutes,
   {
@@ -153,88 +127,73 @@ export const routes: Routes = [
     title: `${rooms.title} · ${SITE_NAME}`,
     data: { description: `${rooms.lead} ${rooms.rule}` },
     canActivate: [featureGuard('rooms')],
-    loadComponent: () =>
-      import('./pages/rooms/rooms-page').then(m => m.RoomsPage),
+    loadComponent: () => import('./pages/rooms/rooms-page').then((m) => m.RoomsPage),
   },
   {
     path: 'r/:code',
     title: `${rooms.title} · ${SITE_NAME}`,
     data: { description: rooms.lead, noIndex: true },
     canActivate: [featureGuard('rooms')],
-    loadComponent: () =>
-      import('./pages/rooms/room-page/room-page').then(m => m.RoomPage),
+    loadComponent: () => import('./pages/rooms/room-page/room-page').then((m) => m.RoomPage),
   },
   {
     path: 'account',
     title: `${account.title} · ${SITE_NAME}`,
     data: { description: account.lead, noIndex: true },
     canActivate: [featureGuard('accounts')],
-    loadComponent: () =>
-      import('./pages/account/account-page').then(m => m.AccountPage),
+    loadComponent: () => import('./pages/account/account-page').then((m) => m.AccountPage),
   },
   {
     path: 'account/reset/:secret',
     title: `${account.resetTitle} · ${SITE_NAME}`,
     data: { description: account.lead, noIndex: true },
     canActivate: [featureGuard('accounts')],
-    loadComponent: () =>
-      import('./pages/account/reset-page/reset-page').then(m => m.ResetPage),
+    loadComponent: () => import('./pages/account/reset-page/reset-page').then((m) => m.ResetPage),
   },
   {
     path: 'leaderboard',
     title: `${leaderboard.title} · ${SITE_NAME}`,
     data: { description: leaderboard.lead, noIndex: true },
     canActivate: [featureGuard('accounts'), featureGuard('leaderboard')],
-    loadComponent: () =>
-      import('./pages/leaderboard/leaderboard-page').then(
-        m => m.LeaderboardPage
-      ),
+    loadComponent: () => import('./pages/leaderboard/leaderboard-page').then((m) => m.LeaderboardPage),
   },
   {
     path: 'colours',
     title: `${colours.title} · ${SITE_NAME}`,
     data: { description: colours.lead },
     canActivate: [featureGuard('colours-page')],
-    loadComponent: () =>
-      import('./pages/colours/colours-page').then(m => m.ColoursPage),
+    loadComponent: () => import('./pages/colours/colours-page').then((m) => m.ColoursPage),
   },
   {
     path: 'install',
     title: `${install.title} · ${SITE_NAME}`,
     data: { description: install.lead },
     canActivate: [featureGuard('install-app')],
-    loadComponent: () =>
-      import('./pages/install/install-page').then(m => m.InstallPage),
+    loadComponent: () => import('./pages/install/install-page').then((m) => m.InstallPage),
   },
   {
     path: 'privacy',
     title: `${privacy.title} · ${SITE_NAME}`,
     data: { description: privacy.lead },
-    loadComponent: () =>
-      import('./pages/privacy/privacy-page').then(m => m.PrivacyPage),
+    loadComponent: () => import('./pages/privacy/privacy-page').then((m) => m.PrivacyPage),
   },
   {
     path: 'suggestions',
     title: `${suggestions.title} · ${SITE_NAME}`,
     data: { description: suggestions.lead },
-    loadComponent: () =>
-      import('./pages/suggestions/suggestions-page').then(
-        m => m.SuggestionsPage
-      ),
+    loadComponent: () => import('./pages/suggestions/suggestions-page').then((m) => m.SuggestionsPage),
   },
   {
     path: ADMIN_PATH,
     title: `${admin.title} · ${SITE_NAME}`,
     data: { description: admin.lead, noIndex: true },
-    loadComponent: () =>
-      import('./pages/admin/admin-page').then(m => m.AdminPage),
+    loadComponent: () => import('./pages/admin/admin-page').then((m) => m.AdminPage),
   },
   {
     path: `${ADMIN_INVITE_PATH}/:secret`,
     title: `${admin.inviteTitle} · ${SITE_NAME}`,
     data: { description: admin.lead, noIndex: true },
-    loadComponent: () =>
-      import('./pages/admin/admin-invite-page/admin-invite-page').then(m => m.AdminInvitePage),
+    loadComponent: () => import('./pages/admin/admin-invite-page/admin-invite-page').then((m) => m.AdminInvitePage),
   },
   { path: '404', ...notFound },
   { path: '**', ...notFound },

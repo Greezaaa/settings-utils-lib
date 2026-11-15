@@ -6,7 +6,9 @@ import { GamesApi, isFeatureId } from './games-api';
 import { readSwitches, writeSwitches } from './remembered-switches';
 
 const SWITCHES_STORAGE = 'feature-switches';
-const NEEDS_CONNECTION: ReadonlySet<FeatureId> = new Set(FEATURES.filter(({ needsConnection }) => needsConnection).map(({ id }) => id));
+const NEEDS_CONNECTION: ReadonlySet<FeatureId> = new Set(
+  FEATURES.filter(({ needsConnection }) => needsConnection).map(({ id }) => id),
+);
 
 @Injectable({ providedIn: 'root' })
 export class FeatureFlags {
@@ -63,7 +65,8 @@ export class FeatureFlags {
       this.hasStoredSwitches = stored !== null;
       this.switches.set(stored ?? this.switches());
     }
-    const [switches] = await Promise.all([this.api.featureSwitches(), this.availability.ready()]);
+    const [site] = await Promise.all([this.api.site(), this.availability.ready()]);
+    const switches = site?.features;
     if (switches) {
       const known = new Map(switches.map(({ feature, enabled }) => [feature, enabled]));
       this.switches.set(known);

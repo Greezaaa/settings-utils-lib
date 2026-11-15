@@ -1,7 +1,7 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { SuDialogService } from '@su-labs/dialog';
 import { Router } from '@angular/router';
-import { AdminApi } from '../../core/admin-api';
+import { AdminSession } from '../../core/admin-session';
 import { ADMIN_PATH } from '../../core/links';
 import { MIN_PASSWORD_LENGTH } from '../../core/passwords';
 import { PlayerAccount } from '../../core/player-account';
@@ -25,7 +25,7 @@ type SignedOutView = 'sign-in' | 'sign-up' | 'forgot';
 })
 export class AccountPage {
   protected readonly account = inject(PlayerAccount);
-  private readonly admin = inject(AdminApi);
+  private readonly admin = inject(AdminSession);
   private readonly router = inject(Router);
   private readonly dialog = inject(SuDialogService);
   protected readonly t = inject(SiteLanguage).messages;

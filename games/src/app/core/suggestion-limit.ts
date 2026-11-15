@@ -3,7 +3,9 @@ export const HOUR_MS = 60 * 60_000;
 
 export function sendsInLastHour(stored: unknown, now: number): number[] {
   return Array.isArray(stored)
-    ? stored.filter((time: unknown): time is number => typeof time === 'number' && time <= now && now - time < HOUR_MS).sort((first, second) => first - second)
+    ? stored
+        .filter((time: unknown): time is number => typeof time === 'number' && time <= now && now - time < HOUR_MS)
+        .sort((first, second) => first - second)
     : [];
 }
 

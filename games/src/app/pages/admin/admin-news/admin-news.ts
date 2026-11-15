@@ -81,7 +81,8 @@ export class AdminNewsTab {
       return;
     }
     this.isSaving.set(true);
-    const saved = editing.id === null ? await this.admin.addNews(draft) : await this.admin.changeNews(editing.id, draft);
+    const saved =
+      editing.id === null ? await this.admin.addNews(draft) : await this.admin.changeNews(editing.id, draft);
     this.isSaving.set(false);
     if (!saved) {
       this.notifySaveFailed();

@@ -104,7 +104,11 @@ export class App {
   }
 
   private readonly openSections = signal<ReadonlySet<string>>(
-    new Set(this.sections().filter((section) => section.openByDefault).map((section) => section.id)),
+    new Set(
+      this.sections()
+        .filter((section) => section.openByDefault)
+        .map((section) => section.id),
+    ),
   );
   /** The tab that opened the sheet, to give focus back when it closes */
   private sheetOpener: HTMLElement | null = null;

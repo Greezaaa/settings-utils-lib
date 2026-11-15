@@ -6,6 +6,7 @@
     "types": [],
     /* Compile the libraries from source so the site always shows the current code (no library build needed) */
     "paths": {
+      "@api/contracts/*": ["../api/src/contracts/*"],
       "@su-labs/core": ["../projects/su-labs/core/src/public-api.ts"],
       "@su-labs/core/*": ["../projects/su-labs/core/*/src/public-api.ts"],
       "@su-labs/dialog": ["../projects/su-labs/dialog/src/public-api.ts"],

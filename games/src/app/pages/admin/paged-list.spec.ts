@@ -28,7 +28,7 @@ describe('PagedList', () => {
 
   it('drops an answer that arrives after a newer reload', async () => {
     const answers: ((rows: number[]) => void)[] = [];
-    const list = new PagedList(() => new Promise<number[]>(resolve => answers.push(resolve)));
+    const list = new PagedList(() => new Promise<number[]>((resolve) => answers.push(resolve)));
     const first = list.reload();
     const second = list.reload();
     answers[1]([2]);

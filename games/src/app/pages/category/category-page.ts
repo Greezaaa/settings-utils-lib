@@ -18,6 +18,9 @@ export class CategoryPage {
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = computed(
-    () => byCategory(this.availability.visibleGames(), (game) => this.availability.categoriesOf(game)).find(({ category }) => category === this.category())?.games ?? [],
+    () =>
+      byCategory(this.availability.visibleGames(), (game) => this.availability.categoriesOf(game)).find(
+        ({ category }) => category === this.category(),
+      )?.games ?? [],
   );
 }

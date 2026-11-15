@@ -3,7 +3,10 @@ import { SiteMotion } from '../core/site-motion';
 
 @Directive({ selector: '[appScrollToActive]' })
 export class ScrollToActive {
-  readonly activeSelector = input('a.active', { alias: 'appScrollToActive', transform: (value: string) => value || 'a.active' });
+  readonly activeSelector = input('a.active', {
+    alias: 'appScrollToActive',
+    transform: (value: string) => value || 'a.active',
+  });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
   private readonly motion = inject(SiteMotion);
@@ -13,7 +16,12 @@ export class ScrollToActive {
   constructor() {
     afterNextRender(() => {
       const watcher = new MutationObserver(() => this.reveal());
-      watcher.observe(this.host, { attributes: true, attributeFilter: ['class', 'aria-selected'], childList: true, subtree: true });
+      watcher.observe(this.host, {
+        attributes: true,
+        attributeFilter: ['class', 'aria-selected'],
+        childList: true,
+        subtree: true,
+      });
       this.reveal();
       this.stop = () => watcher.disconnect();
     });

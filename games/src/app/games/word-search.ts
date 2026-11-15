@@ -77,7 +77,12 @@ export function createWordSearch(level: SearchLevel, pictures: readonly PictureW
 }
 
 export function lineCells(from: number, to: number, size: number): number[] | null {
-  const [fromRow, fromColumn, toRow, toColumn] = [Math.floor(from / size), from % size, Math.floor(to / size), to % size];
+  const [fromRow, fromColumn, toRow, toColumn] = [
+    Math.floor(from / size),
+    from % size,
+    Math.floor(to / size),
+    to % size,
+  ];
   const [rows, columns] = [toRow - fromRow, toColumn - fromColumn];
   if (rows !== 0 && columns !== 0 && Math.abs(rows) !== Math.abs(columns)) {
     return null;
@@ -87,11 +92,7 @@ export function lineCells(from: number, to: number, size: number): number[] | nu
   return Array.from({ length }, (_, index) => from + index * step);
 }
 
-export function wordAt(
-  search: WordSearch,
-  cells: readonly number[],
-  found: ReadonlySet<string>,
-): HiddenWord | null {
+export function wordAt(search: WordSearch, cells: readonly number[], found: ReadonlySet<string>): HiddenWord | null {
   const text = cells.map((cell) => search.letters[cell]).join('');
   const backwards = Array.from(text).reverse().join('');
   return (

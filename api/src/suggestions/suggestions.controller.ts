@@ -14,9 +14,7 @@ const idSchema = z.uuid();
 
 @Controller('v1/suggestions')
 export class SuggestionsController {
-  constructor(
-    private readonly suggestions: SuggestionsService,
-  ) {}
+  constructor(private readonly suggestions: SuggestionsService) {}
 
   @Post()
   @HttpCode(204)

@@ -35,7 +35,17 @@ const DEFAULT_LEVEL: LevelId = 'normal';
 
 @Component({
   selector: 'app-math-games-page',
-  imports: [TranslatePipe, FindTheSignsRound, GameBoard, GameFeedback, RouterLink, ShareResult, TimerBar, TrueOrFalseRound, YourAnswerRound],
+  imports: [
+    TranslatePipe,
+    FindTheSignsRound,
+    GameBoard,
+    GameFeedback,
+    RouterLink,
+    ShareResult,
+    TimerBar,
+    TrueOrFalseRound,
+    YourAnswerRound,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './math-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './math-games-page.scss'],

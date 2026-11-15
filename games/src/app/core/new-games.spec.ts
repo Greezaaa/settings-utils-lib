@@ -23,9 +23,10 @@ describe('new games', () => {
   });
 
   it('skips games hidden from the public, so the newest open ones are marked', () => {
-    expect(
-      newGames(new Date('2026-01-13T00:00:00Z'), UPDATES, 14, 2, (game) => game !== 'place-pieces'),
-    ).toEqual(['turn-picture', 'sliding-puzzle']);
+    expect(newGames(new Date('2026-01-13T00:00:00Z'), UPDATES, 14, 2, (game) => game !== 'place-pieces')).toEqual([
+      'turn-picture',
+      'sliding-puzzle',
+    ]);
   });
 
   it('counts a game from the first update that mentions it', () => {

@@ -40,7 +40,11 @@ export class HomePage {
     const { games } = this.messages();
     return filterGames(
       this.availability.visibleGames(),
-      { query: this.query(), category: this.category(), favoritesOnly: this.favoritesOnly() && this.canFilterFavorites() },
+      {
+        query: this.query(),
+        category: this.category(),
+        favoritesOnly: this.favoritesOnly() && this.canFilterFavorites(),
+      },
       {
         categoriesOf: (game) => this.availability.categoriesOf(game),
         textOf: (game) => `${games[game].name} ${games[game].subtitle}`,

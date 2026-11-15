@@ -1,6 +1,7 @@
 import { SuSwitchComponent } from '@su-labs/fields';
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AdminApi } from '../../../core/admin-api';
+import { AdminSession } from '../../../core/admin-session';
 import { GameAvailability } from '../../../core/game-availability';
 import { OfflineMode, OfflineStatus } from '../../../core/offline-mode';
 import { MIN_PASSWORD_LENGTH } from '../../../core/passwords';
@@ -18,7 +19,8 @@ type Saving = 'idle' | 'saving' | 'saved' | 'wrong' | 'mismatch' | 'offline';
   styleUrls: ['../admin.scss'],
 })
 export class AdminAccount {
-  protected readonly admin = inject(AdminApi);
+  private readonly admin = inject(AdminApi);
+  protected readonly session = inject(AdminSession);
   protected readonly availability = inject(GameAvailability);
   protected readonly minLength = MIN_PASSWORD_LENGTH;
   protected readonly saving = signal<Saving>('idle');

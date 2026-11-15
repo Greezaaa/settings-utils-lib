@@ -1,12 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import {
-  CONSENT_COOKIE,
-  deleteSaved,
-  isSavingAllowed,
-  readStored,
-  setSavingAllowed,
-  writeStored,
-} from './site-storage';
+import { CONSENT_COOKIE, deleteSaved, isSavingAllowed, readStored, setSavingAllowed, writeStored } from './site-storage';
 
 const consentCookieSet = () =>
   document.cookie.split('; ').some((cookie) => cookie.startsWith(`${encodeURIComponent(CONSENT_COOKIE)}=`));

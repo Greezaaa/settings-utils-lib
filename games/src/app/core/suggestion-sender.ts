@@ -125,7 +125,8 @@ function toSaved({ category, text, language, image }: SuggestionDraft): Promise<
   }
   return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onload = () => resolve({ category, text, language, image: typeof reader.result === 'string' ? reader.result : null });
+    reader.onload = () =>
+      resolve({ category, text, language, image: typeof reader.result === 'string' ? reader.result : null });
     reader.onerror = () => resolve({ category, text, language, image: null });
     reader.readAsDataURL(image);
   });
@@ -137,8 +138,13 @@ function readSaved(): SavedSuggestion[] {
     return [];
   }
   return stored.flatMap((item: unknown) => {
-    const [category, text, language, image] = ['category', 'text', 'language', 'image'].map((name) => field(item, name));
-    return isSuggestionCategory(category) && typeof text === 'string' && isLanguageId(language) && (image === null || typeof image === 'string')
+    const [category, text, language, image] = ['category', 'text', 'language', 'image'].map((name) =>
+      field(item, name),
+    );
+    return isSuggestionCategory(category) &&
+      typeof text === 'string' &&
+      isLanguageId(language) &&
+      (image === null || typeof image === 'string')
       ? [{ category, text, language, image }]
       : [];
   });

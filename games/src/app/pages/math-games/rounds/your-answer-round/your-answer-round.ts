@@ -22,7 +22,6 @@ export class YourAnswerRound {
   readonly answering = output<void>();
   readonly answered = output<RoundResult>();
 
-
   protected readonly digits = DIGITS;
   protected readonly prompt = computed(() => formatPrompt(this.question()));
   protected readonly solution = computed(() => formatSolution(this.question()));

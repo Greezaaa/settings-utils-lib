@@ -30,9 +30,12 @@ export class AppInstall {
       const isStandalone =
         window.matchMedia('(display-mode: standalone)').matches || Reflect.get(navigator, 'standalone') === true;
       const isAppleTouch =
-        /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1);
+        /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+        (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1);
       this.isInstalled.set(isStandalone);
-      this.platformSignal.set(isAppleTouch ? 'apple-touch' : /Android/.test(navigator.userAgent) ? 'android' : 'computer');
+      this.platformSignal.set(
+        isAppleTouch ? 'apple-touch' : /Android/.test(navigator.userAgent) ? 'android' : 'computer',
+      );
     });
     window.addEventListener('beforeinstallprompt', (event) => {
       if (isInstallPrompt(event)) {

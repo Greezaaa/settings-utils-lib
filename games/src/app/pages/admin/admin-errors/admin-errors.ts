@@ -34,8 +34,12 @@ export class AdminErrors {
   protected readonly columns = computed<SuTableColumns<LoggedError>>(() => {
     const { admin } = this.t();
     return [
-      { key: 'lastSeen', header: admin.errorColumns.when, sortable: true, format: lastSeen => this.when(lastSeen) },
-      { key: 'code', header: admin.errorColumns.code, format: (code, error) => `${admin.errorSources[error.source]} · ${code}` },
+      { key: 'lastSeen', header: admin.errorColumns.when, sortable: true, format: (lastSeen) => this.when(lastSeen) },
+      {
+        key: 'code',
+        header: admin.errorColumns.code,
+        format: (code, error) => `${admin.errorSources[error.source]} · ${code}`,
+      },
       { key: 'title', header: admin.errorColumns.title },
       { key: 'problem', header: admin.errorColumns.problem },
       { key: 'path', header: admin.errorColumns.page, sortable: true },

@@ -38,8 +38,7 @@ export function deleteSaved(forget: () => void): void {
         localStorage.removeItem(key);
       }
     }
-  } catch {
-  }
+  } catch {}
   forget();
 }
 
@@ -61,6 +60,5 @@ export function writeStored(name: string, value: unknown): void {
   }
   try {
     localStorage.setItem(KEY_PREFIX + name, JSON.stringify(value));
-  } catch {
-  }
+  } catch {}
 }

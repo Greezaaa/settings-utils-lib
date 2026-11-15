@@ -1,6 +1,6 @@
 import { LanguageId } from '../i18n/site-messages';
 import { WORD_GENDERS, WordGender } from '../i18n/word-gender';
-import { field } from './api-url';
+import { field, isNumber } from './api-url';
 import { ROOM_GAMES, RoomGame } from './features';
 
 export type RoomPhase = 'lobby' | 'countdown' | 'playing' | 'results';
@@ -73,43 +73,27 @@ const ROOM_ERRORS: readonly RoomError[] = [
   'too-many',
   'offline',
 ];
-const PHASES: readonly RoomPhase[] = [
-  'lobby',
-  'countdown',
-  'playing',
-  'results',
-];
+const PHASES: readonly RoomPhase[] = ['lobby', 'countdown', 'playing', 'results'];
 const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
 
-const isNumber = (value: unknown): value is number =>
-  typeof value === 'number' && Number.isFinite(value);
 const oneOf =
   <T>(values: readonly T[]) =>
   (value: unknown): value is T =>
-    values.some(item => item === value);
+    values.some((item) => item === value);
 
 export const isRoomError = oneOf(ROOM_ERRORS);
 
-const genderOf = (value: unknown): WordGender | null =>
-  WORD_GENDERS.find(gender => gender === value) ?? null;
+const genderOf = (value: unknown): WordGender | null => WORD_GENDERS.find((gender) => gender === value) ?? null;
 
 const nameOf = (value: unknown): string | null =>
   typeof value === 'string' && /^\p{L}{3,12}$/u.test(value) ? value : null;
 
 function parsePlayer(item: unknown): RoomPlayer[] {
   const nickname = field(item, 'nickname');
-  const [id, color, ready, connected, score, place] = [
-    'id',
-    'color',
-    'ready',
-    'connected',
-    'score',
-    'place',
-  ].map(key => field(item, key));
-  const [adjective, animal] = [
-    field(nickname, 'adjective'),
-    field(nickname, 'animal'),
-  ];
+  const [id, color, ready, connected, score, place] = ['id', 'color', 'ready', 'connected', 'score', 'place'].map(
+    (key) => field(item, key),
+  );
+  const [adjective, animal] = [field(nickname, 'adjective'), field(nickname, 'animal')];
   return typeof id === 'string' &&
     isNumber(adjective) &&
     isNumber(animal) &&
@@ -143,7 +127,7 @@ function parseSettings(value: unknown): RoomSettings | null {
     'language',
     'showScores',
     'ownNames',
-  ].map(key => field(value, key));
+  ].map((key) => field(value, key));
   return oneOf(ROOM_GAMES)(game) &&
     typeof mode === 'string' &&
     typeof level === 'string' &&
@@ -154,22 +138,14 @@ function parseSettings(value: unknown): RoomSettings | null {
 }
 
 function parseRound(value: unknown): Round | null {
-  const [seed, startsAt, endsAt] = ['seed', 'startsAt', 'endsAt'].map(key =>
-    field(value, key)
-  );
-  return isNumber(seed) && isNumber(startsAt) && isNumber(endsAt)
-    ? { seed, startsAt, endsAt }
-    : null;
+  const [seed, startsAt, endsAt] = ['seed', 'startsAt', 'endsAt'].map((key) => field(value, key));
+  return isNumber(seed) && isNumber(startsAt) && isNumber(endsAt) ? { seed, startsAt, endsAt } : null;
 }
 
 export function parseRoomView(data: unknown): RoomView | null {
-  const [code, hostId, phase, players, serverNow] = [
-    'code',
-    'hostId',
-    'phase',
-    'players',
-    'serverNow',
-  ].map(key => field(data, key));
+  const [code, hostId, phase, players, serverNow] = ['code', 'hostId', 'phase', 'players', 'serverNow'].map((key) =>
+    field(data, key),
+  );
   const settings = parseSettings(field(data, 'settings'));
   if (
     typeof code !== 'string' ||

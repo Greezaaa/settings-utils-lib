@@ -39,6 +39,9 @@ export class AccountForm {
 
   private showProblem(problem: FormProblem): void {
     const texts = this.t().account;
-    this.notifications.show({ type: 'error', message: problem === 'mismatch' ? texts.passwordsDiffer : texts.problems[problem] });
+    this.notifications.show({
+      type: 'error',
+      message: problem === 'mismatch' ? texts.passwordsDiffer : texts.problems[problem],
+    });
   }
 }

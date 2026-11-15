@@ -11,26 +11,16 @@ const FEEDBACK_MS = 1300;
 const MAX_DEGREES = 180;
 const MAX_READOUT_DECIMALS = 2;
 
-const decimalsOf = (value: number): number =>
-  (String(value).split('.')[1] ?? '').length;
+const decimalsOf = (value: number): number => (String(value).split('.')[1] ?? '').length;
 
 type SliderExercise = AngleExercise | LineExercise;
 
 const isSliderRight = (exercise: SliderExercise, answer: number): boolean =>
-  exercise.kind === 'angle'
-    ? isAngleRight(exercise, answer)
-    : isLineRight(exercise, answer);
+  exercise.kind === 'angle' ? isAngleRight(exercise, answer) : isLineRight(exercise, answer);
 
 @Component({
   selector: 'app-measure-round',
-  imports: [
-    TranslatePipe,
-    AnswerLine,
-    FractionView,
-    GlassView,
-    NumberLineView,
-    ProtractorView,
-  ],
+  imports: [TranslatePipe, AnswerLine, FractionView, GlassView, NumberLineView, ProtractorView],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './measure-round.html',
   styleUrl: './measure-round.scss',
@@ -46,8 +36,7 @@ export class MeasureRound {
 
   protected readonly value = linkedSignal({
     source: this.exercise,
-    computation: (exercise): number =>
-      exercise.kind === 'line' ? exercise.start : 90,
+    computation: (exercise): number => (exercise.kind === 'line' ? exercise.start : 90),
   });
   protected readonly typed = linkedSignal({
     source: this.exercise,
@@ -71,9 +60,7 @@ export class MeasureRound {
   protected readonly glass = computed(() => this.asGlass(this.exercise()));
   protected readonly line = computed(() => this.asLine(this.exercise()));
 
-  protected readonly hasAnswer = computed(
-    () => this.mode() !== 'read-angle' || this.typed() !== ''
-  );
+  protected readonly hasAnswer = computed(() => this.mode() !== 'read-angle' || this.typed() !== '');
   protected readonly lineReadout = computed(() => {
     const line = this.line();
     if (!line) {
@@ -89,9 +76,7 @@ export class MeasureRound {
     if (!angle || isRight === null) {
       return null;
     }
-    return this.mode() === 'set-angle'
-      ? { angle: angle.angle, isRight: true }
-      : { angle: this.value(), isRight };
+    return this.mode() === 'set-angle' ? { angle: angle.angle, isRight: true } : { angle: this.value(), isRight };
   });
   protected readonly lineAnswer = computed(() => {
     const line = this.line();
@@ -126,8 +111,7 @@ export class MeasureRound {
       return;
     }
     const digits = event.target.value.replace(/\D/g, '');
-    const degrees =
-      digits === '' ? '' : String(Math.min(MAX_DEGREES, Number(digits)));
+    const degrees = digits === '' ? '' : String(Math.min(MAX_DEGREES, Number(digits)));
     event.target.value = degrees;
     this.typed.set(degrees);
     if (degrees !== '') {
@@ -159,14 +143,14 @@ export class MeasureRound {
       return;
     }
     const hasTriesLeft = this.hints() && this.wrongChoices().length === 0;
-    this.wrongChoices.update(choices => [...choices, choice]);
+    this.wrongChoices.update((choices) => [...choices, choice]);
     if (!hasTriesLeft) {
       this.finish(false);
     }
   }
 
   protected isWrongChoice(choice: Fill): boolean {
-    return this.wrongChoices().some(wrong => isSameFill(wrong, choice));
+    return this.wrongChoices().some((wrong) => isSameFill(wrong, choice));
   }
 
   protected isRightChoice(choice: Fill): boolean {

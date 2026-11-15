@@ -23,10 +23,7 @@ export class GlassView {
   };
   protected readonly glasses = computed(() => {
     const { whole, numerator, denominator } = this.fill();
-    return [
-      ...Array.from({ length: whole }, () => 1),
-      numerator / denominator,
-    ].map((share, index) => ({
+    return [...Array.from({ length: whole }, () => 1), numerator / denominator].map((share, index) => ({
       index,
       waterY: BOTTOM - (BOTTOM - TOP) * share,
       waterHeight: (BOTTOM - TOP) * share,

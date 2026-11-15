@@ -15,11 +15,7 @@ describe('room measure', () => {
 
   it('gives every device the same exercises from the round’s seed', () => {
     const settings = roomMeasure('fill-glass', 'normal');
-    expect(roomMeasureExercises(settings, 42)).toEqual(
-      roomMeasureExercises(settings, 42)
-    );
-    expect(roomMeasureExercises(settings, 42)).not.toEqual(
-      roomMeasureExercises(settings, 43)
-    );
+    expect(roomMeasureExercises(settings, 42)).toEqual(roomMeasureExercises(settings, 42));
+    expect(roomMeasureExercises(settings, 42)).not.toEqual(roomMeasureExercises(settings, 43));
   });
 });

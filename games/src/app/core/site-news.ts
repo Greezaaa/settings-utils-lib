@@ -4,6 +4,7 @@ import { readStored, writeStored } from './site-storage';
 import { groupNews, latestPrivacyVersion, latestPublished, latestVersion, NewsItem } from './site-updates';
 
 const NEWS_STORAGE = 'news';
+const NEWS_VERSION_STORAGE = 'news-version';
 
 @Injectable({ providedIn: 'root' })
 export class SiteNews {
@@ -31,10 +32,15 @@ export class SiteNews {
       const stored = readStored(NEWS_STORAGE);
       this.items.set(Array.isArray(stored) ? stored.flatMap((item: unknown) => parseNewsItem(item)) : []);
     }
+    const site = await this.api.site();
+    if (site && this.items().length > 0 && readStored(NEWS_VERSION_STORAGE) === site.newsVersion) {
+      return;
+    }
     const news = await this.api.news();
     if (news) {
       this.items.set(news);
       writeStored(NEWS_STORAGE, news.map(toStored));
+      writeStored(NEWS_VERSION_STORAGE, site?.newsVersion ?? null);
     }
   }
 }

@@ -5,16 +5,12 @@ import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Repository } from 'typeorm';
 import type { Env } from '../config/env.js';
+import type { ThumbnailVersion } from '../contracts/site.contract.js';
 import { GameSlug } from '../shared/catalog.js';
 import { cleanImage } from '../shared/clean-image.js';
 import { GameThumbnail } from './game-thumbnail.entity.js';
 
 const THUMBNAIL_SIDE = 640;
-
-export interface ThumbnailVersion {
-  readonly game: string;
-  readonly version: number;
-}
 
 @Injectable()
 export class GameThumbnailsService implements OnModuleInit {
@@ -25,7 +21,10 @@ export class GameThumbnailsService implements OnModuleInit {
     private readonly thumbnails: Repository<GameThumbnail>,
     config: ConfigService<Env, true>,
   ) {
-    this.folder = join(config.get('UPLOADS_DIR', { infer: true }), 'thumbnails');
+    this.folder = join(
+      config.get('UPLOADS_DIR', { infer: true }),
+      'thumbnails',
+    );
   }
 
   async onModuleInit(): Promise<void> {
@@ -34,7 +33,10 @@ export class GameThumbnailsService implements OnModuleInit {
 
   async list(): Promise<ThumbnailVersion[]> {
     const rows = await this.thumbnails.find({ order: { game: 'ASC' } });
-    return rows.map(({ game, updated }) => ({ game, version: updated.getTime() }));
+    return rows.map(({ game, updated }) => ({
+      game,
+      version: updated.getTime(),
+    }));
   }
 
   async read(game: GameSlug): Promise<Buffer> {

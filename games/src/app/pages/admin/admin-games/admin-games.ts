@@ -2,6 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } f
 import { RouterLink } from '@angular/router';
 import { SuSwitchComponent } from '@su-labs/fields';
 import { AdminApi } from '../../../core/admin-api';
+import { AdminSession } from '../../../core/admin-session';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { FEATURES, FeatureId } from '../../../core/features';
 import { GameAvailability } from '../../../core/game-availability';
@@ -25,7 +26,8 @@ interface SwitchActions {
   styleUrls: ['../admin.scss'],
 })
 export class AdminGames {
-  protected readonly admin = inject(AdminApi);
+  private readonly admin = inject(AdminApi);
+  protected readonly session = inject(AdminSession);
   protected readonly availability = inject(GameAvailability);
   protected readonly flags = inject(FeatureFlags);
   protected readonly features = FEATURES.filter(({ roomGame }) => !roomGame);
@@ -71,7 +73,10 @@ export class AdminGames {
       return;
     }
     await this.whileSaving(game, async () => {
-      const saved = await shrinkImage(file).then((picture) => this.admin.setGameThumbnail(game, picture), () => false);
+      const saved = await shrinkImage(file).then(
+        (picture) => this.admin.setGameThumbnail(game, picture),
+        () => false,
+      );
       if (saved) {
         this.availability.setThumbnail(game, Date.now());
       } else {

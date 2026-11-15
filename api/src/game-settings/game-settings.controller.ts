@@ -5,13 +5,16 @@ import { AdminGuard, SuperAdminGuard } from '../security/admin.guard.js';
 import type { GameCategory, GameSlug } from '../shared/catalog.js';
 import { categorySchema, gameSchema } from '../shared/catalog.js';
 import { IMAGE_MAX_BYTES } from '../shared/clean-image.js';
-import { GameCategoryList, GameSettingsService, GameSwitch } from './game-settings.service.js';
-import { GameThumbnailsService, ThumbnailVersion } from './game-thumbnails.service.js';
+import type { GameCategoryList, GameSwitch, ThumbnailVersion } from '../contracts/site.contract.js';
+import { GameSettingsService } from './game-settings.service.js';
+import { GameThumbnailsService } from './game-thumbnails.service.js';
 
 const GAME_CATEGORY_LIMIT = 4;
 const switchSchema = z.object({ enabled: z.boolean() });
 type SwitchInput = z.infer<typeof switchSchema>;
-const categoriesSchema = z.object({ categories: z.array(categorySchema).min(1).max(GAME_CATEGORY_LIMIT) });
+const categoriesSchema = z.object({
+  categories: z.array(categorySchema).min(1).max(GAME_CATEGORY_LIMIT),
+});
 type CategoriesInput = { categories: GameCategory[] };
 
 @Controller('v1/games')
@@ -23,7 +26,11 @@ export class GameSettingsController {
 
   @Get()
   @Header('Cache-Control', 'no-cache')
-  async list(): Promise<{ games: GameSwitch[]; categories: GameCategoryList[]; thumbnails: ThumbnailVersion[] }> {
+  async list(): Promise<{
+    games: GameSwitch[];
+    categories: GameCategoryList[];
+    thumbnails: ThumbnailVersion[];
+  }> {
     const [games, categories, thumbnails] = await Promise.all([
       this.settings.list(),
       this.settings.listCategories(),
@@ -35,7 +42,9 @@ export class GameSettingsController {
   @Get(':game/thumbnail')
   @Header('Content-Type', 'image/webp')
   @Header('Cache-Control', 'public, max-age=31536000, immutable')
-  async thumbnail(@Param('game', { schema: gameSchema }) game: GameSlug): Promise<StreamableFile> {
+  async thumbnail(
+    @Param('game', { schema: gameSchema }) game: GameSlug,
+  ): Promise<StreamableFile> {
     return new StreamableFile(await this.thumbnails.read(game));
   }
 }
@@ -75,7 +84,11 @@ export class GameSettingsAdminController {
   @UseGuards(SuperAdminGuard)
   @Put('games/:game/thumbnail')
   @HttpCode(204)
-  @UseInterceptors(FileInterceptor('image', { limits: { fileSize: IMAGE_MAX_BYTES, files: 1, fields: 0, parts: 1 } }))
+  @UseInterceptors(
+    FileInterceptor('image', {
+      limits: { fileSize: IMAGE_MAX_BYTES, files: 1, fields: 0, parts: 1 },
+    }),
+  )
   async setThumbnail(
     @Param('game', { schema: gameSchema }) game: GameSlug,
     @UploadedFile() image?: Express.Multer.File,
@@ -89,7 +102,9 @@ export class GameSettingsAdminController {
   @UseGuards(SuperAdminGuard)
   @Delete('games/:game/thumbnail')
   @HttpCode(204)
-  async removeThumbnail(@Param('game', { schema: gameSchema }) game: GameSlug): Promise<void> {
+  async removeThumbnail(
+    @Param('game', { schema: gameSchema }) game: GameSlug,
+  ): Promise<void> {
     await this.thumbnails.remove(game);
   }
 }

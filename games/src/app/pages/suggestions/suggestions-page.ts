@@ -11,7 +11,6 @@ import { SuAutoGrowDirective } from '@su-labs/fields';
 export const MAX_SUGGESTION_LENGTH = 500;
 const MIN_SUGGESTION_LENGTH = 3;
 
-
 @Component({
   selector: 'app-suggestions-page',
   imports: [TranslatePipe, SuAutoGrowDirective],

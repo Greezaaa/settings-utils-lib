@@ -85,9 +85,7 @@ export interface SiteMessages {
     readonly answerStyle: string;
     readonly answerStyles: Readonly<Record<AnswerStyle, OptionText>>;
     readonly menuAnimation: string;
-    readonly menuAnimationChoices: Readonly<
-      Record<MenuAnimationChoice, string>
-    >;
+    readonly menuAnimationChoices: Readonly<Record<MenuAnimationChoice, string>>;
     readonly reactionSide: string;
     readonly reactionSides: Readonly<Record<ReactionSide, string>>;
     readonly stickerDrag: string;
@@ -422,9 +420,7 @@ export interface SiteMessages {
     readonly modeGroup: string;
     readonly modes: Readonly<Record<MeasureModeId, OptionText>>;
     readonly levels: Readonly<Record<MeasureLevelId, string>>;
-    readonly levelSummaries: Readonly<
-      Record<MeasureModeId, Readonly<Record<MeasureLevelId, string>>>
-    >;
+    readonly levelSummaries: Readonly<Record<MeasureModeId, Readonly<Record<MeasureLevelId, string>>>>;
     readonly hintsGroup: string;
     readonly hintOptions: Readonly<Record<HintsId, OptionText>>;
     readonly aim: Readonly<Record<AimHint, string>>;
@@ -547,9 +543,7 @@ export interface SiteMessages {
     readonly micDenied: string;
     readonly micUnavailable: string;
     readonly meter: string;
-    readonly singHints: Readonly<
-      Record<'done' | 'silent' | 'hold' | 'low' | 'high', string>
-    >;
+    readonly singHints: Readonly<Record<'done' | 'silent' | 'hold' | 'low' | 'high', string>>;
     readonly skip: string;
     readonly solved: string;
     readonly summary: (right: number, total: number) => string;
@@ -587,10 +581,7 @@ export interface SiteMessages {
     readonly firstSeen: (moment: string) => string;
     readonly errorSources: Readonly<Record<ErrorSource, string>>;
     readonly errorColumns: Readonly<
-      Record<
-        'when' | 'code' | 'title' | 'problem' | 'page' | 'count' | 'actions',
-        string
-      >
+      Record<'when' | 'code' | 'title' | 'problem' | 'page' | 'count' | 'actions', string>
     >;
     readonly previewTitle: string;
     readonly navLink: string;

@@ -142,7 +142,8 @@ export class SecretWordPage {
 
   protected onKeydown(event: KeyboardEvent): void {
     const target = event.target;
-    const isField = target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
+    const isField =
+      target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
     if (isField || event.ctrlKey || event.metaKey || event.altKey) {
       return;
     }

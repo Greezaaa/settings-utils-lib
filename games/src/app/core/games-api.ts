@@ -1,6 +1,7 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { LanguageId } from '../i18n/site-messages';
-import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import type { SiteView } from '@api/contracts/site.contract';
+import { apiUrl, field, READ_TIMEOUT_MS, SEND_TIMEOUT_MS, wireField } from './api-url';
 import { FEATURE_IDS, FeatureId } from './features';
 import { NewsItem, UPDATE_KINDS, UpdateKind } from './site-updates';
 import { GAME_CATEGORIES, GAME_SLUGS, GameCategory, GameSlug } from './games';
@@ -39,12 +40,23 @@ export interface GameSettings {
   readonly thumbnails: readonly ThumbnailVersion[];
 }
 
+export interface SiteConfig {
+  readonly games: GameSettings;
+  readonly features: readonly FeatureSwitch[];
+  readonly newsVersion: string;
+}
+
 export interface SiteError {
   readonly code: string;
   readonly title: string;
   readonly problem: string;
   readonly path: string;
 }
+
+type GameSwitchWire = SiteView['games'][number];
+type CategoryListWire = SiteView['categories'][number];
+type ThumbnailWire = SiteView['thumbnails'][number];
+type FeatureSwitchWire = SiteView['features'][number];
 
 export interface GamePlays {
   readonly game: GameSlug;
@@ -68,8 +80,8 @@ function parsePlays(body: unknown): GamePlays[] {
 }
 
 function parseCategories(item: unknown): GameCategoryList[] {
-  const game = field(item, 'game');
-  const categories = field(item, 'categories');
+  const game = wireField<CategoryListWire>(item, 'game');
+  const categories = wireField<CategoryListWire>(item, 'categories');
   const known = Array.isArray(categories) ? categories.filter((category: unknown) => isGameCategory(category)) : [];
   return isGameSlug(game) && known.length > 0 ? [{ game, categories: known }] : [];
 }
@@ -77,26 +89,26 @@ function parseCategories(item: unknown): GameCategoryList[] {
 export function parseThumbnails(list: unknown): ThumbnailVersion[] {
   return Array.isArray(list)
     ? list.flatMap((item: unknown) => {
-        const game = field(item, 'game');
-        const version = field(item, 'version');
+        const game = wireField<ThumbnailWire>(item, 'game');
+        const version = wireField<ThumbnailWire>(item, 'version');
         return isGameSlug(game) && typeof version === 'number' && Number.isInteger(version) ? [{ game, version }] : [];
       })
     : [];
 }
 
 function parseGameSettings(body: unknown): GameSettings | null {
-  const games = field(body, 'games');
+  const games = wireField<SiteView>(body, 'games');
   if (!Array.isArray(games)) {
     return null;
   }
   const switches = games.flatMap((item: unknown) => {
-    const game = field(item, 'game');
-    const enabled = field(item, 'enabled');
+    const game = wireField<GameSwitchWire>(item, 'game');
+    const enabled = wireField<GameSwitchWire>(item, 'enabled');
     return isGameSlug(game) && typeof enabled === 'boolean' ? [{ game, enabled }] : [];
   });
-  const lists = field(body, 'categories');
+  const lists = wireField<SiteView>(body, 'categories');
   const categories = Array.isArray(lists) ? lists.flatMap((item: unknown) => parseCategories(item)) : [];
-  return { switches, categories, thumbnails: parseThumbnails(field(body, 'thumbnails')) };
+  return { switches, categories, thumbnails: parseThumbnails(wireField<SiteView>(body, 'thumbnails')) };
 }
 
 export interface FeatureSwitch {
@@ -107,25 +119,43 @@ export interface FeatureSwitch {
 export const isFeatureId = (value: unknown): value is FeatureId => FEATURE_IDS.some((feature) => feature === value);
 
 function parseFeatureSwitches(body: unknown): FeatureSwitch[] | null {
-  const features = field(body, 'features');
+  const features = wireField<SiteView>(body, 'features');
   if (!Array.isArray(features)) {
     return null;
   }
   return features.flatMap((item: unknown) => {
-    const feature = field(item, 'feature');
-    const enabled = field(item, 'enabled');
+    const feature = wireField<FeatureSwitchWire>(item, 'feature');
+    const enabled = wireField<FeatureSwitchWire>(item, 'enabled');
     return isFeatureId(feature) && typeof enabled === 'boolean' ? [{ feature, enabled }] : [];
   });
+}
+
+function parseSiteConfig(body: unknown): SiteConfig | null {
+  const games = parseGameSettings(body);
+  const features = parseFeatureSwitches(body);
+  const newsVersion = wireField<SiteView>(body, 'newsVersion');
+  return games && features && typeof newsVersion === 'string' ? { games, features, newsVersion } : null;
 }
 
 export const isUpdateKind = (value: unknown): value is UpdateKind => UPDATE_KINDS.some((kind) => kind === value);
 
 export function parseNewsItem(item: unknown): NewsItem[] {
-  const [version, published, kind, game, feature, privacy, text] = ['version', 'published', 'kind', 'game', 'feature', 'privacy', 'text'].map(
-    (name) => field(item, name),
-  );
+  const [version, published, kind, game, feature, privacy, text] = [
+    'version',
+    'published',
+    'kind',
+    'game',
+    'feature',
+    'privacy',
+    'text',
+  ].map((name) => field(item, name));
   const spanish = field(text, 'es');
-  if (typeof version !== 'number' || typeof published !== 'string' || !isUpdateKind(kind) || typeof spanish !== 'string') {
+  if (
+    typeof version !== 'number' ||
+    typeof published !== 'string' ||
+    !isUpdateKind(kind) ||
+    typeof spanish !== 'string'
+  ) {
     return [];
   }
   const inLanguage = (language: LanguageId): string => {
@@ -154,6 +184,8 @@ export type SuggestionResult = 'sent' | 'too-many' | 'refused' | 'offline';
 @Injectable({ providedIn: 'root' })
 export class GamesApi {
   private readonly document = inject(DOCUMENT);
+  private siteRequest: Promise<SiteConfig | null> | null = null;
+
   countPlay(game: GameSlug): void {
     void this.sendOrQueue({ path: '/v1/plays', body: { game } });
   }
@@ -190,17 +222,18 @@ export class GamesApi {
     return status < 300 ? 'sent' : status === TOO_MANY ? 'too-many' : 'refused';
   }
 
-  async featureSwitches(): Promise<FeatureSwitch[] | null> {
-    return parseFeatureSwitches(await this.read('/v1/features'));
-  }
-
   async news(): Promise<NewsItem[] | null> {
     const news = field(await this.read('/v1/news'), 'news');
     return Array.isArray(news) ? news.flatMap((item: unknown) => parseNewsItem(item)) : null;
   }
 
-  async gameSettings(): Promise<GameSettings | null> {
-    return parseGameSettings(await this.read('/v1/games'));
+  site(): Promise<SiteConfig | null> {
+    this.siteRequest ??= this.read('/v1/site')
+      .then(parseSiteConfig)
+      .finally(() => {
+        this.siteRequest = null;
+      });
+    return this.siteRequest;
   }
 
   private async read(path: string): Promise<unknown> {
@@ -245,7 +278,10 @@ export class GamesApi {
         ? { method: 'POST', body }
         : { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } };
     try {
-      const response = await fetch(apiUrl(this.document, path), { ...init, signal: AbortSignal.timeout(SEND_TIMEOUT_MS) });
+      const response = await fetch(apiUrl(this.document, path), {
+        ...init,
+        signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
+      });
       return response.status;
     } catch {
       return null;

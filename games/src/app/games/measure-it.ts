@@ -1,24 +1,10 @@
 import { between, pick, Random, shuffled } from './random';
 
-export type MeasureModeId =
-  | 'read-angle'
-  | 'set-angle'
-  | 'fill-glass'
-  | 'number-line';
-export const MEASURE_MODE_IDS: readonly MeasureModeId[] = [
-  'read-angle',
-  'set-angle',
-  'fill-glass',
-  'number-line',
-];
+export type MeasureModeId = 'read-angle' | 'set-angle' | 'fill-glass' | 'number-line';
+export const MEASURE_MODE_IDS: readonly MeasureModeId[] = ['read-angle', 'set-angle', 'fill-glass', 'number-line'];
 
 export type MeasureLevelId = 'easy' | 'normal' | 'hard' | 'expert';
-export const MEASURE_LEVEL_IDS: readonly MeasureLevelId[] = [
-  'easy',
-  'normal',
-  'hard',
-  'expert',
-];
+export const MEASURE_LEVEL_IDS: readonly MeasureLevelId[] = ['easy', 'normal', 'hard', 'expert'];
 
 export const EXERCISES_PER_GAME = 10;
 
@@ -62,10 +48,7 @@ export interface AngleExercise {
   readonly level: AngleLevel;
 }
 
-export function angleExercise(
-  levelId: MeasureLevelId,
-  random: Random
-): AngleExercise {
+export function angleExercise(levelId: MeasureLevelId, random: Random): AngleExercise {
   const level = ANGLE_LEVELS[levelId];
   const steps = Math.floor(180 / level.multipleOf) - 1;
   return {
@@ -75,10 +58,8 @@ export function angleExercise(
   };
 }
 
-export const isAngleRight = (
-  { angle, level }: AngleExercise,
-  answer: number
-): boolean => Math.abs(answer - angle) <= level.tolerance;
+export const isAngleRight = ({ angle, level }: AngleExercise, answer: number): boolean =>
+  Math.abs(answer - angle) <= level.tolerance;
 
 export interface Fill {
   readonly whole: number;
@@ -123,10 +104,7 @@ export interface FillParts {
   readonly denominator: number;
 }
 
-export function fillParts(
-  { whole, numerator, denominator }: Fill,
-  improper: boolean
-): FillParts {
+export function fillParts({ whole, numerator, denominator }: Fill, improper: boolean): FillParts {
   if (improper) {
     return {
       whole: null,
@@ -142,52 +120,40 @@ export function formatFill(fill: Fill, improper: boolean): string {
   return `${whole === null ? '' : `${whole} `}${numerator}/${denominator}`;
 }
 
-const fillValue = ({ whole, numerator, denominator }: Fill): number =>
-  whole + numerator / denominator;
+const fillValue = ({ whole, numerator, denominator }: Fill): number => whole + numerator / denominator;
 
 const greatestDivisor = (first: number, second: number): number =>
   second === 0 ? first : greatestDivisor(second, first % second);
 
 function levelFills({ denominators, wholes }: GlassLevel): Fill[] {
-  const fills = wholes.flatMap(whole =>
-    denominators.flatMap(denominator =>
+  const fills = wholes.flatMap((whole) =>
+    denominators.flatMap((denominator) =>
       Array.from({ length: denominator - 1 }, (_, index) => index + 1)
-        .filter(numerator => greatestDivisor(numerator, denominator) === 1)
-        .map(numerator => ({ whole, numerator, denominator }))
-    )
+        .filter((numerator) => greatestDivisor(numerator, denominator) === 1)
+        .map((numerator) => ({ whole, numerator, denominator })),
+    ),
   );
-  return fills.filter(
-    (fill, index) =>
-      fills.findIndex(other => fillValue(other) === fillValue(fill)) === index
-  );
+  return fills.filter((fill, index) => fills.findIndex((other) => fillValue(other) === fillValue(fill)) === index);
 }
 
-export function glassExercise(
-  levelId: MeasureLevelId,
-  random: Random
-): GlassExercise {
+export function glassExercise(levelId: MeasureLevelId, random: Random): GlassExercise {
   const level = GLASS_LEVELS[levelId];
   const fills = levelFills(level);
   const fill = pick(fills, random);
-  const distance = (other: Fill): number =>
-    Math.abs(fillValue(other) - fillValue(fill));
+  const distance = (other: Fill): number => Math.abs(fillValue(other) - fillValue(fill));
   const wrong = shuffled(
-    fills.filter(other => fillValue(other) !== fillValue(fill)),
-    random
+    fills.filter((other) => fillValue(other) !== fillValue(fill)),
+    random,
   );
-  const others = (
-    level.improper
-      ? wrong.sort((first, second) => distance(first) - distance(second))
-      : wrong
-  ).slice(0, level.choices - 1);
-  const choices = [fill, ...others].sort(
-    (first, second) => fillValue(first) - fillValue(second)
+  const others = (level.improper ? wrong.sort((first, second) => distance(first) - distance(second)) : wrong).slice(
+    0,
+    level.choices - 1,
   );
+  const choices = [fill, ...others].sort((first, second) => fillValue(first) - fillValue(second));
   return { kind: 'glass', fill, choices, improper: level.improper };
 }
 
-export const isSameFill = (first: Fill, second: Fill): boolean =>
-  fillValue(first) === fillValue(second);
+export const isSameFill = (first: Fill, second: Fill): boolean => fillValue(first) === fillValue(second);
 
 interface LineLevel {
   readonly steps: readonly number[];
@@ -229,10 +195,7 @@ export interface LineExercise {
 
 const SLIDER_EXTRA_STEPS = { min: 2, max: 8 };
 
-export function lineExercise(
-  levelId: MeasureLevelId,
-  random: Random
-): LineExercise {
+export function lineExercise(levelId: MeasureLevelId, random: Random): LineExercise {
   const level = LINE_LEVELS[levelId];
   const step = pick(level.steps, random);
   const gaps = between(level.gaps, random);
@@ -251,24 +214,16 @@ export function lineExercise(
   };
 }
 
-export const lineValue = (
-  { start, step }: LineExercise,
-  tick: number
-): number => start + step * tick;
+export const lineValue = ({ start, step }: LineExercise, tick: number): number => start + step * tick;
 
-export const lineEnd = (exercise: LineExercise): number =>
-  lineValue(exercise, exercise.gaps);
+export const lineEnd = (exercise: LineExercise): number => lineValue(exercise, exercise.gaps);
 
 export const isLineRight = (exercise: LineExercise, answer: number): boolean =>
   Math.abs(answer - lineValue(exercise, exercise.mark)) < exercise.step / 2;
 
 export type MeasureExercise = AngleExercise | GlassExercise | LineExercise;
 
-export function measureExercise(
-  mode: MeasureModeId,
-  level: MeasureLevelId,
-  random: Random
-): MeasureExercise {
+export function measureExercise(mode: MeasureModeId, level: MeasureLevelId, random: Random): MeasureExercise {
   switch (mode) {
     case 'fill-glass':
       return glassExercise(level, random);
@@ -283,21 +238,15 @@ export function measureExercises(
   mode: MeasureModeId,
   level: MeasureLevelId,
   random: Random,
-  count = EXERCISES_PER_GAME
+  count = EXERCISES_PER_GAME,
 ): MeasureExercise[] {
-  return Array.from({ length: count }, () =>
-    measureExercise(mode, level, random)
-  );
+  return Array.from({ length: count }, () => measureExercise(mode, level, random));
 }
 
 export type AimHint = 'more' | 'less';
 
 export const rightValue = (exercise: AngleExercise | LineExercise): number =>
-  exercise.kind === 'angle'
-    ? exercise.angle
-    : lineValue(exercise, exercise.mark);
+  exercise.kind === 'angle' ? exercise.angle : lineValue(exercise, exercise.mark);
 
-export const aimHint = (
-  exercise: AngleExercise | LineExercise,
-  answer: number
-): AimHint => (rightValue(exercise) > answer ? 'more' : 'less');
+export const aimHint = (exercise: AngleExercise | LineExercise, answer: number): AimHint =>
+  rightValue(exercise) > answer ? 'more' : 'less';

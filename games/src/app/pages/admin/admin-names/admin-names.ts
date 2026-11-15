@@ -15,7 +15,7 @@ import { saveFailedNotice } from '../save-failed-notice';
 export class AdminNames {
   private readonly admin = inject(AdminApi);
 
-  protected readonly list = new PagedList(offset => this.admin.pendingNames(offset));
+  protected readonly list = new PagedList((offset) => this.admin.pendingNames(offset));
   private readonly notifySaveFailed = saveFailedNotice();
 
   constructor() {
@@ -27,7 +27,10 @@ export class AdminNames {
   }
 
   protected async replace(name: PendingName): Promise<void> {
-    await this.decided(name, this.admin.renamePlayer(name.id).then(screenName => screenName !== null));
+    await this.decided(
+      name,
+      this.admin.renamePlayer(name.id).then((screenName) => screenName !== null),
+    );
   }
 
   private async decided(name: PendingName, saved: Promise<boolean>): Promise<void> {

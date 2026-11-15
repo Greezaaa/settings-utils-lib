@@ -16,9 +16,7 @@ export function roundClock(round: Signal<Round>): RoundClock {
   const ticker = setInterval(() => now.set(client.serverNow()), TICK_MS);
   inject(DestroyRef).onDestroy(() => clearInterval(ticker));
 
-  const secondsLeft = computed(() =>
-    Math.max(0, Math.ceil((round().endsAt - now()) / 1000))
-  );
+  const secondsLeft = computed(() => Math.max(0, Math.ceil((round().endsAt - now()) / 1000)));
   return {
     secondsLeft,
     share: computed(() => {

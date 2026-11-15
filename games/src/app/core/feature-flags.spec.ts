@@ -1,21 +1,23 @@
 import { DOCUMENT, Injector, runInInjectionContext, signal } from '@angular/core';
-import { AdminApi } from './admin-api';
+import { AdminSession } from './admin-session';
 import { Connection } from './connection';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FeatureFlags } from './feature-flags';
 import { GameAvailability } from './game-availability';
-import { FeatureSwitch, GameSettings, GamesApi } from './games-api';
+import { FeatureSwitch, GamesApi, SiteConfig } from './games-api';
 
 const online = signal(true);
 
 function flagsWith(features: FeatureSwitch[] | null): { flags: FeatureFlags; availability: GameAvailability } {
   return flagsFrom({
-    featureSwitches: vi.fn(async () => features),
-    gameSettings: vi.fn(async (): Promise<GameSettings | null> => ({ switches: [], categories: [], thumbnails: [] })),
+    site: vi.fn(
+      async (): Promise<SiteConfig | null> =>
+        features ? { games: { switches: [], categories: [], thumbnails: [] }, features, newsVersion: '' } : null,
+    ),
   });
 }
 
-function flagsFrom(api: Pick<GamesApi, 'featureSwitches' | 'gameSettings'>): { flags: FeatureFlags; availability: GameAvailability } {
+function flagsFrom(api: Pick<GamesApi, 'site'>): { flags: FeatureFlags; availability: GameAvailability } {
   const connection: Pick<Connection, 'isOnline'> = { isOnline: online.asReadonly() };
   const injector = Injector.create({
     providers: [
@@ -23,7 +25,7 @@ function flagsFrom(api: Pick<GamesApi, 'featureSwitches' | 'gameSettings'>): { f
       { provide: GamesApi, useValue: api },
       { provide: Connection, useValue: connection },
       {
-        provide: AdminApi,
+        provide: AdminSession,
         useValue: { restore: vi.fn(async () => 'signed-in'), canPreview: signal(true).asReadonly() },
       },
       { provide: GameAvailability, useFactory: () => new GameAvailability(), deps: [] },
@@ -43,7 +45,7 @@ describe('FeatureFlags', () => {
 
   it('lets a page open at once when the last visit saved its feature on, without waiting for the API', async () => {
     await flagsWith([{ feature: 'rooms', enabled: true }]).flags.ready();
-    const { flags } = flagsFrom({ featureSwitches: () => new Promise(() => undefined), gameSettings: () => new Promise(() => undefined) });
+    const { flags } = flagsFrom({ site: () => new Promise(() => undefined) });
     await expect(flags.canEnter('rooms')).resolves.toBe(true);
   });
 
@@ -70,7 +72,7 @@ describe('FeatureFlags', () => {
     expect(flags.isOpen('offline')).toBe(true);
   });
 
-  it('shows the defaults until the switches arrive, then the admin\'s choice', async () => {
+  it("shows the defaults until the switches arrive, then the admin's choice", async () => {
     const closed = flagsWith([{ feature: 'rooms', enabled: false }]);
     expect(closed.flags.canUse('rooms')).toBe(true);
     await closed.flags.ready();

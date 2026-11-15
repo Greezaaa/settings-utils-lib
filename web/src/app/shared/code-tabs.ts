@@ -18,8 +18,7 @@ export interface CodeTab {
           role="tab"
           class="tab"
           [attr.aria-selected]="index === selectedIndex()"
-          (click)="selectedIndex.set(index)"
-        >
+          (click)="selectedIndex.set(index)">
           {{ tab.label }}
         </button>
       }

@@ -25,22 +25,16 @@ export class RoomMathRound {
   readonly showScore = input(true);
   readonly scored = output<number>();
 
-
   private readonly seed = computed(() => this.round().seed);
   private readonly settings = computed(() => this.math(), {
-    equal: (first, second) =>
-      first.style === second.style && first.levelId === second.levelId,
+    equal: (first, second) => first.style === second.style && first.levelId === second.levelId,
   });
-  private readonly exercises = computed(() =>
-    roomExercises(this.settings(), this.seed())
-  );
+  private readonly exercises = computed(() => roomExercises(this.settings(), this.seed()));
   private readonly index = linkedSignal({
     source: this.exercises,
     computation: () => 0,
   });
-  protected readonly exercise = computed(
-    () => this.exercises()[this.index() % this.exercises().length]
-  );
+  protected readonly exercise = computed(() => this.exercises()[this.index() % this.exercises().length]);
   protected readonly score = linkedSignal({
     source: this.seed,
     computation: () => 0,
@@ -48,18 +42,16 @@ export class RoomMathRound {
 
   protected readonly clock = roundClock(this.round);
   protected readonly signsOperators = computed(() =>
-    this.settings().style === 'find-the-signs'
-      ? signsLevelOf(this.settings()).operators
-      : []
+    this.settings().style === 'find-the-signs' ? signsLevelOf(this.settings()).operators : [],
   );
 
   protected onAnswered({ isCorrect }: RoundResult): void {
     if (this.clock.isOver()) {
       return;
     }
-    this.score.update(score => scoreAfterAnswer(score, isCorrect));
+    this.score.update((score) => scoreAfterAnswer(score, isCorrect));
     this.scored.emit(this.score());
-    this.index.update(index => index + 1);
+    this.index.update((index) => index + 1);
   }
 
   protected questionOf(exercise: RoomExercise): Question | null {

@@ -1,6 +1,9 @@
 import { readStored, writeStored } from './site-storage';
 
-export function readSwitches<K extends string>(name: string, isKey: (value: unknown) => value is K): Map<K, boolean> | null {
+export function readSwitches<K extends string>(
+  name: string,
+  isKey: (value: unknown) => value is K,
+): Map<K, boolean> | null {
   const stored = readStored(name);
   if (!Array.isArray(stored)) {
     return null;

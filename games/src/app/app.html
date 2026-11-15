@@ -82,7 +82,11 @@
         </button>
 
         <div id="site-settings" class="settings-panel" [class.is-open]="settingsOpen()">
-          <app-site-settings (navigated)="settingsOpen.set(false)" />
+          @defer (when settingsOpen(); prefetch on idle) {
+            <app-site-settings (navigated)="settingsOpen.set(false)" />
+          } @loading {
+            <p class="muted" role="status">{{ 'site.loading' | translate }}</p>
+          }
         </div>
       </div>
 
@@ -114,7 +118,7 @@
       }
       <a routerLink="/account" routerLinkActive="active">{{ account.account()?.screenName ?? ('account.navLink' | translate) }}</a>
     }
-    @if (admin.isSignedIn()) {
+    @if (adminSession.isSignedIn()) {
       <a [routerLink]="['/', adminPath]" routerLinkActive="active">{{ 'admin.navLink' | translate }}</a>
     }
   </nav>

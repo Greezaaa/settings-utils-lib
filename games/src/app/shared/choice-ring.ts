@@ -53,12 +53,7 @@ export class ChoiceRing {
   private shapeFor(target: EventTarget | null): DriftShape | null {
     const window = this.document.defaultView;
     const group = this.groupOf(target);
-    if (
-      !window ||
-      !group ||
-      !this.menuAnimation.isOn() ||
-      this.motion.shouldReduce()
-    ) {
+    if (!window || !group || !this.menuAnimation.isOn() || this.motion.shouldReduce()) {
       return null;
     }
     const known = this.shapes.get(group);
@@ -76,10 +71,7 @@ export class ChoiceRing {
     group.style.setProperty('--choice-ring-colour', chosenStyle?.backgroundColor ?? 'var(--button-bg)');
     group.style.setProperty('--choice-ring-text', chosenStyle?.color ?? 'var(--button-text)');
     group.style.setProperty('--choice-ring-radius', chosenStyle?.borderRadius ?? '999px');
-    group.style.setProperty(
-      '--choice-ring-plain',
-      plain ? window.getComputedStyle(plain).color : 'var(--heading)',
-    );
+    group.style.setProperty('--choice-ring-plain', plain ? window.getComputedStyle(plain).color : 'var(--heading)');
     group.classList.add('has-choice-ring');
     const shape = new DriftShape(
       group,

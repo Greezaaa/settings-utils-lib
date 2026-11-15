@@ -100,7 +100,10 @@ export class TablePage {
 
   protected readonly products = signal<readonly Product[]>(PRODUCTS);
   protected readonly productsJson = computed(
-    () => `[\n${this.products().map((product) => `  ${JSON.stringify(product)}`).join(',\n')}\n]`,
+    () =>
+      `[\n${this.products()
+        .map((product) => `  ${JSON.stringify(product)}`)
+        .join(',\n')}\n]`,
   );
   protected readonly selectable = signal(true);
   protected readonly reorderable = signal(true);

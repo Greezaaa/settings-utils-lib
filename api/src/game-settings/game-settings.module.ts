@@ -8,8 +8,11 @@ import { GameSettingsAdminController, GameSettingsController } from './game-sett
 import { GameSettingsService } from './game-settings.service.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([GameSetting, GameCategories, GameThumbnail])],
+  imports: [
+    TypeOrmModule.forFeature([GameSetting, GameCategories, GameThumbnail]),
+  ],
   controllers: [GameSettingsController, GameSettingsAdminController],
   providers: [GameSettingsService, GameThumbnailsService],
+  exports: [GameSettingsService, GameThumbnailsService],
 })
 export class GameSettingsModule {}

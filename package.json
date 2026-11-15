@@ -9,6 +9,8 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts,.html --fix",
+    "format": "prettier --write \"games/src/**/*.ts\" \"web/src/**/*.ts\" && npm --prefix api run format",
+    "format:check": "prettier --check \"games/src/**/*.ts\" \"web/src/**/*.ts\" && npm --prefix api run format:check",
     "build:core": "ng build @su-labs/core --configuration production",
     "build:theme": "ng build @su-labs/theme --configuration production",
     "build:notifications": "ng build @su-labs/notifications --configuration production",

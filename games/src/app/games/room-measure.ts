@@ -8,15 +8,12 @@ export interface RoomMeasure {
 
 export function roomMeasure(mode: string, level: string): RoomMeasure {
   return {
-    mode: MEASURE_MODE_IDS.find(id => id === mode) ?? MEASURE_MODE_IDS[0],
-    levelId: MEASURE_LEVEL_IDS.find(id => id === level) ?? MEASURE_LEVEL_IDS[0],
+    mode: MEASURE_MODE_IDS.find((id) => id === mode) ?? MEASURE_MODE_IDS[0],
+    levelId: MEASURE_LEVEL_IDS.find((id) => id === level) ?? MEASURE_LEVEL_IDS[0],
   };
 }
 
 export const ROOM_MEASURE_COUNT = 120;
 
-export const roomMeasureExercises = (
-  { mode, levelId }: RoomMeasure,
-  seed: number
-): MeasureExercise[] =>
+export const roomMeasureExercises = ({ mode, levelId }: RoomMeasure, seed: number): MeasureExercise[] =>
   measureExercises(mode, levelId, seededRandom(seed), ROOM_MEASURE_COUNT);

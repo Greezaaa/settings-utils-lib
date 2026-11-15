@@ -38,11 +38,10 @@ const ANIMALS = [
 ];
 
 export const EN: SiteMessages = {
-
   answers: {
     right: 'Right!',
     wrong: 'Not quite',
-    wrongWith: answer => `Not quite: it was ${answer}`,
+    wrongWith: (answer) => `Not quite: it was ${answer}`,
   },
 
   site: {
@@ -126,7 +125,7 @@ export const EN: SiteMessages = {
     projectLinks: 'Project links',
     privacyNotice:
       'We use cookies only to save your preferences, like theme, text size and language. We never sell or share your data with anyone. We love your privacy!',
-    lastUpdate: moment => `Last update: ${moment}`,
+    lastUpdate: (moment) => `Last update: ${moment}`,
     noticeOk: 'OK',
     noticeLater: 'Later',
     updateReady: 'A new version of the games is ready.',
@@ -157,15 +156,13 @@ export const EN: SiteMessages = {
     },
     'measure-it': {
       name: 'Measure it',
-      summary:
-        'Read and make angles on a protractor, tell how full the glass is, and find the number on a line.',
+      summary: 'Read and make angles on a protractor, tell how full the glass is, and find the number on a line.',
       subtitle: 'angles, fractions and number lines',
       intro: 'A measuring game for kids.',
     },
     'climb-tower': {
       name: 'Climb the tower',
-      summary:
-        'Every right answer jumps you up a floor; a wrong one and you fall. How high can you climb?',
+      summary: 'Every right answer jumps you up a floor; a wrong one and you fall. How high can you climb?',
       subtitle: 'true or false, or pick the right sum, floor by floor',
       intro: 'A math game for kids.',
     },
@@ -227,22 +224,19 @@ export const EN: SiteMessages = {
     },
     'sliding-puzzle': {
       name: 'Sliding puzzle',
-      summary:
-        'Slide the tiles into the gap until the lines join up again. A new picture every game.',
+      summary: 'Slide the tiles into the gap until the lines join up again. A new picture every game.',
       subtitle: 'slide the tiles and join the lines',
       intro: 'A puzzle game for kids.',
     },
     'turn-picture': {
       name: 'Turn the picture',
-      summary:
-        'Tap the squares to turn them until the drawing is whole again. Look at it, or rebuild it from memory.',
+      summary: 'Tap the squares to turn them until the drawing is whole again. Look at it, or rebuild it from memory.',
       subtitle: 'tap to turn the squares and rebuild the drawing',
       intro: 'A picture puzzle for kids.',
     },
     'place-pieces': {
       name: 'Place the pieces',
-      summary:
-        'Drag the pieces of the drawing back to their places. Look at it, or rebuild it from memory.',
+      summary: 'Drag the pieces of the drawing back to their places. Look at it, or rebuild it from memory.',
       subtitle: 'drag the pieces and rebuild the drawing',
       intro: 'A picture puzzle for kids.',
     },
@@ -267,10 +261,16 @@ export const EN: SiteMessages = {
     lead: 'Mini games that train logic, memory and quick thinking.',
     rule: 'They’re free, need no sign-up, and work on computers, tablets and phones.',
     whatsNewTitle: 'What’s new',
-    updateKinds: { game: 'Games', language: 'Languages', settings: 'Settings', feature: 'Features', privacy: 'Privacy' },
+    updateKinds: {
+      game: 'Games',
+      language: 'Languages',
+      settings: 'Settings',
+      feature: 'Features',
+      privacy: 'Privacy',
+    },
     showMore: 'Show more updates',
     showFewer: 'Show fewer',
-    categoryGames: games => (games === 1 ? '1 game' : `${games} games`),
+    categoryGames: (games) => (games === 1 ? '1 game' : `${games} games`),
     gamesTitle: 'Games',
     searchLabel: 'Search games',
     searchPlaceholder: 'Search a game…',
@@ -296,13 +296,12 @@ export const EN: SiteMessages = {
     goalSmaller: 'Show the goal smaller',
     pictureGroup: 'Picture',
     pictureModes: { lines: 'Lines', drawing: 'Drawing' },
-    moves: moves => `Moves ${moves}`,
-    tile: number => `Tile ${number}`,
+    moves: (moves) => `Moves ${moves}`,
+    tile: (number) => `Tile ${number}`,
     newPuzzle: 'New puzzle',
     solved: 'Well done!',
-    solvedIn: (moves, time) =>
-      `Finished in ${moves} ${moves === 1 ? 'move' : 'moves'} and ${time}`,
-    best: moves => `Best: ${moves} moves`,
+    solvedIn: (moves, time) => `Finished in ${moves} ${moves === 1 ? 'move' : 'moves'} and ${time}`,
+    best: (moves) => `Best: ${moves} moves`,
     newRecord: 'New record!',
     keys: 'Keyboard: the arrow keys slide a tile into the gap',
   },
@@ -326,7 +325,7 @@ export const EN: SiteMessages = {
     inPlace: (placed, total) => `${placed} of ${total} in place`,
     newGame: 'New game',
     solved: 'Well done!',
-    best: time => `Best: ${time}`,
+    best: (time) => `Best: ${time}`,
     newRecord: 'New record!',
   },
 
@@ -334,10 +333,9 @@ export const EN: SiteMessages = {
     lead: 'Tap a square to turn it a quarter. Turn every square until the drawing is right.',
     rule: 'In Memory mode, look carefully: the drawing hides once you press Ready!',
     board: 'Picture',
-    tile: number => `Square ${number}`,
-    turns: turns => `Turns ${turns}`,
-    solvedIn: (turns, time) =>
-      `Finished in ${turns} ${turns === 1 ? 'turn' : 'turns'} and ${time}`,
+    tile: (number) => `Square ${number}`,
+    turns: (turns) => `Turns ${turns}`,
+    solvedIn: (turns, time) => `Finished in ${turns} ${turns === 1 ? 'turn' : 'turns'} and ${time}`,
   },
 
   placePieces: {
@@ -345,14 +343,12 @@ export const EN: SiteMessages = {
     rule: 'In Memory mode, look carefully: the drawing hides once you press Ready!',
     board: 'Picture',
     piece: (number, picked) => `Piece ${number}${picked ? ', picked up' : ''}`,
-    swaps: swaps => `Moves ${swaps}`,
-    solvedIn: (swaps, time) =>
-      `Finished in ${swaps} ${swaps === 1 ? 'move' : 'moves'} and ${time}`,
+    swaps: (swaps) => `Moves ${swaps}`,
+    solvedIn: (swaps, time) => `Finished in ${swaps} ${swaps === 1 ? 'move' : 'moves'} and ${time}`,
   },
 
   pictures: {
-    family:
-      'A child’s drawing of a mother and daughter holding hands, with the sun, the moon and clouds',
+    family: 'A child’s drawing of a mother and daughter holding hands, with the sun, the moon and clouds',
   },
 
   privacy: {
@@ -448,8 +444,7 @@ export const EN: SiteMessages = {
       'No ads and no tracking',
       'Nothing is sold or shared with anyone',
     ],
-    microphone:
-      'The microphone is only used while you play Sing it, and the sound is never recorded or sent',
+    microphone: 'The microphone is only used while you play Sing it, and the sound is never recorded or sent',
     inDevelopment: '(in development)',
     accountsTitle: 'Accounts',
     accountsLead:
@@ -468,8 +463,7 @@ export const EN: SiteMessages = {
     choiceTitle: 'Your choice',
     choiceLabel: 'Remember my preferences on this device',
     choiceOn: 'Your preferences are saved on this device.',
-    choiceOff:
-      'Nothing is saved: settings go back to their defaults on every visit. Only this choice is remembered.',
+    choiceOff: 'Nothing is saved: settings go back to their defaults on every visit. Only this choice is remembered.',
     deleteSaved: 'Delete my saved data',
     deleted: 'Done: everything this site saved on this device is deleted.',
   },
@@ -489,12 +483,12 @@ export const EN: SiteMessages = {
 
   page: {
     section: 'Smart games',
-    ages: age => `Ages ${age}+`,
+    ages: (age) => `Ages ${age}+`,
     new: 'New',
     popular: 'Most played',
     hidden: 'Hidden',
-    addFavorite: game => `Add ${game} to favourites`,
-    removeFavorite: game => `Remove ${game} from favourites`,
+    addFavorite: (game) => `Add ${game} to favourites`,
+    removeFavorite: (game) => `Remove ${game} from favourites`,
     title: 'Math games',
     lead: 'Say whether the result is true or false, tap the result yourself, or find the missing signs. With the timer on, answer before the bar runs out.',
     rule: 'Don’t miss one, or the game is over!',
@@ -548,23 +542,22 @@ export const EN: SiteMessages = {
         summary: 'All four signs, two or three missing',
       },
     },
-    bestScore: best => `Best score: ${best}`,
+    bestScore: (best) => `Best score: ${best}`,
     start: 'Start',
   },
 
   playing: {
-    seconds: seconds => `${seconds}s`,
+    seconds: (seconds) => `${seconds}s`,
     noTimer: 'No timer',
-    score: score => `Score ${score}`,
+    score: (score) => `Score ${score}`,
   },
 
   over: {
     outOfTime: 'Out of time',
     notQuite: 'Not quite',
-    correctAnswers: score =>
-      score === 1 ? 'correct answer' : 'correct answers',
+    correctAnswers: (score) => (score === 1 ? 'correct answer' : 'correct answers'),
     newRecord: 'new record',
-    best: best => `best ${best}`,
+    best: (best) => `best ${best}`,
     youAnswered: 'You answered',
     rightAnswer: 'The right answer was',
     playAgain: 'Play again',
@@ -574,7 +567,7 @@ export const EN: SiteMessages = {
   trueOrFalse: {
     true: 'True',
     false: 'False',
-    given: saysTrue => (saysTrue ? 'true' : 'false'),
+    given: (saysTrue) => (saysTrue ? 'true' : 'false'),
     keys: 'Keyboard: ← for false, → for true',
   },
 
@@ -617,8 +610,7 @@ export const EN: SiteMessages = {
       'Your privacy matters to us: before sending the picture, your browser removes its metadata (like where and when it was taken, or the camera model) and makes it smaller.',
     chooseImage: 'Drag a picture here, or click to choose one',
     dropHere: 'Drop it here',
-    imageTypes:
-      'Photos and drawings from your phone or computer (JPG, PNG, HEIC…)',
+    imageTypes: 'Photos and drawings from your phone or computer (JPG, PNG, HEIC…)',
     imageAlt: 'The picture you chose',
     imageError: 'We couldn’t open that picture. Try a photo or drawing in JPG, PNG or HEIC.',
     removeImage: 'Remove',
@@ -629,8 +621,12 @@ export const EN: SiteMessages = {
     savedSent: 'Your saved idea has been sent. Thanks!',
     tooMany: 'You’ve sent a lot of ideas in a short time. Wait a little and try again later.',
     refused: 'Your idea couldn’t be accepted. Check the text and try again.',
-    sendsLeft: (sends) => (sends === 1 ? 'You can send 1 more idea this hour.' : `You can send ${sends} more ideas this hour.`),
-    waitMinutes: (minutes) => (minutes === 1 ? 'You’ve sent 3 ideas this hour. You can send another in 1 minute.' : `You’ve sent 3 ideas this hour. You can send another in ${minutes} minutes.`),
+    sendsLeft: (sends) =>
+      sends === 1 ? 'You can send 1 more idea this hour.' : `You can send ${sends} more ideas this hour.`,
+    waitMinutes: (minutes) =>
+      minutes === 1
+        ? 'You’ve sent 3 ideas this hour. You can send another in 1 minute.'
+        : `You’ve sent 3 ideas this hour. You can send another in ${minutes} minutes.`,
   },
 
   feedback: {
@@ -682,16 +678,14 @@ export const EN: SiteMessages = {
       hard: { name: 'Hard', summary: '10 letters' },
     },
     timers: {
-      timer:
-        'Finish each word before the bar runs out; in the word builder, find words until it does',
+      timer: 'Finish each word before the bar runs out; in the word builder, find words until it does',
       'no-timer': 'Take your time',
     },
     hintsGroup: 'Hints',
     hints: {
       hints: {
         name: 'With hints',
-        summary:
-          'After 2 mistakes the next letter lights up; after 5 and 10, the first letters are placed for you',
+        summary: 'After 2 mistakes the next letter lights up; after 5 and 10, the first letters are placed for you',
       },
       'no-hints': { name: 'No hints', summary: 'Work it out on your own' },
     },
@@ -702,15 +696,14 @@ export const EN: SiteMessages = {
       'word-builder': 'Tap letters to make a word, then Check',
     },
     progress: (word, total) => `Word ${word} of ${total}`,
-    mistakes: mistakes => `Mistakes ${mistakes}`,
+    mistakes: (mistakes) => `Mistakes ${mistakes}`,
     gap: 'Missing letter',
     letters: 'Letters',
     answer: 'Your word',
     delete: 'Delete',
     check: 'Check',
     keys: 'You can type the letters on your keyboard too; Backspace takes one back',
-    builderKeys:
-      'Type letters on your keyboard: Backspace deletes, Enter checks',
+    builderKeys: 'Type letters on your keyboard: Backspace deletes, Enter checks',
     found: (found, total) => `Found ${found} of ${total}`,
     checks: {
       found: 'Well found!',
@@ -731,8 +724,7 @@ export const EN: SiteMessages = {
     newLetters: 'New letters',
     allFound: 'You found them all!',
     solved: 'Well done!',
-    summary: (words, mistakes) =>
-      `${words} words · ${mistakes} ${mistakes === 1 ? 'mistake' : 'mistakes'}`,
+    summary: (words, mistakes) => `${words} words · ${mistakes} ${mistakes === 1 ? 'mistake' : 'mistakes'}`,
   },
 
   measureIt: {
@@ -795,7 +787,7 @@ export const EN: SiteMessages = {
     },
     aim: { more: 'A bit more ↑', less: 'A bit less ↓' },
     whichAngle: 'How many degrees?',
-    makeAngle: angle => `Make ${angle}°`,
+    makeAngle: (angle) => `Make ${angle}°`,
     howFull: 'How full is it?',
     whichNumber: 'Which number is x?',
     yourAnswer: 'Your answer',
@@ -817,16 +809,14 @@ export const EN: SiteMessages = {
       },
       'which-one': {
         name: 'Which one?',
-        summary:
-          'Jump onto the platform whose sum makes the number in the box.',
+        summary: 'Jump onto the platform whose sum makes the number in the box.',
       },
     },
     answers: 'Answers',
-    floors: floors => `Floor ${floors}`,
-    best: floors => `Best: floor ${floors}`,
+    floors: (floors) => `Floor ${floors}`,
+    best: (floors) => `Best: floor ${floors}`,
     fell: 'You fell!',
-    summary: floors =>
-      floors === 1 ? '1 floor climbed' : `${floors} floors climbed`,
+    summary: (floors) => (floors === 1 ? '1 floor climbed' : `${floors} floors climbed`),
   },
 
   howMany: {
@@ -856,7 +846,7 @@ export const EN: SiteMessages = {
     cell: (row, column, symbol) => `Row ${row}, column ${column}: ${symbol || 'empty'}`,
     check: 'Check',
     done: 'Board complete!',
-    summary: time => `In ${time}`,
+    summary: (time) => `In ${time}`,
     newGame: 'New game',
     games: {
       'letter-sudoku': {
@@ -865,7 +855,7 @@ export const EN: SiteMessages = {
         board: 'Letter board',
         symbols: 'ABCDEFGHI',
         tray: 'Letters',
-        sizeSummary: letters => `${letters} letters`,
+        sizeSummary: (letters) => `${letters} letters`,
         repeated: 'The red letters repeat in their row, column or box.',
         noRepeats: 'No repeated letters so far!',
       },
@@ -875,7 +865,7 @@ export const EN: SiteMessages = {
         board: 'Number board',
         symbols: '123456789',
         tray: 'Numbers',
-        sizeSummary: numbers => `Numbers 1 to ${numbers}`,
+        sizeSummary: (numbers) => `Numbers 1 to ${numbers}`,
         repeated: 'The red numbers repeat in their row, column or box.',
         noRepeats: 'No repeated numbers so far!',
       },
@@ -895,7 +885,7 @@ export const EN: SiteMessages = {
     cell: (row, column, letter) => `Row ${row}, column ${column}: ${letter}`,
     found: (found, total) => `Words ${found}/${total}`,
     done: 'All words found!',
-    summary: time => `In ${time}`,
+    summary: (time) => `In ${time}`,
     newGame: 'New game',
   },
 
@@ -918,10 +908,10 @@ export const EN: SiteMessages = {
     keyboard: 'Keyboard',
     erase: 'Erase a letter',
     send: 'Try',
-    tooShort: letters => `The word has ${letters} letters`,
-    triesLeft: tries => (tries === 1 ? '1 try left' : `${tries} tries left`),
+    tooShort: (letters) => `The word has ${letters} letters`,
+    triesLeft: (tries) => (tries === 1 ? '1 try left' : `${tries} tries left`),
     won: 'You found the secret word!',
-    lost: word => `The secret word was ${word}`,
+    lost: (word) => `The secret word was ${word}`,
     newGame: 'New word',
   },
 
@@ -935,13 +925,12 @@ export const EN: SiteMessages = {
       hard: { name: 'Hard', summary: '30 cards · 15 pairs' },
       expert: { name: 'Expert', summary: '36 cards · 18 pairs' },
     },
-    moves: moves => `Moves ${moves}`,
+    moves: (moves) => `Moves ${moves}`,
     pairs: (found, total) => `Pairs ${found}/${total}`,
-    card: number => `Card ${number}, face down`,
+    card: (number) => `Card ${number}, face down`,
     done: 'All pairs found!',
-    summary: (moves, time) =>
-      `In ${moves} ${moves === 1 ? 'move' : 'moves'} and ${time}`,
-    best: moves => `Best: ${moves} moves`,
+    summary: (moves, time) => `In ${moves} ${moves === 1 ? 'move' : 'moves'} and ${time}`,
+    best: (moves) => `Best: ${moves} moves`,
     newGame: 'New game',
   },
 
@@ -971,8 +960,7 @@ export const EN: SiteMessages = {
       hard: { name: 'Hard', summary: 'The whole scale, C to B · close notes' },
       expert: {
         name: 'Expert',
-        summary:
-          'All 12 notes, sharps too · one step apart · sing very precisely',
+        summary: 'All 12 notes, sharps too · one step apart · sing very precisely',
       },
     },
     instructions: {
@@ -981,7 +969,7 @@ export const EN: SiteMessages = {
       'sing-it': 'Listen, then sing the note and hold it',
     },
     progress: (round, total) => `Round ${round} of ${total}`,
-    mistakes: mistakes => `Mistakes ${mistakes}`,
+    mistakes: (mistakes) => `Mistakes ${mistakes}`,
     noteNames: {
       C: 'C',
       'C#': 'C♯',
@@ -1007,10 +995,8 @@ export const EN: SiteMessages = {
     micPrivacy:
       'Your browser will ask to use the microphone. The sound stays on this device: it is never recorded or sent.',
     micAsking: 'Waiting for the microphone…',
-    micDenied:
-      'The microphone is blocked. Allow it in your browser, or skip this round.',
-    micUnavailable:
-      'No microphone found on this device. You can skip the rounds.',
+    micDenied: 'The microphone is blocked. Allow it in your browser, or skip this round.',
+    micUnavailable: 'No microphone found on this device. You can skip the rounds.',
     meter: 'How close your voice is to the note',
     singHints: {
       done: 'In tune! Well done!',
@@ -1052,13 +1038,21 @@ export const EN: SiteMessages = {
     clearErrors: 'Clear all',
     confirmClearErrors: 'Clear every error from the log?',
     resolveError: 'Fixed',
-    firstSeen: moment => `First: ${moment}`,
+    firstSeen: (moment) => `First: ${moment}`,
     errorSources: { api: 'API', site: 'Site' },
-    errorColumns: { when: 'Last seen', code: 'Code', title: 'Title', problem: 'Problem', page: 'Page', count: 'Times', actions: 'Actions' },
+    errorColumns: {
+      when: 'Last seen',
+      code: 'Code',
+      title: 'Title',
+      problem: 'Problem',
+      page: 'Page',
+      count: 'Times',
+      actions: 'Actions',
+    },
     loading: 'Loading…',
     previewTitle: 'Preview mode',
     navLink: 'Admin',
-    gameCategories: game => `Categories of ${game}`,
+    gameCategories: (game) => `Categories of ${game}`,
     uploadThumbnail: 'Upload picture',
     automaticThumbnail: 'Use automatic',
     newsHelp: 'What’s new on the home page, newest first. Write it in Spanish; the other languages are optional.',
@@ -1076,26 +1070,26 @@ export const EN: SiteMessages = {
     newsFallback: 'Languages left empty show the Spanish text.',
     newsSave: 'Save',
     offlineTitle: 'Playing offline on this device',
-    offlineActive: megabytes => `On: the games are kept here (${megabytes} MB in all)`,
+    offlineActive: (megabytes) => `On: the games are kept here (${megabytes} MB in all)`,
     offlineInactive: 'Off: turn it on in the settings menu to keep the games here',
-    previewHelp: hiddenBadge =>
-      `This browser shows every game, open or not, marked “${hiddenBadge}” when hidden.`,
+    previewHelp: (hiddenBadge) => `This browser shows every game, open or not, marked “${hiddenBadge}” when hidden.`,
     gamesTitle: 'Games',
     open: 'Open to everyone',
     hidden: 'Hidden from the public',
-    byDefault: open => `default: ${open ? 'open' : 'hidden'}`,
+    byDefault: (open) => `default: ${open ? 'open' : 'hidden'}`,
     periodGroup: 'Period',
     periods: { all: 'All time', day: 'Today', week: 'This week', month: 'This month', year: 'This year' },
     resetStats: 'Reset statistics',
-    confirmResetStats: 'Delete every play and 👍/👎 counted so far, so statistics start again from today? This can’t be undone.',
+    confirmResetStats:
+      'Delete every play and 👍/👎 counted so far, so statistics start again from today? This can’t be undone.',
     statsReset: 'Statistics start again from today.',
-    playsTotal: total => `${total} plays in all`,
+    playsTotal: (total) => `${total} plays in all`,
     refresh: 'Refresh',
     playsColumns: { game: 'Game', plays: 'Plays', reasons: 'Reasons' },
     suggestionStatuses: { new: 'New', read: 'Read', archived: 'Archived' },
     showPicture: 'Show picture',
     pictureAlt: 'Picture sent with the suggestion',
-    moveTo: status => `Move to ${status}`,
+    moveTo: (status) => `Move to ${status}`,
     delete: 'Delete',
     confirmDelete: 'Delete this suggestion and its picture for good?',
     noSuggestions: 'No suggestions here.',
@@ -1104,8 +1098,7 @@ export const EN: SiteMessages = {
       approved: 'Kept out',
       rejected: 'Counting again',
     },
-    reportsHelp:
-      'A word reported 3 times stops counting in the word builder until you decide.',
+    reportsHelp: 'A word reported 3 times stops counting in the word builder until you decide.',
     reportColumns: {
       word: 'Word',
       language: 'Language',
@@ -1115,13 +1108,14 @@ export const EN: SiteMessages = {
     keepOut: 'Keep out',
     letCount: 'Let it count',
     noWords: 'No words here.',
-    playersHelp: 'Players on the leaderboards, newest first. Replace a rude screen name with a plain one, or take a player with made-up scores off the leaderboards; they can’t undo it.',
+    playersHelp:
+      'Players on the leaderboards, newest first. Replace a rude screen name with a plain one, or take a player with made-up scores off the leaderboards; they can’t undo it.',
     noPlayers: 'No players on the leaderboards yet.',
     namesTitle: 'Names to check',
     namesHelp:
       'Screen names waiting to show in rooms, reported ones first. Allow a name, or give a rude one a plain name.',
     noNames: 'No names waiting.',
-    nameReports: count => `Reported ${count} ${count === 1 ? 'time' : 'times'}`,
+    nameReports: (count) => `Reported ${count} ${count === 1 ? 'time' : 'times'}`,
     allowName: 'Allow',
     playerColumns: { name: 'Screen name', boards: 'Leaderboards', joined: 'Joined' },
     playerShown: 'Shown',
@@ -1132,8 +1126,8 @@ export const EN: SiteMessages = {
     loadMore: 'Load more',
     tableLabels: {
       search: 'Search',
-      matches: count => (count === 1 ? '1 row matches' : `${count} rows match`),
-      noMatches: query => `No rows match “${query}”`,
+      matches: (count) => (count === 1 ? '1 row matches' : `${count} rows match`),
+      noMatches: (query) => `No rows match “${query}”`,
       searchCleared: 'Search cleared',
       empty: 'Nothing here',
       actions: 'Actions',
@@ -1144,13 +1138,12 @@ export const EN: SiteMessages = {
       page: (page, count) => `Page ${page} of ${count}`,
       previousPage: 'Previous page',
       nextPage: 'Next page',
-      sortedAscending: header => `Sorted by ${header}, ascending`,
-      sortedDescending: header => `Sorted by ${header}, descending`,
+      sortedAscending: (header) => `Sorted by ${header}, ascending`,
+      sortedDescending: (header) => `Sorted by ${header}, descending`,
       sortCleared: 'Sort cleared',
     },
     featuresTitle: 'Features',
-    featuresHelp:
-      'New features start switched off: try them in preview, then open them to everyone.',
+    featuresHelp: 'New features start switched off: try them in preview, then open them to everyone.',
     featureNames: {
       rooms: 'Multiplayer (rooms)',
       'rooms-math-games': 'Math games in rooms',
@@ -1189,23 +1182,19 @@ export const EN: SiteMessages = {
     addMember: 'Add a team member',
     roleLabel: 'Role',
     roleHelp: {
-      moderator:
-        'Reads suggestions, decides on reported words, and sees plays and feedback.',
-      tester:
-        'Like a moderator, and also sees every game and feature in preview, even those switched off.',
+      moderator: 'Reads suggestions, decides on reported words, and sees plays and feedback.',
+      tester: 'Like a moderator, and also sees every game and feature in preview, even those switched off.',
     },
     makeTester: 'Make tester',
     makeModerator: 'Make moderator',
     startingPassword: 'Starting password (optional)',
-    startingPasswordHelp:
-      'Leave it empty to get an invite link instead: they choose their own password.',
+    startingPasswordHelp: 'Leave it empty to get an invite link instead: they choose their own password.',
     add: 'Add',
     alreadyOnTeam: 'Someone with that email is already on the team.',
-    inviteFor: email =>
-      `Invite link for ${email}: copy it and send it to them.`,
+    inviteFor: (email) => `Invite link for ${email}: copy it and send it to them.`,
     copy: 'Copy',
     copied: 'Copied',
-    inviteExpires: day => `Works once, until ${day}.`,
+    inviteExpires: (day) => `Works once, until ${day}.`,
     roles: { super: 'Super admin', moderator: 'Moderator', tester: 'Tester' },
     invited: 'Invited, no password yet',
     active: 'Active',
@@ -1217,13 +1206,12 @@ export const EN: SiteMessages = {
     currentPassword: 'Current password',
     newPassword: 'New password',
     repeatPassword: 'Repeat the new password',
-    passwordRule: min => `At least ${min} characters.`,
-    passwordChanged:
-      'Password changed. Other browsers signed in with your account were signed out.',
+    passwordRule: (min) => `At least ${min} characters.`,
+    passwordChanged: 'Password changed. Other browsers signed in with your account were signed out.',
     wrongPassword: 'The current password is wrong.',
     passwordsDiffer: 'The two passwords are different.',
     inviteTitle: 'Join the admin team',
-    inviteLead: email => `Choose a password for ${email}.`,
+    inviteLead: (email) => `Choose a password for ${email}.`,
     acceptInvite: 'Save and sign in',
     inviteInvalid: 'This invite link doesn’t work any more. Ask for a new one.',
   },
@@ -1239,22 +1227,18 @@ export const EN: SiteMessages = {
     codeLabel: 'Room code',
     join: 'Join',
     homeTitle: 'Multiplayer',
-    homeText:
-      'Up to 4 players, the same exercises at the same time. Who gets the most right?',
+    homeText: 'Up to 4 players, the same exercises at the same time. Who gets the most right?',
     homeLink: 'See rooms',
     errors: {
-      'not-found':
-        'There’s no room with that code. Check it, or ask for a new one.',
+      'not-found': 'There’s no room with that code. Check it, or ask for a new one.',
       full: 'That room is full: it already has 4 players.',
-      'in-game':
-        'That room is playing right now. Try again when the round ends.',
+      'in-game': 'That room is playing right now. Try again when the round ends.',
       'not-host': 'Only the room’s host can do that.',
       'not-ready': 'Everyone has to be ready first, with at least 2 players.',
       'wrong-phase': 'That can’t be done right now.',
       invalid: 'That code doesn’t look right: it has 6 letters and numbers.',
       'too-many': 'Too many tries. Wait a minute and try again.',
-      offline:
-        'Can’t reach the rooms right now. Check your connection and try again.',
+      offline: 'Can’t reach the rooms right now. Check your connection and try again.',
     },
     connecting: 'Connecting…',
     reconnecting: 'Reconnecting…',
@@ -1270,7 +1254,7 @@ export const EN: SiteMessages = {
     imReady: 'I’m ready',
     notReadyYet: 'Not ready yet',
     start: 'Start',
-    needPlayers: min => `At least ${min} players are needed.`,
+    needPlayers: (min) => `At least ${min} players are needed.`,
     waitingForReady: 'Waiting for everyone to be ready…',
     waitingForHost: 'Waiting for the host to start…',
     settingsTitle: 'Game settings',
@@ -1281,26 +1265,33 @@ export const EN: SiteMessages = {
     reportName: 'Report name',
     scoresShown: 'Show scores',
     scoresHidden: 'Scores only at the end',
-    seconds: seconds => `${seconds} s`,
+    seconds: (seconds) => `${seconds} s`,
     getReady: 'Get ready!',
-    timeLeft: seconds => `${seconds} s left`,
-    yourScore: score => `Your score: ${score}`,
+    timeLeft: (seconds) => `${seconds} s left`,
+    yourScore: (score) => `Your score: ${score}`,
     resultsTitle: 'Results',
-    place: place => `#${place}`,
-    points: points => `${points} ${points === 1 ? 'point' : 'points'}`,
+    place: (place) => `#${place}`,
+    points: (points) => `${points} ${points === 1 ? 'point' : 'points'}`,
     playAgain: 'Play again',
     leave: 'Leave the room',
     kick: 'Remove',
     newName: 'Get a new name',
     reactions: {
       title: 'Stickers',
-      names: { shy: 'Shy', happy: 'Happy', love: 'Love', angry: 'Angry', laugh: 'Ha ha ha', confused: 'Confused', cry: 'Sad' },
+      names: {
+        shy: 'Shy',
+        happy: 'Happy',
+        love: 'Love',
+        angry: 'Angry',
+        laugh: 'Ha ha ha',
+        confused: 'Confused',
+        cry: 'Sad',
+      },
     },
     kicked: 'The host removed you from the room.',
     gameUnavailable: 'This game isn’t open for rooms right now.',
     animals: ANIMALS,
-    nickname: (adjective, animal) =>
-      `${ADJECTIVES[adjective]} ${ANIMALS[animal]}`,
+    nickname: (adjective, animal) => `${ADJECTIVES[adjective]} ${ANIMALS[animal]}`,
   },
 
   account: {
@@ -1318,7 +1309,7 @@ export const EN: SiteMessages = {
     loginNameHint: '3 to 30 letters (a–z), digits, dots, dashes or underscores. Only you see it, to sign in.',
     loginOrEmail: 'Login name or email',
     password: 'Password',
-    passwordRule: min => `At least ${min} characters.`,
+    passwordRule: (min) => `At least ${min} characters.`,
     repeatPassword: 'Repeat the password',
     passwordsDiffer: 'The passwords aren’t the same.',
     screenName: 'Screen name',
@@ -1342,8 +1333,8 @@ export const EN: SiteMessages = {
     sendLink: 'Send the link',
     linkSent: 'If an account has this email, a link is on its way. It works for one hour.',
     sending: 'Sending…',
-    signedInAs: screenName => `Signed in as ${screenName}`,
-    loginNameIs: loginName => `Login name: ${loginName}`,
+    signedInAs: (screenName) => `Signed in as ${screenName}`,
+    loginNameIs: (loginName) => `Login name: ${loginName}`,
     signOut: 'Sign out',
     detailsTitle: 'Your details',
     emailNeedsPassword: 'To change or remove the email, type your password too.',
@@ -1361,7 +1352,8 @@ export const EN: SiteMessages = {
     confirmDeleteResults: 'Delete all your results for good?',
     resultsDeleted: 'Your results are deleted.',
     deleteTitle: 'Delete the account',
-    deleteLead: 'This deletes your account, your favourites and results in it, and your place on the leaderboards, for good.',
+    deleteLead:
+      'This deletes your account, your favourites and results in it, and your place on the leaderboards, for good.',
     deleteAccount: 'Delete my account',
     confirmDelete: 'Delete your account for good?',
     deleted: 'Your account is deleted.',
@@ -1459,7 +1451,8 @@ export const EN: SiteMessages = {
     youreHidden: 'You don’t appear on the leaderboards.',
     changeInAccount: 'Change it in your account',
     mysteryPlayer: 'Mystery player',
-    totals: (players, plays) => `${players} ${players === 1 ? 'player' : 'players'} · ${plays} ${plays === 1 ? 'game' : 'games'} played`,
+    totals: (players, plays) =>
+      `${players} ${players === 1 ? 'player' : 'players'} · ${plays} ${plays === 1 ? 'game' : 'games'} played`,
     yourPlays: (plays) => `${plays} played by you`,
     yourBest: (best) => `Your best: ${best}`,
     wouldBePlace: (place) => `you’d be number ${place}`,

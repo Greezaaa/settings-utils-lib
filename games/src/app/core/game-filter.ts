@@ -17,7 +17,11 @@ export interface GameFacts {
 export const NO_FILTER: GameFilter = { query: '', category: 'all', favoritesOnly: false };
 
 export const searchable = (text: string): string =>
-  text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+  text
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .trim();
 
 export function filterGames(games: readonly GameSlug[], filter: GameFilter, facts: GameFacts): GameSlug[] {
   const words = searchable(filter.query).split(/\s+/).filter(Boolean);

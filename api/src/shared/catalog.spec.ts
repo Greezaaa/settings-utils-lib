@@ -35,7 +35,9 @@ describe('catalog', () => {
   it('knows the same kinds of news as the games site', () => {
     const source = readFileSync(join(gamesApp, 'core/site-updates.ts'), 'utf8');
     const list = /UPDATE_KINDS = \[([^\]]+)\]/.exec(source)?.[1] ?? '';
-    expect([...UPDATE_KINDS]).toEqual([...list.matchAll(/'([^']+)'/g)].map(([, value]) => value));
+    expect([...UPDATE_KINDS]).toEqual(
+      [...list.matchAll(/'([^']+)'/g)].map(([, value]) => value),
+    );
   });
 
   it('knows the same languages as the games site', () => {

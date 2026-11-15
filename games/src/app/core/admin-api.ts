@@ -1,11 +1,11 @@
-import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
+import { DOCUMENT, inject, Injectable } from '@angular/core';
 import { LANGUAGE_IDS, LanguageId } from '../i18n/site-messages';
 import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { FeatureId } from './features';
 import { GameCategory, GameSlug } from './games';
 import { GamePlays, isFeatureId, isGameSlug, isUpdateKind, parseGamePlays, SUGGESTION_CATEGORIES, SuggestionCategory } from './games-api';
 import { UpdateKind } from './site-updates';
-import { rememberSignedIn } from './session-hint';
+import { AdminRole, isAdminRole } from './admin-session';
 
 const LANGUAGES: readonly LanguageId[] = ['en', 'es', 'eu', 'it', 'uk'];
 const isLanguage = (value: unknown): value is LanguageId => LANGUAGES.some((language) => language === value);
@@ -49,27 +49,8 @@ export interface PendingName {
 export const STATS_PERIODS = ['day', 'week', 'month', 'year', 'all'] as const;
 export type StatsPeriod = (typeof STATS_PERIODS)[number];
 
-export type AdminRole = 'super' | 'moderator' | 'tester';
 export const MEMBER_ROLES = ['moderator', 'tester'] as const;
 export type MemberRole = (typeof MEMBER_ROLES)[number];
-export type SignInAnswer = 'right' | 'wrong' | 'too-many' | 'offline';
-
-export function failedSignIn(status: number): Exclude<SignInAnswer, 'right'> {
-  if (status === 429) {
-    return 'too-many';
-  }
-  return status === 400 || status === 401 || status === 404 ? 'wrong' : 'offline';
-}
-
-export const canPreview = (role: AdminRole | undefined): boolean => role === 'super' || role === 'tester';
-
-export type Restored = 'signed-in' | 'signed-out' | 'offline';
-
-export interface Me {
-  readonly email: string;
-  readonly role: AdminRole;
-}
-
 export interface TeamMember {
   readonly id: string;
   readonly email: string;
@@ -207,20 +188,13 @@ function parseFeedback(item: unknown): GameFeedback[] {
   return [{ game, up, down, reasons: counts }];
 }
 
-const isRole = oneOf<AdminRole>(['super', 'moderator', 'tester']);
-
-function parseMe(body: unknown): Me | null {
-  const [email, role] = ['email', 'role'].map((key) => field(body, key));
-  return typeof email === 'string' && isRole(role) ? { email, role } : null;
-}
-
 function parseMember(item: unknown): TeamMember[] {
   const [id, email, role, active, invited] = ['id', 'email', 'role', 'active', 'invited'].map((key) =>
     field(item, key),
   );
   return typeof id === 'string' &&
     typeof email === 'string' &&
-    isRole(role) &&
+    isAdminRole(role) &&
     typeof active === 'boolean' &&
     typeof invited === 'boolean'
     ? [{ id, email, role, active, invited }]
@@ -255,9 +229,16 @@ export interface AdminNews extends NewsDraft {
 }
 
 function parseAdminNews(item: unknown): AdminNews[] {
-  const [id, version, published, kind, game, feature, privacy, text] = ['id', 'version', 'published', 'kind', 'game', 'feature', 'privacy', 'text'].map(
-    (name) => field(item, name),
-  );
+  const [id, version, published, kind, game, feature, privacy, text] = [
+    'id',
+    'version',
+    'published',
+    'kind',
+    'game',
+    'feature',
+    'privacy',
+    'text',
+  ].map((name) => field(item, name));
   if (typeof id !== 'number' || typeof version !== 'number' || typeof published !== 'string' || !isUpdateKind(kind)) {
     return [];
   }
@@ -285,31 +266,6 @@ function parseAdminNews(item: unknown): AdminNews[] {
 @Injectable({ providedIn: 'root' })
 export class AdminApi {
   private readonly document = inject(DOCUMENT);
-  private readonly signedIn = signal<Me | null>(null);
-  private restored?: Promise<Restored>;
-
-  readonly me = this.signedIn.asReadonly();
-  readonly isSignedIn = computed(() => this.signedIn() !== null);
-  readonly isSuper = computed(() => this.signedIn()?.role === 'super');
-  readonly canPreview = computed(() => canPreview(this.signedIn()?.role));
-
-  async restore(): Promise<Restored> {
-    this.restored ??= this.askSession();
-    const answer = await this.restored;
-    if (answer === 'offline') {
-      this.restored = undefined;
-    }
-    return answer === 'offline' ? answer : this.signedIn() ? 'signed-in' : 'signed-out';
-  }
-
-  async signIn(email: string, password: string): Promise<SignInAnswer> {
-    return this.startSession(await this.fetch('/auth/login', jsonInit('POST', { email, password }), SEND_TIMEOUT_MS, 'auth'));
-  }
-
-  async signOut(): Promise<void> {
-    await this.fetch('/auth/logout', { method: 'POST' }, READ_TIMEOUT_MS, 'auth');
-    this.setMe(null);
-  }
 
   async changePassword(current: string, next: string): Promise<'saved' | 'wrong' | 'offline'> {
     const response = await this.fetch('/auth/password', jsonInit('POST', { current, next }), SEND_TIMEOUT_MS, 'auth');
@@ -321,13 +277,6 @@ export class AdminApi {
     return typeof email === 'string' ? email : null;
   }
 
-  async acceptInvite(secret: string, password: string): Promise<boolean> {
-    const path = `/auth/invite/${encodeURIComponent(secret)}`;
-    return (
-      (await this.startSession(await this.fetch(path, jsonInit('POST', { password }), SEND_TIMEOUT_MS, 'auth'))) === 'right'
-    );
-  }
-
   async team(): Promise<TeamMember[]> {
     return listOf(await this.read('/admin/team', 'auth'), parseMember);
   }
@@ -337,7 +286,12 @@ export class AdminApi {
     role: MemberRole,
     password?: string,
   ): Promise<{ invite: Invite | null } | 'exists' | 'failed'> {
-    const response = await this.fetch('/admin/team', jsonInit('POST', { email, role, password }), SEND_TIMEOUT_MS, 'auth');
+    const response = await this.fetch(
+      '/admin/team',
+      jsonInit('POST', { email, role, password }),
+      SEND_TIMEOUT_MS,
+      'auth',
+    );
     if (response?.status === 409) {
       return 'exists';
     }
@@ -483,32 +437,12 @@ export class AdminApi {
     return (await this.fetch(path, init, SEND_TIMEOUT_MS, service))?.ok ?? false;
   }
 
-  private async startSession(response: Response | null): Promise<SignInAnswer> {
-    if (!response) {
-      return 'offline';
-    }
-    if (!response.ok) {
-      return failedSignIn(response.status);
-    }
-    this.setMe(parseMe(await response.json()));
-    return 'right';
-  }
-
-  private async askSession(): Promise<Restored> {
-    const response = await this.fetch('/auth/me', {}, READ_TIMEOUT_MS, 'auth');
-    if (!response) {
-      return 'offline';
-    }
-    this.setMe(response.ok ? parseMe(await response.json()) : null);
-    return this.signedIn() ? 'signed-in' : 'signed-out';
-  }
-
-  private setMe(me: Me | null): void {
-    this.signedIn.set(me);
-    rememberSignedIn('admin', me !== null);
-  }
-
-  private fetch(path: string, init: RequestInit, timeoutMs: number, service: ApiService = 'api'): Promise<Response | null> {
+  private fetch(
+    path: string,
+    init: RequestInit,
+    timeoutMs: number,
+    service: ApiService = 'api',
+  ): Promise<Response | null> {
     return credentialedFetch(this.document, path, init, timeoutMs, service);
   }
 }

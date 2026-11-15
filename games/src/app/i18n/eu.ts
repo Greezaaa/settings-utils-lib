@@ -38,11 +38,10 @@ const ANIMALS = [
 ];
 
 export const EU: SiteMessages = {
-
   answers: {
     right: 'Ondo!',
     wrong: 'Ia',
-    wrongWith: answer => `Ia: ${answer} zen`,
+    wrongWith: (answer) => `Ia: ${answer} zen`,
   },
 
   site: {
@@ -121,7 +120,8 @@ export const EU: SiteMessages = {
     newVersion: (version) => `Bertsio berria: ${version}`,
     themeTones: { light: 'Argiak', dark: 'Ilunak' },
     backOnline: 'Berriro konexioa duzu.',
-    wentOffline: 'Konexiorik gabe zaude. Jokoek funtzionatzen jarraitzen dute, eta bidaltzen duzuna internet itzuli arte itxarongo du.',
+    wentOffline:
+      'Konexiorik gabe zaude. Jokoek funtzionatzen jarraitzen dute, eta bidaltzen duzuna internet itzuli arte itxarongo du.',
     wordGenders: { boy: 'mutila', girl: 'neska' },
     wordGenderQuestion: 'Nola hitz egitea nahi duzu? Nahi duzunean alda dezakezu ezarpenetan.',
     wordGenderAnswers: { boy: 'Mutil gisa', girl: 'Neska gisa' },
@@ -129,7 +129,7 @@ export const EU: SiteMessages = {
     projectLinks: 'Proiektuaren estekak',
     privacyNotice:
       'Cookieak zure hobespenak gordetzeko bakarrik erabiltzen ditugu: gaia, testuaren tamaina eta hizkuntza. Ez ditugu inoiz zure datuak saltzen edo inorekin partekatzen. Zure pribatutasuna zaintzen dugu!',
-    lastUpdate: moment => `Azken eguneratzea: ${moment}`,
+    lastUpdate: (moment) => `Azken eguneratzea: ${moment}`,
     noticeOk: 'Ados',
     noticeLater: 'Gero',
     updateReady: 'Jokoen bertsio berri bat prest dago.',
@@ -169,8 +169,7 @@ export const EU: SiteMessages = {
       name: 'Igo dorrea',
       summary:
         'Erantzun zuzen bakoitzak solairu bat igotzen zaitu; huts egiten baduzu, erori egingo zara. Noraino igoko zara?',
-      subtitle:
-        'egia ala gezurra, edo aukeratu eragiketa zuzena, solairuz solairu',
+      subtitle: 'egia ala gezurra, edo aukeratu eragiketa zuzena, solairuz solairu',
       intro: 'Matematika joko bat haurrentzat.',
     },
     'find-pairs': {
@@ -231,22 +230,19 @@ export const EU: SiteMessages = {
     },
     'sliding-puzzle': {
       name: 'Puzzle irristakorra',
-      summary:
-        'Irristatu piezak hutsunera lerroak berriro elkartu arte. Marrazki berria partida bakoitzean.',
+      summary: 'Irristatu piezak hutsunera lerroak berriro elkartu arte. Marrazki berria partida bakoitzean.',
       subtitle: 'irristatu piezak eta lotu lerroak',
       intro: 'Haurrentzako puzzlea.',
     },
     'turn-picture': {
       name: 'Biratu irudia',
-      summary:
-        'Sakatu karratuak biratzeko marrazkia berriro osorik egon arte. Begiratu edo osatu oroimenez.',
+      summary: 'Sakatu karratuak biratzeko marrazkia berriro osorik egon arte. Begiratu edo osatu oroimenez.',
       subtitle: 'sakatu karratuak biratzeko eta marrazkia osatzeko',
       intro: 'Haurrentzako irudi-puzzlea.',
     },
     'place-pieces': {
       name: 'Kokatu piezak',
-      summary:
-        'Arrastatu marrazkiaren piezak beren lekura. Begiratu edo osatu oroimenez.',
+      summary: 'Arrastatu marrazkiaren piezak beren lekura. Begiratu edo osatu oroimenez.',
       subtitle: 'arrastatu piezak eta osatu marrazkia',
       intro: 'Haurrentzako irudi-puzzlea.',
     },
@@ -271,10 +267,16 @@ export const EU: SiteMessages = {
     lead: 'Logika, oroimena eta azkartasuna lantzeko minijokoak.',
     rule: 'Doan dira, ez dute izena ematea eskatzen, eta ordenagailuetan, tabletetan eta mugikorretan dabiltza.',
     whatsNewTitle: 'Berritasunak',
-    updateKinds: { game: 'Jokoak', language: 'Hizkuntzak', settings: 'Ezarpenak', feature: 'Funtzioak', privacy: 'Pribatutasuna' },
+    updateKinds: {
+      game: 'Jokoak',
+      language: 'Hizkuntzak',
+      settings: 'Ezarpenak',
+      feature: 'Funtzioak',
+      privacy: 'Pribatutasuna',
+    },
     showMore: 'Ikusi berritasun gehiago',
     showFewer: 'Ikusi gutxiago',
-    categoryGames: games => `${games} joko`,
+    categoryGames: (games) => `${games} joko`,
     gamesTitle: 'Jokoak',
     searchLabel: 'Bilatu jokoak',
     searchPlaceholder: 'Bilatu joko bat…',
@@ -300,13 +302,12 @@ export const EU: SiteMessages = {
     goalSmaller: 'Ikusi helburua txikiago',
     pictureGroup: 'Irudia',
     pictureModes: { lines: 'Lerroak', drawing: 'Marrazkia' },
-    moves: moves => `Mugimenduak ${moves}`,
-    tile: number => `${number}. pieza`,
+    moves: (moves) => `Mugimenduak ${moves}`,
+    tile: (number) => `${number}. pieza`,
     newPuzzle: 'Puzzle berria',
     solved: 'Oso ondo!',
-    solvedIn: (moves, time) =>
-      `${moves} mugimendu eta ${time} behar izan dituzu`,
-    best: moves => `Errekorra: ${moves} mugimendu`,
+    solvedIn: (moves, time) => `${moves} mugimendu eta ${time} behar izan dituzu`,
+    best: (moves) => `Errekorra: ${moves} mugimendu`,
     newRecord: 'Errekor berria!',
     keys: 'Teklatua: geziek pieza bat hutsunera mugitzen dute',
   },
@@ -333,7 +334,7 @@ export const EU: SiteMessages = {
     inPlace: (placed, total) => `${placed}/${total} bere lekuan`,
     newGame: 'Partida berria',
     solved: 'Oso ondo!',
-    best: time => `Errekorra: ${time}`,
+    best: (time) => `Errekorra: ${time}`,
     newRecord: 'Errekor berria!',
   },
 
@@ -341,8 +342,8 @@ export const EU: SiteMessages = {
     lead: 'Sakatu karratu bat laurden bat biratzeko. Biratu guztiak marrazkia ondo egon arte.',
     rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
     board: 'Irudia',
-    tile: number => `${number}. karratua`,
-    turns: turns => `Birak ${turns}`,
+    tile: (number) => `${number}. karratua`,
+    turns: (turns) => `Birak ${turns}`,
     solvedIn: (turns, time) => `${turns} bira eta ${time} behar izan dituzu`,
   },
 
@@ -351,14 +352,12 @@ export const EU: SiteMessages = {
     rule: 'Oroimen moduan, begiratu ondo: marrazkia ezkutatu egiten da Prest sakatzean!',
     board: 'Irudia',
     piece: (number, picked) => `${number}. pieza${picked ? ', hautatuta' : ''}`,
-    swaps: swaps => `Mugimenduak ${swaps}`,
-    solvedIn: (swaps, time) =>
-      `${swaps} mugimendu eta ${time} behar izan dituzu`,
+    swaps: (swaps) => `Mugimenduak ${swaps}`,
+    solvedIn: (swaps, time) => `${swaps} mugimendu eta ${time} behar izan dituzu`,
   },
 
   pictures: {
-    family:
-      'Ama eta alaba eskutik helduta, eguzkia, ilargia eta hodeiekin, haur-marrazki batean',
+    family: 'Ama eta alaba eskutik helduta, eguzkia, ilargia eta hodeiekin, haur-marrazki batean',
   },
 
   privacy: {
@@ -495,12 +494,12 @@ export const EU: SiteMessages = {
 
   page: {
     section: 'Joko adimentsuak',
-    ages: age => `${age} urtetik aurrera`,
+    ages: (age) => `${age} urtetik aurrera`,
     new: 'Berria',
     popular: 'Jokatuena',
     hidden: 'Ezkutuan',
-    addFavorite: game => `Gehitu ${game} gogokoetara`,
-    removeFavorite: game => `Kendu ${game} gogokoetatik`,
+    addFavorite: (game) => `Gehitu ${game} gogokoetara`,
+    removeFavorite: (game) => `Kendu ${game} gogokoetatik`,
     title: 'Matematika jokoak',
     lead: 'Esan emaitza egia ala gezurra den, sakatu zuk emaitza edo aurkitu falta diren zeinuak. Denborarekin, erantzun barra amaitu baino lehen.',
     rule: 'Ez huts egin, bestela jokoa amaitzen da!',
@@ -563,14 +562,14 @@ export const EU: SiteMessages = {
         summary: 'Lau zeinuak; bi edo hiru falta dira',
       },
     },
-    bestScore: best => `Puntuazio onena: ${best}`,
+    bestScore: (best) => `Puntuazio onena: ${best}`,
     start: 'Hasi',
   },
 
   playing: {
-    seconds: seconds => `${seconds} s`,
+    seconds: (seconds) => `${seconds} s`,
     noTimer: 'Denborarik gabe',
-    score: score => `Puntuak ${score}`,
+    score: (score) => `Puntuak ${score}`,
   },
 
   over: {
@@ -578,7 +577,7 @@ export const EU: SiteMessages = {
     notQuite: 'Ia-ia!',
     correctAnswers: () => 'erantzun zuzen',
     newRecord: 'errekor berria',
-    best: best => `onena ${best}`,
+    best: (best) => `onena ${best}`,
     youAnswered: 'Zure erantzuna',
     rightAnswer: 'Erantzun zuzena hau zen',
     playAgain: 'Jokatu berriro',
@@ -588,7 +587,7 @@ export const EU: SiteMessages = {
   trueOrFalse: {
     true: 'Egia',
     false: 'Gezurra',
-    given: saysTrue => (saysTrue ? 'egia' : 'gezurra'),
+    given: (saysTrue) => (saysTrue ? 'egia' : 'gezurra'),
     keys: 'Teklatua: ← gezurra, → egia',
   },
 
@@ -631,8 +630,7 @@ export const EU: SiteMessages = {
       'Zure pribatutasuna garrantzitsua da guretzat: irudia bidali aurretik, zure nabigatzaileak metadatuak kentzen dizkio (non eta noiz egin zen edo kameraren modeloa, adibidez) eta konprimatu egiten du.',
     chooseImage: 'Ekarri irudi bat hona, edo egin klik bat aukeratzeko',
     dropHere: 'Utzi hemen',
-    imageTypes:
-      'Mugikorreko edo ordenagailuko argazkiak eta marrazkiak (JPG, PNG, HEIC…)',
+    imageTypes: 'Mugikorreko edo ordenagailuko argazkiak eta marrazkiak (JPG, PNG, HEIC…)',
     imageAlt: 'Aukeratu duzun irudia',
     imageError: 'Ezin izan dugu irudi hori ireki. Probatu JPG, PNG edo HEIC formatuko argazki edo marrazki batekin.',
     removeImage: 'Kendu',
@@ -643,8 +641,14 @@ export const EU: SiteMessages = {
     savedSent: 'Gordetako zure ideia bidali da. Eskerrik asko!',
     tooMany: 'Ideia asko bidali dituzu denbora gutxian. Itxaron pixka bat eta saiatu berriro geroago.',
     refused: 'Ezin izan da zure ideia onartu. Begiratu testua eta saiatu berriro.',
-    sendsLeft: (sends) => (sends === 1 ? 'Ideia bat gehiago bidal dezakezu ordu honetan.' : `${sends} ideia gehiago bidal ditzakezu ordu honetan.`),
-    waitMinutes: (minutes) => (minutes === 1 ? '3 ideia bidali dituzu ordu honetan. Minutu 1 barru beste bat bidal dezakezu.' : `3 ideia bidali dituzu ordu honetan. ${minutes} minutu barru beste bat bidal dezakezu.`),
+    sendsLeft: (sends) =>
+      sends === 1
+        ? 'Ideia bat gehiago bidal dezakezu ordu honetan.'
+        : `${sends} ideia gehiago bidal ditzakezu ordu honetan.`,
+    waitMinutes: (minutes) =>
+      minutes === 1
+        ? '3 ideia bidali dituzu ordu honetan. Minutu 1 barru beste bat bidal dezakezu.'
+        : `3 ideia bidali dituzu ordu honetan. ${minutes} minutu barru beste bat bidal dezakezu.`,
   },
 
   feedback: {
@@ -696,16 +700,14 @@ export const EU: SiteMessages = {
       hard: { name: 'Zaila', summary: '10 letra' },
     },
     timers: {
-      timer:
-        'Amaitu hitz bakoitza barra amaitu baino lehen; hitz-sortzailean, bilatu amaitu arte',
+      timer: 'Amaitu hitz bakoitza barra amaitu baino lehen; hitz-sortzailean, bilatu amaitu arte',
       'no-timer': 'Lasai, presarik gabe',
     },
     hintsGroup: 'Pistak',
     hints: {
       hints: {
         name: 'Pistekin',
-        summary:
-          '2 akatsen ondoren hurrengo letra argitzen da; 5 eta 10en ondoren, lehen letrak jartzen dira',
+        summary: '2 akatsen ondoren hurrengo letra argitzen da; 5 eta 10en ondoren, lehen letrak jartzen dira',
       },
       'no-hints': { name: 'Pistarik gabe', summary: 'Ebatzi zuk bakarrik' },
     },
@@ -716,15 +718,14 @@ export const EU: SiteMessages = {
       'word-builder': 'Sakatu letrak hitz bat osatzeko, eta gero Egiaztatu',
     },
     progress: (word, total) => `Hitza: ${word}/${total}`,
-    mistakes: mistakes => `Akatsak: ${mistakes}`,
+    mistakes: (mistakes) => `Akatsak: ${mistakes}`,
     gap: 'Falta den letra',
     letters: 'Letrak',
     answer: 'Zure hitza',
     delete: 'Ezabatu',
     check: 'Egiaztatu',
     keys: 'Letrak teklatuarekin ere idatz ditzakezu; Atzera teklak azkena kentzen du',
-    builderKeys:
-      'Idatzi letrak teklatuarekin: Atzera teklak ezabatzen du, Sartu teklak egiaztatzen du',
+    builderKeys: 'Idatzi letrak teklatuarekin: Atzera teklak ezabatzen du, Sartu teklak egiaztatzen du',
     found: (found, total) => `Aurkituta: ${found}/${total}`,
     checks: {
       found: 'Ondo aurkitua!',
@@ -737,8 +738,7 @@ export const EU: SiteMessages = {
     dictionary: {
       loading: 'Hiztegia deskargatzen…',
       why: 'Lehen aldiz jokatzean zure hizkuntzako hiztegia deskargatzen dugu (100 KB inguru) zure hitzak egiaztatzeko. Zure nabigatzaileak hurrengorako gordetzen du.',
-      failed:
-        'Hiztegia ez da deskargatu, beraz ezkutuko hitzek bakarrik balio dute.',
+      failed: 'Hiztegia ez da deskargatu, beraz ezkutuko hitzek bakarrik balio dute.',
       credit: 'Hiztegia: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
     report: 'Salatu hitz hau',
@@ -817,7 +817,7 @@ export const EU: SiteMessages = {
     },
     aim: { more: 'Pixka bat gehiago ↑', less: 'Pixka bat gutxiago ↓' },
     whichAngle: 'Zenbat gradu?',
-    makeAngle: angle => `Egin ${angle}°`,
+    makeAngle: (angle) => `Egin ${angle}°`,
     howFull: 'Zenbat beteta dago?',
     whichNumber: 'Zein zenbaki da x?',
     yourAnswer: 'Zure erantzuna',
@@ -839,15 +839,14 @@ export const EU: SiteMessages = {
       },
       'which-one': {
         name: 'Zein da?',
-        summary:
-          'Egin salto kutxako zenbakia ematen duen eragiketaren plataformara.',
+        summary: 'Egin salto kutxako zenbakia ematen duen eragiketaren plataformara.',
       },
     },
     answers: 'Erantzunak',
-    floors: floors => `${floors}. solairua`,
-    best: floors => `Errekorra: ${floors}. solairua`,
+    floors: (floors) => `${floors}. solairua`,
+    best: (floors) => `Errekorra: ${floors}. solairua`,
     fell: 'Erori zara!',
-    summary: floors => `${floors} solairu igota`,
+    summary: (floors) => `${floors} solairu igota`,
   },
 
   howMany: {
@@ -877,7 +876,7 @@ export const EU: SiteMessages = {
     cell: (row, column, symbol) => `${row}. errenkada, ${column}. zutabea: ${symbol || 'hutsik'}`,
     check: 'Egiaztatu',
     done: 'Taula osatuta!',
-    summary: time => time,
+    summary: (time) => time,
     newGame: 'Partida berria',
     games: {
       'letter-sudoku': {
@@ -886,7 +885,7 @@ export const EU: SiteMessages = {
         board: 'Hizki taula',
         symbols: 'ABDEFGHIJ',
         tray: 'Hizkiak',
-        sizeSummary: letters => `${letters} hizki`,
+        sizeSummary: (letters) => `${letters} hizki`,
         repeated: 'Hizki gorriak errepikatuta daude beren errenkadan, zutabean edo karratuan.',
         noRepeats: 'Oraingoz ez dago hizki errepikaturik!',
       },
@@ -896,7 +895,7 @@ export const EU: SiteMessages = {
         board: 'Zenbaki taula',
         symbols: '123456789',
         tray: 'Zenbakiak',
-        sizeSummary: numbers => `1etik ${numbers}era bitarteko zenbakiak`,
+        sizeSummary: (numbers) => `1etik ${numbers}era bitarteko zenbakiak`,
         repeated: 'Zenbaki gorriak errepikatuta daude beren errenkadan, zutabean edo karratuan.',
         noRepeats: 'Oraingoz ez dago zenbaki errepikaturik!',
       },
@@ -916,7 +915,7 @@ export const EU: SiteMessages = {
     cell: (row, column, letter) => `${row}. errenkada, ${column}. zutabea: ${letter}`,
     found: (found, total) => `Hitzak ${found}/${total}`,
     done: 'Hitz guztiak aurkitu dituzu!',
-    summary: time => time,
+    summary: (time) => time,
     newGame: 'Partida berria',
   },
 
@@ -939,10 +938,10 @@ export const EU: SiteMessages = {
     keyboard: 'Teklatua',
     erase: 'Ezabatu hizki bat',
     send: 'Probatu',
-    tooShort: letters => `Hitzak ${letters} hizki ditu`,
-    triesLeft: tries => (tries === 1 ? 'Saiakera 1 geratzen da' : `${tries} saiakera geratzen dira`),
+    tooShort: (letters) => `Hitzak ${letters} hizki ditu`,
+    triesLeft: (tries) => (tries === 1 ? 'Saiakera 1 geratzen da' : `${tries} saiakera geratzen dira`),
     won: 'Hitz sekretua aurkitu duzu!',
-    lost: word => `Hitz sekretua ${word} zen`,
+    lost: (word) => `Hitz sekretua ${word} zen`,
     newGame: 'Beste hitz bat',
   },
 
@@ -956,12 +955,12 @@ export const EU: SiteMessages = {
       hard: { name: 'Zaila', summary: '30 karta · 15 bikote' },
       expert: { name: 'Aditua', summary: '36 karta · 18 bikote' },
     },
-    moves: moves => `Mugimenduak ${moves}`,
+    moves: (moves) => `Mugimenduak ${moves}`,
     pairs: (found, total) => `Bikoteak ${found}/${total}`,
-    card: number => `${number}. karta, buruz behera`,
+    card: (number) => `${number}. karta, buruz behera`,
     done: 'Bikote guztiak aurkitu dituzu!',
     summary: (moves, time) => `${moves} mugimendu eta ${time}`,
-    best: moves => `Errekorra: ${moves} mugimendu`,
+    best: (moves) => `Errekorra: ${moves} mugimendu`,
     newGame: 'Partida berria',
   },
 
@@ -1003,7 +1002,7 @@ export const EU: SiteMessages = {
       'sing-it': 'Entzun, gero abestu nota eta eutsi',
     },
     progress: (round, total) => `Txanda: ${round}/${total}`,
-    mistakes: mistakes => `Akatsak: ${mistakes}`,
+    mistakes: (mistakes) => `Akatsak: ${mistakes}`,
     noteNames: {
       C: 'Do',
       'C#': 'Do♯',
@@ -1029,8 +1028,7 @@ export const EU: SiteMessages = {
     micPrivacy:
       'Zure nabigatzaileak mikrofonoa erabiltzeko baimena eskatuko du. Soinua gailu honetan geratzen da: ez da inoiz grabatzen ezta bidaltzen ere.',
     micAsking: 'Mikrofonoaren zain…',
-    micDenied:
-      'Mikrofonoa blokeatuta dago. Baimendu zure nabigatzailean, edo saltatu txanda hau.',
+    micDenied: 'Mikrofonoa blokeatuta dago. Baimendu zure nabigatzailean, edo saltatu txanda hau.',
     micUnavailable: 'Gailu honek ez du mikrofonorik. Txandak salta ditzakezu.',
     meter: 'Zure ahotsa notatik zein hurbil dagoen',
     singHints: {
@@ -1050,7 +1048,8 @@ export const EU: SiteMessages = {
     lead: 'Aktibatu edo desaktibatu jokoak, ikusi zer jokatzen den, eta moderatu proposamenak eta salatutako hitzak.',
     email: 'Helbide elektronikoa',
     password: 'Pasahitza',
-    wrongCredentials: 'Helbidea edo pasahitza okerra. Jarraian 5 saiakera oker egin ondoren, 15 minutu itxaron behar da.',
+    wrongCredentials:
+      'Helbidea edo pasahitza okerra. Jarraian 5 saiakera oker egin ondoren, 15 minutu itxaron behar da.',
     tooManyTries: 'Saiakera gehiegi. Itxaron 15 minutu eta saiatu berriro.',
     offline: 'Orain ezin da APIarekin konektatu. Saiatu geroago.',
     checking: 'Egiaztatzen…',
@@ -1073,13 +1072,21 @@ export const EU: SiteMessages = {
     clearErrors: 'Ezabatu denak',
     confirmClearErrors: 'Ezabatu errore guztiak erregistrotik?',
     resolveError: 'Konponduta',
-    firstSeen: moment => `Lehena: ${moment}`,
+    firstSeen: (moment) => `Lehena: ${moment}`,
     errorSources: { api: 'APIa', site: 'Webgunea' },
-    errorColumns: { when: 'Azkena', code: 'Kodea', title: 'Izenburua', problem: 'Arazoa', page: 'Orria', count: 'Aldiz', actions: 'Ekintzak' },
+    errorColumns: {
+      when: 'Azkena',
+      code: 'Kodea',
+      title: 'Izenburua',
+      problem: 'Arazoa',
+      page: 'Orria',
+      count: 'Aldiz',
+      actions: 'Ekintzak',
+    },
     loading: 'Kargatzen…',
     previewTitle: 'Aurrebista modua',
     navLink: 'Admin',
-    gameCategories: game => `${game} jokoaren kategoriak`,
+    gameCategories: (game) => `${game} jokoaren kategoriak`,
     uploadThumbnail: 'Igo irudia',
     automaticThumbnail: 'Erabili automatikoa',
     newsHelp: 'Hasierako orriko berritasunak, berrienak lehenik. Idatzi gaztelaniaz; beste hizkuntzak aukerakoak dira.',
@@ -1097,20 +1104,21 @@ export const EU: SiteMessages = {
     newsFallback: 'Hutsik dauden hizkuntzek gaztelaniazko testua erakusten dute.',
     newsSave: 'Gorde',
     offlineTitle: 'Konexiorik gabeko jokoa gailu honetan',
-    offlineActive: megabytes => `Aktibatuta: jokoak hemen gordetzen dira (${megabytes} MB guztira)`,
+    offlineActive: (megabytes) => `Aktibatuta: jokoak hemen gordetzen dira (${megabytes} MB guztira)`,
     offlineInactive: 'Desaktibatuta: aktibatu ezarpenen menuan jokoak hemen gordetzeko',
-    previewHelp: hiddenBadge =>
+    previewHelp: (hiddenBadge) =>
       `Nabigatzaile honek joko guztiak erakusten ditu, irekiak izan ala ez, «${hiddenBadge}» markarekin ezkutuan daudenean.`,
     gamesTitle: 'Jokoak',
     open: 'Denentzat irekita',
     hidden: 'Publikoari ezkutatuta',
-    byDefault: open => `berez: ${open ? 'irekita' : 'ezkutuan'}`,
+    byDefault: (open) => `berez: ${open ? 'irekita' : 'ezkutuan'}`,
     periodGroup: 'Epea',
     periods: { all: 'Beti', day: 'Gaur', week: 'Aste honetan', month: 'Hilabete honetan', year: 'Aurten' },
     resetStats: 'Berrabiarazi estatistikak',
-    confirmResetStats: 'Orain arte kontatutako partida eta 👍/👎 guztiak ezabatu, estatistikak gaurtik berriro has daitezen? Ezin da desegin.',
+    confirmResetStats:
+      'Orain arte kontatutako partida eta 👍/👎 guztiak ezabatu, estatistikak gaurtik berriro has daitezen? Ezin da desegin.',
     statsReset: 'Estatistikak gaurtik hasten dira berriro.',
-    playsTotal: total => `${total} partida guztira`,
+    playsTotal: (total) => `${total} partida guztira`,
     refresh: 'Freskatu',
     playsColumns: { game: 'Jokoa', plays: 'Jokatutako partidak', reasons: 'Arrazoiak' },
     suggestionStatuses: {
@@ -1120,7 +1128,7 @@ export const EU: SiteMessages = {
     },
     showPicture: 'Ikusi irudia',
     pictureAlt: 'Proposamenarekin bidalitako irudia',
-    moveTo: status => `Eraman hona: ${status}`,
+    moveTo: (status) => `Eraman hona: ${status}`,
     delete: 'Ezabatu',
     confirmDelete: 'Proposamen hau eta bere irudia betiko ezabatu?',
     noSuggestions: 'Ez dago proposamenik hemen.',
@@ -1129,8 +1137,7 @@ export const EU: SiteMessages = {
       approved: 'Blokeatuak',
       rejected: 'Baimenduak',
     },
-    reportsHelp:
-      '3 aldiz salatutako hitzak ez du balio hitz-sortzailean zuk erabaki arte.',
+    reportsHelp: '3 aldiz salatutako hitzak ez du balio hitz-sortzailean zuk erabaki arte.',
     reportColumns: {
       word: 'Hitza',
       language: 'Hizkuntza',
@@ -1140,13 +1147,14 @@ export const EU: SiteMessages = {
     keepOut: 'Blokeatu',
     letCount: 'Baimendu',
     noWords: 'Ez dago hitzik hemen.',
-    playersHelp: 'Sailkapenetako jokalariak, berrienak lehenik. Aldatu izen itsusi bat izen neutro batera, edo atera sailkapenetatik puntuazio asmatuak dituena; ezin izango du desegin.',
+    playersHelp:
+      'Sailkapenetako jokalariak, berrienak lehenik. Aldatu izen itsusi bat izen neutro batera, edo atera sailkapenetatik puntuazio asmatuak dituena; ezin izango du desegin.',
     noPlayers: 'Oraindik ez dago jokalaririk sailkapenetan.',
     namesTitle: 'Berrikusteko izenak',
     namesHelp:
       'Geletan agertzeko zain dauden izen ikusgaiak; salatutakoak lehenengo. Onartu izen bat, edo aldatu izen zakar bat izen arrunt batengatik.',
     noNames: 'Ez dago izenik zain.',
-    nameReports: count => `${count} aldiz salatua`,
+    nameReports: (count) => `${count} aldiz salatua`,
     allowName: 'Onartu',
     playerColumns: { name: 'Izen ikusgaia', boards: 'Sailkapenak', joined: 'Alta' },
     playerShown: 'Ikusgai',
@@ -1157,8 +1165,8 @@ export const EU: SiteMessages = {
     loadMore: 'Gehiago kargatu',
     tableLabels: {
       search: 'Bilatu',
-      matches: count => (count === 1 ? 'Errenkada 1 bat dator' : `${count} errenkada bat datoz`),
-      noMatches: query => `Ez dago «${query}»-rekin bat datorren errenkadarik`,
+      matches: (count) => (count === 1 ? 'Errenkada 1 bat dator' : `${count} errenkada bat datoz`),
+      noMatches: (query) => `Ez dago «${query}»-rekin bat datorren errenkadarik`,
       searchCleared: 'Bilaketa garbituta',
       empty: 'Ez dago ezer',
       actions: 'Ekintzak',
@@ -1169,13 +1177,12 @@ export const EU: SiteMessages = {
       page: (page, count) => `${page}. orria / ${count}`,
       previousPage: 'Aurreko orria',
       nextPage: 'Hurrengo orria',
-      sortedAscending: header => `${header} arabera ordenatuta, gorantz`,
-      sortedDescending: header => `${header} arabera ordenatuta, beherantz`,
+      sortedAscending: (header) => `${header} arabera ordenatuta, gorantz`,
+      sortedDescending: (header) => `${header} arabera ordenatuta, beherantz`,
       sortCleared: 'Ordena kenduta',
     },
     featuresTitle: 'Funtzioak',
-    featuresHelp:
-      'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
+    featuresHelp: 'Funtzio berriak desaktibatuta hasten dira: probatu aurrebistan, eta gero ireki denentzat.',
     featureNames: {
       rooms: 'Jokalari anitz (gelak)',
       'rooms-math-games': 'Matematika geletan',
@@ -1222,15 +1229,13 @@ export const EU: SiteMessages = {
     makeTester: 'Egin tester',
     makeModerator: 'Egin moderatzaile',
     startingPassword: 'Hasierako pasahitza (aukerakoa)',
-    startingPasswordHelp:
-      'Utzi hutsik gonbidapen-esteka bat lortzeko: berak aukeratuko du pasahitza.',
+    startingPasswordHelp: 'Utzi hutsik gonbidapen-esteka bat lortzeko: berak aukeratuko du pasahitza.',
     add: 'Gehitu',
     alreadyOnTeam: 'Badago norbait taldean helbide horrekin.',
-    inviteFor: email =>
-      `Gonbidapen-esteka ${email} helbiderako: kopiatu eta bidali.`,
+    inviteFor: (email) => `Gonbidapen-esteka ${email} helbiderako: kopiatu eta bidali.`,
     copy: 'Kopiatu',
     copied: 'Kopiatuta',
-    inviteExpires: day => `Behin bakarrik balio du, ${day} arte.`,
+    inviteExpires: (day) => `Behin bakarrik balio du, ${day} arte.`,
     roles: {
       super: 'Superadministratzailea',
       moderator: 'Moderatzailea',
@@ -1246,16 +1251,14 @@ export const EU: SiteMessages = {
     currentPassword: 'Oraingo pasahitza',
     newPassword: 'Pasahitz berria',
     repeatPassword: 'Errepikatu pasahitz berria',
-    passwordRule: min => `Gutxienez ${min} karaktere.`,
-    passwordChanged:
-      'Pasahitza aldatu da. Zure kontuarekin zeuden beste nabigatzaileetan saioa itxi da.',
+    passwordRule: (min) => `Gutxienez ${min} karaktere.`,
+    passwordChanged: 'Pasahitza aldatu da. Zure kontuarekin zeuden beste nabigatzaileetan saioa itxi da.',
     wrongPassword: 'Oraingo pasahitza ez da zuzena.',
     passwordsDiffer: 'Bi pasahitzak ez datoz bat.',
     inviteTitle: 'Batu administrazio taldera',
-    inviteLead: email => `Aukeratu pasahitz bat ${email} helbiderako.`,
+    inviteLead: (email) => `Aukeratu pasahitz bat ${email} helbiderako.`,
     acceptInvite: 'Gorde eta sartu',
-    inviteInvalid:
-      'Gonbidapen-esteka honek ez du balio jada. Eskatu berri bat.',
+    inviteInvalid: 'Gonbidapen-esteka honek ez du balio jada. Eskatu berri bat.',
   },
 
   rooms: {
@@ -1269,23 +1272,18 @@ export const EU: SiteMessages = {
     codeLabel: 'Gelaren kodea',
     join: 'Sartu',
     homeTitle: 'Jokalari anitz',
-    homeText:
-      '4 jokalari arte, ariketa berak aldi berean. Nork asmatzen du gehien?',
+    homeText: '4 jokalari arte, ariketa berak aldi berean. Nork asmatzen du gehien?',
     homeLink: 'Ikusi gelak',
     errors: {
-      'not-found':
-        'Ez dago gelarik kode horrekin. Begiratu edo eskatu berri bat.',
+      'not-found': 'Ez dago gelarik kode horrekin. Begiratu edo eskatu berri bat.',
       full: 'Gela hori beteta dago: 4 jokalari ditu jada.',
-      'in-game':
-        'Gela horretan jokatzen ari dira orain. Saiatu berriro txanda amaitzean.',
+      'in-game': 'Gela horretan jokatzen ari dira orain. Saiatu berriro txanda amaitzean.',
       'not-host': 'Gelako anfitrioiak bakarrik egin dezake hori.',
-      'not-ready':
-        'Lehenik denek prest egon behar dute, gutxienez 2 jokalarirekin.',
+      'not-ready': 'Lehenik denek prest egon behar dute, gutxienez 2 jokalarirekin.',
       'wrong-phase': 'Orain ezin da hori egin.',
       invalid: 'Kode hori ez dirudi zuzena: 6 letra eta zenbaki ditu.',
       'too-many': 'Saiakera gehiegi. Itxaron minutu bat eta saiatu berriro.',
-      offline:
-        'Orain ezin da geletara konektatu. Begiratu zure konexioa eta saiatu berriro.',
+      offline: 'Orain ezin da geletara konektatu. Begiratu zure konexioa eta saiatu berriro.',
     },
     connecting: 'Konektatzen…',
     reconnecting: 'Berriro konektatzen…',
@@ -1301,7 +1299,7 @@ export const EU: SiteMessages = {
     imReady: 'Prest nago',
     notReadyYet: 'Oraindik ez nago prest',
     start: 'Hasi',
-    needPlayers: min => `Gutxienez ${min} jokalari behar dira.`,
+    needPlayers: (min) => `Gutxienez ${min} jokalari behar dira.`,
     waitingForReady: 'Denak prest egon arte itxaroten…',
     waitingForHost: 'Anfitrioiak hasi arte itxaroten…',
     settingsTitle: 'Jokoaren ezarpenak',
@@ -1312,26 +1310,33 @@ export const EU: SiteMessages = {
     reportName: 'Salatu izena',
     scoresShown: 'Erakutsi puntuazioa',
     scoresHidden: 'Puntuazioa amaieran bakarrik',
-    seconds: seconds => `${seconds} s`,
+    seconds: (seconds) => `${seconds} s`,
     getReady: 'Prest!',
-    timeLeft: seconds => `${seconds} s falta dira`,
-    yourScore: score => `Zure puntuazioa: ${score}`,
+    timeLeft: (seconds) => `${seconds} s falta dira`,
+    yourScore: (score) => `Zure puntuazioa: ${score}`,
     resultsTitle: 'Emaitzak',
-    place: place => `${place}.`,
-    points: points => `${points} puntu`,
+    place: (place) => `${place}.`,
+    points: (points) => `${points} puntu`,
     playAgain: 'Jokatu berriro',
     leave: 'Irten gelatik',
     kick: 'Kendu',
     newName: 'Izena aldatu',
     reactions: {
       title: 'Pegatinak',
-      names: { shy: 'Lotsa', happy: 'Pozik', love: 'Maite zaitut', angry: 'Haserre', laugh: 'Jajaja', confused: 'Zer?', cry: 'Triste' },
+      names: {
+        shy: 'Lotsa',
+        happy: 'Pozik',
+        love: 'Maite zaitut',
+        angry: 'Haserre',
+        laugh: 'Jajaja',
+        confused: 'Zer?',
+        cry: 'Triste',
+      },
     },
     kicked: 'Anfitrioiak gelatik kendu zaitu.',
     gameUnavailable: 'Joko hau ez dago irekita geletan oraintxe.',
     animals: ANIMALS,
-    nickname: (adjective, animal) =>
-      `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
+    nickname: (adjective, animal) => `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
   },
 
   account: {
@@ -1349,7 +1354,7 @@ export const EU: SiteMessages = {
     loginNameHint: '3tik 30era letra (a–z), zenbaki, puntu, marra edo azpimarra. Zuk bakarrik ikusten duzu, sartzeko.',
     loginOrEmail: 'Erabiltzaile-izena edo helbide elektronikoa',
     password: 'Pasahitza',
-    passwordRule: min => `Gutxienez ${min} karaktere.`,
+    passwordRule: (min) => `Gutxienez ${min} karaktere.`,
     repeatPassword: 'Errepikatu pasahitza',
     passwordsDiffer: 'Pasahitzak ez dira berdinak.',
     screenName: 'Izen ikusgaia',
@@ -1369,12 +1374,13 @@ export const EU: SiteMessages = {
     signIn: 'Sartu',
     signUp: 'Sortu nire kontua',
     syncNote: 'Gailu honetako gogokoak eta emaitza onenak zure kontura gehitzen dira.',
-    forgotLead: 'Idatzi zure kontuaren helbide elektronikoa, eta pasahitz berria aukeratzeko esteka bat bidaliko dizugu.',
+    forgotLead:
+      'Idatzi zure kontuaren helbide elektronikoa, eta pasahitz berria aukeratzeko esteka bat bidaliko dizugu.',
     sendLink: 'Bidali esteka',
     linkSent: 'Kontu batek helbide hau badu, esteka bidean da. Ordubetez balio du.',
     sending: 'Bidaltzen…',
-    signedInAs: screenName => `${screenName} gisa sartu zara`,
-    loginNameIs: loginName => `Erabiltzaile-izena: ${loginName}`,
+    signedInAs: (screenName) => `${screenName} gisa sartu zara`,
+    loginNameIs: (loginName) => `Erabiltzaile-izena: ${loginName}`,
     signOut: 'Irten',
     detailsTitle: 'Zure datuak',
     emailNeedsPassword: 'Helbidea aldatzeko edo kentzeko, idatzi zure pasahitza ere.',
@@ -1392,13 +1398,15 @@ export const EU: SiteMessages = {
     confirmDeleteResults: 'Zure emaitza guztiak betiko ezabatu?',
     resultsDeleted: 'Zure emaitzak ezabatu dira.',
     deleteTitle: 'Ezabatu kontua',
-    deleteLead: 'Honek betiko ezabatzen ditu zure kontua, bertan gordetako gogokoak eta emaitzak, eta sailkapenetako zure tokia.',
+    deleteLead:
+      'Honek betiko ezabatzen ditu zure kontua, bertan gordetako gogokoak eta emaitzak, eta sailkapenetako zure tokia.',
     deleteAccount: 'Ezabatu nire kontua',
     confirmDelete: 'Zure kontua betiko ezabatu?',
     deleted: 'Zure kontua ezabatu da.',
     problems: {
       invalid: 'Zerbait ez dago ondo: begiratu idatzi duzuna.',
-      'wrong-login': 'Erabiltzaile-izena edo pasahitza ez da zuzena. Jarraian 5 saiakera oker egin ondoren, 15 minutu itxaron behar da.',
+      'wrong-login':
+        'Erabiltzaile-izena edo pasahitza ez da zuzena. Jarraian 5 saiakera oker egin ondoren, 15 minutu itxaron behar da.',
       'wrong-password': 'Pasahitza ez da zuzena.',
       'login-taken': 'Erabiltzaile-izen hori hartuta dago: saiatu beste batekin.',
       'screen-name-taken': 'Izen ikusgai hori hartuta dago: saiatu beste batekin.',

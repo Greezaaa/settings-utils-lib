@@ -5,8 +5,7 @@ const LEFT = 20;
 const RIGHT = 300;
 const Y = 40;
 
-export const formatNumber = (value: number): string =>
-  String(Math.round(value * 100) / 100).replace('-', '−');
+export const formatNumber = (value: number): string => String(Math.round(value * 100) / 100).replace('-', '−');
 
 @Component({
   selector: 'app-number-line-view',
@@ -28,11 +27,7 @@ export class NumberLineView {
       isMark: tick === mark,
     }));
   });
-  protected readonly startLabel = computed(() =>
-    formatNumber(this.line().start)
-  );
-  protected readonly endLabel = computed(() =>
-    formatNumber(lineEnd(this.line()))
-  );
+  protected readonly startLabel = computed(() => formatNumber(this.line().start));
+  protected readonly endLabel = computed(() => formatNumber(lineEnd(this.line())));
   protected readonly ends = { left: LEFT, right: RIGHT, y: Y };
 }

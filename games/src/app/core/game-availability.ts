@@ -1,5 +1,5 @@
 import { computed, DOCUMENT, inject, Injectable, signal } from '@angular/core';
-import { AdminApi } from './admin-api';
+import { AdminSession } from './admin-session';
 import { apiUrl } from './api-url';
 import { defaultCategories, GameCategory, GAMES, GameSlug, gameThumbnail } from './games';
 import { GameCategoryList, GamesApi, isGameCategory, isGameSlug, parseThumbnails } from './games-api';
@@ -14,7 +14,7 @@ const THUMBNAILS_STORAGE = 'game-thumbnails';
 @Injectable({ providedIn: 'root' })
 export class GameAvailability {
   private readonly api = inject(GamesApi);
-  private readonly admin = inject(AdminApi);
+  private readonly admin = inject(AdminSession);
   private readonly switches = signal<ReadonlyMap<GameSlug, boolean>>(new Map());
   private readonly categories = signal<ReadonlyMap<GameSlug, readonly GameCategory[]>>(new Map());
   private readonly thumbnails = signal<ReadonlyMap<GameSlug, number>>(new Map());
@@ -61,7 +61,9 @@ export class GameAvailability {
 
   thumbnailOf(game: GameSlug): string {
     const version = this.thumbnails().get(game);
-    return version === undefined ? gameThumbnail(game) : apiUrl(this.document, `/v1/games/${game}/thumbnail?v=${version}`);
+    return version === undefined
+      ? gameThumbnail(game)
+      : apiUrl(this.document, `/v1/games/${game}/thumbnail?v=${version}`);
   }
 
   hasOwnThumbnail(game: GameSlug): boolean {
@@ -102,14 +104,15 @@ export class GameAvailability {
   private async load(): Promise<void> {
     this.useRemembered();
     const wantsPreview = readStored(PREVIEW_STORAGE) === true;
-    const [settings, previewAllowed] = await Promise.all([
-      this.api.gameSettings(),
+    const [site, previewAllowed] = await Promise.all([
+      this.api.site(),
       wantsPreview ? this.previewAllowed() : Promise.resolve(false),
     ]);
     this.isPreview.set(previewAllowed);
     if (wantsPreview && !previewAllowed) {
       writeStored(PREVIEW_STORAGE, false);
     }
+    const settings = site?.games;
     if (settings) {
       const known = new Map(settings.switches.map(({ game, enabled }) => [game, enabled]));
       this.switches.set(known);
@@ -131,7 +134,9 @@ export class GameAvailability {
     this.hasStoredSwitches = stored !== null;
     this.switches.set(stored ?? this.switches());
     this.categories.set(new Map(readCategories().map(({ game, categories }) => [game, categories])));
-    this.thumbnails.set(new Map(parseThumbnails(readStored(THUMBNAILS_STORAGE)).map(({ game, version }) => [game, version])));
+    this.thumbnails.set(
+      new Map(parseThumbnails(readStored(THUMBNAILS_STORAGE)).map(({ game, version }) => [game, version])),
+    );
   }
 
   private async previewAllowed(): Promise<boolean> {

@@ -17,10 +17,7 @@ type Phase = 'ready' | 'playing' | 'done';
   imports: [TranslatePipe, GameBoard, GameFeedback, MeasureRound, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './measure-it-page.html',
-  styleUrls: [
-    '../../shared/utility-page.scss',
-    '../../shared/game-settings.scss',
-  ],
+  styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss'],
 })
 export class MeasureItPage {
   protected readonly modes = MEASURE_MODE_IDS;
@@ -39,15 +36,11 @@ export class MeasureItPage {
   protected readonly index = signal(0);
   protected readonly score = signal(0);
   protected readonly total = computed(() => this.exercises().length);
-  protected readonly exercise = computed(
-    () => this.exercises()[this.index()] ?? null
-  );
+  protected readonly exercise = computed(() => this.exercises()[this.index()] ?? null);
 
   protected start(): void {
     this.api.countPlay('measure-it');
-    this.exercises.set(
-      measureExercises(this.modeId(), this.levelId(), Math.random)
-    );
+    this.exercises.set(measureExercises(this.modeId(), this.levelId(), Math.random));
     this.index.set(0);
     this.score.set(0);
     this.phase.set('playing');
@@ -55,12 +48,12 @@ export class MeasureItPage {
 
   protected onAnswered(isRight: boolean): void {
     if (isRight) {
-      this.score.update(score => score + 1);
+      this.score.update((score) => score + 1);
     }
     if (this.index() + 1 >= this.total()) {
       this.phase.set('done');
     } else {
-      this.index.update(index => index + 1);
+      this.index.update((index) => index + 1);
     }
   }
 

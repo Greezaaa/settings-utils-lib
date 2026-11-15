@@ -1,11 +1,11 @@
 import { DOCUMENT, Injector, runInInjectionContext, signal } from '@angular/core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { AdminApi, AdminRole, canPreview } from './admin-api';
+import { AdminRole, AdminSession, canPreview } from './admin-session';
 import { GameAvailability } from './game-availability';
 import { GAMES } from './games';
 import { GameCategoryList, GamesApi, GameSwitch, ThumbnailVersion } from './games-api';
 
-function adminAs(role?: AdminRole): Pick<AdminApi, 'restore' | 'canPreview'> {
+function adminAs(role?: AdminRole): Pick<AdminSession, 'restore' | 'canPreview'> {
   return {
     restore: vi.fn(async () => (role ? 'signed-in' : 'signed-out')),
     canPreview: signal(canPreview(role)).asReadonly(),
@@ -18,17 +18,22 @@ function availabilityWith(
   categories: GameCategoryList[] = [],
   thumbnails: ThumbnailVersion[] = [],
 ): GameAvailability {
-  return availabilityFrom({
-    gameSettings: vi.fn(async () => (switches ? { switches, categories, thumbnails } : null)),
-  }, role);
+  return availabilityFrom(
+    {
+      site: vi.fn(async () =>
+        switches ? { games: { switches, categories, thumbnails }, features: [], newsVersion: '' } : null,
+      ),
+    },
+    role,
+  );
 }
 
-function availabilityFrom(api: Pick<GamesApi, 'gameSettings'>, role?: AdminRole): GameAvailability {
+function availabilityFrom(api: Pick<GamesApi, 'site'>, role?: AdminRole): GameAvailability {
   const injector = Injector.create({
     providers: [
       { provide: DOCUMENT, useValue: document },
       { provide: GamesApi, useValue: api },
-      { provide: AdminApi, useValue: adminAs(role) },
+      { provide: AdminSession, useValue: adminAs(role) },
     ],
   });
   return runInInjectionContext(injector, () => new GameAvailability());
@@ -59,7 +64,7 @@ describe('GameAvailability', () => {
 
   it('lets a game open at once when the last visit saved it open, without waiting for the API', async () => {
     await availabilityWith([{ game: 'how-many', enabled: true }]).ready();
-    const next = availabilityFrom({ gameSettings: () => new Promise(() => undefined) });
+    const next = availabilityFrom({ site: () => new Promise(() => undefined) });
     await expect(next.canEnter('how-many')).resolves.toBe(true);
   });
 
@@ -70,7 +75,7 @@ describe('GameAvailability', () => {
     await expect(opened.canEnter('sliding-puzzle')).resolves.toBe(true);
   });
 
-  it('uses the admin\'s categories over the built-in one, and remembers them for offline visits', async () => {
+  it("uses the admin's categories over the built-in one, and remembers them for offline visits", async () => {
     const online = availabilityWith([], undefined, [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }]);
     expect(online.categoriesOf('letter-sudoku')).toEqual(['letters']);
     await online.ready();

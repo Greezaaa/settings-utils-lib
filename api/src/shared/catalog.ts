@@ -20,9 +20,20 @@ export const GAME_SLUGS = [
   'word-search',
   'secret-word',
 ] as const;
-export const UPDATE_KINDS = ['game', 'language', 'settings', 'feature', 'privacy'] as const;
+export const UPDATE_KINDS = [
+  'game',
+  'language',
+  'settings',
+  'feature',
+  'privacy',
+] as const;
 export type UpdateKind = (typeof UPDATE_KINDS)[number];
-export const GAME_CATEGORIES = ['numbers', 'letters', 'music', 'puzzles'] as const;
+export const GAME_CATEGORIES = [
+  'numbers',
+  'letters',
+  'music',
+  'puzzles',
+] as const;
 export type GameCategory = (typeof GAME_CATEGORIES)[number];
 export const LANGUAGE_IDS = ['en', 'es', 'eu', 'it', 'uk'] as const;
 export const FEATURE_IDS = [

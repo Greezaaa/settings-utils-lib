@@ -32,7 +32,10 @@ describe('game filter', () => {
 
   it('keeps games of a category, including games in several', () => {
     expect(filterGames(GAMES, { ...NO_FILTER, category: 'puzzles' }, facts())).toEqual(['letter-sudoku']);
-    expect(filterGames(GAMES, { ...NO_FILTER, category: 'letters' }, facts())).toEqual(['letter-games', 'letter-sudoku']);
+    expect(filterGames(GAMES, { ...NO_FILTER, category: 'letters' }, facts())).toEqual([
+      'letter-games',
+      'letter-sudoku',
+    ]);
   });
 
   it('combines favourites with the category', () => {

@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import type { FeatureSwitch } from '../contracts/site.contract.js';
 import { FeatureId } from '../shared/catalog.js';
 import { today } from '../shared/day.js';
 import { FeatureFlag } from './feature-flag.entity.js';
-
-export interface FeatureSwitch {
-  readonly feature: string;
-  readonly enabled: boolean;
-}
 
 @Injectable()
 export class FeatureFlagsService {

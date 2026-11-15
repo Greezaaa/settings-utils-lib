@@ -6,7 +6,11 @@ import { LiveSettings, MIN_RECHECK_GAP_MS } from './live-settings';
 import { SiteNews } from './site-news';
 
 function liveSettings(visibility: DocumentVisibilityState) {
-  const refreshes = { games: vi.fn(async () => undefined), features: vi.fn(async () => undefined), news: vi.fn(async () => undefined) };
+  const refreshes = {
+    games: vi.fn(async () => undefined),
+    features: vi.fn(async () => undefined),
+    news: vi.fn(async () => undefined),
+  };
   const page: Pick<Document, 'visibilityState' | 'addEventListener' | 'defaultView'> = {
     visibilityState: visibility,
     addEventListener: vi.fn(),
@@ -32,7 +36,9 @@ describe('LiveSettings', () => {
     live.recheckIfVisible(start + 1000);
     expect(refreshes.games).not.toHaveBeenCalled();
     live.recheckIfVisible(start + MIN_RECHECK_GAP_MS + 1);
-    expect([refreshes.games, refreshes.features, refreshes.news].map((refresh) => refresh.mock.calls.length)).toEqual([1, 1, 1]);
+    expect([refreshes.games, refreshes.features, refreshes.news].map((refresh) => refresh.mock.calls.length)).toEqual([
+      1, 1, 1,
+    ]);
     live.recheckIfVisible(start + MIN_RECHECK_GAP_MS + 2);
     expect(refreshes.games).toHaveBeenCalledTimes(1);
   });

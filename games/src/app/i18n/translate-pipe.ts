@@ -28,8 +28,7 @@ export type MessageResult<P extends MessagePath> =
 const isRecord = (value: unknown): value is Readonly<Record<string, unknown>> =>
   typeof value === 'object' && value !== null;
 
-const isFunction = (value: unknown): value is (...args: readonly unknown[]) => unknown =>
-  typeof value === 'function';
+const isFunction = (value: unknown): value is (...args: readonly unknown[]) => unknown => typeof value === 'function';
 
 export function translate<P extends MessagePath>(
   messages: SiteMessages,
@@ -37,9 +36,7 @@ export function translate<P extends MessagePath>(
   ...args: MessageArgs<P>
 ): MessageResult<P>;
 export function translate(messages: SiteMessages, path: string, ...args: readonly unknown[]): unknown {
-  const message = path
-    .split('.')
-    .reduce<unknown>((value, key) => (isRecord(value) ? value[key] : undefined), messages);
+  const message = path.split('.').reduce<unknown>((value, key) => (isRecord(value) ? value[key] : undefined), messages);
   return isFunction(message) ? message(...args) : message;
 }
 

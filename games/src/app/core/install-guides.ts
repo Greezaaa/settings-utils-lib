@@ -29,5 +29,5 @@ export const INSTALL_GUIDES: readonly InstallGuide[] = [
 ];
 
 export function guidesFor(platform: InstallPlatform): readonly InstallGuide[] {
-  return INSTALL_GUIDES.filter(guide => guide.platform === platform);
+  return INSTALL_GUIDES.filter((guide) => guide.platform === platform);
 }

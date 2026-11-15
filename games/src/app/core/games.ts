@@ -15,12 +15,7 @@ export type GameSlug =
   | 'secret-word';
 
 export type GameCategory = 'numbers' | 'letters' | 'music' | 'puzzles';
-export const GAME_CATEGORIES: readonly GameCategory[] = [
-  'numbers',
-  'letters',
-  'music',
-  'puzzles',
-];
+export const GAME_CATEGORIES: readonly GameCategory[] = ['numbers', 'letters', 'music', 'puzzles'];
 
 export interface GameInfo {
   readonly slug: GameSlug;
@@ -136,7 +131,7 @@ export const GAME_SLUGS: readonly GameSlug[] = GAMES.map(({ slug }) => slug);
 export const gameThumbnail = (slug: GameSlug): string => `/thumbnails/${slug}.webp`;
 
 export function gameInfo(slug: GameSlug): GameInfo {
-  const game = GAMES.find(info => info.slug === slug);
+  const game = GAMES.find((info) => info.slug === slug);
   if (!game) {
     throw new Error(`Unknown game: ${slug}`);
   }
@@ -154,13 +149,13 @@ export function byCategory(
   games: readonly GameSlug[],
   categoriesOf: (game: GameSlug) => readonly GameCategory[] = defaultCategories,
 ): CategoryGames[] {
-  return GAME_CATEGORIES.map(category => ({
+  return GAME_CATEGORIES.map((category) => ({
     category,
-    games: games.filter(game => categoriesOf(game).includes(category)),
-  })).filter(group => group.games.length > 0);
+    games: games.filter((game) => categoriesOf(game).includes(category)),
+  })).filter((group) => group.games.length > 0);
 }
 
 export function gameOfPath(path: string): GameSlug | null {
   const firstSegment = path.split(/[/?#]/).find(Boolean) ?? '';
-  return GAME_SLUGS.find(slug => slug === firstSegment) ?? null;
+  return GAME_SLUGS.find((slug) => slug === firstSegment) ?? null;
 }

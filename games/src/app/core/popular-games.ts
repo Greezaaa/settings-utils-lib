@@ -19,7 +19,11 @@ export function popularGames(
 
 export const MOST_PLAYED_LIMIT = 4;
 
-export function toppedUp(mostPlayed: readonly GameSlug[], all: readonly GameSlug[], count = MOST_PLAYED_LIMIT): GameSlug[] {
+export function toppedUp(
+  mostPlayed: readonly GameSlug[],
+  all: readonly GameSlug[],
+  count = MOST_PLAYED_LIMIT,
+): GameSlug[] {
   return [...new Set([...mostPlayed, ...all])].slice(0, count);
 }
 

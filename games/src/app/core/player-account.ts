@@ -1,5 +1,5 @@
 import { afterNextRender, computed, DOCUMENT, effect, inject, Injectable, signal, untracked } from '@angular/core';
-import { ApiService, credentialedFetch, field, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
+import { ApiService, credentialedFetch, field, isNumber, jsonInit, READ_TIMEOUT_MS, SEND_TIMEOUT_MS } from './api-url';
 import { Connection } from './connection';
 import { FavoriteGames, readFavorites } from './favorite-games';
 import { FeatureFlags } from './feature-flags';
@@ -23,25 +23,6 @@ export interface Account {
 
 const SIGN_IN_PATH = '/v1/apps/games/account';
 
-/** Players shown per leaderboard; keep in sync with LEADERBOARD_SIZE in api/src/accounts/results.service.ts */
-export const LEADERBOARD_SIZE = 10;
-
-export interface LeaderboardEntry {
-  readonly place: number;
-  readonly screenName: string | null;
-  readonly plays: number;
-  readonly best: number;
-  readonly isMe: boolean;
-}
-
-export interface Leaderboard {
-  readonly key: string;
-  readonly players: number;
-  readonly plays: number;
-  readonly entries: readonly LeaderboardEntry[];
-  readonly me: LeaderboardEntry | null;
-}
-
 export const ACCOUNT_PROBLEMS = [
   'invalid',
   'wrong-login',
@@ -56,37 +37,15 @@ export const ACCOUNT_PROBLEMS = [
   'offline',
 ] as const;
 export type AccountProblem = (typeof ACCOUNT_PROBLEMS)[number];
-const isAccountProblem = (value: unknown): value is AccountProblem => ACCOUNT_PROBLEMS.some((problem) => problem === value);
+const isAccountProblem = (value: unknown): value is AccountProblem =>
+  ACCOUNT_PROBLEMS.some((problem) => problem === value);
 
 export type AccountAnswer = 'done' | AccountProblem;
-
-const isNumber = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 
 function parseResult(item: unknown): AccountResult[] {
   const [game, key, plays, best] = ['game', 'key', 'plays', 'best'].map((name) => field(item, name));
   return typeof game === 'string' && isResultGame(game) && typeof key === 'string' && isNumber(plays) && isNumber(best)
     ? [{ game, key, plays, value: best }]
-    : [];
-}
-
-function parseEntry(item: unknown): LeaderboardEntry[] {
-  const [place, screenName, plays, best, isMe] = ['place', 'screenName', 'plays', 'best', 'isMe'].map((name) =>
-    field(item, name),
-  );
-  return isNumber(place) &&
-    (typeof screenName === 'string' || screenName === null) &&
-    isNumber(plays) &&
-    isNumber(best) &&
-    typeof isMe === 'boolean'
-    ? [{ place, screenName, plays, best, isMe }]
-    : [];
-}
-
-function parseBoard(item: unknown): Leaderboard[] {
-  const [key, players, plays, entries] = ['key', 'players', 'plays', 'entries'].map((name) => field(item, name));
-  const [me] = parseEntry(field(item, 'me'));
-  return typeof key === 'string' && isNumber(players) && isNumber(plays) && Array.isArray(entries)
-    ? [{ key, players, plays, entries: entries.flatMap((entry: unknown) => parseEntry(entry)), me: me ?? null }]
     : [];
 }
 
@@ -148,7 +107,9 @@ export class PlayerAccount {
   }
 
   signIn(loginName: string, password: string): Promise<AccountAnswer> {
-    return this.startSession(this.fetch(`${SIGN_IN_PATH}/login`, jsonInit('POST', { loginName, password }), SEND_TIMEOUT_MS, 'auth'));
+    return this.startSession(
+      this.fetch(`${SIGN_IN_PATH}/login`, jsonInit('POST', { loginName, password }), SEND_TIMEOUT_MS, 'auth'),
+    );
   }
 
   reset(secret: string, password: string): Promise<AccountAnswer> {
@@ -178,7 +139,9 @@ export class PlayerAccount {
   }
 
   changePassword(current: string, next: string): Promise<AccountAnswer> {
-    return this.answer(this.fetch(`${SIGN_IN_PATH}/password`, jsonInit('POST', { current, next }), SEND_TIMEOUT_MS, 'auth'));
+    return this.answer(
+      this.fetch(`${SIGN_IN_PATH}/password`, jsonInit('POST', { current, next }), SEND_TIMEOUT_MS, 'auth'),
+    );
   }
 
   forgot(email: string): Promise<AccountAnswer> {
@@ -186,7 +149,9 @@ export class PlayerAccount {
   }
 
   async remove(password: string): Promise<AccountAnswer> {
-    const answer = await this.answer(this.fetch(SIGN_IN_PATH, jsonInit('DELETE', { password }), SEND_TIMEOUT_MS, 'auth'));
+    const answer = await this.answer(
+      this.fetch(SIGN_IN_PATH, jsonInit('DELETE', { password }), SEND_TIMEOUT_MS, 'auth'),
+    );
     if (answer === 'done') {
       this.setAccount(null);
     }
@@ -207,11 +172,6 @@ export class PlayerAccount {
     if (this.isSignedIn()) {
       void this.fetch('/v1/account/results', jsonInit('POST', { game, key, value }), SEND_TIMEOUT_MS);
     }
-  }
-
-  async leaderboards(game: ResultGame): Promise<Leaderboard[] | null> {
-    const boards = field(await this.read(`/v1/leaderboard/${game}`), 'boards');
-    return Array.isArray(boards) ? boards.flatMap((board: unknown) => parseBoard(board)) : null;
   }
 
   async roomNamePass(): Promise<string | null> {
@@ -270,7 +230,9 @@ export class PlayerAccount {
       showOnLeaderboard: field(body, 'showOnLeaderboard') === true,
       nameApproved: field(body, 'nameApproved') === true,
     });
-    this.favorites.set([...new Set([...this.favorites.games(), ...accountFavorites])].filter((game) => isGameSlug(game)));
+    this.favorites.set(
+      [...new Set([...this.favorites.games(), ...accountFavorites])].filter((game) => isGameSlug(game)),
+    );
     const local = RESULT_GAME_SLUGS.flatMap((game) => storedBests(game, readStored(RESULT_GAMES[game].storage)));
     const bests = bestsToSend(local, accountResults);
     if (bests.length > 0) {
@@ -303,7 +265,12 @@ export class PlayerAccount {
     return response?.ok ? response.json() : null;
   }
 
-  private fetch(path: string, init: RequestInit, timeoutMs: number, service: ApiService = 'api'): Promise<Response | null> {
+  private fetch(
+    path: string,
+    init: RequestInit,
+    timeoutMs: number,
+    service: ApiService = 'api',
+  ): Promise<Response | null> {
     return credentialedFetch(this.document, path, init, timeoutMs, service);
   }
 }

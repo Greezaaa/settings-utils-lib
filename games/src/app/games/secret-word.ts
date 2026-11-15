@@ -40,9 +40,10 @@ export function getSecretLevel(id: SecretLevelId): SecretLevel {
 
 export function secretWords(bank: WordBank, level: SecretLevel, hints: HintsId): SecretWord[] {
   const fits = (word: string): boolean => Array.from(word).length === level.length;
-  const words: SecretWord[] = hints === 'hints'
-    ? bank.pictures.map(({ word, emoji }) => ({ word, picture: emoji }))
-    : [...bank.pictures.map(({ word }) => word), ...bank.words].map((word) => ({ word, picture: null }));
+  const words: SecretWord[] =
+    hints === 'hints'
+      ? bank.pictures.map(({ word, emoji }) => ({ word, picture: emoji }))
+      : [...bank.pictures.map(({ word }) => word), ...bank.words].map((word) => ({ word, picture: null }));
   const byWord = new Map(words.filter(({ word }) => fits(word)).map((secret) => [secret.word, secret]));
   return [...byWord.values()];
 }
@@ -65,7 +66,10 @@ export function markGuess(guess: readonly string[], secret: readonly string[]): 
   return marks;
 }
 
-export function keyMarks(guesses: readonly (readonly string[])[], secret: readonly string[]): ReadonlyMap<string, LetterMark> {
+export function keyMarks(
+  guesses: readonly (readonly string[])[],
+  secret: readonly string[],
+): ReadonlyMap<string, LetterMark> {
   const best = new Map<string, LetterMark>();
   for (const guess of guesses) {
     markGuess(guess, secret).forEach((mark, index) => {

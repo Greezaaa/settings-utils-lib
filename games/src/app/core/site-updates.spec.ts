@@ -26,12 +26,27 @@ describe('site updates', () => {
 
   it('groups news items into updates by version, oldest first', () => {
     const items: NewsItem[] = [
-      { version: 2, published: '2026-02-01T10:00:00Z', privacy: false, change: { kind: 'game', text: text('Two'), game: 'math-games' } },
+      {
+        version: 2,
+        published: '2026-02-01T10:00:00Z',
+        privacy: false,
+        change: { kind: 'game', text: text('Two'), game: 'math-games' },
+      },
       { version: 1, published: '2026-01-01T10:00:00Z', privacy: true, change: { kind: 'feature', text: text('One') } },
-      { version: 2, published: '2026-02-01T10:00:00Z', privacy: false, change: { kind: 'settings', text: text('Three') } },
+      {
+        version: 2,
+        published: '2026-02-01T10:00:00Z',
+        privacy: false,
+        change: { kind: 'settings', text: text('Three') },
+      },
     ];
     expect(groupNews(items)).toEqual([
-      { version: 1, published: '2026-01-01T10:00:00Z', privacy: true, changes: [{ kind: 'feature', text: text('One') }] },
+      {
+        version: 1,
+        published: '2026-01-01T10:00:00Z',
+        privacy: true,
+        changes: [{ kind: 'feature', text: text('One') }],
+      },
       {
         version: 2,
         published: '2026-02-01T10:00:00Z',

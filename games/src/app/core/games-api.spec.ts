@@ -95,7 +95,7 @@ describe('GamesApi', () => {
     expect(parseNewsItem({ version: 1, published: 'x', kind: 'gossip', text: { es: 'Hola' } })).toEqual([]);
   });
 
-  it('reads game switches and categories, keeping known games and categories only', async () => {
+  it('reads the site settings in one request shared by everyone asking at once, keeping known games, categories and features only', async () => {
     vi.stubGlobal(
       'fetch',
       answer({
@@ -108,12 +108,26 @@ describe('GamesApi', () => {
           { game: 'word-search', categories: ['sports'] },
           { game: 'chess', categories: ['puzzles'] },
         ],
+        features: [
+          { feature: 'rooms', enabled: true },
+          { feature: 'gossip', enabled: true },
+        ],
+        newsVersion: 'abc',
       }),
     );
-    expect(await api.gameSettings()).toEqual({
-      switches: [{ game: 'hit-the-note', enabled: false }],
-      categories: [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }],
-      thumbnails: [],
+    const [first, second] = await Promise.all([api.site(), api.site()]);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(second).toBe(first);
+    expect(first).toEqual({
+      games: {
+        switches: [{ game: 'hit-the-note', enabled: false }],
+        categories: [{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }],
+        thumbnails: [],
+      },
+      features: [{ feature: 'rooms', enabled: true }],
+      newsVersion: 'abc',
     });
+    vi.stubGlobal('fetch', answer({ games: [] }));
+    expect(await api.site()).toBeNull();
   });
 });

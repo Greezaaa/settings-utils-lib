@@ -21,7 +21,7 @@ export class AdminWordReports {
 
   protected readonly statuses = REPORT_STATUSES;
   protected readonly status = signal<ReportStatus>('pending');
-  protected readonly list = new PagedList(offset => this.admin.wordReports(this.status(), offset));
+  protected readonly list = new PagedList((offset) => this.admin.wordReports(this.status(), offset));
   private readonly notifySaveFailed = saveFailedNotice();
   private readonly features = inject(FeatureFlags);
   protected readonly t = inject(SiteLanguage).messages;
@@ -33,7 +33,12 @@ export class AdminWordReports {
     const { admin } = this.t();
     return [
       { key: 'word', header: admin.reportColumns.word, sortable: true },
-      { key: 'language', header: admin.reportColumns.language, sortable: true, format: language => language.toUpperCase() },
+      {
+        key: 'language',
+        header: admin.reportColumns.language,
+        sortable: true,
+        format: (language) => language.toUpperCase(),
+      },
       { key: 'reports', header: admin.reportColumns.reports, sortable: true, align: 'end' },
       { key: 'firstReported', header: admin.reportColumns.firstReported, sortable: true },
     ];
@@ -41,8 +46,8 @@ export class AdminWordReports {
   protected readonly actions = computed<readonly SuTableAction<WordReport>[]>(() => {
     const { admin } = this.t();
     return [
-      { id: 'approved', label: admin.keepOut, hidden: report => report.status === 'approved' },
-      { id: 'rejected', label: admin.letCount, hidden: report => report.status === 'rejected' },
+      { id: 'approved', label: admin.keepOut, hidden: (report) => report.status === 'approved' },
+      { id: 'rejected', label: admin.letCount, hidden: (report) => report.status === 'rejected' },
     ];
   });
 

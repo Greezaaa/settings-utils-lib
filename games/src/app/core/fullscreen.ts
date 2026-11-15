@@ -17,7 +17,9 @@ export class Fullscreen {
   constructor() {
     afterNextRender(() => {
       this.ready.set(true);
-      this.document.addEventListener('fullscreenchange', () => this.native.set(this.document.fullscreenElement !== null));
+      this.document.addEventListener('fullscreenchange', () =>
+        this.native.set(this.document.fullscreenElement !== null),
+      );
       this.document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && this.filled()) {
           this.filled.set(false);

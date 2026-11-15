@@ -3,6 +3,7 @@ import { SuDialogService } from '@su-labs/dialog';
 import { SuNotificationService } from '@su-labs/notifications';
 import { SuTableColumns, SuTableComponent } from '@su-labs/table';
 import { AdminApi, GameFeedback, STATS_PERIODS, StatsPeriod } from '../../../core/admin-api';
+import { AdminSession } from '../../../core/admin-session';
 import { FeatureFlags } from '../../../core/feature-flags';
 import { GAMES, GameSlug } from '../../../core/games';
 import { GamePlays } from '../../../core/games-api';
@@ -28,7 +29,8 @@ interface PlaysRow {
   styleUrl: '../admin.scss',
 })
 export class AdminPlays {
-  protected readonly admin = inject(AdminApi);
+  private readonly admin = inject(AdminApi);
+  protected readonly session = inject(AdminSession);
   private readonly notifications = inject(SuNotificationService);
   private readonly dialog = inject(SuDialogService);
   private readonly notifySaveFailed = saveFailedNotice();
@@ -60,15 +62,17 @@ export class AdminPlays {
   protected readonly columns = computed<SuTableColumns<PlaysRow>>(() => {
     const { admin, games } = this.t();
     return [
-      { key: 'game', header: admin.playsColumns.game, sortable: true, format: game => games[game].name },
+      { key: 'game', header: admin.playsColumns.game, sortable: true, format: (game) => games[game].name },
       { key: 'plays', header: admin.playsColumns.plays, sortable: true, align: 'end' },
       { key: 'up', header: '👍', sortable: true, align: 'end' },
       { key: 'down', header: '👎', sortable: true, align: 'end' },
       {
         key: 'reasons',
         header: admin.playsColumns.reasons,
-        format: reasons =>
-          reasons.length === 0 ? '—' : reasons.map(([reason, count]) => `${this.reasonName(reason)} (${count})`).join(', '),
+        format: (reasons) =>
+          reasons.length === 0
+            ? '—'
+            : reasons.map(([reason, count]) => `${this.reasonName(reason)} (${count})`).join(', '),
       },
     ];
   });

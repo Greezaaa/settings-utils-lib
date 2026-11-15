@@ -18,6 +18,10 @@ export function field(value: unknown, key: string): unknown {
   return typeof value === 'object' && value !== null ? Reflect.get(value, key) : undefined;
 }
 
+export const wireField = <T extends object>(value: unknown, key: keyof T & string): unknown => field(value, key);
+
+export const isNumber = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
+
 export const jsonInit = (method: string, body: object): RequestInit => ({
   method,
   body: JSON.stringify(body),
@@ -32,7 +36,11 @@ export async function credentialedFetch(
   service: ApiService = 'api',
 ): Promise<Response | null> {
   try {
-    return await fetch(apiUrl(document, path, service), { ...init, credentials: 'include', signal: AbortSignal.timeout(timeoutMs) });
+    return await fetch(apiUrl(document, path, service), {
+      ...init,
+      credentials: 'include',
+      signal: AbortSignal.timeout(timeoutMs),
+    });
   } catch {
     return null;
   }

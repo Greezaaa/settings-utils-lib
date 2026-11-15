@@ -3,7 +3,8 @@ import { z } from 'zod';
 import { SuperAdminGuard } from '../security/admin.guard.js';
 import type { FeatureId } from '../shared/catalog.js';
 import { featureSchema } from '../shared/catalog.js';
-import { FeatureFlagsService, FeatureSwitch } from './feature-flags.service.js';
+import type { FeatureSwitch } from '../contracts/site.contract.js';
+import { FeatureFlagsService } from './feature-flags.service.js';
 
 const switchSchema = z.object({ enabled: z.boolean() });
 type SwitchInput = z.infer<typeof switchSchema>;

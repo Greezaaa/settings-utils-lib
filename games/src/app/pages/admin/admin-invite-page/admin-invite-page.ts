@@ -1,6 +1,7 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminApi } from '../../../core/admin-api';
+import { AdminSession } from '../../../core/admin-session';
 import { ADMIN_PATH } from '../../../core/links';
 import { MIN_PASSWORD_LENGTH } from '../../../core/passwords';
 import { RevealPassword } from '../../../shared/reveal-password';
@@ -19,6 +20,7 @@ export class AdminInvitePage {
   readonly secret = input.required<string>();
 
   private readonly admin = inject(AdminApi);
+  private readonly session = inject(AdminSession);
   private readonly router = inject(Router);
   protected readonly minLength = MIN_PASSWORD_LENGTH;
   protected readonly step = signal<Step>('checking');
@@ -39,7 +41,7 @@ export class AdminInvitePage {
       return;
     }
     this.step.set('saving');
-    if (await this.admin.acceptInvite(this.secret(), password.value)) {
+    if (await this.session.acceptInvite(this.secret(), password.value)) {
       await this.router.navigateByUrl(`/${ADMIN_PATH}`);
     } else {
       this.step.set('failed');

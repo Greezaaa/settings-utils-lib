@@ -14,7 +14,10 @@ export function toneOf(colour: string | undefined): Tone {
   return (0.299 * red + 0.587 * green + 0.114 * blue) / 255 >= 0.5 ? 'light' : 'dark';
 }
 
-export function byTone<T>(items: readonly T[], backgroundOf: (item: T) => string | undefined): Readonly<Record<Tone, T[]>> {
+export function byTone<T>(
+  items: readonly T[],
+  backgroundOf: (item: T) => string | undefined,
+): Readonly<Record<Tone, T[]>> {
   return {
     light: items.filter((item) => toneOf(backgroundOf(item)) === 'light'),
     dark: items.filter((item) => toneOf(backgroundOf(item)) === 'dark'),

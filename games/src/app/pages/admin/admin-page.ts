@@ -1,5 +1,5 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { AdminApi } from '../../core/admin-api';
+import { AdminSession } from '../../core/admin-session';
 import { GameAvailability } from '../../core/game-availability';
 import { wasSignedIn } from '../../core/session-hint';
 import { AdminAccount } from './admin-account/admin-account';
@@ -24,13 +24,27 @@ const SUPER_TABS: readonly Tab[] = ['games', 'news', 'errors', 'team'];
 
 @Component({
   selector: 'app-admin-page',
-  imports: [TranslatePipe, EmailHint, RevealPassword, ScrollToActive, AdminAccount, AdminErrors, AdminGames, AdminNewsTab, AdminPlayers, AdminPlays, AdminSuggestions, AdminTeam, AdminWordReports],
+  imports: [
+    TranslatePipe,
+    EmailHint,
+    RevealPassword,
+    ScrollToActive,
+    AdminAccount,
+    AdminErrors,
+    AdminGames,
+    AdminNewsTab,
+    AdminPlayers,
+    AdminPlays,
+    AdminSuggestions,
+    AdminTeam,
+    AdminWordReports,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-page.html',
   styleUrls: ['../../shared/utility-page.scss', './admin.scss'],
 })
 export class AdminPage {
-  protected readonly admin = inject(AdminApi);
+  protected readonly admin = inject(AdminSession);
   private readonly availability = inject(GameAvailability);
 
   protected readonly signIn = signal<SignIn>('restoring');

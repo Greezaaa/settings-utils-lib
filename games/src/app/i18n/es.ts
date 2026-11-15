@@ -39,11 +39,10 @@ const ANIMALS = [
 ];
 
 export const spanish = (gender: WordGender): SiteMessages => ({
-
   answers: {
     right: '¡Correcto!',
     wrong: 'Casi',
-    wrongWith: answer => `Casi: era ${answer}`,
+    wrongWith: (answer) => `Casi: era ${answer}`,
   },
 
   site: {
@@ -130,7 +129,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     projectLinks: 'Enlaces del proyecto',
     privacyNotice:
       'Usamos cookies solo para guardar tus preferencias, como el tema, el tamaño del texto y el idioma. Nunca vendemos ni compartimos tus datos con nadie. ¡Cuidamos tu privacidad!',
-    lastUpdate: moment => `Última actualización: ${moment}`,
+    lastUpdate: (moment) => `Última actualización: ${moment}`,
     noticeOk: 'Vale',
     noticeLater: 'Luego',
     updateReady: 'Hay una nueva versión de los juegos.',
@@ -148,8 +147,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'Minijuegos gratuitos para que los niños entrenen la lógica, la memoria y la rapidez. Sin registro, para ordenadores, tabletas y móviles.',
     notFoundTitle: 'Página no encontrada',
     notFoundDescription: 'Esta página no existe.',
-    previewImageAlt:
-      'SG Smart Games: Juegos inteligentes para mentes despiertas',
+    previewImageAlt: 'SG Smart Games: Juegos inteligentes para mentes despiertas',
   },
 
   games: {
@@ -169,8 +167,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     },
     'climb-tower': {
       name: 'Sube la torre',
-      summary:
-        'Cada respuesta correcta te sube un piso; si fallas, te caes. ¿Hasta dónde llegarás?',
+      summary: 'Cada respuesta correcta te sube un piso; si fallas, te caes. ¿Hasta dónde llegarás?',
       subtitle: 'verdadero o falso, o elige la operación correcta, piso a piso',
       intro: 'Un juego de matemáticas para niños.',
     },
@@ -232,8 +229,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     },
     'sliding-puzzle': {
       name: 'Puzle deslizante',
-      summary:
-        'Desliza las piezas al hueco hasta que las líneas vuelvan a unirse. Un dibujo nuevo en cada partida.',
+      summary: 'Desliza las piezas al hueco hasta que las líneas vuelvan a unirse. Un dibujo nuevo en cada partida.',
       subtitle: 'desliza las piezas y une las líneas',
       intro: 'Un puzle para niños.',
     },
@@ -246,8 +242,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     },
     'place-pieces': {
       name: 'Coloca las piezas',
-      summary:
-        'Arrastra las piezas del dibujo a su sitio. Míralo o reconstrúyelo de memoria.',
+      summary: 'Arrastra las piezas del dibujo a su sitio. Míralo o reconstrúyelo de memoria.',
       subtitle: 'arrastra las piezas y reconstruye el dibujo',
       intro: 'Un puzle de imágenes para niños.',
     },
@@ -272,10 +267,16 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     lead: 'Minijuegos para entrenar la lógica, la memoria y la rapidez.',
     rule: 'Son gratis, sin registro y funcionan en ordenadores, tabletas y móviles.',
     whatsNewTitle: 'Novedades',
-    updateKinds: { game: 'Juegos', language: 'Idiomas', settings: 'Ajustes', feature: 'Funciones', privacy: 'Privacidad' },
+    updateKinds: {
+      game: 'Juegos',
+      language: 'Idiomas',
+      settings: 'Ajustes',
+      feature: 'Funciones',
+      privacy: 'Privacidad',
+    },
     showMore: 'Ver más novedades',
     showFewer: 'Ver menos',
-    categoryGames: games => (games === 1 ? '1 juego' : `${games} juegos`),
+    categoryGames: (games) => (games === 1 ? '1 juego' : `${games} juegos`),
     gamesTitle: 'Juegos',
     searchLabel: 'Buscar juegos',
     searchPlaceholder: 'Busca un juego…',
@@ -301,13 +302,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     goalSmaller: 'Ver el objetivo más pequeño',
     pictureGroup: 'Imagen',
     pictureModes: { lines: 'Líneas', drawing: 'Dibujo' },
-    moves: moves => `Movimientos ${moves}`,
-    tile: number => `Pieza ${number}`,
+    moves: (moves) => `Movimientos ${moves}`,
+    tile: (number) => `Pieza ${number}`,
     newPuzzle: 'Nuevo puzle',
     solved: '¡Muy bien!',
-    solvedIn: (moves, time) =>
-      `Terminado en ${moves} ${moves === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
-    best: moves => `Récord: ${moves} movimientos`,
+    solvedIn: (moves, time) => `Terminado en ${moves} ${moves === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
+    best: (moves) => `Récord: ${moves} movimientos`,
     newRecord: '¡Nuevo récord!',
     keys: 'Teclado: las flechas mueven una pieza al hueco',
   },
@@ -334,7 +334,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     inPlace: (placed, total) => `${placed} de ${total} en su sitio`,
     newGame: 'Nueva partida',
     solved: '¡Muy bien!',
-    best: time => `Récord: ${time}`,
+    best: (time) => `Récord: ${time}`,
     newRecord: '¡Nuevo récord!',
   },
 
@@ -346,10 +346,9 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'En el modo Memoria, fíjate bien: ¡el dibujo se esconde al pulsar Lista!',
     ),
     board: 'Imagen',
-    tile: number => `Cuadrado ${number}`,
-    turns: turns => `Giros ${turns}`,
-    solvedIn: (turns, time) =>
-      `Terminado en ${turns} ${turns === 1 ? 'giro' : 'giros'} y ${time}`,
+    tile: (number) => `Cuadrado ${number}`,
+    turns: (turns) => `Giros ${turns}`,
+    solvedIn: (turns, time) => `Terminado en ${turns} ${turns === 1 ? 'giro' : 'giros'} y ${time}`,
   },
 
   placePieces: {
@@ -361,14 +360,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     ),
     board: 'Imagen',
     piece: (number, picked) => `Pieza ${number}${picked ? ', elegida' : ''}`,
-    swaps: swaps => `Movimientos ${swaps}`,
-    solvedIn: (swaps, time) =>
-      `Terminado en ${swaps} ${swaps === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
+    swaps: (swaps) => `Movimientos ${swaps}`,
+    solvedIn: (swaps, time) => `Terminado en ${swaps} ${swaps === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
   },
 
   pictures: {
-    family:
-      'Dibujo infantil de una madre y su hija de la mano, con el sol, la luna y nubes',
+    family: 'Dibujo infantil de una madre y su hija de la mano, con el sol, la luna y nubes',
   },
 
   privacy: {
@@ -464,8 +461,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'Ni anuncios ni seguimiento',
       'No vendemos ni compartimos nada con nadie',
     ],
-    microphone:
-      'El micrófono solo se usa mientras juegas a Cántala, y el sonido nunca se graba ni se envía',
+    microphone: 'El micrófono solo se usa mientras juegas a Cántala, y el sonido nunca se graba ni se envía',
     inDevelopment: '(en desarrollo)',
     accountsTitle: 'Cuentas',
     accountsLead:
@@ -487,8 +483,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     choiceOff:
       'No se guarda nada: los ajustes vuelven a los de siempre en cada visita. Solo se recuerda esta elección.',
     deleteSaved: 'Borrar mis datos guardados',
-    deleted:
-      'Hecho: se ha borrado todo lo que esta web guardaba en este dispositivo.',
+    deleted: 'Hecho: se ha borrado todo lo que esta web guardaba en este dispositivo.',
   },
 
   notFound: {
@@ -506,12 +501,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
 
   page: {
     section: 'Juegos inteligentes',
-    ages: age => `Desde ${age} años`,
+    ages: (age) => `Desde ${age} años`,
     new: 'Nuevo',
     popular: 'Más jugado',
     hidden: 'Oculto',
-    addFavorite: game => `Añadir ${game} a favoritos`,
-    removeFavorite: game => `Quitar ${game} de favoritos`,
+    addFavorite: (game) => `Añadir ${game} a favoritos`,
+    removeFavorite: (game) => `Quitar ${game} de favoritos`,
     title: 'Juegos de matemáticas',
     lead: 'Di si el resultado es verdadero o falso, marca tú el resultado o encuentra los signos que faltan. Con tiempo, responde antes de que se acabe la barra.',
     rule: '¡No falles, o se acaba la partida!',
@@ -574,22 +569,22 @@ export const spanish = (gender: WordGender): SiteMessages => ({
         summary: 'Los cuatro signos; faltan dos o tres',
       },
     },
-    bestScore: best => `Mejor puntuación: ${best}`,
+    bestScore: (best) => `Mejor puntuación: ${best}`,
     start: 'Empezar',
   },
 
   playing: {
-    seconds: seconds => `${seconds} s`,
+    seconds: (seconds) => `${seconds} s`,
     noTimer: 'Sin tiempo',
-    score: score => `Puntos ${score}`,
+    score: (score) => `Puntos ${score}`,
   },
 
   over: {
     outOfTime: 'Se acabó el tiempo',
     notQuite: '¡Casi!',
-    correctAnswers: score => (score === 1 ? 'acierto' : 'aciertos'),
+    correctAnswers: (score) => (score === 1 ? 'acierto' : 'aciertos'),
     newRecord: 'nuevo récord',
-    best: best => `récord ${best}`,
+    best: (best) => `récord ${best}`,
     youAnswered: 'Tu respuesta',
     rightAnswer: 'La respuesta correcta era',
     playAgain: 'Jugar otra vez',
@@ -599,7 +594,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
   trueOrFalse: {
     true: 'Verdadero',
     false: 'Falso',
-    given: saysTrue => (saysTrue ? 'verdadero' : 'falso'),
+    given: (saysTrue) => (saysTrue ? 'verdadero' : 'falso'),
     keys: 'Teclado: ← falso, → verdadero',
   },
 
@@ -653,8 +648,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     savedSent: 'Tu idea guardada se ha enviado. ¡Gracias!',
     tooMany: 'Has enviado muchas ideas en poco tiempo. Espera un poco y vuelve a intentarlo más tarde.',
     refused: 'Tu idea no se ha podido aceptar. Revisa el texto y vuelve a intentarlo.',
-    sendsLeft: (sends) => (sends === 1 ? 'Puedes enviar 1 idea más en esta hora.' : `Puedes enviar ${sends} ideas más en esta hora.`),
-    waitMinutes: (minutes) => (minutes === 1 ? 'Has enviado 3 ideas en esta hora. Podrás enviar otra dentro de 1 minuto.' : `Has enviado 3 ideas en esta hora. Podrás enviar otra dentro de ${minutes} minutos.`),
+    sendsLeft: (sends) =>
+      sends === 1 ? 'Puedes enviar 1 idea más en esta hora.' : `Puedes enviar ${sends} ideas más en esta hora.`,
+    waitMinutes: (minutes) =>
+      minutes === 1
+        ? 'Has enviado 3 ideas en esta hora. Podrás enviar otra dentro de 1 minuto.'
+        : `Has enviado 3 ideas en esta hora. Podrás enviar otra dentro de ${minutes} minutos.`,
   },
 
   feedback: {
@@ -706,16 +705,14 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       hard: { name: 'Difícil', summary: '10 letras' },
     },
     timers: {
-      timer:
-        'Termina cada palabra antes de que se acabe la barra; en Forma palabras, busca hasta que se acabe',
+      timer: 'Termina cada palabra antes de que se acabe la barra; en Forma palabras, busca hasta que se acabe',
       'no-timer': 'Sin prisa',
     },
     hintsGroup: 'Pistas',
     hints: {
       hints: {
         name: 'Con pistas',
-        summary:
-          'Tras 2 fallos se ilumina la siguiente letra; tras 5 y 10, se colocan las primeras letras',
+        summary: 'Tras 2 fallos se ilumina la siguiente letra; tras 5 y 10, se colocan las primeras letras',
       },
       'no-hints': { name: 'Sin pistas', summary: forGender(gender, 'Resuélvelo tú solo', 'Resuélvelo tú sola') },
     },
@@ -726,15 +723,14 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'word-builder': 'Toca letras para formar una palabra y pulsa Comprobar',
     },
     progress: (word, total) => `Palabra ${word} de ${total}`,
-    mistakes: mistakes => `Fallos ${mistakes}`,
+    mistakes: (mistakes) => `Fallos ${mistakes}`,
     gap: 'Letra que falta',
     letters: 'Letras',
     answer: 'Tu palabra',
     delete: 'Borrar',
     check: 'Comprobar',
     keys: 'También puedes escribir las letras con el teclado; Retroceso quita la última',
-    builderKeys:
-      'Escribe letras con el teclado: Retroceso borra, Intro comprueba',
+    builderKeys: 'Escribe letras con el teclado: Retroceso borra, Intro comprueba',
     found: (found, total) => `${found} de ${total} encontradas`,
     checks: {
       found: '¡Bien encontrada!',
@@ -747,8 +743,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     dictionary: {
       loading: 'Descargando el diccionario…',
       why: 'La primera vez que juegas descargamos el diccionario de tu idioma (unos 100 KB) para comprobar tus palabras. Tu navegador lo guarda para la próxima vez.',
-      failed:
-        'El diccionario no se ha descargado, así que solo cuentan las palabras ocultas.',
+      failed: 'El diccionario no se ha descargado, así que solo cuentan las palabras ocultas.',
       credit: 'Diccionario: FrequencyWords (Hermit Dave), CC BY-SA 4.0',
     },
     report: 'Denunciar esta palabra',
@@ -756,8 +751,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     newLetters: 'Otras letras',
     allFound: '¡Las has encontrado todas!',
     solved: '¡Muy bien!',
-    summary: (words, mistakes) =>
-      `${words} palabras · ${mistakes} ${mistakes === 1 ? 'fallo' : 'fallos'}`,
+    summary: (words, mistakes) => `${words} palabras · ${mistakes} ${mistakes === 1 ? 'fallo' : 'fallos'}`,
   },
 
   measureIt: {
@@ -825,7 +819,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     },
     aim: { more: 'Un poco más ↑', less: 'Un poco menos ↓' },
     whichAngle: '¿Cuántos grados?',
-    makeAngle: angle => `Forma ${angle}°`,
+    makeAngle: (angle) => `Forma ${angle}°`,
     howFull: '¿Cuánto está lleno?',
     whichNumber: '¿Qué número es x?',
     yourAnswer: 'Tu respuesta',
@@ -847,16 +841,14 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       },
       'which-one': {
         name: '¿Cuál es?',
-        summary:
-          'Salta a la plataforma cuya operación da el número de la caja.',
+        summary: 'Salta a la plataforma cuya operación da el número de la caja.',
       },
     },
     answers: 'Respuestas',
-    floors: floors => `Piso ${floors}`,
-    best: floors => `Récord: piso ${floors}`,
+    floors: (floors) => `Piso ${floors}`,
+    best: (floors) => `Récord: piso ${floors}`,
     fell: '¡Te caíste!',
-    summary: floors =>
-      floors === 1 ? '1 piso subido' : `${floors} pisos subidos`,
+    summary: (floors) => (floors === 1 ? '1 piso subido' : `${floors} pisos subidos`),
   },
 
   howMany: {
@@ -886,7 +878,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     cell: (row, column, symbol) => `Fila ${row}, columna ${column}: ${symbol || 'vacía'}`,
     check: 'Comprobar',
     done: '¡Tablero completo!',
-    summary: time => `En ${time}`,
+    summary: (time) => `En ${time}`,
     newGame: 'Nueva partida',
     games: {
       'letter-sudoku': {
@@ -895,7 +887,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
         board: 'Tablero de letras',
         symbols: 'ABCDEFGHI',
         tray: 'Letras',
-        sizeSummary: letters => `${letters} letras`,
+        sizeSummary: (letters) => `${letters} letras`,
         repeated: 'Las letras en rojo se repiten en su fila, columna o cuadro.',
         noRepeats: '¡De momento no se repite ninguna letra!',
       },
@@ -905,7 +897,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
         board: 'Tablero de números',
         symbols: '123456789',
         tray: 'Números',
-        sizeSummary: numbers => `Números del 1 al ${numbers}`,
+        sizeSummary: (numbers) => `Números del 1 al ${numbers}`,
         repeated: 'Los números en rojo se repiten en su fila, columna o cuadro.',
         noRepeats: '¡De momento no se repite ningún número!',
       },
@@ -925,7 +917,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     cell: (row, column, letter) => `Fila ${row}, columna ${column}: ${letter}`,
     found: (found, total) => `Palabras ${found}/${total}`,
     done: '¡Todas las palabras encontradas!',
-    summary: time => `En ${time}`,
+    summary: (time) => `En ${time}`,
     newGame: 'Nueva partida',
   },
 
@@ -948,10 +940,10 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     keyboard: 'Teclado',
     erase: 'Borrar una letra',
     send: 'Probar',
-    tooShort: letters => `La palabra tiene ${letters} letras`,
-    triesLeft: tries => (tries === 1 ? 'Queda 1 intento' : `Quedan ${tries} intentos`),
+    tooShort: (letters) => `La palabra tiene ${letters} letras`,
+    triesLeft: (tries) => (tries === 1 ? 'Queda 1 intento' : `Quedan ${tries} intentos`),
     won: '¡Has encontrado la palabra secreta!',
-    lost: word => `La palabra secreta era ${word}`,
+    lost: (word) => `La palabra secreta era ${word}`,
     newGame: 'Otra palabra',
   },
 
@@ -965,13 +957,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       hard: { name: 'Difícil', summary: '30 cartas · 15 parejas' },
       expert: { name: 'Experto', summary: '36 cartas · 18 parejas' },
     },
-    moves: moves => `Movimientos ${moves}`,
+    moves: (moves) => `Movimientos ${moves}`,
     pairs: (found, total) => `Parejas ${found}/${total}`,
-    card: number => `Carta ${number}, boca abajo`,
+    card: (number) => `Carta ${number}, boca abajo`,
     done: '¡Todas las parejas encontradas!',
-    summary: (moves, time) =>
-      `En ${moves} ${moves === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
-    best: moves => `Récord: ${moves} movimientos`,
+    summary: (moves, time) => `En ${moves} ${moves === 1 ? 'movimiento' : 'movimientos'} y ${time}`,
+    best: (moves) => `Récord: ${moves} movimientos`,
     newGame: 'Nueva partida',
   },
 
@@ -1004,8 +995,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       },
       expert: {
         name: 'Experto',
-        summary:
-          'Las 12 notas, también los sostenidos · de una en una · afina con mucha precisión',
+        summary: 'Las 12 notas, también los sostenidos · de una en una · afina con mucha precisión',
       },
     },
     instructions: {
@@ -1014,7 +1004,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'sing-it': 'Escucha y luego canta la nota y mantenla',
     },
     progress: (round, total) => `Ronda ${round} de ${total}`,
-    mistakes: mistakes => `Fallos ${mistakes}`,
+    mistakes: (mistakes) => `Fallos ${mistakes}`,
     noteNames: {
       C: 'Do',
       'C#': 'Do♯',
@@ -1040,10 +1030,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     micPrivacy:
       'Tu navegador pedirá permiso para usar el micrófono. El sonido no sale de este dispositivo: nunca se graba ni se envía.',
     micAsking: 'Esperando al micrófono…',
-    micDenied:
-      'El micrófono está bloqueado. Permítelo en tu navegador o salta esta ronda.',
-    micUnavailable:
-      'No hay micrófono en este dispositivo. Puedes saltar las rondas.',
+    micDenied: 'El micrófono está bloqueado. Permítelo en tu navegador o salta esta ronda.',
+    micUnavailable: 'No hay micrófono en este dispositivo. Puedes saltar las rondas.',
     meter: 'Lo cerca que está tu voz de la nota',
     singHints: {
       done: '¡Afinado! ¡Muy bien!',
@@ -1079,23 +1067,32 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       team: 'Equipo',
       account: 'Cuenta',
     },
-    saveFailed:
-      'El cambio no se ha guardado. Revisa la API e inténtalo de nuevo.',
-    errorsHelp: 'Errores de la API y de los navegadores de los visitantes, los últimos primero. Quita uno cuando esté arreglado.',
+    saveFailed: 'El cambio no se ha guardado. Revisa la API e inténtalo de nuevo.',
+    errorsHelp:
+      'Errores de la API y de los navegadores de los visitantes, los últimos primero. Quita uno cuando esté arreglado.',
     noErrors: 'Sin errores. ¡Todo bien!',
     clearErrors: 'Borrar todos',
     confirmClearErrors: '¿Borrar todos los errores del registro?',
     resolveError: 'Arreglado',
-    firstSeen: moment => `Primero: ${moment}`,
+    firstSeen: (moment) => `Primero: ${moment}`,
     errorSources: { api: 'API', site: 'Web' },
-    errorColumns: { when: 'Último', code: 'Código', title: 'Título', problem: 'Problema', page: 'Página', count: 'Veces', actions: 'Acciones' },
+    errorColumns: {
+      when: 'Último',
+      code: 'Código',
+      title: 'Título',
+      problem: 'Problema',
+      page: 'Página',
+      count: 'Veces',
+      actions: 'Acciones',
+    },
     loading: 'Cargando…',
     previewTitle: 'Modo vista previa',
     navLink: 'Admin',
-    gameCategories: game => `Categorías de ${game}`,
+    gameCategories: (game) => `Categorías de ${game}`,
     uploadThumbnail: 'Subir imagen',
     automaticThumbnail: 'Usar automática',
-    newsHelp: 'Las novedades de la página de inicio, las más recientes primero. Escríbelas en español; los demás idiomas son opcionales.',
+    newsHelp:
+      'Las novedades de la página de inicio, las más recientes primero. Escríbelas en español; los demás idiomas son opcionales.',
     addNews: 'Añadir novedad',
     editNews: 'Editar',
     deleteNews: 'Borrar',
@@ -1110,20 +1107,21 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     newsFallback: 'Los idiomas vacíos muestran el texto en español.',
     newsSave: 'Guardar',
     offlineTitle: 'Juego sin conexión en este dispositivo',
-    offlineActive: megabytes => `Activado: los juegos se guardan aquí (${megabytes} MB en total)`,
+    offlineActive: (megabytes) => `Activado: los juegos se guardan aquí (${megabytes} MB en total)`,
     offlineInactive: 'Desactivado: actívalo en el menú de ajustes para guardar aquí los juegos',
-    previewHelp: hiddenBadge =>
+    previewHelp: (hiddenBadge) =>
       `Este navegador muestra todos los juegos, abiertos o no, marcados como «${hiddenBadge}» si están ocultos.`,
     gamesTitle: 'Juegos',
     open: 'Abierto para todos',
     hidden: 'Oculto al público',
-    byDefault: open => `por defecto: ${open ? 'abierto' : 'oculto'}`,
+    byDefault: (open) => `por defecto: ${open ? 'abierto' : 'oculto'}`,
     periodGroup: 'Periodo',
     periods: { all: 'Siempre', day: 'Hoy', week: 'Esta semana', month: 'Este mes', year: 'Este año' },
     resetStats: 'Reiniciar estadísticas',
-    confirmResetStats: '¿Borrar todas las partidas y los 👍/👎 contados hasta ahora, para que las estadísticas empiecen de nuevo hoy? No se puede deshacer.',
+    confirmResetStats:
+      '¿Borrar todas las partidas y los 👍/👎 contados hasta ahora, para que las estadísticas empiecen de nuevo hoy? No se puede deshacer.',
     statsReset: 'Las estadísticas empiezan de nuevo desde hoy.',
-    playsTotal: total => `${total} partidas en total`,
+    playsTotal: (total) => `${total} partidas en total`,
     refresh: 'Actualizar',
     playsColumns: { game: 'Juego', plays: 'Partidas jugadas', reasons: 'Motivos' },
     suggestionStatuses: {
@@ -1133,7 +1131,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     },
     showPicture: 'Ver imagen',
     pictureAlt: 'Imagen enviada con la sugerencia',
-    moveTo: status => `Mover a ${status}`,
+    moveTo: (status) => `Mover a ${status}`,
     delete: 'Borrar',
     confirmDelete: '¿Borrar esta sugerencia y su imagen para siempre?',
     noSuggestions: 'No hay sugerencias aquí.',
@@ -1142,8 +1140,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       approved: 'Bloqueadas',
       rejected: 'Permitidas',
     },
-    reportsHelp:
-      'Una palabra denunciada 3 veces deja de contar en Forma palabras hasta que decidas.',
+    reportsHelp: 'Una palabra denunciada 3 veces deja de contar en Forma palabras hasta que decidas.',
     reportColumns: {
       word: 'Palabra',
       language: 'Idioma',
@@ -1153,13 +1150,14 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     keepOut: 'Bloquear',
     letCount: 'Permitir',
     noWords: 'No hay palabras aquí.',
-    playersHelp: 'Jugadores en las clasificaciones, los más nuevos primero. Cambia un nombre visible grosero por uno neutro, o saca de las clasificaciones a quien tenga puntuaciones inventadas; no podrá deshacerlo.',
+    playersHelp:
+      'Jugadores en las clasificaciones, los más nuevos primero. Cambia un nombre visible grosero por uno neutro, o saca de las clasificaciones a quien tenga puntuaciones inventadas; no podrá deshacerlo.',
     noPlayers: 'Todavía no hay jugadores en las clasificaciones.',
     namesTitle: 'Nombres por revisar',
     namesHelp:
       'Nombres visibles que esperan para mostrarse en las salas; primero los denunciados. Permite un nombre o cambia uno grosero por uno sencillo.',
     noNames: 'No hay nombres esperando.',
-    nameReports: count => `Denunciado ${count} ${count === 1 ? 'vez' : 'veces'}`,
+    nameReports: (count) => `Denunciado ${count} ${count === 1 ? 'vez' : 'veces'}`,
     allowName: 'Permitir',
     playerColumns: { name: 'Nombre visible', boards: 'Clasificaciones', joined: 'Alta' },
     playerShown: 'Visible',
@@ -1170,8 +1168,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     loadMore: 'Cargar más',
     tableLabels: {
       search: 'Buscar',
-      matches: count => (count === 1 ? '1 fila coincide' : `${count} filas coinciden`),
-      noMatches: query => `Ninguna fila coincide con «${query}»`,
+      matches: (count) => (count === 1 ? '1 fila coincide' : `${count} filas coinciden`),
+      noMatches: (query) => `Ninguna fila coincide con «${query}»`,
       searchCleared: 'Búsqueda borrada',
       empty: 'No hay nada',
       actions: 'Acciones',
@@ -1182,13 +1180,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       page: (page, count) => `Página ${page} de ${count}`,
       previousPage: 'Página anterior',
       nextPage: 'Página siguiente',
-      sortedAscending: header => `Ordenado por ${header}, ascendente`,
-      sortedDescending: header => `Ordenado por ${header}, descendente`,
+      sortedAscending: (header) => `Ordenado por ${header}, ascendente`,
+      sortedDescending: (header) => `Ordenado por ${header}, descendente`,
       sortCleared: 'Orden quitado',
     },
     featuresTitle: 'Funciones',
-    featuresHelp:
-      'Las funciones nuevas empiezan desactivadas: pruébalas en vista previa y luego ábrelas a todos.',
+    featuresHelp: 'Las funciones nuevas empiezan desactivadas: pruébalas en vista previa y luego ábrelas a todos.',
     featureNames: {
       rooms: 'Multijugador (salas)',
       'rooms-math-games': 'Matemáticas en salas',
@@ -1227,23 +1224,19 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     addMember: 'Añadir a alguien al equipo',
     roleLabel: 'Rol',
     roleHelp: {
-      moderator:
-        'Lee sugerencias, decide sobre las palabras denunciadas y ve partidas y valoraciones.',
-      tester:
-        'Como un moderador, y además ve en vista previa todos los juegos y funciones, incluso los desactivados.',
+      moderator: 'Lee sugerencias, decide sobre las palabras denunciadas y ve partidas y valoraciones.',
+      tester: 'Como un moderador, y además ve en vista previa todos los juegos y funciones, incluso los desactivados.',
     },
     makeTester: 'Hacer tester',
     makeModerator: 'Hacer moderador',
     startingPassword: 'Contraseña inicial (opcional)',
-    startingPasswordHelp:
-      'Déjala vacía para obtener un enlace de invitación: elegirá su propia contraseña.',
+    startingPasswordHelp: 'Déjala vacía para obtener un enlace de invitación: elegirá su propia contraseña.',
     add: 'Añadir',
     alreadyOnTeam: 'Ya hay alguien en el equipo con ese correo.',
-    inviteFor: email =>
-      `Enlace de invitación para ${email}: cópialo y envíaselo.`,
+    inviteFor: (email) => `Enlace de invitación para ${email}: cópialo y envíaselo.`,
     copy: 'Copiar',
     copied: 'Copiado',
-    inviteExpires: day => `Funciona una sola vez, hasta el ${day}.`,
+    inviteExpires: (day) => `Funciona una sola vez, hasta el ${day}.`,
     roles: {
       super: 'Superadministrador',
       moderator: 'Moderador',
@@ -1259,13 +1252,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     currentPassword: 'Contraseña actual',
     newPassword: 'Nueva contraseña',
     repeatPassword: 'Repite la nueva contraseña',
-    passwordRule: min => `Al menos ${min} caracteres.`,
-    passwordChanged:
-      'Contraseña cambiada. Se ha cerrado la sesión en los demás navegadores con tu cuenta.',
+    passwordRule: (min) => `Al menos ${min} caracteres.`,
+    passwordChanged: 'Contraseña cambiada. Se ha cerrado la sesión en los demás navegadores con tu cuenta.',
     wrongPassword: 'La contraseña actual no es correcta.',
     passwordsDiffer: 'Las dos contraseñas no coinciden.',
     inviteTitle: 'Únete al equipo de administración',
-    inviteLead: email => `Elige una contraseña para ${email}.`,
+    inviteLead: (email) => `Elige una contraseña para ${email}.`,
     acceptInvite: 'Guardar y entrar',
     inviteInvalid: 'Este enlace de invitación ya no funciona. Pide uno nuevo.',
   },
@@ -1281,23 +1273,18 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     codeLabel: 'Código de la sala',
     join: 'Entrar',
     homeTitle: 'Multijugador',
-    homeText:
-      'Hasta 4 jugadores, los mismos ejercicios a la vez. ¿Quién acierta más?',
+    homeText: 'Hasta 4 jugadores, los mismos ejercicios a la vez. ¿Quién acierta más?',
     homeLink: 'Ver las salas',
     errors: {
-      'not-found':
-        'No hay ninguna sala con ese código. Revísalo o pide uno nuevo.',
+      'not-found': 'No hay ninguna sala con ese código. Revísalo o pide uno nuevo.',
       full: 'Esa sala está llena: ya tiene 4 jugadores.',
-      'in-game':
-        'En esa sala se está jugando ahora. Vuelve a probar cuando acabe la ronda.',
+      'in-game': 'En esa sala se está jugando ahora. Vuelve a probar cuando acabe la ronda.',
       'not-host': 'Solo el anfitrión de la sala puede hacerlo.',
-      'not-ready':
-        'Primero tiene que estar todo el mundo listo, con al menos 2 jugadores.',
+      'not-ready': 'Primero tiene que estar todo el mundo listo, con al menos 2 jugadores.',
       'wrong-phase': 'Ahora no se puede hacer eso.',
       invalid: 'Ese código no parece correcto: tiene 6 letras y números.',
       'too-many': 'Demasiados intentos. Espera un minuto y vuelve a probar.',
-      offline:
-        'Ahora no se puede conectar con las salas. Revisa tu conexión y vuelve a probar.',
+      offline: 'Ahora no se puede conectar con las salas. Revisa tu conexión y vuelve a probar.',
     },
     connecting: 'Conectando…',
     reconnecting: 'Reconectando…',
@@ -1313,7 +1300,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     imReady: forGender(gender, 'Estoy listo', 'Estoy lista'),
     notReadyYet: forGender(gender, 'Aún no estoy listo', 'Aún no estoy lista'),
     start: 'Empezar',
-    needPlayers: min => `Hacen falta al menos ${min} jugadores.`,
+    needPlayers: (min) => `Hacen falta al menos ${min} jugadores.`,
     waitingForReady: 'Esperando a que todos estén listos…',
     waitingForHost: 'Esperando a que el anfitrión empiece…',
     settingsTitle: 'Ajustes del juego',
@@ -1324,26 +1311,33 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     reportName: 'Denunciar nombre',
     scoresShown: 'Ver la puntuación',
     scoresHidden: 'Puntuación solo al final',
-    seconds: seconds => `${seconds} s`,
+    seconds: (seconds) => `${seconds} s`,
     getReady: '¡Preparados!',
-    timeLeft: seconds => `Quedan ${seconds} s`,
-    yourScore: score => `Tu puntuación: ${score}`,
+    timeLeft: (seconds) => `Quedan ${seconds} s`,
+    yourScore: (score) => `Tu puntuación: ${score}`,
     resultsTitle: 'Resultados',
-    place: place => `${place}.º`,
-    points: points => `${points} ${points === 1 ? 'punto' : 'puntos'}`,
+    place: (place) => `${place}.º`,
+    points: (points) => `${points} ${points === 1 ? 'punto' : 'puntos'}`,
     playAgain: 'Jugar otra vez',
     leave: 'Salir de la sala',
     kick: 'Quitar',
     newName: 'Cambiar de nombre',
     reactions: {
       title: 'Pegatinas',
-      names: { shy: 'Vergüenza', happy: 'Contento', love: 'Te quiero', angry: 'Enfadado', laugh: 'Jajaja', confused: '¿Qué?', cry: 'Triste' },
+      names: {
+        shy: 'Vergüenza',
+        happy: 'Contento',
+        love: 'Te quiero',
+        angry: 'Enfadado',
+        laugh: 'Jajaja',
+        confused: '¿Qué?',
+        cry: 'Triste',
+      },
     },
     kicked: 'El anfitrión te ha quitado de la sala.',
     gameUnavailable: 'Este juego no está abierto en las salas ahora mismo.',
     animals: ANIMALS,
-    nickname: (adjective, animal) =>
-      `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
+    nickname: (adjective, animal) => `${ANIMALS[animal]} ${ADJECTIVES[adjective]}`,
   },
 
   account: {
@@ -1361,7 +1355,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     loginNameHint: 'De 3 a 30 letras (a–z), números, puntos, guiones o guiones bajos. Solo lo ves tú, para entrar.',
     loginOrEmail: 'Nombre de usuario o correo',
     password: 'Contraseña',
-    passwordRule: min => `Al menos ${min} caracteres.`,
+    passwordRule: (min) => `Al menos ${min} caracteres.`,
     repeatPassword: 'Repite la contraseña',
     passwordsDiffer: 'Las contraseñas no son iguales.',
     screenName: 'Nombre visible',
@@ -1385,8 +1379,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     sendLink: 'Enviar el enlace',
     linkSent: 'Si alguna cuenta tiene este correo, el enlace va de camino. Funciona durante una hora.',
     sending: 'Enviando…',
-    signedInAs: screenName => `Has entrado como ${screenName}`,
-    loginNameIs: loginName => `Nombre de usuario: ${loginName}`,
+    signedInAs: (screenName) => `Has entrado como ${screenName}`,
+    loginNameIs: (loginName) => `Nombre de usuario: ${loginName}`,
     signOut: 'Salir',
     detailsTitle: 'Tus datos',
     emailNeedsPassword: 'Para cambiar o quitar el correo, escribe también tu contraseña.',
@@ -1404,13 +1398,15 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     confirmDeleteResults: '¿Borrar todos tus resultados para siempre?',
     resultsDeleted: 'Tus resultados se han borrado.',
     deleteTitle: 'Borrar la cuenta',
-    deleteLead: 'Esto borra para siempre tu cuenta, tus favoritos y resultados guardados en ella, y tu puesto en las clasificaciones.',
+    deleteLead:
+      'Esto borra para siempre tu cuenta, tus favoritos y resultados guardados en ella, y tu puesto en las clasificaciones.',
     deleteAccount: 'Borrar mi cuenta',
     confirmDelete: '¿Borrar tu cuenta para siempre?',
     deleted: 'Tu cuenta se ha borrado.',
     problems: {
       invalid: 'Algo no está bien: revisa lo que has escrito.',
-      'wrong-login': 'El nombre de usuario o la contraseña no son correctos. Tras 5 intentos fallidos seguidos, hay que esperar 15 minutos.',
+      'wrong-login':
+        'El nombre de usuario o la contraseña no son correctos. Tras 5 intentos fallidos seguidos, hay que esperar 15 minutos.',
       'wrong-password': 'La contraseña no es correcta.',
       'login-taken': 'Este nombre de usuario ya existe: prueba otro.',
       'screen-name-taken': 'Este nombre visible ya existe: prueba otro.',
@@ -1496,13 +1492,18 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     gameGroup: 'Juego',
     loading: 'Cargando…',
     failed: 'Ahora no se puede cargar la clasificación. Inténtalo de nuevo en un momento.',
-    empty: forGender(gender, 'Nadie ha jugado aún a este juego con cuenta. ¡Sé el primero!', 'Nadie ha jugado aún a este juego con cuenta. ¡Sé la primera!'),
+    empty: forGender(
+      gender,
+      'Nadie ha jugado aún a este juego con cuenta. ¡Sé el primero!',
+      'Nadie ha jugado aún a este juego con cuenta. ¡Sé la primera!',
+    ),
     columns: { place: 'Puesto', name: 'Nombre visible', plays: 'Partidas', best: 'Mejor' },
     you: 'tú',
     youreHidden: 'No apareces en las clasificaciones.',
     changeInAccount: 'Cámbialo en tu cuenta',
     mysteryPlayer: 'Jugador misterioso',
-    totals: (players, plays) => `${players} ${players === 1 ? 'jugador' : 'jugadores'} · ${plays} ${plays === 1 ? 'partida jugada' : 'partidas jugadas'}`,
+    totals: (players, plays) =>
+      `${players} ${players === 1 ? 'jugador' : 'jugadores'} · ${plays} ${plays === 1 ? 'partida jugada' : 'partidas jugadas'}`,
     yourPlays: (plays) => `${plays} ${plays === 1 ? 'jugada' : 'jugadas'} por ti`,
     yourBest: (best) => `Tu mejor resultado: ${best}`,
     wouldBePlace: (place) => `estarías en el puesto ${place}`,

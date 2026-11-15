@@ -19,7 +19,9 @@ export class ConnectionNotices {
       const isOnline = connection.isOnline();
       if (wasOnline !== null && isOnline !== wasOnline) {
         const { site } = untracked(messages);
-        notifications.show(isOnline ? { type: 'success', message: site.backOnline } : { type: 'info', message: site.wentOffline });
+        notifications.show(
+          isOnline ? { type: 'success', message: site.backOnline } : { type: 'info', message: site.wentOffline },
+        );
       }
       wasOnline = isOnline;
     });

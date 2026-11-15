@@ -6,7 +6,10 @@ const MAX_SIDE = 1600;
 const ACCEPTED_FORMATS = ['jpeg', 'png', 'webp'];
 const MAX_INPUT_PIXELS = 40_000_000;
 
-export async function cleanImage(input: Buffer, maxSide = MAX_SIDE): Promise<Buffer> {
+export async function cleanImage(
+  input: Buffer,
+  maxSide = MAX_SIDE,
+): Promise<Buffer> {
   try {
     const image = sharp(input, {
       failOn: 'error',

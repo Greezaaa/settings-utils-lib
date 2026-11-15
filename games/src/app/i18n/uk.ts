@@ -67,11 +67,10 @@ const ANIMALS = [
 const FEMININE_ANIMALS = new Set([2, 5, 9, 10, 11, 13]);
 
 export const ukrainian = (gender: WordGender): SiteMessages => ({
-
   answers: {
     right: 'Правильно!',
     wrong: 'Майже',
-    wrongWith: answer => `Майже: було ${answer}`,
+    wrongWith: (answer) => `Майже: було ${answer}`,
   },
 
   site: {
@@ -158,7 +157,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     projectLinks: 'Посилання проєкту',
     privacyNotice:
       'Ми використовуємо cookie лише для збереження ваших налаштувань: теми, розміру тексту й мови. Ми ніколи не продаємо і не передаємо ваші дані нікому. Ми дбаємо про вашу приватність!',
-    lastUpdate: moment => `Останнє оновлення: ${moment}`,
+    lastUpdate: (moment) => `Останнє оновлення: ${moment}`,
     noticeOk: 'Гаразд',
     noticeLater: 'Пізніше',
     updateReady: 'Готова нова версія ігор.',
@@ -189,23 +188,19 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     },
     'measure-it': {
       name: 'Виміряй',
-      summary:
-        'Читай і будуй кути на транспортирі, скажи, наскільки повна склянка, і знайди число на прямій.',
+      summary: 'Читай і будуй кути на транспортирі, скажи, наскільки повна склянка, і знайди число на прямій.',
       subtitle: 'кути, дроби і числові прямі',
       intro: 'Гра у вимірювання для дітей.',
     },
     'climb-tower': {
       name: 'Піднімись на вежу',
-      summary:
-        'Кожна правильна відповідь піднімає на поверх вище; помилка — і ти падаєш. Як високо ти залізеш?',
-      subtitle:
-        'правда чи ні, або обери правильний приклад, поверх за поверхом',
+      summary: 'Кожна правильна відповідь піднімає на поверх вище; помилка — і ти падаєш. Як високо ти залізеш?',
+      subtitle: 'правда чи ні, або обери правильний приклад, поверх за поверхом',
       intro: 'Математична гра для дітей.',
     },
     'find-pairs': {
       name: 'Знайди пари',
-      summary:
-        'Перевертай картки по дві й запам’ятовуй, де яка картинка. Знайди всі пари за якомога менше ходів.',
+      summary: 'Перевертай картки по дві й запам’ятовуй, де яка картинка. Знайди всі пари за якомога менше ходів.',
       subtitle: 'переверни дві картки й знайди однакові картинки',
       intro: 'Гра на пам’ять для дітей.',
     },
@@ -260,8 +255,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     },
     'sliding-puzzle': {
       name: 'П’ятнашки',
-      summary:
-        'Пересувай плитки на порожнє місце, доки лінії знову не з’єднаються. Щоразу новий малюнок.',
+      summary: 'Пересувай плитки на порожнє місце, доки лінії знову не з’єднаються. Щоразу новий малюнок.',
       subtitle: 'пересувай плитки й з’єднуй лінії',
       intro: 'Гра-головоломка для дітей.',
     },
@@ -274,8 +268,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     },
     'place-pieces': {
       name: 'Розклади шматочки',
-      summary:
-        'Перетягни шматочки малюнка на свої місця. Дивись на нього або відтвори з пам’яті.',
+      summary: 'Перетягни шматочки малюнка на свої місця. Дивись на нього або відтвори з пам’яті.',
       subtitle: 'перетягуй шматочки й відтворюй малюнок',
       intro: 'Пазл із малюнком для дітей.',
     },
@@ -300,10 +293,16 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     lead: 'Мініігри, що тренують логіку, пам’ять і швидкість мислення.',
     rule: 'Вони безкоштовні, без реєстрації й працюють на комп’ютерах, планшетах і телефонах.',
     whatsNewTitle: 'Що нового',
-    updateKinds: { game: 'Ігри', language: 'Мови', settings: 'Налаштування', feature: 'Функції', privacy: 'Приватність' },
+    updateKinds: {
+      game: 'Ігри',
+      language: 'Мови',
+      settings: 'Налаштування',
+      feature: 'Функції',
+      privacy: 'Приватність',
+    },
     showMore: 'Показати більше новин',
     showFewer: 'Показати менше',
-    categoryGames: games => `${games} ${plural(games, 'гра', 'гри', 'ігор')}`,
+    categoryGames: (games) => `${games} ${plural(games, 'гра', 'гри', 'ігор')}`,
     gamesTitle: 'Ігри',
     searchLabel: 'Пошук ігор',
     searchPlaceholder: 'Шукай гру…',
@@ -329,13 +328,12 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     goalSmaller: 'Показати ціль меншою',
     pictureGroup: 'Малюнок',
     pictureModes: { lines: 'Лінії', drawing: 'Малюнок' },
-    moves: moves => `Ходи: ${moves}`,
-    tile: number => `Плитка ${number}`,
+    moves: (moves) => `Ходи: ${moves}`,
+    tile: (number) => `Плитка ${number}`,
     newPuzzle: 'Новий пазл',
     solved: 'Молодець!',
-    solvedIn: (moves, time) =>
-      `Готово за ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')} і ${time}`,
-    best: moves => `Рекорд: ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')}`,
+    solvedIn: (moves, time) => `Готово за ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')} і ${time}`,
+    best: (moves) => `Рекорд: ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')}`,
     newRecord: 'Новий рекорд!',
     keys: 'Клавіатура: стрілки пересувають плитку на порожнє місце',
   },
@@ -359,7 +357,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     inPlace: (placed, total) => `${placed} з ${total} на місці`,
     newGame: 'Нова гра',
     solved: 'Молодець!',
-    best: time => `Рекорд: ${time}`,
+    best: (time) => `Рекорд: ${time}`,
     newRecord: 'Новий рекорд!',
   },
 
@@ -367,10 +365,9 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     lead: 'Торкнися квадрата, щоб повернути його на чверть оберту. Повертай усі квадрати, доки малюнок не стане правильним.',
     rule: 'У режимі «Пам’ять» дивись уважно: малюнок зникне, щойно ти натиснеш «Готово»!',
     board: 'Малюнок',
-    tile: number => `Квадрат ${number}`,
-    turns: turns => `Повороти: ${turns}`,
-    solvedIn: (turns, time) =>
-      `Готово за ${turns} ${plural(turns, 'поворот', 'повороти', 'поворотів')} і ${time}`,
+    tile: (number) => `Квадрат ${number}`,
+    turns: (turns) => `Повороти: ${turns}`,
+    solvedIn: (turns, time) => `Готово за ${turns} ${plural(turns, 'поворот', 'повороти', 'поворотів')} і ${time}`,
   },
 
   placePieces: {
@@ -378,14 +375,12 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     rule: 'У режимі «Пам’ять» дивись уважно: малюнок зникне, щойно ти натиснеш «Готово»!',
     board: 'Малюнок',
     piece: (number, picked) => `Шматочок ${number}${picked ? ', вибрано' : ''}`,
-    swaps: swaps => `Ходи: ${swaps}`,
-    solvedIn: (swaps, time) =>
-      `Готово за ${swaps} ${plural(swaps, 'хід', 'ходи', 'ходів')} і ${time}`,
+    swaps: (swaps) => `Ходи: ${swaps}`,
+    solvedIn: (swaps, time) => `Готово за ${swaps} ${plural(swaps, 'хід', 'ходи', 'ходів')} і ${time}`,
   },
 
   pictures: {
-    family:
-      'Дитячий малюнок: мама й донька тримаються за руки, а над ними сонце, місяць і хмари',
+    family: 'Дитячий малюнок: мама й донька тримаються за руки, а над ними сонце, місяць і хмари',
   },
 
   privacy: {
@@ -481,8 +476,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'Жодної реклами й стеження',
       'Нічого не продаємо й нікому не передаємо',
     ],
-    microphone:
-      'Мікрофон використовується лише під час гри «Заспівай», а звук ніколи не записують і не надсилають',
+    microphone: 'Мікрофон використовується лише під час гри «Заспівай», а звук ніколи не записують і не надсилають',
     inDevelopment: '(у розробці)',
     accountsTitle: 'Облікові записи',
     accountsLead:
@@ -490,10 +484,18 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     accounts: [
       'Логін і пароль (зберігається зашифрованим, його ніхто не може прочитати), щоб увійти у свій обліковий запис',
       'Ім’я в грі — єдине, що бачать інші гравці, у таблицях лідерів. Це не мусить бути твоє справжнє ім’я',
-      forGender(gender, 'Твої улюблені ігри, а також скільки разів ти грав у кожну гру і твій найкращий результат', 'Твої улюблені ігри, а також скільки разів ти грала в кожну гру і твій найкращий результат'),
+      forGender(
+        gender,
+        'Твої улюблені ігри, а також скільки разів ти грав у кожну гру і твій найкращий результат',
+        'Твої улюблені ігри, а також скільки разів ти грала в кожну гру і твій найкращий результат',
+      ),
       'Якщо видалити обліковий запис на його сторінці, усе видаляється одразу: він не зберігається вимкненим, і його не можна відновити',
       'На сторінці облікового запису можна видалити лише свої результати (ігри, найкращі результати й місця в таблицях лідерів), залишивши обліковий запис',
-      forGender(gender, 'Ти сам вирішуєш, чи бути в таблицях лідерів: тебе там немає, доки ти не ввімкнеш це у своєму обліковому записі', 'Ти сама вирішуєш, чи бути в таблицях лідерів: тебе там немає, доки ти не ввімкнеш це у своєму обліковому записі'),
+      forGender(
+        gender,
+        'Ти сам вирішуєш, чи бути в таблицях лідерів: тебе там немає, доки ти не ввімкнеш це у своєму обліковому записі',
+        'Ти сама вирішуєш, чи бути в таблицях лідерів: тебе там немає, доки ти не ввімкнеш це у своєму обліковому записі',
+      ),
     ],
     accountsEmail:
       'Електронну пошту, лише якщо ти її додаси; вона потрібна тільки щоб надіслати посилання, якщо ти забудеш пароль. Без пошти забутий пароль не можна відновити',
@@ -522,14 +524,18 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
 
   page: {
     section: 'Розумні ігри',
-    ages: age => `Від ${age} ${age === 1 ? 'року' : 'років'}`,
+    ages: (age) => `Від ${age} ${age === 1 ? 'року' : 'років'}`,
     new: 'Нове',
     popular: 'Найпопулярніша',
     hidden: 'Приховано',
-    addFavorite: game => `Додати «${game}» до улюблених`,
-    removeFavorite: game => `Прибрати «${game}» з улюблених`,
+    addFavorite: (game) => `Додати «${game}» до улюблених`,
+    removeFavorite: (game) => `Прибрати «${game}» з улюблених`,
     title: 'Математичні ігри',
-    lead: forGender(gender, 'Скажи, чи правильний результат, введи відповідь сам або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.', 'Скажи, чи правильний результат, введи відповідь сама або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.'),
+    lead: forGender(
+      gender,
+      'Скажи, чи правильний результат, введи відповідь сам або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.',
+      'Скажи, чи правильний результат, введи відповідь сама або знайди пропущені знаки. З таймером відповідай, доки смужка не закінчилася.',
+    ),
     rule: 'Не помились, бо гра закінчиться!',
     game: 'Гра',
   },
@@ -590,28 +596,22 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
         summary: 'Усі чотири знаки, бракує двох або трьох',
       },
     },
-    bestScore: best => `Найкращий результат: ${best}`,
+    bestScore: (best) => `Найкращий результат: ${best}`,
     start: 'Почати',
   },
 
   playing: {
-    seconds: seconds => `${seconds} с`,
+    seconds: (seconds) => `${seconds} с`,
     noTimer: 'Без таймера',
-    score: score => `Бали: ${score}`,
+    score: (score) => `Бали: ${score}`,
   },
 
   over: {
     outOfTime: 'Час вийшов',
     notQuite: 'Майже!',
-    correctAnswers: score =>
-      plural(
-        score,
-        'правильна відповідь',
-        'правильні відповіді',
-        'правильних відповідей'
-      ),
+    correctAnswers: (score) => plural(score, 'правильна відповідь', 'правильні відповіді', 'правильних відповідей'),
     newRecord: 'новий рекорд',
-    best: best => `рекорд ${best}`,
+    best: (best) => `рекорд ${best}`,
     youAnswered: 'Твоя відповідь',
     rightAnswer: 'Правильна відповідь',
     playAgain: 'Грати ще',
@@ -621,7 +621,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
   trueOrFalse: {
     true: 'Правда',
     false: 'Неправда',
-    given: saysTrue => (saysTrue ? 'правда' : 'неправда'),
+    given: (saysTrue) => (saysTrue ? 'правда' : 'неправда'),
     keys: 'Клавіатура: ← неправда, → правда',
   },
 
@@ -676,7 +676,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     tooMany: 'Надіслано багато ідей за короткий час. Зачекай трохи й спробуй пізніше.',
     refused: 'Твою ідею не вдалося прийняти. Перевір текст і спробуй ще раз.',
     sendsLeft: (sends) => `Цієї години можна надіслати ще ${sends} ${plural(sends, 'ідею', 'ідеї', 'ідей')}.`,
-    waitMinutes: (minutes) => `Цієї години вже надіслано 3 ідеї. Наступну можна буде надіслати через ${minutes} ${plural(minutes, 'хвилину', 'хвилини', 'хвилин')}.`,
+    waitMinutes: (minutes) =>
+      `Цієї години вже надіслано 3 ідеї. Наступну можна буде надіслати через ${minutes} ${plural(minutes, 'хвилину', 'хвилини', 'хвилин')}.`,
   },
 
   feedback: {
@@ -728,16 +729,14 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       hard: { name: 'Складний', summary: '10 букв' },
     },
     timers: {
-      timer:
-        'Встигни скласти кожне слово, доки не скінчилася смужка; у «Склади слова» шукай, доки вона не скінчиться',
+      timer: 'Встигни скласти кожне слово, доки не скінчилася смужка; у «Склади слова» шукай, доки вона не скінчиться',
       'no-timer': 'Не поспішай',
     },
     hintsGroup: 'Підказки',
     hints: {
       hints: {
         name: 'З підказками',
-        summary:
-          'Після 2 помилок підсвічується наступна буква; після 5 і 10 — перші букви ставляться самі',
+        summary: 'Після 2 помилок підсвічується наступна буква; після 5 і 10 — перші букви ставляться самі',
       },
       'no-hints': { name: 'Без підказок', summary: forGender(gender, 'Розв’яжи сам', 'Розв’яжи сама') },
     },
@@ -745,11 +744,10 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'first-vowel': 'З якої голосної починається?',
       'missing-vowels': 'Торкайся пропущених голосних по черзі',
       'mixed-letters': 'Торкайся букв у правильному порядку',
-      'word-builder':
-        'Торкайся букв, щоб скласти слово, і натисни «Перевірити»',
+      'word-builder': 'Торкайся букв, щоб скласти слово, і натисни «Перевірити»',
     },
     progress: (word, total) => `Слово ${word} з ${total}`,
-    mistakes: mistakes => `Помилки: ${mistakes}`,
+    mistakes: (mistakes) => `Помилки: ${mistakes}`,
     gap: 'Пропущена буква',
     letters: 'Букви',
     answer: 'Твоє слово',
@@ -846,7 +844,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     },
     aim: { more: 'Трохи більше ↑', less: 'Трохи менше ↓' },
     whichAngle: 'Скільки градусів?',
-    makeAngle: angle => `Побудуй ${angle}°`,
+    makeAngle: (angle) => `Побудуй ${angle}°`,
     howFull: 'Наскільки повна?',
     whichNumber: 'Яке число x?',
     yourAnswer: 'Твоя відповідь',
@@ -872,10 +870,10 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       },
     },
     answers: 'Відповіді',
-    floors: floors => `Поверх ${floors}`,
-    best: floors => `Рекорд: поверх ${floors}`,
+    floors: (floors) => `Поверх ${floors}`,
+    best: (floors) => `Рекорд: поверх ${floors}`,
     fell: forGender(gender, 'Ти впав!', 'Ти впала!'),
-    summary: floors => `Поверхів пройдено: ${floors}`,
+    summary: (floors) => `Поверхів пройдено: ${floors}`,
   },
 
   howMany: {
@@ -905,7 +903,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     cell: (row, column, symbol) => `Рядок ${row}, стовпець ${column}: ${symbol || 'порожньо'}`,
     check: 'Перевірити',
     done: 'Поле заповнено!',
-    summary: time => `За ${time}`,
+    summary: (time) => `За ${time}`,
     newGame: 'Нова гра',
     games: {
       'letter-sudoku': {
@@ -914,7 +912,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
         board: 'Поле з літерами',
         symbols: 'АБВГДЕЖЗИ',
         tray: 'Літери',
-        sizeSummary: letters => `${letters} ${plural(letters, 'літера', 'літери', 'літер')}`,
+        sizeSummary: (letters) => `${letters} ${plural(letters, 'літера', 'літери', 'літер')}`,
         repeated: 'Червоні літери повторюються у своєму рядку, стовпці чи квадраті.',
         noRepeats: 'Поки що жодна літера не повторюється!',
       },
@@ -924,7 +922,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
         board: 'Поле з числами',
         symbols: '123456789',
         tray: 'Числа',
-        sizeSummary: numbers => `Числа від 1 до ${numbers}`,
+        sizeSummary: (numbers) => `Числа від 1 до ${numbers}`,
         repeated: 'Червоні числа повторюються у своєму рядку, стовпці чи квадраті.',
         noRepeats: 'Поки що жодне число не повторюється!',
       },
@@ -944,7 +942,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     cell: (row, column, letter) => `Рядок ${row}, стовпець ${column}: ${letter}`,
     found: (found, total) => `Слова ${found}/${total}`,
     done: 'Усі слова знайдено!',
-    summary: time => `За ${time}`,
+    summary: (time) => `За ${time}`,
     newGame: 'Нова гра',
   },
 
@@ -967,10 +965,11 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     keyboard: 'Клавіатура',
     erase: 'Стерти літеру',
     send: 'Спробувати',
-    tooShort: letters => `У слові ${letters} ${plural(letters, 'літера', 'літери', 'літер')}`,
-    triesLeft: tries => `${plural(tries, 'Лишилася', 'Лишилося', 'Лишилося')} ${tries} ${plural(tries, 'спроба', 'спроби', 'спроб')}`,
+    tooShort: (letters) => `У слові ${letters} ${plural(letters, 'літера', 'літери', 'літер')}`,
+    triesLeft: (tries) =>
+      `${plural(tries, 'Лишилася', 'Лишилося', 'Лишилося')} ${tries} ${plural(tries, 'спроба', 'спроби', 'спроб')}`,
     won: 'Таємне слово знайдено!',
-    lost: word => `Таємне слово було ${word}`,
+    lost: (word) => `Таємне слово було ${word}`,
     newGame: 'Інше слово',
   },
 
@@ -984,13 +983,12 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       hard: { name: 'Важко', summary: '30 карток · 15 пар' },
       expert: { name: 'Експерт', summary: '36 карток · 18 пар' },
     },
-    moves: moves => `Ходи ${moves}`,
+    moves: (moves) => `Ходи ${moves}`,
     pairs: (found, total) => `Пари ${found}/${total}`,
-    card: number => `Картка ${number}, закрита`,
+    card: (number) => `Картка ${number}, закрита`,
     done: 'Усі пари знайдено!',
-    summary: (moves, time) =>
-      `За ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')} і ${time}`,
-    best: moves => `Рекорд: ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')}`,
+    summary: (moves, time) => `За ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')} і ${time}`,
+    best: (moves) => `Рекорд: ${moves} ${plural(moves, 'хід', 'ходи', 'ходів')}`,
     newGame: 'Нова гра',
   },
 
@@ -1032,7 +1030,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'sing-it': 'Послухай, потім заспівай ноту й потримай її',
     },
     progress: (round, total) => `Раунд ${round} з ${total}`,
-    mistakes: mistakes => `Помилки: ${mistakes}`,
+    mistakes: (mistakes) => `Помилки: ${mistakes}`,
     noteNames: {
       C: 'До',
       'C#': 'До♯',
@@ -1058,10 +1056,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     micPrivacy:
       'Браузер попросить дозвіл на мікрофон. Звук залишається на цьому пристрої: його ніколи не записують і не надсилають.',
     micAsking: 'Чекаємо на мікрофон…',
-    micDenied:
-      'Мікрофон заблоковано. Дозволь його в браузері або пропусти цей раунд.',
-    micUnavailable:
-      'На цьому пристрої немає мікрофона. Можна пропускати раунди.',
+    micDenied: 'Мікрофон заблоковано. Дозволь його в браузері або пропусти цей раунд.',
+    micUnavailable: 'На цьому пристрої немає мікрофона. Можна пропускати раунди.',
     meter: 'Наскільки твій голос близький до ноти',
     singHints: {
       done: 'Точно в ноту! Молодець!',
@@ -1103,13 +1099,21 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     clearErrors: 'Очистити все',
     confirmClearErrors: 'Очистити всі помилки з журналу?',
     resolveError: 'Виправлено',
-    firstSeen: moment => `Уперше: ${moment}`,
+    firstSeen: (moment) => `Уперше: ${moment}`,
     errorSources: { api: 'API', site: 'Сайт' },
-    errorColumns: { when: 'Востаннє', code: 'Код', title: 'Назва', problem: 'Проблема', page: 'Сторінка', count: 'Разів', actions: 'Дії' },
+    errorColumns: {
+      when: 'Востаннє',
+      code: 'Код',
+      title: 'Назва',
+      problem: 'Проблема',
+      page: 'Сторінка',
+      count: 'Разів',
+      actions: 'Дії',
+    },
     loading: 'Завантаження…',
     previewTitle: 'Режим перегляду',
     navLink: 'Адмін',
-    gameCategories: game => `Категорії гри ${game}`,
+    gameCategories: (game) => `Категорії гри ${game}`,
     uploadThumbnail: 'Завантажити картинку',
     automaticThumbnail: 'Автоматична',
     newsHelp: 'Новини на головній сторінці, спершу найновіші. Пиши іспанською; інші мови необовʼязкові.',
@@ -1127,20 +1131,20 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     newsFallback: 'Порожні мови показують іспанський текст.',
     newsSave: 'Зберегти',
     offlineTitle: 'Гра без мережі на цьому пристрої',
-    offlineActive: megabytes => `Увімкнено: ігри зберігаються тут (усього ${megabytes} МБ)`,
+    offlineActive: (megabytes) => `Увімкнено: ігри зберігаються тут (усього ${megabytes} МБ)`,
     offlineInactive: 'Вимкнено: увімкни це в меню налаштувань, щоб зберегти ігри тут',
-    previewHelp: hiddenBadge =>
-      `Цей браузер показує всі ігри, відкриті чи ні; приховані позначено «${hiddenBadge}».`,
+    previewHelp: (hiddenBadge) => `Цей браузер показує всі ігри, відкриті чи ні; приховані позначено «${hiddenBadge}».`,
     gamesTitle: 'Ігри',
     open: 'Відкрито для всіх',
     hidden: 'Приховано від публіки',
-    byDefault: open => `типово: ${open ? 'відкрито' : 'приховано'}`,
+    byDefault: (open) => `типово: ${open ? 'відкрито' : 'приховано'}`,
     periodGroup: 'Період',
     periods: { all: 'За весь час', day: 'Сьогодні', week: 'Цього тижня', month: 'Цього місяця', year: 'Цього року' },
     resetStats: 'Скинути статистику',
-    confirmResetStats: 'Видалити всі ігри та 👍/👎, пораховані досі, щоб статистика почалася знову з сьогодні? Це не можна скасувати.',
+    confirmResetStats:
+      'Видалити всі ігри та 👍/👎, пораховані досі, щоб статистика почалася знову з сьогодні? Це не можна скасувати.',
     statsReset: 'Статистика починається знову з сьогодні.',
-    playsTotal: total => `Усього ігор: ${total}`,
+    playsTotal: (total) => `Усього ігор: ${total}`,
     refresh: 'Оновити',
     playsColumns: { game: 'Гра', plays: 'Зіграно', reasons: 'Причини' },
     suggestionStatuses: {
@@ -1150,7 +1154,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     },
     showPicture: 'Показати малюнок',
     pictureAlt: 'Малюнок, надісланий із пропозицією',
-    moveTo: status => `Перенести: ${status}`,
+    moveTo: (status) => `Перенести: ${status}`,
     delete: 'Видалити',
     confirmDelete: 'Видалити цю пропозицію та її малюнок назавжди?',
     noSuggestions: 'Тут немає пропозицій.',
@@ -1159,8 +1163,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       approved: 'Заблоковані',
       rejected: 'Дозволені',
     },
-    reportsHelp:
-      'Слово, на яке поскаржилися 3 рази, не зараховується в «Склади слова», доки ти не вирішиш.',
+    reportsHelp: 'Слово, на яке поскаржилися 3 рази, не зараховується в «Склади слова», доки ти не вирішиш.',
     reportColumns: {
       word: 'Слово',
       language: 'Мова',
@@ -1170,13 +1173,14 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     keepOut: 'Заблокувати',
     letCount: 'Дозволити',
     noWords: 'Тут немає слів.',
-    playersHelp: 'Гравці в рейтингах, спершу нові. Замініть грубе ім’я на нейтральне або приберіть із рейтингів того, хто має вигадані результати; сам він цього не скасує.',
+    playersHelp:
+      'Гравці в рейтингах, спершу нові. Замініть грубе ім’я на нейтральне або приберіть із рейтингів того, хто має вигадані результати; сам він цього не скасує.',
     noPlayers: 'У рейтингах ще немає гравців.',
     namesTitle: 'Імена на перевірку',
     namesHelp:
       'Імена, що чекають на показ у кімнатах; спершу ті, на які скаржилися. Дозволь ім’я або заміни грубе на просте.',
     noNames: 'Немає імен на перевірку.',
-    nameReports: count => `Скарг: ${count}`,
+    nameReports: (count) => `Скарг: ${count}`,
     allowName: 'Дозволити',
     playerColumns: { name: 'Ім’я', boards: 'Рейтинги', joined: 'Приєднався' },
     playerShown: 'Показано',
@@ -1187,8 +1191,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     loadMore: 'Завантажити ще',
     tableLabels: {
       search: 'Пошук',
-      matches: count => (count === 1 ? 'Збігається 1 рядок' : `Збігається рядків: ${count}`),
-      noMatches: query => `Жоден рядок не збігається з «${query}»`,
+      matches: (count) => (count === 1 ? 'Збігається 1 рядок' : `Збігається рядків: ${count}`),
+      noMatches: (query) => `Жоден рядок не збігається з «${query}»`,
       searchCleared: 'Пошук очищено',
       empty: 'Тут нічого немає',
       actions: 'Дії',
@@ -1199,13 +1203,12 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       page: (page, count) => `Сторінка ${page} з ${count}`,
       previousPage: 'Попередня сторінка',
       nextPage: 'Наступна сторінка',
-      sortedAscending: header => `Упорядковано за ${header}, за зростанням`,
-      sortedDescending: header => `Упорядковано за ${header}, за спаданням`,
+      sortedAscending: (header) => `Упорядковано за ${header}, за зростанням`,
+      sortedDescending: (header) => `Упорядковано за ${header}, за спаданням`,
       sortCleared: 'Упорядкування знято',
     },
     featuresTitle: 'Функції',
-    featuresHelp:
-      'Нові функції спершу вимкнені: спробуй їх у режимі перегляду, а потім відкрий для всіх.',
+    featuresHelp: 'Нові функції спершу вимкнені: спробуй їх у режимі перегляду, а потім відкрий для всіх.',
     featureNames: {
       rooms: 'Мультиплеєр (кімнати)',
       'rooms-math-games': 'Математика в кімнатах',
@@ -1244,22 +1247,19 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     addMember: 'Додати до команди',
     roleLabel: 'Роль',
     roleHelp: {
-      moderator:
-        'Читає пропозиції, вирішує щодо скарг на слова, бачить ігри й оцінки.',
-      tester:
-        'Як модератор, а ще бачить у режимі перегляду всі ігри й функції, навіть вимкнені.',
+      moderator: 'Читає пропозиції, вирішує щодо скарг на слова, бачить ігри й оцінки.',
+      tester: 'Як модератор, а ще бачить у режимі перегляду всі ігри й функції, навіть вимкнені.',
     },
     makeTester: 'Зробити тестувальником',
     makeModerator: 'Зробити модератором',
     startingPassword: 'Початковий пароль (необов’язково)',
-    startingPasswordHelp:
-      'Залиш порожнім, щоб отримати посилання-запрошення: модератор сам обере пароль.',
+    startingPasswordHelp: 'Залиш порожнім, щоб отримати посилання-запрошення: модератор сам обере пароль.',
     add: 'Додати',
     alreadyOnTeam: 'У команді вже є хтось із такою поштою.',
-    inviteFor: email => `Посилання-запрошення для ${email}: скопіюй і надішли.`,
+    inviteFor: (email) => `Посилання-запрошення для ${email}: скопіюй і надішли.`,
     copy: 'Копіювати',
     copied: 'Скопійовано',
-    inviteExpires: day => `Працює один раз, до ${day}.`,
+    inviteExpires: (day) => `Працює один раз, до ${day}.`,
     roles: {
       super: 'Головний адміністратор',
       moderator: 'Модератор',
@@ -1275,13 +1275,12 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     currentPassword: 'Поточний пароль',
     newPassword: 'Новий пароль',
     repeatPassword: 'Повтори новий пароль',
-    passwordRule: min => `Щонайменше ${min} символів.`,
-    passwordChanged:
-      'Пароль змінено. В інших браузерах із твоїм обліковим записом сеанс завершено.',
+    passwordRule: (min) => `Щонайменше ${min} символів.`,
+    passwordChanged: 'Пароль змінено. В інших браузерах із твоїм обліковим записом сеанс завершено.',
     wrongPassword: 'Поточний пароль неправильний.',
     passwordsDiffer: 'Паролі не збігаються.',
     inviteTitle: 'Приєднуйся до команди',
-    inviteLead: email => `Обери пароль для ${email}.`,
+    inviteLead: (email) => `Обери пароль для ${email}.`,
     acceptInvite: 'Зберегти й увійти',
     inviteInvalid: 'Це посилання вже не працює. Попроси нове.',
   },
@@ -1297,12 +1296,10 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     codeLabel: 'Код кімнати',
     join: 'Увійти',
     homeTitle: 'Мультиплеєр',
-    homeText:
-      'До 4 гравців, ті самі вправи одночасно. Хто відповість правильно найбільше разів?',
+    homeText: 'До 4 гравців, ті самі вправи одночасно. Хто відповість правильно найбільше разів?',
     homeLink: 'До кімнат',
     errors: {
-      'not-found':
-        'Кімнати з таким кодом немає. Перевір його або попроси новий.',
+      'not-found': 'Кімнати з таким кодом немає. Перевір його або попроси новий.',
       full: 'Ця кімната заповнена: у ній уже 4 гравці.',
       'in-game': 'У цій кімнаті зараз грають. Спробуй, коли раунд закінчиться.',
       'not-host': 'Це може зробити лише власник кімнати.',
@@ -1310,8 +1307,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'wrong-phase': 'Зараз цього зробити не можна.',
       invalid: 'Код виглядає неправильно: у ньому 6 букв і цифр.',
       'too-many': 'Забагато спроб. Зачекай хвилину й спробуй ще.',
-      offline:
-        'Зараз немає зв’язку з кімнатами. Перевір з’єднання й спробуй ще.',
+      offline: 'Зараз немає зв’язку з кімнатами. Перевір з’єднання й спробуй ще.',
     },
     connecting: 'З’єднання…',
     reconnecting: 'Повторне з’єднання…',
@@ -1327,7 +1323,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     imReady: forGender(gender, 'Я готовий', 'Я готова'),
     notReadyYet: forGender(gender, 'Ще не готовий', 'Ще не готова'),
     start: 'Почати',
-    needPlayers: min => `Потрібно щонайменше ${min} гравці.`,
+    needPlayers: (min) => `Потрібно щонайменше ${min} гравці.`,
     waitingForReady: 'Чекаємо, доки всі будуть готові…',
     waitingForHost: 'Чекаємо, доки власник почне…',
     settingsTitle: 'Налаштування гри',
@@ -1338,20 +1334,28 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     reportName: 'Поскаржитися на ім’я',
     scoresShown: 'Показувати бали',
     scoresHidden: 'Бали лише в кінці',
-    seconds: seconds => `${seconds} с`,
+    seconds: (seconds) => `${seconds} с`,
     getReady: 'Приготуйся!',
-    timeLeft: seconds => `Залишилося ${seconds} с`,
-    yourScore: score => `Твої бали: ${score}`,
+    timeLeft: (seconds) => `Залишилося ${seconds} с`,
+    yourScore: (score) => `Твої бали: ${score}`,
     resultsTitle: 'Результати',
-    place: place => `${place} місце`,
-    points: points => `${points} ${plural(points, 'бал', 'бали', 'балів')}`,
+    place: (place) => `${place} місце`,
+    points: (points) => `${points} ${plural(points, 'бал', 'бали', 'балів')}`,
     playAgain: 'Грати ще',
     leave: 'Вийти з кімнати',
     kick: 'Видалити',
     newName: 'Змінити ім’я',
     reactions: {
       title: 'Наліпки',
-      names: { shy: 'Соромно', happy: 'Радісно', love: 'Люблю', angry: 'Сердито', laugh: 'Ха-ха-ха', confused: 'Що?', cry: 'Сумно' },
+      names: {
+        shy: 'Соромно',
+        happy: 'Радісно',
+        love: 'Люблю',
+        angry: 'Сердито',
+        laugh: 'Ха-ха-ха',
+        confused: 'Що?',
+        cry: 'Сумно',
+      },
     },
     kicked: 'Власник видалив тебе з кімнати.',
     gameUnavailable: 'Ця гра зараз недоступна в кімнатах.',
@@ -1372,10 +1376,11 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     signUpTab: 'Створити обліковий запис',
     forgotTab: forGender(gender, 'Я забув пароль', 'Я забула пароль'),
     loginName: 'Логін',
-    loginNameHint: 'Від 3 до 30 латинських літер (a–z), цифр, крапок, дефісів або підкреслень. Його бачиш лише ти, щоб увійти.',
+    loginNameHint:
+      'Від 3 до 30 латинських літер (a–z), цифр, крапок, дефісів або підкреслень. Його бачиш лише ти, щоб увійти.',
     loginOrEmail: 'Логін або електронна пошта',
     password: 'Пароль',
-    passwordRule: min => `Щонайменше ${min} символів.`,
+    passwordRule: (min) => `Щонайменше ${min} символів.`,
     repeatPassword: 'Повтори пароль',
     passwordsDiffer: 'Паролі не однакові.',
     screenName: 'Ім’я в грі',
@@ -1399,8 +1404,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     sendLink: 'Надіслати посилання',
     linkSent: 'Якщо якийсь обліковий запис має цю пошту, посилання вже в дорозі. Воно діє одну годину.',
     sending: 'Надсилання…',
-    signedInAs: screenName => forGender(gender, `Ти увійшов як ${screenName}`, `Ти увійшла як ${screenName}`),
-    loginNameIs: loginName => `Логін: ${loginName}`,
+    signedInAs: (screenName) => forGender(gender, `Ти увійшов як ${screenName}`, `Ти увійшла як ${screenName}`),
+    loginNameIs: (loginName) => `Логін: ${loginName}`,
     signOut: 'Вийти',
     detailsTitle: 'Твої дані',
     emailNeedsPassword: 'Щоб змінити або прибрати пошту, введи також свій пароль.',
@@ -1418,7 +1423,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     confirmDeleteResults: 'Видалити всі твої результати назавжди?',
     resultsDeleted: 'Твої результати видалено.',
     deleteTitle: 'Видалити обліковий запис',
-    deleteLead: 'Це назавжди видалить твій обліковий запис, збережені в ньому улюблені ігри й результати та твоє місце в таблицях лідерів.',
+    deleteLead:
+      'Це назавжди видалить твій обліковий запис, збережені в ньому улюблені ігри й результати та твоє місце в таблицях лідерів.',
     deleteAccount: 'Видалити мій обліковий запис',
     confirmDelete: 'Видалити твій обліковий запис назавжди?',
     deleted: 'Твій обліковий запис видалено.',
@@ -1438,7 +1444,11 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     resetTitle: 'Вибери новий пароль',
     resetLead: 'Введи новий пароль двічі. Потім ти ввійдеш у свій обліковий запис.',
     resetSave: 'Зберегти пароль',
-    resetDone: forGender(gender, 'Пароль змінено, і ти ввійшов у свій обліковий запис.', 'Пароль змінено, і ти ввійшла у свій обліковий запис.'),
+    resetDone: forGender(
+      gender,
+      'Пароль змінено, і ти ввійшов у свій обліковий запис.',
+      'Пароль змінено, і ти ввійшла у свій обліковий запис.',
+    ),
   },
 
   colours: {
@@ -1510,7 +1520,11 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     gameGroup: 'Гра',
     loading: 'Завантаження…',
     failed: 'Зараз не вдається завантажити таблицю лідерів. Спробуй ще раз за мить.',
-    empty: forGender(gender, 'Ще ніхто не грав у цю гру з обліковим записом. Будь першим!', 'Ще ніхто не грав у цю гру з обліковим записом. Будь першою!'),
+    empty: forGender(
+      gender,
+      'Ще ніхто не грав у цю гру з обліковим записом. Будь першим!',
+      'Ще ніхто не грав у цю гру з обліковим записом. Будь першою!',
+    ),
     columns: { place: 'Місце', name: 'Ім’я в грі', plays: 'Зіграно ігор', best: 'Найкраще' },
     you: 'ти',
     youreHidden: 'Тебе немає в таблицях лідерів.',

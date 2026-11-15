@@ -223,22 +223,42 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(204);
     await request(app.getHttpServer())
       .get('/v1/games')
-      .expect(200, { games: [{ game: 'hit-the-note', enabled: true }], categories: [], thumbnails: [] });
+      .expect(200, {
+        games: [{ game: 'hit-the-note', enabled: true }],
+        categories: [],
+        thumbnails: [],
+      });
   });
 
   it('lets the super admin upload a thumbnail for a game, served as a small WebP picture, and remove it', async () => {
     const server = app.getHttpServer();
-    const picture = await sharp({ create: { width: 1600, height: 1200, channels: 3, background: '#88ccee' } }).png().toBuffer();
-    await request(server).put('/admin/games/word-search/thumbnail').attach('image', picture, 'drawing.png').expect(401);
-    await request(server).put('/admin/games/word-search/thumbnail').set(admin).expect(400);
+    const picture = await sharp({
+      create: { width: 1600, height: 1200, channels: 3, background: '#88ccee' },
+    })
+      .png()
+      .toBuffer();
+    await request(server)
+      .put('/admin/games/word-search/thumbnail')
+      .attach('image', picture, 'drawing.png')
+      .expect(401);
+    await request(server)
+      .put('/admin/games/word-search/thumbnail')
+      .set(admin)
+      .expect(400);
     await request(server)
       .put('/admin/games/word-search/thumbnail')
       .set(admin)
       .attach('image', Buffer.from('not a picture'), 'drawing.png')
       .expect(400);
-    await request(server).put('/admin/games/word-search/thumbnail').set(admin).attach('image', picture, 'drawing.png').expect(204);
+    await request(server)
+      .put('/admin/games/word-search/thumbnail')
+      .set(admin)
+      .attach('image', picture, 'drawing.png')
+      .expect(204);
     const { body } = await request(server).get('/v1/games').expect(200);
-    expect(body.thumbnails).toEqual([{ game: 'word-search', version: expect.any(Number) }]);
+    expect(body.thumbnails).toEqual([
+      { game: 'word-search', version: expect.any(Number) },
+    ]);
     const thumbnail = await request(server)
       .get('/v1/games/word-search/thumbnail')
       .buffer(true)
@@ -250,28 +270,62 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
       .expect(200)
       .expect('Content-Type', 'image/webp');
     const { width, height, format } = await sharp(thumbnail.body).metadata();
-    expect({ width, height, format }).toEqual({ width: 640, height: 480, format: 'webp' });
-    await request(server).delete('/admin/games/word-search/thumbnail').set(admin).expect(204);
+    expect({ width, height, format }).toEqual({
+      width: 640,
+      height: 480,
+      format: 'webp',
+    });
+    await request(server)
+      .delete('/admin/games/word-search/thumbnail')
+      .set(admin)
+      .expect(204);
     await request(server).get('/v1/games/word-search/thumbnail').expect(404);
   });
 
   it('keeps the earlier news and lets the super admin add, change and remove news in every language', async () => {
     const server = app.getHttpServer();
-    const earlier = (await request(server).get('/v1/news').expect(200)).body.news;
+    const earlier = (await request(server).get('/v1/news').expect(200)).body
+      .news;
     expect(earlier).toHaveLength(22);
     expect(earlier[0].version).toBe(15);
     const news = {
       kind: 'game',
       game: 'word-search',
       published: '2026-11-20T12:00:00+01:00',
-      text: { es: 'Nuevo juego: Sopa de letras', en: 'New game: Word search', eu: '' },
+      text: {
+        es: 'Nuevo juego: Sopa de letras',
+        en: 'New game: Word search',
+        eu: '',
+      },
     };
     await request(server).post('/admin/news').send(news).expect(401);
-    await request(server).post('/admin/news').set(admin).send({ ...news, text: { en: 'Only English' } }).expect(400);
-    await request(server).post('/admin/news').set(admin).send({ ...news, kind: 'gossip' }).expect(400);
-    const added = (await request(server).post('/admin/news').set(admin).send(news).expect(201)).body;
-    expect(added).toMatchObject({ version: 16, game: 'word-search', feature: null, privacy: false });
-    expect(added.text).toEqual({ es: 'Nuevo juego: Sopa de letras', en: 'New game: Word search' });
+    await request(server)
+      .post('/admin/news')
+      .set(admin)
+      .send({ ...news, text: { en: 'Only English' } })
+      .expect(400);
+    await request(server)
+      .post('/admin/news')
+      .set(admin)
+      .send({ ...news, kind: 'gossip' })
+      .expect(400);
+    const added = (
+      await request(server)
+        .post('/admin/news')
+        .set(admin)
+        .send(news)
+        .expect(201)
+    ).body;
+    expect(added).toMatchObject({
+      version: 16,
+      game: 'word-search',
+      feature: null,
+      privacy: false,
+    });
+    expect(added.text).toEqual({
+      es: 'Nuevo juego: Sopa de letras',
+      en: 'New game: Word search',
+    });
     const changed = (
       await request(server)
         .put(`/admin/news/${added.id}`)
@@ -279,37 +333,108 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
         .send({ ...news, text: { es: 'Nuevo: Sopa de letras' } })
         .expect(200)
     ).body;
-    expect(changed).toMatchObject({ id: added.id, version: 16, text: { es: 'Nuevo: Sopa de letras' } });
-    expect((await request(server).get('/v1/news').expect(200)).body.news[0].id).toBe(added.id);
-    await request(server).delete(`/admin/news/${added.id}`).set(admin).expect(204);
-    expect((await request(server).get('/v1/news').expect(200)).body.news).toHaveLength(22);
+    expect(changed).toMatchObject({
+      id: added.id,
+      version: 16,
+      text: { es: 'Nuevo: Sopa de letras' },
+    });
+    expect(
+      (await request(server).get('/v1/news').expect(200)).body.news[0].id,
+    ).toBe(added.id);
+    await request(server)
+      .delete(`/admin/news/${added.id}`)
+      .set(admin)
+      .expect(204);
+    expect(
+      (await request(server).get('/v1/news').expect(200)).body.news,
+    ).toHaveLength(22);
+  });
+
+  it('answers the games, features and a news version in one request, and changes the version when news change', async () => {
+    const server = app.getHttpServer();
+    const first = (await request(server).get('/v1/site').expect(200)).body;
+    expect(Object.keys(first).sort()).toEqual([
+      'categories',
+      'features',
+      'games',
+      'newsVersion',
+      'thumbnails',
+    ]);
+    const news = {
+      kind: 'game',
+      game: 'word-search',
+      published: '2026-11-20T12:00:00+01:00',
+      text: { es: 'Nuevo juego' },
+    };
+    const added = (
+      await request(server)
+        .post('/admin/news')
+        .set(admin)
+        .send(news)
+        .expect(201)
+    ).body;
+    expect(
+      (await request(server).get('/v1/site').expect(200)).body.newsVersion,
+    ).not.toBe(first.newsVersion);
+    await request(server)
+      .delete(`/admin/news/${added.id}`)
+      .set(admin)
+      .expect(204);
+    expect(
+      (await request(server).get('/v1/site').expect(200)).body.newsVersion,
+    ).toBe(first.newsVersion);
   });
 
   it('answers 304 when the games, features or news have not changed since the browser last asked', async () => {
     const server = app.getHttpServer();
-    for (const path of ['/v1/games', '/v1/features', '/v1/news']) {
-      const first = await request(server).get(path).expect(200).expect('Cache-Control', 'no-cache');
+    for (const path of ['/v1/site', '/v1/games', '/v1/features', '/v1/news']) {
+      const first = await request(server)
+        .get(path)
+        .expect(200)
+        .expect('Cache-Control', 'no-cache');
       const tag = first.headers['etag'];
       expect(tag).toBeTruthy();
       await request(server).get(path).set('If-None-Match', tag).expect(304);
     }
-    const before = (await request(server).get('/v1/games').expect(200)).headers['etag'];
-    await request(server).put('/admin/games/how-many').set(admin).send({ enabled: true }).expect(204);
-    await request(server).get('/v1/games').set('If-None-Match', before).expect(200);
+    const before = (await request(server).get('/v1/games').expect(200)).headers[
+      'etag'
+    ];
+    await request(server)
+      .put('/admin/games/how-many')
+      .set(admin)
+      .send({ enabled: true })
+      .expect(204);
+    await request(server)
+      .get('/v1/games')
+      .set('If-None-Match', before)
+      .expect(200);
   });
 
   it('lets the super admin give a game one or more known categories', async () => {
     const server = app.getHttpServer();
-    await request(server).put('/admin/games/letter-sudoku/categories').send({ categories: ['letters'] }).expect(401);
-    await request(server).put('/admin/games/letter-sudoku/categories').set(admin).send({ categories: [] }).expect(400);
-    await request(server).put('/admin/games/letter-sudoku/categories').set(admin).send({ categories: ['sports'] }).expect(400);
+    await request(server)
+      .put('/admin/games/letter-sudoku/categories')
+      .send({ categories: ['letters'] })
+      .expect(401);
+    await request(server)
+      .put('/admin/games/letter-sudoku/categories')
+      .set(admin)
+      .send({ categories: [] })
+      .expect(400);
+    await request(server)
+      .put('/admin/games/letter-sudoku/categories')
+      .set(admin)
+      .send({ categories: ['sports'] })
+      .expect(400);
     await request(server)
       .put('/admin/games/letter-sudoku/categories')
       .set(admin)
       .send({ categories: ['letters', 'puzzles', 'letters'] })
       .expect(204);
     const { body } = await request(server).get('/v1/games').expect(200);
-    expect(body.categories).toEqual([{ game: 'letter-sudoku', categories: ['letters', 'puzzles'] }]);
+    expect(body.categories).toEqual([
+      { game: 'letter-sudoku', categories: ['letters', 'puzzles'] },
+    ]);
   });
 
   it('signs in the super admin, who adds moderators by password or invite and turns them off', async () => {
@@ -529,12 +654,23 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
   });
 
   it('quietly drops suggestions that fill the hidden field only bots see', async () => {
-    const before = await request(app.getHttpServer()).get('/admin/suggestions?status=new').set(admin).expect(200);
+    const before = await request(app.getHttpServer())
+      .get('/admin/suggestions?status=new')
+      .set(admin)
+      .expect(200);
     await request(app.getHttpServer())
       .post('/v1/suggestions')
-      .field({ category: 'other', text: 'Buy cheap things', language: 'en', website: 'https://spam.test' })
+      .field({
+        category: 'other',
+        text: 'Buy cheap things',
+        language: 'en',
+        website: 'https://spam.test',
+      })
       .expect(204);
-    const after = await request(app.getHttpServer()).get('/admin/suggestions?status=new').set(admin).expect(200);
+    const after = await request(app.getHttpServer())
+      .get('/admin/suggestions?status=new')
+      .set(admin)
+      .expect(200);
     expect(after.body).toEqual(before.body);
   });
 
@@ -961,13 +1097,11 @@ describe.runIf(databaseUrl)('API (e2e)', () => {
     it('shows a screen name in rooms once a moderator approves it, until a player reports it', async () => {
       const server = app.getHttpServer();
       const signUp = (screenName: string) =>
-        browser('10.1.3.1')
-          .post('/v1/apps/games/account')
-          .send({
-            loginName: 'namer',
-            password: 'a long password',
-            screenName,
-          });
+        browser('10.1.3.1').post('/v1/apps/games/account').send({
+          loginName: 'namer',
+          password: 'a long password',
+          screenName,
+        });
       await signUp('Lucia2015').expect(400);
       await app
         .get(DataSource)

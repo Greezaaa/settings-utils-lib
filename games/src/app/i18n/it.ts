@@ -39,7 +39,6 @@ const ANIMALS = [
 ];
 
 export const italian = (gender: WordGender): SiteMessages => ({
-
   answers: {
     right: 'Giusto!',
     wrong: 'Non proprio',
@@ -265,7 +264,13 @@ export const italian = (gender: WordGender): SiteMessages => ({
     lead: 'Minigiochi che allenano logica, memoria e prontezza.',
     rule: 'Sono gratis, senza registrazione, e funzionano su computer, tablet e telefoni.',
     whatsNewTitle: 'Novità',
-    updateKinds: { game: 'Giochi', language: 'Lingue', settings: 'Impostazioni', feature: 'Funzioni', privacy: 'Privacy' },
+    updateKinds: {
+      game: 'Giochi',
+      language: 'Lingue',
+      settings: 'Impostazioni',
+      feature: 'Funzioni',
+      privacy: 'Privacy',
+    },
     showMore: 'Mostra altri aggiornamenti',
     showFewer: 'Mostra meno',
     categoryGames: (games) => (games === 1 ? '1 gioco' : `${games} giochi`),
@@ -451,8 +456,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'Niente pubblicità e niente tracciamento',
       'Non vendiamo né condividiamo niente con nessuno',
     ],
-    microphone:
-      'Il microfono si usa solo mentre giochi a Cantala, e il suono non viene mai registrato né inviato',
+    microphone: 'Il microfono si usa solo mentre giochi a Cantala, e il suono non viene mai registrato né inviato',
     inDevelopment: '(in sviluppo)',
     accountsTitle: 'Account',
     accountsLead:
@@ -629,8 +633,12 @@ export const italian = (gender: WordGender): SiteMessages => ({
     savedSent: 'La tua idea salvata è stata inviata. Grazie!',
     tooMany: 'Hai inviato molte idee in poco tempo. Aspetta un po’ e riprova più tardi.',
     refused: 'La tua idea non è stata accettata. Controlla il testo e riprova.',
-    sendsLeft: (sends) => (sends === 1 ? 'Puoi inviare ancora 1 idea in quest’ora.' : `Puoi inviare ancora ${sends} idee in quest’ora.`),
-    waitMinutes: (minutes) => (minutes === 1 ? 'Hai inviato 3 idee in quest’ora. Potrai inviarne un’altra tra 1 minuto.' : `Hai inviato 3 idee in quest’ora. Potrai inviarne un’altra tra ${minutes} minuti.`),
+    sendsLeft: (sends) =>
+      sends === 1 ? 'Puoi inviare ancora 1 idea in quest’ora.' : `Puoi inviare ancora ${sends} idee in quest’ora.`,
+    waitMinutes: (minutes) =>
+      minutes === 1
+        ? 'Hai inviato 3 idee in quest’ora. Potrai inviarne un’altra tra 1 minuto.'
+        : `Hai inviato 3 idee in quest’ora. Potrai inviarne un’altra tra ${minutes} minuti.`,
   },
 
   feedback: {
@@ -1059,7 +1067,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     gameCategories: (game) => `Categorie di ${game}`,
     uploadThumbnail: 'Carica immagine',
     automaticThumbnail: 'Usa automatica',
-    newsHelp: 'Le novità della pagina iniziale, le più recenti prima. Scrivile in spagnolo; le altre lingue sono facoltative.',
+    newsHelp:
+      'Le novità della pagina iniziale, le più recenti prima. Scrivile in spagnolo; le altre lingue sono facoltative.',
     addNews: 'Aggiungi novità',
     editNews: 'Modifica',
     deleteNews: 'Elimina',
@@ -1113,13 +1122,14 @@ export const italian = (gender: WordGender): SiteMessages => ({
     keepOut: 'Escludi',
     letCount: 'Lasciala valere',
     noWords: 'Nessuna parola qui.',
-    playersHelp: 'Giocatori nelle classifiche, i più nuovi per primi. Sostituisci un nome volgare con uno neutro, o togli dalle classifiche chi ha punteggi inventati; non potrà annullarlo.',
+    playersHelp:
+      'Giocatori nelle classifiche, i più nuovi per primi. Sostituisci un nome volgare con uno neutro, o togli dalle classifiche chi ha punteggi inventati; non potrà annullarlo.',
     noPlayers: 'Ancora nessun giocatore nelle classifiche.',
     namesTitle: 'Nomi da controllare',
     namesHelp:
       'Nomi visibili in attesa di apparire nelle stanze, prima quelli segnalati. Approva un nome, o sostituisci uno volgare con un nome semplice.',
     noNames: 'Nessun nome in attesa.',
-    nameReports: count => `Segnalato ${count} ${count === 1 ? 'volta' : 'volte'}`,
+    nameReports: (count) => `Segnalato ${count} ${count === 1 ? 'volta' : 'volte'}`,
     allowName: 'Approva',
     playerColumns: { name: 'Nome visibile', boards: 'Classifiche', joined: 'Iscritto' },
     playerShown: 'Visibile',
@@ -1130,8 +1140,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     loadMore: 'Carica altri',
     tableLabels: {
       search: 'Cerca',
-      matches: count => (count === 1 ? '1 riga corrisponde' : `${count} righe corrispondono`),
-      noMatches: query => `Nessuna riga corrisponde a «${query}»`,
+      matches: (count) => (count === 1 ? '1 riga corrisponde' : `${count} righe corrispondono`),
+      noMatches: (query) => `Nessuna riga corrisponde a «${query}»`,
       searchCleared: 'Ricerca cancellata',
       empty: 'Non c’è niente',
       actions: 'Azioni',
@@ -1142,8 +1152,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
       page: (page, count) => `Pagina ${page} di ${count}`,
       previousPage: 'Pagina precedente',
       nextPage: 'Pagina successiva',
-      sortedAscending: header => `Ordinato per ${header}, crescente`,
-      sortedDescending: header => `Ordinato per ${header}, decrescente`,
+      sortedAscending: (header) => `Ordinato per ${header}, crescente`,
+      sortedDescending: (header) => `Ordinato per ${header}, decrescente`,
       sortCleared: 'Ordinamento tolto',
     },
     featuresTitle: 'Funzioni',
@@ -1282,7 +1292,15 @@ export const italian = (gender: WordGender): SiteMessages => ({
     newName: 'Cambia nome',
     reactions: {
       title: 'Adesivi',
-      names: { shy: 'Vergogna', happy: 'Felice', love: 'Ti voglio bene', angry: 'Arrabbiato', laugh: 'Ahahah', confused: 'Eh?', cry: 'Triste' },
+      names: {
+        shy: 'Vergogna',
+        happy: 'Felice',
+        love: 'Ti voglio bene',
+        angry: 'Arrabbiato',
+        laugh: 'Ahahah',
+        confused: 'Eh?',
+        cry: 'Triste',
+      },
     },
     kicked: 'L’organizzatore ti ha tolto dalla stanza.',
     gameUnavailable: 'Questo gioco ora non è aperto per le stanze.',
@@ -1355,7 +1373,8 @@ export const italian = (gender: WordGender): SiteMessages => ({
     deleted: 'Il tuo account è stato eliminato.',
     problems: {
       invalid: 'Qualcosa non va: controlla cosa hai scritto.',
-      'wrong-login': 'Il nome utente o la password sono sbagliati. Dopo 5 tentativi sbagliati di fila, bisogna aspettare 15 minuti.',
+      'wrong-login':
+        'Il nome utente o la password sono sbagliati. Dopo 5 tentativi sbagliati di fila, bisogna aspettare 15 minuti.',
       'wrong-password': 'La password è sbagliata.',
       'login-taken': 'Questo nome utente esiste già: provane un altro.',
       'screen-name-taken': 'Questo nome visibile esiste già: provane un altro.',
@@ -1369,7 +1388,11 @@ export const italian = (gender: WordGender): SiteMessages => ({
     resetTitle: 'Scegli una nuova password',
     resetLead: 'Scrivi due volte la nuova password. Poi entrerai nel tuo account.',
     resetSave: 'Salva la password',
-    resetDone: forGender(gender, 'La tua password è stata cambiata e sei entrato nel tuo account.', 'La tua password è stata cambiata e sei entrata nel tuo account.'),
+    resetDone: forGender(
+      gender,
+      'La tua password è stata cambiata e sei entrato nel tuo account.',
+      'La tua password è stata cambiata e sei entrata nel tuo account.',
+    ),
   },
 
   colours: {
@@ -1441,13 +1464,18 @@ export const italian = (gender: WordGender): SiteMessages => ({
     gameGroup: 'Gioco',
     loading: 'Caricamento…',
     failed: 'Ora non è possibile caricare la classifica. Riprova tra un momento.',
-    empty: forGender(gender, 'Nessuno ha ancora giocato a questo gioco con un account. Sii il primo!', 'Nessuno ha ancora giocato a questo gioco con un account. Sii la prima!'),
+    empty: forGender(
+      gender,
+      'Nessuno ha ancora giocato a questo gioco con un account. Sii il primo!',
+      'Nessuno ha ancora giocato a questo gioco con un account. Sii la prima!',
+    ),
     columns: { place: 'Posto', name: 'Nome visibile', plays: 'Partite', best: 'Record' },
     you: 'tu',
     youreHidden: 'Non compari nelle classifiche.',
     changeInAccount: 'Cambialo nel tuo account',
     mysteryPlayer: 'Giocatore misterioso',
-    totals: (players, plays) => `${players} ${players === 1 ? 'giocatore' : 'giocatori'} · ${plays} ${plays === 1 ? 'partita giocata' : 'partite giocate'}`,
+    totals: (players, plays) =>
+      `${players} ${players === 1 ? 'giocatore' : 'giocatori'} · ${plays} ${plays === 1 ? 'partita giocata' : 'partite giocate'}`,
     yourPlays: (plays) => `${plays} ${plays === 1 ? 'giocata' : 'giocate'} da te`,
     yourBest: (best) => `Il tuo miglior risultato: ${best}`,
     wouldBePlace: (place) => `saresti al ${place}° posto`,

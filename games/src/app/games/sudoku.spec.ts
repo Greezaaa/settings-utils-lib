@@ -36,7 +36,9 @@ describe('sudoku', () => {
   it('marks symbols repeated in a row, a column or a box', () => {
     const board = [0, null, null, null, null, 0, null, null, null, null, null, null, 0, null, null, null];
     expect([...repeatedCells(board, 4)].sort((first, second) => first - second)).toEqual([0, 5, 12]);
-    expect(repeatedCells([0, null, null, null, null, null, null, null, null, null, 0, null, null, null, null, null], 4).size).toBe(0);
+    expect(
+      repeatedCells([0, null, null, null, null, null, null, null, null, null, 0, null, null, null, null, null], 4).size,
+    ).toBe(0);
   });
 
   it('counts only a full board without repeats as solved', () => {

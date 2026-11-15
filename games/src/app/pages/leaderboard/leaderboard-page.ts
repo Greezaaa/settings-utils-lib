@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } 
 import { RouterLink } from '@angular/router';
 import { bestText, boardLabel } from '../../core/board-labels';
 import { FeatureFlags } from '../../core/feature-flags';
-import { Leaderboard, LEADERBOARD_SIZE, PlayerAccount } from '../../core/player-account';
+import { Leaderboard, LEADERBOARD_SIZE, Leaderboards } from '../../core/leaderboards';
+import { PlayerAccount } from '../../core/player-account';
 import { isBetter, RESULT_GAME_SLUGS, RESULT_GAMES, ResultGame, storedBests } from '../../core/player-results';
 import { readStored } from '../../core/site-storage';
 import { SiteLanguage } from '../../i18n/site-language';
@@ -25,6 +26,7 @@ interface YourScore {
 })
 export class LeaderboardPage {
   protected readonly account = inject(PlayerAccount);
+  private readonly leaderboards = inject(Leaderboards);
   private readonly features = inject(FeatureFlags);
   protected readonly messages = inject(SiteLanguage).messages;
   protected readonly games = RESULT_GAME_SLUGS;
@@ -93,9 +95,11 @@ export class LeaderboardPage {
 
   private async load(game: ResultGame): Promise<void> {
     this.boards.set('loading');
-    const boards = await this.account.leaderboards(game);
+    const boards = await this.leaderboards.of(game);
     if (game === this.game()) {
-      this.localBests.set(new Map(storedBests(game, readStored(RESULT_GAMES[game].storage)).map(({ key, value }) => [key, value])));
+      this.localBests.set(
+        new Map(storedBests(game, readStored(RESULT_GAMES[game].storage)).map(({ key, value }) => [key, value])),
+      );
       this.boards.set(boards ?? 'failed');
     }
   }

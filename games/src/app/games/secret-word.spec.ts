@@ -25,7 +25,9 @@ describe('secret word', () => {
     for (const [language, bank] of Object.entries(WORD_BANKS)) {
       const keys = new Set(keyboardRows(bank, language).flat());
       for (const level of SECRET_LEVELS) {
-        expect(secretWords(bank, level, 'no-hints').every(({ word }) => letters(word).every((letter) => keys.has(letter)))).toBe(true);
+        expect(
+          secretWords(bank, level, 'no-hints').every(({ word }) => letters(word).every((letter) => keys.has(letter))),
+        ).toBe(true);
       }
     }
   });

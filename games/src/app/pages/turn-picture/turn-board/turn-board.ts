@@ -22,7 +22,6 @@ export class TurnBoard {
   readonly showHints = input(false);
   readonly tapped = output<number>();
 
-
   protected isTileRight(cell: number): boolean {
     return isRight(this.turns()[cell] ?? 0);
   }

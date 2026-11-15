@@ -47,11 +47,7 @@ const TICK_MS = 100;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './room-page.html',
-  styleUrls: [
-    '../../../shared/utility-page.scss',
-    '../../../shared/game-settings.scss',
-    '../rooms.scss',
-  ],
+  styleUrls: ['../../../shared/utility-page.scss', '../../../shared/game-settings.scss', '../rooms.scss'],
 })
 export class RoomPage {
   readonly code = input.required<string>();
@@ -71,59 +67,33 @@ export class RoomPage {
   protected readonly hasEntered = signal(false);
 
   protected readonly room = this.client.room;
-  protected readonly game = computed<RoomGame>(
-    () => this.room()?.settings.game ?? 'math-games'
-  );
+  protected readonly game = computed<RoomGame>(() => this.room()?.settings.game ?? 'math-games');
   protected readonly choice = computed(() => {
     const settings = this.room()?.settings;
     return roomChoice(this.game(), settings?.mode ?? '', settings?.level ?? '');
   });
   protected readonly modes = computed(() => ROOM_CHOICES[this.game()].modes);
-  protected readonly levels = computed(() =>
-    ROOM_CHOICES[this.game()].levelsOf(this.choice().mode)
-  );
-  protected readonly math = computed(() =>
-    roomMath(this.choice().mode, this.choice().level)
-  );
-  protected readonly measure = computed(() =>
-    roomMeasure(this.choice().mode, this.choice().level)
-  );
-  protected readonly letters = computed(() =>
-    roomLetters(this.choice().mode, this.choice().level)
-  );
-  protected readonly sliding = computed(() =>
-    roomSliding(this.choice().mode, this.choice().level)
-  );
-  protected readonly turnPicture = computed(() =>
-    roomPicture('turn-picture', this.choice().mode, this.choice().level)
-  );
-  protected readonly placePieces = computed(() =>
-    roomPicture('place-pieces', this.choice().mode, this.choice().level)
-  );
+  protected readonly levels = computed(() => ROOM_CHOICES[this.game()].levelsOf(this.choice().mode));
+  protected readonly math = computed(() => roomMath(this.choice().mode, this.choice().level));
+  protected readonly measure = computed(() => roomMeasure(this.choice().mode, this.choice().level));
+  protected readonly letters = computed(() => roomLetters(this.choice().mode, this.choice().level));
+  protected readonly sliding = computed(() => roomSliding(this.choice().mode, this.choice().level));
+  protected readonly turnPicture = computed(() => roomPicture('turn-picture', this.choice().mode, this.choice().level));
+  protected readonly placePieces = computed(() => roomPicture('place-pieces', this.choice().mode, this.choice().level));
   protected readonly canRename = computed(() => this.features.canUse('room-rename'));
   protected readonly hasOwnNames = computed(() => this.features.canUse('room-names'));
   protected readonly isWide = computed(
     () =>
       this.room()?.phase === 'lobby' ||
-      (this.game() === 'letter-games' &&
-        this.choice().mode === 'word-builder' &&
-        this.room()?.phase === 'playing')
+      (this.game() === 'letter-games' && this.choice().mode === 'word-builder' && this.room()?.phase === 'playing'),
   );
   protected readonly openGames = computed(() =>
-    ROOM_GAMES.filter(game => this.features.canUse(ROOM_GAME_FEATURES[game]))
+    ROOM_GAMES.filter((game) => this.features.canUse(ROOM_GAME_FEATURES[game])),
   );
-  protected readonly canPlayGame = computed(() =>
-    this.openGames().includes(this.game())
-  );
+  protected readonly canPlayGame = computed(() => this.openGames().includes(this.game()));
   protected readonly canStart = computed(() => {
-    const players = (this.room()?.players ?? []).filter(
-      ({ connected }) => connected
-    );
-    return (
-      players.length >= MIN_PLAYERS_TO_START &&
-      players.every(({ ready }) => ready) &&
-      this.canPlayGame()
-    );
+    const players = (this.room()?.players ?? []).filter(({ connected }) => connected);
+    return players.length >= MIN_PLAYERS_TO_START && players.every(({ ready }) => ready) && this.canPlayGame();
   });
 
   private readonly now = signal(0);
@@ -137,10 +107,7 @@ export class RoomPage {
       void this.client.enter(this.code());
       this.hasEntered.set(true);
     });
-    const ticker = setInterval(
-      () => this.now.set(this.client.serverNow()),
-      TICK_MS
-    );
+    const ticker = setInterval(() => this.now.set(this.client.serverNow()), TICK_MS);
     inject(DestroyRef).onDestroy(() => {
       clearInterval(ticker);
       this.client.close();
@@ -220,9 +187,7 @@ export class RoomPage {
   }
 
   protected async copyLink(): Promise<void> {
-    await navigator.clipboard.writeText(
-      `${this.document.location.origin}/r/${this.code().toUpperCase()}`
-    );
+    await navigator.clipboard.writeText(`${this.document.location.origin}/r/${this.code().toUpperCase()}`);
     this.isCopied.set(true);
   }
 }

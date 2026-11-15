@@ -7,7 +7,7 @@ import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { PageTransition } from './core/page-transition';
 import { byCategory, gameOfPath } from './core/games';
-import { AdminApi } from './core/admin-api';
+import { AdminSession } from './core/admin-session';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
 import { wasSignedIn } from './core/session-hint';
 import { MenuAnimation } from './core/menu-animation';
@@ -65,7 +65,9 @@ export class App {
 
   private readonly availability = inject(GameAvailability);
   protected readonly games = this.availability.visibleGames;
-  protected readonly categories = computed(() => byCategory(this.games(), (game) => this.availability.categoriesOf(game)));
+  protected readonly categories = computed(() =>
+    byCategory(this.games(), (game) => this.availability.categoriesOf(game)),
+  );
   protected readonly features = inject(FeatureFlags);
   protected readonly account = inject(PlayerAccount);
   private readonly pagePath = signal(inject(DOCUMENT).location.pathname);
@@ -80,15 +82,11 @@ export class App {
   });
   protected readonly isCheckingGame = computed(() => {
     const game = this.pageGame();
-    return (
-      game !== null &&
-      !this.availability.isKnown() &&
-      !this.availability.canPlay(game)
-    );
+    return game !== null && !this.availability.isKnown() && !this.availability.canPlay(game);
   });
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly adminPath = ADMIN_PATH;
-  protected readonly admin = inject(AdminApi);
+  protected readonly adminSession = inject(AdminSession);
   protected readonly fullscreen = inject(Fullscreen);
   protected readonly canGoFullscreen = computed(
     () =>
@@ -99,19 +97,15 @@ export class App {
   );
 
   protected readonly menuOpen = signal(false);
-  private readonly menuToggle =
-    viewChild.required<ElementRef<HTMLButtonElement>>('menuToggle');
-  private readonly siteNav =
-    viewChild.required<ElementRef<HTMLElement>>('siteNav');
+  private readonly menuToggle = viewChild.required<ElementRef<HTMLButtonElement>>('menuToggle');
+  private readonly siteNav = viewChild.required<ElementRef<HTMLElement>>('siteNav');
   private readonly injector = inject(Injector);
   private readonly document = inject(DOCUMENT);
   private readonly pageTransition = inject(PageTransition);
 
   protected readonly settingsOpen = signal(false);
-  private readonly settings =
-    viewChild.required<ElementRef<HTMLElement>>('settings');
-  private readonly siteHeader =
-    viewChild.required<ElementRef<HTMLElement>>('siteHeader');
+  private readonly settings = viewChild.required<ElementRef<HTMLElement>>('settings');
+  private readonly siteHeader = viewChild.required<ElementRef<HTMLElement>>('siteHeader');
 
   constructor() {
     const dialog = inject(SuDialogService);
@@ -119,7 +113,7 @@ export class App {
       dialog.configure({
         acceptLabel: this.t().site.noticeOk,
         cancelLabel: this.t().site.cancel,
-      })
+      }),
     );
     const choiceRing = inject(ChoiceRing);
     const liveSettings = inject(LiveSettings);
@@ -129,11 +123,11 @@ export class App {
       choiceRing.start();
       liveSettings.start();
       if (wasSignedIn('admin')) {
-        void this.admin.restore();
+        void this.adminSession.restore();
       }
     });
     const router = inject(Router);
-    router.events.pipe(takeUntilDestroyed()).subscribe(event => {
+    router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.pagePath.set(event.urlAfterRedirects.split(/[?#]/)[0]);
         this.menuOpen.set(false);
@@ -142,29 +136,23 @@ export class App {
   }
 
   protected toggleMenu(): void {
-    this.menuOpen.update(open => !open);
+    this.menuOpen.update((open) => !open);
     this.settingsOpen.set(false);
     if (this.menuOpen()) {
-      afterNextRender(
-        () => this.siteNav().nativeElement.querySelector('a')?.focus(),
-        { injector: this.injector }
-      );
+      afterNextRender(() => this.siteNav().nativeElement.querySelector('a')?.focus(), { injector: this.injector });
     }
   }
 
   protected closePanels(): void {
     this.settingsOpen.set(false);
-    if (
-      this.menuOpen() &&
-      this.siteNav().nativeElement.contains(this.document.activeElement)
-    ) {
+    if (this.menuOpen() && this.siteNav().nativeElement.contains(this.document.activeElement)) {
       this.menuToggle().nativeElement.focus();
     }
     this.menuOpen.set(false);
   }
 
   protected toggleSettings(): void {
-    this.settingsOpen.update(open => !open);
+    this.settingsOpen.update((open) => !open);
     this.menuOpen.set(false);
   }
 

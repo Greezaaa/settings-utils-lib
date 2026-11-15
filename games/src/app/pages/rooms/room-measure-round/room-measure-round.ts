@@ -24,19 +24,14 @@ export class RoomMeasureRound {
 
   private readonly seed = computed(() => this.round().seed);
   protected readonly settings = computed(() => this.measure(), {
-    equal: (first, second) =>
-      first.mode === second.mode && first.levelId === second.levelId,
+    equal: (first, second) => first.mode === second.mode && first.levelId === second.levelId,
   });
-  private readonly exercises = computed(() =>
-    roomMeasureExercises(this.settings(), this.seed())
-  );
+  private readonly exercises = computed(() => roomMeasureExercises(this.settings(), this.seed()));
   private readonly index = linkedSignal({
     source: this.exercises,
     computation: () => 0,
   });
-  protected readonly exercise = computed(
-    () => this.exercises()[this.index() % this.exercises().length]
-  );
+  protected readonly exercise = computed(() => this.exercises()[this.index() % this.exercises().length]);
   protected readonly score = linkedSignal({
     source: this.seed,
     computation: () => 0,
@@ -46,8 +41,8 @@ export class RoomMeasureRound {
     if (this.clock.isOver()) {
       return;
     }
-    this.score.update(score => scoreAfterAnswer(score, isRight));
+    this.score.update((score) => scoreAfterAnswer(score, isRight));
     this.scored.emit(this.score());
-    this.index.update(index => index + 1);
+    this.index.update((index) => index + 1);
   }
 }

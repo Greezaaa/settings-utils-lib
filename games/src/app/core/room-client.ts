@@ -246,7 +246,7 @@ export class RoomClient {
     this.reactions.update((reactions) => [...reactions, shown]);
     setTimeout(
       () => this.reactions.update((reactions) => reactions.filter(({ key }) => key !== shown.key)),
-      REACTION_SHOW_MS
+      REACTION_SHOW_MS,
     );
   }
 
@@ -275,8 +275,7 @@ export class RoomClient {
   private saveSeat(seat: Seat): void {
     try {
       sessionStorage.setItem(SEAT_SESSION_KEY, JSON.stringify(seat));
-    } catch {
-    }
+    } catch {}
   }
 
   private forgetSeat(): void {
@@ -284,7 +283,6 @@ export class RoomClient {
     this.playerId.set(null);
     try {
       sessionStorage.removeItem(SEAT_SESSION_KEY);
-    } catch {
-    }
+    } catch {}
   }
 }

@@ -15,7 +15,16 @@ export interface NewsView {
   readonly text: NewsText;
 }
 
-const view = ({ id, version, published, kind, game, feature, privacy, text }: NewsItem): NewsView => ({
+const view = ({
+  id,
+  version,
+  published,
+  kind,
+  game,
+  feature,
+  privacy,
+  text,
+}: NewsItem): NewsView => ({
   id,
   version,
   published: published.toISOString(),
@@ -37,14 +46,21 @@ export class NewsService {
   ) {}
 
   async list(): Promise<NewsView[]> {
-    const items = await this.news.find({ order: { version: 'DESC', id: 'ASC' } });
+    const items = await this.news.find({
+      order: { version: 'DESC', id: 'ASC' },
+    });
     return items.map(view);
   }
 
   async add(input: NewsInput): Promise<NewsView> {
     const latest = await this.news.maximum('version');
     const item = await this.news.save(
-      this.news.create({ ...input, published: new Date(input.published), text: withoutEmpty(input.text), version: (latest ?? 0) + 1 }),
+      this.news.create({
+        ...input,
+        published: new Date(input.published),
+        text: withoutEmpty(input.text),
+        version: (latest ?? 0) + 1,
+      }),
     );
     return view(item);
   }
@@ -54,7 +70,11 @@ export class NewsService {
     if (!item) {
       throw new NotFoundException();
     }
-    Object.assign(item, { ...input, published: new Date(input.published), text: withoutEmpty(input.text) });
+    Object.assign(item, {
+      ...input,
+      published: new Date(input.published),
+      text: withoutEmpty(input.text),
+    });
     return view(await this.news.save(item));
   }
 

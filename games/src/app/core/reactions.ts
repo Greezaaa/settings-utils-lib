@@ -8,8 +8,7 @@ export type Reaction = (typeof REACTIONS)[number];
 export const REACTION_GAP_MS = 1500;
 export const REACTION_SHOW_MS = 3000;
 
-export const isReaction = (value: unknown): value is Reaction =>
-  REACTIONS.some((reaction) => reaction === value);
+export const isReaction = (value: unknown): value is Reaction => REACTIONS.some((reaction) => reaction === value);
 
 export const reactionPicture = (reaction: Reaction): string => `/reactions/${reaction}.webp`;
 

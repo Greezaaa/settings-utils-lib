@@ -8,9 +8,19 @@ import { WordGender } from './word-gender';
 type MessagesFor = (gender: WordGender) => SiteMessages;
 
 const LOADERS: Readonly<Record<LanguageId, () => Promise<MessagesFor>>> = {
-  en: () => import('./en').then(({ EN }) => () => EN),
+  en: () =>
+    import('./en').then(
+      ({ EN }) =>
+        () =>
+          EN,
+    ),
   es: () => Promise.resolve(spanish),
-  eu: () => import('./eu').then(({ EU }) => () => EU),
+  eu: () =>
+    import('./eu').then(
+      ({ EU }) =>
+        () =>
+          EU,
+    ),
   it: () => import('./it').then(({ italian }) => italian),
   uk: () => import('./uk').then(({ ukrainian }) => ukrainian),
 };
@@ -31,7 +41,6 @@ export const PRERENDER_LANGUAGE: LanguageId = 'es';
 
 export const PRERENDER_MESSAGES: SiteMessages = spanish('boy');
 
-
 @Injectable({ providedIn: 'root' })
 export class SiteLanguage {
   private readonly document = inject(DOCUMENT);
@@ -44,9 +53,7 @@ export class SiteLanguage {
 
   constructor() {
     afterNextRender(() => void this.show(initialLanguage()));
-    effect(() =>
-      this.document.documentElement.setAttribute('lang', this.languageId())
-    );
+    effect(() => this.document.documentElement.setAttribute('lang', this.languageId()));
   }
 
   set(id: LanguageId): void {
@@ -80,8 +87,6 @@ function initialLanguage(): LanguageId {
   if (isLanguageId(stored)) {
     return stored;
   }
-  const browser = navigator.languages
-    .map(tag => tag.slice(0, 2).toLowerCase())
-    .find(isLanguageId);
+  const browser = navigator.languages.map((tag) => tag.slice(0, 2).toLowerCase()).find(isLanguageId);
   return browser ?? 'en';
 }

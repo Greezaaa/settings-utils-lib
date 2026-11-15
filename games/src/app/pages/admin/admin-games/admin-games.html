@@ -10,7 +10,7 @@
               labelPosition="start"
               size="small"
               [checked]="availability.isOpen(slug)"
-              [disabled]="!admin.isSuper()"
+              [disabled]="!session.isSuper()"
               [busy]="saving().has(slug)"
               (checkedChange)="toggle(slug, $event)"
             >
@@ -24,7 +24,7 @@
             </su-lib-switch>
             <div class="thumbnail-row">
               <img class="thumbnail-preview" [src]="availability.thumbnailOf(slug)" alt="" loading="lazy" />
-              @if (admin.isSuper()) {
+              @if (session.isSuper()) {
                 <label class="button button-secondary button-small" [class.is-busy]="saving().has(slug)">
                   {{ 'admin.uploadThumbnail' | translate }}
                   <input type="file" accept="image/png,image/jpeg,image/webp" class="visually-hidden" [disabled]="saving().has(slug)" (change)="uploadThumbnail(slug, $event)" />
@@ -43,7 +43,7 @@
                   type="button"
                   class="button button-secondary button-small"
                   [attr.aria-pressed]="isChosen"
-                  [disabled]="!admin.isSuper() || saving().has(slug) || (isChosen && availability.categoriesOf(slug).length === 1)"
+                  [disabled]="!session.isSuper() || saving().has(slug) || (isChosen && availability.categoriesOf(slug).length === 1)"
                   (click)="toggleCategory(slug, category)"
                 >
                   {{ ('categories' | translate)[category] }}
@@ -65,7 +65,7 @@
             labelPosition="start"
             size="small"
             [checked]="flags.isOpen(feature.id)"
-            [disabled]="!admin.isSuper()"
+            [disabled]="!session.isSuper()"
             [busy]="saving().has(feature.id)"
             (checkedChange)="toggleFeature(feature.id, $event)"
           >
@@ -91,7 +91,7 @@
             labelPosition="start"
             size="small"
             [checked]="flags.isOpen(feature.id)"
-            [disabled]="!admin.isSuper()"
+            [disabled]="!session.isSuper()"
             [busy]="saving().has(feature.id)"
             (checkedChange)="toggleFeature(feature.id, $event)"
           >

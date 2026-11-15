@@ -1,20 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import type { GameCategoryList, GameSwitch } from '../contracts/site.contract.js';
 import { GameCategory, GameSlug } from '../shared/catalog.js';
 import { today } from '../shared/day.js';
 import { GameCategories } from './game-categories.entity.js';
 import { GameSetting } from './game-setting.entity.js';
-
-export interface GameSwitch {
-  readonly game: string;
-  readonly enabled: boolean;
-}
-
-export interface GameCategoryList {
-  readonly game: string;
-  readonly categories: readonly string[];
-}
 
 @Injectable()
 export class GameSettingsService {
@@ -39,7 +30,14 @@ export class GameSettingsService {
     return rows.map(({ game, categories }) => ({ game, categories }));
   }
 
-  async setCategories(game: GameSlug, categories: readonly GameCategory[], day = today()): Promise<void> {
-    await this.categories.upsert({ game, categories: [...new Set(categories)], updated: day }, ['game']);
+  async setCategories(
+    game: GameSlug,
+    categories: readonly GameCategory[],
+    day = today(),
+  ): Promise<void> {
+    await this.categories.upsert(
+      { game, categories: [...new Set(categories)], updated: day },
+      ['game'],
+    );
   }
 }

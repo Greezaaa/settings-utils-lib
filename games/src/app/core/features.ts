@@ -40,12 +40,7 @@ export type FeatureId =
 
 export type RoomGame = Extract<
   GameSlug,
-  | 'math-games'
-  | 'measure-it'
-  | 'letter-games'
-  | 'sliding-puzzle'
-  | 'turn-picture'
-  | 'place-pieces'
+  'math-games' | 'measure-it' | 'letter-games' | 'sliding-puzzle' | 'turn-picture' | 'place-pieces'
 >;
 
 export interface FeatureInfo {
@@ -90,9 +85,7 @@ export const FEATURES: readonly FeatureInfo[] = [
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);
 
-export const ROOM_GAMES: readonly RoomGame[] = FEATURES.flatMap(
-  ({ roomGame }) => (roomGame ? [roomGame] : [])
-);
+export const ROOM_GAMES: readonly RoomGame[] = FEATURES.flatMap(({ roomGame }) => (roomGame ? [roomGame] : []));
 
 export const ROOM_GAME_FEATURES: Readonly<Record<RoomGame, FeatureId>> = {
   'math-games': 'rooms-math-games',

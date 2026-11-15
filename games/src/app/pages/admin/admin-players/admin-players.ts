@@ -34,7 +34,7 @@ export class AdminPlayers {
         key: 'removedFromBoards',
         header: admin.playerColumns.boards,
         sortable: true,
-        format: removed => (removed ? admin.playerRemoved : admin.playerShown),
+        format: (removed) => (removed ? admin.playerRemoved : admin.playerShown),
       },
       { key: 'joined', header: admin.playerColumns.joined, sortable: true },
     ];
@@ -43,12 +43,12 @@ export class AdminPlayers {
     const { admin } = this.t();
     return [
       { id: 'rename', label: admin.plainName },
-      { id: 'take-off', label: admin.takeOff, hidden: player => player.removedFromBoards },
-      { id: 'put-back', label: admin.putBack, hidden: player => !player.removedFromBoards },
+      { id: 'take-off', label: admin.takeOff, hidden: (player) => player.removedFromBoards },
+      { id: 'put-back', label: admin.putBack, hidden: (player) => !player.removedFromBoards },
     ];
   });
 
-  protected readonly list = new PagedList(offset => this.admin.players(offset));
+  protected readonly list = new PagedList((offset) => this.admin.players(offset));
   private readonly notifySaveFailed = saveFailedNotice();
 
   constructor() {

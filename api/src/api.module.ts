@@ -6,6 +6,7 @@ import { FeedbackModule } from './feedback/feedback.module.js';
 import { GameSettingsModule } from './game-settings/game-settings.module.js';
 import { NewsModule } from './news/news.module.js';
 import { PlaysModule } from './plays/plays.module.js';
+import { SiteModule } from './site/site.module.js';
 import { StatsModule } from './stats/stats.module.js';
 import { SuggestionsModule } from './suggestions/suggestions.module.js';
 import { WordReportsModule } from './word-reports/word-reports.module.js';
@@ -20,6 +21,7 @@ import { WordReportsModule } from './word-reports/word-reports.module.js';
     FeatureFlagsModule,
     GameSettingsModule,
     NewsModule,
+    SiteModule,
     WordReportsModule,
     SuggestionsModule,
   ],

@@ -21,13 +21,13 @@ export class AdminSuggestions {
 
   protected readonly statuses = SUGGESTION_STATUSES;
   protected readonly status = signal<SuggestionStatus>('new');
-  protected readonly list = new PagedList(offset => this.admin.suggestions(this.status(), offset));
+  protected readonly list = new PagedList((offset) => this.admin.suggestions(this.status(), offset));
   private readonly notifySaveFailed = saveFailedNotice();
   protected readonly images = signal<ReadonlyMap<string, string>>(new Map());
 
   constructor() {
     void this.list.reload();
-    inject(DestroyRef).onDestroy(() => this.images().forEach(url => URL.revokeObjectURL(url)));
+    inject(DestroyRef).onDestroy(() => this.images().forEach((url) => URL.revokeObjectURL(url)));
   }
 
   protected show(status: SuggestionStatus): void {
@@ -38,7 +38,7 @@ export class AdminSuggestions {
   protected async showImage(id: string): Promise<void> {
     const image = await this.admin.suggestionImage(id);
     if (image) {
-      this.images.update(images => new Map(images).set(id, URL.createObjectURL(image)));
+      this.images.update((images) => new Map(images).set(id, URL.createObjectURL(image)));
     }
   }
 
@@ -54,7 +54,7 @@ export class AdminSuggestions {
   }
 
   protected otherStatuses(status: SuggestionStatus): SuggestionStatus[] {
-    return SUGGESTION_STATUSES.filter(other => other !== status);
+    return SUGGESTION_STATUSES.filter((other) => other !== status);
   }
 
   private async afterChange(suggestion: AdminSuggestion, change: Promise<boolean>): Promise<void> {

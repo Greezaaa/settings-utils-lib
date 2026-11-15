@@ -27,7 +27,10 @@ export class NewsAdminController {
   }
 
   @Put(':id')
-  change(@Param('id', { schema: newsIdSchema }) id: number, @Body({ schema: newsSchema }) input: NewsInput): Promise<NewsView> {
+  change(
+    @Param('id', { schema: newsIdSchema }) id: number,
+    @Body({ schema: newsSchema }) input: NewsInput,
+  ): Promise<NewsView> {
     return this.news.change(id, input);
   }
 

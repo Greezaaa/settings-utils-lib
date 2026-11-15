@@ -12,7 +12,9 @@ import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'playing' | 'done';
 
-type PressSource = { readonly kind: 'tray'; readonly symbol: number } | { readonly kind: 'cell'; readonly cell: number };
+type PressSource =
+  | { readonly kind: 'tray'; readonly symbol: number }
+  | { readonly kind: 'cell'; readonly cell: number };
 
 interface Press {
   readonly source: PressSource;
@@ -56,7 +58,9 @@ export class SudokuPage {
   protected readonly traySymbols = computed(() => Array.from({ length: this.size() }, (_, symbol) => symbol));
   protected readonly usedUp = computed(() => {
     const board = this.board();
-    return new Set(this.traySymbols().filter((symbol) => board.filter((cell) => cell === symbol).length >= this.size()));
+    return new Set(
+      this.traySymbols().filter((symbol) => board.filter((cell) => cell === symbol).length >= this.size()),
+    );
   });
 
   protected readonly picked = signal<number | null>(null);
