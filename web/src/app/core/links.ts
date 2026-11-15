@@ -32,6 +32,9 @@ export const changelogRawUrl = (folder: string): string => `${RAW_MAIN_URL}/proj
 
 export const npmUrl = (packageName: string): string => `https://www.npmjs.com/package/${packageName}`;
 
+export const npmMonthlyDownloadsUrl = (packageName: string): string =>
+  `https://api.npmjs.org/downloads/point/last-month/${packageName}`;
+
 export const marketplaceUrl = (extensionId: string): string =>
   `https://marketplace.visualstudio.com/items?itemName=${extensionId}`;
 

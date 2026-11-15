@@ -1,0 +1,5 @@
+@if (downloads() !== null) {
+  <a class="tag tag-npm" [href]="link()" target="_blank" rel="noopener" [attr.aria-label]="label()">
+    npm: {{ shortCount() }}<span class="tag-npm-more">&nbsp;downloads last month</span>
+  </a>
+}

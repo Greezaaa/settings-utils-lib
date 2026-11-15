@@ -1,0 +1,27 @@
+:host {
+  display: contents;
+}
+
+.tag-npm {
+  background: var(--npm-red);
+  color: #ffffff;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--heading);
+    outline-offset: 2px;
+  }
+}
+
+.tag-npm-more {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  transition: max-width 250ms var(--ease-out);
+  vertical-align: bottom;
+}
+
+.tag-npm:hover .tag-npm-more,
+.tag-npm:focus-visible .tag-npm-more {
+  max-width: 12rem;
+}
