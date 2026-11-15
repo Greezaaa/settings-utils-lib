@@ -5,11 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.1.1] - 2026-11-15
+
+### Fixed
+- The heading pin of a column set up with `pinned: 'end'` pins it back to the end instead of the start
+
 ## [22.1.0]
 
 ### Added
 - Pinned columns: `pinned: 'start' | 'end'` on a column keeps it in view while the others scroll, with a soft shadow on its edge while columns pass under it; the move handles and checkboxes stay with columns pinned to the start, the actions with those pinned to the end
-- A pin in the heading of pinned and pinnable columns (`pinnable: true`) unpins the column or pins it back to the side it was set up with (the start by default; a toggle, announced)
+- A pin in the heading of pinned and pinnable columns (`pinnable: true`) pins the column to the start or unpins it (a toggle, announced)
 - `columnControls`: a Columns button with a menu to show, hide, pin and unpin columns: a search for long lists, a Select all checkbox (partly checked while some columns are hidden), a checkbox for each column and a toggle beside it that shows or hides the column's heading pin; Escape or a click outside closes it
 - When the pinned columns would leave too little room to scroll the rest (e.g. on a phone), they stop sticking until there's room
 - `--su-table-pinned-background` and `--su-table-pinned-shadow`
