@@ -11,6 +11,7 @@ import { GameBoard } from '../../shared/game-board';
 import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { TowerPlatform, TowerView } from './tower-view/tower-view';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'ready' | 'playing' | 'over';
 
@@ -30,7 +31,7 @@ const ANSWER_KEYS: Readonly<Record<string, Side>> = { ArrowLeft: 'left', ArrowRi
 
 @Component({
   selector: 'app-climb-tower-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, TowerView],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, ShareResult, TowerView],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './climb-tower-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './climb-tower-page.scss'],

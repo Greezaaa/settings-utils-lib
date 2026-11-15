@@ -40,6 +40,7 @@
             @if (isNewBest()) {
               <small class="record">{{ 'over.newRecord' | translate }}</small>
             }
+            <app-share-result game="find-pairs" [details]="[('findPairs.levels' | translate)[levelId()].name, 'findPairs.summary' | translate: moves() : clock.time()]" />
           </p>
         }
       </div>

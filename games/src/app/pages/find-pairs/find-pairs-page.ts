@@ -11,6 +11,7 @@ import { GameClock } from '../../shared/game-clock';
 import { GameBoard } from '../../shared/game-board';
 import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'playing' | 'done';
 type BestMoves = Partial<Record<BoardLevelId, number>>;
@@ -20,7 +21,7 @@ const MISMATCH_MS = 900;
 
 @Component({
   selector: 'app-find-pairs-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './find-pairs-page.html',
   styleUrls: [

@@ -112,6 +112,7 @@
           }
         </p>
         <p class="muted settings-label">{{ settingsLabel() }}</p>
+        <app-share-result game="math-games" [details]="[settingsLabel(), 'over.correctAnswers' | translate: score()]" />
         <p class="solution">
           @if (ending() === 'wrong') {
             <span class="muted">{{ 'over.youAnswered' | translate }}</span>

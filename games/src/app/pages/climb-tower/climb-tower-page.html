@@ -95,6 +95,7 @@
             · {{ 'over.best' | translate: best() }}
           }
         </p>
+        <app-share-result game="climb-tower" [details]="[('climbTower.modes' | translate)[modeId()].name, ('settings.levels' | translate)[levelId()].name, 'climbTower.summary' | translate: floor()]" />
         <p class="solution">
           <span class="muted">{{ 'over.rightAnswer' | translate }}</span>
           <span class="mono">{{ solution() }}</span>

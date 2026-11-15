@@ -9,6 +9,7 @@ import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { GameBoard } from '../../shared/game-board';
 import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'playing' | 'won' | 'lost';
 
@@ -19,7 +20,7 @@ interface Tile {
 
 @Component({
   selector: 'app-secret-word-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './secret-word-page.html',
   styleUrls: [
@@ -51,6 +52,7 @@ export class SecretWordPage {
   private readonly keys = computed(() => new Set(this.keyboard().flat()));
   protected readonly marks = computed(() => keyMarks(this.guesses(), this.secretLetters()));
   protected readonly triesLeft = computed(() => MAX_GUESSES - this.guesses().length);
+  protected readonly triesUsed = computed(() => `${this.guesses().length}/${MAX_GUESSES}`);
 
   protected readonly rows = computed<Tile[][]>(() => {
     const [guesses, typing, length] = [this.guesses(), this.typing(), this.level().length];

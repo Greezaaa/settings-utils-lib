@@ -257,6 +257,12 @@ export interface SiteMessages {
     readonly playInstead: string;
   };
 
+  readonly share: {
+    readonly button: string;
+    readonly challenge: string;
+    readonly copied: string;
+  };
+
   readonly page: {
     readonly section: string;
     readonly ages: (age: number) => string;

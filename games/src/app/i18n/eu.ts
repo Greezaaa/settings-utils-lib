@@ -482,6 +482,12 @@ export const EU: SiteMessages = {
     playInstead: 'Jokatu honetara',
   },
 
+  share: {
+    button: 'Partekatu',
+    challenge: 'Gai zara ni gainditzeko? 🏆',
+    copied: 'Kopiatuta!',
+  },
+
   page: {
     section: 'Joko adimentsuak',
     ages: age => `${age} urtetik aurrera`,
@@ -1194,6 +1200,7 @@ export const EU: SiteMessages = {
       'email-hints': 'Posta elektronikoko akatsen iradokizunak (gmial.com → gmail.com)',
       'admin-tables': 'Administrazio-zerrendak bilaketa eta orriak dituzten taula gisa',
       'menu-sheet': 'Mugikorreko menua irristatzen den panel gisa',
+      'share-results': 'Partekatzeko botoia joko bat amaitzean',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:

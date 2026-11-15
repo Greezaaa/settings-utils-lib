@@ -15,12 +15,13 @@ import { BestTimes, pictureScoreKey, readBestTimes, writeBestTimes } from '../..
 import { PictureSettings } from '../../shared/picture-settings/picture-settings';
 import { PieceSwap, PlaceBoard } from './place-board/place-board';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 const BEST_TIMES_STORAGE = RESULT_GAMES['place-pieces'].storage;
 
 @Component({
   selector: 'app-place-pieces-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, PlaceBoard, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, PlaceBoard, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './place-pieces-page.html',
   styleUrls: [

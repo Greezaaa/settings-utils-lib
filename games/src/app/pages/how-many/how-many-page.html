@@ -98,6 +98,7 @@
               <p class="trophy" aria-hidden="true">🏆</p>
               <p class="final-score">{{ 'howMany.done' | translate }}</p>
               <p class="muted">{{ 'howMany.summary' | translate: stars() : results().length }}</p>
+              <app-share-result game="how-many" [details]="[('howMany.levels' | translate)[levelId()].name, 'howMany.summary' | translate: stars() : results().length]" />
               <button type="button" class="button start" (click)="newGame()">{{ 'over.playAgain' | translate }}</button>
             </div>
           }

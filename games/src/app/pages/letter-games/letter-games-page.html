@@ -127,6 +127,7 @@
         <p class="eyebrow">{{ isTimeUp() ? ('over.outOfTime' | translate) : ('letterGames.solved' | translate) }}</p>
         <p class="final-score">{{ wordsDone() }}</p>
         <p class="muted">{{ 'letterGames.summary' | translate: wordsDone() : mistakes() }}</p>
+        <app-share-result game="letter-games" [details]="[('letterGames.modes' | translate)[modeId()].name, 'letterGames.summary' | translate: wordsDone() : mistakes()]" />
         <div class="button-row">
           <button type="button" class="button" (click)="start()">{{ 'over.playAgain' | translate }}</button>
           <button type="button" class="button button-secondary" (click)="backToSettings()">

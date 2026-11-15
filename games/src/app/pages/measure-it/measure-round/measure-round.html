@@ -16,16 +16,20 @@
       [marksEvery]="angle.level.marksEvery"
       [labels]="angle.level.markLabels"
       [checked]="checkedRay()" />
-    <div class="dial">
-      <span class="value mono">{{ value() }}°</span>
-      <app-protractor-view
-        [angle]="value()"
-        [marksEvery]="0"
-        [labels]="false"
-        [editable]="!isDone()"
-        [label]="'measureIt.yourAnswer' | translate"
-        (angleChange)="value.set($event)" />
-    </div>
+    <label class="degrees">
+      <input
+        class="degrees-input mono"
+        type="text"
+        inputmode="numeric"
+        maxlength="3"
+        autocomplete="off"
+        [value]="typed()"
+        [disabled]="isDone()"
+        [attr.aria-label]="'measureIt.yourAnswer' | translate"
+        (input)="typeDegrees($event)"
+        (keydown.enter)="check()" />
+      <span class="value mono" aria-hidden="true">°</span>
+    </label>
   }
 }
 
@@ -55,7 +59,7 @@
   <p class="question">{{ 'measureIt.whichNumber' | translate }}</p>
   <app-number-line-view [line]="line" [answer]="lineAnswer()" />
   <label class="slider">
-    <span class="value mono">x = {{ formatNumber(value()) }}</span>
+    <span class="value mono">x = {{ lineReadout() }}</span>
     <input
       type="range"
       [min]="line.slider.min"
@@ -74,7 +78,7 @@
     class="button check"
     [class.is-right]="isRight() === true"
     [class.is-wrong]="isRight() === false"
-    [disabled]="isDone()"
+    [disabled]="isDone() || !hasAnswer()"
     (click)="check()">
     {{ 'measureIt.check' | translate }}
   </button>

@@ -15,6 +15,7 @@ import { BuilderRound } from './rounds/builder-round/builder-round';
 import { GapRound } from './rounds/gap-round/gap-round';
 import { MixedRound } from './rounds/mixed-round/mixed-round';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'ready' | 'playing' | 'done';
 
@@ -22,7 +23,17 @@ const SOLVED_MS = 700;
 
 @Component({
   selector: 'app-letter-games-page',
-  imports: [TranslatePipe, BuilderRound, GameBoard, GameFeedback, GapRound, MixedRound, RouterLink, TimerBar],
+  imports: [
+    TranslatePipe,
+    BuilderRound,
+    GameBoard,
+    GameFeedback,
+    GapRound,
+    MixedRound,
+    RouterLink,
+    ShareResult,
+    TimerBar,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './letter-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './letter-games-page.scss'],

@@ -54,6 +54,7 @@ export const FEATURE_IDS = [
   'email-hints',
   'admin-tables',
   'menu-sheet',
+  'share-results',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

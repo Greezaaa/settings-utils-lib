@@ -18,6 +18,7 @@ import { RoundResult } from './rounds/round-result';
 import { TrueOrFalseRound } from './rounds/true-or-false-round/true-or-false-round';
 import { YourAnswerRound } from './rounds/your-answer-round/your-answer-round';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'ready' | 'playing' | 'over';
 
@@ -34,7 +35,7 @@ const DEFAULT_LEVEL: LevelId = 'normal';
 
 @Component({
   selector: 'app-math-games-page',
-  imports: [TranslatePipe, FindTheSignsRound, GameBoard, GameFeedback, RouterLink, TimerBar, TrueOrFalseRound, YourAnswerRound],
+  imports: [TranslatePipe, FindTheSignsRound, GameBoard, GameFeedback, RouterLink, ShareResult, TimerBar, TrueOrFalseRound, YourAnswerRound],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './math-games-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './math-games-page.scss'],

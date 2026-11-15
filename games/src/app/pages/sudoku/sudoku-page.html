@@ -78,6 +78,7 @@
           <p class="done" role="status">
             {{ 'sudoku.done' | translate }}
             <small>{{ 'sudoku.summary' | translate: clock.time() }}</small>
+            <app-share-result [game]="game()" [details]="[size() + ' × ' + size(), 'sudoku.summary' | translate: clock.time()]" />
           </p>
         } @else if (isChecked()) {
           <p class="check-result" role="status" [class.is-wrong]="repeated().size > 0">

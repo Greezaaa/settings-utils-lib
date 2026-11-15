@@ -509,6 +509,12 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     playInstead: 'Краще пограймо',
   },
 
+  share: {
+    button: 'Поділитися',
+    challenge: 'Зможеш мене перевершити? 🏆',
+    copied: 'Скопійовано!',
+  },
+
   page: {
     section: 'Розумні ігри',
     ages: age => `Від ${age} ${age === 1 ? 'року' : 'років'}`,
@@ -1224,6 +1230,7 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
       'email-hints': 'Підказки щодо помилок в email (gmial.com → gmail.com)',
       'admin-tables': 'Адмін-списки як таблиці з пошуком і сторінками',
       'menu-sheet': 'Меню на телефоні як панель, що висувається',
+      'share-results': 'Кнопка «Поділитися» після завершення гри',
     },
     multiplayerTitle: 'Ігри для кількох гравців',
     multiplayerHelp:

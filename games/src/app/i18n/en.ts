@@ -476,6 +476,12 @@ export const EN: SiteMessages = {
     playInstead: 'Play instead',
   },
 
+  share: {
+    button: 'Share',
+    challenge: 'Can you beat me? 🏆',
+    copied: 'Copied!',
+  },
+
   page: {
     section: 'Smart games',
     ages: age => `Ages ${age}+`,
@@ -1169,6 +1175,7 @@ export const EN: SiteMessages = {
       'email-hints': 'Email typo hints (gmial.com → gmail.com)',
       'admin-tables': 'Admin lists as tables with search and pages',
       'menu-sheet': 'Phone menu as a sheet that slides up',
+      'share-results': 'Share button when a game is finished',
     },
     multiplayerTitle: 'Multiplayer games',
     multiplayerHelp:

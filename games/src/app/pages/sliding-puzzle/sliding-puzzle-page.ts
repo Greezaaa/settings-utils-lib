@@ -15,6 +15,7 @@ import { GameClock } from '../../shared/game-clock';
 import { PuzzleTile } from './puzzle-tile/puzzle-tile';
 import { SlidingBoard } from './sliding-board/sliding-board';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 const BEST_MOVES_STORAGE = RESULT_GAMES['sliding-puzzle'].storage;
 type BestMoves = Partial<Record<BoardLevelId, number>>;
@@ -23,7 +24,7 @@ const DEFAULT_LEVEL: BoardLevelId = 'normal';
 
 @Component({
   selector: 'app-sliding-puzzle-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, PuzzleTile, RouterLink, SlidingBoard],
+  imports: [TranslatePipe, GameBoard, GameFeedback, PuzzleTile, RouterLink, ShareResult, SlidingBoard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sliding-puzzle-page.html',
   styleUrls: [

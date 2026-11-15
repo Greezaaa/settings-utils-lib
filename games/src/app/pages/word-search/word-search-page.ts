@@ -9,6 +9,7 @@ import { TranslatePipe } from '../../i18n/translate-pipe';
 import { GameBoard } from '../../shared/game-board';
 import { GameClock } from '../../shared/game-clock';
 import { GameFeedback } from '../../shared/game-feedback/game-feedback';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'playing' | 'done';
 
@@ -22,7 +23,7 @@ const FOUND_COLOURS = 4;
 
 @Component({
   selector: 'app-word-search-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './word-search-page.html',
   styleUrls: [

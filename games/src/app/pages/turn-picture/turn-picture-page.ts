@@ -15,12 +15,13 @@ import { BestTimes, pictureScoreKey, readBestTimes, writeBestTimes } from '../..
 import { PictureSettings } from '../../shared/picture-settings/picture-settings';
 import { TurnBoard } from './turn-board/turn-board';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 const BEST_TIMES_STORAGE = RESULT_GAMES['turn-picture'].storage;
 
 @Component({
   selector: 'app-turn-picture-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, RouterLink, TurnBoard],
+  imports: [TranslatePipe, GameBoard, GameFeedback, PictureSettings, RouterLink, ShareResult, TurnBoard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './turn-picture-page.html',
   styleUrls: [

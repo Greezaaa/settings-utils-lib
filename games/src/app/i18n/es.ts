@@ -493,6 +493,12 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     playInstead: 'Juega a esto',
   },
 
+  share: {
+    button: 'Compartir',
+    challenge: '¿Puedes superarme? 🏆',
+    copied: '¡Copiado!',
+  },
+
   page: {
     section: 'Juegos inteligentes',
     ages: age => `Desde ${age} años`,
@@ -1207,6 +1213,7 @@ export const spanish = (gender: WordGender): SiteMessages => ({
       'email-hints': 'Avisos de errores en el correo (gmial.com → gmail.com)',
       'admin-tables': 'Listas de administración como tablas con búsqueda y páginas',
       'menu-sheet': 'Menú del móvil como panel que se desliza',
+      'share-results': 'Botón de compartir al terminar un juego',
     },
     multiplayerTitle: 'Juegos multijugador',
     multiplayerHelp:

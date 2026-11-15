@@ -8,6 +8,7 @@ import { GameClock } from '../../shared/game-clock';
 import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'playing' | 'done';
 
@@ -28,7 +29,7 @@ const NO_CELLS: ReadonlySet<number> = new Set();
 
 @Component({
   selector: 'app-sudoku-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sudoku-page.html',
   styleUrls: [

@@ -11,6 +11,7 @@ import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { roundFeedback } from '../../shared/round-feedback';
 import { CountVoice } from './count-voice';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'playing' | 'done';
 
@@ -20,7 +21,7 @@ const CONFETTI = ['🎉', '⭐', '✨', '🌟', '🎊', '💫', '⭐', '✨'];
 
 @Component({
   selector: 'app-how-many-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './how-many-page.html',
   styleUrls: [

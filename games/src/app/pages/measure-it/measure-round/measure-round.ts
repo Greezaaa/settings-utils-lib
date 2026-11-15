@@ -8,6 +8,11 @@ import { CheckedRay, ProtractorView } from '../protractor-view/protractor-view';
 import { TranslatePipe } from '../../../i18n/translate-pipe';
 
 const FEEDBACK_MS = 1300;
+const MAX_DEGREES = 180;
+const MAX_READOUT_DECIMALS = 2;
+
+const decimalsOf = (value: number): number =>
+  (String(value).split('.')[1] ?? '').length;
 
 type SliderExercise = AngleExercise | LineExercise;
 
@@ -38,12 +43,15 @@ export class MeasureRound {
 
   protected readonly formatFill = formatFill;
   protected readonly fillParts = fillParts;
-  protected readonly formatNumber = formatNumber;
 
   protected readonly value = linkedSignal({
     source: this.exercise,
     computation: (exercise): number =>
       exercise.kind === 'line' ? exercise.start : 90,
+  });
+  protected readonly typed = linkedSignal({
+    source: this.exercise,
+    computation: (): string => '',
   });
   protected readonly isRight = linkedSignal({
     source: this.exercise,
@@ -62,6 +70,18 @@ export class MeasureRound {
   protected readonly angle = computed(() => this.asAngle(this.exercise()));
   protected readonly glass = computed(() => this.asGlass(this.exercise()));
   protected readonly line = computed(() => this.asLine(this.exercise()));
+
+  protected readonly hasAnswer = computed(
+    () => this.mode() !== 'read-angle' || this.typed() !== ''
+  );
+  protected readonly lineReadout = computed(() => {
+    const line = this.line();
+    if (!line) {
+      return '';
+    }
+    const decimals = Math.min(MAX_READOUT_DECIMALS, decimalsOf(line.step / 10));
+    return this.value().toFixed(decimals).replace('-', '−');
+  });
 
   protected readonly checkedRay = computed((): CheckedRay | null => {
     const angle = this.angle();
@@ -101,9 +121,23 @@ export class MeasureRound {
     }
   }
 
+  protected typeDegrees(event: Event): void {
+    if (!(event.target instanceof HTMLInputElement) || this.isDone()) {
+      return;
+    }
+    const digits = event.target.value.replace(/\D/g, '');
+    const degrees =
+      digits === '' ? '' : String(Math.min(MAX_DEGREES, Number(digits)));
+    event.target.value = degrees;
+    this.typed.set(degrees);
+    if (degrees !== '') {
+      this.value.set(Number(degrees));
+    }
+  }
+
   protected check(): void {
     const exercise = this.angle() ?? this.line();
-    if (!exercise || this.isDone()) {
+    if (!exercise || this.isDone() || !this.hasAnswer()) {
       return;
     }
     if (isSliderRight(exercise, this.value())) {

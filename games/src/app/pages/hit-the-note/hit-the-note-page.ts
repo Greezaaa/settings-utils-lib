@@ -10,6 +10,7 @@ import { FindNoteRound } from './rounds/find-note-round/find-note-round';
 import { HigherLowerRound } from './rounds/higher-lower-round/higher-lower-round';
 import { SingRound } from './rounds/sing-round/sing-round';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'ready' | 'playing' | 'done';
 
@@ -17,7 +18,16 @@ const NEXT_ROUND_MS = 1200;
 
 @Component({
   selector: 'app-hit-the-note-page',
-  imports: [TranslatePipe, FindNoteRound, GameBoard, GameFeedback, HigherLowerRound, RouterLink, SingRound],
+  imports: [
+    TranslatePipe,
+    FindNoteRound,
+    GameBoard,
+    GameFeedback,
+    HigherLowerRound,
+    RouterLink,
+    ShareResult,
+    SingRound,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './hit-the-note-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/game-settings.scss', './hit-the-note-page.scss'],

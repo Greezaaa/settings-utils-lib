@@ -32,6 +32,7 @@
               @if (isNewBest()) {
                 <small class="record">{{ 'pictureGames.newRecord' | translate }}</small>
               }
+              <app-share-result game="place-pieces" [details]="[('pictureGames.levels' | translate)[levelId()].name, 'placePieces.solvedIn' | translate: moves() : clock.time()]" />
             </p>
           }
 

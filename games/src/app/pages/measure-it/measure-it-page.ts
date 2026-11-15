@@ -8,12 +8,13 @@ import { GameBoard } from '../../shared/game-board';
 import { GameFeedback } from '../../shared/game-feedback/game-feedback';
 import { MeasureRound } from './measure-round/measure-round';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { ShareResult } from '../../shared/share-result/share-result';
 
 type Phase = 'ready' | 'playing' | 'done';
 
 @Component({
   selector: 'app-measure-it-page',
-  imports: [TranslatePipe, GameBoard, GameFeedback, MeasureRound, RouterLink],
+  imports: [TranslatePipe, GameBoard, GameFeedback, MeasureRound, RouterLink, ShareResult],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './measure-it-page.html',
   styleUrls: [

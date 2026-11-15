@@ -31,6 +31,7 @@
             @if (isNewBest()) {
               <small class="record">{{ 'slidingPuzzle.newRecord' | translate }}</small>
             }
+            <app-share-result game="sliding-puzzle" [details]="[('slidingPuzzle.levels' | translate)[levelId()].name, 'slidingPuzzle.solvedIn' | translate: moves() : clock.time()]" />
           </p>
         }
       </div>

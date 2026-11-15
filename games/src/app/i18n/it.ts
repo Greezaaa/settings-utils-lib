@@ -479,6 +479,12 @@ export const italian = (gender: WordGender): SiteMessages => ({
     playInstead: 'Gioca invece',
   },
 
+  share: {
+    button: 'Condividi',
+    challenge: 'Riesci a battermi? 🏆',
+    copied: 'Copiato!',
+  },
+
   page: {
     section: 'Giochi intelligenti',
     ages: (age) => `Dai ${age} anni`,
@@ -1166,6 +1172,7 @@ export const italian = (gender: WordGender): SiteMessages => ({
       'email-hints': 'Suggerimenti per errori nell’email (gmial.com → gmail.com)',
       'admin-tables': 'Elenchi di amministrazione come tabelle con ricerca e pagine',
       'menu-sheet': 'Menu del telefono come pannello che scorre',
+      'share-results': 'Pulsante condividi a fine partita',
     },
     multiplayerTitle: 'Giochi multigiocatore',
     multiplayerHelp:
