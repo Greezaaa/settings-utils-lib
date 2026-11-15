@@ -7,7 +7,7 @@ const ANSWERS: Readonly<Record<string, WorkerAnswer>> = {
   NO_NEW_VERSION_DETECTED: 'no-new-version',
   VERSION_INSTALLATION_FAILED: 'failed',
 };
-const STATUS = 'STATUS';
+const COMPLETED = 'OPERATION_COMPLETED';
 export const WORKER_ANSWER_TIMEOUT_MS = 30_000;
 const ACTIVATE_TIMEOUT_MS = 5_000;
 
@@ -57,9 +57,9 @@ export async function activateWorkerUpdate(container: ServiceWorkerContainer): P
     container,
     'ACTIVATE_UPDATE',
     ACTIVATE_TIMEOUT_MS,
-    (data, nonce) => field(data, 'type') === STATUS && field(data, 'nonce') === nonce,
+    (data, nonce) => field(data, 'type') === COMPLETED && field(data, 'nonce') === nonce,
   );
-  return field(answer, 'status') === true;
+  return field(answer, 'result') === true;
 }
 
 export async function removeWorker(container: ServiceWorkerContainer, cacheStorage: CacheStorage): Promise<void> {
@@ -67,4 +67,40 @@ export async function removeWorker(container: ServiceWorkerContainer, cacheStora
   await Promise.all(registrations.map((registration) => registration.unregister()));
   const names = await cacheStorage.keys().catch(() => []);
   await Promise.all(names.filter((name) => name.startsWith('ngsw:')).map((name) => cacheStorage.delete(name)));
+}
+
+export interface SavedFiles {
+  readonly saved: number;
+  readonly total: number;
+}
+
+const APP_GROUP = 'app';
+const APP_CACHE_SUFFIX = ':assets:app:cache';
+
+async function appFileUrls(): Promise<readonly string[] | null> {
+  try {
+    const manifest: unknown = await fetch(`/ngsw.json?ngsw-cache-bust=${Date.now()}`, { cache: 'no-store' }).then(
+      (answer) => (answer.ok ? answer.json() : null),
+    );
+    const groups = field(manifest, 'assetGroups');
+    const app = Array.isArray(groups) ? groups.find((group: unknown) => field(group, 'name') === APP_GROUP) : undefined;
+    const urls = field(app, 'urls');
+    return Array.isArray(urls) ? urls.filter((url: unknown): url is string => typeof url === 'string') : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function savedAppFiles(cacheStorage: CacheStorage): Promise<SavedFiles | null> {
+  const urls = await appFileUrls();
+  if (urls === null) {
+    return null;
+  }
+  const name = (await cacheStorage.keys().catch(() => [])).find((key) => key.endsWith(APP_CACHE_SUFFIX));
+  if (name === undefined) {
+    return { saved: 0, total: urls.length };
+  }
+  const cache = await cacheStorage.open(name);
+  const answers = await Promise.all(urls.map((url) => cache.match(url)));
+  return { saved: answers.filter((answer) => answer !== undefined).length, total: urls.length };
 }

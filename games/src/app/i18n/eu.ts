@@ -107,6 +107,8 @@ export const EU: SiteMessages = {
     offlinePlay: 'Konexiorik gabe jolastu',
     offlinePlayChoices: { on: 'Bai', off: 'Ez' },
     offlinePlayHelp: 'Jokoak gailu honetan gordetzen ditu (2 MB inguru), internetik gabe funtziona dezaten',
+    offlineSaving: (saved, total) => `Jokoak gordetzen: ${saved}/${total}. Mantendu internet amaitu arte.`,
+    offlineReady: 'Prest: jokoek internetik gabe dabiltza gailu honetan',
     install: 'Instalatu jokoak',
     installButton: 'Instalatu',
     installGuide: 'Nola instalatu',

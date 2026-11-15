@@ -105,6 +105,9 @@ export const italian = (gender: WordGender): SiteMessages => ({
     offlinePlay: 'Gioca offline',
     offlinePlayChoices: { on: 'Sì', off: 'No' },
     offlinePlayHelp: 'Tiene i giochi su questo dispositivo (circa 2 MB) per farli funzionare senza internet',
+    offlineSaving: (saved, total) =>
+      `Salvataggio dei giochi: ${saved} di ${total}. Tieni internet acceso finché non finisce.`,
+    offlineReady: 'Pronto: i giochi funzionano senza internet su questo dispositivo',
     install: 'Installa i giochi',
     installButton: 'Installa',
     installGuide: 'Come installare',

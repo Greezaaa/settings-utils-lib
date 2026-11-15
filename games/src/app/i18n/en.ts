@@ -104,6 +104,8 @@ export const EN: SiteMessages = {
     offlinePlay: 'Play offline',
     offlinePlayChoices: { on: 'Yes', off: 'No' },
     offlinePlayHelp: 'Keeps the games on this device (about 2 MB) so they work without internet',
+    offlineSaving: (saved, total) => `Saving the games: ${saved} of ${total}. Keep the internet on until it's done.`,
+    offlineReady: 'Ready: the games work without internet on this device',
     install: 'Install the games',
     installButton: 'Install',
     installGuide: 'How to install',

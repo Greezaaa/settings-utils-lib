@@ -136,6 +136,8 @@ export const ukrainian = (gender: WordGender): SiteMessages => ({
     offlinePlay: 'Грати без мережі',
     offlinePlayChoices: { on: 'Так', off: 'Ні' },
     offlinePlayHelp: 'Зберігає ігри на цьому пристрої (близько 2 МБ), щоб вони працювали без інтернету',
+    offlineSaving: (saved, total) => `Зберігаємо ігри: ${saved} з ${total}. Не вимикай інтернет, доки не завершиться.`,
+    offlineReady: 'Готово: ігри працюють без інтернету на цьому пристрої',
     install: 'Встановити ігри',
     installButton: 'Встановити',
     installGuide: 'Як встановити',

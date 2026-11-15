@@ -123,6 +123,13 @@
       }
     </div>
     <small class="muted">{{ 'site.offlinePlayHelp' | translate }}</small>
+    @if (offlineMode.isOn() && offlineMode.files(); as files) {
+      @if (offlineMode.isSaved()) {
+        <small class="offline-ready" role="status">{{ 'site.offlineReady' | translate }}</small>
+      } @else {
+        <small class="muted" role="status">{{ 'site.offlineSaving' | translate: files.saved : files.total }}</small>
+      }
+    }
   </div>
 }
 @if (appInstall.isAvailable()) {

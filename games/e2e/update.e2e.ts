@@ -20,19 +20,36 @@ function nextVersionOf(current: string, from: string): string {
   cpSync(from, next, { recursive: true });
   const manifest = JSON.parse(readFileSync(join(next, 'ngsw.json'), 'utf8'));
   const sha1 = (text: string): string => createHash('sha1').update(text).digest('hex');
-  const oldMain = readdirSync(next).find((file) => file.startsWith('main-') && file.endsWith('.js')) ?? '';
-  const newMain = 'main-NEXTVERSION.js';
-  writeFileSync(join(next, newMain), readFileSync(join(next, oldMain), 'utf8').replaceAll(current, NEXT_VERSION));
-  rmSync(join(next, oldMain));
-  for (const page of readdirSync(next, { recursive: true, encoding: 'utf8' }).filter((file) => file.endsWith('.html'))) {
-    const path = join(next, page);
-    writeFileSync(path, readFileSync(path, 'utf8').replaceAll(oldMain, newMain));
+  const renamed = new Map<string, string>();
+  const changed = new Set<string>();
+  for (const name of readdirSync(next).filter((file) => file.endsWith('.js'))) {
+    const text = readFileSync(join(next, name), 'utf8');
+    if (text.includes(current)) {
+      const newName = name.replace(/\.js$/, '-next.js');
+      writeFileSync(join(next, newName), text.replaceAll(current, NEXT_VERSION));
+      rmSync(join(next, name));
+      renamed.set(name, newName);
+      changed.add(newName);
+    }
   }
-  delete manifest.hashTable[`/${oldMain}`];
-  manifest.hashTable[`/${newMain}`] = sha1(readFileSync(join(next, newMain), 'utf8'));
-  manifest.hashTable['/index.csr.html'] = sha1(readFileSync(join(next, 'index.csr.html'), 'utf8'));
+  const files = readdirSync(next, { recursive: true, encoding: 'utf8' }).filter((file) => /\.(html|js)$/.test(file));
+  for (const file of files) {
+    const path = join(next, file);
+    const before = readFileSync(path, 'utf8');
+    const after = [...renamed].reduce((text, [oldName, newName]) => text.replaceAll(oldName, newName), before);
+    if (after !== before) {
+      writeFileSync(path, after);
+      changed.add(file);
+    }
+  }
+  const hashTable: Record<string, string> = {};
+  for (const [url, hash] of Object.entries<string>(manifest.hashTable)) {
+    const name = renamed.get(url.slice(1)) ?? url.slice(1);
+    hashTable[`/${name}`] = changed.has(name) ? sha1(readFileSync(join(next, name), 'utf8')) : hash;
+  }
+  manifest.hashTable = hashTable;
   for (const group of manifest.assetGroups) {
-    group.urls = group.urls.map((url: string) => (url === `/${oldMain}` ? `/${newMain}` : url));
+    group.urls = group.urls.map((url: string) => `/${renamed.get(url.slice(1)) ?? url.slice(1)}`);
   }
   manifest.timestamp = Date.now();
   writeFileSync(join(next, 'ngsw.json'), JSON.stringify(manifest));
@@ -43,28 +60,37 @@ function nextVersionOf(current: string, from: string): string {
 test.use({ serviceWorkers: 'allow', baseURL: ORIGIN });
 test.setTimeout(90_000);
 
-test.beforeAll(() => {
+test.beforeAll(async () => {
   folder = mkdtempSync(join(tmpdir(), 'games-update-'));
   root = BUILD;
-  server = createServer((request, response) => serveFrom(root, request, response)).listen(PORT);
+  server = createServer((request, response) => serveFrom(root, request, response));
+  await new Promise<void>((resolve, reject) => server.once('error', reject).listen(PORT, resolve));
 });
 
-test.afterAll(() => {
-  server.close();
+test.afterAll(async () => {
+  server.closeAllConnections();
+  await new Promise<void>((resolve) => server.close(() => resolve()));
   rmSync(folder, { recursive: true, force: true });
 });
 
 test('the update button brings the installed app to the new version', async ({ context, page }) => {
   const current: string = JSON.parse(readFileSync(join(BUILD, 'version.json'), 'utf8')).version;
-  await answerSiteOnly(context);
-  await turnOfflinePlayOn(page);
-
-  root = nextVersionOf(current, BUILD);
-  await page.locator('.settings-toggle').click();
-  await expect(page.locator('.app-version .mono')).toHaveText(current);
-  await page.locator('.version-check').click();
-  await page.locator('su-lib-notifications').getByRole('button', { name: 'Reload', exact: true }).click();
-  await page.waitForURL('/');
-  await page.locator('.settings-toggle').click();
-  await expect(page.locator('.app-version .mono')).toHaveText(NEXT_VERSION, { timeout: 30_000 });
+  await test.step('install the app for offline play', async () => {
+    await answerSiteOnly(context);
+    await turnOfflinePlayOn(page);
+  });
+  await test.step('publish the next version and find it', async () => {
+    root = nextVersionOf(current, BUILD);
+    await page.locator('.settings-toggle').click();
+    await expect(page.locator('.app-version .mono')).toHaveText(current);
+    await page.locator('.version-check').dispatchEvent('click');
+  });
+  await test.step('reload into the next version', async () => {
+    const reloaded = page.waitForEvent('load');
+    await page.locator('su-lib-notifications').getByRole('button', { name: 'Reload', exact: true }).click();
+    await reloaded;
+    expect(await page.evaluate(() => navigator.serviceWorker.controller !== null)).toBe(true);
+    await page.locator('.settings-toggle').click();
+    await expect(page.locator('.app-version .mono')).toHaveText(NEXT_VERSION);
+  });
 });

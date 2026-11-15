@@ -1,7 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
 import { API_ADDRESSES } from './offline-play.ts';
 
-
 function collectErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));

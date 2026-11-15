@@ -108,6 +108,8 @@ export const spanish = (gender: WordGender): SiteMessages => ({
     offlinePlay: 'Jugar sin conexión',
     offlinePlayChoices: { on: 'Sí', off: 'No' },
     offlinePlayHelp: 'Guarda los juegos en este dispositivo (unos 2 MB) para que funcionen sin internet',
+    offlineSaving: (saved, total) => `Guardando los juegos: ${saved} de ${total}. Mantén internet hasta que termine.`,
+    offlineReady: 'Listo: los juegos funcionan sin internet en este dispositivo',
     install: 'Instalar los juegos',
     installButton: 'Instalar',
     installGuide: 'Cómo instalar',

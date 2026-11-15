@@ -25,6 +25,9 @@ function find(root: string, url: string): string | null {
 export function serveFrom(root: string, request: IncomingMessage, response: ServerResponse): void {
   const file = find(root, request.url ?? '/');
   const served = file ?? join(root, '404.html');
-  response.writeHead(file ? 200 : 404, { 'Content-Type': TYPES[extname(served)] ?? 'application/octet-stream', 'Cache-Control': 'no-cache' });
+  response.writeHead(file ? 200 : 404, {
+    'Content-Type': TYPES[extname(served)] ?? 'application/octet-stream',
+    'Cache-Control': 'no-cache',
+  });
   createReadStream(served).pipe(response);
 }

@@ -96,6 +96,8 @@ export interface SiteMessages {
     readonly offlinePlay: string;
     readonly offlinePlayChoices: Readonly<Record<OfflineChoice, string>>;
     readonly offlinePlayHelp: string;
+    readonly offlineSaving: (saved: number, total: number) => string;
+    readonly offlineReady: string;
     readonly install: string;
     readonly installButton: string;
     readonly installGuide: string;
