@@ -3,6 +3,7 @@ import { field } from './api-url';
 import { BackgroundChecks } from './background-checks';
 import { FeatureFlags } from './feature-flags';
 import { SiteNotices } from './site-notices';
+import { activateWorkerUpdate, checkWorkerUpdate, removeWorker } from './worker-update';
 
 declare const GAMES_VERSION: string | undefined;
 
@@ -10,6 +11,7 @@ const VERSION_FILE = '/version.json';
 const CHECK_EVERY_MS = 30 * 60 * 1000;
 const MIN_CHECK_GAP_MS = 60_000;
 const CHECK_FOR_UPDATES = 'CHECK_FOR_UPDATES';
+const TRIED_STORAGE = 'su-labs-games:update-tried';
 
 export type UpdateState = 'idle' | 'checking' | 'latest' | 'ready' | 'failed';
 
@@ -67,8 +69,35 @@ export class AppUpdate {
     this.notices.announceUpdate(() => this.reload());
   }
 
-  reload(): void {
+  async reload(): Promise<void> {
+    const view = this.document.defaultView;
+    const container = view?.navigator.serviceWorker;
+    if (view && container?.controller) {
+      this.stateSignal.set('checking');
+      const latest = this.latestSignal() ?? '';
+      const isRetry = this.readTried(view) === latest;
+      this.writeTried(view, latest);
+      const answer = isRetry ? 'failed' : await checkWorkerUpdate(container);
+      const isActivated = answer !== 'failed' && (await activateWorkerUpdate(container));
+      if (!isActivated) {
+        await removeWorker(container, view.caches);
+      }
+    }
     this.document.location.reload();
+  }
+
+  private readTried(view: Window): string | null {
+    try {
+      return view.sessionStorage.getItem(TRIED_STORAGE);
+    } catch {
+      return null;
+    }
+  }
+
+  private writeTried(view: Window, version: string): void {
+    try {
+      view.sessionStorage.setItem(TRIED_STORAGE, version);
+    } catch {}
   }
 
   private async fetchLatest(): Promise<string | null> {

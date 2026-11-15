@@ -3,10 +3,10 @@ import { field } from './api-url';
 import { FeatureFlags } from './feature-flags';
 import { SiteNotices } from './site-notices';
 import { readStored, writeStored } from './site-storage';
+import { removeWorker } from './worker-update';
 
 const STORAGE = 'offline-play';
 const WORKER = 'ngsw-worker.js';
-const WORKER_CACHES = 'ngsw:';
 
 export type OfflineChoice = 'on' | 'off';
 export const OFFLINE_CHOICES: readonly OfflineChoice[] = ['on', 'off'];
@@ -30,11 +30,11 @@ export class OfflineMode {
   constructor() {
     const isReady = signal(false);
     afterNextRender(async () => {
-      if (readStored(STORAGE) === 'on') {
-        this.chosen.set('on');
-      }
       if (!this.canUseWorker()) {
         return;
+      }
+      if (readStored(STORAGE) === 'on' || (await this.isInstalled())) {
+        this.chosen.set('on');
       }
       navigator.serviceWorker.addEventListener('message', (event: MessageEvent<unknown>) => {
         if (field(event.data, 'type') === 'VERSION_READY') {
@@ -45,10 +45,12 @@ export class OfflineMode {
       isReady.set(true);
     });
     effect(() => {
-      if (isReady()) {
-        const isOn = this.isOn();
-        untracked(() => void (isOn ? this.install() : this.remove()));
+      if (!isReady()) {
+        return;
       }
+      const isOn = this.isOn();
+      const isTurnedOff = this.chosen() === 'off' || (this.features.hasServerAnswer() && !this.isAvailable());
+      untracked(() => void (isOn ? this.install() : isTurnedOff ? this.remove() : undefined));
     });
   }
 
@@ -69,15 +71,20 @@ export class OfflineMode {
     return !isDevMode() && 'serviceWorker' in navigator;
   }
 
+  private async isInstalled(): Promise<boolean> {
+    return (await this.ownRegistrations()).length > 0;
+  }
+
+  private async ownRegistrations(): Promise<readonly ServiceWorkerRegistration[]> {
+    const registrations = await navigator.serviceWorker.getRegistrations().catch(() => []);
+    return registrations.filter((registration) => registration.active?.scriptURL.endsWith(`/${WORKER}`));
+  }
+
   private async install(): Promise<void> {
     await navigator.serviceWorker.register(`/${WORKER}`, { scope: '/' }).catch(() => undefined);
   }
 
   private async remove(): Promise<void> {
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    const ours = registrations.filter((registration) => registration.active?.scriptURL.endsWith(`/${WORKER}`));
-    await Promise.all(ours.map((registration) => registration.unregister()));
-    const names = await caches.keys();
-    await Promise.all(names.filter((name) => name.startsWith(WORKER_CACHES)).map((name) => caches.delete(name)));
+    await removeWorker(navigator.serviceWorker, caches);
   }
 }

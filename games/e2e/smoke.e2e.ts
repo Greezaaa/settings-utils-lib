@@ -1,6 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
+import { API_ADDRESSES } from './offline-play.ts';
 
-const API_HOSTS = /https:\/\/(api|auth)\.su-labs\.dev\//;
 
 function collectErrors(page: Page): string[] {
   const errors: string[] = [];
@@ -14,7 +14,7 @@ function collectErrors(page: Page): string[] {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route(API_HOSTS, (route) => route.abort('internetdisconnected'));
+  await page.route(API_ADDRESSES, (route) => route.abort('internetdisconnected'));
 });
 
 test('the home page shows the games without the API and without errors', async ({ page }) => {

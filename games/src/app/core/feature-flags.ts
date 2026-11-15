@@ -1,4 +1,4 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Connection } from './connection';
 import { FeatureId, FEATURES } from './features';
 import { GameAvailability } from './game-availability';
@@ -17,6 +17,9 @@ export class FeatureFlags {
   private readonly connection = inject(Connection);
   private readonly switches = new RememberedSwitches<FeatureId>(SWITCHES_STORAGE, isFeatureId);
   private loading: Promise<void> | null = null;
+  private readonly serverAnswered = signal(false);
+
+  readonly hasServerAnswer = this.serverAnswered.asReadonly();
 
   readonly openFeatures = computed<readonly FeatureId[]>(() =>
     FEATURES.filter(({ id, openByDefault }) => this.switches.all().get(id) ?? openByDefault).map(({ id }) => id),
@@ -62,6 +65,7 @@ export class FeatureFlags {
     const switches = site?.features;
     if (switches) {
       this.switches.replace(new Map(switches.map(({ feature, enabled }) => [feature, enabled])));
+      this.serverAnswered.set(true);
     }
   }
 }
