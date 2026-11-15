@@ -105,6 +105,11 @@ export interface SiteMessages {
     readonly wordGender: string;
     readonly fullscreen: string;
     readonly exitFullscreen: string;
+    readonly version: string;
+    readonly checkUpdate: string;
+    readonly upToDate: string;
+    readonly checkFailed: string;
+    readonly newVersion: (version: string) => string;
     readonly themeTones: Readonly<Record<Tone, string>>;
     readonly backOnline: string;
     readonly wentOffline: string;

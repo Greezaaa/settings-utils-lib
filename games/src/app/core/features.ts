@@ -35,7 +35,8 @@ export type FeatureId =
   | 'email-hints'
   | 'admin-tables'
   | 'menu-sheet'
-  | 'share-results';
+  | 'share-results'
+  | 'update-check';
 
 export type RoomGame = Extract<
   GameSlug,
@@ -84,6 +85,7 @@ export const FEATURES: readonly FeatureInfo[] = [
   { id: 'admin-tables', openByDefault: false },
   { id: 'menu-sheet', openByDefault: false },
   { id: 'share-results', openByDefault: false },
+  { id: 'update-check', openByDefault: false },
 ];
 
 export const FEATURE_IDS: readonly FeatureId[] = FEATURES.map(({ id }) => id);

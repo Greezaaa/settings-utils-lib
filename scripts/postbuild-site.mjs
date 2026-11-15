@@ -59,4 +59,8 @@ ${urls.map((url) => `  <url><loc>${url}</loc><lastmod>${today}</lastmod></url>`)
 `;
 await writeFile(join(outputDir, 'sitemap.xml'), sitemap);
 
+if (site === 'games' && process.env.GAMES_VERSION) {
+  await writeFile(join(outputDir, 'version.json'), `${JSON.stringify({ version: process.env.GAMES_VERSION })}\n`);
+}
+
 console.log(`${site} sitemap.xml: ${urls.length} pages. 404.html: not-found page.`);

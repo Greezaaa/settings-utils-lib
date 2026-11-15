@@ -18,6 +18,7 @@ import { Fullscreen } from './core/fullscreen';
 import { LiveSettings } from './core/live-settings';
 import { SuggestionSender } from './core/suggestion-sender';
 import { OfflineMode } from './core/offline-mode';
+import { AppUpdate } from './core/app-update';
 import { OutboxSender } from './core/outbox-sender';
 import { SiteNotices } from './core/site-notices';
 import { SiteLanguage } from './i18n/site-language';
@@ -54,6 +55,7 @@ export class App {
   protected readonly siteLanguage = inject(SiteLanguage);
   private readonly notices = inject(SiteNotices);
   private readonly offlineMode = inject(OfflineMode);
+  private readonly appUpdate = inject(AppUpdate);
   private readonly connectionNotices = inject(ConnectionNotices);
   private readonly suggestionSender = inject(SuggestionSender);
   private readonly appInstall = inject(AppInstall);

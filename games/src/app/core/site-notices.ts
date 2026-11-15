@@ -44,6 +44,7 @@ export class SiteNotices {
   private readonly features = inject(FeatureFlags);
   private readonly gender = inject(PlayerGender);
   private readonly news = inject(SiteNews);
+  private isUpdateAnnounced = false;
 
   constructor() {
     afterNextRender(() => void this.showDue());
@@ -99,6 +100,10 @@ export class SiteNotices {
   }
 
   announceUpdate(reload: () => void): void {
+    if (this.isUpdateAnnounced) {
+      return;
+    }
+    this.isUpdateAnnounced = true;
     this.open(
       computed(() => {
         const { site } = this.language.messages();

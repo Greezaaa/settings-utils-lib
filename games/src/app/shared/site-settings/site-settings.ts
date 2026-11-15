@@ -6,6 +6,7 @@ import { isSuBaseThemeName, SuThemeName } from '@su-labs/theme';
 import { ANSWER_STYLES, AnswerWords } from '../../core/answer-words';
 import { BoardColours } from '../../core/board-colours';
 import { AppInstall } from '../../core/app-install';
+import { AppUpdate } from '../../core/app-update';
 import { FeatureFlags } from '../../core/feature-flags';
 import { GAME_THEMES, getGameTheme, isGameThemeId } from '../../core/game-themes';
 import { byTone, TONES } from '../../core/theme-tone';
@@ -40,6 +41,7 @@ export class SiteSettings {
   protected readonly menuAnimation = inject(MenuAnimation);
   protected readonly offlineMode = inject(OfflineMode);
   protected readonly appInstall = inject(AppInstall);
+  protected readonly appUpdate = inject(AppUpdate);
   protected readonly features = inject(FeatureFlags);
 
   protected readonly languages = LANGUAGE_IDS;

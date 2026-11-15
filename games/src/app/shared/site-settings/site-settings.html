@@ -203,3 +203,47 @@
     }
   </div>
 </div>
+@if (appUpdate.isAvailable()) {
+  <div class="setting app-version">
+    <p class="setting-label">{{ 'site.version' | translate }}</p>
+    <div class="version-row">
+      <span class="mono">{{ appUpdate.current }}</span>
+      <button
+        type="button"
+        class="icon-button version-check"
+        [class.is-checking]="appUpdate.state() === 'checking'"
+        [attr.aria-label]="'site.checkUpdate' | translate"
+        [title]="'site.checkUpdate' | translate"
+        [disabled]="appUpdate.state() === 'checking'"
+        (click)="appUpdate.check()"
+      >
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path
+            d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      @if (appUpdate.state() === 'ready') {
+        <button type="button" class="icon-button" (click)="appUpdate.reload()">{{ 'site.reload' | translate }}</button>
+      }
+    </div>
+    <small class="muted" aria-live="polite">
+      @switch (appUpdate.state()) {
+        @case ('latest') {
+          {{ 'site.upToDate' | translate }}
+        }
+        @case ('failed') {
+          {{ 'site.checkFailed' | translate }}
+        }
+        @case ('ready') {
+          {{ 'site.newVersion' | translate: appUpdate.latest() ?? '' }}
+        }
+      }
+    </small>
+  </div>
+}

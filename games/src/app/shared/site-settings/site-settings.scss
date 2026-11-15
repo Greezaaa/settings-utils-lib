@@ -80,3 +80,19 @@
   font-size: 0.8125rem;
 }
 
+.version-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.version-check.is-checking svg {
+  animation: version-spin 800ms linear infinite;
+}
+
+@keyframes version-spin {
+  to {
+    rotate: 360deg;
+  }
+}
