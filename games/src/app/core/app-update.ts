@@ -15,10 +15,16 @@ const TRIED_STORAGE = 'su-labs-games:update-tried';
 
 export type UpdateState = 'idle' | 'checking' | 'latest' | 'ready' | 'failed';
 
+interface ServedVersion {
+  readonly version: string;
+  readonly isCritical: boolean;
+}
+
 /**
  * Compares the running build's version (set by `npm run build:games`) with `/version.json` on the server: on start,
  * when the app comes back to the screen (phones keep installed apps open for days) and every half hour, plus the
- * button in the settings. A newer version shows the reload notice once.
+ * button in the settings. A newer version shows the reload notice once; `critical` in the file (set with
+ * `GAMES_CRITICAL=1 npm run build:games`) marks it as one that fixes or changes how the games work.
  */
 @Injectable({ providedIn: 'root' })
 export class AppUpdate {
@@ -28,11 +34,13 @@ export class AppUpdate {
   private readonly checks = inject(BackgroundChecks);
   private readonly stateSignal = signal<UpdateState>('idle');
   private readonly latestSignal = signal<string | null>(null);
+  private readonly criticalSignal = signal(false);
 
   readonly current = typeof GAMES_VERSION === 'string' ? GAMES_VERSION : 'dev';
   readonly isAvailable = computed(() => this.features.canUse('update-check'));
   readonly state = this.stateSignal.asReadonly();
   readonly latest = this.latestSignal.asReadonly();
+  readonly isCritical = this.criticalSignal.asReadonly();
 
   constructor() {
     const isReady = signal(false);
@@ -55,13 +63,14 @@ export class AppUpdate {
       action: CHECK_FOR_UPDATES,
       nonce: Date.now(),
     });
-    const latest = await this.fetchLatest();
-    if (latest === null) {
+    const served = await this.fetchLatest();
+    if (served === null) {
       this.stateSignal.set('failed');
       return;
     }
-    this.latestSignal.set(latest);
-    if (latest === this.current) {
+    this.latestSignal.set(served.version);
+    this.criticalSignal.set(served.isCritical);
+    if (served.version === this.current) {
       this.stateSignal.set('latest');
       return;
     }
@@ -100,11 +109,12 @@ export class AppUpdate {
     } catch {}
   }
 
-  private async fetchLatest(): Promise<string | null> {
+  private async fetchLatest(): Promise<ServedVersion | null> {
     try {
       const response = await fetch(VERSION_FILE, { cache: 'no-store' });
-      const version = response.ok ? field(await response.json(), 'version') : null;
-      return typeof version === 'string' ? version : null;
+      const body: unknown = response.ok ? await response.json() : null;
+      const version = field(body, 'version');
+      return typeof version === 'string' ? { version, isCritical: field(body, 'critical') === true } : null;
     } catch {
       return null;
     }

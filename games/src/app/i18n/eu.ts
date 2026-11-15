@@ -120,6 +120,24 @@ export const EU: SiteMessages = {
     upToDate: 'Eguneratuta',
     checkFailed: 'Ezin izan da egiaztatu, saiatu geroago',
     newVersion: (version) => `Bertsio berria: ${version}`,
+    criticalVersion: (version) => `Eguneratze garrantzitsua: ${version}`,
+    allSettings: 'Ezarpen guztiak',
+    showInMenu: 'Erakutsi menuan',
+    settingNames: {
+      'text-size': 'Testuaren tamaina',
+      'reduce-motion': 'Mugimendua murriztu',
+      theme: 'Gaia',
+      'board-colours': 'Jokoaren koloreak',
+      'answer-style': 'Erantzun-estiloa',
+      'menu-animation': 'Menuaren animazioa',
+      'offline-play': 'Konexiorik gabe jokatu',
+      install: 'Instalatu',
+      'reaction-side': 'Pegatinen aldea',
+      'sticker-drag': 'Pegatinak arrastatu',
+      'word-gender': 'Hitzen generoa',
+      language: 'Hizkuntza',
+      version: 'Bertsioa',
+    },
     themeTones: { light: 'Argiak', dark: 'Ilunak' },
     backOnline: 'Berriro konexioa duzu.',
     wentOffline:
@@ -1216,6 +1234,7 @@ export const EU: SiteMessages = {
       'menu-sheet': 'Mugikorreko menua irristatzen den panel gisa',
       'share-results': 'Partekatzeko botoia joko bat amaitzean',
       'update-check': 'Bertsio-zenbakia eta eguneratzeak bilatzea ezarpenetan',
+      'settings-page': 'Ezarpen-orria, jokalari bakoitzak ezarpen-menuak zer erakusten duen aukeratzeko',
     },
     multiplayerTitle: 'Jokalari anitzeko jokoak',
     multiplayerHelp:
@@ -1425,6 +1444,11 @@ export const EU: SiteMessages = {
     resetDone: 'Zure pasahitza aldatu da eta zure kontuan sartu zara.',
   },
 
+  settingsPage: {
+    title: 'Ezarpenak',
+    lead: 'Jokoen ezarpen guztiak leku bakarrean.',
+    rule: 'Finkatu gehien erabiltzen dituzunak ezarpen-menuan ikusteko.',
+  },
   colours: {
     title: 'Jokoaren koloreak',
     lead: 'Joko-tauletarako kolore guztiak, bakoitza taula txiki batean.',

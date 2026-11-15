@@ -19,6 +19,7 @@ const {
   leaderboard,
   colours,
   install,
+  settingsPage,
 } = PREVIEW_MESSAGES;
 
 function gameMeta(slug: GameSlug): Pick<Route, 'title' | 'data' | 'canActivate'> {
@@ -156,6 +157,13 @@ export const routes: Routes = [
     data: { description: leaderboard.lead, noIndex: true },
     canActivate: [featureGuard('accounts'), featureGuard('leaderboard')],
     loadComponent: () => import('./pages/leaderboard/leaderboard-page').then((m) => m.LeaderboardPage),
+  },
+  {
+    path: 'settings',
+    title: `${settingsPage.title} · ${SITE_NAME}`,
+    data: { description: settingsPage.lead, noIndex: true },
+    canActivate: [featureGuard('settings-page')],
+    loadComponent: () => import('./pages/settings/settings-page').then((m) => m.SettingsPage),
   },
   {
     path: 'colours',

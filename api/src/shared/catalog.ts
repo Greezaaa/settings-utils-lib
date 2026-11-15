@@ -67,6 +67,7 @@ export const FEATURE_IDS = [
   'menu-sheet',
   'share-results',
   'update-check',
+  'settings-page',
 ] as const;
 
 export type GameSlug = (typeof GAME_SLUGS)[number];

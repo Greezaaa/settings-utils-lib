@@ -1,256 +1,279 @@
-<div class="setting">
-  <p class="setting-label" id="setting-text-size">{{ 'site.textSize' | translate }}</p>
-  <div class="text-size" role="group" aria-labelledby="setting-text-size">
-    <button
-      type="button"
-      class="icon-button"
-      (click)="fontSize.decrease()"
-      [disabled]="fontSize.isMin()"
-      [attr.aria-label]="'site.smallerText' | translate"
-    >
-      A<span aria-hidden="true">-</span>
-    </button>
-    <button
-      type="button"
-      class="icon-button"
-      (click)="fontSize.increase()"
-      [disabled]="fontSize.isMax()"
-      [attr.aria-label]="'site.largerText' | translate"
-    >
-      A<span aria-hidden="true">+</span>
-    </button>
-  </div>
-</div>
-<div class="setting">
-  <su-lib-switch labelPosition="start" size="small" [checked]="motion.reduced()" (checkedChange)="motion.set($event)">
-    <span class="setting-label">{{ 'site.reduceMotion' | translate }}</span>
-  </su-lib-switch>
-</div>
-<div class="setting">
-  <label class="setting-label" for="setting-theme">{{ 'site.theme' | translate }}</label>
-  <div class="board-colours">
-    <span
-      class="swatch"
-      aria-hidden="true"
-      [style.--swatch-background]="themeSwatch().background"
-      [style.--swatch-accent]="themeSwatch()['main-accent']"
-    ></span>
-    <select id="setting-theme" (change)="chooseTheme($event)">
-      <option value="system" [selected]="theme.preference() === 'system'">{{ themeName('system') }}</option>
-      @for (tone of tones; track tone) {
-        <optgroup [label]="('site.themeTones' | translate)[tone]">
-          @for (choice of siteThemesByTone[tone]; track choice) {
-            <option [value]="choice" [selected]="choice === theme.preference()">{{ themeName(choice) }}</option>
+@for (setting of settings(); track setting) {
+  <div class="setting-slot" [class.is-small-screens-only]="isSmallScreensOnly(setting)">
+    @switch (setting) {
+      @case ('text-size') {
+        <div class="setting">
+          <p class="setting-label" id="setting-text-size">{{ 'site.textSize' | translate }}</p>
+          <div class="text-size" role="group" aria-labelledby="setting-text-size">
+            <button
+              type="button"
+              class="icon-button"
+              (click)="fontSize.decrease()"
+              [disabled]="fontSize.isMin()"
+              [attr.aria-label]="'site.smallerText' | translate"
+            >
+              A<span aria-hidden="true">-</span>
+            </button>
+            <button
+              type="button"
+              class="icon-button"
+              (click)="fontSize.increase()"
+              [disabled]="fontSize.isMax()"
+              [attr.aria-label]="'site.largerText' | translate"
+            >
+              A<span aria-hidden="true">+</span>
+            </button>
+          </div>
+        </div>
+      }
+      @case ('reduce-motion') {
+        <div class="setting">
+          <su-lib-switch labelPosition="start" size="small" [checked]="motion.reduced()" (checkedChange)="motion.set($event)">
+            <span class="setting-label">{{ 'site.reduceMotion' | translate }}</span>
+          </su-lib-switch>
+        </div>
+      }
+      @case ('theme') {
+        <div class="setting">
+          <label class="setting-label" for="setting-theme">{{ 'site.theme' | translate }}</label>
+          <div class="board-colours">
+            <span
+              class="swatch"
+              aria-hidden="true"
+              [style.--swatch-background]="themeSwatch().background"
+              [style.--swatch-accent]="themeSwatch()['main-accent']"
+            ></span>
+            <select id="setting-theme" (change)="chooseTheme($event)">
+              <option value="system" [selected]="theme.preference() === 'system'">{{ themeName('system') }}</option>
+              @for (tone of tones; track tone) {
+                <optgroup [label]="('site.themeTones' | translate)[tone]">
+                  @for (choice of siteThemesByTone[tone]; track choice) {
+                    <option [value]="choice" [selected]="choice === theme.preference()">{{ themeName(choice) }}</option>
+                  }
+                </optgroup>
+              }
+            </select>
+          </div>
+        </div>
+      }
+      @case ('board-colours') {
+        <div class="setting">
+          <label class="setting-label" for="setting-game-colours">{{ 'site.boardColours' | translate }}</label>
+          <div class="board-colours">
+            <span
+              class="swatch"
+              aria-hidden="true"
+              [style.--swatch-background]="selectedBoardTheme().palette.background"
+              [style.--swatch-accent]="selectedBoardTheme().palette['main-accent']"
+            ></span>
+            <select id="setting-game-colours" (change)="chooseBoardColours($event)">
+              @for (tone of tones; track tone) {
+                <optgroup [label]="('site.themeTones' | translate)[tone]">
+                  @for (theme of gameThemesByTone[tone]; track theme.id) {
+                    <option [value]="theme.id" [selected]="theme.id === boardColours.selected()">
+                      {{ ('site.boardThemes' | translate)[theme.id].name }}
+                    </option>
+                  }
+                </optgroup>
+              }
+            </select>
+          </div>
+          @if (features.canUse('colours-page')) {
+            <a class="setting-link" routerLink="/colours" (click)="navigated.emit()">{{ 'site.allColours' | translate }}</a>
           }
-        </optgroup>
+        </div>
       }
-    </select>
-  </div>
-</div>
-<div class="setting">
-  <label class="setting-label" for="setting-game-colours">{{ 'site.boardColours' | translate }}</label>
-  <div class="board-colours">
-    <span
-      class="swatch"
-      aria-hidden="true"
-      [style.--swatch-background]="selectedBoardTheme().palette.background"
-      [style.--swatch-accent]="selectedBoardTheme().palette['main-accent']"
-    ></span>
-    <select id="setting-game-colours" (change)="chooseBoardColours($event)">
-      @for (tone of tones; track tone) {
-        <optgroup [label]="('site.themeTones' | translate)[tone]">
-          @for (theme of gameThemesByTone[tone]; track theme.id) {
-            <option [value]="theme.id" [selected]="theme.id === boardColours.selected()">
-              {{ ('site.boardThemes' | translate)[theme.id].name }}
-            </option>
+      @case ('answer-style') {
+        <div class="setting">
+          <p class="setting-label" id="setting-answers">{{ 'site.answerStyle' | translate }}</p>
+          <div class="languages" role="group" aria-labelledby="setting-answers">
+            @for (style of answerStyles; track style) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-pressed]="style === answerWords.style()"
+                [title]="('site.answerStyles' | translate)[style].summary"
+                (click)="answerWords.set(style)"
+              >
+                {{ ('site.answerStyles' | translate)[style].name }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+      @case ('menu-animation') {
+        <div class="setting is-inline">
+          <p class="setting-label" id="setting-menu-animation">{{ 'site.menuAnimation' | translate }}</p>
+          <div class="languages" role="group" aria-labelledby="setting-menu-animation">
+            @for (choice of menuAnimationChoices; track choice) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-pressed]="choice === menuAnimation.choice()"
+                (click)="menuAnimation.set(choice)"
+              >
+                {{ ('site.menuAnimationChoices' | translate)[choice] }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+      @case ('offline-play') {
+        <div class="setting is-inline">
+          <p class="setting-label" id="setting-offline">{{ 'site.offlinePlay' | translate }}</p>
+          <div class="languages" role="group" aria-labelledby="setting-offline">
+            @for (choice of offlineChoices; track choice) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-pressed]="choice === offlineMode.choice()"
+                (click)="offlineMode.set(choice)"
+              >
+                {{ ('site.offlinePlayChoices' | translate)[choice] }}
+              </button>
+            }
+          </div>
+          <small class="muted">{{ 'site.offlinePlayHelp' | translate }}</small>
+          @if (offlineMode.isOn() && offlineMode.files(); as files) {
+            @if (offlineMode.isSaved()) {
+              <small class="offline-ready" role="status">{{ 'site.offlineReady' | translate }}</small>
+            } @else {
+              <small class="muted" role="status">{{ 'site.offlineSaving' | translate: files.saved : files.total }}</small>
+            }
           }
-        </optgroup>
+        </div>
       }
-    </select>
-  </div>
-  @if (features.canUse('colours-page')) {
-    <a class="setting-link" routerLink="/colours" (click)="navigated.emit()">{{ 'site.allColours' | translate }}</a>
-  }
-</div>
-@if (answerWords.isAvailable()) {
-  <div class="setting">
-    <p class="setting-label" id="setting-answers">{{ 'site.answerStyle' | translate }}</p>
-    <div class="languages" role="group" aria-labelledby="setting-answers">
-      @for (style of answerStyles; track style) {
-        <button
-          type="button"
-          class="icon-button"
-          [attr.aria-pressed]="style === answerWords.style()"
-          [title]="('site.answerStyles' | translate)[style].summary"
-          (click)="answerWords.set(style)"
-        >
-          {{ ('site.answerStyles' | translate)[style].name }}
-        </button>
+      @case ('install') {
+        <div class="setting">
+          <p class="setting-label">{{ 'site.install' | translate }}</p>
+          @if (appInstall.canPrompt()) {
+            <button type="button" class="icon-button" (click)="appInstall.install()">{{ 'site.installButton' | translate }}</button>
+          }
+          <a class="setting-link" routerLink="/install" (click)="navigated.emit()">{{ 'site.installGuide' | translate }}</a>
+        </div>
       }
-    </div>
-  </div>
-}
-@if (menuAnimation.isAvailable()) {
-  <div class="setting is-inline">
-    <p class="setting-label" id="setting-menu-animation">{{ 'site.menuAnimation' | translate }}</p>
-    <div class="languages" role="group" aria-labelledby="setting-menu-animation">
-      @for (choice of menuAnimationChoices; track choice) {
-        <button
-          type="button"
-          class="icon-button"
-          [attr.aria-pressed]="choice === menuAnimation.choice()"
-          (click)="menuAnimation.set(choice)"
-        >
-          {{ ('site.menuAnimationChoices' | translate)[choice] }}
-        </button>
+      @case ('reaction-side') {
+        <div class="setting">
+          <p class="setting-label" id="setting-reaction-side">{{ 'site.reactionSide' | translate }}</p>
+          <div class="languages" role="group" aria-labelledby="setting-reaction-side">
+            @for (side of reactionSides; track side) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-pressed]="side === reactions.side()"
+                (click)="reactions.setSide(side)"
+              >
+                {{ ('site.reactionSides' | translate)[side] }}
+              </button>
+            }
+          </div>
+        </div>
       }
-    </div>
-  </div>
-}
-@if (offlineMode.isAvailable()) {
-  <div class="setting is-inline">
-    <p class="setting-label" id="setting-offline">{{ 'site.offlinePlay' | translate }}</p>
-    <div class="languages" role="group" aria-labelledby="setting-offline">
-      @for (choice of offlineChoices; track choice) {
-        <button
-          type="button"
-          class="icon-button"
-          [attr.aria-pressed]="choice === offlineMode.choice()"
-          (click)="offlineMode.set(choice)"
-        >
-          {{ ('site.offlinePlayChoices' | translate)[choice] }}
-        </button>
+      @case ('sticker-drag') {
+        <div class="setting is-inline">
+          <p class="setting-label" id="setting-sticker-drag">{{ 'site.stickerDrag' | translate }}</p>
+          <div class="languages" role="group" aria-labelledby="setting-sticker-drag">
+            @for (choice of stickerDragChoices; track choice) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-pressed]="choice === reactions.dragChosen()"
+                (click)="reactions.setDrag(choice)"
+              >
+                {{ ('site.stickerDragChoices' | translate)[choice] }}
+              </button>
+            }
+          </div>
+        </div>
       }
-    </div>
-    <small class="muted">{{ 'site.offlinePlayHelp' | translate }}</small>
-    @if (offlineMode.isOn() && offlineMode.files(); as files) {
-      @if (offlineMode.isSaved()) {
-        <small class="offline-ready" role="status">{{ 'site.offlineReady' | translate }}</small>
-      } @else {
-        <small class="muted" role="status">{{ 'site.offlineSaving' | translate: files.saved : files.total }}</small>
+      @case ('word-gender') {
+        <div class="setting">
+          <p class="setting-label" id="setting-word-gender">{{ 'site.wordGender' | translate }}</p>
+          <div class="languages" role="group" aria-labelledby="setting-word-gender">
+            @for (gender of wordGenders; track gender) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-pressed]="gender === playerGender.choice()"
+                (click)="playerGender.set(gender)"
+              >
+                {{ ('site.wordGenders' | translate)[gender] }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+      @case ('language') {
+        <div class="setting">
+          <p class="setting-label" id="setting-language">{{ 'site.language' | translate }}</p>
+          <div class="languages" role="group" aria-labelledby="setting-language">
+            @for (language of languages; track language) {
+              <button
+                type="button"
+                class="icon-button"
+                [attr.lang]="language"
+                [attr.aria-label]="siteLanguage.nameOf(language)"
+                [attr.aria-pressed]="language === siteLanguage.language()"
+                [title]="siteLanguage.nameOf(language)"
+                (click)="siteLanguage.set(language)"
+              >
+                {{ siteLanguage.codeOf(language) }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+      @case ('version') {
+        <div class="setting is-inline app-version">
+          <p class="setting-label">{{ 'site.version' | translate }}</p>
+          <div class="version-row" [attr.data-status]="versionStatus()">
+            <span class="mono">{{ appUpdate.current }}</span>
+            <button
+              type="button"
+              class="icon-button version-check"
+              [class.is-checking]="appUpdate.state() === 'checking'"
+              [attr.aria-label]="('site.checkUpdate' | translate) + ' · ' + versionText()"
+              [title]="versionText()"
+              [disabled]="appUpdate.state() === 'checking'"
+              (click)="appUpdate.check()"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <path
+                  d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            @if (appUpdate.state() === 'ready') {
+              <button type="button" class="icon-button version-reload" (click)="appUpdate.reload()">
+                {{ 'site.reload' | translate }}
+              </button>
+            }
+          </div>
+          <span class="visually-hidden" aria-live="polite">{{ versionText() }}</span>
+        </div>
       }
     }
-  </div>
-}
-@if (appInstall.isAvailable()) {
-  <div class="setting">
-    <p class="setting-label">{{ 'site.install' | translate }}</p>
-    @if (appInstall.canPrompt()) {
-      <button type="button" class="icon-button" (click)="appInstall.install()">{{ 'site.installButton' | translate }}</button>
-    }
-    <a class="setting-link" routerLink="/install" (click)="navigated.emit()">{{ 'site.installGuide' | translate }}</a>
-  </div>
-}
-@if (reactions.isAvailable()) {
-  <div class="setting is-small-screens-only">
-    <p class="setting-label" id="setting-reaction-side">{{ 'site.reactionSide' | translate }}</p>
-    <div class="languages" role="group" aria-labelledby="setting-reaction-side">
-      @for (side of reactionSides; track side) {
-        <button
-          type="button"
-          class="icon-button"
-          [attr.aria-pressed]="side === reactions.side()"
-          (click)="reactions.setSide(side)"
-        >
-          {{ ('site.reactionSides' | translate)[side] }}
-        </button>
-      }
-    </div>
-  </div>
-  @if (reactions.canChooseDrag()) {
-    <div class="setting is-inline is-small-screens-only">
-      <p class="setting-label" id="setting-sticker-drag">{{ 'site.stickerDrag' | translate }}</p>
-      <div class="languages" role="group" aria-labelledby="setting-sticker-drag">
-        @for (choice of stickerDragChoices; track choice) {
-          <button
-            type="button"
-            class="icon-button"
-            [attr.aria-pressed]="choice === reactions.dragChosen()"
-            (click)="reactions.setDrag(choice)"
-          >
-            {{ ('site.stickerDragChoices' | translate)[choice] }}
-          </button>
-        }
-      </div>
-    </div>
-  }
-}
-@if (playerGender.isAvailable()) {
-  <div class="setting">
-    <p class="setting-label" id="setting-word-gender">{{ 'site.wordGender' | translate }}</p>
-    <div class="languages" role="group" aria-labelledby="setting-word-gender">
-      @for (gender of wordGenders; track gender) {
-        <button
-          type="button"
-          class="icon-button"
-          [attr.aria-pressed]="gender === playerGender.choice()"
-          (click)="playerGender.set(gender)"
-        >
-          {{ ('site.wordGenders' | translate)[gender] }}
-        </button>
-      }
-    </div>
-  </div>
-}
-<div class="setting">
-  <p class="setting-label" id="setting-language">{{ 'site.language' | translate }}</p>
-  <div class="languages" role="group" aria-labelledby="setting-language">
-    @for (language of languages; track language) {
+    @if (place() === 'page') {
       <button
         type="button"
-        class="icon-button"
-        [attr.lang]="language"
-        [attr.aria-label]="siteLanguage.nameOf(language)"
-        [attr.aria-pressed]="language === siteLanguage.language()"
-        [title]="siteLanguage.nameOf(language)"
-        (click)="siteLanguage.set(language)"
+        class="icon-button pin"
+        [attr.aria-pressed]="settingsMenu.isPinned(setting)"
+        [attr.aria-label]="('site.showInMenu' | translate) + ': ' + ('site.settingNames' | translate)[setting]"
+        [title]="'site.showInMenu' | translate"
+        (click)="settingsMenu.togglePin(setting)"
       >
-        {{ siteLanguage.codeOf(language) }}
-      </button>
-    }
-  </div>
-</div>
-@if (appUpdate.isAvailable()) {
-  <div class="setting app-version">
-    <p class="setting-label">{{ 'site.version' | translate }}</p>
-    <div class="version-row">
-      <span class="mono">{{ appUpdate.current }}</span>
-      <button
-        type="button"
-        class="icon-button version-check"
-        [class.is-checking]="appUpdate.state() === 'checking'"
-        [attr.aria-label]="'site.checkUpdate' | translate"
-        [title]="'site.checkUpdate' | translate"
-        [disabled]="appUpdate.state() === 'checking'"
-        (click)="appUpdate.check()"
-      >
-        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-          <path
-            d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M12 17v5M9 3h6l-1 7 4 3v2H6v-2l4-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
-      @if (appUpdate.state() === 'ready') {
-        <button type="button" class="icon-button" (click)="appUpdate.reload()">{{ 'site.reload' | translate }}</button>
-      }
-    </div>
-    <small class="muted" aria-live="polite">
-      @switch (appUpdate.state()) {
-        @case ('latest') {
-          {{ 'site.upToDate' | translate }}
-        }
-        @case ('failed') {
-          {{ 'site.checkFailed' | translate }}
-        }
-        @case ('ready') {
-          {{ 'site.newVersion' | translate: appUpdate.latest() ?? '' }}
-        }
-      }
-    </small>
+    }
   </div>
+}
+@if (place() === 'menu' && settingsMenu.isAvailable()) {
+  <a class="setting-link all-settings" routerLink="/settings" (click)="navigated.emit()">{{ 'site.allSettings' | translate }}</a>
 }

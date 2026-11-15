@@ -15,6 +15,7 @@ import { PictureId } from '../core/pictures';
 import { AccountProblem } from '../core/player-account';
 import { Reaction, ReactionSide, StickerDragChoice } from '../core/reactions';
 import { RoomError } from '../core/room-view';
+import { SettingId } from '../core/settings-menu';
 import { UpdateKind } from '../core/site-updates';
 import { BoardLevelId } from '../games/board';
 import { ClimbModeId } from '../games/climb-tower';
@@ -110,6 +111,10 @@ export interface SiteMessages {
     readonly upToDate: string;
     readonly checkFailed: string;
     readonly newVersion: (version: string) => string;
+    readonly criticalVersion: (version: string) => string;
+    readonly allSettings: string;
+    readonly showInMenu: string;
+    readonly settingNames: Readonly<Record<SettingId, string>>;
     readonly themeTones: Readonly<Record<Tone, string>>;
     readonly backOnline: string;
     readonly wentOffline: string;
@@ -826,6 +831,12 @@ export interface SiteMessages {
     readonly resetLead: string;
     readonly resetSave: string;
     readonly resetDone: string;
+  };
+
+  readonly settingsPage: {
+    readonly title: string;
+    readonly lead: string;
+    readonly rule: string;
   };
 
   readonly colours: {

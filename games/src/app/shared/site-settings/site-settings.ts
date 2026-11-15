@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SuSwitchComponent } from '@su-labs/fields';
 import { FontSizeService } from '@su-labs/font-size';
@@ -14,11 +14,16 @@ import { MENU_ANIMATION_CHOICES, MenuAnimation } from '../../core/menu-animation
 import { OFFLINE_CHOICES, OfflineMode } from '../../core/offline-mode';
 import { PlayerGender } from '../../core/player-gender';
 import { REACTION_SIDES, Reactions, STICKER_DRAG_CHOICES } from '../../core/reactions';
+import { SETTING_IDS, SettingId, SettingsMenu } from '../../core/settings-menu';
 import { SiteMotion } from '../../core/site-motion';
 import { SiteTheme } from '../../core/site-theme';
 import { LANGUAGE_IDS, SiteLanguage } from '../../i18n/site-language';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { WORD_GENDERS } from '../../i18n/word-gender';
+
+export type SettingsPlace = 'menu' | 'page';
+
+const SMALL_SCREENS_ONLY: readonly SettingId[] = ['reaction-side', 'sticker-drag'];
 
 @Component({
   selector: 'app-site-settings',
@@ -26,8 +31,10 @@ import { WORD_GENDERS } from '../../i18n/word-gender';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './site-settings.html',
   styleUrl: './site-settings.scss',
+  host: { '[class.is-page]': "place() === 'page'" },
 })
 export class SiteSettings {
+  readonly place = input<SettingsPlace>('menu');
   readonly navigated = output();
 
   protected readonly theme = inject(SiteTheme);
@@ -43,6 +50,7 @@ export class SiteSettings {
   protected readonly appInstall = inject(AppInstall);
   protected readonly appUpdate = inject(AppUpdate);
   protected readonly features = inject(FeatureFlags);
+  protected readonly settingsMenu = inject(SettingsMenu);
 
   protected readonly languages = LANGUAGE_IDS;
   protected readonly answerStyles = ANSWER_STYLES;
@@ -59,6 +67,53 @@ export class SiteSettings {
   );
   protected readonly selectedBoardTheme = computed(() => getGameTheme(this.boardColours.selected()));
   protected readonly themeSwatch = computed(() => this.theme.coloursOf(this.theme.preference()));
+
+  private readonly isOffered: Record<SettingId, () => boolean> = {
+    'text-size': () => true,
+    'reduce-motion': () => true,
+    theme: () => true,
+    'board-colours': () => true,
+    'answer-style': () => this.answerWords.isAvailable(),
+    'menu-animation': () => this.menuAnimation.isAvailable(),
+    'offline-play': () => this.offlineMode.isAvailable(),
+    install: () => this.appInstall.isAvailable(),
+    'reaction-side': () => this.reactions.isAvailable(),
+    'sticker-drag': () => this.reactions.isAvailable() && this.reactions.canChooseDrag(),
+    'word-gender': () => this.playerGender.isAvailable(),
+    language: () => true,
+    version: () => this.appUpdate.isAvailable(),
+  };
+
+  protected readonly settings = computed(() =>
+    SETTING_IDS.filter((id) => this.isOffered[id]() && (this.place() === 'page' || this.settingsMenu.showsInMenu(id))),
+  );
+
+  protected readonly versionStatus = computed(() => {
+    const state = this.appUpdate.state();
+    if (state === 'ready') {
+      return this.appUpdate.isCritical() ? 'critical' : 'update';
+    }
+    return state === 'latest' ? 'latest' : 'unknown';
+  });
+
+  protected readonly versionText = computed(() => {
+    const { upToDate, checkFailed, newVersion, criticalVersion } = this.siteLanguage.messages().site;
+    const latest = this.appUpdate.latest() ?? '';
+    switch (this.versionStatus()) {
+      case 'latest':
+        return upToDate;
+      case 'update':
+        return newVersion(latest);
+      case 'critical':
+        return criticalVersion(latest);
+      default:
+        return this.appUpdate.state() === 'failed' ? checkFailed : '';
+    }
+  });
+
+  protected isSmallScreensOnly(id: SettingId): boolean {
+    return this.place() === 'menu' && SMALL_SCREENS_ONLY.includes(id);
+  }
 
   protected themeName(theme: SuThemeName): string {
     const { themeNames, boardThemes } = this.siteLanguage.messages().site;
