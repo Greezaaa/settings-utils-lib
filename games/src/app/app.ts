@@ -6,7 +6,7 @@ import { SuNotificationComponent } from '@su-labs/notifications';
 import { FeatureFlags } from './core/feature-flags';
 import { GameAvailability } from './core/game-availability';
 import { PageTransition } from './core/page-transition';
-import { byCategory, gameInfo, gameOfPath } from './core/games';
+import { byCategory, gameOfPath } from './core/games';
 import { AdminApi } from './core/admin-api';
 import { ADMIN_PATH, AUTHOR_EMAIL_URL } from './core/links';
 import { wasSignedIn } from './core/session-hint';
@@ -83,7 +83,7 @@ export class App {
     return (
       game !== null &&
       !this.availability.isKnown() &&
-      !gameInfo(game).openByDefault
+      !this.availability.canPlay(game)
     );
   });
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;

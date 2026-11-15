@@ -16,7 +16,7 @@ export class FeatureFlags {
   private readonly switches = signal<ReadonlyMap<FeatureId, boolean>>(new Map());
   private loading: Promise<void> | null = null;
   private hasRemembered = false;
-
+  private hasStoredSwitches = false;
 
   readonly openFeatures = computed<readonly FeatureId[]>(() =>
     FEATURES.filter(({ id, openByDefault }) => this.switches().get(id) ?? openByDefault).map(({ id }) => id),
@@ -31,6 +31,15 @@ export class FeatureFlags {
       return false;
     }
     return this.availability.isPreview() || this.isOpen(feature);
+  }
+
+  async canEnter(feature: FeatureId): Promise<boolean> {
+    const loading = this.ready();
+    if (this.hasStoredSwitches && this.canUse(feature)) {
+      return true;
+    }
+    await loading;
+    return this.canUse(feature);
   }
 
   ready(): Promise<void> {
@@ -50,7 +59,9 @@ export class FeatureFlags {
   private async load(): Promise<void> {
     if (!this.hasRemembered) {
       this.hasRemembered = true;
-      this.switches.set(readSwitches(SWITCHES_STORAGE, isFeatureId) ?? this.switches());
+      const stored = readSwitches(SWITCHES_STORAGE, isFeatureId);
+      this.hasStoredSwitches = stored !== null;
+      this.switches.set(stored ?? this.switches());
     }
     const [switches] = await Promise.all([this.api.featureSwitches(), this.availability.ready()]);
     if (switches) {

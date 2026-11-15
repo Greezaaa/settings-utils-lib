@@ -12,6 +12,5 @@ export const featureGuard =
     if (!isPlatformBrowser(inject(PLATFORM_ID))) {
       return true;
     }
-    await flags.ready();
-    return flags.canUse(feature) || router.parseUrl('/');
+    return (await flags.canEnter(feature)) || router.parseUrl('/');
   };

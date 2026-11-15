@@ -9,11 +9,14 @@ import { FeatureSwitch, GameSettings, GamesApi } from './games-api';
 const online = signal(true);
 
 function flagsWith(features: FeatureSwitch[] | null): { flags: FeatureFlags; availability: GameAvailability } {
-  const connection: Pick<Connection, 'isOnline'> = { isOnline: online.asReadonly() };
-  const api: Pick<GamesApi, 'featureSwitches' | 'gameSettings'> = {
+  return flagsFrom({
     featureSwitches: vi.fn(async () => features),
     gameSettings: vi.fn(async (): Promise<GameSettings | null> => ({ switches: [], categories: [], thumbnails: [] })),
-  };
+  });
+}
+
+function flagsFrom(api: Pick<GamesApi, 'featureSwitches' | 'gameSettings'>): { flags: FeatureFlags; availability: GameAvailability } {
+  const connection: Pick<Connection, 'isOnline'> = { isOnline: online.asReadonly() };
   const injector = Injector.create({
     providers: [
       { provide: DOCUMENT, useValue: document },
@@ -36,6 +39,17 @@ describe('FeatureFlags', () => {
   afterEach(() => {
     localStorage.clear();
     online.set(true);
+  });
+
+  it('lets a page open at once when the last visit saved its feature on, without waiting for the API', async () => {
+    await flagsWith([{ feature: 'rooms', enabled: true }]).flags.ready();
+    const { flags } = flagsFrom({ featureSwitches: () => new Promise(() => undefined), gameSettings: () => new Promise(() => undefined) });
+    await expect(flags.canEnter('rooms')).resolves.toBe(true);
+  });
+
+  it('asks the API before opening a page on the first visit', async () => {
+    const { flags } = flagsWith([{ feature: 'rooms', enabled: false }]);
+    await expect(flags.canEnter('rooms')).resolves.toBe(false);
   });
 
   it('turns rooms off without a connection, and keeps features that work offline', async () => {

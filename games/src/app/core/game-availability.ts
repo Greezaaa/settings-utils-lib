@@ -21,6 +21,7 @@ export class GameAvailability {
   private readonly document = inject(DOCUMENT);
   private loading: Promise<void> | null = null;
   private hasRemembered = false;
+  private hasStoredSwitches = false;
 
   readonly isPreview = signal(false);
   readonly isKnown = signal(false);
@@ -39,6 +40,15 @@ export class GameAvailability {
 
   canPlay(game: GameSlug): boolean {
     return this.visibleGames().includes(game);
+  }
+
+  async canEnter(game: GameSlug): Promise<boolean> {
+    const loading = this.ready();
+    if (this.hasStoredSwitches && this.canPlay(game)) {
+      return true;
+    }
+    await loading;
+    return this.canPlay(game);
   }
 
   categoriesOf(game: GameSlug): readonly GameCategory[] {
@@ -117,7 +127,9 @@ export class GameAvailability {
       return;
     }
     this.hasRemembered = true;
-    this.switches.set(readSwitches(SWITCHES_STORAGE, isGameSlug) ?? this.switches());
+    const stored = readSwitches(SWITCHES_STORAGE, isGameSlug);
+    this.hasStoredSwitches = stored !== null;
+    this.switches.set(stored ?? this.switches());
     this.categories.set(new Map(readCategories().map(({ game, categories }) => [game, categories])));
     this.thumbnails.set(new Map(parseThumbnails(readStored(THUMBNAILS_STORAGE)).map(({ game, version }) => [game, version])));
   }

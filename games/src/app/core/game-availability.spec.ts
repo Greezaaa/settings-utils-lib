@@ -18,9 +18,12 @@ function availabilityWith(
   categories: GameCategoryList[] = [],
   thumbnails: ThumbnailVersion[] = [],
 ): GameAvailability {
-  const api: Pick<GamesApi, 'gameSettings'> = {
+  return availabilityFrom({
     gameSettings: vi.fn(async () => (switches ? { switches, categories, thumbnails } : null)),
-  };
+  }, role);
+}
+
+function availabilityFrom(api: Pick<GamesApi, 'gameSettings'>, role?: AdminRole): GameAvailability {
   const injector = Injector.create({
     providers: [
       { provide: DOCUMENT, useValue: document },
@@ -52,6 +55,19 @@ describe('GameAvailability', () => {
     expect(next.isOpen('how-many')).toBe(true);
     await loading;
     expect(next.isOpen('how-many')).toBe(false);
+  });
+
+  it('lets a game open at once when the last visit saved it open, without waiting for the API', async () => {
+    await availabilityWith([{ game: 'how-many', enabled: true }]).ready();
+    const next = availabilityFrom({ gameSettings: () => new Promise(() => undefined) });
+    await expect(next.canEnter('how-many')).resolves.toBe(true);
+  });
+
+  it('asks the API before letting a game open on the first visit or when it was saved closed', async () => {
+    const firstVisit = availabilityWith([{ game: 'sliding-puzzle', enabled: false }]);
+    await expect(firstVisit.canEnter('sliding-puzzle')).resolves.toBe(false);
+    const opened = availabilityWith([{ game: 'sliding-puzzle', enabled: true }]);
+    await expect(opened.canEnter('sliding-puzzle')).resolves.toBe(true);
   });
 
   it('uses the admin\'s categories over the built-in one, and remembers them for offline visits', async () => {

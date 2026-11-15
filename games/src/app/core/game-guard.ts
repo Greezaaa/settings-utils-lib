@@ -12,6 +12,5 @@ export const gameAvailableGuard =
     if (!isPlatformBrowser(inject(PLATFORM_ID))) {
       return true;
     }
-    await availability.ready();
-    return availability.canPlay(game) || router.parseUrl('/');
+    return (await availability.canEnter(game)) || router.parseUrl('/');
   };
