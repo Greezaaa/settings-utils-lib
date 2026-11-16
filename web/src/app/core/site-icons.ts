@@ -2,7 +2,6 @@
 export const SITE_ICONS = {
   home: ['M4 11l8-7 8 7v9h-5v-6h-6v6H4z'],
   packages: ['M4 8l8-4 8 4v8l-8 4-8-4z', 'M4 8l8 4 8-4', 'M12 12v8'],
-  more: ['M5.5 12h.01', 'M12 12h.01', 'M18.5 12h.01'],
   theme: ['M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18z', 'M12 3v18', 'M12 7h4.5', 'M12 11h6', 'M12 15h5.5'],
   'font-size': ['M3.5 19 8.5 5l5 14', 'M5.5 14h6', 'M15 19l3-8 3 8', 'M16 16.5h4'],
   notifications: ['M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15z', 'M10 20.5a2 2 0 0 0 4 0'],
@@ -13,14 +12,6 @@ export const SITE_ICONS = {
   'visit-tracker': ['M4 19h16', 'M5 15l4.5-4.5 3.5 3.5 6-6.5', 'M15 7.5h4v4'],
   fields: ['M3 8h18v8H3z', 'M7 10.5v3', 'M10 12h7'],
   imports: ['M9 7l-5 5 5 5', 'M15 7l5 5-5 5'],
-  games: [
-    'M7.5 8.5h9a4.5 4.5 0 0 1 4.5 4.5v.5a3 3 0 0 1-5.4 1.8L14.5 14h-5l-1.1 1.3A3 3 0 0 1 3 13.5V13a4.5 4.5 0 0 1 4.5-4.5z',
-    'M8 10.5v3',
-    'M6.5 12h3',
-    'M15.5 11.5h.01',
-    'M17.5 13h.01',
-  ],
-  reminder: ['M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18z', 'M12 7v5l3.5 2'],
   app: ['M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z', 'M9 12h6', 'M12 9v6'],
   changelog: ['M7 3h7l4 4v14H7z', 'M14 3v4h4', 'M10 12h5', 'M10 16h5'],
   privacy: ['M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z', 'M9.5 12l2 2 3.5-4'],
@@ -34,4 +25,12 @@ export const SITE_ICONS = {
   ],
 } as const satisfies Record<string, readonly string[]>;
 
-export type SiteIconName = keyof typeof SITE_ICONS;
+export type SiteLineIconName = keyof typeof SITE_ICONS;
+
+/** App logos drawn in the site's own colours, so they follow its light and dark theme */
+export const SITE_LOGOS = ['smartiplay', 'reminder'] as const;
+export type SiteLogoName = (typeof SITE_LOGOS)[number];
+
+export type SiteIconName = SiteLineIconName | SiteLogoName;
+
+export const isSiteLogo = (name: SiteIconName): name is SiteLogoName => SITE_LOGOS.some((logo) => logo === name);

@@ -223,11 +223,11 @@
     type="button"
     class="tab"
     aria-haspopup="dialog"
-    [attr.aria-expanded]="sheet() === 'more'"
-    (click)="openSheet('more', $event)"
+    [attr.aria-expanded]="sheet() === 'settings'"
+    (click)="openSheet('settings', $event)"
   >
-    <app-site-icon name="more" [size]="20" />
-    <span>More</span>
+    <app-site-icon name="settings" [size]="20" />
+    <span>Settings</span>
   </button>
 </nav>
 
@@ -248,7 +248,7 @@
   >
     <div class="sheet-content">
       <div class="sheet-head">
-        <h2 id="sheet-title" class="sheet-title" tabindex="-1">{{ sheetSection()?.title ?? 'More' }}</h2>
+        <h2 id="sheet-title" class="sheet-title" tabindex="-1">{{ sheetSection()?.title ?? 'Settings' }}</h2>
         @if ((sheetSection()?.links?.length ?? 0) > 1) {
           <button type="button" class="text-button" [attr.aria-pressed]="customising()" (click)="customising.set(!customising())">
             <app-site-icon name="customise" [size]="15" />
@@ -266,18 +266,11 @@
           <button type="button" class="text-button reset-order" (click)="menuOrder.reset()">Reset order</button>
         }
       } @else {
-        @for (section of moreSections(); track section.id) {
-          <div class="sheet-section">
-            <h3 class="sheet-section-title">{{ section.title }}</h3>
-            <app-menu-links [sectionId]="section.id" [links]="section.links" />
-          </div>
-        }
-        <a class="sheet-privacy" routerLink="/privacy">
-          <app-site-icon name="privacy" />
-          Privacy
-        </a>
         <div class="site-settings">
           <ng-container *ngTemplateOutlet="settings" />
+        </div>
+        <div class="sheet-footer">
+          <app-menu-links sectionId="sheet-footer" [links]="sheetFooterLinks()" />
         </div>
       }
     </div>

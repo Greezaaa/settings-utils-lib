@@ -12,17 +12,16 @@ export const SITE_APPS: readonly SiteApp[] = [
   {
     key: 'smartiplay',
     name: 'Smarti Play',
-    icon: 'games',
-    summary:
-      'Smartiplay, smart play with an i for ideas: free brain games for kids, no sign-up, works offline.',
+    icon: 'smartiplay',
+    summary: 'Smartiplay, smart play with an i for ideas: free brain games for kids, no sign-up, works offline.',
     url: 'https://smartiplay.com/',
   },
   {
     key: 'reminder',
     name: 'Reminder',
     icon: 'reminder',
-    summary: 'In development.',
-    url: null,
+    summary: 'Subscriptions, birthdays, events and lists in one place, with what is coming up next.',
+    url: 'https://reminder.su-labs.dev/',
   },
   {
     key: 'spotea',

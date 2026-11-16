@@ -8,7 +8,7 @@ import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, GUIDES_URL, npmUrl } from './core/links';
-import { sectionHasRoute } from './core/menu';
+import { sectionHasRoute, SiteMenuLink } from './core/menu';
 import { MenuOrder } from './core/menu-order';
 import { CORE_PACKAGE } from './core/packages';
 import { PageTransition } from './core/page-transition';
@@ -30,8 +30,8 @@ const DESKTOP = '(min-width: 64rem)';
 /** Between the phone layout and a wide screen, the menu closes to its icons by itself */
 const NARROW_DESKTOP = '(min-width: 64rem) and (max-width: 79.99rem)';
 
-/** The sheets the bottom bar opens on phones: a menu section's links, or More */
-type MenuSheet = 'packages' | 'extensions' | 'apps' | 'more';
+/** The sheets the bottom bar opens on phones: a menu section's links, or Settings */
+type MenuSheet = 'packages' | 'extensions' | 'apps' | 'settings';
 
 @Component({
   selector: 'app-root',
@@ -69,10 +69,13 @@ export class App {
   protected readonly sections = this.menuOrder.sections;
   /** The section a sheet lists, for the Packages, Extensions and Apps sheets */
   protected readonly sheetSection = computed(() => this.sections().find((section) => section.id === this.sheet()));
-  /** What the More sheet lists; packages, extensions and apps have their own tabs in the bottom bar */
-  protected readonly moreSections = computed(() =>
-    this.sections().filter((section) => !['packages', 'extensions', 'apps'].includes(section.id)),
-  );
+  /** The links under the settings in the Settings sheet: changelog and privacy; packages, extensions and apps have their own tabs */
+  protected readonly sheetFooterLinks = computed<readonly SiteMenuLink[]>(() => [
+    ...this.sections()
+      .filter((section) => !['packages', 'extensions', 'apps'].includes(section.id))
+      .flatMap((section) => section.links),
+    { key: 'privacy', label: 'Privacy', icon: 'privacy', route: '/privacy' },
+  ]);
   protected readonly githubUrl = GITHUB_REPO_URL;
   protected readonly authorEmailUrl = AUTHOR_EMAIL_URL;
   protected readonly guidesUrl = GUIDES_URL;

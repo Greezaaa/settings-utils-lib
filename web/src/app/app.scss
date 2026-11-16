@@ -323,31 +323,14 @@
   margin: 0 auto 0 0;
 }
 
-.sheet-section {
-  display: grid;
-  gap: 0.35rem;
+.sheet-content > .site-settings {
+  border-top: 0;
+  padding-top: 0;
 }
 
-.sheet-section-title {
-  color: var(--muted);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.sheet-privacy {
-  align-items: center;
-  color: var(--muted);
-  display: inline-flex;
-  gap: 0.6rem;
-  padding: 0.5rem 0.75rem;
-  text-decoration: none;
-
-  &:hover {
-    color: var(--heading);
-  }
+.sheet-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
 }
 
 .reset-order {
