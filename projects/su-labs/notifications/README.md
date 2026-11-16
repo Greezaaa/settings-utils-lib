@@ -64,7 +64,7 @@ You can install this library via npm:
 npm install @su-labs/notifications
 ```
 
-On Angular 19 or 20, install the matching version: `npm install @su-labs/notifications@ng19` or `npm install @su-labs/notifications@ng20`.
+On Angular 19, 20 or 21, install the matching version: `npm install @su-labs/notifications@ng19`, `@ng20` or `@ng21`.
 
 ## Peer Dependencies
 

@@ -33,7 +33,7 @@ API's own shape, ready to send.
 npm install @su-labs/table
 ```
 
-On Angular 19 or 20, install the matching version: `npm install @su-labs/table@ng19` or `npm install @su-labs/table@ng20`.
+On Angular 19, 20 or 21, install the matching version: `npm install @su-labs/table@ng19`, `@ng20` or `@ng21`.
 
 Peer dependencies: `@angular/core` and `@angular/common` 22.
 

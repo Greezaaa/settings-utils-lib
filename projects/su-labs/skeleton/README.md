@@ -18,7 +18,7 @@ Skeleton loaders for Angular that you draw with your own HTML and CSS, so they k
 npm install @su-labs/skeleton
 ```
 
-On Angular 19 or 20, install the matching version: `npm install @su-labs/skeleton@ng19` or `npm install @su-labs/skeleton@ng20`.
+On Angular 19, 20 or 21, install the matching version: `npm install @su-labs/skeleton@ng19`, `@ng20` or `@ng21`.
 
 ## Usage
 

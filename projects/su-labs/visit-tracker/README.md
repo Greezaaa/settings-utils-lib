@@ -57,7 +57,7 @@ You can install this library via npm:
 npm install @su-labs/visit-tracker
 ```
 
-On Angular 19 or 20, install the matching version: `npm install @su-labs/visit-tracker@ng19` or `npm install @su-labs/visit-tracker@ng20`.
+On Angular 19, 20 or 21, install the matching version: `npm install @su-labs/visit-tracker@ng19`, `@ng20` or `@ng21`.
 
 ## Peer Dependencies
 

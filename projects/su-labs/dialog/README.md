@@ -30,7 +30,7 @@ with a promise, and styled entirely through CSS variables so they follow your th
 npm install @su-labs/dialog
 ```
 
-On Angular 19 or 20, install the matching version: `npm install @su-labs/dialog@ng19` or `npm install @su-labs/dialog@ng20`.
+On Angular 19, 20 or 21, install the matching version: `npm install @su-labs/dialog@ng19`, `@ng20` or `@ng21`.
 
 Peer dependencies: `@angular/core` and `@angular/common` 22.
 

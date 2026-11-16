@@ -9,15 +9,15 @@ import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, write
 import { join, relative } from 'node:path';
 
 const ROOT = join(import.meta.dirname, '..');
-const SUPPORTED = ['19', '20'];
+const SUPPORTED = ['19', '20', '21'];
 const SKIPPED = new Set(['core', 'prettier-plugin-single-line-imports', 'vscode-ts-one-line-imports']);
-// Angular 22 renamed ChangeDetectionStrategy.Default to Eager; older majors only know Default
-const SOURCE_PATCHES = [['ChangeDetectionStrategy.Eager', 'ChangeDetectionStrategy.Default']];
 
 const [major, ...only] = process.argv.slice(2);
 if (!SUPPORTED.includes(major)) {
   throw new Error(`Usage: node scripts/build-compat.mjs <${SUPPORTED.join('|')}> [package…]`);
 }
+// ChangeDetectionStrategy.Eager arrived in Angular 21; Angular 19 and 20 only know Default
+const SOURCE_PATCHES = Number(major) < 21 ? [['ChangeDetectionStrategy.Eager', 'ChangeDetectionStrategy.Default']] : [];
 
 const toolchain = join(ROOT, 'compat', `angular-${major}`);
 const buildDir = join(toolchain, 'build');
@@ -71,7 +71,7 @@ function patchSources(dir) {
   }
 }
 
-const TYPESCRIPT_FLOOR = { 19: '5.5', 20: '5.8' };
+const TYPESCRIPT_FLOOR = { 19: '5.5', 20: '5.8', 21: '5.9' };
 
 function patchReadme(work, name) {
   const path = join(work, 'README.md');
@@ -81,9 +81,9 @@ function patchReadme(work, name) {
   const packageName = `@su-labs/${name}`;
   const text = readFileSync(path, 'utf8')
     .replace(
-      /^On Angular 19 or 20, install the matching version:.*$/m,
+      /^On Angular 19, 20 or 21, install the matching version:.*$/m,
       `This is the Angular ${major} version. For the newest Angular, install \`${packageName}\` without a tag.${
-        name === 'notifications' ? ' Before Angular 20.2, notifications show and hide without the slide animation.' : ''
+        name === 'notifications' && Number(major) < 21 ? ' Before Angular 20.2, notifications show and hide without the slide animation.' : ''
       }`,
     )
     .replaceAll(`npm install ${packageName}\n`, `npm install ${packageName}@ng${major}\n`)
