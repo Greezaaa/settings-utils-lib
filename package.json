@@ -24,6 +24,8 @@
     "build:prettier-single-line-imports": "tsc -p projects/su-labs/prettier-plugin-single-line-imports/tsconfig.lib.json && cd projects/su-labs/prettier-plugin-single-line-imports && cp package.json README.md CHANGELOG.md LICENSE ../../../dist/su-labs/prettier-plugin-single-line-imports/",
     "build:vscode-ts-one-line-imports": "tsc -p projects/su-labs/vscode-ts-one-line-imports/tsconfig.json && node projects/su-labs/vscode-ts-one-line-imports/build.mjs",
     "package:vscode-ts-one-line-imports": "npm run build:vscode-ts-one-line-imports && cd dist/su-labs/vscode-ts-one-line-imports && vsce package --no-dependencies --out ../",
+    "build:ng19": "npm run build:core && node scripts/build-compat.mjs 19",
+    "build:ng20": "npm run build:core && node scripts/build-compat.mjs 20",
     "build:all": "npm run build:core && npm run build:theme && npm run build:notifications && npm run build:dialog && npm run build:scroll-spy && npm run build:fields && npm run build:font-size && npm run build:visit-tracker && npm run build:table && npm run build:skeleton && npm run build:prettier-single-line-imports && npm run build:vscode-ts-one-line-imports",
     "start:web": "ng serve web",
     "build:web": "ng build web && node scripts/postbuild-site.mjs web",

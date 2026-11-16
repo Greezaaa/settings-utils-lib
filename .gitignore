@@ -46,3 +46,9 @@ Thumbs.db
 **/.vite/
 # Claude Code keeps its local files (previews, worktrees) out of the project
 /.claude/
+
+# Older Angular toolchains for the ng19/ng20 package builds (npm run build:ng19 / build:ng20)
+/compat/*/node_modules/
+/compat/*/build/
+/compat/*/angular.json
+/compat/*/.angular/

@@ -60,6 +60,7 @@ npm install @su-labs/core
 ## Angular Libraries
 
 These packages are built for Angular 22+ and expose injectable services with signals.
+On Angular 19 or 20, install the matching line: `npm install @su-labs/theme@ng19` (or `@ng20`).
 
 ### [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker)
 Track user visits with reactive signals, milestone detection, and localStorage persistence.
@@ -110,6 +111,9 @@ Comprehensive theme management with dark mode, system preferences, and CSS varia
 ```bash
 npm install @su-labs/theme
 ```
+
+On Angular 19 or 20, add the matching tag: `npm install @su-labs/theme@ng19` or `@su-labs/theme@ng20`. Those versions
+have the same features; on Angular 19 and 20.0–20.1 the notifications show and hide without their slide animation.
 
 **Features:**
 - Light, dark, contrast themes
@@ -393,6 +397,29 @@ npm run build:library-name
 cd dist/su-labs/library-name
 npm publish --access public
 ```
+
+### Angular 19 and 20 builds
+
+The same source is also built for Angular 19 and 20, with that Angular's own compiler (toolchains in
+`compat/angular-19` and `compat/angular-20`). Versions are `19.<minor>.<patch>` and `20.<minor>.<patch>` of the current
+release, published under a dist-tag so `latest` stays on Angular 22.
+
+```bash
+# once: install the toolchains
+(cd compat/angular-19 && npm ci)
+(cd compat/angular-20 && npm ci)
+
+# build every Angular package, plus a small app using all of them to prove they link and run
+npm run build:ng19
+npm run build:ng20
+
+# publish one package
+(cd dist/su-labs-ng19/library-name && npm publish --access public --tag ng19)
+(cd dist/su-labs-ng20/library-name && npm publish --access public --tag ng20)
+```
+
+Without `--tag`, npm would make the older line `latest`. Source changes that need Angular 22 have to be patched in
+`scripts/build-compat.mjs` (today: `ChangeDetectionStrategy.Eager` becomes `Default`) or written to work on all three.
 
 ---
 

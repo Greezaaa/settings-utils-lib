@@ -200,10 +200,12 @@
                   [mixedLabel]="t.mixed"
                   (valueChange)="setDraft(cell.key, $event)"
                 />
-              } @else if (cellTemplate(cell.key); as template) {
-                <ng-container *ngTemplateOutlet="template; context: { $implicit: row.data, text: cell.text }" />
               } @else {
-                {{ cell.text }}
+                @if (cellTemplate(cell.key); as template) {
+                  <ng-container *ngTemplateOutlet="template; context: { $implicit: row.data, text: cell.text }" />
+                } @else {
+                  {{ cell.text }}
+                }
               }
             </td>
           }

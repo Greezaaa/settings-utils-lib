@@ -1,0 +1,19 @@
+{
+  "name": "su-labs-angular-20-build",
+  "private": true,
+  "description": "Angular 20 toolchain that builds the @su-labs Angular packages for Angular 20 (npm run build:ng20 from the repo root)",
+  "devDependencies": {
+    "@angular/build": "20.3.43",
+    "@angular/cli": "20.3.43",
+    "@angular/common": "20.3.35",
+    "@angular/compiler": "20.3.35",
+    "@angular/compiler-cli": "20.3.35",
+    "@angular/core": "20.3.35",
+    "@angular/platform-browser": "20.3.35",
+    "ng-packagr": "20.3.2",
+    "rxjs": "7.8.2",
+    "tslib": "2.8.1",
+    "typescript": "5.8.3",
+    "zone.js": "0.15.1"
+  }
+}
