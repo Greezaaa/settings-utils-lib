@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/visit-tracker",
-	"version": "22.1.1",
+	"version": "22.1.2",
 	"keywords": [
 		"angular",
 		"user-tracking",
@@ -18,7 +18,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
-		"@su-labs/core": "1.8.0",
+		"@su-labs/core": "1.9.0",
 		"tslib": "^2.3.0"
 	},
 	"homepage": "https://su-labs.dev/visit-tracker/",
