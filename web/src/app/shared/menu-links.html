@@ -44,17 +44,20 @@
         >
           <app-site-icon [name]="link.icon" />
           <span class="menu-label">{{ link.label }}</span>
-          <span class="soon-tag">Soon</span>
+          <span class="menu-tag">Soon</span>
         </span>
       } @else {
         <a
           class="menu-link"
           [href]="link.href"
-          [attr.aria-label]="rail() ? link.label : null"
-          [attr.data-tooltip]="rail() ? link.label : null"
+          [attr.aria-label]="rail() ? (link.tag ? link.label + ', ' + link.tag : link.label) : null"
+          [attr.data-tooltip]="rail() ? (link.tag ? link.label + ' (' + link.tag + ')' : link.label) : null"
         >
           <app-site-icon [name]="link.icon" />
           <span class="menu-label">{{ link.label }}</span>
+          @if (link.tag) {
+            <span class="menu-tag">{{ link.tag }}</span>
+          }
         </a>
       }
     </li>

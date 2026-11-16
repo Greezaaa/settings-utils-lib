@@ -90,13 +90,18 @@
     @for (app of apps; track app.key) {
       @if (app.url; as url) {
         <a class="card utility-card tool-card" [href]="url" appReveal>
-          <h3>{{ app.name }}</h3>
+          <h3>
+            {{ app.name }}
+            @if (app.isBeta) {
+              <span class="app-tag">Beta</span>
+            }
+          </h3>
           <p class="muted">{{ app.summary }}</p>
           <p class="utility-packages mono">{{ hostOf(url) }}</p>
         </a>
       } @else {
         <div class="card utility-card tool-card is-soon" appReveal>
-          <h3>{{ app.name }} <span class="soon-tag">Soon</span></h3>
+          <h3>{{ app.name }} <span class="app-tag">Soon</span></h3>
           <p class="muted">{{ app.summary }}</p>
         </div>
       }

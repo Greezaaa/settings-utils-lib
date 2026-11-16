@@ -6,6 +6,7 @@ export interface SiteApp {
   readonly icon: SiteIconName;
   readonly summary: string;
   readonly url: string | null;
+  readonly isBeta?: boolean;
 }
 
 export const SITE_APPS: readonly SiteApp[] = [
@@ -15,6 +16,7 @@ export const SITE_APPS: readonly SiteApp[] = [
     icon: 'smartiplay',
     summary: 'Smartiplay, smart play with an i for ideas: free brain games for kids, no sign-up, works offline.',
     url: 'https://smartiplay.com/',
+    isBeta: true,
   },
   {
     key: 'reminder',
@@ -22,6 +24,7 @@ export const SITE_APPS: readonly SiteApp[] = [
     icon: 'reminder',
     summary: 'Subscriptions, birthdays, events and lists in one place, with what is coming up next.',
     url: 'https://reminder.su-labs.dev/',
+    isBeta: true,
   },
   {
     key: 'spotea',

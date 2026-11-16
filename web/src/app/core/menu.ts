@@ -4,7 +4,7 @@ import { SiteIconName } from './site-icons';
 
 export type SiteMenuLink = { readonly key: string; readonly label: string; readonly icon: SiteIconName } & (
   | { readonly route: string }
-  | { readonly href: string }
+  | { readonly href: string; readonly tag?: string }
   | { readonly soon: true }
 );
 
@@ -52,8 +52,10 @@ export const SITE_MENU: readonly SiteMenuSection[] = [
   {
     id: 'apps',
     title: 'Apps',
-    links: SITE_APPS.map(({ key, name, icon, url }) =>
-      url ? { key, label: name, icon, href: url } : { key, label: name, icon, soon: true as const },
+    links: SITE_APPS.map(({ key, name, icon, url, isBeta }) =>
+      url
+        ? { key, label: name, icon, href: url, ...(isBeta ? { tag: 'Beta' } : {}) }
+        : { key, label: name, icon, soon: true as const },
     ),
   },
   {
