@@ -35,6 +35,17 @@
           <app-site-icon [name]="link.icon" />
           <span class="menu-label">{{ link.label }}</span>
         </a>
+      } @else if ('soon' in link) {
+        <span
+          class="menu-link is-soon"
+          aria-disabled="true"
+          [attr.aria-label]="rail() ? link.label + ', soon' : null"
+          [attr.data-tooltip]="rail() ? link.label + ' (soon)' : null"
+        >
+          <app-site-icon [name]="link.icon" />
+          <span class="menu-label">{{ link.label }}</span>
+          <span class="soon-tag">Soon</span>
+        </span>
       } @else {
         <a
           class="menu-link"

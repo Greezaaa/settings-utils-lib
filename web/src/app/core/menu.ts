@@ -1,10 +1,11 @@
-import { GAMES_URL } from './links';
+import { SITE_APPS } from './apps';
 import { UTILITIES } from './packages';
 import { SiteIconName } from './site-icons';
 
 export type SiteMenuLink = { readonly key: string; readonly label: string; readonly icon: SiteIconName } & (
   | { readonly route: string }
   | { readonly href: string }
+  | { readonly soon: true }
 );
 
 export interface SiteMenuSection {
@@ -51,7 +52,9 @@ export const SITE_MENU: readonly SiteMenuSection[] = [
   {
     id: 'apps',
     title: 'Apps',
-    links: [{ key: 'games', label: 'Smart games', icon: 'games', href: GAMES_URL }],
+    links: SITE_APPS.map(({ key, name, icon, url }) =>
+      url ? { key, label: name, icon, href: url } : { key, label: name, icon, soon: true as const },
+    ),
   },
   {
     id: 'project',

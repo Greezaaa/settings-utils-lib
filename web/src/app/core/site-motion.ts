@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { SHARED_SETTINGS } from './shared-settings';
 
 /**
- * The visitor's choice to calm the site's motion, shared with games.su-labs.dev like the theme. While it's on, the
+ * The visitor's choice to calm the site's motion, saved in a su-labs.dev cookie like the theme. While it's on, the
  * page carries `data-reduce-motion` and the stylesheet stops every animation and transition; the system's own
  * "reduce motion" setting is followed either way.
  */

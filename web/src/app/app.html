@@ -209,10 +209,16 @@
     <app-site-icon name="imports" [size]="20" />
     <span>Extensions</span>
   </button>
-  <a class="tab" [href]="gamesUrl">
-    <app-site-icon name="games" [size]="20" />
-    <span>Games</span>
-  </a>
+  <button
+    type="button"
+    class="tab"
+    aria-haspopup="dialog"
+    [attr.aria-expanded]="sheet() === 'apps'"
+    (click)="openSheet('apps', $event)"
+  >
+    <app-site-icon name="app" [size]="20" />
+    <span>Apps</span>
+  </button>
   <button
     type="button"
     class="tab"

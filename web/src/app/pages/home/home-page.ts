@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ENVIRONMENTS } from '../../core/environments';
-import { GAMES_URL, GUIDES_URL } from '../../core/links';
+import { hostOf, SITE_APPS } from '../../core/apps';
+import { GUIDES_URL } from '../../core/links';
 import { TOOLS, UTILITIES } from '../../core/packages';
 import { CodeBlock } from '../../shared/code-block';
 import { Reveal } from '../../shared/reveal';
@@ -32,7 +33,8 @@ export class HomePage {
   protected readonly tools = TOOLS;
   protected readonly environments = ENVIRONMENTS;
   protected readonly guidesUrl = GUIDES_URL;
-  protected readonly gamesUrl = GAMES_URL;
+  protected readonly apps = SITE_APPS;
+  protected readonly hostOf = hostOf;
   protected readonly angularExample = ANGULAR_EXAMPLE;
   protected readonly coreExample = CORE_EXAMPLE;
 }

@@ -4,9 +4,9 @@ import { createSuCookieStorage } from '@su-labs/core';
  * su-labs.dev's small per-browser memory (the visit count of the visit tracker demo, notices seen), as JSON under
  * `su-labs-site:<name>`, and the visitor's choice about saving.
  *
- * Saving is on unless the visitor turns it off on the privacy page. That choice is shared with games.su-labs.dev (one
- * cookie on su-labs.dev, `su-labs:storage-consent`), as both sites share the theme and text size cookies: turning it
- * off on either site deletes what was saved and stops both from saving. Only the choice itself is kept.
+ * Saving is on unless the visitor turns it off on the privacy page. That choice is one cookie on su-labs.dev
+ * (`su-labs:storage-consent`), next to the theme, text size and motion cookies: turning it off deletes what was saved
+ * and stops saving. Only the choice itself is kept.
  */
 
 const KEY_PREFIX = 'su-labs-site:';

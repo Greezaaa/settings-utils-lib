@@ -15,7 +15,7 @@ const SAVED: readonly SavedItem[] = [
   {
     what: 'Theme, text size and motion',
     where: 'A cookie for su-labs.dev',
-    why: 'So su-labs.dev and games.su-labs.dev look the way you chose',
+    why: 'So su-labs.dev looks the way you chose',
   },
   {
     what: 'Your visits',
@@ -48,8 +48,8 @@ const SAVED_COLUMNS: SuTableColumns<SavedItem> = [
 ];
 
 /**
- * Privacy: what su-labs.dev saves, where and why, and a switch to stop saving anything. The switch is shared with
- * games.su-labs.dev, as both sites share the theme and text size. Turning it off deletes what was saved.
+ * Privacy: what su-labs.dev saves, where and why, and a switch to stop saving anything. Turning it off deletes what was
+ * saved.
  */
 @Component({
   selector: 'app-privacy-page',

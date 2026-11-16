@@ -42,6 +42,24 @@ li {
   }
 }
 
+.menu-link.is-soon {
+  cursor: default;
+  opacity: 0.7;
+
+  &:hover {
+    border-left-color: var(--border);
+    color: var(--muted);
+  }
+}
+
+.soon-tag {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  margin-left: auto;
+  padding: 0.05rem 0.45rem;
+}
+
 .menu-label {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -63,7 +81,8 @@ li {
     }
   }
 
-  .menu-label {
+  .menu-label,
+  .soon-tag {
     display: none;
   }
 

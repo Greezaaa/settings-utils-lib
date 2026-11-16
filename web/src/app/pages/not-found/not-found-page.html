@@ -25,9 +25,13 @@
       <a routerLink="/one-line-imports">One-line imports</a>
       <span class="muted">Keep every TypeScript and JavaScript import on one line.</span>
     </li>
-    <li>
-      <a [href]="gamesUrl">Smart games</a>
-      <span class="muted">Free math games for kids, on games.su-labs.dev.</span>
-    </li>
+    @for (app of apps; track app.key) {
+      @if (app.url; as url) {
+        <li>
+          <a [href]="url">{{ app.name }}</a>
+          <span class="muted">{{ app.summary }}</span>
+        </li>
+      }
+    }
   </ul>
 </section>

@@ -2,8 +2,6 @@ import type { SuPackage } from './packages';
 
 export const SITE_URL = 'https://su-labs.dev';
 
-export const GAMES_URL = 'https://games.su-labs.dev/';
-
 export const SITE_PREVIEW_IMAGE_URL = `${SITE_URL}/og-image.png`;
 
 export const SITE_PREVIEW_IMAGE = {

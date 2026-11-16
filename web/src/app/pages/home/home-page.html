@@ -82,15 +82,26 @@
 
 <section class="container section">
   <div class="section-head" appReveal>
-    <p class="eyebrow">Smart games</p>
-    <h2>Smart games, for smart kids.</h2>
-    <p class="muted">Short, free games for kids. They work on phones, tablets and computers.</p>
+    <p class="eyebrow">Apps</p>
+    <h2>Apps built with these packages.</h2>
+    <p class="muted">Each one is its own project, with its own site.</p>
   </div>
-  <a class="card utility-card tool-card" [href]="gamesUrl" appReveal>
-    <h3>Smart games</h3>
-    <p class="muted">Math games: true or false, tap the answer, or find the missing signs. In English, Spanish and Basque.</p>
-    <p class="utility-packages mono">games.su-labs.dev</p>
-  </a>
+  <div class="app-grid">
+    @for (app of apps; track app.key) {
+      @if (app.url; as url) {
+        <a class="card utility-card tool-card" [href]="url" appReveal>
+          <h3>{{ app.name }}</h3>
+          <p class="muted">{{ app.summary }}</p>
+          <p class="utility-packages mono">{{ hostOf(url) }}</p>
+        </a>
+      } @else {
+        <div class="card utility-card tool-card is-soon" appReveal>
+          <h3>{{ app.name }} <span class="soon-tag">Soon</span></h3>
+          <p class="muted">{{ app.summary }}</p>
+        </div>
+      }
+    }
+  </div>
 </section>
 
 <section class="container section">

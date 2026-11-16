@@ -64,6 +64,29 @@
   }
 }
 
+.app-grid {
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 48rem) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.utility-card.is-soon {
+  opacity: 0.7;
+}
+
+.soon-tag {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  padding: 0.1rem 0.5rem;
+  vertical-align: middle;
+}
+
 .utility-packages {
   color: var(--muted);
   font-size: 0.75rem;

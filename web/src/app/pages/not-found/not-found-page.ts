@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { GAMES_URL } from '../../core/links';
+import { hostOf, SITE_APPS } from '../../core/apps';
 import { UTILITIES } from '../../core/packages';
 
 @Component({
@@ -12,5 +12,6 @@ import { UTILITIES } from '../../core/packages';
 })
 export class NotFoundPage {
   protected readonly utilities = UTILITIES;
-  protected readonly gamesUrl = GAMES_URL;
+  protected readonly apps = SITE_APPS.filter((app) => app.url !== null);
+  protected readonly hostOf = hostOf;
 }
