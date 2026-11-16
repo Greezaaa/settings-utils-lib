@@ -59,6 +59,8 @@ You can install this library via npm:
 npm install @su-labs/font-size
 ```
 
+On Angular 19 or 20, install the matching version: `npm install @su-labs/font-size@ng19` or `npm install @su-labs/font-size@ng20`.
+
 ## Peer Dependencies
 
 This library requires the following peer dependencies:

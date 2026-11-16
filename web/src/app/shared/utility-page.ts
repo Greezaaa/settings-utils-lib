@@ -5,7 +5,7 @@ import { changelogResource } from '../changelog/changelog.resource';
 import { ReleaseList } from '../changelog/release-list';
 import { ENVIRONMENTS } from '../core/environments';
 import { changelogUrl, npmUrl, readmeUrl } from '../core/links';
-import { SuUtility } from '../core/packages';
+import { OLDER_ANGULAR_MAJORS, SuUtility } from '../core/packages';
 import { CodeBlock } from './code-block';
 import { CodeTab, CodeTabs } from './code-tabs';
 import { NpmDownloadsTag } from './npm-downloads-tag';
@@ -44,7 +44,13 @@ export class UtilityPage {
 
   protected readonly install = computed<CodeTab[]>(() => {
     const { packageName, coreEntry } = this.utility();
-    const angular = { label: 'Angular', code: `npm install ${packageName}` };
-    return coreEntry ? [angular, { label: 'Any framework', code: 'npm install @su-labs/core' }] : [angular];
+    const angular = [
+      { label: 'Angular 22', code: `npm install ${packageName}` },
+      ...OLDER_ANGULAR_MAJORS.map((major) => ({
+        label: `Angular ${major}`,
+        code: `npm install ${packageName}@ng${major}`,
+      })),
+    ];
+    return coreEntry ? [...angular, { label: 'Any framework', code: 'npm install @su-labs/core' }] : angular;
   });
 }

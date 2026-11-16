@@ -19,6 +19,8 @@ Every animation stops for visitors who ask their device for less motion.
 npm install @su-labs/fields
 ```
 
+On Angular 19 or 20, install the matching version: `npm install @su-labs/fields@ng19` or `npm install @su-labs/fields@ng20`.
+
 ## Code boxes
 
 ```ts

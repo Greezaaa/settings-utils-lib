@@ -19,6 +19,9 @@ export const CORE_PACKAGE: SuPackage = {
   summary: 'Every utility without a framework, plus a tiny reactive store.',
 };
 
+/** Older Angular majors with their own build of every Angular package, installed with the `ng<major>` dist-tag */
+export const OLDER_ANGULAR_MAJORS: readonly number[] = [20, 19];
+
 export const UTILITIES: readonly SuUtility[] = [
   {
     slug: 'theme',

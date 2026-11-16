@@ -71,6 +71,29 @@ function patchSources(dir) {
   }
 }
 
+const TYPESCRIPT_FLOOR = { 19: '5.5', 20: '5.8' };
+
+function patchReadme(work, name) {
+  const path = join(work, 'README.md');
+  if (!existsSync(path)) {
+    return;
+  }
+  const packageName = `@su-labs/${name}`;
+  const text = readFileSync(path, 'utf8')
+    .replace(
+      /^On Angular 19 or 20, install the matching version:.*$/m,
+      `This is the Angular ${major} version. For the newest Angular, install \`${packageName}\` without a tag.${
+        name === 'notifications' ? ' Before Angular 20.2, notifications show and hide without the slide animation.' : ''
+      }`,
+    )
+    .replaceAll(`npm install ${packageName}\n`, `npm install ${packageName}@ng${major}\n`)
+    .replaceAll('@angular/common@^22 @angular/core@^22', `@angular/common@^${major} @angular/core@^${major}`)
+    .replaceAll('`@angular/core` and `@angular/common` 22', `\`@angular/core\` and \`@angular/common\` ${major}`)
+    .replaceAll('Angular 22+', `Angular ${major}`)
+    .replaceAll('TypeScript 6.0+', `TypeScript ${TYPESCRIPT_FLOOR[major]}+`);
+  writeFileSync(path, text);
+}
+
 function compatVersion(version) {
   const [, minor, patch] = version.split('.');
   return `${major}.${minor}.${patch}`;
@@ -83,6 +106,7 @@ function preparePackage(name) {
     filter: (path) => !path.endsWith('.spec.ts') && !path.includes('node_modules'),
   });
   patchSources(join(work, 'src'));
+  patchReadme(work, name);
 
   const manifest = readJson(join(work, 'package.json'));
   manifest.version = compatVersion(manifest.version);
@@ -156,7 +180,9 @@ function buildSmokeApp() {
 }
 
 rmSync(buildDir, { recursive: true, force: true });
-rmSync(distDir, { recursive: true, force: true });
+for (const name of only.length === 0 ? ['.'] : packages) {
+  rmSync(join(distDir, name), { recursive: true, force: true });
+}
 cpSync(join(packagesDir, 'core'), join(buildDir, 'core'), {
   recursive: true,
   filter: (path) => !path.includes('node_modules'),
