@@ -1,5 +1,0 @@
-{
-  "singleQuote": true,
-  "trailingComma": "all",
-  "plugins": ["../projects/su-labs/prettier-plugin-single-line-imports/src/index.ts"]
-}

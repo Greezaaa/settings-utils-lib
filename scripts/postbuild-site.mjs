@@ -2,7 +2,7 @@ import { readdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const SITES = ['web', 'games'];
+const SITES = ['web'];
 
 const site = process.argv[2];
 if (!SITES.includes(site)) {
@@ -58,13 +58,5 @@ ${urls.map((url) => `  <url><loc>${url}</loc><lastmod>${today}</lastmod></url>`)
 </urlset>
 `;
 await writeFile(join(outputDir, 'sitemap.xml'), sitemap);
-
-if (site === 'games' && process.env.GAMES_VERSION) {
-  const critical = process.env.GAMES_CRITICAL === '1';
-  await writeFile(
-    join(outputDir, 'version.json'),
-    `${JSON.stringify({ version: process.env.GAMES_VERSION, critical })}\n`,
-  );
-}
 
 console.log(`${site} sitemap.xml: ${urls.length} pages. 404.html: not-found page.`);

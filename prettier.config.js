@@ -11,7 +11,7 @@ module.exports = {
   plugins: ['./projects/su-labs/prettier-plugin-single-line-imports/src/index.ts'],
   overrides: [
     {
-      files: ['games/**/*.ts', 'web/**/*.ts'],
+      files: ['web/**/*.ts'],
       options: {
         printWidth: 120,
         arrowParens: 'always',

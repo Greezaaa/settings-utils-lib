@@ -23,7 +23,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    exclude: [...configDefaults.exclude, 'api/**'],
+    exclude: [...configDefaults.exclude],
     setupFiles: resolve(__dirname, 'vitest.setup.ts'),
     coverage: {
       reporter: ['text', 'html'],

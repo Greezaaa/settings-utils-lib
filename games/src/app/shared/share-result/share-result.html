@@ -1,8 +1,0 @@
-@if (isShown()) {
-  <button type="button" class="button button-secondary button-small share" (click)="share()">
-    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-      <path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    {{ isCopied() ? ('share.copied' | translate) : ('share.button' | translate) }}
-  </button>
-}

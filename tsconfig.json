@@ -94,9 +94,6 @@
     },
     {
       "path": "./web/tsconfig.app.json"
-    },
-    {
-      "path": "./games/tsconfig.app.json"
     }
   ]
 }
