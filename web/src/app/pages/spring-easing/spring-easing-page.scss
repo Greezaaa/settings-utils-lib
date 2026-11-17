@@ -1,0 +1,28 @@
+.spring-fields {
+  --tool-field-columns: 1;
+}
+
+.spring-graph {
+  background: var(--subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  display: block;
+  overflow: visible;
+  padding: 1rem;
+  width: 100%;
+
+  path {
+    fill: none;
+    stroke: var(--heading);
+    stroke-linejoin: round;
+    stroke-width: 2.5px;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+.rest {
+  stroke: var(--muted);
+  stroke-dasharray: 4 4;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}

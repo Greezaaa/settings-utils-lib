@@ -1,0 +1,112 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">CSS shadows</span>
+  </div>
+  <h1>Box shadow</h1>
+  <p class="lead">
+    Stack shadow layers until a card looks lifted, pressed or glowing.
+    <br />
+    Tune each layer, or start from one of the examples.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="editor-title">
+  <h2 id="editor-title" class="section-title">Editor</h2>
+  <div class="tool-editor">
+    <div class="tool-panel">
+      <div class="shadow-stage" [class]="'stage-' + stage()">
+        <div class="shadow-card" [style.box-shadow]="shadow()" role="img" aria-label="Card with the shadow"></div>
+      </div>
+      <div class="button-row" role="group" aria-label="Preview background">
+        @for (item of stages; track item.value) {
+          <button
+            type="button"
+            class="button button-secondary button-small"
+            [attr.aria-pressed]="stage() === item.value"
+            (click)="stage.set(item.value)">
+            {{ item.label }} background
+          </button>
+        }
+      </div>
+      <div class="tool-value">
+        <app-code-block [code]="code()" />
+        <p class="muted tool-note" aria-live="polite">
+          @if (match(); as preset) {
+            The {{ preset.name }} example.
+          } @else {
+            Your own shadow. The link in the address bar shares it.
+          }
+        </p>
+      </div>
+    </div>
+
+    <div class="tool-panel">
+      <div class="field">
+        <span>Layers, from top to bottom</span>
+        <div class="button-row" role="group" aria-label="Layers">
+          @for (layer of layers(); track layer.id; let index = $index) {
+            <button
+              type="button"
+              class="button button-secondary button-small"
+              [attr.aria-pressed]="layer.id === selected().id"
+              (click)="selectedId.set(layer.id)">
+              Layer {{ index + 1 }}
+            </button>
+          }
+          <button type="button" class="button button-secondary button-small" (click)="addLayer()">+ Add layer</button>
+        </div>
+      </div>
+
+      <fieldset class="tool-fields layer-fields">
+        <legend>Selected layer</legend>
+        @for (range of ranges; track range.key) {
+          <label class="field">
+            <span>{{ range.label }}: {{ selected()[range.key] }}px</span>
+            <input
+              type="range"
+              step="1"
+              [min]="range.min"
+              [max]="range.max"
+              [value]="selected()[range.key]"
+              (input)="setNumber(range.key, $event)" />
+          </label>
+        }
+        <app-color-field label="Colour" [value]="selected().color" (valueChange)="setColor($event)" />
+        <label class="field">
+          <span>Opacity: {{ opacityPercent() }}%</span>
+          <input type="range" min="0" max="100" step="1" [value]="opacityPercent()" (input)="setOpacity($event)" />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [checked]="selected().inset" (change)="setInset($event)" />
+          Inset, inside the box
+        </label>
+        <button
+          type="button"
+          class="button button-secondary button-small"
+          [disabled]="layers().length <= 1"
+          (click)="removeLayer()">
+          Remove layer
+        </button>
+      </fieldset>
+    </div>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="examples-title">
+  <h2 id="examples-title" class="section-title">Examples</h2>
+  <p class="muted section-intro">Click one to load it into the editor.</p>
+  <ul class="presets">
+    @for (preset of presets; track preset.key) {
+      <li>
+        <button type="button" class="preset" [attr.aria-pressed]="match()?.key === preset.key" (click)="load(preset)">
+          <span class="preset-swatch shadow-swatch"><span [style.box-shadow]="preset.shadow"></span></span>
+          <span class="preset-text">
+            <span class="preset-name">{{ preset.name }}</span>
+            <span class="preset-detail">{{ preset.layers.length }} {{ preset.layers.length === 1 ? 'layer' : 'layers' }}</span>
+          </span>
+        </button>
+      </li>
+    }
+  </ul>
+</section>

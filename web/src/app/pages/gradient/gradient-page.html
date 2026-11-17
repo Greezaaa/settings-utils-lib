@@ -1,0 +1,161 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">CSS gradients</span>
+  </div>
+  <h1>Gradient</h1>
+  <p class="lead">
+    Build linear, radial and conic gradients that blend smoothly, without the grey middle.
+    <br />
+    Drag the colour stops, or start from one of the examples.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="editor-title">
+  <h2 id="editor-title" class="section-title">Editor</h2>
+  <div class="tool-editor">
+    <div class="tool-panel">
+      <div class="gradient-preview" [style.background]="preview()" role="img" [attr.aria-label]="'Preview of ' + value()"></div>
+
+      <div class="stops">
+        <span class="stops-label" id="stops-hint">
+          Click the bar to add a stop. Drag a stop, or focus it and use the arrow keys; Delete removes it.
+        </span>
+        <div
+          class="stop-bar"
+          [style.background]="stripe()"
+          role="group"
+          aria-label="Colour stops"
+          aria-describedby="stops-hint"
+          appPointerDrag
+          (dragStart)="startDrag($event)"
+          (dragMove)="drag($event)"
+          (dragEnd)="endDrag()">
+          @for (stop of stops(); track stop.id; let index = $index) {
+            <span
+              class="stop drag-handle"
+              tabindex="0"
+              role="slider"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-valuenow]="stop.position"
+              [attr.aria-valuetext]="describeStop(stop)"
+              [attr.aria-label]="'Colour ' + (index + 1)"
+              [attr.data-drag-index]="stop.id"
+              [class.is-selected]="stop.id === selected().id"
+              [style.left.%]="stop.position"
+              [style.--stop-color]="stop.color"
+              (focus)="selectedId.set(stop.id)"
+              (keydown)="stopKey($event, stop)"></span>
+          }
+        </div>
+      </div>
+
+      <div class="stop-list-head">
+        <span class="stop-list-title">Colours</span>
+        <button type="button" class="button button-secondary button-small" (click)="addColor()">+ Add colour</button>
+      </div>
+      <ul class="stop-list">
+        @for (stop of stops(); track stop.id; let index = $index) {
+          <li class="stop-row" [class.is-selected]="stop.id === selected().id" (focusin)="selectedId.set(stop.id)">
+            <app-color-field
+              [label]="'Colour ' + (index + 1)"
+              [value]="stop.color"
+              (valueChange)="setColor(stop.id, $event)" />
+            <label class="field">
+              <span>Position (%)</span>
+              <input
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                [value]="stop.position"
+                (change)="setPosition(stop.id, $event)"
+                (keydown.enter)="setPosition(stop.id, $event)" />
+            </label>
+            <button
+              type="button"
+              class="button button-secondary button-small"
+              [disabled]="!canRemove()"
+              [attr.aria-label]="'Remove colour ' + (index + 1)"
+              (click)="removeStop(stop.id)">
+              Remove
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="tool-panel">
+      <div class="tool-value">
+        <app-code-block [code]="code()" />
+        <p class="muted tool-note" aria-live="polite">
+          @if (match(); as preset) {
+            The {{ preset.name }} example.
+          } @else {
+            Your own gradient. The link in the address bar shares it.
+          }
+        </p>
+      </div>
+
+      <div class="field">
+        <span>Type</span>
+        <div class="button-row" role="group" aria-label="Gradient type">
+          @for (item of types; track item.value) {
+            <button
+              type="button"
+              class="button button-secondary button-small"
+              [attr.aria-pressed]="gradient().type === item.value"
+              (click)="setType(item.value)">
+              {{ item.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (gradient().type !== 'radial') {
+        <label class="field">
+          <span>Angle: {{ gradient().angle }}°</span>
+          <input type="range" min="0" max="359" step="1" [value]="gradient().angle" (input)="setAngle($event)" />
+        </label>
+      }
+
+      <div class="field">
+        <span>Blending</span>
+        <div class="button-row" role="group" aria-label="Blending">
+          @for (item of spaces; track item.value) {
+            <button
+              type="button"
+              class="button button-secondary button-small"
+              [attr.aria-pressed]="gradient().space === item.value"
+              (click)="setSpace(item.value)">
+              {{ item.label }}
+            </button>
+          }
+        </div>
+        <p class="muted tool-note">
+          Smooth blending mixes colours in oklch, so blue to yellow doesn’t pass through grey. Browsers without it use the
+          first line.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="examples-title">
+  <h2 id="examples-title" class="section-title">Examples</h2>
+  <p class="muted section-intro">Click one to load it into the editor.</p>
+  <ul class="presets">
+    @for (preset of presets; track preset.key) {
+      <li>
+        <button type="button" class="preset" [attr.aria-pressed]="match()?.key === preset.key" (click)="load(preset)">
+          <span class="preset-swatch" [style.background]="preset.background"></span>
+          <span class="preset-text">
+            <span class="preset-name">{{ preset.name }}</span>
+            <span class="preset-detail">{{ preset.gradient.type }}, {{ preset.gradient.stops.length }} stops</span>
+          </span>
+        </button>
+      </li>
+    }
+  </ul>
+</section>

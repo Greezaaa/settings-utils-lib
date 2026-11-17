@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { SuNotificationService } from '@su-labs/notifications';
+import { Clipboard } from './clipboard';
 
 @Component({
   selector: 'app-code-block',
@@ -63,17 +63,9 @@ import { SuNotificationService } from '@su-labs/notifications';
 export class CodeBlock {
   readonly code = input.required<string>();
 
-  private readonly notifications = inject(SuNotificationService);
+  private readonly clipboard = inject(Clipboard);
 
-  protected async copy(): Promise<void> {
-    try {
-      await navigator.clipboard.writeText(this.code());
-      this.notifications.show({ type: 'success', message: 'Copied to clipboard.', duration: 2000 });
-    } catch {
-      this.notifications.show({
-        type: 'error',
-        message: 'Copying is blocked in this browser. Select the code instead.',
-      });
-    }
+  protected copy(): Promise<void> {
+    return this.clipboard.copy(this.code());
   }
 }

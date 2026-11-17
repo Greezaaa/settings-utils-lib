@@ -1,0 +1,117 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">CSS shapes</span>
+  </div>
+  <h1>Clip path</h1>
+  <p class="lead">
+    Cut any element into a triangle, star, arrow or a shape of your own.
+    <br />
+    Drag the points, or start from one of the examples.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="editor-title">
+  <h2 id="editor-title" class="section-title">Editor</h2>
+  <div class="tool-editor">
+    <div class="tool-panel">
+      <div
+        class="clip-editor"
+        role="group"
+        aria-label="Shape editor"
+        aria-describedby="clip-hint"
+        appPointerDrag
+        (dragStart)="startDrag($event)"
+        (dragMove)="drag($event)"
+        (dragEnd)="endDrag()">
+        <div class="clip-ghost" aria-hidden="true"></div>
+        <div class="clip-shape" [style.clip-path]="polygon()" aria-hidden="true"></div>
+        <svg class="clip-outline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <polygon [attr.points]="outline()" />
+        </svg>
+        @for (point of shape(); track point.id; let index = $index) {
+          <span
+            class="clip-point drag-handle"
+            tabindex="0"
+            role="slider"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-label]="'Point ' + (index + 1)"
+            [attr.aria-valuenow]="point.x"
+            [attr.aria-valuetext]="point.x + '% across, ' + point.y + '% down'"
+            [attr.data-drag-index]="point.id"
+            [class.is-selected]="point.id === selected().id"
+            [style.left.%]="point.x"
+            [style.top.%]="point.y"
+            (focus)="selectedId.set(point.id)"
+            (keydown)="pointKey($event, point)"></span>
+        }
+      </div>
+      <p id="clip-hint" class="muted tool-note">
+        Drag a point, or focus it and use the arrow keys (Shift for bigger steps); Delete removes it. Click an empty spot
+        to add a point on the nearest edge.
+      </p>
+    </div>
+
+    <div class="tool-panel">
+      <div class="tool-value">
+        <app-code-block [code]="code()" />
+        <p class="muted tool-note" aria-live="polite">
+          @if (match(); as preset) {
+            The {{ preset.name }} example.
+          } @else {
+            Your own shape. The link in the address bar shares it.
+          }
+        </p>
+      </div>
+      <fieldset class="tool-fields point-fields">
+        <legend>Selected point</legend>
+        <label class="field">
+          <span>Across (%)</span>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            [value]="selected().x"
+            (change)="setCoordinate('x', $event)"
+            (keydown.enter)="setCoordinate('x', $event)" />
+        </label>
+        <label class="field">
+          <span>Down (%)</span>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            [value]="selected().y"
+            (change)="setCoordinate('y', $event)"
+            (keydown.enter)="setCoordinate('y', $event)" />
+        </label>
+        <button
+          type="button"
+          class="button button-secondary"
+          [disabled]="shape().length <= minPoints"
+          (click)="removePoint(selected().id)">
+          Remove point
+        </button>
+      </fieldset>
+    </div>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="examples-title">
+  <h2 id="examples-title" class="section-title">Examples</h2>
+  <p class="muted section-intro">Click one to load it into the editor.</p>
+  <ul class="presets">
+    @for (preset of presets; track preset.key) {
+      <li>
+        <button type="button" class="preset" [attr.aria-pressed]="match()?.key === preset.key" (click)="load(preset)">
+          <span class="preset-swatch clip-swatch"><span [style.clip-path]="preset.polygon"></span></span>
+          <span class="preset-text">
+            <span class="preset-name">{{ preset.name }}</span>
+            <span class="preset-detail">{{ preset.points.length }} points</span>
+          </span>
+        </button>
+      </li>
+    }
+  </ul>
+</section>

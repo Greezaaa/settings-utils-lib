@@ -1,6 +1,7 @@
 import { SITE_APPS } from './apps';
 import { UTILITIES } from './packages';
 import { SiteIconName } from './site-icons';
+import { SITE_TOOLS } from './tools';
 
 export type SiteMenuLink = { readonly key: string; readonly label: string; readonly icon: SiteIconName } & (
   | { readonly route: string }
@@ -49,10 +50,7 @@ export const SITE_MENU: readonly SiteMenuSection[] = [
     id: 'extensions',
     title: 'Extensions & tools',
     railTitle: 'Tools',
-    links: [
-      { key: 'one-line-imports', label: 'One-line imports', icon: 'imports', route: '/one-line-imports' },
-      { key: 'cubic-bezier', label: 'Cubic bezier', icon: 'bezier', route: '/cubic-bezier' },
-    ],
+    links: SITE_TOOLS.map(({ slug, name, icon }) => ({ key: slug, label: name, icon, route: `/${slug}` })),
   },
   {
     id: 'apps',

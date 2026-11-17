@@ -1,0 +1,110 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">CSS clamp()</span>
+  </div>
+  <h1>Fluid type</h1>
+  <p class="lead">
+    Let text grow with the screen, smoothly between a smallest and a largest size, with no breakpoints.
+    <br />
+    Set the sizes and widths, then copy the clamp() value or a whole type scale.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="clamp-title">
+  <h2 id="clamp-title" class="section-title">One size</h2>
+  <div class="tool-editor">
+    <div class="tool-panel">
+      <fieldset class="tool-fields range-fields">
+        <legend>Sizes and screen widths</legend>
+        @for (field of rangeFields; track field.key) {
+          <label class="field">
+            <span>{{ field.label }}</span>
+            <input
+              type="number"
+              [min]="field.min"
+              [max]="field.max"
+              [step]="field.step"
+              [value]="range()[field.key]"
+              (change)="setRange(field, $event)"
+              (keydown.enter)="setRange(field, $event)" />
+          </label>
+        }
+      </fieldset>
+      <div class="tool-value">
+        <app-code-block [code]="code()" />
+        <p class="muted tool-note">The link in the address bar shares these settings.</p>
+      </div>
+    </div>
+
+    <div class="tool-panel">
+      <label class="field">
+        <span>Preview at a screen {{ previewWidth() }}px wide</span>
+        <input
+          type="range"
+          [min]="preview.min"
+          [max]="preview.max"
+          [step]="preview.step"
+          [value]="previewWidth()"
+          (input)="setPreviewWidth($event)" />
+      </label>
+      <div class="fluid-sample">
+        <span class="muted tool-note" aria-live="polite">{{ previewSize() }}px</span>
+        <p [style.font-size.px]="previewSize()">The quick brown fox jumps over the lazy dog.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="scale-title">
+  <h2 id="scale-title" class="section-title">Type scale</h2>
+  <p class="muted section-intro">
+    Each step is the one below times the ratio. A smaller ratio on narrow screens keeps headings from crowding them.
+  </p>
+  <div class="tool-fields scale-fields">
+    @for (field of scaleFields; track field.key) {
+      <label class="field">
+        <span>{{ field.label }}</span>
+        <input
+          type="number"
+          [min]="field.min"
+          [max]="field.max"
+          [step]="field.step"
+          [value]="scale()[field.key]"
+          (change)="setScale(field, $event)"
+          (keydown.enter)="setScale(field, $event)" />
+      </label>
+    }
+    <label class="field">
+      <span>Ratio, narrow</span>
+      <select (change)="setRatio('minRatio', $event)">
+        @for (ratio of ratios; track ratio.value) {
+          <option [value]="ratio.value" [selected]="scale().minRatio === ratio.value">{{ ratio.value }} {{ ratio.name }}</option>
+        }
+      </select>
+    </label>
+    <label class="field">
+      <span>Ratio, wide</span>
+      <select (change)="setRatio('maxRatio', $event)">
+        @for (ratio of ratios; track ratio.value) {
+          <option [value]="ratio.value" [selected]="scale().maxRatio === ratio.value">{{ ratio.value }} {{ ratio.name }}</option>
+        }
+      </select>
+    </label>
+  </div>
+  <p class="muted tool-note">
+    Screen widths and root size come from the settings above. Previewed at {{ previewWidth() }}px wide.
+  </p>
+  <ol class="scale" reversed>
+    @for (step of steps(); track step.step) {
+      <li>
+        <span class="scale-meta mono">
+          {{ step.name }}
+          <span class="muted">{{ step.minSize }}–{{ step.maxSize }}px</span>
+        </span>
+        <span class="scale-sample" [style.font-size.px]="step.previewSize">Fluid type</span>
+      </li>
+    }
+  </ol>
+  <app-code-block [code]="scaleCode()" />
+</section>

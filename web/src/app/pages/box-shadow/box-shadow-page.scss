@@ -1,0 +1,54 @@
+.shadow-stage {
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  display: grid;
+  justify-items: center;
+  min-height: 18rem;
+  padding: 3rem 1.5rem;
+
+  &.stage-light {
+    --card: #ffffff;
+
+    background: #f4f4f2;
+  }
+
+  &.stage-dark {
+    --card: #2a2a2a;
+
+    background: #171717;
+  }
+}
+
+.shadow-card {
+  aspect-ratio: 4 / 3;
+  background: var(--card);
+  border-radius: var(--radius-large);
+  width: min(100%, 14rem);
+}
+
+.layer-fields {
+  --tool-field-columns: 2;
+
+  align-items: end;
+
+  app-color-field,
+  .checkbox {
+    grid-column: 1 / -1;
+  }
+}
+
+.shadow-swatch {
+  align-items: center;
+  background: #f4f4f2;
+  display: grid;
+  justify-items: center;
+  overflow: visible;
+
+  > span {
+    background: #ffffff;
+    border-radius: 4px;
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+}

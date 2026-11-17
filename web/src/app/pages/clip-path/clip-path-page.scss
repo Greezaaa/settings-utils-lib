@@ -1,0 +1,82 @@
+.clip-editor {
+  aspect-ratio: 1;
+  cursor: copy;
+  margin: 0.75rem;
+  max-width: 26rem;
+  position: relative;
+  user-select: none;
+}
+
+.clip-ghost,
+.clip-shape {
+  background: linear-gradient(135deg in oklch, #ff9a8b, #6366f1);
+  border-radius: 2px;
+  inset: 0;
+  position: absolute;
+}
+
+.clip-ghost {
+  opacity: 0.15;
+}
+
+.clip-outline {
+  height: 100%;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+
+  polygon {
+    fill: none;
+    stroke: var(--heading);
+    stroke-dasharray: 4 3;
+    stroke-width: 1.5px;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+.clip-point {
+  background: var(--button-bg);
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--muted);
+  height: 1.25rem;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 1.25rem;
+
+  &::before {
+    content: '';
+    inset: -0.625rem;
+    position: absolute;
+  }
+
+  &.is-selected {
+    box-shadow:
+      0 0 0 1px var(--muted),
+      0 0 0 4px var(--heading);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--heading);
+    outline-offset: 4px;
+  }
+}
+
+.point-fields {
+  --tool-field-columns: 3;
+
+  align-items: end;
+}
+
+.clip-swatch {
+  background: var(--subtle);
+
+  > span {
+    background: linear-gradient(135deg in oklch, #ff9a8b, #6366f1);
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+}

@@ -1,0 +1,56 @@
+.range-fields {
+  --tool-field-columns: 2;
+}
+
+.fluid-sample {
+  background: var(--subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  display: grid;
+  gap: 0.5rem;
+  min-height: 12rem;
+  min-width: 0;
+  padding: 1.25rem;
+
+  p {
+    color: var(--heading);
+    line-height: 1.25;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.scale {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+
+  li {
+    align-items: baseline;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    gap: 0.25rem 1rem;
+    min-width: 0;
+    padding-bottom: 0.75rem;
+
+    @media (min-width: 40rem) {
+      grid-template-columns: 12rem minmax(0, 1fr);
+    }
+  }
+}
+
+.scale-meta {
+  display: grid;
+  font-size: 0.8125rem;
+}
+
+.scale-sample {
+  color: var(--heading);
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -21,14 +21,12 @@
         <span class="muted">{{ utility.summary }}</span>
       </li>
     }
-    <li>
-      <a routerLink="/one-line-imports">One-line imports</a>
-      <span class="muted">Keep every TypeScript and JavaScript import on one line.</span>
-    </li>
-    <li>
-      <a routerLink="/cubic-bezier">Cubic bezier</a>
-      <span class="muted">Shape a CSS easing curve and play it.</span>
-    </li>
+    @for (tool of tools; track tool.slug) {
+      <li>
+        <a [routerLink]="['/', tool.slug]">{{ tool.name }}</a>
+        <span class="muted">{{ tool.summary }}</span>
+      </li>
+    }
     @for (app of apps; track app.key) {
       @if (app.url; as url) {
         <li>

@@ -5,10 +5,10 @@
   role="group"
   aria-label="Curve graph"
   aria-describedby="bezier-graph-hint"
-  (pointerdown)="startDrag($event)"
-  (pointermove)="drag($event)"
-  (pointerup)="endDrag($event)"
-  (pointercancel)="endDrag($event)">
+  appPointerDrag
+  (dragStart)="startDrag($event)"
+  (dragMove)="drag($event)"
+  (dragEnd)="settled.emit()">
   <rect class="overshoot" [attr.x]="view.left" y="0" [attr.width]="view.width" [attr.height]="view.height" />
   <rect class="unit" [attr.x]="unit.x" [attr.y]="unit.y" [attr.width]="unit.size" [attr.height]="unit.size" />
   @for (line of gridLines; track line.x) {
@@ -30,7 +30,7 @@
       class="handle"
       tabindex="0"
       role="slider"
-      [attr.data-handle]="handle.index"
+      [attr.data-drag-index]="handle.index"
       [attr.aria-label]="handle.label"
       [attr.aria-valuenow]="curve()[handle.index * 2 + 1]"
       [attr.aria-valuemin]="yMin"

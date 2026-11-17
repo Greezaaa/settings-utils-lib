@@ -1,0 +1,12 @@
+<span class="color-label" [id]="labelId">{{ label() }}</span>
+<div class="color-inputs">
+  <input type="color" [value]="value()" [attr.aria-label]="label() + ', colour picker'" (input)="pick($event)" />
+  <input
+    type="text"
+    spellcheck="false"
+    autocomplete="off"
+    [value]="value()"
+    [attr.aria-labelledby]="labelId"
+    (change)="type($event)"
+    (keydown.enter)="type($event)" />
+</div>

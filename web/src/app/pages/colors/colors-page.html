@@ -1,0 +1,58 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">CSS colours</span>
+  </div>
+  <h1>Colour converter</h1>
+  <p class="lead">
+    One colour in hex, rgb, hsl and oklch, and a full palette of shades made from it.
+    <br />
+    Pick a colour, or paste any CSS colour value.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="convert-title">
+  <h2 id="convert-title" class="section-title">Convert</h2>
+  <div class="tool-editor">
+    <div class="tool-panel">
+      <app-color-field label="Colour" [(value)]="color" />
+      <div class="color-preview" [style.background]="color()" role="img" [attr.aria-label]="'Colour ' + color()"></div>
+    </div>
+    <ul class="formats">
+      @for (format of formats(); track format.label) {
+        <li>
+          <span class="muted tool-note">{{ format.label }}</span>
+          <app-code-block [code]="format.value" />
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="palette-title">
+  <h2 id="palette-title" class="section-title">Palette</h2>
+  <p class="muted section-intro">
+    Eleven shades from 50 to 950 with the same hue, evened out in oklch. Click a shade to copy its hex.
+  </p>
+  <label class="field name-field">
+    <span>Variable name</span>
+    <input type="text" spellcheck="false" autocomplete="off" [value]="name()" (change)="setName($event)" />
+  </label>
+  <ul class="palette">
+    @for (shade of palette(); track shade.step) {
+      <li>
+        <button
+          type="button"
+          class="shade"
+          [class.is-dark]="shade.dark"
+          [style.background]="shade.hex"
+          [attr.aria-label]="'Copy ' + name() + ' ' + shade.step + ', ' + shade.hex"
+          (click)="copyShade(shade)">
+          <span class="shade-step">{{ shade.step }}</span>
+          <span class="shade-hex mono">{{ shade.hex }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+  <app-code-tabs [tabs]="paletteCode()" />
+</section>

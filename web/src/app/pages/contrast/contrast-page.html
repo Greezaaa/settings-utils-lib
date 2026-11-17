@@ -1,0 +1,90 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">Accessibility</span>
+  </div>
+  <h1>Contrast checker</h1>
+  <p class="lead">
+    See whether text stays readable on its background, by the WCAG 2.2 rules.
+    <br />
+    Pick two colours, or paste any hex, rgb, hsl or oklch value.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="editor-title">
+  <h2 id="editor-title" class="section-title">Checker</h2>
+  <div class="tool-editor">
+    <div class="tool-panel">
+      <div class="tool-fields color-fields">
+        <app-color-field label="Text" [(value)]="text" />
+        <app-color-field label="Background" [(value)]="background" />
+      </div>
+      <div class="button-row">
+        <button type="button" class="button button-secondary button-small" (click)="swap()">Swap colours</button>
+      </div>
+      <div class="sample" [style.color]="text()" [style.background]="background()">
+        <p class="sample-large">Large text, 24px</p>
+        <p>
+          Normal text at 16px. The quick brown fox jumps over the lazy dog, and the reader keeps reading without squinting.
+        </p>
+        <span class="sample-control" [style.border-color]="text()">Outlined button</span>
+      </div>
+    </div>
+
+    <div class="tool-panel">
+      <div class="ratio" aria-live="polite">
+        <span class="ratio-value mono">{{ ratioLabel() }}</span>
+        <span class="muted">contrast ratio</span>
+      </div>
+      <div class="table-scroll">
+      <table class="checks">
+        <caption class="visually-hidden">WCAG results</caption>
+        <thead>
+          <tr>
+            <th scope="col">Used for</th>
+            <th scope="col">Level</th>
+            <th scope="col">Needs</th>
+            <th scope="col">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (check of checks(); track check.use + check.level) {
+            <tr>
+              <td>{{ check.use }}</td>
+              <td>{{ check.level }}</td>
+              <td class="mono">{{ check.minimum }} : 1</td>
+              <td>
+                <span class="tag" [class.tag-green]="check.passes" [class.tag-red]="!check.passes">
+                  {{ check.passes ? 'Pass' : 'Fail' }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+
+      @if (suggestions().length > 0) {
+        <div class="suggestions">
+          <h3>Nearest text colour that passes</h3>
+          <ul>
+            @for (suggestion of suggestions(); track suggestion.level) {
+              @if (suggestion.color; as color) {
+                <li>
+                  <span class="suggestion-swatch" [style.background]="color"></span>
+                  <span class="mono">{{ color }}</span>
+                  <span class="muted">{{ suggestion.ratio }} : 1, normal text {{ suggestion.level }}</span>
+                  <button type="button" class="button button-secondary button-small" (click)="text.set(color)">Use</button>
+                </li>
+              } @else {
+                <li class="muted">No text colour of this hue reaches {{ suggestion.level }} on this background.</li>
+              }
+            }
+          </ul>
+        </div>
+      } @else {
+        <p class="muted tool-note">These colours pass every level.</p>
+      }
+    </div>
+  </div>
+</section>

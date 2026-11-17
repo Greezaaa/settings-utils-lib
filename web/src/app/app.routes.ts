@@ -1,5 +1,6 @@
 import { Route, Routes } from '@angular/router';
 import { SITE_META, SITE_NAME, utilityMeta } from './core/page-meta';
+import { toolMeta } from './core/tools';
 
 const notFound = {
   title: `Page not found · ${SITE_NAME}`,
@@ -89,20 +90,56 @@ export const routes: Routes = [
   {
     path: 'one-line-imports',
     title: `One-line imports · ${SITE_NAME}`,
-    data: {
-      description:
-        'Keep every TypeScript and JavaScript import on one line: a VS Code extension for every project you open, and a Prettier plugin for your team and CI.',
-    },
+    data: toolMeta('one-line-imports'),
     loadComponent: () => import('./pages/one-line-imports/one-line-imports-page').then((m) => m.OneLineImportsPage),
   },
   {
     path: 'cubic-bezier',
     title: `Cubic bezier · ${SITE_NAME}`,
-    data: {
-      description:
-        'A free cubic-bezier editor: drag the control points, play the curve against linear or a CSS keyword, and copy the CSS easing.',
-    },
+    data: toolMeta('cubic-bezier'),
     loadComponent: () => import('./pages/cubic-bezier/cubic-bezier-page').then((m) => m.CubicBezierPage),
+  },
+  {
+    path: 'spring-easing',
+    title: `Spring easing · ${SITE_NAME}`,
+    data: toolMeta('spring-easing'),
+    loadComponent: () => import('./pages/spring-easing/spring-easing-page').then((m) => m.SpringEasingPage),
+  },
+  {
+    path: 'gradient',
+    title: `Gradient · ${SITE_NAME}`,
+    data: toolMeta('gradient'),
+    loadComponent: () => import('./pages/gradient/gradient-page').then((m) => m.GradientPage),
+  },
+  {
+    path: 'box-shadow',
+    title: `Box shadow · ${SITE_NAME}`,
+    data: toolMeta('box-shadow'),
+    loadComponent: () => import('./pages/box-shadow/box-shadow-page').then((m) => m.BoxShadowPage),
+  },
+  {
+    path: 'clip-path',
+    title: `Clip path · ${SITE_NAME}`,
+    data: toolMeta('clip-path'),
+    loadComponent: () => import('./pages/clip-path/clip-path-page').then((m) => m.ClipPathPage),
+  },
+  {
+    path: 'contrast',
+    title: `Contrast checker · ${SITE_NAME}`,
+    data: toolMeta('contrast'),
+    loadComponent: () => import('./pages/contrast/contrast-page').then((m) => m.ContrastPage),
+  },
+  {
+    path: 'colors',
+    title: `Colour converter · ${SITE_NAME}`,
+    data: toolMeta('colors'),
+    loadComponent: () => import('./pages/colors/colors-page').then((m) => m.ColorsPage),
+  },
+  {
+    path: 'fluid-type',
+    title: `Fluid type · ${SITE_NAME}`,
+    data: toolMeta('fluid-type'),
+    loadComponent: () => import('./pages/fluid-type/fluid-type-page').then((m) => m.FluidTypePage),
   },
   { path: 'changelog', redirectTo: 'changelog/core', pathMatch: 'full' },
   {

@@ -1,30 +1,37 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, signal } from '@angular/core';
-import { BezierCurve, easeAt } from '../cubic-bezier';
+import { SiteMotion } from '../../core/site-motion';
 
 export type PreviewEffect = 'move' | 'scale' | 'fade';
 
 export interface PreviewLane {
   readonly label: string;
-  readonly curve: BezierCurve;
+  readonly ease: (progress: number) => number;
 }
 
+const EFFECTS: readonly { readonly value: PreviewEffect; readonly label: string }[] = [
+  { value: 'move', label: 'Move' },
+  { value: 'scale', label: 'Scale' },
+  { value: 'fade', label: 'Fade' },
+];
+
 @Component({
-  selector: 'app-bezier-preview',
+  selector: 'app-easing-preview',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './bezier-preview.html',
-  styleUrl: './bezier-preview.scss',
+  templateUrl: './easing-preview.html',
+  styleUrl: './easing-preview.scss',
 })
-export class BezierPreview {
+export class EasingPreview {
   readonly lanes = input.required<readonly PreviewLane[]>();
   readonly duration = input.required<number>();
-  readonly effect = input.required<PreviewEffect>();
 
+  private readonly motion = inject(SiteMotion);
   private readonly progress = signal(0);
   private frame?: number;
 
-  protected readonly playing = signal(false);
+  protected readonly effects = EFFECTS;
+  protected readonly effect = signal<PreviewEffect>('move');
   protected readonly easedLanes = computed(() =>
-    this.lanes().map((lane) => ({ ...lane, value: easeAt(lane.curve, this.progress()) })),
+    this.lanes().map((lane) => ({ ...lane, value: lane.ease(this.progress()) })),
   );
 
   constructor() {
@@ -34,19 +41,24 @@ export class BezierPreview {
   play(): void {
     this.stop();
     const startedAt = performance.now();
-    this.playing.set(true);
     const tick = (now: number): void => {
       const progress = Math.min(1, (now - startedAt) / this.duration());
       this.progress.set(progress);
-      if (progress < 1) {
-        this.frame = requestAnimationFrame(tick);
-      } else {
-        this.frame = undefined;
-        this.playing.set(false);
-      }
+      this.frame = progress < 1 ? requestAnimationFrame(tick) : undefined;
     };
     this.progress.set(0);
     this.frame = requestAnimationFrame(tick);
+  }
+
+  autoplay(): void {
+    if (!this.motion.shouldReduce()) {
+      this.play();
+    }
+  }
+
+  protected chooseEffect(effect: PreviewEffect): void {
+    this.effect.set(effect);
+    this.autoplay();
   }
 
   private stop(): void {
@@ -54,6 +66,5 @@ export class BezierPreview {
       cancelAnimationFrame(this.frame);
       this.frame = undefined;
     }
-    this.playing.set(false);
   }
 }

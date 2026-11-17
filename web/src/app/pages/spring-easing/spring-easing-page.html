@@ -1,0 +1,90 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">CSS easing</span>
+  </div>
+  <h1>Spring easing</h1>
+  <p class="lead">
+    Real spring motion in plain CSS, with the bounce and settle a cubic-bezier can’t draw.
+    <br />
+    Set the spring, watch it move, and copy the linear() easing.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="editor-title">
+  <h2 id="editor-title" class="section-title">Editor</h2>
+  <div class="tool-editor">
+    <div class="tool-panel">
+      <fieldset class="tool-fields spring-fields">
+        <legend>Spring</legend>
+        @for (field of fields; track field.key) {
+          <label class="field">
+            <span>{{ field.label }}: {{ spring()[field.key] }}</span>
+            <input
+              type="range"
+              [min]="field.min"
+              [max]="field.max"
+              [step]="field.step"
+              [value]="spring()[field.key]"
+              (input)="setField(field.key, $event)"
+              (change)="preview.autoplay()" />
+          </label>
+        }
+      </fieldset>
+      <svg
+        class="spring-graph"
+        [attr.viewBox]="'0 0 ' + graph.width + ' ' + graph.height"
+        role="img"
+        [attr.aria-label]="'Spring curve, settles after ' + motion().duration + ' ms'">
+        <line class="rest" x1="0" [attr.y1]="rest()" [attr.x2]="graph.width" [attr.y2]="rest()" />
+        <path [attr.d]="path()" />
+      </svg>
+      <p class="muted tool-note" aria-live="polite">
+        Settles after {{ motion().duration }} ms, used as the duration below.
+        @if (match(); as preset) {
+          The {{ preset.name }} example.
+        } @else {
+          The link in the address bar shares this spring.
+        }
+      </p>
+    </div>
+
+    <div class="tool-panel">
+      <label class="checkbox">
+        <input type="checkbox" [checked]="compareWithEase()" (change)="setCompare($event)" />
+        Compare with ease-out
+      </label>
+      <app-easing-preview #preview [lanes]="lanes()" [duration]="motion().duration" />
+    </div>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="examples-title">
+  <h2 id="examples-title" class="section-title">Examples</h2>
+  <p class="muted section-intro">Click one to load it into the editor.</p>
+  <ul class="presets">
+    @for (preset of presets; track preset.key) {
+      <li>
+        <button type="button" class="preset" [attr.aria-pressed]="match()?.key === preset.key" (click)="load(preset)">
+          <svg class="preset-curve" viewBox="0 0 40 40" aria-hidden="true">
+            <path [attr.d]="preset.thumbnail" />
+          </svg>
+          <span class="preset-text">
+            <span class="preset-name">{{ preset.name }}</span>
+            <span class="preset-detail mono">
+              {{ preset.spring.stiffness }} / {{ preset.spring.damping }} / {{ preset.spring.mass }}
+            </span>
+          </span>
+        </button>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="use-title">
+  <h2 id="use-title" class="section-title">Use it</h2>
+  <p class="muted section-intro">
+    linear() works in every current browser: Chrome 113+, Safari 17.2+ and Firefox 112+.
+  </p>
+  <app-code-tabs [tabs]="snippets()" />
+</section>

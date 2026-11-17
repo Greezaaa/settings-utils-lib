@@ -1,16 +1,13 @@
-import { isPlatformBrowser, Location } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, effect, inject, PLATFORM_ID, signal, viewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { SiteMotion } from '../../core/site-motion';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, signal, viewChild } from '@angular/core';
 import { CodeBlock } from '../../shared/code-block';
 import { CodeTab, CodeTabs } from '../../shared/code-tabs';
+import { EasingPreview, PreviewLane } from '../../shared/easing-preview/easing-preview';
 import { Reveal } from '../../shared/reveal';
+import { readQueryParam, syncQueryParams } from '../../shared/url-query';
 import { BezierGraph } from './bezier-graph/bezier-graph';
-import { BezierPreview, PreviewEffect, PreviewLane } from './bezier-preview/bezier-preview';
-import { BEZIER_PRESETS, BEZIER_Y_MAX, BEZIER_Y_MIN, BezierCurve, BezierPreset, curvePath, DEFAULT_CURVE, findPreset, formatCurve, formatNumber, parseCurve, sameCurve, serializeCurve, withCoordinate } from './cubic-bezier';
+import { BEZIER_PRESETS, BEZIER_Y_MAX, BEZIER_Y_MIN, BezierCurve, BezierPreset, curvePath, DEFAULT_CURVE, easeAt, findPreset, formatCurve, formatNumber, parseCurve, sameCurve, serializeCurve, withCoordinate } from './cubic-bezier';
 
 const QUERY_KEY = 'curve';
-const URL_DELAY = 300;
 const NO_COMPARE = 'none';
 
 const COORDINATES = [
@@ -19,12 +16,6 @@ const COORDINATES = [
   { index: 2, label: 'x2', min: 0, max: 1 },
   { index: 3, label: 'y2', min: BEZIER_Y_MIN, max: BEZIER_Y_MAX },
 ] as const;
-
-const EFFECTS: readonly { readonly value: PreviewEffect; readonly label: string }[] = [
-  { value: 'move', label: 'Move' },
-  { value: 'scale', label: 'Scale' },
-  { value: 'fade', label: 'Fade' },
-];
 
 const DURATION = { min: 200, max: 3000, step: 100, initial: 800 };
 
@@ -62,27 +53,26 @@ const snippets = (value: string, duration: number): readonly CodeTab[] => [
   },
 ];
 
+const bezierLane = (label: string, curve: BezierCurve): PreviewLane => ({
+  label,
+  ease: (progress) => easeAt(curve, progress),
+});
+
 @Component({
   selector: 'app-cubic-bezier-page',
-  imports: [BezierGraph, BezierPreview, CodeBlock, CodeTabs, Reveal],
+  imports: [BezierGraph, CodeBlock, CodeTabs, EasingPreview, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cubic-bezier-page.html',
-  styleUrls: ['../../shared/utility-page.scss', './cubic-bezier-page.scss'],
+  styleUrls: ['../../shared/utility-page.scss', '../../shared/tool-page.scss', './cubic-bezier-page.scss'],
 })
 export class CubicBezierPage {
-  private readonly location = inject(Location);
-  private readonly motion = inject(SiteMotion);
-  private readonly preview = viewChild.required(BezierPreview);
+  private readonly preview = viewChild.required(EasingPreview);
 
-  protected readonly curve = signal<BezierCurve>(
-    parseCurve(inject(ActivatedRoute).snapshot.queryParamMap.get(QUERY_KEY)) ?? DEFAULT_CURVE,
-  );
+  protected readonly curve = signal<BezierCurve>(parseCurve(readQueryParam(QUERY_KEY)) ?? DEFAULT_CURVE);
   protected readonly compareKey = signal('linear');
   protected readonly duration = signal(DURATION.initial);
-  protected readonly effect = signal<PreviewEffect>('move');
 
   protected readonly coordinates = COORDINATES;
-  protected readonly effects = EFFECTS;
   protected readonly durationRange = DURATION;
   protected readonly examples = EXAMPLES;
   protected readonly presets = BEZIER_PRESETS;
@@ -93,23 +83,15 @@ export class CubicBezierPage {
   protected readonly compare = computed(() => BEZIER_PRESETS.find((preset) => preset.key === this.compareKey()));
   protected readonly lanes = computed<readonly PreviewLane[]>(() => {
     const compare = this.compare();
-    const own = { label: `Yours · ${this.value()}`, curve: this.curve() };
-    return compare ? [own, { label: compare.name, curve: compare.curve }] : [own];
+    const own = bezierLane(`Yours · ${this.value()}`, this.curve());
+    return compare ? [own, bezierLane(compare.name, compare.curve)] : [own];
   });
   protected readonly snippets = computed(() => snippets(this.value(), this.duration()));
 
   constructor() {
-    if (isPlatformBrowser(inject(PLATFORM_ID))) {
-      effect((onCleanup) => {
-        const curve = this.curve();
-        const query = sameCurve(curve, DEFAULT_CURVE) ? '' : `${QUERY_KEY}=${serializeCurve(curve)}`;
-        const timer = setTimeout(
-          () => this.location.replaceState(this.location.path().split('?')[0], query),
-          URL_DELAY,
-        );
-        onCleanup(() => clearTimeout(timer));
-      });
-    }
+    syncQueryParams(() => ({
+      [QUERY_KEY]: sameCurve(this.curve(), DEFAULT_CURVE) ? undefined : serializeCurve(this.curve()),
+    }));
     afterNextRender(() => this.autoplay());
   }
 
@@ -141,18 +123,7 @@ export class CubicBezierPage {
     }
   }
 
-  protected chooseEffect(effect: PreviewEffect): void {
-    this.effect.set(effect);
-    this.autoplay();
-  }
-
-  protected play(): void {
-    this.preview().play();
-  }
-
   protected autoplay(): void {
-    if (!this.motion.shouldReduce()) {
-      this.play();
-    }
+    this.preview().autoplay();
   }
 }
