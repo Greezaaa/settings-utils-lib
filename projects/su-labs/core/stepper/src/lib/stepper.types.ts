@@ -4,7 +4,7 @@ export type SuStepperOrientation = 'horizontal' | 'vertical';
 /**
  * Where a step stands:
  * - `current`: on screen
- * - `completed`: left forward, and still allows going forward
+ * - `completed`: left forward and still allows going forward, or marked `completed` in its options
  * - `visited`: seen, but not (or no longer) completed
  * - `upcoming`: not seen yet
  */
@@ -20,6 +20,8 @@ export interface SuStepOptions {
   readonly canBack?: boolean;
   /** The step can't be visited; moving forward or back skips it @default false */
   readonly disabled?: boolean;
+  /** Shows the step as completed whatever the user does here, e.g. for work saved earlier @default false */
+  readonly completed?: boolean;
 }
 
 /** A stepper's steps and how the user may move between them */

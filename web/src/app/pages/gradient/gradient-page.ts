@@ -4,6 +4,7 @@ import { ColorField } from '../../shared/color-field/color-field';
 import { arrowMove, dragIndexOf, DragPoint, PointerDrag } from '../../shared/pointer-drag';
 import { Reveal } from '../../shared/reveal';
 import { readQueryParam, syncQueryParams } from '../../shared/url-query';
+import { GradientClock } from './gradient-clock/gradient-clock';
 import { clampAngle, clampPosition, colorAt, DEFAULT_GRADIENT, describeStop, formatGradient, formatStripe, Gradient, GRADIENT_PRESETS, GradientPreset, GradientSpace, GradientStop, GradientType, parseGradient, renderable, sameGradient, serializeGradient, sortedStops, widestGapMiddle } from './gradient';
 
 const QUERY_KEY = 'gradient';
@@ -36,7 +37,7 @@ const snippet = (gradient: Gradient): string => {
 
 @Component({
   selector: 'app-gradient-page',
-  imports: [CodeBlock, ColorField, PointerDrag, Reveal],
+  imports: [CodeBlock, ColorField, GradientClock, PointerDrag, Reveal],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gradient-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/tool-page.scss', './gradient-page.scss'],
@@ -54,6 +55,8 @@ export class GradientPage {
   protected readonly preview = computed(() => renderable(this.gradient(), formatGradient));
   protected readonly stripe = computed(() => renderable(this.gradient(), formatStripe));
   protected readonly stops = computed(() => sortedStops(this.gradient()));
+  protected readonly firstColor = computed(() => this.stops()[0].color);
+  protected readonly lastColor = computed(() => this.stops()[this.stops().length - 1].color);
   protected readonly canRemove = computed(() => this.gradient().stops.length > MIN_STOPS);
   protected readonly code = computed(() => snippet(this.gradient()));
   protected readonly match = computed(() =>

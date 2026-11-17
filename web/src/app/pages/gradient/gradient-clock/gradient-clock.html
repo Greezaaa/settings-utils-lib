@@ -1,0 +1,29 @@
+<div class="clock-example">
+  <div class="clock-face">
+    <div class="button-row" role="group" aria-label="Clock hands">
+      @for (item of modes; track item.value) {
+        <button
+          type="button"
+          class="button button-secondary button-small"
+          [attr.aria-pressed]="mode() === item.value"
+          [disabled]="isDisabled(item.value)"
+          (click)="choose(item.value)">
+          {{ item.label }}
+        </button>
+      }
+    </div>
+    <div
+      class="clock"
+      role="img"
+      [attr.aria-label]="'Clock showing ' + time()"
+      [style.--hours]="hours()"
+      [style.--minutes]="minutes()"
+      [style.--seconds]="seconds()"
+      [style.background]="background()"></div>
+    <time class="clock-time mono" aria-hidden="true">{{ time() }}</time>
+    @if (!secondsAllowed()) {
+      <p class="muted clock-note">The seconds hand is off while reduced motion is on.</p>
+    }
+  </div>
+  <app-code-tabs [tabs]="code()" />
+</div>

@@ -41,7 +41,7 @@ import { SuStepComponent, SuStepperComponent } from '@su-labs/stepper';
 </su-lib-stepper>
 ```
 
-Leave `label` out to show only the step's number. A step is completed once the user leaves it forward, as long as it still allows going forward.
+Leave `label` out to show only the step's number. A step is completed once the user leaves it forward, as long as it still allows going forward, or when you set its `completed`.
 
 ### Stepper
 
@@ -71,6 +71,7 @@ To use your own buttons, set `[controls]="false"` and call the methods through a
 | `canNext` | `true` | The user may go forward from this step |
 | `canBack` | `true` | The user may go back from this step |
 | `disabled` | `false` | The step can't be visited; Back and Next skip it |
+| `completed` | `false` | Shows the step as completed whatever the user does, e.g. for work saved earlier |
 
 A jump from a step header checks every step it passes: forward, each one's `canNext`; back, each one's `canBack`.
 

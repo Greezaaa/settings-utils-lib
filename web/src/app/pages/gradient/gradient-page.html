@@ -159,3 +159,12 @@
     }
   </ul>
 </section>
+
+<section class="container page-section" appReveal aria-labelledby="clock-title">
+  <h2 id="clock-title" class="section-title">Clock</h2>
+  <p class="muted section-intro">
+    Where a conic gradient ends and starts again, it leaves a sharp edge. Stack one per hand for a live clock: hours,
+    minutes and seconds. It uses your first and last colours.
+  </p>
+  <app-gradient-clock [first]="firstColor()" [last]="lastColor()" />
+</section>

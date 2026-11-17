@@ -140,7 +140,7 @@ export class SuStepperController {
   private stepView(step: SuStepOptions, index: number): SuStepView {
     const current = index === this.current;
     const canNext = step.canNext !== false;
-    const completed = this.passed.has(index) && canNext;
+    const completed = step.completed === true || (this.passed.has(index) && canNext);
     const visited = this.visited.has(index);
     return {
       index,

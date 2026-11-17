@@ -29,6 +29,8 @@ export class SuStepComponent {
   readonly canBack = input(true, { transform: booleanAttribute });
   /** The step can't be visited; moving forward or back skips it @default false */
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Shows the step as completed whatever the user does here, e.g. for work saved earlier @default false */
+  readonly completed = input(false, { transform: booleanAttribute });
 
   /** The step's options for `SuStepperController` */
   readonly options = computed<SuStepOptions>(() => ({
@@ -36,6 +38,7 @@ export class SuStepComponent {
     canNext: this.canNext(),
     canBack: this.canBack(),
     disabled: this.disabled(),
+    completed: this.completed(),
   }));
 
   protected readonly stepper = inject(SU_STEPPER);

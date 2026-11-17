@@ -10,7 +10,7 @@ import { SuStepComponent, SuStepperComponent } from '../../../../../../dist/su-l
   template: `
     <su-lib-stepper label="Sign up" [tabs]="tabs()" [(current)]="current">
       <su-lib-step label="Account" [canNext]="named()"><p>Name</p></su-lib-step>
-      <su-lib-step><p>Address</p></su-lib-step>
+      <su-lib-step [completed]="addressDone()"><p>Address</p></su-lib-step>
       <su-lib-step label="Confirm" [canBack]="false"
         ><p>Confirm</p></su-lib-step
       >
@@ -21,6 +21,7 @@ class HostComponent {
   readonly tabs = signal(false);
   readonly named = signal(false);
   readonly current = signal(0);
+  readonly addressDone = signal(false);
 }
 
 async function render(setup: (host: HostComponent) => void = () => undefined) {
@@ -66,6 +67,17 @@ describe('SuStepperComponent', () => {
       'aria-labelledby',
       items[0]?.querySelector('.su-stepper-header')?.id
     );
+  });
+
+  it('shows a step marked completed as completed before it is visited', async () => {
+    const { element } = await render(host => host.addressDone.set(true));
+    const items = Array.from(element.querySelectorAll('li'));
+
+    expect(items.map(item => item.classList.contains('is-completed'))).toEqual([
+      false,
+      true,
+      false,
+    ]);
   });
 
   it('blocks Next until the step allows going forward, then moves focus to the new step', async () => {

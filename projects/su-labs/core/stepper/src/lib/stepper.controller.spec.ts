@@ -65,6 +65,20 @@ describe('SuStepperController', () => {
     expect(stepper.next()).toBe(true);
   });
 
+  it('shows steps marked completed as completed before they are visited', () => {
+    const stepper = new SuStepperController({
+      steps: [{ completed: true }, {}, { completed: true }],
+    });
+
+    expect(stepper.state.get().steps.map(step => step.status)).toEqual([
+      'current',
+      'upcoming',
+      'completed',
+    ]);
+    expect(stepper.state.get().steps[0]?.completed).toBe(true);
+    expect(stepper.state.get().steps[1]?.completed).toBe(false);
+  });
+
   it('stays on a step that doesn’t allow going back', () => {
     const stepper = new SuStepperController({
       steps: [{}, { canBack: false }, {}],

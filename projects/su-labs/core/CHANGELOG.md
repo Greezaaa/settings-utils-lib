@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `@su-labs/core/tree-table`: `SuTreeTableController` for rows with child rows: data parents or group rows across the table (`rowKind`, `groupLabel`), `toggle`, `setAllExpanded`, `isExpanded`, `expandedIds` and the `expanded` option; numbering per parent (`numbering`: `nested`, `restart` or `continue`) with `unnumbered` rows; merged cells from a column's `span` (`rowSpan`, `colSpan`); sorting within each parent, a search that keeps a match's parents open, paging by top-level rows, pinned top-level rows with their children, the table's column visibility and pins; `rowKey` for treegrid keyboard moves; `SU_TREE_TABLE_LABELS`
+- `@su-labs/core/stepper`: a step's `completed` option shows it as completed from outside, e.g. for work saved earlier
 - `@su-labs/core/table`: the pieces both tables share, `suResolveTableColumn`, `SuTableColumnLayout`, `suSearchTerms`, `suNormalizeText`, `suPageBounds`, `suNormalizePageSize` and `suPinOffsets`; `SuTableController` works as before
 
 ## [1.10.0] - 2026-11-17
