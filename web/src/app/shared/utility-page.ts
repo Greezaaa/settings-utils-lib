@@ -55,13 +55,25 @@ export class UtilityPage {
 
   protected readonly install = computed<CodeTab[]>(() => {
     const { packageName, coreEntry } = this.utility();
-    const angular = [
-      { label: 'Angular 22', code: `npm install ${packageName}` },
-      ...OLDER_ANGULAR_MAJORS.map((major) => ({
-        label: `Angular ${major}`,
-        code: `npm install ${packageName}@ng${major}`,
-      })),
-    ];
-    return coreEntry ? [...angular, { label: 'Any framework', code: 'npm install @su-labs/core' }] : angular;
+    const tabs = ENVIRONMENTS.map((environment): CodeTab => {
+      const isAngular = environment.tab === 'Angular';
+      return {
+        label: environment.tab,
+        code: `npm install ${isAngular ? packageName : '@su-labs/core'}`,
+        note: environment.detail,
+        link: { label: `${environment.tab} guide`, url: environment.url },
+        ...(isAngular
+          ? {
+              versionsLabel: 'Older Angular',
+              versions: OLDER_ANGULAR_MAJORS.map((major) => ({
+                label: `Angular ${major}`,
+                code: `npm install ${packageName}@ng${major}`,
+              })),
+            }
+          : {}),
+      };
+    });
+    const angularFirst = [...tabs].sort((a, b) => Number(b.label === 'Angular') - Number(a.label === 'Angular'));
+    return coreEntry ? angularFirst : angularFirst.filter((tab) => tab.label === 'Angular');
   });
 }

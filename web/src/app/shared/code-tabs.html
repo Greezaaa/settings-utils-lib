@@ -1,0 +1,54 @@
+@if (tabs().length > 1) {
+  <div class="tabs" role="tablist">
+    @for (tab of tabs(); track tab.label; let index = $index) {
+      <button type="button" role="tab" class="tab" [attr.aria-selected]="index === selectedIndex()" (click)="select(index)">
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+}
+@if (selected(); as tab) {
+  @if (hasVersions()) {
+    <div class="versions">
+      @if (tab.versions?.length) {
+        <button
+          type="button"
+          class="versions-toggle"
+          [attr.aria-expanded]="versionsOpen()"
+          (click)="versionsOpen.set(!versionsOpen())"
+        >
+          <span class="versions-sign" aria-hidden="true">{{ versionsOpen() ? '−' : '+' }}</span>
+          {{ tab.versionsLabel ?? 'Other versions' }}
+        </button>
+        @if (versionsOpen()) {
+          <div
+            class="version-chips"
+            role="group"
+            animate.enter="is-entering"
+            [attr.aria-label]="tab.versionsLabel ?? 'Other versions'"
+          >
+            <button type="button" class="chip" [attr.aria-pressed]="versionIndex() === null" (click)="versionIndex.set(null)">
+              Latest
+            </button>
+            @for (version of tab.versions; track version.label; let index = $index) {
+              <button type="button" class="chip" [attr.aria-pressed]="versionIndex() === index" (click)="chooseVersion(index)">
+                {{ version.label }}
+              </button>
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+  <app-code-block [code]="code()" />
+  @if (tab.note || tab.link) {
+    <p class="note">
+      @if (tab.note) {
+        <span>{{ tab.note }}</span>
+      }
+      @if (tab.link; as link) {
+        <a [href]="link.url" target="_blank" rel="noopener">{{ link.label }} →</a>
+      }
+    </p>
+  }
+}

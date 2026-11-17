@@ -1,66 +1,50 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { CodeBlock } from './code-block';
 
+export interface CodeTabVersion {
+  readonly label: string;
+  readonly code: string;
+}
+
 export interface CodeTab {
   readonly label: string;
   readonly code: string;
+  /** A short line under the code */
+  readonly note?: string;
+  readonly link?: { readonly label: string; readonly url: string };
+  /** Other versions of the same code, e.g. older framework majors, revealed on request */
+  readonly versions?: readonly CodeTabVersion[];
+  /** The name of the button that reveals the versions */
+  readonly versionsLabel?: string;
 }
 
 @Component({
   selector: 'app-code-tabs',
   imports: [CodeBlock],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="tabs" role="tablist">
-      @for (tab of tabs(); track tab.label; let index = $index) {
-        <button
-          type="button"
-          role="tab"
-          class="tab"
-          [attr.aria-selected]="index === selectedIndex()"
-          (click)="selectedIndex.set(index)">
-          {{ tab.label }}
-        </button>
-      }
-    </div>
-    @if (selected(); as tab) {
-      <app-code-block [code]="tab.code" />
-    }
-  `,
-  styles: `
-    :host {
-      display: block;
-      min-width: 0;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 1.25rem;
-      margin-bottom: 0.75rem;
-      overflow-x: auto;
-    }
-
-    .tab {
-      background: none;
-      border: 0;
-      border-bottom: 1px solid transparent;
-      color: var(--muted);
-      cursor: pointer;
-      font: inherit;
-      font-size: 0.875rem;
-      padding: 0.25rem 0;
-      white-space: nowrap;
-    }
-
-    .tab[aria-selected='true'] {
-      border-bottom-color: var(--heading);
-      color: var(--heading);
-    }
-  `,
+  templateUrl: './code-tabs.html',
+  styleUrl: './code-tabs.scss',
 })
 export class CodeTabs {
   readonly tabs = input.required<readonly CodeTab[]>();
 
   protected readonly selectedIndex = signal(0);
   protected readonly selected = computed(() => this.tabs()[this.selectedIndex()]);
+  protected readonly versionsOpen = signal(false);
+  protected readonly versionIndex = signal<number | null>(null);
+  protected readonly hasVersions = computed(() => this.tabs().some((tab) => (tab.versions?.length ?? 0) > 0));
+  protected readonly code = computed(() => {
+    const tab = this.selected();
+    const index = this.versionIndex();
+    return (index === null ? undefined : tab.versions?.[index]?.code) ?? tab.code;
+  });
+
+  protected select(index: number): void {
+    this.selectedIndex.set(index);
+    this.versionIndex.set(null);
+  }
+
+  protected chooseVersion(index: number): void {
+    this.versionIndex.update((current) => (current === index ? null : index));
+  }
 }
