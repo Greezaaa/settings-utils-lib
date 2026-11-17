@@ -1,0 +1,59 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.stage {
+  background: var(--subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+.lane {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.lane-label {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.track {
+  --box: 2.5rem;
+
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  height: calc(var(--box) + 1rem);
+  position: relative;
+}
+
+.box {
+  background: var(--button-bg);
+  border-radius: 6px;
+  height: var(--box);
+  left: 0.5rem;
+  position: absolute;
+  top: 0.5rem;
+  width: var(--box);
+}
+
+.effect-move .box {
+  left: calc(0.5rem + var(--progress) * (100% - var(--box) - 1rem));
+}
+
+.effect-scale .box {
+  left: calc(50% - var(--box) / 2);
+  transform: scale(max(0, calc(0.2 + var(--progress) * 0.8)));
+}
+
+.effect-fade .box {
+  left: calc(50% - var(--box) / 2);
+  opacity: var(--progress);
+}

@@ -38,13 +38,17 @@
 @if (features().length > 0) {
   <section class="container page-section" appReveal aria-labelledby="features">
     <div class="section-heading">
-      <h2 id="features" class="section-title">What it does</h2>
-      <app-section-link target="features" label="What it does" />
+      <h2 id="features" class="section-title">{{ featuresTitle() }}</h2>
+      <app-section-link target="features" [label]="featuresTitle()" />
     </div>
     <p class="muted section-intro">
       {{ featuresLead() }}
       <br />
-      Try them right here, and open the code to see what turns them on.
+      @if (features().length === 1) {
+        Try it right here, and open the code to see how.
+      } @else {
+        Try them right here, and open the code to see what turns them on.
+      }
     </p>
     <div class="feature-list">
       @for (example of features(); track example.feature().title) {

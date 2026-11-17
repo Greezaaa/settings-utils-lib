@@ -49,7 +49,10 @@ export const SITE_MENU: readonly SiteMenuSection[] = [
     id: 'extensions',
     title: 'Extensions & tools',
     railTitle: 'Tools',
-    links: [{ key: 'one-line-imports', label: 'One-line imports', icon: 'imports', route: '/one-line-imports' }],
+    links: [
+      { key: 'one-line-imports', label: 'One-line imports', icon: 'imports', route: '/one-line-imports' },
+      { key: 'cubic-bezier', label: 'Cubic bezier', icon: 'bezier', route: '/cubic-bezier' },
+    ],
   },
   {
     id: 'apps',

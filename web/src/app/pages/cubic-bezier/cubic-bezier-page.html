@@ -1,0 +1,120 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">CSS easing</span>
+  </div>
+  <h1>Cubic bezier</h1>
+  <p class="lead">
+    Shape your own CSS easing curve and see how it feels before it ships.
+    <br />
+    Drag the two points, or start from one of the examples.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="editor-title">
+  <h2 id="editor-title" class="section-title">Editor</h2>
+  <div class="editor">
+    <app-bezier-graph [(curve)]="curve" [compare]="compare()?.curve" (settled)="autoplay()" />
+
+    <div class="panel">
+      <div class="value">
+        <app-code-block [code]="value()" />
+        <p class="muted value-note" aria-live="polite">
+          @if (match(); as preset) {
+            Same as <code>{{ preset.name }}</code>.
+          } @else {
+            Your own curve. The link in the address bar shares it.
+          }
+        </p>
+      </div>
+
+      <fieldset class="coordinates">
+        <legend>Control points</legend>
+        @for (coordinate of coordinates; track coordinate.index) {
+          <label class="field">
+            <span class="mono">{{ coordinate.label }}</span>
+            <input
+              type="number"
+              step="0.01"
+              [min]="coordinate.min"
+              [max]="coordinate.max"
+              [value]="curve()[coordinate.index]"
+              (change)="setCoordinate(coordinate.index, $event)"
+              (keydown.enter)="setCoordinate(coordinate.index, $event)" />
+          </label>
+        }
+      </fieldset>
+
+      <div class="preview-controls">
+        <div class="button-row" role="group" aria-label="What the preview animates">
+          @for (item of effects; track item.value) {
+            <button
+              type="button"
+              class="button button-secondary button-small"
+              [attr.aria-pressed]="effect() === item.value"
+              (click)="chooseEffect(item.value)">
+              {{ item.label }}
+            </button>
+          }
+        </div>
+        <label class="field">
+          <span>Compare with</span>
+          <select (change)="chooseCompare($event)">
+            <option [value]="noCompare" [selected]="compareKey() === noCompare">Nothing</option>
+            @for (preset of presets; track preset.key) {
+              <option [value]="preset.key" [selected]="compareKey() === preset.key">{{ preset.name }}</option>
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span>Duration: {{ duration() }} ms</span>
+          <input
+            type="range"
+            [min]="durationRange.min"
+            [max]="durationRange.max"
+            [step]="durationRange.step"
+            [value]="duration()"
+            (input)="setDuration($event)" />
+        </label>
+      </div>
+
+      <app-bezier-preview [lanes]="lanes()" [duration]="duration()" [effect]="effect()" />
+      <div class="button-row">
+        <button type="button" class="button" (click)="play()">Play</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="examples-title">
+  <h2 id="examples-title" class="section-title">Examples</h2>
+  <p class="muted section-intro">The CSS keywords and a few favourites. Click one to load it into the editor.</p>
+  <ul class="examples">
+    @for (example of examples; track example.key) {
+      <li>
+        <button
+          type="button"
+          class="example"
+          [attr.aria-pressed]="match()?.key === example.key"
+          (click)="load(example)">
+          <svg class="example-curve" viewBox="0 0 40 40" aria-hidden="true">
+            <path [attr.d]="example.thumbnail" />
+          </svg>
+          <span class="example-text">
+            <span class="example-name">{{ example.name }}</span>
+            <span class="example-value mono">{{ example.value }}</span>
+          </span>
+          @if (example.keyword) {
+            <span class="tag">Keyword</span>
+          }
+        </button>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="container page-section" appReveal aria-labelledby="use-title">
+  <h2 id="use-title" class="section-title">Use it</h2>
+  <p class="muted section-intro">Ready to paste, with the curve and duration from the editor.</p>
+  <app-code-tabs [tabs]="snippets()" />
+</section>

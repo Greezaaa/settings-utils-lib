@@ -30,9 +30,10 @@ export class CodeTabs {
 
   protected readonly selectedIndex = signal(0);
   protected readonly selected = computed(() => this.tabs()[this.selectedIndex()]);
-  protected readonly versionsOpen = signal(false);
   protected readonly versionIndex = signal<number | null>(null);
-  protected readonly hasVersions = computed(() => this.tabs().some((tab) => (tab.versions?.length ?? 0) > 0));
+  /** The tab whose versions slide open while it is selected, kept while they slide closed */
+  protected readonly versionTab = computed(() => this.tabs().find((tab) => (tab.versions?.length ?? 0) > 0));
+  protected readonly versionsOpen = computed(() => (this.selected().versions?.length ?? 0) > 0);
   protected readonly code = computed(() => {
     const tab = this.selected();
     const index = this.versionIndex();

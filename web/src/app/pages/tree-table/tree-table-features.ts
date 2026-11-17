@@ -120,6 +120,25 @@ isStage = (step: PlanStep) => step.isStage === true;`,
   { key: 'people', header: 'People', sortable: true },
 ];`,
   },
+  theming: {
+    title: 'Your own look',
+    description:
+      'It takes every --su-table-* variable of the table, plus its own: the group rows, the open and close ' +
+      'toggles, the indent of each level, the numbers and the merged cells.',
+    code: `su-lib-tree-table {
+  --su-table-border: 1px solid #10b98155;
+  --su-table-row-border: 1px solid #10b98122;
+  --su-table-header-background: #0f3d2e;
+  --su-table-header-color: #d1fae5;
+  --su-table-header-text-transform: uppercase;
+  --su-table-hover-background: rgb(16 185 129 / 0.12);
+  --su-tree-table-group-background: rgb(16 185 129 / 0.14);
+  --su-tree-table-group-color: #059669;
+  --su-tree-table-toggle-color: #10b981;
+  --su-tree-table-toggle-hover-background: rgb(16 185 129 / 0.16);
+  --su-tree-table-indent: 1.75rem;
+}`,
+  },
   keyboard: {
     title: 'A treegrid for the keyboard',
     description:

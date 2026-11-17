@@ -95,6 +95,15 @@ export const routes: Routes = [
     },
     loadComponent: () => import('./pages/one-line-imports/one-line-imports-page').then((m) => m.OneLineImportsPage),
   },
+  {
+    path: 'cubic-bezier',
+    title: `Cubic bezier · ${SITE_NAME}`,
+    data: {
+      description:
+        'A free cubic-bezier editor: drag the control points, play the curve against linear or a CSS keyword, and copy the CSS easing.',
+    },
+    loadComponent: () => import('./pages/cubic-bezier/cubic-bezier-page').then((m) => m.CubicBezierPage),
+  },
   { path: 'changelog', redirectTo: 'changelog/core', pathMatch: 'full' },
   {
     path: 'changelog/:slug',

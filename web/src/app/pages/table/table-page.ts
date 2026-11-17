@@ -7,7 +7,7 @@ import { CodeTab } from '../../shared/code-tabs';
 import { PageFeatureExample } from '../../shared/page-feature';
 import { UtilityPage } from '../../shared/utility-page';
 import { TABLE_FEATURES } from './table-features';
-import { EDIT_ACTION, EXAMPLE_COLUMNS, mutedWhenOutOfStock, ROW_ACTIONS, SAMPLE, SPANISH } from './table-examples';
+import { DETAILED_SAMPLE, EDIT_ACTION, EXAMPLE_COLUMNS, mutedWhenOutOfStock, PINNED_COLUMNS, ROW_ACTIONS, SAMPLE, SPANISH } from './table-examples';
 import { Product, PRODUCT_COLUMNS, productId, PRODUCTS } from './table-products';
 
 const ACTIONS: readonly SuTableAction<Product>[] = [
@@ -88,6 +88,8 @@ export class TablePage {
   protected readonly features = TABLE_FEATURES;
   protected readonly examples = EXAMPLE_COLUMNS;
   protected readonly sample = SAMPLE;
+  protected readonly detailedSample = DETAILED_SAMPLE;
+  protected readonly pinnedColumns = PINNED_COLUMNS;
   protected readonly allProducts = PRODUCTS;
   protected readonly editAction = EDIT_ACTION;
   protected readonly rowActions = ROW_ACTIONS;

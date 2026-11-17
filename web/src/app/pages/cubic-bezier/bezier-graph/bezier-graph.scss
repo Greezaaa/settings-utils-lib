@@ -1,0 +1,102 @@
+:host {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+  min-width: 0;
+}
+
+.graph {
+  aspect-ratio: 116 / 220;
+  cursor: crosshair;
+  display: block;
+  overflow: visible;
+  touch-action: none;
+  user-select: none;
+  width: min(100%, 18rem);
+}
+
+.overshoot {
+  fill: var(--subtle);
+}
+
+.unit {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}
+
+.grid,
+.diagonal {
+  stroke: var(--border);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}
+
+.diagonal {
+  stroke-dasharray: 4 4;
+}
+
+.compare {
+  fill: none;
+  stroke: var(--muted);
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5px;
+  vector-effect: non-scaling-stroke;
+}
+
+.arm {
+  stroke: var(--muted);
+  stroke-width: 1.5px;
+  vector-effect: non-scaling-stroke;
+}
+
+.curve {
+  fill: none;
+  stroke: var(--heading);
+  stroke-linecap: round;
+  stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+}
+
+.anchor {
+  fill: var(--heading);
+}
+
+.handle {
+  cursor: grab;
+  outline: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.handle-hit {
+  fill: transparent;
+}
+
+.handle-ring {
+  fill: none;
+  opacity: 0;
+  stroke: var(--heading);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+
+.handle-dot {
+  fill: var(--button-bg);
+  stroke: var(--surface);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+
+.handle:focus-visible .handle-ring {
+  opacity: 1;
+}
+
+.hint {
+  font-size: 0.8125rem;
+  margin: 0;
+  text-align: center;
+}

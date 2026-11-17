@@ -1,0 +1,48 @@
+<svg
+  #svg
+  class="graph"
+  [attr.viewBox]="viewBox"
+  role="group"
+  aria-label="Curve graph"
+  aria-describedby="bezier-graph-hint"
+  (pointerdown)="startDrag($event)"
+  (pointermove)="drag($event)"
+  (pointerup)="endDrag($event)"
+  (pointercancel)="endDrag($event)">
+  <rect class="overshoot" [attr.x]="view.left" y="0" [attr.width]="view.width" [attr.height]="view.height" />
+  <rect class="unit" [attr.x]="unit.x" [attr.y]="unit.y" [attr.width]="unit.size" [attr.height]="unit.size" />
+  @for (line of gridLines; track line.x) {
+    <line class="grid" [attr.x1]="line.x" [attr.y1]="unit.y" [attr.x2]="line.x" [attr.y2]="start.y" />
+    <line class="grid" [attr.x1]="start.x" [attr.y1]="line.y" [attr.x2]="end.x" [attr.y2]="line.y" />
+  }
+  <line class="diagonal" [attr.x1]="start.x" [attr.y1]="start.y" [attr.x2]="end.x" [attr.y2]="end.y" />
+  @if (comparePath(); as compare) {
+    <path class="compare" [attr.d]="compare" />
+  }
+  @for (handle of handles(); track handle.index) {
+    <line class="arm" [attr.x1]="handle.anchorX" [attr.y1]="handle.anchorY" [attr.x2]="handle.x" [attr.y2]="handle.y" />
+  }
+  <path class="curve" [attr.d]="path()" />
+  <circle class="anchor" [attr.cx]="start.x" [attr.cy]="start.y" r="2.5" />
+  <circle class="anchor" [attr.cx]="end.x" [attr.cy]="end.y" r="2.5" />
+  @for (handle of handles(); track handle.index) {
+    <g
+      class="handle"
+      tabindex="0"
+      role="slider"
+      [attr.data-handle]="handle.index"
+      [attr.aria-label]="handle.label"
+      [attr.aria-valuenow]="curve()[handle.index * 2 + 1]"
+      [attr.aria-valuemin]="yMin"
+      [attr.aria-valuemax]="yMax"
+      [attr.aria-valuetext]="handle.valueText"
+      (keydown)="nudge($event, handle.index)">
+      <circle class="handle-hit" [attr.cx]="handle.x" [attr.cy]="handle.y" r="10" />
+      <circle class="handle-ring" [attr.cx]="handle.x" [attr.cy]="handle.y" r="7.5" />
+      <circle class="handle-dot" [attr.cx]="handle.x" [attr.cy]="handle.y" r="4.5" />
+    </g>
+  }
+</svg>
+<p id="bezier-graph-hint" class="hint muted">
+  Drag a point, or focus it and use the arrow keys. Hold Shift for bigger steps.
+</p>

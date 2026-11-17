@@ -1,4 +1,4 @@
-@if (tabs().length > 1 || hasVersions()) {
+@if (tabs().length > 1 || versionTab()) {
   <div class="tabs" role="tablist">
     @for (tab of tabs(); track tab.label; let index = $index) {
       <button type="button" role="tab" class="tab" [attr.aria-selected]="index === selectedIndex()" (click)="select(index)">
@@ -7,39 +7,23 @@
     }
   </div>
 }
-@if (selected(); as tab) {
-  @if (hasVersions()) {
-    <div class="versions">
-      @if (tab.versions?.length) {
-        <button
-          type="button"
-          class="versions-toggle"
-          [attr.aria-expanded]="versionsOpen()"
-          (click)="versionsOpen.set(!versionsOpen())"
-        >
-          <span class="versions-sign" aria-hidden="true">{{ versionsOpen() ? '−' : '+' }}</span>
-          {{ tab.versionsLabel ?? 'Other versions' }}
+@if (versionTab(); as versionTab) {
+  <div class="versions" [class.is-open]="versionsOpen()" [inert]="!versionsOpen()">
+    <div class="versions-inner">
+      <div class="version-chips" role="group" [attr.aria-label]="versionTab.versionsLabel ?? 'Versions'">
+        <button type="button" class="chip" [attr.aria-pressed]="versionIndex() === null" (click)="versionIndex.set(null)">
+          Latest
         </button>
-        @if (versionsOpen()) {
-          <div
-            class="version-chips"
-            role="group"
-            animate.enter="is-entering"
-            [attr.aria-label]="tab.versionsLabel ?? 'Other versions'"
-          >
-            <button type="button" class="chip" [attr.aria-pressed]="versionIndex() === null" (click)="versionIndex.set(null)">
-              Latest
-            </button>
-            @for (version of tab.versions; track version.label; let index = $index) {
-              <button type="button" class="chip" [attr.aria-pressed]="versionIndex() === index" (click)="chooseVersion(index)">
-                {{ version.label }}
-              </button>
-            }
-          </div>
+        @for (version of versionTab.versions; track version.label; let index = $index) {
+          <button type="button" class="chip" [attr.aria-pressed]="versionIndex() === index" (click)="chooseVersion(index)">
+            {{ version.label }}
+          </button>
         }
-      }
+      </div>
     </div>
-  }
+  </div>
+}
+@if (selected(); as tab) {
   <app-code-block [code]="code()" />
   @if (tab.note || tab.link) {
     <p class="note">

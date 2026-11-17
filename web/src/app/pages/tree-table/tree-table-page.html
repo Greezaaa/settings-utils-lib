@@ -173,6 +173,19 @@
     />
   </ng-template>
 
+  <ng-template [appPageFeature]="features.theming">
+    <su-lib-tree-table
+      class="mini-tree-table themed-tree-table"
+      caption="Catalogue, in a look of its own"
+      [columns]="catalogueColumns"
+      [rows]="catalogue"
+      [rowId]="shopItemId"
+      [children]="shopChildren"
+      [rowKind]="categoryKind"
+      [expanded]="['herbs']"
+    />
+  </ng-template>
+
   <ng-template [appPageFeature]="features.keyboard">
     <su-lib-tree-table
       class="mini-tree-table"

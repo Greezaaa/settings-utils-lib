@@ -677,7 +677,8 @@ html.page-part-flying::view-transition-new(page) {
 /* Motion turned down on this site (SiteMotion): every animation and transition ends at once, in the libraries too */
 html[data-reduce-motion] *,
 html[data-reduce-motion] *::before,
-html[data-reduce-motion] *::after {
+html[data-reduce-motion] *::after,
+html[data-reduce-motion] *::details-content {
   animation-duration: 0.01ms !important;
   animation-iteration-count: 1 !important;
   scroll-behavior: auto !important;
@@ -703,4 +704,43 @@ html[data-reduce-motion] *::after {
   --su-dialog-accept-color: #0f3d2e;
   --su-dialog-cancel-color: #d1fae5;
   --su-dialog-cancel-border: 1px solid #10b98166;
+}
+
+details {
+  interpolate-size: allow-keywords;
+
+  &::details-content {
+    block-size: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+      block-size 300ms cubic-bezier(0.3, 0.7, 0.3, 1),
+      opacity 220ms ease,
+      content-visibility 300ms allow-discrete;
+  }
+
+  &[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
+  &[open] > :not(summary) {
+    animation: details-settle 300ms cubic-bezier(0.34, 1.35, 0.64, 1);
+  }
+}
+
+@keyframes details-settle {
+  from {
+    transform: translateY(-0.375rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  details::details-content {
+    transition: none;
+  }
+
+  details[open] > :not(summary) {
+    animation: none;
+  }
 }
