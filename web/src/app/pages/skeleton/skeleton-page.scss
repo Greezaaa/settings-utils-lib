@@ -63,3 +63,10 @@
     margin: 0;
   }
 }
+
+.themed-skeleton {
+  --su-skeleton-color: rgb(16 185 129 / 0.16);
+  --su-skeleton-shimmer: rgb(16 185 129 / 0.32);
+  --su-skeleton-radius: 999px;
+  --su-skeleton-duration: 2.4s;
+}

@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { SuDialogBackdrop, SuDialogKind, SuDialogService, SuDialogSize } from '@su-labs/dialog';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
+import { PageFeatureExample } from '../../shared/page-feature';
 import { UtilityPage } from '../../shared/utility-page';
+import { DIALOG_FEATURES } from './dialog-features';
 
 const KINDS: readonly { kind: SuDialogKind; label: string }[] = [
   { kind: 'confirm', label: 'Accept and cancel' },
@@ -60,13 +62,14 @@ const accepted = await dialogs.confirm({ title: 'Delete your results?' });`,
 
 @Component({
   selector: 'app-dialog-page',
-  imports: [UtilityPage],
+  imports: [PageFeatureExample, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dialog-page.html',
 })
 export class DialogPage {
   private readonly dialog = inject(SuDialogService);
   protected readonly utility = getUtility('dialog');
+  protected readonly features = DIALOG_FEATURES;
   protected readonly usage = USAGE;
   protected readonly kinds = KINDS;
   protected readonly sizes = SIZES;
@@ -130,4 +133,13 @@ export class DialogPage {
   }
 
   protected readonly kindValues = KINDS.map(({ kind }) => kind);
+
+  protected openThemed(): void {
+    void this.dialog.confirm({
+      title: 'Plant the seeds?',
+      body: 'Sow them in rows, a finger deep.',
+      acceptLabel: 'Plant',
+      cssClass: 'su-dialog-themed',
+    });
+  }
 }

@@ -2,7 +2,9 @@ import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, inject
 import { SuSkeletonBusyDirective, SuSkeletonComponent } from '@su-labs/skeleton';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
+import { PageFeatureExample } from '../../shared/page-feature';
 import { UtilityPage } from '../../shared/utility-page';
+import { SKELETON_FEATURES } from './skeleton-features';
 
 const LOADING_TIME = 2500;
 
@@ -58,13 +60,14 @@ setSuSkeletonBusy(region, false);`,
 
 @Component({
   selector: 'app-skeleton-page',
-  imports: [SuSkeletonBusyDirective, SuSkeletonComponent, UtilityPage],
+  imports: [PageFeatureExample, SuSkeletonBusyDirective, SuSkeletonComponent, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './skeleton-page.html',
   styleUrl: './skeleton-page.scss',
 })
 export class SkeletonPage {
   protected readonly utility = getUtility('skeleton');
+  protected readonly features = SKELETON_FEATURES;
   protected readonly usage = USAGE;
   protected readonly articles = ARTICLES;
   protected readonly loading = signal(true);

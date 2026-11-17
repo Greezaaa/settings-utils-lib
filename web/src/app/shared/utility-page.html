@@ -26,15 +26,21 @@
   }
 </header>
 
-<section class="container page-section" appReveal aria-labelledby="demo-title">
-  <h2 id="demo-title" class="section-title">Live demo</h2>
+<section class="container page-section" appReveal aria-labelledby="demo">
+  <div class="section-heading">
+    <h2 id="demo" class="section-title">Live demo</h2>
+    <app-section-link target="demo" label="Live demo" />
+  </div>
   <p class="muted section-intro">This demo runs on the library itself, like the rest of this site.</p>
   <ng-content />
 </section>
 
 @if (features().length > 0) {
-  <section class="container page-section" appReveal aria-labelledby="features-title">
-    <h2 id="features-title" class="section-title">What it does</h2>
+  <section class="container page-section" appReveal aria-labelledby="features">
+    <div class="section-heading">
+      <h2 id="features" class="section-title">What it does</h2>
+      <app-section-link target="features" label="What it does" />
+    </div>
     <p class="muted section-intro">
       {{ featuresLead() }}
       <br />
@@ -45,7 +51,10 @@
         @let feature = example.feature();
         <article class="feature">
           <div class="feature-text">
-            <h3>{{ feature.title }}</h3>
+            <div class="section-heading">
+              <h3 [id]="featureId(feature.title)">{{ feature.title }}</h3>
+              <app-section-link [target]="featureId(feature.title)" [label]="feature.title" />
+            </div>
             <p>{{ feature.description }}</p>
             <details class="feature-code">
               <summary>Show the code</summary>
@@ -65,18 +74,27 @@
   </section>
 }
 
-<section class="container page-section" appReveal aria-labelledby="install-title">
-  <h2 id="install-title" class="section-title">Install</h2>
+<section class="container page-section" appReveal aria-labelledby="install">
+  <div class="section-heading">
+    <h2 id="install" class="section-title">Install</h2>
+    <app-section-link target="install" label="Install" />
+  </div>
   <app-code-tabs [tabs]="install()" />
 </section>
 
-<section class="container page-section" appReveal aria-labelledby="usage-title">
-  <h2 id="usage-title" class="section-title">Usage</h2>
+<section class="container page-section" appReveal aria-labelledby="usage">
+  <div class="section-heading">
+    <h2 id="usage" class="section-title">Usage</h2>
+    <app-section-link target="usage" label="Usage" />
+  </div>
   <app-code-tabs [tabs]="usage()" />
 </section>
 
-<section class="container page-section" appReveal aria-labelledby="release-title">
-  <h2 id="release-title" class="section-title">Latest release</h2>
+<section class="container page-section" appReveal aria-labelledby="release">
+  <div class="section-heading">
+    <h2 id="release" class="section-title">Latest release</h2>
+    <app-section-link target="release" label="Latest release" />
+  </div>
   @if (changelog.isLoading()) {
     <p class="muted">Loading the changelog from GitHub…</p>
   } @else if (changelog.failed()) {

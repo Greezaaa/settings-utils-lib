@@ -50,6 +50,26 @@ export const STEPPER_FEATURES = {
   <su-lib-step label="Review">…</su-lib-step>
 </su-lib-stepper>`,
   },
+  theming: {
+    title: 'Your own look',
+    description:
+      'Every colour, size and state is a CSS variable: the circles and their numbers, the current and completed ' +
+      'steps, the line between steps and the part already done, the labels, the tab hover, the panel, and the Back ' +
+      'and Next buttons.',
+    code: `su-lib-stepper {
+  --su-stepper-accent: #10b981;
+  --su-stepper-accent-text: #0f3d2e;
+  --su-stepper-marker-size: 2.25rem;
+  --su-stepper-marker-border: 2px solid #10b98155;
+  --su-stepper-line-width: 3px;
+  --su-stepper-line-color: #10b98133;
+  --su-stepper-line-done-color: #10b981;
+  --su-stepper-current-label-color: #059669;
+  --su-stepper-tab-hover-background: rgb(16 185 129 / 0.1);
+  --su-stepper-primary-background: #0f3d2e;
+  --su-stepper-primary-color: #d1fae5;
+}`,
+  },
   buttons: {
     title: 'Your own buttons',
     description:

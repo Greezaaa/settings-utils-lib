@@ -117,6 +117,8 @@
   --su-table-danger-border: color-mix(in srgb, var(--red-text) 35%, transparent);
   --su-table-input-background: var(--surface);
   --su-table-input-border: 1px solid var(--border);
+  --su-tree-table-group-background: var(--subtle);
+  --su-tree-table-number-color: var(--muted);
 
   color-scheme: light;
 }
@@ -680,4 +682,25 @@ html[data-reduce-motion] *::after {
   animation-iteration-count: 1 !important;
   scroll-behavior: auto !important;
   transition-duration: 0.01ms !important;
+}
+
+.su-notification-themed {
+  --su-notification-background-color: #0f3d2e;
+  --su-notification-text-color: #d1fae5;
+  --su-notification-success-border-color: #10b981;
+  --su-notification-icon-color: #10b981;
+  --su-notification-box-shadow: rgb(15 61 46 / 0.35);
+  --su-notification-close-btn-text-color: #d1fae5;
+}
+
+.su-dialog-themed {
+  --su-dialog-background: #0f3d2e;
+  --su-dialog-text-color: #d1fae5;
+  --su-dialog-title-color: #ecfdf5;
+  --su-dialog-border: 1px solid #10b98155;
+  --su-dialog-radius: 20px;
+  --su-dialog-accept-background: #10b981;
+  --su-dialog-accept-color: #0f3d2e;
+  --su-dialog-cancel-color: #d1fae5;
+  --su-dialog-cancel-border: 1px solid #10b98166;
 }

@@ -16,3 +16,17 @@ textarea.text-input {
 .nested-check {
   margin-left: 1.75rem;
 }
+
+.themed-fields {
+  --su-field-accent: #10b981;
+  --su-switch-track-on: #10b981;
+  --su-switch-on: #10b981;
+  --su-switch-width: 3.25rem;
+  --su-switch-height: 1.75rem;
+  --su-checkbox-size: 1.375rem;
+  --su-checkbox-tick: #0f3d2e;
+
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}

@@ -116,6 +116,14 @@
     </su-lib-stepper>
   </ng-template>
 
+  <ng-template [appPageFeature]="features.theming">
+    <su-lib-stepper class="mini-stepper themed-stepper" tabs label="Garden plan">
+      <su-lib-step label="Soil"><p>Loosen the bed and add compost.</p></su-lib-step>
+      <su-lib-step label="Seeds"><p>Sow in rows, a finger deep.</p></su-lib-step>
+      <su-lib-step label="Water"><p>A little every morning.</p></su-lib-step>
+    </su-lib-stepper>
+  </ng-template>
+
   <ng-template [appPageFeature]="features.buttons">
     <su-lib-stepper #custom class="mini-stepper" label="Tour" [controls]="false">
       <su-lib-step><p>Welcome to the tour.</p></su-lib-step>

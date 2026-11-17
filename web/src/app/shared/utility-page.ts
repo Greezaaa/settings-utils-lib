@@ -11,10 +11,11 @@ import { CodeTab, CodeTabs } from './code-tabs';
 import { NpmDownloadsTag } from './npm-downloads-tag';
 import { PageFeatureExample } from './page-feature';
 import { Reveal } from './reveal';
+import { SectionLink } from './section-link/section-link';
 
 @Component({
   selector: 'app-utility-page',
-  imports: [CodeBlock, CodeTabs, NgTemplateOutlet, NpmDownloadsTag, ReleaseList, RouterLink, Reveal],
+  imports: [CodeBlock, CodeTabs, NgTemplateOutlet, NpmDownloadsTag, ReleaseList, RouterLink, Reveal, SectionLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './utility-page.html',
   styleUrl: './utility-page.scss',
@@ -28,6 +29,14 @@ export class UtilityPage {
   protected readonly features = contentChildren(PageFeatureExample);
 
   protected readonly environments = ENVIRONMENTS;
+
+  protected featureId(title: string): string {
+    return title
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
 
   protected readonly changelog = changelogResource(() => this.utility().slug);
   protected readonly latest = computed(() => {

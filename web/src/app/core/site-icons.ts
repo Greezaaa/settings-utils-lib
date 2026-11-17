@@ -7,6 +7,7 @@ export const SITE_ICONS = {
   notifications: ['M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15z', 'M10 20.5a2 2 0 0 0 4 0'],
   dialog: ['M4 5h16v14H4z', 'M4 9h16', 'M12 15h2.5', 'M16 15h1.5'],
   table: ['M4 5h16v14H4z', 'M4 10h16', 'M4 14.5h16', 'M10 10v9'],
+  'tree-table': ['M4 5h16v14H4z', 'M4 10h16', 'M7 13h10', 'M10 16.5h7', 'M7 13v3.5h3'],
   skeleton: ['M4 5h16v5H4z', 'M4 14h10', 'M4 18h6'],
   stepper: [
     'M2 12a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
@@ -25,6 +26,11 @@ export const SITE_ICONS = {
   customise: ['M4 20h4L19 9l-4-4L4 16z', 'M13 7l4 4'],
   grip: ['M9 6h.01', 'M15 6h.01', 'M9 12h.01', 'M15 12h.01', 'M9 18h.01', 'M15 18h.01'],
   close: ['M6 6l12 12', 'M18 6L6 18'],
+  link: [
+    'M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2',
+    'M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2',
+  ],
+  check: ['M5 12.5l4.5 4.5L19 7.5'],
   chevron: ['M14.5 6l-6 6 6 6'],
   settings: [
     'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',

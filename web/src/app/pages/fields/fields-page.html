@@ -1,4 +1,4 @@
-<app-utility-page [utility]="utility" [usage]="usage">
+<app-utility-page [utility]="utility" [usage]="usage" featuresLead="Each feature on a few fields of its own.">
   <div class="card demo-grid">
     <div class="demo-controls">
       <div class="field">
@@ -78,4 +78,11 @@
     </dl>
   </div>
   <p class="muted">Every animation stops when your device asks for less motion.</p>
+
+  <ng-template [appPageFeature]="features.theming">
+    <div class="card themed-fields">
+      <su-lib-switch [(checked)]="themedSwitch">Water every morning</su-lib-switch>
+      <su-lib-checkbox [(checked)]="themedCheck">Seeds planted</su-lib-checkbox>
+    </div>
+  </ng-template>
 </app-utility-page>

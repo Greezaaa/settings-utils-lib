@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { SuNotificationPosition, SuNotificationService, SuNotificationType } from '@su-labs/notifications';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
+import { PageFeatureExample } from '../../shared/page-feature';
 import { UtilityPage } from '../../shared/utility-page';
+import { NOTIFICATIONS_FEATURES } from './notifications-features';
 
 const EXAMPLES: readonly { type: SuNotificationType; label: string; message: string }[] = [
   { type: 'success', label: 'Success', message: 'Your settings were saved.' },
@@ -48,12 +50,13 @@ notifications.show({ type: 'success', message: 'Saved!' });`,
 
 @Component({
   selector: 'app-notifications-page',
-  imports: [UtilityPage],
+  imports: [PageFeatureExample, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './notifications-page.html',
 })
 export class NotificationsPage {
   protected readonly utility = getUtility('notifications');
+  protected readonly features = NOTIFICATIONS_FEATURES;
   protected readonly usage = USAGE;
   protected readonly examples = EXAMPLES;
   protected readonly positions = POSITIONS;
@@ -89,5 +92,13 @@ export class NotificationsPage {
     if (event.target instanceof HTMLInputElement) {
       this.autoClose.set(event.target.checked);
     }
+  }
+
+  protected showThemed(): void {
+    this.notifications.show({
+      type: 'success',
+      message: 'Saved, in a look of its own.',
+      cssClass: 'su-notification-themed',
+    });
   }
 }

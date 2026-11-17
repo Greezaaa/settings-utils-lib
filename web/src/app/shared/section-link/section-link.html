@@ -1,0 +1,11 @@
+<button
+  type="button"
+  class="section-link"
+  [class.is-copied]="copied()"
+  [attr.aria-label]="'Copy the link to ' + label()"
+  (click)="copy()"
+>
+  <app-site-icon [name]="copied() ? 'check' : 'link'" [size]="15" />
+  <span class="section-link-text" aria-hidden="true">{{ copied() ? 'Copied' : 'Copy link' }}</span>
+</button>
+<span class="visually-hidden" role="status">{{ copied() ? 'Link copied' : '' }}</span>

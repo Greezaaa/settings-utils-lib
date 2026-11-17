@@ -1,4 +1,4 @@
-<app-utility-page [utility]="utility" [usage]="usage">
+<app-utility-page [utility]="utility" [usage]="usage" featuresLead="Each feature with a button of its own.">
   <div class="card demo-grid">
     <div class="demo-controls">
       <div class="field">
@@ -56,4 +56,10 @@
     </dl>
   </div>
   <p class="muted">The position applies to the whole site, including the copy confirmations.</p>
+
+  <ng-template [appPageFeature]="features.theming">
+    <div class="card">
+      <button type="button" class="button" (click)="showThemed()">Show a toast in its own look</button>
+    </div>
+  </ng-template>
 </app-utility-page>

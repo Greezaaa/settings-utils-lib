@@ -1,4 +1,4 @@
-<app-utility-page [utility]="utility" [usage]="usage">
+<app-utility-page [utility]="utility" [usage]="usage" featuresLead="Each feature on a small placeholder of its own.">
   <p class="muted">
     The placeholder below is plain HTML laid out with the same grid as the cards.
     <br />
@@ -50,4 +50,17 @@
       </div>
     }
   </section>
+
+  <ng-template [appPageFeature]="features.theming">
+    <su-lib-skeleton class="themed-skeleton">
+      <div class="card skeleton-profile su-skeleton-layout">
+        <div class="skeleton-avatar"></div>
+        <div class="skeleton-lines su-skeleton-layout">
+          <div class="skeleton-title"></div>
+          <div></div>
+          <div class="skeleton-short"></div>
+        </div>
+      </div>
+    </su-lib-skeleton>
+  </ng-template>
 </app-utility-page>

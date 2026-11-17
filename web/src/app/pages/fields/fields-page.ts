@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { SuAutoGrowDirective, SuCheckboxComponent, SuChipOption, SuChipsComponent, SuCodeBoxesComponent, SuEmailFieldComponent, SuStrengthLevel, SuStrengthMeterComponent, SuSwitchComponent } from '@su-labs/fields';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
+import { PageFeatureExample } from '../../shared/page-feature';
 import { UtilityPage } from '../../shared/utility-page';
+import { FIELDS_FEATURES } from './fields-features';
 
 const CODE_LENGTH = 6;
 const CODE_PATTERN = /^[A-Z0-9]{6}$/;
@@ -96,6 +98,7 @@ picked = signal<readonly Topic[]>([]);
 @Component({
   selector: 'app-fields-page',
   imports: [
+    PageFeatureExample,
     SuAutoGrowDirective,
     SuCheckboxComponent,
     SuChipsComponent,
@@ -111,6 +114,9 @@ picked = signal<readonly Topic[]>([]);
 })
 export class FieldsPage {
   protected readonly utility = getUtility('fields');
+  protected readonly features = FIELDS_FEATURES;
+  protected readonly themedSwitch = signal(true);
+  protected readonly themedCheck = signal(true);
   protected readonly usage = USAGE;
   protected readonly codeLength = CODE_LENGTH;
   protected readonly levelNames = LEVEL_NAMES;
