@@ -30,13 +30,14 @@ Every utility is available in `@su-labs/core` for any environment, and as an Ang
 | Visit tracker | `@su-labs/core/visit-tracker` | `@su-labs/visit-tracker` |
 | Table | `@su-labs/core/table` | `@su-labs/table` |
 | Skeleton | `@su-labs/core/skeleton`, `@su-labs/core/skeleton.css` | `@su-labs/skeleton` |
+| Stepper | `@su-labs/core/stepper` | `@su-labs/stepper` |
 | Form fields | - | `@su-labs/fields` |
 
 ## API reference
 
 The full API of each utility is documented in its package README:
 
-- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, dialog, table, skeleton, scroll spy, visit tracker)
+- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, dialog, table, skeleton, stepper, scroll spy, visit tracker)
 - [`@su-labs/theme`](../projects/su-labs/theme/README.md)
 - [`@su-labs/font-size`](../projects/su-labs/font-size/README.md)
 - [`@su-labs/notifications`](../projects/su-labs/notifications/README.md)
@@ -46,3 +47,4 @@ The full API of each utility is documented in its package README:
 - [`@su-labs/table`](../projects/su-labs/table/README.md)
 - [`@su-labs/fields`](../projects/su-labs/fields/README.md)
 - [`@su-labs/skeleton`](../projects/su-labs/skeleton/README.md)
+- [`@su-labs/stepper`](../projects/su-labs/stepper/README.md)

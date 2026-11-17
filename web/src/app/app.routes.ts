@@ -57,6 +57,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/skeleton/skeleton-page').then((m) => m.SkeletonPage),
   },
   {
+    path: 'stepper',
+    title: `Stepper · ${SITE_NAME}`,
+    data: utilityMeta('stepper'),
+    loadComponent: () => import('./pages/stepper/stepper-page').then((m) => m.StepperPage),
+  },
+  {
     path: 'scroll-spy',
     title: `Scroll spy · ${SITE_NAME}`,
     data: utilityMeta('scroll-spy'),

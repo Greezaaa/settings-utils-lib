@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/font-size",
-	"version": "22.2.1",
+	"version": "22.2.2",
 	"description": "A lightweight Angular service for dynamic font size management.",
 	"keywords": [
 		"angular",
@@ -29,7 +29,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
-		"@su-labs/core": "1.9.0",
+		"@su-labs/core": "1.10.0",
 		"tslib": "^2.3.0"
 	},
 	"repository": {

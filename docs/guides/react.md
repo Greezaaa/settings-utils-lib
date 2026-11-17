@@ -432,6 +432,40 @@ export function Profile({ user }: { user?: User }) {
 }
 ```
 
+## Stepper
+
+Keep one controller per stepper and pass it the steps' rules again whenever they change, e.g. as a form is filled. Render the headers from `state` and call `next()`, `back()` or `goTo()`; each returns whether it moved:
+
+```tsx
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import { SuStepperController } from '@su-labs/core/stepper';
+
+export function SignUp() {
+  const [stepper] = useState(() => new SuStepperController());
+  const state = useSyncExternalStore(stepper.state.subscribe, stepper.state.get, stepper.state.get);
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    stepper.setSteps([{ label: 'Account', canNext: name.length > 0 }, { label: 'Plan' }, { label: 'Confirm' }]);
+  }, [stepper, name]);
+
+  return (
+    <>
+      <ol aria-label="Sign up">
+        {state.steps.map((step) => (
+          <li key={step.index} aria-current={step.current ? 'step' : undefined}>
+            <span aria-hidden="true">{step.number}</span> {step.label}
+          </li>
+        ))}
+      </ol>
+      {state.current === 0 && <input value={name} onChange={(event) => setName(event.target.value)} />}
+      <button type="button" disabled={!state.canBack} onClick={() => stepper.back()}>Back</button>
+      <button type="button" disabled={!state.canNext} onClick={() => stepper.next()}>Next</button>
+    </>
+  );
+}
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -441,4 +475,5 @@ export function Profile({ user }: { user?: User }) {
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
+- [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
 - [Node and server-side rendering](node.md)

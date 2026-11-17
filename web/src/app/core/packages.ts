@@ -66,6 +66,13 @@ export const UTILITIES: readonly SuUtility[] = [
     summary: 'Loading placeholders drawn with your own HTML and CSS, with one shimmer and screen reader support.',
   },
   {
+    slug: 'stepper',
+    name: 'Stepper',
+    packageName: '@su-labs/stepper',
+    coreEntry: '@su-labs/core/stepper',
+    summary: 'Content in numbered steps shown one at a time, with rules for going forward and back, and tab mode.',
+  },
+  {
     slug: 'scroll-spy',
     name: 'Scroll spy',
     packageName: '@su-labs/scroll-spy',

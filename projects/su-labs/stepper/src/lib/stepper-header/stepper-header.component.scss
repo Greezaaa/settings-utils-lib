@@ -1,0 +1,71 @@
+:host {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--su-stepper-label-gap, 0.5rem);
+  min-width: 0;
+}
+
+.su-stepper-marker {
+  align-items: center;
+  background: var(--su-stepper-marker-background, transparent);
+  border: var(--su-stepper-marker-border, 2px solid rgb(0 0 0 / 0.2));
+  border-radius: 50%;
+  box-sizing: border-box;
+  color: var(--su-stepper-marker-color, inherit);
+  display: inline-flex;
+  flex: none;
+  font-size: var(--su-stepper-marker-font-size, 0.875rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  height: var(--su-stepper-marker-size, 2rem);
+  justify-content: center;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  width: var(--su-stepper-marker-size, 2rem);
+}
+
+.su-stepper-label {
+  color: var(--su-stepper-label-color, inherit);
+  font-size: var(--su-stepper-label-font-size, 0.95rem);
+  overflow-wrap: anywhere;
+}
+
+:host(.is-current) {
+  .su-stepper-marker {
+    background: var(--su-stepper-current-background, transparent);
+    border-color: var(--su-stepper-accent, #2563eb);
+    color: var(--su-stepper-current-color, var(--su-stepper-accent, #2563eb));
+  }
+
+  .su-stepper-label {
+    color: var(--su-stepper-current-label-color, inherit);
+    font-weight: var(--su-stepper-current-label-weight, 600);
+  }
+}
+
+:host(.is-completed) .su-stepper-marker {
+  background: var(--su-stepper-accent, #2563eb);
+  border-color: var(--su-stepper-accent, #2563eb);
+  color: var(--su-stepper-accent-text, #ffffff);
+}
+
+:host(.is-disabled) {
+  opacity: var(--su-stepper-disabled-opacity, 0.45);
+}
+
+.su-stepper-visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .su-stepper-marker {
+    transition: none;
+  }
+}

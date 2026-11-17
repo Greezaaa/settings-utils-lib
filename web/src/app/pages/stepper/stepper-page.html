@@ -1,0 +1,130 @@
+<app-utility-page
+  [utility]="utility"
+  [usage]="usage"
+  featuresLead="Each feature on a small stepper of its own.">
+  <div class="card stepper-demo">
+    <div class="stepper-demo-controls">
+      <label class="field">
+        <span>Orientation</span>
+        <select [value]="orientation()" (change)="chooseOrientation($event)">
+          @for (item of orientations; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="titles()" (change)="setFlag(titles.set, $event)" />
+        Titles beside the numbers
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="tabs()" (change)="setFlag(tabs.set, $event)" />
+        Headers act as tabs
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="requireName()" (change)="setFlag(requireName.set, $event)" />
+        Account needs a name to go on
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="linear()" [disabled]="!tabs()" (change)="setFlag(linear.set, $event)" />
+        Linear (tabs only reach visited steps)
+      </label>
+    </div>
+
+    <su-lib-stepper
+      #signUp
+      label="Sign up"
+      [orientation]="orientation()"
+      [tabs]="tabs()"
+      [linear]="linear()"
+      [(current)]="current">
+      <su-lib-step [label]="label('Account')" [canNext]="accountDone()">
+        <label class="field">
+          <span>Your name</span>
+          <input type="text" autocomplete="off" [value]="name()" (input)="setText(name.set, $event)" />
+        </label>
+      </su-lib-step>
+      <su-lib-step [label]="label('Plan')">
+        <fieldset class="stepper-plans">
+          <legend class="muted">Pick a plan</legend>
+          @for (item of plans; track item) {
+            <label class="checkbox">
+              <input type="radio" name="stepper-plan" [checked]="plan() === item" (change)="plan.set(item)" />
+              {{ item }}
+            </label>
+          }
+        </fieldset>
+      </su-lib-step>
+      <su-lib-step [label]="label('Confirm')" [canBack]="false">
+        <p>{{ hasName() ? name() : 'You' }}, you’re on the {{ plan() }} plan.</p>
+        <p class="muted">This step doesn’t let you go back.</p>
+        <button type="button" class="button button-small button-secondary" (click)="startOver(signUp)">Start over</button>
+      </su-lib-step>
+    </su-lib-stepper>
+
+    <dl class="state-list">
+      <div>
+        <dt>Current step</dt>
+        <dd>{{ current() + 1 }} of 3</dd>
+      </div>
+      <div>
+        <dt>Account allows going forward</dt>
+        <dd>{{ accountDone() ? 'yes' : 'no' }}</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="muted">
+    Next waits until the first step has a name, and the last step doesn’t let you go back.
+    <br />
+    Try it: turn the name rule off to move between steps freely, or switch to vertical or tabs.
+  </p>
+
+  <ng-template [appPageFeature]="features.numbers">
+    <su-lib-stepper class="mini-stepper" label="Order">
+      <su-lib-step><p>Choose what you need.</p></su-lib-step>
+      <su-lib-step><p>Tell us where to send it.</p></su-lib-step>
+      <su-lib-step label="Done"><p>That’s all.</p></su-lib-step>
+    </su-lib-stepper>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.rules">
+    <su-lib-stepper class="mini-stepper" label="Payment">
+      <su-lib-step label="Terms" [canNext]="agreed()">
+        <label class="checkbox">
+          <input type="checkbox" [checked]="agreed()" (change)="setFlag(agreed.set, $event)" />
+          I agree
+        </label>
+      </su-lib-step>
+      <su-lib-step label="Pay"><p>Pay, then you can’t go back.</p></su-lib-step>
+      <su-lib-step label="Paid" [canBack]="false"><p>Thanks, it’s paid.</p></su-lib-step>
+    </su-lib-stepper>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.vertical">
+    <su-lib-stepper class="mini-stepper" orientation="vertical" label="Project">
+      <su-lib-step label="Plan"><p>Write down what to build.</p></su-lib-step>
+      <su-lib-step label="Build"><p>Build it, one piece at a time.</p></su-lib-step>
+      <su-lib-step label="Ship"><p>Put it in front of people.</p></su-lib-step>
+    </su-lib-stepper>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.tabs">
+    <su-lib-stepper class="mini-stepper" tabs linear label="Settings">
+      <su-lib-step label="Profile"><p>Your name and photo.</p></su-lib-step>
+      <su-lib-step label="Billing" disabled><p>Not available on this plan.</p></su-lib-step>
+      <su-lib-step label="Team"><p>Who works with you.</p></su-lib-step>
+      <su-lib-step label="Review"><p>Everything at a glance.</p></su-lib-step>
+    </su-lib-stepper>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.buttons">
+    <su-lib-stepper #custom class="mini-stepper" label="Tour" [controls]="false">
+      <su-lib-step><p>Welcome to the tour.</p></su-lib-step>
+      <su-lib-step><p>Here is the menu.</p></su-lib-step>
+      <su-lib-step><p>And here are your settings.</p></su-lib-step>
+    </su-lib-stepper>
+    <div class="button-row">
+      <button type="button" class="button button-small button-secondary" (click)="custom.back()">Previous</button>
+      <button type="button" class="button button-small" (click)="custom.next()">Continue</button>
+    </div>
+  </ng-template>
+</app-utility-page>

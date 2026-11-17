@@ -1,0 +1,15 @@
+:host {
+  border-radius: var(--su-stepper-panel-radius, 0.5rem);
+  display: block;
+  outline: none;
+  padding: var(--su-stepper-panel-padding, 1rem 0);
+
+  &:focus-visible {
+    outline: var(--su-stepper-focus-ring, 2px solid currentColor);
+    outline-offset: 2px;
+  }
+}
+
+:host([hidden]) {
+  display: none;
+}

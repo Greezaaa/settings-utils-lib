@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Vue, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/stepper](https://www.npmjs.com/package/@su-labs/stepper), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
 
 ## Table of Contents
 
@@ -19,6 +19,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Dialog](#dialog)
 - [Table](#table)
 - [Skeleton](#skeleton)
+- [Stepper](#stepper)
 - [Scroll Spy](#scroll-spy)
 - [Visit Tracker](#visit-tracker)
 - [Storage](#storage)
@@ -57,6 +58,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/table` | `SuTableController`, the editors (`suTextEditor`, `suNumberEditor`, …), `SU_TABLE_LABELS` and table types |
 | `@su-labs/core/skeleton` | `setSuSkeletonBusy` |
 | `@su-labs/core/skeleton.css` | The skeleton stylesheet |
+| `@su-labs/core/stepper` | `SuStepperController`, `SU_STEPPER_LABELS` and stepper types |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 | `@su-labs/core/visit-tracker` | `SuVisitTrackerController` and visit types |
 
@@ -378,7 +380,7 @@ setSuSkeletonBusy(region, false);
 </section>
 ```
 
-Without a bundler that handles CSS imports, link the file instead: `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.9.0/skeleton/skeleton.css">`.
+Without a bundler that handles CSS imports, link the file instead: `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.10.0/skeleton/skeleton.css">`.
 
 ### API
 
@@ -397,6 +399,49 @@ Without a bundler that handles CSS imports, link the file instead: `<link rel="s
 | `--su-skeleton-angle` | `100deg` | Tilt of the shine |
 
 The shine is fixed to the window so it runs across every shape together; iOS Safari doesn't support that, so there each shape shines on its own. It stops for visitors who ask for less motion.
+
+## Stepper
+
+Content split into steps shown one at a time, with rules for when the user may go forward and back. It keeps the current step and the steps visited and completed, and checks each move; your app renders the steps (Angular: [`@su-labs/stepper`](https://www.npmjs.com/package/@su-labs/stepper)).
+
+```ts
+import { SuStepperController } from '@su-labs/core/stepper';
+
+const stepper = new SuStepperController({
+  steps: [{ label: 'Account', canNext: false }, { label: 'Address' }, { label: 'Confirm' }],
+});
+
+stepper.state.subscribe((state) => render(state)); // the steps, the current one and whether next() and back() would move
+form.addEventListener('input', () =>
+  stepper.setSteps([{ label: 'Account', canNext: form.checkValidity() }, { label: 'Address' }, { label: 'Confirm' }]),
+);
+nextButton.addEventListener('click', () => stepper.next());
+```
+
+A step is completed once the user leaves it forward, as long as it still allows going forward. A jump (e.g. clicking a step's header) checks every step it passes: forward, each one's `canNext`; back, each one's `canBack`.
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `next()` / `back()` | Goes to the next or previous step that isn't disabled, if the rules allow it; returns whether it moved |
+| `goTo(index)` | Goes to a step, from 0, if the rules allow it |
+| `canGoTo(index)` | Whether the rules allow going there now |
+| `select(index)` | Shows a step without checking the rules, e.g. to restore where the user was |
+| `setSteps(steps)` | Replaces the steps (and their rules); the current step stays |
+| `setLinear(linear)` | Changes the `linear` option |
+| `reset(start?)` | Back to a step (the first by default) with nothing visited or completed |
+| `state` | Read-only store: `steps` (each with `number`, `label`, `status`, `current`, `completed`, `visited`, `disabled`, `reachable`), `current`, `count`, `isFirst`, `isLast`, `canNext`, `canBack` |
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `steps` | `[]` | Each `{ label?, canNext?, canBack?, disabled? }`; without a label only the number shows |
+| `start` | `0` | The step shown first |
+| `linear` | `false` | Going forward by more than one step only reaches steps already visited |
+
+`SU_STEPPER_LABELS` holds the English texts a stepper reads out (`Step 1 of 3`, `Completed`, …), to replace in the page's language.
 
 ## Scroll Spy
 

@@ -1,0 +1,62 @@
+<ol
+  class="su-stepper-steps"
+  [attr.role]="tabs() ? 'tablist' : null"
+  [attr.aria-orientation]="tabs() ? orientation() : null"
+  [attr.aria-label]="label() ?? text().steps">
+  @for (step of state().steps; track step.index) {
+    <li
+      class="su-stepper-step"
+      [class.is-current]="step.current"
+      [class.is-completed]="step.completed"
+      [attr.role]="tabs() ? 'presentation' : null"
+      [attr.aria-current]="!tabs() && step.current ? 'step' : null">
+      @if (tabs()) {
+        <button
+          #tab
+          type="button"
+          role="tab"
+          class="su-stepper-header su-stepper-tab"
+          [id]="headerId(step.index)"
+          [attr.aria-controls]="panelId(step.index)"
+          [attr.aria-selected]="step.current"
+          [attr.aria-disabled]="step.current || step.reachable ? null : 'true'"
+          [tabIndex]="step.current ? 0 : -1"
+          (click)="goTo(step.index)"
+          (keydown)="onTabKeydown($event, step.index)">
+          <su-lib-stepper-header [step]="step" [count]="state().count" [labels]="text()" />
+        </button>
+      } @else {
+        <div class="su-stepper-header" [id]="headerId(step.index)">
+          <su-lib-stepper-header [step]="step" [count]="state().count" [labels]="text()" />
+        </div>
+      }
+    </li>
+  }
+</ol>
+
+<div class="su-stepper-body">
+  <ng-content />
+
+  @if (controls() && state().count > 1) {
+    <div class="su-stepper-controls">
+      @if (!state().isFirst) {
+        <button
+          type="button"
+          class="su-stepper-button su-stepper-back"
+          [attr.aria-disabled]="state().canBack ? null : 'true'"
+          (click)="onBack()">
+          {{ text().back }}
+        </button>
+      }
+      @if (!state().isLast) {
+        <button
+          type="button"
+          class="su-stepper-button su-stepper-next"
+          [attr.aria-disabled]="state().canNext ? null : 'true'"
+          (click)="onNext()">
+          {{ text().next }}
+        </button>
+      }
+    </div>
+  }
+</div>

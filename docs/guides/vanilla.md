@@ -22,7 +22,7 @@ Load the package as an ES module directly in the browser:
 
 ```html
 <script type="module">
-  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.9.0/theme';
+  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.10.0/theme';
 </script>
 ```
 
@@ -61,7 +61,7 @@ theme.init({ defaultTheme: 'system' });
 <p>Current theme: <span id="current-theme"></span></p>
 
 <script type="module">
-  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.9.0/theme';
+  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.10.0/theme';
 
   const theme = new SuThemeController();
   theme.init();
@@ -108,7 +108,7 @@ Text size controls that stay within limits and remember the user's choice:
 <button type="button" id="bigger">A+</button>
 
 <script type="module">
-  import { SuFontSizeController } from 'https://esm.sh/@su-labs/core@1.9.0/font-size';
+  import { SuFontSizeController } from 'https://esm.sh/@su-labs/core@1.10.0/font-size';
 
   const fontSize = new SuFontSizeController();
   fontSize.init();
@@ -144,7 +144,7 @@ The controller keeps the list of notifications and closes them on time; you rend
 <button type="button" id="save">Save</button>
 
 <script type="module">
-  import { SuNotificationController } from 'https://esm.sh/@su-labs/core@1.9.0/notifications';
+  import { SuNotificationController } from 'https://esm.sh/@su-labs/core@1.10.0/notifications';
 
   const notifications = new SuNotificationController();
   const container = document.querySelector('#notifications');
@@ -189,7 +189,7 @@ Highlight the navigation link of the section in the middle of the screen:
 <section id="about">...</section>
 
 <script type="module">
-  import { SuScrollSpyController } from 'https://esm.sh/@su-labs/core@1.9.0/scroll-spy';
+  import { SuScrollSpyController } from 'https://esm.sh/@su-labs/core@1.10.0/scroll-spy';
 
   const scrollSpy = new SuScrollSpyController();
   document.querySelectorAll('section[id]').forEach((section) => scrollSpy.observe(section, section.id));
@@ -210,7 +210,7 @@ Greet returning visitors:
 <p id="welcome"></p>
 
 <script type="module">
-  import { SuVisitTrackerController } from 'https://esm.sh/@su-labs/core@1.9.0/visit-tracker';
+  import { SuVisitTrackerController } from 'https://esm.sh/@su-labs/core@1.10.0/visit-tracker';
 
   const visits = new SuVisitTrackerController();
   visits.init();
@@ -337,7 +337,7 @@ Render pinned cells with `position: sticky` and pinned rows first in `<tbody>`.
 Draw the placeholder with your own elements inside `.su-skeleton`, laid out like the real content. Wrappers with `su-skeleton-layout` only lay shapes out and aren't drawn:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.9.0/skeleton/skeleton.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.10.0/skeleton/skeleton.css" />
 
 <section class="profile">
   <div class="su-skeleton" aria-hidden="true">
@@ -350,7 +350,7 @@ Draw the placeholder with your own elements inside `.su-skeleton`, laid out like
 </section>
 
 <script type="module">
-  import { setSuSkeletonBusy } from 'https://esm.sh/@su-labs/core@1.9.0/skeleton';
+  import { setSuSkeletonBusy } from 'https://esm.sh/@su-labs/core@1.10.0/skeleton';
 
   const region = document.querySelector('.profile');
   setSuSkeletonBusy(region, true);
@@ -362,6 +362,42 @@ Draw the placeholder with your own elements inside `.su-skeleton`, laid out like
 
 With a bundler, `import '@su-labs/core/skeleton.css';` instead of the link.
 
+## Stepper
+
+Keep one controller per stepper and pass it the steps' rules again whenever they change, e.g. as a form is filled. Render the headers from `state` and call `next()`, `back()` or `goTo()`; each returns whether it moved:
+
+```html
+<ol id="steps" aria-label="Sign up"></ol>
+<input id="name" />
+<button type="button" id="back">Back</button>
+<button type="button" id="next">Next</button>
+
+<script type="module">
+  import { SuStepperController } from 'https://esm.sh/@su-labs/core@1.10.0/stepper';
+
+  const name = document.querySelector('#name');
+  const steps = () => [{ label: 'Account', canNext: name.value.length > 0 }, { label: 'Plan' }, { label: 'Confirm' }];
+  const stepper = new SuStepperController({ steps: steps() });
+
+  stepper.state.subscribe((state) => {
+    document.querySelector('#steps').replaceChildren(
+      ...state.steps.map((step) => {
+        const item = document.createElement('li');
+        item.textContent = `${step.number} ${step.label ?? ''}`;
+        if (step.current) item.setAttribute('aria-current', 'step');
+        return item;
+      }),
+    );
+    name.hidden = state.current !== 0;
+    document.querySelector('#back').disabled = !state.canBack;
+    document.querySelector('#next').disabled = !state.canNext;
+  });
+  name.addEventListener('input', () => stepper.setSteps(steps()));
+  document.querySelector('#back').addEventListener('click', () => stepper.back());
+  document.querySelector('#next').addEventListener('click', () => stepper.next());
+</script>
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -371,4 +407,5 @@ With a bundler, `import '@su-labs/core/skeleton.css';` instead of the link.
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
+- [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
 - [Node and server-side rendering](node.md)

@@ -22,6 +22,8 @@ import { Reveal } from './reveal';
 export class UtilityPage {
   readonly utility = input.required<SuUtility>();
   readonly usage = input.required<readonly CodeTab[]>();
+  /** The first line above the features, saying what each live example runs on */
+  readonly featuresLead = input('Each feature on a small table of its own.');
   /** Features shown one by one under the demo, each beside its live example, alternating sides */
   protected readonly features = contentChildren(PageFeatureExample);
 

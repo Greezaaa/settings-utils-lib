@@ -51,6 +51,9 @@
       "@su-labs/skeleton": [
         "./dist/su-labs/skeleton"
       ],
+      "@su-labs/stepper": [
+        "./dist/su-labs/stepper"
+      ],
     }
   },
   "angularCompilerOptions": {
@@ -91,6 +94,9 @@
     },
     {
       "path": "./projects/su-labs/skeleton/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/stepper/tsconfig.lib.json"
     },
     {
       "path": "./web/tsconfig.app.json"

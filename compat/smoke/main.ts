@@ -6,6 +6,7 @@ import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent, SuNotificationService } from '@su-labs/notifications';
 import { ScrollSpyDirective, ScrollSpyService } from '@su-labs/scroll-spy';
 import { SuSkeletonComponent } from '@su-labs/skeleton';
+import { SuStepComponent, SuStepperComponent } from '@su-labs/stepper';
 import { SuTableColumns, SuTableComponent } from '@su-labs/table';
 import { SuThemeService } from '@su-labs/theme';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
@@ -24,6 +25,8 @@ interface Fruit {
     SuDialogComponent,
     SuNotificationComponent,
     SuSkeletonComponent,
+    SuStepComponent,
+    SuStepperComponent,
     SuSwitchComponent,
     SuTableComponent,
   ],
@@ -37,6 +40,10 @@ interface Fruit {
     <su-lib-checkbox [(checked)]="isOn">Checkbox</su-lib-checkbox>
     <su-lib-chips label="Colours" [options]="colours" />
     <su-lib-skeleton><p>Loading</p></su-lib-skeleton>
+    <su-lib-stepper tabs>
+      <su-lib-step label="One" [canNext]="isOn()"><p>First</p></su-lib-step>
+      <su-lib-step><p>Second</p></su-lib-step>
+    </su-lib-stepper>
     <button type="button" id="smoke-notify" (click)="notify()">Notify</button>
     <su-lib-notifications />
     <su-lib-dialog />
@@ -68,7 +75,10 @@ class Smoke {
   }
 
   protected notify(): void {
-    this.notifications.show({ type: 'success', message: 'Hello from the smoke app' });
+    this.notifications.show({
+      type: 'success',
+      message: 'Hello from the smoke app',
+    });
   }
 }
 

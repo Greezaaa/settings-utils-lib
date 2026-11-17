@@ -1,0 +1,41 @@
+{
+	"name": "@su-labs/stepper",
+	"version": "22.0.0",
+	"description": "Accessible Angular steppers: content split into steps shown one at a time, with numbered circles joined by a line, optional titles, rules for going forward and back, horizontal or vertical, and headers that can act as tabs, themeable with CSS variables.",
+	"keywords": [
+		"angular",
+		"stepper",
+		"wizard",
+		"steps",
+		"multi-step-form",
+		"tabs",
+		"accessible",
+		"signals",
+		"themeable",
+		"css-variables"
+	],
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/stepper"
+	},
+	"homepage": "https://su-labs.dev/stepper/",
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"peerDependencies": {
+		"@angular/common": "^22.0.0",
+		"@angular/core": "^22.0.0"
+	},
+	"dependencies": {
+		"@su-labs/core": "1.10.0",
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

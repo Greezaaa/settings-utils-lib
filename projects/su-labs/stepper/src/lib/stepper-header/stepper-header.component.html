@@ -1,0 +1,5 @@
+<span class="su-stepper-marker" aria-hidden="true">{{ step().number }}</span>
+@if (step().label; as label) {
+  <span class="su-stepper-label" aria-hidden="true">{{ label }}</span>
+}
+<span class="su-stepper-visually-hidden">{{ description() }}</span>

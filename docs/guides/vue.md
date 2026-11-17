@@ -404,6 +404,37 @@ defineProps<{ user?: User }>();
 </template>
 ```
 
+## Stepper
+
+Keep one controller per stepper and pass it the steps' rules again whenever they change, e.g. as a form is filled. Render the headers from `state` and call `next()`, `back()` or `goTo()`; each returns whether it moved:
+
+```vue
+<script setup lang="ts">
+import { ref, watchEffect } from 'vue';
+import { SuStepperController } from '@su-labs/core/stepper';
+import { useStore } from '@/composables/use-store';
+
+const stepper = new SuStepperController();
+const state = useStore(stepper.state);
+const name = ref('');
+
+watchEffect(() =>
+  stepper.setSteps([{ label: 'Account', canNext: name.value.length > 0 }, { label: 'Plan' }, { label: 'Confirm' }]),
+);
+</script>
+
+<template>
+  <ol aria-label="Sign up">
+    <li v-for="step in state.steps" :key="step.index" :aria-current="step.current ? 'step' : undefined">
+      <span aria-hidden="true">{{ step.number }}</span> {{ step.label }}
+    </li>
+  </ol>
+  <input v-if="state.current === 0" v-model="name" />
+  <button type="button" :disabled="!state.canBack" @click="stepper.back()">Back</button>
+  <button type="button" :disabled="!state.canNext" @click="stepper.next()">Next</button>
+</template>
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -413,4 +444,5 @@ defineProps<{ user?: User }>();
 - [Visit tracker API](../../projects/su-labs/core/README.md#visit-tracker)
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
+- [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
 - [Node and server-side rendering](node.md)

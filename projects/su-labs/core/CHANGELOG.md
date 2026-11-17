@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2026-11-17
+
+### Added
+- `@su-labs/core/stepper`: `SuStepperController` for content split into steps shown one at a time, with each step's rules for going forward (`canNext`) and back (`canBack`), disabled steps that moves skip, jumps that check every step they pass (`goTo`, `canGoTo`), a `linear` option, `next`, `back`, `select`, `setSteps`, `reset`, the visited and completed steps in `state`, and replaceable `SU_STEPPER_LABELS`
+
 ## [1.9.0] - 2026-11-15
 
 ### Added

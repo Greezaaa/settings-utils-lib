@@ -18,6 +18,7 @@ npm install @su-labs/visit-tracker
 npm install @su-labs/table
 npm install @su-labs/fields
 npm install @su-labs/skeleton
+npm install @su-labs/stepper
 ```
 
 Requires Angular 22 or later.
@@ -35,6 +36,7 @@ Requires Angular 22 or later.
 | `@su-labs/table` | Data tables with sorting, selection, inline and bulk editing, reordering, row actions, paging, search, pinned rows and columns, and a Columns menu | [README](../../projects/su-labs/table/README.md) |
 | `@su-labs/fields` | Code boxes, password strength meter, auto-grow textarea, switch, email field, checkbox and chips | [README](../../projects/su-labs/fields/README.md) |
 | `@su-labs/skeleton` | Skeleton loaders drawn with your own HTML and CSS, with one shimmer and screen reader support | [README](../../projects/su-labs/skeleton/README.md) |
+| `@su-labs/stepper` | Content in numbered steps shown one at a time, with rules for going forward and back, horizontal or vertical, and headers that can act as tabs | [README](../../projects/su-labs/stepper/README.md) |
 
 ## Theme quick start
 
@@ -119,7 +121,35 @@ export class UsersComponent {
 }
 ```
 
+## Stepper quick start
+
+```ts
+import { Component, signal } from '@angular/core';
+import { SuStepComponent, SuStepperComponent } from '@su-labs/stepper';
+
+@Component({
+  selector: 'app-sign-up',
+  imports: [SuStepComponent, SuStepperComponent],
+  template: `
+    <su-lib-stepper label="Sign up" [(current)]="step">
+      <su-lib-step label="Account" [canNext]="name().length > 0">
+        <input #nameInput [value]="name()" (input)="name.set(nameInput.value)" />
+      </su-lib-step>
+      <su-lib-step label="Plan">…</su-lib-step>
+      <su-lib-step label="Confirm" [canBack]="false">…</su-lib-step>
+    </su-lib-stepper>
+  `,
+})
+export class SignUp {
+  protected readonly step = signal(0);
+  protected readonly name = signal('');
+}
+```
+
+Add `orientation="vertical"` for the steps in a column, and `tabs` to let a click on a step header go to it.
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/theme/README.md)
 - [Table setup and full API](../../projects/su-labs/table/README.md)
+- [Stepper setup and full API](../../projects/su-labs/stepper/README.md)
