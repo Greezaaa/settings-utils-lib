@@ -37,7 +37,7 @@ if (await this.dialog.confirm({
 }`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuDialogController } from '@su-labs/core/dialog';
 
 const dialogs = new SuDialogController();

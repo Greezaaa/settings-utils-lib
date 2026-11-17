@@ -36,7 +36,7 @@ private readonly notifications = inject(SuNotificationService);
 this.notifications.show({ type: 'success', message: 'Saved!' });`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuNotificationController } from '@su-labs/core/notifications';
 
 const notifications = new SuNotificationController();

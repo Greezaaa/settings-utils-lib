@@ -32,7 +32,7 @@ const USAGE: readonly CodeTab[] = [
 </section>`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import '@su-labs/core/skeleton.css';
 import { setSuSkeletonBusy } from '@su-labs/core/skeleton';
 

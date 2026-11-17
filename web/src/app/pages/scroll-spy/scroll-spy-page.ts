@@ -40,7 +40,7 @@ const USAGE: readonly CodeTab[] = [
 protected readonly scrollSpy = inject(ScrollSpyService);`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuScrollSpyController } from '@su-labs/core/scroll-spy';
 
 const scrollSpy = new SuScrollSpyController();

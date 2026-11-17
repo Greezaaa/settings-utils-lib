@@ -21,7 +21,7 @@ provideAppInitializer(() => inject(SuVisitTrackerService).init({ milestoneVisits
 }`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuVisitTrackerController } from '@su-labs/core/visit-tracker';
 
 const visits = new SuVisitTrackerController();

@@ -42,7 +42,7 @@ protected readonly columns: SuTableColumns<Product> = [
 />`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { suNumberEditor, SuTableController, suTextEditor } from '@su-labs/core/table';
 
 const table = new SuTableController({

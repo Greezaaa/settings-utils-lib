@@ -1,4 +1,4 @@
-@if (tabs().length > 1) {
+@if (tabs().length > 1 || hasVersions()) {
   <div class="tabs" role="tablist">
     @for (tab of tabs(); track tab.label; let index = $index) {
       <button type="button" role="tab" class="tab" [attr.aria-selected]="index === selectedIndex()" (click)="select(index)">

@@ -26,7 +26,7 @@ const USAGE: readonly CodeTab[] = [
 </su-lib-stepper>`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuStepperController } from '@su-labs/core/stepper';
 
 const steps = () => [

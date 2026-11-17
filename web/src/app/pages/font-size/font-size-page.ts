@@ -19,7 +19,7 @@ provideAppInitializer(() => {
 <button (click)="fontSize.increase()" [disabled]="fontSize.isMax()">A+</button>`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuFontSizeController } from '@su-labs/core/font-size';
 
 const fontSize = new SuFontSizeController();

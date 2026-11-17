@@ -27,7 +27,7 @@ protected readonly theme = inject(SuThemeService);
 // (click)="theme.setTheme('dark')"`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuThemeController } from '@su-labs/core/theme';
 
 const theme = new SuThemeController();

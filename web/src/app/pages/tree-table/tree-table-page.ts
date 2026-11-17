@@ -37,7 +37,7 @@ protected readonly kindOf = (item: ShopItem) => (item.isCategory ? 'group' : 'da
 />`,
   },
   {
-    label: 'Any framework',
+    label: 'Other frameworks',
     code: `import { SuTreeTableController } from '@su-labs/core/tree-table';
 
 const tree = new SuTreeTableController({
