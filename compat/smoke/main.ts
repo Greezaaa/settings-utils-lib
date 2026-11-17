@@ -9,11 +9,13 @@ import { SuSkeletonComponent } from '@su-labs/skeleton';
 import { SuStepComponent, SuStepperComponent } from '@su-labs/stepper';
 import { SuTableColumns, SuTableComponent } from '@su-labs/table';
 import { SuThemeService } from '@su-labs/theme';
+import { SuTreeTableColumns, SuTreeTableComponent } from '@su-labs/tree-table';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 
 interface Fruit {
   readonly name: string;
   readonly colour: string;
+  readonly kinds?: readonly Fruit[];
 }
 
 @Component({
@@ -29,12 +31,20 @@ interface Fruit {
     SuStepperComponent,
     SuSwitchComponent,
     SuTableComponent,
+    SuTreeTableComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h1 id="smoke-version">Angular {{ version }}</h1>
     <section appScrollSpy="fruits">
       <su-lib-table caption="Fruits" [columns]="columns" [rows]="rows" />
+      <su-lib-tree-table
+        caption="Fruit kinds"
+        numbered
+        [columns]="treeColumns"
+        [rows]="rows"
+        [children]="kindsOf"
+        [expanded]="true" />
     </section>
     <su-lib-switch [(checked)]="isOn">Switch</su-lib-switch>
     <su-lib-checkbox [(checked)]="isOn">Checkbox</su-lib-checkbox>
@@ -55,8 +65,24 @@ class Smoke {
     { key: 'name', header: 'Name' },
     { key: 'colour', header: 'Colour' },
   ];
+  protected readonly treeColumns: SuTreeTableColumns<Fruit> = [
+    { key: 'name', header: 'Name' },
+    {
+      key: 'colour',
+      header: 'Colour',
+      span: (_colour, fruit) => (fruit.name === 'Gala' ? { rows: 2 } : null),
+    },
+  ];
+  protected readonly kindsOf = (fruit: Fruit) => fruit.kinds;
   protected readonly rows: readonly Fruit[] = [
-    { name: 'Apple', colour: 'Red' },
+    {
+      name: 'Apple',
+      colour: 'Red',
+      kinds: [
+        { name: 'Gala', colour: 'Red' },
+        { name: 'Fuji', colour: 'Red' },
+      ],
+    },
     { name: 'Lemon', colour: 'Yellow' },
   ];
   protected readonly colours = [

@@ -59,6 +59,13 @@ export const UTILITIES: readonly SuUtility[] = [
     summary: 'Data tables from your API’s JSON: sorting, inline and bulk editing, reordering and row actions.',
   },
   {
+    slug: 'tree-table',
+    name: 'Tree table',
+    packageName: '@su-labs/tree-table',
+    coreEntry: '@su-labs/core/tree-table',
+    summary: 'Tables of nested rows that open and close, with group rows, numbering and merged cells.',
+  },
+  {
     slug: 'skeleton',
     name: 'Skeleton',
     packageName: '@su-labs/skeleton',

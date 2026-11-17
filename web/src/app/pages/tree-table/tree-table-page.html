@@ -1,0 +1,186 @@
+<app-utility-page
+  [utility]="utility"
+  [usage]="usage"
+  featuresLead="Each feature on a small tree table of its own.">
+  <div class="card tree-table-demo">
+    <div class="tree-table-demo-controls">
+      <label class="checkbox">
+        <input type="checkbox" [checked]="groupRows()" (change)="setFlag(groupRows.set, $event)" />
+        Categories as group rows
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="numbered()" (change)="setFlag(numbered.set, $event)" />
+        Numbers
+      </label>
+      <label class="field">
+        <span>Numbering</span>
+        <select [value]="numbering()" [disabled]="!numbered()" (change)="chooseNumbering($event)">
+          @for (item of numberings; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="openAll()" (change)="setFlag(openAll.set, $event)" />
+        Open every row
+      </label>
+    </div>
+
+    @defer (on viewport) {
+      <su-lib-tree-table
+        caption="Garden shop catalogue"
+        columnControls
+        searchable
+        rowPinning
+        maxHeight="30rem"
+        [numbered]="numbered()"
+        [numbering]="numbering()"
+        [unnumbered]="unnumberedCategory()"
+        [columns]="catalogueColumns"
+        [rows]="catalogue"
+        [rowId]="shopItemId"
+        [children]="shopChildren"
+        [rowKind]="catalogueKind()"
+        [expanded]="openAll() || ['vegetables']"
+        [pageSize]="3"
+        [pageSizes]="[2, 3, 'all']"
+        (toggled)="onToggled($event)"
+        (sortChange)="onSort($event)"
+      />
+    } @placeholder {
+      <div class="tree-table-placeholder"></div>
+    }
+
+    <dl class="state-list">
+      <div>
+        <dt>Last opened or closed</dt>
+        <dd>{{ lastToggle() }}</dd>
+      </div>
+      <div>
+        <dt>Sorted by</dt>
+        <dd>{{ sort() }}</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="muted">
+    Categories can be group rows across the table, or parents with their own cells.
+    <br />
+    Try it: open a category, sort by price, search for “mint”, or move between rows with the arrow keys.
+  </p>
+
+  <ng-template [appPageFeature]="features.dataParents">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Teams"
+      [columns]="teamColumns"
+      [rows]="teams"
+      [rowId]="teamId"
+      [children]="teamChildren"
+      [expanded]="['engineering']"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.groupRows">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Catalogue with group rows"
+      [columns]="catalogueColumns"
+      [rows]="catalogue"
+      [rowId]="shopItemId"
+      [children]="shopChildren"
+      [rowKind]="categoryKind"
+      [expanded]="['herbs']"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.nested">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Trip plan, nested numbers"
+      numbered
+      [expanded]="true"
+      [columns]="planColumns"
+      [rows]="plan"
+      [rowId]="planStepId"
+      [children]="planChildren"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.restart">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Trip plan, numbers that restart"
+      numbered
+      numbering="restart"
+      [expanded]="true"
+      [columns]="planColumns"
+      [rows]="plan"
+      [rowId]="planStepId"
+      [children]="planChildren"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.continue">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Trip plan, one running count"
+      numbered
+      numbering="continue"
+      [expanded]="true"
+      [columns]="planColumns"
+      [rows]="plan"
+      [rowId]="planStepId"
+      [children]="planChildren"
+      [rowKind]="stageKind"
+      [unnumbered]="isStage"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.merged">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Order with merged cells"
+      [expanded]="true"
+      [columns]="orderColumns"
+      [rows]="order"
+      [rowId]="orderLineId"
+      [children]="orderChildren"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.search">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Catalogue, searchable"
+      searchable
+      [columns]="catalogueColumns"
+      [rows]="catalogue"
+      [rowId]="shopItemId"
+      [children]="shopChildren"
+      [rowKind]="categoryKind"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.sorting">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Teams, sortable"
+      [expanded]="true"
+      [columns]="teamColumns"
+      [rows]="teams"
+      [rowId]="teamId"
+      [children]="teamChildren"
+    />
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.keyboard">
+    <su-lib-tree-table
+      class="mini-tree-table"
+      caption="Teams, for the keyboard"
+      [columns]="teamColumns"
+      [rows]="teams"
+      [rowId]="teamId"
+      [children]="teamChildren"
+    />
+  </ng-template>
+</app-utility-page>

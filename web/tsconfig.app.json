@@ -17,6 +17,7 @@
       "@su-labs/stepper": ["../projects/su-labs/stepper/src/public-api.ts"],
       "@su-labs/table": ["../projects/su-labs/table/src/public-api.ts"],
       "@su-labs/theme": ["../projects/su-labs/theme/src/public-api.ts"],
+      "@su-labs/tree-table": ["../projects/su-labs/tree-table/src/public-api.ts"],
       "@su-labs/visit-tracker": ["../projects/su-labs/visit-tracker/src/public-api.ts"]
     }
   },

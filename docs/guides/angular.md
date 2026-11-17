@@ -19,6 +19,7 @@ npm install @su-labs/table
 npm install @su-labs/fields
 npm install @su-labs/skeleton
 npm install @su-labs/stepper
+npm install @su-labs/tree-table
 ```
 
 Requires Angular 22 or later.
@@ -37,6 +38,7 @@ Requires Angular 22 or later.
 | `@su-labs/fields` | Code boxes, password strength meter, auto-grow textarea, switch, email field, checkbox and chips | [README](../../projects/su-labs/fields/README.md) |
 | `@su-labs/skeleton` | Skeleton loaders drawn with your own HTML and CSS, with one shimmer and screen reader support | [README](../../projects/su-labs/skeleton/README.md) |
 | `@su-labs/stepper` | Content in numbered steps shown one at a time, with rules for going forward and back, horizontal or vertical, and headers that can act as tabs | [README](../../projects/su-labs/stepper/README.md) |
+| `@su-labs/tree-table` | Tree tables: rows with child rows, data or group parents, numbering, merged cells, and the table's sorting, search, paging and pinned rows and columns | [README](../../projects/su-labs/tree-table/README.md) |
 
 ## Theme quick start
 
@@ -148,8 +150,44 @@ export class SignUp {
 
 Add `orientation="vertical"` for the steps in a column, and `tabs` to let a click on a step header go to it.
 
+## Tree table quick start
+
+```ts
+import { Component } from '@angular/core';
+import { SuTreeTableColumns, SuTreeTableComponent } from '@su-labs/tree-table';
+
+@Component({
+  selector: 'app-price-list',
+  imports: [SuTreeTableComponent],
+  template: `
+    <su-lib-tree-table
+      caption="Price list"
+      numbered
+      [columns]="columns"
+      [rows]="items"
+      [rowId]="itemId"
+      [children]="childrenOf"
+      [rowKind]="kindOf"
+    />
+  `,
+})
+export class PriceList {
+  protected readonly items: readonly Item[] = [];
+  protected readonly columns: SuTreeTableColumns<Item> = [
+    { key: 'name', header: 'Item', sortable: true },
+    { key: 'price', header: 'Price', sortable: true },
+  ];
+  protected readonly itemId = (item: Item) => item.id;
+  protected readonly childrenOf = (item: Item) => item.children;
+  protected readonly kindOf = (item: Item) => (item.isGroup ? 'group' : 'data');
+}
+```
+
+Add `numbering="restart"` or `"continue"` to count children another way, and a column's `span` to merge cells.
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/theme/README.md)
 - [Table setup and full API](../../projects/su-labs/table/README.md)
 - [Stepper setup and full API](../../projects/su-labs/stepper/README.md)
+- [Tree table setup and full API](../../projects/su-labs/tree-table/README.md)

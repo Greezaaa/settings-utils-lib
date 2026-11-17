@@ -1,22 +1,9 @@
 import { createSuStore, SuReadableStore } from '@su-labs/core';
+import { SuTableColumnLayout, SuTableLayoutChange, suSearchTerms } from './table.column-layout';
+import { SuResolvedTableColumn, suResolveTableColumn } from './table.columns';
 import { SU_TABLE_LABELS } from './table.labels';
-import { SuTableAction, SuTableActionView, SuTableColumn, SuTableColumns, SuTableColumnView, SuTableDraft, SuTableEditorView, SuTableInputValue, SuTableLabels, SuTableMoveKeyResult, SuTableOptions, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSaveResult, SuTableSort, SuTableState } from './table.types';
-
-/** A column with its field mapping turned into functions of the whole row */
-interface ResolvedColumn<TRow extends object> {
-  readonly key: keyof TRow;
-  readonly view: Omit<SuTableColumnView<TRow>, 'sort'>;
-  readonly compare: ((a: TRow, b: TRow) => number) | null;
-  readonly searchable: boolean;
-  readonly hidden: boolean;
-  readonly pinnable: boolean;
-  text(row: TRow): string;
-  toInput(row: TRow): SuTableInputValue;
-  apply(
-    row: TRow,
-    input: SuTableInputValue
-  ): { readonly row: TRow; readonly error: string | null };
-}
+import { suNormalizePageSize, SuTablePageBounds, suPageBounds } from './table.paging';
+import { SuTableAction, SuTableActionView, SuTableColumns, SuTableDraft, SuTableInputValue, SuTableLabels, SuTableMoveKeyResult, SuTableOptions, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSaveResult, SuTableSort, SuTableState } from './table.types';
 
 /** The rows being edited and what has been typed so far */
 interface DraftState<TRow extends object> {
@@ -33,98 +20,6 @@ interface GrabState<TRow extends object> {
   readonly original: readonly TRow[];
 }
 
-const isEmpty = (value: unknown): boolean =>
-  value === null || value === undefined || value === '';
-
-/** Compares two field values: numbers, booleans and dates by value, anything else as text; empty values last */
-export function suCompareValues(a: unknown, b: unknown): number {
-  if (isEmpty(a) || isEmpty(b)) {
-    return Number(isEmpty(a)) - Number(isEmpty(b));
-  }
-  if (typeof a === 'number' && typeof b === 'number') {
-    return a - b;
-  }
-  if (typeof a === 'boolean' && typeof b === 'boolean') {
-    return Number(a) - Number(b);
-  }
-  if (a instanceof Date && b instanceof Date) {
-    return a.getTime() - b.getTime();
-  }
-  return String(a).localeCompare(String(b), undefined, {
-    numeric: true,
-    sensitivity: 'base',
-  });
-}
-
-function defaultText(value: unknown, labels: SuTableLabels): string {
-  if (value === null || value === undefined) {
-    return '';
-  }
-  if (typeof value === 'boolean') {
-    return value ? labels.yes : labels.no;
-  }
-  if (value instanceof Date) {
-    return value.toLocaleDateString();
-  }
-  return typeof value === 'object' ? JSON.stringify(value) : String(value);
-}
-
-function resolveColumn<TRow extends object, TKey extends keyof TRow>(
-  column: SuTableColumn<TRow, TKey>,
-  labels: SuTableLabels
-): ResolvedColumn<TRow> {
-  const { key, edit, sortable = false } = column;
-  const compareValues =
-    typeof sortable === 'function' ? sortable : suCompareValues;
-  const editor: SuTableEditorView | null = edit
-    ? {
-        input: edit.input,
-        options: edit.options ?? [],
-        attributes: edit.attributes ?? {},
-      }
-    : null;
-  return {
-    key,
-    view: {
-      key,
-      header: column.header,
-      align: column.align ?? 'start',
-      pinned: column.pinned ?? null,
-      pinnable: column.pinnable ?? column.pinned !== undefined,
-      sortable: sortable !== false,
-      editor,
-    },
-    searchable: column.searchable ?? true,
-    hidden: column.hidden ?? false,
-    pinnable: column.pinnable ?? column.pinned !== undefined,
-    compare:
-      sortable === false ? null : (a, b) => compareValues(a[key], b[key]),
-    text: row =>
-      column.format
-        ? column.format(row[key], row)
-        : defaultText(row[key], labels),
-    toInput: row => (edit ? edit.toInput(row[key]) : ''),
-    apply: (row, input) => {
-      if (!edit) {
-        return { row, error: null };
-      }
-      const value = edit.parse(input);
-      const error =
-        edit.validate?.(value) ?? column.validate?.(value, row) ?? null;
-      return { row: { ...row, [key]: value }, error };
-    },
-  };
-}
-
-/** Lowercase text without accents, for searching */
-function normalizeText(text: string): string {
-  return text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase();
-}
-
-function normalizePageSize(pageSize: SuTablePageSize): SuTablePageSize {
-  return pageSize === 'all' ? pageSize : Math.max(1, Math.floor(pageSize));
-}
-
 function moveItem<T>(items: readonly T[], from: number, to: number): T[] {
   const next = [...items];
   const [item] = next.splice(from, 1);
@@ -139,7 +34,7 @@ function moveItem<T>(items: readonly T[], from: number, to: number): T[] {
  * @typeParam TRow The row as the API sends it
  */
 export class SuTableController<TRow extends object> {
-  private columns: readonly ResolvedColumn<TRow>[] = [];
+  private readonly layout = new SuTableColumnLayout<TRow>();
   private actions: readonly SuTableAction<TRow>[] = [];
   private labels: SuTableLabels = SU_TABLE_LABELS;
   private rowIdOf: ((row: TRow) => SuTableRowId) | null = null;
@@ -152,9 +47,6 @@ export class SuTableController<TRow extends object> {
   private grabbed: GrabState<TRow> | null = null;
   private announcement = '';
   private columnOptions: SuTableColumns<TRow> = [];
-  private readonly pins = new Map<keyof TRow, SuTablePin | null>();
-  private readonly visibility = new Map<keyof TRow, boolean>();
-  private readonly pinnability = new Map<keyof TRow, boolean>();
   private pinnedIds: readonly SuTableRowId[] = [];
   private query = '';
   private terms: readonly string[] = [];
@@ -179,15 +71,18 @@ export class SuTableController<TRow extends object> {
   configure(options: SuTableOptions<TRow>): void {
     this.labels = { ...this.labels, ...options.labels };
     this.columnOptions = options.columns ?? this.columnOptions;
-    this.columns = this.columnOptions.map(column =>
-      resolveColumn(column, this.labels)
+    this.layout.configure(
+      this.columnOptions.map(column =>
+        suResolveTableColumn(column, this.labels)
+      ),
+      this.labels
     );
     this.actions = options.actions ?? this.actions;
     this.rowIdOf = options.rowId ?? this.rowIdOf;
     this.pageSizes = options.pageSizes ?? this.pageSizes;
     this.pinnedIds = options.pinnedRows ?? this.pinnedIds;
     if (options.pageSize !== undefined) {
-      this.pageSize = normalizePageSize(options.pageSize);
+      this.pageSize = suNormalizePageSize(options.pageSize);
       this.page = 0;
     }
     this.publish();
@@ -232,7 +127,7 @@ export class SuTableController<TRow extends object> {
 
   /** Sorts by a column: ascending, then descending, then back to the rows' own order */
   sortBy(key: keyof TRow): void {
-    const column = this.columns.find(item => item.key === key);
+    const column = this.layout.find(key);
     if (!column?.compare) {
       return;
     }
@@ -301,7 +196,7 @@ export class SuTableController<TRow extends object> {
   /** Changes how many rows a page shows, keeping the first row on screen in view */
   setPageSize(pageSize: SuTablePageSize): void {
     const { start } = this.pageBounds();
-    this.pageSize = normalizePageSize(pageSize);
+    this.pageSize = suNormalizePageSize(pageSize);
     this.page = this.pageSize === 'all' ? 0 : Math.floor(start / this.pageSize);
     const { page, count } = this.pageBounds();
     this.announcement = this.labels.page(page + 1, count);
@@ -412,7 +307,7 @@ export class SuTableController<TRow extends object> {
     }
     this.cancelMove();
     this.query = query;
-    this.terms = normalizeText(query).split(/\s+/).filter(Boolean);
+    this.terms = suSearchTerms(query);
     this.page = 0;
     this.announcement =
       this.terms.length > 0
@@ -478,22 +373,7 @@ export class SuTableController<TRow extends object> {
    * hidden columns are left out of the search.
    */
   setColumnVisible(key: keyof TRow, visible: boolean): void {
-    const column = this.columns.find(item => item.key === key);
-    if (!column || this.isVisible(column) === visible) {
-      return;
-    }
-    if (
-      !visible &&
-      this.columns.filter(item => this.isVisible(item)).length === 1
-    ) {
-      return;
-    }
-    this.visibility.set(key, visible);
-    const { header } = column.view;
-    this.announcement = visible
-      ? this.labels.columnShown(header)
-      : this.labels.columnHidden(header);
-    this.publish();
+    this.applyLayout(this.layout.setVisible(key, visible));
   }
 
   /**
@@ -501,55 +381,23 @@ export class SuTableController<TRow extends object> {
    * column, so nothing stays pinned without a way back.
    */
   setColumnPinnable(key: keyof TRow, pinnable: boolean): void {
-    const column = this.columns.find(item => item.key === key);
-    if (!column || this.isPinnable(column) === pinnable) {
-      return;
-    }
-    this.pinnability.set(key, pinnable);
-    if (!pinnable && this.pinOf(column)) {
-      this.pins.set(key, null);
-      this.announcement = this.labels.columnUnpinned(column.view.header);
-    }
-    this.publish();
+    this.applyLayout(this.layout.setPinnable(key, pinnable));
   }
 
   /** Shows every column, or hides all but the first one on view */
   setColumnsVisible(visible: boolean): void {
-    const shown = this.columns.filter(column => this.isVisible(column));
-    const keep = this.displayColumns()[0];
-    this.columns.forEach(column =>
-      this.visibility.set(column.key, visible || column === keep)
-    );
-    const changed = visible
-      ? shown.length < this.columns.length
-      : shown.length > 1;
-    if (!changed) {
-      return;
-    }
-    this.announcement = visible
-      ? this.labels.allColumnsShown
-      : this.labels.columnsHidden;
-    this.publish();
+    this.applyLayout(this.layout.setAllVisible(visible));
   }
 
   /** Pins a column to an edge, keeping it in view while the others scroll, or unpins it with null */
   pinColumn(key: keyof TRow, pin: SuTablePin | null): void {
-    const column = this.columns.find(item => item.key === key);
-    if (!column || this.pinOf(column) === pin) {
-      return;
-    }
-    this.pins.set(key, pin);
-    const { header } = column.view;
-    this.announcement = pin
-      ? this.labels.columnPinned(header, pin)
-      : this.labels.columnUnpinned(header);
-    this.publish();
+    this.applyLayout(this.layout.pin(key, pin));
   }
 
   /** Starts editing rows: one row edits every field, many rows apply only the fields that change to all of them */
   startEdit(ids: readonly SuTableRowId[] = [...this.selected]): void {
     const rows = this.rowsOf(ids);
-    const editable = this.columns.filter(column => column.view.editor);
+    const editable = this.layout.all.filter(column => column.view.editor);
     if (rows.length === 0 || editable.length === 0) {
       return;
     }
@@ -598,7 +446,7 @@ export class SuTableController<TRow extends object> {
       return { ok: true, rows: [] };
     }
     draft.errors.clear();
-    const changed = this.columns.filter(column =>
+    const changed = this.layout.all.filter(column =>
       draft.changed.has(column.key)
     );
     const edits = new Map<TRow, TRow>();
@@ -649,9 +497,7 @@ export class SuTableController<TRow extends object> {
 
   private displayed(): readonly TRow[] {
     const sort = this.sort;
-    const compare = this.columns.find(
-      column => column.key === sort?.key
-    )?.compare;
+    const compare = sort ? this.layout.find(sort.key)?.compare : undefined;
     if (!sort || !compare) {
       return this.order;
     }
@@ -697,7 +543,7 @@ export class SuTableController<TRow extends object> {
   }
 
   private rowLabel(row: TRow, id: SuTableRowId): string {
-    return this.columns[0]?.text(row) || String(id);
+    return this.layout.all[0]?.text(row) || String(id);
   }
 
   /** The unpinned rows that match the search */
@@ -709,26 +555,13 @@ export class SuTableController<TRow extends object> {
   }
 
   private matches(row: TRow): boolean {
-    const text = normalizeText(
-      this.columns
-        .filter(column => column.searchable && this.isVisible(column))
-        .map(column => column.text(row))
-        .join(' ')
-    );
-    return this.terms.every(term => text.includes(term));
+    return this.layout.matches(row, this.terms);
   }
 
-  private pageBounds(total = this.listed(this.order).length): {
-    readonly page: number;
-    readonly count: number;
-    readonly start: number;
-    readonly end: number;
-  } {
-    const size = this.pageSize === 'all' ? Math.max(total, 1) : this.pageSize;
-    const count = Math.max(1, Math.ceil(total / size));
-    const page = Math.min(this.page, count - 1);
-    const start = page * size;
-    return { page, count, start, end: Math.min(start + size, total) };
+  private pageBounds(
+    total = this.listed(this.order).length
+  ): SuTablePageBounds {
+    return suPageBounds(total, this.pageSize, this.page);
   }
 
   private pageRows(): readonly TRow[] {
@@ -737,29 +570,14 @@ export class SuTableController<TRow extends object> {
     return rows.slice(start, end);
   }
 
-  private pinOf(column: ResolvedColumn<TRow>): SuTablePin | null {
-    return this.pins.has(column.key)
-      ? (this.pins.get(column.key) ?? null)
-      : column.view.pinned;
-  }
-
-  /** The columns in display order: pinned to the start, the rest, then pinned to the end */
-  private isPinnable(column: ResolvedColumn<TRow>): boolean {
-    return this.pinnability.get(column.key) ?? column.pinnable;
-  }
-
-  private isVisible(column: ResolvedColumn<TRow>): boolean {
-    return this.visibility.get(column.key) ?? !column.hidden;
-  }
-
-  private displayColumns(): readonly ResolvedColumn<TRow>[] {
-    const rank = (column: ResolvedColumn<TRow>): number => {
-      const pin = this.pinOf(column);
-      return pin === 'start' ? 0 : pin === 'end' ? 2 : 1;
-    };
-    return this.columns
-      .filter(column => this.isVisible(column))
-      .sort((a, b) => rank(a) - rank(b));
+  private applyLayout(change: SuTableLayoutChange): void {
+    if (!change) {
+      return;
+    }
+    if (change.announcement !== null) {
+      this.announcement = change.announcement;
+    }
+    this.publish();
   }
 
   private publish(): void {
@@ -767,7 +585,7 @@ export class SuTableController<TRow extends object> {
   }
 
   private build(): SuTableState<TRow> {
-    const columns = this.displayColumns();
+    const columns = this.layout.displayed();
     const all = this.displayed();
     const unpinned = this.listed(all);
     const { page, count, start, end } = this.pageBounds(unpinned.length);
@@ -778,23 +596,11 @@ export class SuTableController<TRow extends object> {
     const onScreen = [...pinnedRows, ...rows];
     const selectedCount = onScreen.filter(row => row.selected).length;
     return {
-      columns: columns.map(column => ({
-        ...column.view,
-        pinned: this.pinOf(column),
-        pinnable: this.isPinnable(column),
-        sort: this.sort?.key === column.key ? this.sort.direction : 'none',
-      })),
+      columns: this.layout.views(this.sort),
       rows,
       pinnedRows,
-      allColumns: this.columns.map(column => ({
-        key: column.key,
-        header: column.view.header,
-        visible: this.isVisible(column),
-        pinned: this.pinOf(column),
-        pinnable: this.isPinnable(column),
-      })),
-      rowHeaderKey:
-        this.columns.find(column => this.isVisible(column))?.key ?? null,
+      allColumns: this.layout.states(),
+      rowHeaderKey: this.layout.rowHeaderKey(),
       sort: this.sort,
       selectedIds: all
         .map(row => this.idOf(row))
@@ -833,7 +639,7 @@ export class SuTableController<TRow extends object> {
 
   private rowView(
     row: TRow,
-    columns: readonly ResolvedColumn<TRow>[]
+    columns: readonly SuResolvedTableColumn<TRow>[]
   ): SuTableRowView<TRow> {
     const id = this.idOf(row);
     const cells = columns.map(column => ({
@@ -864,7 +670,7 @@ export class SuTableController<TRow extends object> {
     if (!draft) {
       return null;
     }
-    const fields = this.displayColumns().flatMap(({ key, view }) =>
+    const fields = this.layout.displayed().flatMap(({ key, view }) =>
       view.editor
         ? [
             {

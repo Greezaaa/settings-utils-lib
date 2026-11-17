@@ -1,7 +1,7 @@
 {
 	"name": "@su-labs/core",
-	"version": "1.10.0",
-	"description": "Framework-agnostic browser utilities (theme, font size, notifications, dialogs, data tables, skeleton loaders, steppers, scroll spy and visit tracker) with a tiny reactive store. Works with vanilla JS, React, Vue, Svelte, Angular or any other framework.",
+	"version": "1.11.0",
+	"description": "Framework-agnostic browser utilities (theme, font size, notifications, dialogs, data tables, tree tables, skeleton loaders, steppers, scroll spy and visit tracker) with a tiny reactive store. Works with vanilla JS, React, Vue, Svelte, Angular or any other framework.",
 	"keywords": [
 		"framework-agnostic",
 		"vanilla-js",
@@ -21,6 +21,8 @@
 		"confirm",
 		"table",
 		"data-table",
+		"tree-table",
+		"treegrid",
 		"skeleton",
 		"skeleton-loader",
 		"stepper",

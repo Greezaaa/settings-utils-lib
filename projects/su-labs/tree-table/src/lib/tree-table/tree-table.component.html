@@ -1,0 +1,181 @@
+@let current = state();
+@let t = text();
+@let pins = placements();
+@let firstColumnSlot = columnSlot();
+@let pinnedCount = current.pinnedRows.length;
+@if (searchable() || columnControls()) {
+  <su-lib-table-toolbar
+    [labels]="t"
+    [controlId]="tableId"
+    [searchable]="searchable()"
+    [query]="current.query"
+    [columnControls]="columnControls()"
+    [columns]="current.allColumns"
+    (queryChange)="search($event)"
+    (pinnableChange)="setColumnPinnable($event)"
+    (visibilityChange)="setColumnVisible($event)"
+    (allVisibilityChange)="setColumnsVisible($event)"
+  />
+}
+
+<div
+  class="su-table-scroll"
+  [class.is-scrolled-start]="scrolledFromStart()"
+  [class.has-more-end]="moreAtEnd()"
+  [class.is-scrolled-top]="scrolledFromTop()"
+  [class.has-pinned-rows]="current.pinnedRows.length > 0"
+  [style.max-height]="maxHeight()"
+  (scroll)="onScroll($event)"
+>
+  <table class="su-table-grid" role="treegrid">
+    <caption [class.su-table-visually-hidden]="!showCaption()">{{ caption() }}</caption>
+    <thead>
+      <tr>
+        @if (numbered()) {
+          <th scope="col" class="su-tree-table-number" [suTablePin]="pins[0]">{{ t.number }}</th>
+        }
+        @for (column of current.columns; track column.key; let columnIndex = $index) {
+          <th
+            scope="col"
+            class="su-table-align-{{ column.align }}"
+            [class.is-sorted]="column.sort !== 'none'"
+            [suTablePin]="pins[firstColumnSlot + columnIndex]"
+            [attr.aria-sort]="column.sort === 'none' ? null : column.sort"
+          >
+            @if (column.sortable) {
+              <button type="button" class="su-table-sort" (click)="sortBy(column.key)">
+                {{ column.header }}
+                <span class="su-table-sort-icon is-{{ column.sort }}" aria-hidden="true"></span>
+              </button>
+            } @else {
+              {{ column.header }}
+            }
+            @if (column.pinnable) {
+              <button
+                type="button"
+                class="su-table-header-pin"
+                [attr.aria-label]="t.pinColumn(column.header)"
+                [attr.aria-pressed]="column.pinned !== null"
+                (click)="toggleColumnPin(column.key, column.pinned)"
+              >
+                <svg suTreeTablePinIcon width="12" height="12"></svg>
+              </button>
+            } @else if (pins[firstColumnSlot + columnIndex]) {
+              <svg suTreeTablePinIcon class="su-table-pinned-icon" width="11" height="11"></svg>
+            }
+          </th>
+        }
+        @if (rowPinning()) {
+          <th scope="col" class="su-table-actions-cell" [suTablePin]="pins[pins.length - 1]">{{ t.actions }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of bodyRows(); track row.id; let rowIndex = $index) {
+        <tr
+          [attr.data-su-tree-row]="row.id"
+          [attr.tabindex]="row.id === tabRowId() ? 0 : -1"
+          [attr.aria-level]="row.level"
+          [attr.aria-posinset]="row.position"
+          [attr.aria-setsize]="row.siblings"
+          [attr.aria-expanded]="row.expanded"
+          [class]="rowClassOf(row)"
+          [class.su-tree-table-row]="true"
+          [class.is-group]="row.kind === 'group'"
+          [class.is-pinned-row]="rowIndex < pinnedCount"
+          [class.is-last-pinned-row]="rowIndex === pinnedCount - 1"
+          [style.--su-table-row-top]="rowIndex < pinnedCount ? pinnedRowTops()[rowIndex] + 'px' : null"
+          [style.--su-tree-table-level]="row.level - 1"
+          (keydown)="onRowKey($event, row)"
+          (focus)="onRowFocus(row.id)"
+        >
+          @if (numbered()) {
+            <td class="su-tree-table-number" [suTablePin]="pins[0]">{{ row.number }}</td>
+          }
+          @if (row.kind === 'group') {
+            <td
+              role="rowheader"
+              class="su-tree-table-group-cell su-tree-table-tree-cell"
+              [attr.colspan]="current.columns.length"
+            >
+              <span class="su-tree-table-group-label">
+                <su-lib-tree-table-toggle
+                  [expanded]="row.expanded"
+                  [label]="row.expanded ? t.collapseRow(row.label) : t.expandRow(row.label)"
+                  (toggle)="toggle(row)"
+                />
+                {{ row.label }}
+              </span>
+            </td>
+          } @else {
+            @for (cell of row.cells; track cell.key) {
+              @let column = current.columns[cell.columnIndex];
+              <td
+                class="su-table-align-{{ column.align }}"
+                [attr.role]="cell.key === current.rowHeaderKey ? 'rowheader' : 'gridcell'"
+                [attr.rowspan]="cell.rowSpan > 1 ? cell.rowSpan : null"
+                [attr.colspan]="cell.colSpan > 1 ? cell.colSpan : null"
+                [class.su-table-row-header]="cell.key === current.rowHeaderKey"
+                [class.su-tree-table-tree-cell]="cell.columnIndex === 0"
+                [class.is-merged]="cell.rowSpan > 1 || cell.colSpan > 1"
+                [class.is-sorted]="column.sort !== 'none'"
+                [suTablePin]="pins[firstColumnSlot + cell.columnIndex]"
+              >
+                @if (cell.columnIndex === 0) {
+                  <su-lib-tree-table-toggle
+                    [expanded]="row.expanded"
+                    [label]="row.expanded ? t.collapseRow(row.label) : t.expandRow(row.label)"
+                    (toggle)="toggle(row)"
+                  />
+                }
+                @if (cellTemplate(cell.key); as template) {
+                  <ng-container *ngTemplateOutlet="template; context: { $implicit: row.data, text: cell.text }" />
+                } @else {
+                  {{ cell.text }}
+                }
+              </td>
+            }
+          }
+          @if (rowPinning()) {
+            <td class="su-table-actions-cell" [suTablePin]="pins[pins.length - 1]">
+              @if (row.level === 1) {
+                <div class="su-table-actions">
+                  <button
+                    type="button"
+                    class="su-table-button su-table-pin-button"
+                    [attr.aria-pressed]="row.pinned"
+                    [attr.aria-label]="t.pinRow + ', ' + row.label"
+                    (click)="pinRow(row.id)"
+                  >
+                    <svg suTreeTablePinIcon width="12" height="12"></svg>
+                    {{ t.pinRow }}
+                  </button>
+                </div>
+              }
+            </td>
+          }
+        </tr>
+      }
+      @if (current.rows.length === 0) {
+        <tr>
+          <td class="su-table-empty" [attr.colspan]="columnCount()">
+            {{ current.searching ? t.noMatches(current.query) : t.empty }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (current.pagination.pageSizes.length > 0 || current.pagination.pageSize !== 'all') {
+  <su-lib-table-paginator
+    [pagination]="current.pagination"
+    [labels]="t"
+    [controlId]="tableId + '-page-size'"
+    (pageChange)="setPage($event)"
+    (pageSizeChange)="setPageSize($event)"
+  />
+}
+
+<div class="su-table-visually-hidden" role="status">{{ current.announcement }}</div>
+

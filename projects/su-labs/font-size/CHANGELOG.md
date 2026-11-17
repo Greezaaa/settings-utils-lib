@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [22.2.3] - 2026-11-17
+
+### Changed
+- Uses `@su-labs/core` 1.11.0 (was 1.10.0), the same version as every other `@su-labs` package, so apps using several of them install core once
+
 ## [22.2.2] - 2026-11-17
 
 ### Changed

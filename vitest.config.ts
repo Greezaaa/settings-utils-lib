@@ -12,6 +12,13 @@ export default defineConfig({
         ),
       },
       {
+        find: /^@su-labs\/table$/,
+        replacement: resolve(
+          __dirname,
+          'dist/su-labs/table/fesm2022/su-labs-table.mjs'
+        ),
+      },
+      {
         find: /^@su-labs\/core$/,
         replacement: resolve(
           __dirname,

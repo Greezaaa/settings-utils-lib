@@ -435,6 +435,51 @@ watchEffect(() =>
 </template>
 ```
 
+## Tree table
+
+Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
+
+```vue
+<script setup lang="ts">
+import { SuTreeTableController } from '@su-labs/core/tree-table';
+import { useStore } from '@/composables/use-store';
+
+const props = defineProps<{ items: readonly Item[] }>();
+const tree = new SuTreeTableController<Item>({
+  columns: [
+    { key: 'name', header: 'Item' },
+    { key: 'price', header: 'Price' },
+  ],
+  rowId: (item) => item.id,
+  children: (item) => item.children,
+  rowKind: (item) => (item.isGroup ? 'group' : 'data'),
+  rows: props.items,
+});
+const state = useStore(tree.state);
+</script>
+
+<template>
+  <table role="treegrid" aria-label="Price list">
+    <tbody>
+      <tr
+        v-for="row in state.rows"
+        :key="row.id"
+        :aria-level="row.level"
+        :aria-posinset="row.position"
+        :aria-setsize="row.siblings"
+        :aria-expanded="row.expanded ?? undefined"
+        @click="tree.toggle(row.id)"
+      >
+        <td v-if="row.kind === 'group'" :colspan="state.columns.length">{{ row.label }}</td>
+        <td v-for="cell in row.cells" v-else :key="String(cell.key)" :rowspan="cell.rowSpan" :colspan="cell.colSpan">
+          {{ cell.text }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -445,4 +490,5 @@ watchEffect(() =>
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
+- [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

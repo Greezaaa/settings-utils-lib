@@ -1,0 +1,45 @@
+{
+	"name": "@su-labs/tree-table",
+	"version": "22.0.0",
+	"description": "Accessible tree tables for Angular: rows with child rows that open and close, data or group parents, numbering that nests, restarts or continues, merged cells, and the table's sorting, search, paging, pinned rows and columns, themeable with CSS variables.",
+	"keywords": [
+		"angular",
+		"tree-table",
+		"treegrid",
+		"tree",
+		"table",
+		"data-table",
+		"nested-rows",
+		"rowspan",
+		"colspan",
+		"accessible",
+		"signals",
+		"themeable",
+		"css-variables"
+	],
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/tree-table"
+	},
+	"homepage": "https://su-labs.dev/tree-table/",
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"peerDependencies": {
+		"@angular/common": "^22.0.0",
+		"@angular/core": "^22.0.0"
+	},
+	"dependencies": {
+		"@su-labs/core": "1.11.0",
+		"@su-labs/table": "22.1.4",
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

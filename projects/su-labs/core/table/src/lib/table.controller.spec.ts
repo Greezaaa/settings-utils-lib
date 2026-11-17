@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { suCompareValues, SuTableController } from './table.controller';
+import { suCompareValues } from './table.columns';
+import { SuTableController } from './table.controller';
 import { suTableDropIndex } from './table.drop-index';
 import { suCheckboxEditor, suDateEditor, suNumberEditor, suSelectEditor, suTextEditor } from './table.editors';
 import { SuTableColumns } from './table.types';

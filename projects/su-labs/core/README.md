@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Vue, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/stepper](https://www.npmjs.com/package/@su-labs/stepper), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/tree-table](https://www.npmjs.com/package/@su-labs/tree-table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/stepper](https://www.npmjs.com/package/@su-labs/stepper), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
 
 ## Table of Contents
 
@@ -18,6 +18,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Notifications](#notifications)
 - [Dialog](#dialog)
 - [Table](#table)
+- [Tree Table](#tree-table)
 - [Skeleton](#skeleton)
 - [Stepper](#stepper)
 - [Scroll Spy](#scroll-spy)
@@ -56,6 +57,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/notifications` | `SuNotificationController`, `isSuNotificationImageIcon` and notification types |
 | `@su-labs/core/dialog` | `SuDialogController`, `suDialogBackdropColor` and dialog types |
 | `@su-labs/core/table` | `SuTableController`, the editors (`suTextEditor`, `suNumberEditor`, …), `SU_TABLE_LABELS` and table types |
+| `@su-labs/core/tree-table` | `SuTreeTableController`, `SU_TREE_TABLE_LABELS` and tree table types |
 | `@su-labs/core/skeleton` | `setSuSkeletonBusy` |
 | `@su-labs/core/skeleton.css` | The skeleton stylesheet |
 | `@su-labs/core/stepper` | `SuStepperController`, `SU_STEPPER_LABELS` and stepper types |
@@ -352,6 +354,75 @@ Render the table as a `<table>` with a caption, put `aria-sort` on sorted headin
 Actions (`{ id, label, danger?, bulk?, hidden?(row), disabled?(row) }`) are resolved for each row in `rows[].actions`,
 and the bulk ones in `bulkActions`. Every text the table announces or shows is in `SU_TABLE_LABELS`; pass any of them
 as `labels`, e.g. in the page's language.
+
+## Tree Table
+
+A table of rows with child rows: each parent opens and closes, and is either a data row with its own cells or a group row, a heading across the table. Rows can be numbered, cells merged, and the table's sorting, search, paging and pinned rows and columns all work on the tree. Your app renders the rows (Angular: [`@su-labs/tree-table`](https://www.npmjs.com/package/@su-labs/tree-table)).
+
+```ts
+import { SuTreeTableController } from '@su-labs/core/tree-table';
+
+const tree = new SuTreeTableController({
+  columns: [
+    { key: 'name', header: 'Item', sortable: true },
+    { key: 'unit', header: 'Unit', span: (unit, item) => (item.sameUnitBelow ? { rows: 2 } : null) },
+    { key: 'price', header: 'Price', sortable: true },
+  ],
+  rowId: (item) => item.id,
+  children: (item) => item.children,
+  rowKind: (item) => (item.isGroup ? 'group' : 'data'),
+  numbering: 'nested',
+  unnumbered: (item) => item.isGroup,
+  rows: await api.items(),
+});
+
+tree.state.subscribe((state) => render(state)); // render a <table role="treegrid"> with your own markup
+tree.toggle('fruit');
+row.addEventListener('keydown', (event) => {
+  const result = tree.rowKey(row.dataset.id, event.key);
+  if (result.handled) {
+    event.preventDefault();
+    focusRow(result.focusId);
+  }
+});
+```
+
+How the tree works with the table's features:
+
+- **Sorting** sorts each parent's children, and the top-level rows, never mixing levels
+- **Search** keeps the matches, the parents on the way to them (opened to show them) and the matches' own children; group rows match on their text. Numbers don't change
+- **Paging** counts top-level rows, so a parent and its children always share a page
+- **Pinned rows** are top-level rows, pinned with their children
+- **Numbering** counts the whole tree in display order, open or not: `nested` (1, 1.1, 1.2), `restart` (1, 2 under each parent) or `continue` (the parent's count goes on through its children), for every parent or per parent; `unnumbered` rows (e.g. group rows) get no number and don't count
+- **Merged cells**: a column's `span(value, row)` returns `{ rows, columns }`. A row span stops at a group row, at the end of its parent's rows and at the end of the page; a column span stays within the column's pinned side; the first column, which holds the toggles, isn't merged down. Covered cells are left out of `cells`, and each cell has its `rowSpan`, `colSpan` and `columnIndex`
+
+### API
+
+| Member | Description |
+|--------|-------------|
+| `setRows(rows)` | Replaces the top-level rows, each with its children |
+| `toggle(id, expanded?)` | Opens or closes a row with children; without `expanded`, toggles it |
+| `setAllExpanded(expanded)` | Opens or closes every row |
+| `isExpanded(id)` / `expandedIds()` | Whether a row is open / every open row with children |
+| `rowKey(id, key)` | Handles a key on a row: up, down, Home and End move; right opens or moves to the first child; left closes or moves to the parent; Enter and Space toggle. Returns `{ handled, focusId }` |
+| `rowOf(id)` | The row with this id, at any level |
+| `sortBy`, `search`, `setPage`, `setPageSize`, `pinRow`, `pinColumn`, `setColumnVisible`, `setColumnPinnable`, `setColumnsVisible` | As in the table |
+| `state` | Read-only store: `columns`, `rows` and `pinnedRows` (each with `kind`, `level`, `position`, `siblings`, `parentId`, `expanded`, `number`, `cells`, `label`), `allColumns`, `rowHeaderKey`, `sort`, `pagination`, `announcement`, `query`, `searching` |
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `columns` | `[]` | Like table columns without `edit`, plus `span` |
+| `children` | none | A row's child rows |
+| `rowKind` | every row `'data'` | `'group'` for heading rows across the table |
+| `groupLabel` | the first column's text | A group row's text |
+| `expanded` | `false` | The ids of the rows open to start with, or `true` for every one |
+| `numbering` | `'nested'` | `'nested'`, `'restart'` or `'continue'`, or a function of the parent row |
+| `unnumbered` | none | Rows without a number |
+| `rowId`, `labels`, `pageSize`, `pageSizes`, `pinnedRows` | | As in the table; `pageSize` counts top-level rows |
+
+`SU_TREE_TABLE_LABELS` holds the table's English texts plus the tree's own (`Expand Fruit`, `Collapse Fruit`, `No.`).
 
 ## Skeleton
 

@@ -466,6 +466,59 @@ export function SignUp() {
 }
 ```
 
+## Tree table
+
+Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
+
+```tsx
+import { useState, useSyncExternalStore } from 'react';
+import { SuTreeTableController } from '@su-labs/core/tree-table';
+
+export function PriceList({ items }: { items: readonly Item[] }) {
+  const [tree] = useState(
+    () =>
+      new SuTreeTableController<Item>({
+        columns: [
+          { key: 'name', header: 'Item' },
+          { key: 'price', header: 'Price' },
+        ],
+        rowId: (item) => item.id,
+        children: (item) => item.children,
+        rowKind: (item) => (item.isGroup ? 'group' : 'data'),
+        rows: items,
+      }),
+  );
+  const state = useSyncExternalStore(tree.state.subscribe, tree.state.get, tree.state.get);
+
+  return (
+    <table role="treegrid" aria-label="Price list">
+      <tbody>
+        {state.rows.map((row) => (
+          <tr
+            key={row.id}
+            aria-level={row.level}
+            aria-posinset={row.position}
+            aria-setsize={row.siblings}
+            aria-expanded={row.expanded ?? undefined}
+            onClick={() => tree.toggle(row.id)}
+          >
+            {row.kind === 'group' ? (
+              <td colSpan={state.columns.length}>{row.label}</td>
+            ) : (
+              row.cells.map((cell) => (
+                <td key={String(cell.key)} rowSpan={cell.rowSpan} colSpan={cell.colSpan}>
+                  {cell.text}
+                </td>
+              ))
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -476,4 +529,5 @@ export function SignUp() {
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
+- [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

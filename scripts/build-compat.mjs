@@ -116,6 +116,12 @@ function preparePackage(name) {
       dependency.startsWith('@angular/') ? `^${major}.0.0` : range,
     ]),
   );
+  manifest.dependencies = Object.fromEntries(
+    Object.entries(manifest.dependencies ?? {}).map(([dependency, version]) => [
+      dependency,
+      dependency.startsWith('@su-labs/') && dependency !== '@su-labs/core' ? compatVersion(version) : version,
+    ]),
+  );
   writeJson(join(work, 'package.json'), manifest);
 
   const ngPackage = readJson(join(work, 'ng-package.json'));
@@ -191,6 +197,8 @@ cpSync(join(packagesDir, 'core'), join(buildDir, 'core'), {
 for (const name of packages) {
   console.log(`\n@su-labs/${name}@${preparePackage(name)} (Angular ${major})`);
   run('ng-packagr', ['-p', join(buildDir, name, 'ng-package.json'), '-c', join(buildDir, name, 'tsconfig.lib.json')]);
+  // Packages build in name order, so a later one can use an earlier one with this Angular (the tree table uses the table)
+  cpSync(join(distDir, name), join(buildDir, 'node_modules/@su-labs', name), { recursive: true });
 }
 if (only.length === 0) {
   buildSmokeApp();

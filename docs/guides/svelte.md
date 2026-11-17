@@ -415,6 +415,51 @@ Keep one controller per stepper and pass it the steps' rules again whenever they
 <button type="button" disabled={!$steps.canNext} onclick={() => stepper.next()}>Next</button>
 ```
 
+## Tree table
+
+Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
+
+```svelte
+<script lang="ts">
+  import { SuTreeTableController } from '@su-labs/core/tree-table';
+
+  let { items }: { items: readonly Item[] } = $props();
+  const tree = new SuTreeTableController<Item>({
+    columns: [
+      { key: 'name', header: 'Item' },
+      { key: 'price', header: 'Price' },
+    ],
+    rowId: (item) => item.id,
+    children: (item) => item.children,
+    rowKind: (item) => (item.isGroup ? 'group' : 'data'),
+    rows: items,
+  });
+  const state = tree.state;
+</script>
+
+<table role="treegrid" aria-label="Price list">
+  <tbody>
+    {#each $state.rows as row (row.id)}
+      <tr
+        aria-level={row.level}
+        aria-posinset={row.position}
+        aria-setsize={row.siblings}
+        aria-expanded={row.expanded ?? undefined}
+        onclick={() => tree.toggle(row.id)}
+      >
+        {#if row.kind === 'group'}
+          <td colspan={$state.columns.length}>{row.label}</td>
+        {:else}
+          {#each row.cells as cell (cell.key)}
+            <td rowspan={cell.rowSpan} colspan={cell.colSpan}>{cell.text}</td>
+          {/each}
+        {/if}
+      </tr>
+    {/each}
+  </tbody>
+</table>
+```
+
 ## Next steps
 
 - [Theme configuration and full API](../../projects/su-labs/core/README.md#theme)
@@ -425,4 +470,5 @@ Keep one controller per stepper and pass it the steps' rules again whenever they
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
+- [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

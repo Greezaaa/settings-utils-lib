@@ -51,6 +51,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/table/table-page').then((m) => m.TablePage),
   },
   {
+    path: 'tree-table',
+    title: `Tree table · ${SITE_NAME}`,
+    data: utilityMeta('tree-table'),
+    loadComponent: () => import('./pages/tree-table/tree-table-page').then((m) => m.TreeTablePage),
+  },
+  {
     path: 'skeleton',
     title: `Skeleton · ${SITE_NAME}`,
     data: utilityMeta('skeleton'),

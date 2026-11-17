@@ -1,0 +1,12 @@
+@if (expanded() !== null) {
+  <button
+    type="button"
+    tabindex="-1"
+    class="su-tree-table-toggle"
+    [class.is-expanded]="expanded()"
+    [attr.aria-label]="label()"
+    (click)="toggle.emit()"
+  >
+    <span class="su-tree-table-chevron" aria-hidden="true"></span>
+  </button>
+}

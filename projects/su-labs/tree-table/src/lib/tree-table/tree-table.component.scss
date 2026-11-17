@@ -1,0 +1,49 @@
+@use '../../../../table/src/lib/table.component';
+
+tbody tr.su-tree-table-row:focus-visible {
+  outline: var(--su-table-focus-outline, 2px solid currentColor);
+  outline-offset: -2px;
+}
+
+.su-tree-table-tree-cell {
+  padding-inline-start: calc(
+    var(--su-tree-table-cell-start, 0.4rem) + var(--su-tree-table-level, 0) *
+      var(--su-tree-table-indent, 1.25rem)
+  );
+  white-space: nowrap;
+}
+
+.su-tree-table-number {
+  color: var(
+    --su-tree-table-number-color,
+    color-mix(in srgb, currentColor 65%, transparent)
+  );
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  width: 1%;
+}
+
+tbody tr.is-group {
+  --su-table-row-tint: var(--su-tree-table-group-background, rgb(0 0 0 / 0.04));
+  color: var(--su-tree-table-group-color, inherit);
+  font-weight: var(--su-tree-table-group-font-weight, 600);
+}
+
+.su-tree-table-group-label {
+  align-items: center;
+  display: inline-flex;
+  inset-inline-start: 0;
+  position: sticky;
+}
+
+td.is-merged {
+  --su-table-cell-tint: var(--su-tree-table-merged-background, transparent);
+  vertical-align: var(--su-tree-table-merged-vertical-align, middle);
+}
+
+td[rowspan] {
+  border-inline: var(
+    --su-tree-table-merged-border,
+    var(--su-table-row-border, 1px solid rgb(0 0 0 / 0.08))
+  );
+}

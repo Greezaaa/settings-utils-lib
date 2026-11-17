@@ -54,6 +54,9 @@
       "@su-labs/stepper": [
         "./dist/su-labs/stepper"
       ],
+      "@su-labs/tree-table": [
+        "./dist/su-labs/tree-table"
+      ],
     }
   },
   "angularCompilerOptions": {
@@ -97,6 +100,9 @@
     },
     {
       "path": "./projects/su-labs/stepper/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/tree-table/tsconfig.lib.json"
     },
     {
       "path": "./web/tsconfig.app.json"

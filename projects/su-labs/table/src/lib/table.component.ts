@@ -1,6 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { afterRenderEffect, booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChildren, DestroyRef, effect, ElementRef, inject, input, output, signal, TemplateRef, untracked } from '@angular/core';
-import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableColumnState, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSort } from '@su-labs/core/table';
+import { SU_TABLE_LABELS, SuTableAction, SuTableActionView, SuTableColumns, SuTableColumnState, SuTableController, SuTableDraftField, suTableDropIndex, SuTableInputValue, SuTableLabels, SuTablePageSize, SuTablePin, SuTableRowId, SuTableRowView, SuTableSort, suPinOffsets } from '@su-labs/core/table';
 import { SuTableCellContext, SuTableCellDirective } from './table-cell.directive';
 import { SuTableFieldComponent } from './table-field.component';
 import { SuTablePaginatorComponent } from './table-paginator.component';
@@ -218,35 +218,11 @@ export class SuTableComponent<TRow extends object> {
       ...columns.map(column => column.pinned),
       ...(this.hasActions() ? [actionsPin] : []),
     ];
-    const widths = this.headerWidths();
-    const pinnedWidth = pins.reduce(
-      (sum, pin, index) => (pin ? sum + (widths[index] ?? 0) : sum),
-      0
-    );
-    if (pinnedWidth > this.scrollerWidth() - MIN_SCROLLING_WIDTH) {
-      return pins.map(() => null);
-    }
-    const lastStart = pins.lastIndexOf('start');
-    const firstEnd = pins.indexOf('end');
-    const widthOf = (pin: SuTablePin, from: number, to: number): number =>
-      pins
-        .slice(from, to)
-        .reduce(
-          (sum, slotPin, index) =>
-            slotPin === pin ? sum + (widths[from + index] ?? 0) : sum,
-          0
-        );
-    return pins.map((pin, index) =>
-      pin
-        ? {
-            pin,
-            offset:
-              pin === 'start'
-                ? widthOf(pin, 0, index)
-                : widthOf(pin, index + 1, pins.length),
-            edge: index === (pin === 'start' ? lastStart : firstEnd),
-          }
-        : null
+    return suPinOffsets(
+      pins,
+      this.headerWidths(),
+      this.scrollerWidth(),
+      MIN_SCROLLING_WIDTH
     );
   });
   protected readonly columnCount = computed(
