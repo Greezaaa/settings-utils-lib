@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-11-18
+
+### Added
+- `@su-labs/core/tooltip`: `SuTooltipController` for whether a tooltip is open, with `show` and `hide` after `showDelay` and `hideDelay` (a pointer only passing over doesn't open it, one moving to the tooltip doesn't close it), `open`, `close`, `toggle`, `setOpen`, `setDelays` and `cancel`; `suTooltipPosition` for a tooltip beside its trigger (12 placements, moving to the other side when only that has room, kept inside the viewport, right to left aware) with where its arrow points and the point it grows from; `suTooltipIconPosition` and `suTooltipIconClip` for a tooltip that grows out of an icon; `suTooltipPlacementParts`; `SU_TOOLTIP_LABELS`
+
 ## [1.11.0] - 2026-11-17
 
 ### Added

@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Vue, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/tree-table](https://www.npmjs.com/package/@su-labs/tree-table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/stepper](https://www.npmjs.com/package/@su-labs/stepper), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/tree-table](https://www.npmjs.com/package/@su-labs/tree-table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/stepper](https://www.npmjs.com/package/@su-labs/stepper), [@su-labs/tooltip](https://www.npmjs.com/package/@su-labs/tooltip), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
 
 ## Table of Contents
 
@@ -21,6 +21,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Tree Table](#tree-table)
 - [Skeleton](#skeleton)
 - [Stepper](#stepper)
+- [Tooltip](#tooltip)
 - [Scroll Spy](#scroll-spy)
 - [Visit Tracker](#visit-tracker)
 - [Storage](#storage)
@@ -61,6 +62,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/skeleton` | `setSuSkeletonBusy` |
 | `@su-labs/core/skeleton.css` | The skeleton stylesheet |
 | `@su-labs/core/stepper` | `SuStepperController`, `SU_STEPPER_LABELS` and stepper types |
+| `@su-labs/core/tooltip` | `SuTooltipController`, `suTooltipPosition`, `suTooltipIconPosition`, `suTooltipIconClip`, `SU_TOOLTIP_LABELS` and tooltip types |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 | `@su-labs/core/visit-tracker` | `SuVisitTrackerController` and visit types |
 
@@ -513,6 +515,41 @@ A step is completed once the user leaves it forward, as long as it still allows 
 | `linear` | `false` | Going forward by more than one step only reaches steps already visited |
 
 `SU_STEPPER_LABELS` holds the English texts a stepper reads out (`Step 1 of 3`, `Completed`, …), to replace in the page's language.
+
+## Tooltip
+
+Whether a tooltip is open, with the delays that keep it from flashing while the pointer only passes over its trigger and from closing while the pointer moves onto it, plus the maths to place it. Your app renders it (Angular: [`@su-labs/tooltip`](https://www.npmjs.com/package/@su-labs/tooltip)).
+
+```ts
+import { SuTooltipController, suTooltipPosition } from '@su-labs/core/tooltip';
+
+const tooltip = new SuTooltipController({ showDelay: 300, hideDelay: 100 });
+
+trigger.addEventListener('pointerenter', () => tooltip.show()); // opens after showDelay
+trigger.addEventListener('pointerleave', () => tooltip.hide()); // closes after hideDelay, unless show() comes first
+tooltip.state.subscribe(({ open }) => {
+  panel.hidden = !open;
+  if (!open) return;
+  const { x, y, side, arrow, origin } = suTooltipPosition(trigger.getBoundingClientRect(), panel.getBoundingClientRect(), {
+    placement: 'bottom-start',
+    viewport: { width: innerWidth, height: innerHeight },
+  });
+  // side: where it fits after flipping; arrow: px along the edge facing the trigger; origin: where to grow from
+});
+```
+
+| Method | |
+|---|---|
+| `show()` / `hide()` | Opens or closes after the delay; each calls off the other's pending wait |
+| `open()` / `close()` / `toggle()` / `setOpen(open)` | Opens or closes now |
+| `setDelays({ showDelay, hideDelay })` | New delays from the next wait |
+| `cancel()` | Calls off a pending `show` or `hide` |
+
+`suTooltipPosition(trigger, tooltip, options)` places a tooltip beside its trigger. `placement` is `top`, `right`, `bottom` or `left`, each with `-start` and `-end` (following `rtl`); with a `viewport` it moves to the other side when only that one has room and stays `padding` away from the edges. `offset` is the gap to the trigger, `arrowPadding` keeps the arrow away from the corners.
+
+`suTooltipIconPosition(icon, tooltip, options)` places a tooltip with one corner on an icon, so it can grow out of it; `suTooltipIconClip(position, tooltip, iconSize, radius)` gives the `clip-path` to animate from (a circle on the icon) and to (the whole tooltip).
+
+`SU_TOOLTIP_LABELS` holds the English names of the "?" icon and the close button.
 
 ## Scroll Spy
 

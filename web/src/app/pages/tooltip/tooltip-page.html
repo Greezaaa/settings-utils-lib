@@ -1,0 +1,129 @@
+<app-utility-page
+  [utility]="utility"
+  [usage]="usage"
+  featuresLead="Each feature on a tooltip of its own.">
+  <div class="card tooltip-demo">
+    <div class="tooltip-demo-controls">
+      <label class="field">
+        <span>Trigger</span>
+        <select [value]="trigger()" (change)="choose(triggers, trigger.set, $event)">
+          @for (item of triggers; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Placement</span>
+        <select [value]="placement()" (change)="choose(placements, placement.set, $event)">
+          @for (item of placements; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Opens on</span>
+        <select [value]="openOn()" (change)="choose(openOnOptions, openOn.set, $event)">
+          @for (item of openOnOptions; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Width</span>
+        <input type="text" autocomplete="off" [value]="width()" (input)="setText(width.set, $event)" />
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="interactive()" (change)="setFlag(interactive.set, $event)" />
+        Interactive
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="animated()" (change)="setFlag(animated.set, $event)" />
+        Animated
+      </label>
+    </div>
+
+    @defer (on viewport) {
+      <p class="tooltip-demo-text">
+        Parcels leave the warehouse within a day.
+        <su-lib-tooltip
+          [trigger]="trigger()"
+          [placement]="placement()"
+          [openOn]="openOn()"
+          [interactive]="interactive()"
+          [animated]="animated()"
+          [width]="trigger() === 'icon' ? width() : undefined"
+          [text]="shipping"
+          [(open)]="open"
+          ><strong>Shipping costs</strong></su-lib-tooltip
+        >
+        depend on the weight and the destination, and delivery usually takes three working days.
+      </p>
+    } @placeholder {
+      <p class="tooltip-demo-text">Parcels leave the warehouse within a day. <strong>Shipping costs</strong> depend on the weight and the destination, and delivery usually takes three working days.</p>
+    }
+    <ng-template #shipping>
+      We weigh every parcel at the warehouse. Prices include VAT;
+      <a href="/">customs fees</a> outside the EU are paid on delivery.
+    </ng-template>
+
+    <dl class="state-list">
+      <div>
+        <dt>Open</dt>
+        <dd>{{ open() ? 'yes' : 'no' }}</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="muted">
+    The tooltip opens on the bold words, or on the “?” after them with the icon trigger.
+    <br />
+    Try it: switch the trigger to icon, change the placement, or make it interactive and move onto the link.
+  </p>
+
+  <ng-template [appPageFeature]="features.placements">
+    <div class="tooltip-grid">
+      @for (item of grid; track item) {
+        <su-lib-tooltip [placement]="item" [text]="item"
+          ><button type="button" class="button button-small button-secondary">{{ item }}</button></su-lib-tooltip
+        >
+      }
+    </div>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.click">
+    <su-lib-tooltip text="Stays until you close it" openOn="click"
+      ><button type="button" class="button button-small button-secondary">Click me</button></su-lib-tooltip
+    >
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.interactive">
+    <p class="tooltip-row">
+      <su-lib-tooltip placement="bottom" text="The pointer goes through me">Not interactive</su-lib-tooltip>
+      <su-lib-tooltip placement="bottom" interactive [text]="help">Interactive</su-lib-tooltip>
+    </p>
+    <ng-template #help>Free over 50 €. <a href="/">Read more</a></ng-template>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.icon">
+    <p class="tooltip-row">
+      <su-lib-tooltip trigger="icon" width="18rem" text="Prices include VAT. Customs fees outside the EU are paid on delivery."
+        >Price</su-lib-tooltip
+      >
+      <su-lib-tooltip trigger="icon" placement="top-end" text="Grows up and to the left." />
+      <su-lib-tooltip trigger="icon" icon="i" text="Your own icon, a short text or an SVG template." />
+    </p>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.motion">
+    <p class="tooltip-row">
+      <su-lib-tooltip text="Grows out of the trigger">Animated</su-lib-tooltip>
+      <su-lib-tooltip text="Appears at once" [animated]="false">No motion</su-lib-tooltip>
+    </p>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.theming">
+    <p class="tooltip-row themed-tooltip">
+      <su-lib-tooltip text="Warm and round">Hover me</su-lib-tooltip>
+      <su-lib-tooltip trigger="icon" text="The icon follows the theme too." />
+    </p>
+  </ng-template>
+</app-utility-page>

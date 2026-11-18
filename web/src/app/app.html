@@ -36,15 +36,17 @@
       <span class="mono">{{ theme.preference() }}</span>
     </button>
   </div>
-  <su-lib-switch
-    class="setting-switch"
-    labelPosition="start"
-    size="small"
-    [checked]="motion.reduced()"
-    (checkedChange)="motion.set($event)"
-  >
-    Reduce motion
-  </su-lib-switch>
+  @defer (on immediate) {
+    <su-lib-switch
+      class="setting-switch"
+      labelPosition="start"
+      size="small"
+      [checked]="motion.reduced()"
+      (checkedChange)="motion.set($event)"
+    >
+      Reduce motion
+    </su-lib-switch>
+  }
 </ng-template>
 
 
@@ -277,5 +279,7 @@
   </div>
 }
 
-<su-lib-notifications />
-<su-lib-dialog />
+@defer (on idle) {
+  <su-lib-notifications />
+  <su-lib-dialog />
+}

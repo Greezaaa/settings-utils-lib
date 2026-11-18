@@ -54,6 +54,9 @@
       "@su-labs/stepper": [
         "./dist/su-labs/stepper"
       ],
+      "@su-labs/tooltip": [
+        "./dist/su-labs/tooltip"
+      ],
       "@su-labs/tree-table": [
         "./dist/su-labs/tree-table"
       ],
@@ -100,6 +103,9 @@
     },
     {
       "path": "./projects/su-labs/stepper/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/tooltip/tsconfig.lib.json"
     },
     {
       "path": "./projects/su-labs/tree-table/tsconfig.lib.json"

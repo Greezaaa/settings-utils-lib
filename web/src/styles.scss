@@ -95,6 +95,12 @@
   --su-stepper-button-color: var(--heading);
   --su-stepper-button-radius: var(--radius);
   --su-stepper-focus-ring: 2px solid var(--heading);
+  --su-tooltip-background: var(--heading);
+  --su-tooltip-text-color: var(--surface);
+  --su-tooltip-icon-background: var(--button-bg);
+  --su-tooltip-icon-color: var(--button-text);
+  --su-tooltip-radius: var(--radius);
+  --su-tooltip-focus-ring: 2px solid var(--heading);
   --su-table-sorted-background: color-mix(in srgb, var(--blue-text) 7%, transparent);
   --su-table-drop-line-color: var(--blue-text);
   --su-table-text-color: var(--text);

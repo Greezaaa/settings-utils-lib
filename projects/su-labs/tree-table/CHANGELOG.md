@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.0.1] - 2026-11-18
+
+### Changed
+- Uses `@su-labs/core` 1.12.0 (was 1.11.0), the same version as every other `@su-labs` package, so apps using several of them install core once
+- Uses `@su-labs/table` 22.1.5 (was 22.1.4)
+
 ## [22.0.0] - 2026-11-17
 
 ### Added

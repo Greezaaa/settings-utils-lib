@@ -1,0 +1,41 @@
+{
+	"name": "@su-labs/tooltip",
+	"version": "22.0.0",
+	"description": "Accessible Angular tooltips: on your own content or a built-in \"?\" icon that grows into the tooltip and turns into its close button, opening on hover or click, 12 placements with an arrow, animated out of the trigger, themeable with CSS variables.",
+	"keywords": [
+		"angular",
+		"tooltip",
+		"toggletip",
+		"popover",
+		"hint",
+		"help",
+		"accessible",
+		"signals",
+		"themeable",
+		"css-variables"
+	],
+	"author": {
+		"name": "Yevheniy Alekseyev",
+		"email": "yev.alekseyev@gmail.com",
+		"url": "https://github.com/Greezaaa"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Greezaaa/settings-utils-lib.git",
+		"directory": "projects/su-labs/tooltip"
+	},
+	"homepage": "https://su-labs.dev/tooltip/",
+	"bugs": {
+		"url": "https://github.com/Greezaaa/settings-utils-lib/issues"
+	},
+	"peerDependencies": {
+		"@angular/common": "^22.0.0",
+		"@angular/core": "^22.0.0"
+	},
+	"dependencies": {
+		"@su-labs/core": "1.12.0",
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false,
+	"license": "MIT"
+}

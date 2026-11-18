@@ -19,6 +19,7 @@ npm install @su-labs/table
 npm install @su-labs/fields
 npm install @su-labs/skeleton
 npm install @su-labs/stepper
+npm install @su-labs/tooltip
 npm install @su-labs/tree-table
 ```
 
@@ -38,6 +39,7 @@ Requires Angular 22 or later.
 | `@su-labs/fields` | Code boxes, password strength meter, auto-grow textarea, switch, email field, checkbox and chips | [README](../../projects/su-labs/fields/README.md) |
 | `@su-labs/skeleton` | Skeleton loaders drawn with your own HTML and CSS, with one shimmer and screen reader support | [README](../../projects/su-labs/skeleton/README.md) |
 | `@su-labs/stepper` | Content in numbered steps shown one at a time, with rules for going forward and back, horizontal or vertical, and headers that can act as tabs | [README](../../projects/su-labs/stepper/README.md) |
+| `@su-labs/tooltip` | Tooltips on your content or a "?" icon that grows into the tooltip, opening on hover or click, 12 placements with an arrow | [README](../../projects/su-labs/tooltip/README.md) |
 | `@su-labs/tree-table` | Tree tables: rows with child rows, data or group parents, numbering, merged cells, and the table's sorting, search, paging and pinned rows and columns | [README](../../projects/su-labs/tree-table/README.md) |
 
 ## Theme quick start
@@ -150,6 +152,25 @@ export class SignUp {
 
 Add `orientation="vertical"` for the steps in a column, and `tabs` to let a click on a step header go to it.
 
+## Tooltip quick start
+
+```ts
+import { Component } from '@angular/core';
+import { SuTooltipComponent } from '@su-labs/tooltip';
+
+@Component({
+  selector: 'app-toolbar',
+  imports: [SuTooltipComponent],
+  template: `
+    <su-lib-tooltip text="Saves a draft"><button type="button">Save</button></su-lib-tooltip>
+    <su-lib-tooltip openOn="click" interactive [text]="help">Shipping</su-lib-tooltip>
+    <ng-template #help>Free over 50 €. <a href="/shipping">Read more</a></ng-template>
+    <su-lib-tooltip trigger="icon" width="18rem" text="Prices include VAT." />
+  `,
+})
+export class Toolbar {}
+```
+
 ## Tree table quick start
 
 ```ts
@@ -190,4 +211,5 @@ Add `numbering="restart"` or `"continue"` to count children another way, and a c
 - [Theme configuration and full API](../../projects/su-labs/theme/README.md)
 - [Table setup and full API](../../projects/su-labs/table/README.md)
 - [Stepper setup and full API](../../projects/su-labs/stepper/README.md)
+- [Tooltip setup and full API](../../projects/su-labs/tooltip/README.md)
 - [Tree table setup and full API](../../projects/su-labs/tree-table/README.md)

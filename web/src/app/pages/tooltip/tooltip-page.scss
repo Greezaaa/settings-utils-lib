@@ -1,0 +1,66 @@
+.tooltip-demo {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.tooltip-demo-controls {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+input[type='text'] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--heading);
+  font: inherit;
+  max-width: 8rem;
+  min-height: 2.5rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.tooltip-demo-text {
+  line-height: 1.8;
+  margin: 0;
+  max-width: 40rem;
+
+  strong {
+    color: var(--heading);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+  }
+}
+
+.tooltip-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  padding: 2.5rem 0;
+}
+
+.tooltip-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin: 0;
+  padding: 1.5rem 0;
+
+  > su-lib-tooltip:not([trigger='icon']) {
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+  }
+}
+
+.themed-tooltip {
+  --su-tooltip-background: #fef3c7;
+  --su-tooltip-text-color: #78350f;
+  --su-tooltip-radius: 1rem;
+  --su-tooltip-arrow-size: 10px;
+  --su-tooltip-icon-background: #f59e0b;
+  --su-tooltip-icon-color: #451a03;
+  --su-tooltip-duration: 320ms;
+}

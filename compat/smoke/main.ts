@@ -9,6 +9,7 @@ import { SuSkeletonComponent } from '@su-labs/skeleton';
 import { SuStepComponent, SuStepperComponent } from '@su-labs/stepper';
 import { SuTableColumns, SuTableComponent } from '@su-labs/table';
 import { SuThemeService } from '@su-labs/theme';
+import { SuTooltipComponent } from '@su-labs/tooltip';
 import { SuTreeTableColumns, SuTreeTableComponent } from '@su-labs/tree-table';
 import { SuVisitTrackerService } from '@su-labs/visit-tracker';
 
@@ -31,6 +32,7 @@ interface Fruit {
     SuStepperComponent,
     SuSwitchComponent,
     SuTableComponent,
+    SuTooltipComponent,
     SuTreeTableComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,6 +56,8 @@ interface Fruit {
       <su-lib-step label="One" [canNext]="isOn()"><p>First</p></su-lib-step>
       <su-lib-step><p>Second</p></su-lib-step>
     </su-lib-stepper>
+    <su-lib-tooltip text="Saves a draft">Save</su-lib-tooltip>
+    <su-lib-tooltip trigger="icon" text="More about saving" />
     <button type="button" id="smoke-notify" (click)="notify()">Notify</button>
     <su-lib-notifications />
     <su-lib-dialog />

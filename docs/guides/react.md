@@ -466,6 +466,41 @@ export function SignUp() {
 }
 ```
 
+## Tooltip
+
+Keep one controller per tooltip for whether it's open, with the delays that stop it flashing, and place it with `suTooltipPosition` each time it opens. It returns the side it fits on, where the arrow points and the point to grow from:
+
+```tsx
+import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { SuTooltipController, suTooltipPosition } from '@su-labs/core/tooltip';
+
+export function SaveButton() {
+  const [tooltip] = useState(() => new SuTooltipController());
+  const { open } = useSyncExternalStore(tooltip.state.subscribe, tooltip.state.get, tooltip.state.get);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!open || !trigger.current || !panel.current) return;
+    const { x, y } = suTooltipPosition(trigger.current.getBoundingClientRect(), panel.current.getBoundingClientRect(), {
+      viewport: { width: innerWidth, height: innerHeight },
+    });
+    Object.assign(panel.current.style, { left: `${x}px`, top: `${y}px` });
+  }, [open]);
+
+  return (
+    <>
+      <button ref={trigger} type="button" aria-describedby="save-tip" onPointerEnter={() => tooltip.show()} onPointerLeave={() => tooltip.hide()} onFocus={() => tooltip.open()} onBlur={() => tooltip.close()}>
+        Save
+      </button>
+      <div ref={panel} id="save-tip" role="tooltip" hidden={!open} style={{ position: 'fixed' }}>
+        Saves a draft
+      </div>
+    </>
+  );
+}
+```
+
 ## Tree table
 
 Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
@@ -529,5 +564,6 @@ export function PriceList({ items }: { items: readonly Item[] }) {
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
+- [Tooltip options and full API](../../projects/su-labs/core/README.md#tooltip)
 - [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

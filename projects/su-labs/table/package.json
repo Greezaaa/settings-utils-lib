@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/table",
-	"version": "22.1.4",
+	"version": "22.1.5",
 	"description": "Accessible data tables for Angular, mapped from your API's JSON with typed columns: sorting, selection, inline and bulk editing, drag-and-drop and keyboard reordering, and row actions, themeable with CSS variables.",
 	"keywords": [
 		"angular",
@@ -36,7 +36,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
-		"@su-labs/core": "1.11.0",
+		"@su-labs/core": "1.12.0",
 		"tslib": "^2.3.0"
 	},
 	"sideEffects": false,

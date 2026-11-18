@@ -435,6 +435,41 @@ watchEffect(() =>
 </template>
 ```
 
+## Tooltip
+
+Keep one controller per tooltip for whether it's open, with the delays that stop it flashing, and place it with `suTooltipPosition` each time it opens. It returns the side it fits on, where the arrow points and the point to grow from:
+
+```vue
+<script setup lang="ts">
+import { nextTick, ref, watch } from 'vue';
+import { SuTooltipController, suTooltipPosition } from '@su-labs/core/tooltip';
+import { useStore } from '@/composables/use-store';
+
+const tooltip = new SuTooltipController();
+const state = useStore(tooltip.state);
+const trigger = ref<HTMLButtonElement>();
+const panel = ref<HTMLDivElement>();
+const style = ref({ left: '0px', top: '0px' });
+
+watch(
+  () => state.value.open,
+  async (open) => {
+    await nextTick();
+    if (!open || !trigger.value || !panel.value) return;
+    const { x, y } = suTooltipPosition(trigger.value.getBoundingClientRect(), panel.value.getBoundingClientRect(), {
+      viewport: { width: innerWidth, height: innerHeight },
+    });
+    style.value = { left: `${x}px`, top: `${y}px` };
+  },
+);
+</script>
+
+<template>
+  <button ref="trigger" type="button" aria-describedby="save-tip" @pointerenter="tooltip.show()" @pointerleave="tooltip.hide()" @focus="tooltip.open()" @blur="tooltip.close()">Save</button>
+  <div v-show="state.open" ref="panel" id="save-tip" role="tooltip" :style="{ position: 'fixed', ...style }">Saves a draft</div>
+</template>
+```
+
 ## Tree table
 
 Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
@@ -490,5 +525,6 @@ const state = useStore(tree.state);
 - [Table columns, editors and full API](../../projects/su-labs/core/README.md#table)
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
+- [Tooltip options and full API](../../projects/su-labs/core/README.md#tooltip)
 - [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

@@ -70,6 +70,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/stepper/stepper-page').then((m) => m.StepperPage),
   },
   {
+    path: 'tooltip',
+    title: `Tooltip · ${SITE_NAME}`,
+    data: utilityMeta('tooltip'),
+    loadComponent: () => import('./pages/tooltip/tooltip-page').then((m) => m.TooltipPage),
+  },
+  {
     path: 'scroll-spy',
     title: `Scroll spy · ${SITE_NAME}`,
     data: utilityMeta('scroll-spy'),

@@ -1,0 +1,60 @@
+<span #content class="su-tooltip-content"><ng-content /></span>
+@if (isIcon()) {
+  <button
+    #iconButton
+    type="button"
+    class="su-tooltip-icon"
+    [attr.aria-label]="label() ?? texts().more"
+    [attr.aria-expanded]="open()"
+    [attr.aria-controls]="panelId">
+    <ng-container [ngTemplateOutlet]="iconGlyph" />
+  </button>
+}
+<ng-template #iconGlyph>
+  @if (iconTemplate(); as glyph) {
+    <ng-container [ngTemplateOutlet]="glyph" />
+  } @else if (iconText()) {
+    <span class="su-tooltip-icon-text" aria-hidden="true">{{ iconText() }}</span>
+  } @else {
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.2V15" />
+      <path d="M12 19h.01" />
+    </svg>
+  }
+</ng-template>
+<div
+  #panel
+  popover="manual"
+  class="su-tooltip-panel"
+  [id]="panelId"
+  [attr.role]="describes() ? 'tooltip' : null"
+  [class.su-tooltip-panel-icon]="isIcon()"
+  [class.su-tooltip-interactive]="isInteractive()">
+  @if (isIcon()) {
+    <button
+      #closeButton
+      type="button"
+      class="su-tooltip-close"
+      [class.su-tooltip-morphed]="morphed()"
+      [attr.aria-label]="texts().close"
+      (click)="onClose()">
+      <span class="su-tooltip-glyph su-tooltip-glyph-icon">
+        <ng-container [ngTemplateOutlet]="iconGlyph" />
+      </span>
+      <span class="su-tooltip-glyph su-tooltip-glyph-close">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </span>
+    </button>
+  } @else if (arrow()) {
+    <span class="su-tooltip-arrow" aria-hidden="true"></span>
+  }
+  <div class="su-tooltip-body">
+    @if (template(); as body) {
+      <ng-container [ngTemplateOutlet]="body" />
+    } @else {
+      {{ plainText() }}
+    }
+  </div>
+</div>

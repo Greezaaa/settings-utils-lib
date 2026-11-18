@@ -29,6 +29,7 @@ const PACKAGE_ICONS: Readonly<Record<string, SiteIconName>> = {
   'tree-table': 'tree-table',
   skeleton: 'skeleton',
   stepper: 'stepper',
+  tooltip: 'tooltip',
   'scroll-spy': 'scroll-spy',
   'visit-tracker': 'visit-tracker',
   fields: 'fields',

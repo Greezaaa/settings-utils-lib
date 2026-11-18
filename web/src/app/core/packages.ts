@@ -80,6 +80,13 @@ export const UTILITIES: readonly SuUtility[] = [
     summary: 'Content in numbered steps shown one at a time, with rules for going forward and back, and tab mode.',
   },
   {
+    slug: 'tooltip',
+    name: 'Tooltip',
+    packageName: '@su-labs/tooltip',
+    coreEntry: '@su-labs/core/tooltip',
+    summary: 'Tooltips on hover or click with an arrow, 12 placements, and a "?" icon that grows into its tooltip.',
+  },
+  {
     slug: 'scroll-spy',
     name: 'Scroll spy',
     packageName: '@su-labs/scroll-spy',

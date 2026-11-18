@@ -1,4 +1,4 @@
-@use '../../../../table/src/lib/table.component';
+@use '../../../../table/src/lib/table-grid';
 
 tbody tr.su-tree-table-row:focus-visible {
   outline: var(--su-table-focus-outline, 2px solid currentColor);

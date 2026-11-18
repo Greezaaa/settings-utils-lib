@@ -1,121 +1,23 @@
 @use './table-controls' as controls;
-
-:host {
-  color: var(--su-table-text-color, inherit);
-  display: block;
-  min-width: 0;
-  font-family: var(--su-table-font-family, inherit);
-  font-size: var(--su-table-font-size, 0.95rem);
-}
-
-.su-table-scroll {
-  border: var(--su-table-border, 1px solid rgb(0 0 0 / 0.12));
-  border-radius: var(--su-table-radius, 10px);
-  overflow: auto;
-}
-
-.su-table-grid {
-  background: var(--su-table-background, transparent);
-  border-collapse: separate;
-  border-spacing: 0;
-  min-width: 100%;
-}
-
-caption {
-  caption-side: top;
-  color: var(--su-table-caption-color, inherit);
-  font-size: var(--su-table-caption-font-size, inherit);
-  font-weight: 600;
-  padding: var(--su-table-cell-padding, 0.6rem 0.75rem);
-  text-align: start;
-}
-
-th,
-td {
-  background-image: linear-gradient(var(--su-table-cell-tint, transparent), var(--su-table-cell-tint, transparent));
-  border-bottom: var(--su-table-row-border, 1px solid rgb(0 0 0 / 0.08));
-  padding: var(--su-table-cell-padding, 0.6rem 0.75rem);
-  text-align: start;
-  vertical-align: var(--su-table-cell-vertical-align, middle);
-}
-
-thead th {
-  --su-table-row-tint: var(--su-table-header-background, rgb(0 0 0 / 0.03));
-  border-bottom: var(--su-table-header-border, var(--su-table-row-border, 1px solid rgb(0 0 0 / 0.08)));
-  color: var(--su-table-header-color, inherit);
-  font-size: var(--su-table-header-font-size, inherit);
-  font-weight: var(--su-table-header-font-weight, 600);
-  letter-spacing: var(--su-table-header-letter-spacing, normal);
-  padding: var(--su-table-header-padding, var(--su-table-cell-padding, 0.6rem 0.75rem));
-  text-transform: var(--su-table-header-text-transform, none);
-  white-space: nowrap;
-}
-
-.is-sorted {
-  --su-table-cell-tint: var(--su-table-sorted-background, transparent);
-}
-
-td.is-editable:hover,
-th.is-editable:hover {
-  --su-table-cell-tint: var(--su-table-editable-hover-background, color-mix(in srgb, currentColor 6%, transparent));
-}
-
-.su-table-row-header {
-  font-weight: var(--su-table-row-header-weight, 600);
-}
-
-tbody tr:last-child > * {
-  border-bottom: none;
-}
+@use './table-grid';
 
 tbody tr {
-  --su-table-row-tint: var(--su-table-row-background, transparent);
-  background: var(--su-table-row-tint);
-  color: var(--su-table-row-color, inherit);
-
-  &:nth-child(even) {
-    --su-table-row-tint: var(--su-table-stripe-background, var(--su-table-row-background, transparent));
-  }
-
-  &.is-muted {
-    --su-table-row-tint: var(--su-table-muted-background, transparent);
-    color: color-mix(in srgb, currentColor var(--su-table-muted-text, 55%), transparent);
-  }
-
-  &.is-highlighted {
-    --su-table-row-tint: var(--su-table-highlight-background, color-mix(in srgb, #f59e0b 14%, transparent));
-  }
-
-  &:hover {
-    --su-table-row-tint: var(--su-table-hover-background, rgb(0 0 0 / 0.025));
-  }
-
-  &.is-selected {
-    --su-table-row-tint: var(--su-table-selected-background, color-mix(in srgb, #2563eb 8%, transparent));
-    color: var(--su-table-selected-color, inherit);
-  }
-
-  &.is-editing {
-    --su-table-row-tint: var(--su-table-editing-background, color-mix(in srgb, #2563eb 5%, transparent));
-  }
-
-  &.is-pinned-row {
-    --su-table-row-tint: var(--su-table-pinned-row-background, color-mix(in srgb, #2563eb 6%, transparent));
-  }
-
-  &.is-last-pinned-row > * {
-    border-bottom: var(--su-table-pinned-row-border, 2px solid color-mix(in srgb, #2563eb 40%, transparent));
-  }
-
   &.is-grabbed,
   &.is-dragging {
-    --su-table-row-tint: var(--su-table-grabbed-background, color-mix(in srgb, #2563eb 14%, transparent));
-    outline: var(--su-table-grabbed-outline, 2px solid color-mix(in srgb, #2563eb 60%, transparent));
+    --su-table-row-tint: var(
+      --su-table-grabbed-background,
+      color-mix(in srgb, #2563eb 14%, transparent)
+    );
+    outline: var(
+      --su-table-grabbed-outline,
+      2px solid color-mix(in srgb, #2563eb 60%, transparent)
+    );
     outline-offset: -2px;
   }
 
   &.is-dragging {
-    background: linear-gradient(var(--su-table-row-tint), var(--su-table-row-tint)),
+    background:
+      linear-gradient(var(--su-table-row-tint), var(--su-table-row-tint)),
       var(--su-table-dragging-background, Canvas);
     box-shadow: var(--su-table-dragging-shadow, 0 8px 24px rgb(0 0 0 / 0.18));
     cursor: grabbing;
@@ -124,116 +26,22 @@ tbody tr {
   }
 
   &.is-drop-before > * {
-    box-shadow: inset 0 var(--su-table-drop-line-width, 2px) 0 var(--su-table-drop-line-color, #2563eb);
+    box-shadow: inset 0 var(--su-table-drop-line-width, 2px) 0
+      var(--su-table-drop-line-color, #2563eb);
   }
 
   &.is-drop-after > * {
-    box-shadow: inset 0 calc(-1 * var(--su-table-drop-line-width, 2px)) 0 var(--su-table-drop-line-color, #2563eb);
+    box-shadow: inset 0 calc(-1 * var(--su-table-drop-line-width, 2px)) 0
+      var(--su-table-drop-line-color, #2563eb);
   }
 }
 
-thead th,
-tbody tr.is-pinned-row > *,
-.is-pinned-start,
-.is-pinned-end {
-  background:
-    linear-gradient(var(--su-table-cell-tint, transparent), var(--su-table-cell-tint, transparent)),
-    linear-gradient(var(--su-table-row-tint, transparent), var(--su-table-row-tint, transparent)),
-    var(--su-table-pinned-background, Canvas);
-  position: sticky;
-  z-index: 1;
-}
-
-thead th {
-  top: 0;
-  z-index: 4;
-
-  &.is-pinned-start,
-  &.is-pinned-end {
-    z-index: 5;
-  }
-}
-
-tbody tr.is-pinned-row > * {
-  top: var(--su-table-row-top, 0);
-  z-index: 2;
-
-  &.is-pinned-start,
-  &.is-pinned-end {
-    z-index: 3;
-  }
-}
-
-.is-scrolled-top:not(.has-pinned-rows) thead th,
-.is-scrolled-top tr.is-last-pinned-row > * {
-  box-shadow: var(--su-table-sticky-shadow, 0 6px 8px -6px rgb(0 0 0 / 0.25));
-}
-
-.is-pinned-edge::after {
-  content: '';
-  inset-block: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  transition: opacity 150ms ease-out;
-  width: 1rem;
-}
-
-.is-pinned-start.is-pinned-edge {
-  border-inline-end: var(--su-table-pinned-border, 1px solid rgb(0 0 0 / 0.14));
-}
-
-.is-pinned-end.is-pinned-edge {
-  border-inline-start: var(--su-table-pinned-border, 1px solid rgb(0 0 0 / 0.14));
-}
-
-.su-table-pinned-icon {
-  margin-inline-start: 0.35rem;
-  opacity: 0.45;
-  vertical-align: -1px;
-}
-
-.su-table-header-pin {
-  @include controls.focus-ring;
-  background: none;
-  border: none;
-  border-radius: 4px;
-  color: inherit;
-  cursor: pointer;
-  margin-inline-start: 0.2rem;
-  opacity: 0.3;
-  padding: 0.2rem;
-  vertical-align: middle;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &[aria-pressed='true'] {
-    color: var(--su-table-accent, #2563eb);
-    opacity: 1;
-  }
-}
-
-.is-pinned-start.is-pinned-edge::after {
-  background: linear-gradient(to right, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.22)), transparent);
-  inset-inline-start: 100%;
-}
-
-.is-pinned-end.is-pinned-edge::after {
-  background: linear-gradient(to left, var(--su-table-pinned-shadow, rgb(0 0 0 / 0.22)), transparent);
-  inset-inline-end: 100%;
-}
-
-.is-scrolled-start .is-pinned-start.is-pinned-edge::after,
-.has-more-end .is-pinned-end.is-pinned-edge::after {
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .is-dragging-rows tbody tr:not(.is-dragging) {
-    transition: transform 150ms ease-out;
-  }
+td.is-editable:hover,
+th.is-editable:hover {
+  --su-table-cell-tint: var(
+    --su-table-editable-hover-background,
+    color-mix(in srgb, currentColor 6%, transparent)
+  );
 }
 
 td.is-editable,
@@ -241,71 +49,10 @@ th.is-editable {
   cursor: text;
 }
 
-.su-table-align-start {
-  text-align: start;
-}
-
-.su-table-align-center {
-  text-align: center;
-}
-
-.su-table-align-end {
-  text-align: end;
-}
-
 .su-table-handle-cell,
 .su-table-select-cell {
   text-align: center;
   width: 1%;
-}
-
-.su-table-actions-cell {
-  text-align: end;
-  width: 1%;
-}
-
-.su-table-actions {
-  display: flex;
-  gap: 0.35rem;
-  justify-content: flex-end;
-}
-
-.su-table-sort {
-  align-items: center;
-  background: none;
-  border: none;
-  border-radius: 4px;
-  color: inherit;
-  cursor: pointer;
-  display: inline-flex;
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-  gap: 0.35rem;
-  margin: -0.2rem -0.35rem;
-  padding: 0.2rem 0.35rem;
-}
-
-.su-table-sort-icon {
-  border-left: 0.3rem solid transparent;
-  border-right: 0.3rem solid transparent;
-  height: 0;
-  opacity: 0.35;
-  width: 0;
-
-  &.is-none,
-  &.is-ascending {
-    border-bottom: 0.4rem solid currentColor;
-  }
-
-  &.is-descending {
-    border-top: 0.4rem solid currentColor;
-  }
-
-  &.is-ascending,
-  &.is-descending {
-    opacity: 1;
-  }
 }
 
 .su-table-handle {
@@ -332,30 +79,6 @@ th.is-editable {
   width: 12px;
 }
 
-.su-table-button {
-  @include controls.button;
-
-  &.su-table-pin-button {
-    align-items: center;
-    display: inline-flex;
-    gap: 0.3rem;
-
-    svg {
-      opacity: 0.5;
-    }
-
-    &[aria-pressed='true'] {
-      border-color: var(--su-table-accent, #2563eb);
-      color: var(--su-table-accent, #2563eb);
-
-      svg {
-        opacity: 1;
-      }
-    }
-  }
-}
-
-.su-table-sort,
 .su-table-handle,
 .su-table-checkbox {
   @include controls.focus-ring;
@@ -408,23 +131,8 @@ th.is-editable {
   margin-top: 0.75rem;
 }
 
-.su-table-empty {
-  opacity: 0.7;
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.su-table-visually-hidden {
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  tbody tr {
-    transition: background-color 120ms ease-out;
+  .is-dragging-rows tbody tr:not(.is-dragging) {
+    transition: transform 150ms ease-out;
   }
 }
