@@ -391,7 +391,34 @@
         }
       }
     },
-    "@su-labs/tooltip": {
+    "@su-labs/select": {
+      "projectType": "library",
+      "root": "projects/su-labs/select",
+      "sourceRoot": "projects/su-labs/select/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/su-labs/select/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/su-labs/select/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/su-labs/select/tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  },
+  "cli": {    "@su-labs/tooltip": {
       "projectType": "library",
       "root": "projects/su-labs/tooltip",
       "sourceRoot": "projects/su-labs/tooltip/src",

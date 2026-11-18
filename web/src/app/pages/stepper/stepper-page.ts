@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { SuStepperOrientation } from '@su-labs/core/stepper';
+import { SuSelectComponent } from '@su-labs/select';
 import { SuStepComponent, SuStepperComponent } from '@su-labs/stepper';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { PageFeatureExample } from '../../shared/page-feature';
+import { selectOptions } from '../../shared/select-options';
 import { UtilityPage } from '../../shared/utility-page';
 import { STEPPER_FEATURES } from './stepper-features';
 
@@ -53,7 +55,7 @@ backButton.addEventListener('click', () => stepper.back());`,
 
 @Component({
   selector: 'app-stepper-page',
-  imports: [PageFeatureExample, SuStepComponent, SuStepperComponent, UtilityPage],
+  imports: [PageFeatureExample, SuSelectComponent, SuStepComponent, SuStepperComponent, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stepper-page.html',
   styleUrl: './stepper-page.scss',
@@ -62,7 +64,7 @@ export class StepperPage {
   protected readonly utility = getUtility('stepper');
   protected readonly usage = USAGE;
   protected readonly features = STEPPER_FEATURES;
-  protected readonly orientations = ORIENTATIONS;
+  protected readonly orientations = selectOptions(ORIENTATIONS);
   protected readonly plans = PLANS;
 
   protected readonly orientation = signal<SuStepperOrientation>('horizontal');
@@ -86,16 +88,6 @@ export class StepperPage {
 
   protected label(title: string): string | undefined {
     return this.titles() ? title : undefined;
-  }
-
-  protected chooseOrientation(event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      const { value } = event.target;
-      const option = ORIENTATIONS.find((item) => item === value);
-      if (option) {
-        this.orientation.set(option);
-      }
-    }
   }
 
   protected setFlag(flag: (value: boolean) => void, event: Event): void {

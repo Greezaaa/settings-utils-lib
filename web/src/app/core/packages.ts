@@ -87,6 +87,14 @@ export const UTILITIES: readonly SuUtility[] = [
     summary: 'Tooltips on hover or click with an arrow, 12 placements, and a "?" icon that grows into its tooltip.',
   },
   {
+    slug: 'select',
+    name: 'Select',
+    packageName: '@su-labs/select',
+    coreEntry: '@su-labs/core/select',
+    summary:
+      'A select with its own styled list: search, groups, disabled options, keyboard and type-ahead, never cut off.',
+  },
+  {
     slug: 'scroll-spy',
     name: 'Scroll spy',
     packageName: '@su-labs/scroll-spy',

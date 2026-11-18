@@ -501,6 +501,53 @@ export function SaveButton() {
 }
 ```
 
+## Select
+
+Keep one controller per select for whether it's open, the value, the search and the active option. It skips disabled options and does type-ahead; you render the list and point `aria-activedescendant` at the active option:
+
+```tsx
+import { KeyboardEvent, useState, useSyncExternalStore } from 'react';
+import { SuSelectController } from '@su-labs/core/select';
+
+export function SizeSelect() {
+  const [select] = useState(
+    () =>
+      new SuSelectController({
+        options: [
+          { value: 's', label: 'Small' },
+          { value: 'm', label: 'Medium' },
+          { value: 'l', label: 'Large', disabled: true },
+        ],
+        value: 'm',
+      }),
+  );
+  const { open, value, visible, active } = useSyncExternalStore(select.state.subscribe, select.state.get, select.state.get);
+
+  function onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') { event.preventDefault(); open ? select.move('next') : select.open(); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); select.move('previous'); }
+    if (event.key === 'Enter') { event.preventDefault(); open ? select.choose() : select.open(); }
+    if (event.key === 'Escape') select.close();
+    if (event.key.length === 1 && event.key !== ' ') select.typeAhead(event.key);
+  }
+
+  return (
+    <>
+      <button type="button" role="combobox" aria-controls="size-list" aria-expanded={open} aria-activedescendant={open && active >= 0 ? `size-${active}` : undefined} onClick={() => select.toggle()} onKeyDown={onKeyDown}>
+        {select.selected?.label ?? 'Choose…'}
+      </button>
+      <ul id="size-list" role="listbox" hidden={!open}>
+        {visible.map((option, index) => (
+          <li key={option.value} id={`size-${index}`} role="option" aria-selected={option.value === value} aria-disabled={option.disabled} className={index === active ? 'active' : undefined} onMouseDown={(event) => event.preventDefault()} onClick={() => select.choose(index)}>
+            {option.label}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+```
+
 ## Tree table
 
 Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
@@ -565,5 +612,6 @@ export function PriceList({ items }: { items: readonly Item[] }) {
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
 - [Tooltip options and full API](../../projects/su-labs/core/README.md#tooltip)
+- [Select options and full API](../../projects/su-labs/core/README.md#select)
 - [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

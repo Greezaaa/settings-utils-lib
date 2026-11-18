@@ -3,29 +3,17 @@
     <div class="demo-controls">
       <label class="field">
         <span>Buttons</span>
-        <select [value]="kind()" (change)="choose(kindValues, $event, kind.set)">
-          @for (item of kinds; track item.kind) {
-            <option [value]="item.kind">{{ item.label }}</option>
-          }
-        </select>
+        <su-lib-select [options]="kinds" [value]="kind()" (chosen)="kind.set($event)" />
       </label>
 
       <label class="field">
         <span>Size</span>
-        <select [value]="size()" (change)="choose(sizes, $event, size.set)">
-          @for (item of sizes; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="sizes" [value]="size()" (chosen)="size.set($event)" />
       </label>
 
       <label class="field">
         <span>Backdrop</span>
-        <select [value]="backdrop()" (change)="choose(backdrops, $event, backdrop.set)">
-          @for (item of backdrops; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="backdrops" [value]="backdrop()" (chosen)="backdrop.set($event)" />
       </label>
 
       @if (backdrop() === 'dim') {

@@ -1,0 +1,83 @@
+<app-utility-page
+  [utility]="utility"
+  [usage]="usage"
+  featuresLead="Each feature on a select of its own.">
+  <div class="card select-demo">
+    <div class="select-demo-controls">
+      <label class="checkbox">
+        <input type="checkbox" [checked]="searchable()" (change)="setFlag(searchable.set, $event)" />
+        Searchable
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="animated()" (change)="setFlag(animated.set, $event)" />
+        Animated
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" [checked]="disabled()" (change)="setFlag(disabled.set, $event)" />
+        Disabled
+      </label>
+    </div>
+
+    <label class="field select-demo-field">
+      <span>Country</span>
+      <su-lib-select
+        placeholder="Choose a country"
+        [options]="countries"
+        [searchable]="searchable()"
+        [animated]="animated()"
+        [disabled]="disabled()"
+        [(value)]="country"
+        [(open)]="open" />
+    </label>
+
+    <dl class="state-list">
+      <div>
+        <dt>Value</dt>
+        <dd>{{ country() ?? 'none' }}</dd>
+      </div>
+      <div>
+        <dt>Open</dt>
+        <dd>{{ open() ? 'yes' : 'no' }}</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="muted">
+    Countries in three groups, two of them disabled.
+    <br />
+    Try it: tab to the select and use the arrows, type a letter while it’s closed, or open it and search for “mex”.
+  </p>
+
+  <ng-template [appPageFeature]="features.search">
+    <label class="field select-feature">
+      <span>Country</span>
+      <su-lib-select searchable [options]="countries" [(value)]="country" />
+    </label>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.groups">
+    <label class="field select-feature">
+      <span>Delivery</span>
+      <su-lib-select [options]="delivery" [(value)]="method" />
+    </label>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.keyboard">
+    <label class="field select-feature">
+      <span>Size</span>
+      <su-lib-select [options]="sizes" [(value)]="size" />
+    </label>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.layer">
+    <div class="select-clip">
+      <su-lib-select ariaLabel="Size" [options]="sizes" [(value)]="size" />
+    </div>
+  </ng-template>
+
+  <ng-template [appPageFeature]="features.theming">
+    <label class="field select-feature themed-select">
+      <span>Size</span>
+      <su-lib-select [options]="sizes" [(value)]="size" />
+    </label>
+  </ng-template>
+</app-utility-page>

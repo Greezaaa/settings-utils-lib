@@ -77,19 +77,11 @@
     }
     <label class="field">
       <span>Ratio, narrow</span>
-      <select (change)="setRatio('minRatio', $event)">
-        @for (ratio of ratios; track ratio.value) {
-          <option [value]="ratio.value" [selected]="scale().minRatio === ratio.value">{{ ratio.value }} {{ ratio.name }}</option>
-        }
-      </select>
+      <su-lib-select [options]="ratios" [value]="scale().minRatio" (chosen)="setRatio('minRatio', $event)" />
     </label>
     <label class="field">
       <span>Ratio, wide</span>
-      <select (change)="setRatio('maxRatio', $event)">
-        @for (ratio of ratios; track ratio.value) {
-          <option [value]="ratio.value" [selected]="scale().maxRatio === ratio.value">{{ ratio.value }} {{ ratio.name }}</option>
-        }
-      </select>
+      <su-lib-select [options]="ratios" [value]="scale().maxRatio" (chosen)="setRatio('maxRatio', $event)" />
     </label>
   </div>
   <p class="muted tool-note">

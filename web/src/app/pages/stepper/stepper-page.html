@@ -6,11 +6,7 @@
     <div class="stepper-demo-controls">
       <label class="field">
         <span>Orientation</span>
-        <select [value]="orientation()" (change)="chooseOrientation($event)">
-          @for (item of orientations; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="orientations" [value]="orientation()" (chosen)="orientation.set($event)" />
       </label>
       <label class="checkbox">
         <input type="checkbox" [checked]="titles()" (change)="setFlag(titles.set, $event)" />

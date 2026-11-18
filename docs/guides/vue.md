@@ -470,6 +470,45 @@ watch(
 </template>
 ```
 
+## Select
+
+Keep one controller per select for whether it's open, the value, the search and the active option. It skips disabled options and does type-ahead; you render the list and point `aria-activedescendant` at the active option:
+
+```vue
+<script setup lang="ts">
+import { SuSelectController } from '@su-labs/core/select';
+import { useStore } from '@/composables/use-store';
+
+const select = new SuSelectController({
+  options: [
+    { value: 's', label: 'Small' },
+    { value: 'm', label: 'Medium' },
+    { value: 'l', label: 'Large', disabled: true },
+  ],
+  value: 'm',
+});
+const state = useStore(select.state);
+
+function onKeydown(event: KeyboardEvent) {
+  const open = state.value.open;
+  if (event.key === 'ArrowDown') { event.preventDefault(); open ? select.move('next') : select.open(); }
+  if (event.key === 'ArrowUp') { event.preventDefault(); select.move('previous'); }
+  if (event.key === 'Enter') { event.preventDefault(); open ? select.choose() : select.open(); }
+  if (event.key === 'Escape') select.close();
+  if (event.key.length === 1 && event.key !== ' ') select.typeAhead(event.key);
+}
+</script>
+
+<template>
+  <button type="button" role="combobox" aria-controls="size-list" :aria-expanded="state.open" :aria-activedescendant="state.open && state.active >= 0 ? `size-${state.active}` : undefined" @click="select.toggle()" @keydown="onKeydown">
+    {{ select.selected?.label ?? 'Choose…' }}
+  </button>
+  <ul v-show="state.open" id="size-list" role="listbox">
+    <li v-for="(option, index) in state.visible" :id="`size-${index}`" :key="option.value" role="option" :aria-selected="option.value === state.value" :aria-disabled="option.disabled" :class="{ active: index === state.active }" @mousedown.prevent @click="select.choose(index)">{{ option.label }}</li>
+  </ul>
+</template>
+```
+
 ## Tree table
 
 Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
@@ -526,5 +565,6 @@ const state = useStore(tree.state);
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
 - [Tooltip options and full API](../../projects/su-labs/core/README.md#tooltip)
+- [Select options and full API](../../projects/su-labs/core/README.md#select)
 - [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

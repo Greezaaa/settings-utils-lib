@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { SuNotificationPosition, SuNotificationService, SuNotificationType } from '@su-labs/notifications';
+import { SuSelectComponent } from '@su-labs/select';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { PageFeatureExample } from '../../shared/page-feature';
+import { selectOptions } from '../../shared/select-options';
 import { UtilityPage } from '../../shared/utility-page';
 import { NOTIFICATIONS_FEATURES } from './notifications-features';
 
@@ -50,7 +52,7 @@ notifications.show({ type: 'success', message: 'Saved!' });`,
 
 @Component({
   selector: 'app-notifications-page',
-  imports: [PageFeatureExample, UtilityPage],
+  imports: [PageFeatureExample, SuSelectComponent, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './notifications-page.html',
 })
@@ -59,8 +61,8 @@ export class NotificationsPage {
   protected readonly features = NOTIFICATIONS_FEATURES;
   protected readonly usage = USAGE;
   protected readonly examples = EXAMPLES;
-  protected readonly positions = POSITIONS;
-  protected readonly durations = DURATIONS;
+  protected readonly positions = selectOptions(POSITIONS);
+  protected readonly durations = selectOptions(DURATIONS, (duration) => `${duration / 1000} seconds`);
 
   protected readonly notifications = inject(SuNotificationService);
   protected readonly position = signal<SuNotificationPosition>(this.notifications.position);
@@ -71,21 +73,9 @@ export class NotificationsPage {
     this.notifications.show({ type, message, duration: this.duration(), autoClose: this.autoClose() });
   }
 
-  protected setPosition(event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      const { value } = event.target;
-      const position = POSITIONS.find((item) => item === value);
-      if (position) {
-        this.notifications.position = position;
-        this.position.set(position);
-      }
-    }
-  }
-
-  protected setDuration(event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      this.duration.set(Number(event.target.value));
-    }
+  protected setPosition(position: SuNotificationPosition): void {
+    this.notifications.position = position;
+    this.position.set(position);
   }
 
   protected setAutoClose(event: Event): void {

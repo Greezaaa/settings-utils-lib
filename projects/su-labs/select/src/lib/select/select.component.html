@@ -1,0 +1,65 @@
+<button
+  #trigger
+  type="button"
+  class="su-select-trigger"
+  role="combobox"
+  aria-haspopup="listbox"
+  [id]="id"
+  [disabled]="disabled()"
+  [attr.aria-expanded]="state().open"
+  [attr.aria-controls]="listId"
+  [attr.aria-activedescendant]="searchable() ? null : activeId()"
+  [attr.aria-label]="ariaLabel() ?? null"
+  [attr.aria-labelledby]="ariaLabelledby() ?? null"
+  (click)="toggle()"
+  (keydown)="onKeydown($event)">
+  <span class="su-select-value" [class.su-select-placeholder]="!selected()">{{ selected()?.label ?? placeholder() ?? texts().placeholder }}</span>
+  <svg class="su-select-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+</button>
+<div #panel popover="manual" class="su-select-panel" [class.su-select-animated]="animated()">
+  @if (searchable()) {
+    <input
+      #search
+      type="text"
+      class="su-select-search"
+      role="combobox"
+      autocomplete="off"
+      spellcheck="false"
+      aria-autocomplete="list"
+      aria-expanded="true"
+      [attr.aria-controls]="listId"
+      [attr.aria-activedescendant]="activeId()"
+      [attr.aria-label]="texts().search"
+      [placeholder]="texts().search"
+      (input)="onSearch($event)"
+      (keydown)="onKeydown($event)" />
+  }
+  <ul class="su-select-list" role="listbox" tabindex="-1" [id]="listId" [attr.aria-label]="ariaLabel() ?? null" [attr.aria-labelledby]="ariaLabel() ? null : (ariaLabelledby() ?? id)" (mousedown)="$event.preventDefault()">
+    @for (group of groups(); track $index) {
+      <li role="presentation">
+        <ul class="su-select-group" [attr.role]="group.label ? 'group' : 'presentation'" [attr.aria-labelledby]="group.label ? id + '-group-' + $index : null">
+          @if (group.label) {
+            <li role="presentation" class="su-select-group-label" [id]="id + '-group-' + $index">{{ group.label }}</li>
+          }
+          @for (item of group.options; track item.index) {
+            <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- the combobox handles the keyboard through aria-activedescendant -->
+            <li
+              role="option"
+              class="su-select-option"
+              [id]="optionId(item.index)"
+              [class.su-select-active]="item.index === state().active"
+              [attr.aria-selected]="isSelected(item.option)"
+              [attr.aria-disabled]="item.option.disabled ? true : null"
+              (click)="choose(item.index)"
+              (pointermove)="activate(item.index)">
+              <span class="su-select-option-label">{{ item.option.label }}</span>
+              <svg class="su-select-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+            </li>
+          }
+        </ul>
+      </li>
+    } @empty {
+      <li role="presentation" class="su-select-empty">{{ texts().empty }}</li>
+    }
+  </ul>
+</div>

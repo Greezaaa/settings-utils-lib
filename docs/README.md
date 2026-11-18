@@ -32,6 +32,7 @@ Every utility is available in `@su-labs/core` for any environment, and as an Ang
 | Skeleton | `@su-labs/core/skeleton`, `@su-labs/core/skeleton.css` | `@su-labs/skeleton` |
 | Stepper | `@su-labs/core/stepper` | `@su-labs/stepper` |
 | Tooltip | `@su-labs/core/tooltip` | `@su-labs/tooltip` |
+| Select | `@su-labs/core/select` | `@su-labs/select` |
 | Tree table | `@su-labs/core/tree-table` | `@su-labs/tree-table` |
 | Form fields | - | `@su-labs/fields` |
 
@@ -39,7 +40,7 @@ Every utility is available in `@su-labs/core` for any environment, and as an Ang
 
 The full API of each utility is documented in its package README:
 
-- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, dialog, table, tree table, skeleton, stepper, tooltip, scroll spy, visit tracker)
+- [`@su-labs/core`](../projects/su-labs/core/README.md) (store, theme, font size, notifications, dialog, table, tree table, skeleton, stepper, tooltip, select, scroll spy, visit tracker)
 - [`@su-labs/theme`](../projects/su-labs/theme/README.md)
 - [`@su-labs/font-size`](../projects/su-labs/font-size/README.md)
 - [`@su-labs/notifications`](../projects/su-labs/notifications/README.md)
@@ -51,4 +52,5 @@ The full API of each utility is documented in its package README:
 - [`@su-labs/skeleton`](../projects/su-labs/skeleton/README.md)
 - [`@su-labs/stepper`](../projects/su-labs/stepper/README.md)
 - [`@su-labs/tooltip`](../projects/su-labs/tooltip/README.md)
+- [`@su-labs/select`](../projects/su-labs/select/README.md)
 - [`@su-labs/tree-table`](../projects/su-labs/tree-table/README.md)

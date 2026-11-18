@@ -430,6 +430,58 @@ Keep one controller per tooltip for whether it's open, with the delays that stop
 </script>
 ```
 
+## Select
+
+Keep one controller per select for whether it's open, the value, the search and the active option. It skips disabled options and does type-ahead; you render the list and point `aria-activedescendant` at the active option:
+
+```html
+<button type="button" id="size" role="combobox" aria-controls="size-list" aria-expanded="false"></button>
+<ul id="size-list" role="listbox" hidden></ul>
+
+<script type="module">
+  import { SuSelectController } from 'https://esm.sh/@su-labs/core@1.12.0/select';
+
+  const trigger = document.querySelector('#size');
+  const list = document.querySelector('#size-list');
+  const select = new SuSelectController({
+    options: [
+      { value: 's', label: 'Small' },
+      { value: 'm', label: 'Medium' },
+      { value: 'l', label: 'Large', disabled: true },
+    ],
+    value: 'm',
+  });
+
+  select.state.subscribe(({ open, value, visible, active }) => {
+    trigger.textContent = select.selected?.label ?? 'Choose…';
+    trigger.setAttribute('aria-expanded', String(open));
+    trigger.setAttribute('aria-activedescendant', open && active >= 0 ? `size-${active}` : '');
+    list.hidden = !open;
+    list.replaceChildren(
+      ...visible.map((option, index) => {
+        const item = Object.assign(document.createElement('li'), { id: `size-${index}`, role: 'option', textContent: option.label });
+        item.setAttribute('aria-selected', String(option.value === value));
+        item.toggleAttribute('aria-disabled', !!option.disabled);
+        item.classList.toggle('active', index === active);
+        item.addEventListener('mousedown', (event) => event.preventDefault());
+        item.addEventListener('click', () => select.choose(index));
+        return item;
+      }),
+    );
+  });
+  trigger.addEventListener('click', () => select.toggle());
+  trigger.addEventListener('blur', () => select.close());
+  trigger.addEventListener('keydown', (event) => {
+    const { open } = select.state.get();
+    if (event.key === 'ArrowDown') { event.preventDefault(); open ? select.move('next') : select.open(); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); select.move('previous'); }
+    if (event.key === 'Enter') { event.preventDefault(); open ? select.choose() : select.open(); }
+    if (event.key === 'Escape') select.close();
+    if (event.key.length === 1 && event.key !== ' ') select.typeAhead(event.key);
+  });
+</script>
+```
+
 ## Tree table
 
 Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
@@ -495,5 +547,6 @@ Render the rows on screen from `state` as a `treegrid`: each row has its `level`
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
 - [Tooltip options and full API](../../projects/su-labs/core/README.md#tooltip)
+- [Select options and full API](../../projects/su-labs/core/README.md#select)
 - [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

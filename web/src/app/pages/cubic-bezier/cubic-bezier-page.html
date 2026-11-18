@@ -48,12 +48,7 @@
       <div class="tool-fields preview-fields">
         <label class="field">
           <span>Compare with</span>
-          <select (change)="chooseCompare($event)">
-            <option [value]="noCompare" [selected]="compareKey() === noCompare">Nothing</option>
-            @for (preset of presets; track preset.key) {
-              <option [value]="preset.key" [selected]="compareKey() === preset.key">{{ preset.name }}</option>
-            }
-          </select>
+          <su-lib-select [options]="compareOptions" [value]="compareKey()" (chosen)="compareKey.set($event)" />
         </label>
         <label class="field">
           <span>Duration: {{ duration() }} ms</span>

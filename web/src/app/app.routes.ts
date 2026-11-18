@@ -76,6 +76,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/tooltip/tooltip-page').then((m) => m.TooltipPage),
   },
   {
+    path: 'select',
+    title: `Select · ${SITE_NAME}`,
+    data: utilityMeta('select'),
+    loadComponent: () => import('./pages/select/select-page').then((m) => m.SelectPage),
+  },
+  {
     path: 'scroll-spy',
     title: `Scroll spy · ${SITE_NAME}`,
     data: utilityMeta('scroll-spy'),

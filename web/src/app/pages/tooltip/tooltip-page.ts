@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { SuTooltipOpenOn, SuTooltipPlacement, SuTooltipTrigger } from '@su-labs/core/tooltip';
+import { SuSelectComponent } from '@su-labs/select';
 import { SuTooltipComponent } from '@su-labs/tooltip';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { PageFeatureExample } from '../../shared/page-feature';
+import { selectOptions } from '../../shared/select-options';
 import { UtilityPage } from '../../shared/utility-page';
 import { TOOLTIP_FEATURES } from './tooltip-features';
 
@@ -78,7 +80,7 @@ tooltip.state.subscribe(({ open }) => {
 
 @Component({
   selector: 'app-tooltip-page',
-  imports: [PageFeatureExample, SuTooltipComponent, UtilityPage],
+  imports: [PageFeatureExample, SuSelectComponent, SuTooltipComponent, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tooltip-page.html',
   styleUrl: './tooltip-page.scss',
@@ -87,10 +89,10 @@ export class TooltipPage {
   protected readonly utility = getUtility('tooltip');
   protected readonly usage = USAGE;
   protected readonly features = TOOLTIP_FEATURES;
-  protected readonly placements = PLACEMENTS;
+  protected readonly placementOptions = selectOptions(PLACEMENTS);
   protected readonly grid = GRID;
-  protected readonly triggers = TRIGGERS;
-  protected readonly openOnOptions = OPEN_ON;
+  protected readonly triggerOptions = selectOptions(TRIGGERS);
+  protected readonly openOnOptions = selectOptions(OPEN_ON);
 
   protected readonly placement = signal<SuTooltipPlacement>('top');
   protected readonly trigger = signal<SuTooltipTrigger>('content');
@@ -99,16 +101,6 @@ export class TooltipPage {
   protected readonly animated = signal(true);
   protected readonly width = signal('18rem');
   protected readonly open = signal(false);
-
-  protected choose<T extends string>(options: readonly T[], set: (value: T) => void, event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      const { value } = event.target;
-      const option = options.find((item) => item === value);
-      if (option) {
-        set(option);
-      }
-    }
-  }
 
   protected setFlag(flag: (value: boolean) => void, event: Event): void {
     if (event.target instanceof HTMLInputElement) {

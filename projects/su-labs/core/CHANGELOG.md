@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `@su-labs/core/tooltip`: `SuTooltipController` for whether a tooltip is open, with `show` and `hide` after `showDelay` and `hideDelay` (a pointer only passing over doesn't open it, one moving to the tooltip doesn't close it), `open`, `close`, `toggle`, `setOpen`, `setDelays` and `cancel`; `suTooltipPosition` for a tooltip beside its trigger (12 placements, moving to the other side when only that has room, kept inside the viewport, right to left aware) with where its arrow points and the point it grows from; `suTooltipIconPosition` and `suTooltipIconClip` for a tooltip that grows out of an icon; `suTooltipPlacementParts`; `SU_TOOLTIP_LABELS`
+- `@su-labs/core/select`: `SuSelectController` for a select following the WAI-ARIA listbox pattern: `open`, `close`, `toggle`, `move` (`next`, `previous`, `first`, `last`, skipping disabled options), `activate`, `choose`, `search` (ignoring case and accents), `typeAhead` (choosing at once while closed, like a native select), `setOptions`, `setValue` and `selected`, with `typeAheadDelay` and `compare` options; `suSelectGroups` for options under group headings; `suSelectFilter`, `suSelectNormalize`; `SU_SELECT_LABELS`
 
 ## [1.11.0] - 2026-11-17
 

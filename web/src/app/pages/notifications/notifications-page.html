@@ -14,20 +14,12 @@
 
       <label class="field">
         <span>Position</span>
-        <select [value]="position()" (change)="setPosition($event)">
-          @for (item of positions; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="positions" [value]="position()" (chosen)="setPosition($event)" />
       </label>
 
       <label class="field">
         <span>Duration</span>
-        <select [value]="duration()" (change)="setDuration($event)" [disabled]="!autoClose()">
-          @for (item of durations; track item) {
-            <option [value]="item">{{ item / 1000 }} seconds</option>
-          }
-        </select>
+        <su-lib-select [options]="durations" [value]="duration()" [disabled]="!autoClose()" (chosen)="duration.set($event)" />
       </label>
 
       <label class="checkbox">

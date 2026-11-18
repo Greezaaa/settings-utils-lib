@@ -6,27 +6,15 @@
     <div class="tooltip-demo-controls">
       <label class="field">
         <span>Trigger</span>
-        <select [value]="trigger()" (change)="choose(triggers, trigger.set, $event)">
-          @for (item of triggers; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="triggerOptions" [value]="trigger()" (chosen)="trigger.set($event)" />
       </label>
       <label class="field">
         <span>Placement</span>
-        <select [value]="placement()" (change)="choose(placements, placement.set, $event)">
-          @for (item of placements; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="placementOptions" [value]="placement()" (chosen)="placement.set($event)" />
       </label>
       <label class="field">
         <span>Opens on</span>
-        <select [value]="openOn()" (change)="choose(openOnOptions, openOn.set, $event)">
-          @for (item of openOnOptions; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="openOnOptions" [value]="openOn()" (chosen)="openOn.set($event)" />
       </label>
       <label class="field">
         <span>Width</span>

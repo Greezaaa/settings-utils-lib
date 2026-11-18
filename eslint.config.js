@@ -147,6 +147,7 @@ module.exports = tseslint.config(
       '@angular-eslint/template/no-negated-async': 'error',
       '@angular-eslint/template/alt-text': 'warn',
       '@angular-eslint/template/button-has-type': 'error',
+      '@angular-eslint/template/label-has-associated-control': ['error', { controlComponents: ['su-lib-select'] }],
     },
   },
 );

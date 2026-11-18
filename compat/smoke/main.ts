@@ -5,6 +5,7 @@ import { SuCheckboxComponent, SuChipsComponent, SuSwitchComponent } from '@su-la
 import { FontSizeService } from '@su-labs/font-size';
 import { SuNotificationComponent, SuNotificationService } from '@su-labs/notifications';
 import { ScrollSpyDirective, ScrollSpyService } from '@su-labs/scroll-spy';
+import { SuSelectComponent } from '@su-labs/select';
 import { SuSkeletonComponent } from '@su-labs/skeleton';
 import { SuStepComponent, SuStepperComponent } from '@su-labs/stepper';
 import { SuTableColumns, SuTableComponent } from '@su-labs/table';
@@ -27,6 +28,7 @@ interface Fruit {
     SuChipsComponent,
     SuDialogComponent,
     SuNotificationComponent,
+    SuSelectComponent,
     SuSkeletonComponent,
     SuStepComponent,
     SuStepperComponent,
@@ -58,6 +60,11 @@ interface Fruit {
     </su-lib-stepper>
     <su-lib-tooltip text="Saves a draft">Save</su-lib-tooltip>
     <su-lib-tooltip trigger="icon" text="More about saving" />
+    <su-lib-select
+      ariaLabel="Colour"
+      searchable
+      [options]="colours"
+      [(value)]="colour" />
     <button type="button" id="smoke-notify" (click)="notify()">Notify</button>
     <su-lib-notifications />
     <su-lib-dialog />
@@ -94,6 +101,7 @@ class Smoke {
     { value: 'green', label: 'Green' },
   ];
   protected readonly isOn = signal(false);
+  protected readonly colour = signal<string | null>('red');
   private readonly notifications = inject(SuNotificationService);
 
   constructor() {

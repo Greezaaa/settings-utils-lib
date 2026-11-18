@@ -14,6 +14,7 @@
       "@su-labs/notifications": ["../projects/su-labs/notifications/src/public-api.ts"],
       "@su-labs/scroll-spy": ["../projects/su-labs/scroll-spy/src/public-api.ts"],
       "@su-labs/skeleton": ["../projects/su-labs/skeleton/src/public-api.ts"],
+      "@su-labs/select": ["../projects/su-labs/select/src/public-api.ts"],
       "@su-labs/stepper": ["../projects/su-labs/stepper/src/public-api.ts"],
       "@su-labs/tooltip": ["../projects/su-labs/tooltip/src/public-api.ts"],
       "@su-labs/table": ["../projects/su-labs/table/src/public-api.ts"],

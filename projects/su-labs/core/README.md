@@ -5,7 +5,7 @@
 
 Framework-agnostic browser utilities with a tiny reactive store. Use them from vanilla JavaScript, React, Vue, Svelte, Angular or any other framework. No dependencies besides `tslib`.
 
-> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/tree-table](https://www.npmjs.com/package/@su-labs/tree-table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/stepper](https://www.npmjs.com/package/@su-labs/stepper), [@su-labs/tooltip](https://www.npmjs.com/package/@su-labs/tooltip), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
+> Using Angular? [@su-labs/theme](https://www.npmjs.com/package/@su-labs/theme), [@su-labs/font-size](https://www.npmjs.com/package/@su-labs/font-size), [@su-labs/notifications](https://www.npmjs.com/package/@su-labs/notifications), [@su-labs/dialog](https://www.npmjs.com/package/@su-labs/dialog), [@su-labs/table](https://www.npmjs.com/package/@su-labs/table), [@su-labs/tree-table](https://www.npmjs.com/package/@su-labs/tree-table), [@su-labs/skeleton](https://www.npmjs.com/package/@su-labs/skeleton), [@su-labs/stepper](https://www.npmjs.com/package/@su-labs/stepper), [@su-labs/tooltip](https://www.npmjs.com/package/@su-labs/tooltip), [@su-labs/select](https://www.npmjs.com/package/@su-labs/select), [@su-labs/scroll-spy](https://www.npmjs.com/package/@su-labs/scroll-spy) and [@su-labs/visit-tracker](https://www.npmjs.com/package/@su-labs/visit-tracker) wrap these utilities in Angular services, components and directives with signals.
 
 ## Table of Contents
 
@@ -22,6 +22,7 @@ Framework-agnostic browser utilities with a tiny reactive store. Use them from v
 - [Skeleton](#skeleton)
 - [Stepper](#stepper)
 - [Tooltip](#tooltip)
+- [Select](#select)
 - [Scroll Spy](#scroll-spy)
 - [Visit Tracker](#visit-tracker)
 - [Storage](#storage)
@@ -63,6 +64,7 @@ Each utility has its own entry point, so your bundle only includes what you impo
 | `@su-labs/core/skeleton.css` | The skeleton stylesheet |
 | `@su-labs/core/stepper` | `SuStepperController`, `SU_STEPPER_LABELS` and stepper types |
 | `@su-labs/core/tooltip` | `SuTooltipController`, `suTooltipPosition`, `suTooltipIconPosition`, `suTooltipIconClip`, `SU_TOOLTIP_LABELS` and tooltip types |
+| `@su-labs/core/select` | `SuSelectController`, `suSelectGroups`, `suSelectFilter`, `SU_SELECT_LABELS` and select types |
 | `@su-labs/core/scroll-spy` | `SuScrollSpyController`, `observeSuScrollSpySection` |
 | `@su-labs/core/visit-tracker` | `SuVisitTrackerController` and visit types |
 
@@ -550,6 +552,54 @@ tooltip.state.subscribe(({ open }) => {
 `suTooltipIconPosition(icon, tooltip, options)` places a tooltip with one corner on an icon, so it can grow out of it; `suTooltipIconClip(position, tooltip, iconSize, radius)` gives the `clip-path` to animate from (a circle on the icon) and to (the whole tooltip).
 
 `SU_TOOLTIP_LABELS` holds the English names of the "?" icon and the close button.
+
+## Select
+
+A select's logic, following the WAI-ARIA listbox pattern: whether the list is open, the chosen value, the search text and the option the keyboard is on, skipping disabled options, with type-ahead. Your app renders it (Angular: [`@su-labs/select`](https://www.npmjs.com/package/@su-labs/select)), and can place the list with `suTooltipPosition` from `@su-labs/core/tooltip`.
+
+```ts
+import { SuSelectController, suSelectGroups } from '@su-labs/core/select';
+
+const select = new SuSelectController({
+  options: [
+    { value: 's', label: 'Small' },
+    { value: 'm', label: 'Medium' },
+    { value: 'l', label: 'Large', disabled: true },
+  ],
+  value: 'm',
+});
+
+trigger.addEventListener('click', () => select.toggle());
+trigger.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowDown') select.state.get().open ? select.move('next') : select.open();
+  if (event.key === 'Enter') select.choose();
+  if (event.key === 'Escape') select.close();
+  if (event.key.length === 1) select.typeAhead(event.key);
+});
+select.state.subscribe(({ open, value, visible, active }) => {
+  // render suSelectGroups(visible), mark visible[active] with aria-activedescendant
+});
+```
+
+| Method | |
+|---|---|
+| `open()` / `close()` / `toggle()` | Opens on the chosen option (or the first one that can be chosen), or closes and clears the search |
+| `move('next' \| 'previous' \| 'first' \| 'last')` | Moves the active option, skipping disabled ones |
+| `activate(index)` | Makes a visible option active, e.g. under the pointer |
+| `choose(index?)` | Chooses the visible option at `index`, or the active one, and closes; `false` for a disabled one |
+| `search(query)` | Shows only the options containing the text, ignoring case and accents |
+| `typeAhead(key)` | Jumps to the next option starting with the typed letters; while closed it chooses it, like a native select |
+| `setOptions(options)` / `setValue(value)` | Replace the options or set the value from outside |
+| `selected` | The chosen option |
+
+| Option | Default | |
+|---|---|---|
+| `options` | `[]` | `{ value, label, disabled?, group? }` |
+| `value` | `null` | |
+| `typeAheadDelay` | `500` | Milliseconds between keys that still make one word |
+| `compare` | `Object.is` | Whether two values are the same |
+
+`suSelectGroups(options)` splits the options into runs sharing a `group`, for headings; `suSelectFilter` and `suSelectNormalize` are the search helpers. `SU_SELECT_LABELS` holds the English placeholder, search and "No matches" texts.
 
 ## Scroll Spy
 

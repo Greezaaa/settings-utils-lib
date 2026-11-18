@@ -20,6 +20,7 @@ npm install @su-labs/fields
 npm install @su-labs/skeleton
 npm install @su-labs/stepper
 npm install @su-labs/tooltip
+npm install @su-labs/select
 npm install @su-labs/tree-table
 ```
 
@@ -40,6 +41,7 @@ Requires Angular 22 or later.
 | `@su-labs/skeleton` | Skeleton loaders drawn with your own HTML and CSS, with one shimmer and screen reader support | [README](../../projects/su-labs/skeleton/README.md) |
 | `@su-labs/stepper` | Content in numbered steps shown one at a time, with rules for going forward and back, horizontal or vertical, and headers that can act as tabs | [README](../../projects/su-labs/stepper/README.md) |
 | `@su-labs/tooltip` | Tooltips on your content or a "?" icon that grows into the tooltip, opening on hover or click, 12 placements with an arrow | [README](../../projects/su-labs/tooltip/README.md) |
+| `@su-labs/select` | A select with its own styled list: search, groups, disabled options, keyboard and type-ahead, never cut off | [README](../../projects/su-labs/select/README.md) |
 | `@su-labs/tree-table` | Tree tables: rows with child rows, data or group parents, numbering, merged cells, and the table's sorting, search, paging and pinned rows and columns | [README](../../projects/su-labs/tree-table/README.md) |
 
 ## Theme quick start
@@ -171,6 +173,35 @@ import { SuTooltipComponent } from '@su-labs/tooltip';
 export class Toolbar {}
 ```
 
+## Select quick start
+
+```ts
+import { Component, signal } from '@angular/core';
+import { SuSelectOption } from '@su-labs/core/select';
+import { SuSelectComponent } from '@su-labs/select';
+
+@Component({
+  selector: 'app-shipping',
+  imports: [SuSelectComponent],
+  template: `
+    <label>
+      Delivery
+      <su-lib-select [options]="options" [(value)]="delivery" />
+    </label>
+  `,
+})
+export class Shipping {
+  protected readonly options: SuSelectOption<string>[] = [
+    { value: 'standard', label: 'Standard' },
+    { value: 'express', label: 'Express' },
+    { value: 'drone', label: 'Drone', disabled: true },
+  ];
+  protected readonly delivery = signal<string | null>('standard');
+}
+```
+
+Add `searchable` for a search field in the list, and a `group` on options to list them under headings.
+
 ## Tree table quick start
 
 ```ts
@@ -212,4 +243,5 @@ Add `numbering="restart"` or `"continue"` to count children another way, and a c
 - [Table setup and full API](../../projects/su-labs/table/README.md)
 - [Stepper setup and full API](../../projects/su-labs/stepper/README.md)
 - [Tooltip setup and full API](../../projects/su-labs/tooltip/README.md)
+- [Select setup and full API](../../projects/su-labs/select/README.md)
 - [Tree table setup and full API](../../projects/su-labs/tree-table/README.md)

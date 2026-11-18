@@ -37,6 +37,7 @@ The utilities manage things that only exist in a browser: the page, `localStorag
 | Scroll spy | Keeps state and notifies subscribers. `observe()` does nothing, since there is no page to watch. |
 | Stepper | Works fully (it holds state only and never touches the DOM). |
 | Tooltip | `SuTooltipController` works fully (open state and delays); `suTooltipPosition` and `suTooltipIconPosition` are plain maths, but there is nothing to measure without a page. |
+| Select | Works fully (it holds state only and never touches the DOM). |
 | Tree table | Works fully (it holds state only and never touches the DOM). |
 | Skeleton | Nothing to run: render the `su-skeleton` markup and `aria-busy` in the server HTML, and the stylesheet shimmers it in the browser. |
 | Visit tracker | `init()` does nothing, since there is no `localStorage`. The count stays `0`. |

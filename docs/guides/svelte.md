@@ -444,6 +444,44 @@ Keep one controller per tooltip for whether it's open, with the delays that stop
 <div bind:this={panel} id="save-tip" role="tooltip" hidden={!$tip.open} style="position: fixed; left: {position.x}px; top: {position.y}px">Saves a draft</div>
 ```
 
+## Select
+
+Keep one controller per select for whether it's open, the value, the search and the active option. It skips disabled options and does type-ahead; you render the list and point `aria-activedescendant` at the active option:
+
+```svelte
+<script lang="ts">
+  import { SuSelectController } from '@su-labs/core/select';
+
+  const select = new SuSelectController({
+    options: [
+      { value: 's', label: 'Small' },
+      { value: 'm', label: 'Medium' },
+      { value: 'l', label: 'Large', disabled: true },
+    ],
+    value: 'm',
+  });
+  const view = select.state;
+
+  function onKeydown(event: KeyboardEvent) {
+    const open = $view.open;
+    if (event.key === 'ArrowDown') { event.preventDefault(); open ? select.move('next') : select.open(); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); select.move('previous'); }
+    if (event.key === 'Enter') { event.preventDefault(); open ? select.choose() : select.open(); }
+    if (event.key === 'Escape') select.close();
+    if (event.key.length === 1 && event.key !== ' ') select.typeAhead(event.key);
+  }
+</script>
+
+<button type="button" role="combobox" aria-controls="size-list" aria-expanded={$view.open} aria-activedescendant={$view.open && $view.active >= 0 ? `size-${$view.active}` : undefined} onclick={() => select.toggle()} onkeydown={onKeydown}>
+  {select.selected?.label ?? 'Choose…'}
+</button>
+<ul id="size-list" role="listbox" hidden={!$view.open}>
+  {#each $view.visible as option, index}
+    <li id="size-{index}" role="option" aria-selected={option.value === $view.value} aria-disabled={option.disabled} class:active={index === $view.active} onmousedown={(event) => event.preventDefault()} onclick={() => select.choose(index)}>{option.label}</li>
+  {/each}
+</ul>
+```
+
 ## Tree table
 
 Render the rows on screen from `state` as a `treegrid`: each row has its `level`, `position`, `siblings` and `expanded` for the ARIA attributes, and `cells` with their `rowSpan` and `colSpan`. Call `toggle(id)` from a row's button and `rowKey(id, key)` from its keydown:
@@ -500,5 +538,6 @@ Render the rows on screen from `state` as a `treegrid`: each row has its `level`
 - [Skeleton classes and CSS variables](../../projects/su-labs/core/README.md#skeleton)
 - [Stepper options and full API](../../projects/su-labs/core/README.md#stepper)
 - [Tooltip options and full API](../../projects/su-labs/core/README.md#tooltip)
+- [Select options and full API](../../projects/su-labs/core/README.md#select)
 - [Tree table options and full API](../../projects/su-labs/core/README.md#tree-table)
 - [Node and server-side rendering](node.md)

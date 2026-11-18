@@ -1,14 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { SuSelectOption } from '@su-labs/core/select';
 import { SuDialogBackdrop, SuDialogKind, SuDialogService, SuDialogSize } from '@su-labs/dialog';
+import { SuSelectComponent } from '@su-labs/select';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { PageFeatureExample } from '../../shared/page-feature';
+import { selectOptions } from '../../shared/select-options';
 import { UtilityPage } from '../../shared/utility-page';
 import { DIALOG_FEATURES } from './dialog-features';
 
-const KINDS: readonly { kind: SuDialogKind; label: string }[] = [
-  { kind: 'confirm', label: 'Accept and cancel' },
-  { kind: 'ok', label: 'One button' },
+const KINDS: readonly SuSelectOption<SuDialogKind>[] = [
+  { value: 'confirm', label: 'Accept and cancel' },
+  { value: 'ok', label: 'One button' },
 ];
 const SIZES: readonly SuDialogSize[] = ['small', 'medium', 'large'];
 const BACKDROPS: readonly SuDialogBackdrop[] = ['dim', 'none'];
@@ -62,7 +65,7 @@ const accepted = await dialogs.confirm({ title: 'Delete your results?' });`,
 
 @Component({
   selector: 'app-dialog-page',
-  imports: [PageFeatureExample, UtilityPage],
+  imports: [PageFeatureExample, SuSelectComponent, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dialog-page.html',
 })
@@ -72,8 +75,8 @@ export class DialogPage {
   protected readonly features = DIALOG_FEATURES;
   protected readonly usage = USAGE;
   protected readonly kinds = KINDS;
-  protected readonly sizes = SIZES;
-  protected readonly backdrops = BACKDROPS;
+  protected readonly sizes = selectOptions(SIZES);
+  protected readonly backdrops = selectOptions(BACKDROPS);
 
   protected readonly kind = signal<SuDialogKind>('confirm');
   protected readonly size = signal<SuDialogSize>('small');
@@ -104,16 +107,6 @@ export class DialogPage {
     this.answer.set(accepted ? 'accepted' : 'cancelled');
   }
 
-  protected choose<T extends string>(options: readonly T[], event: Event, set: (value: T) => void): void {
-    if (event.target instanceof HTMLSelectElement || event.target instanceof HTMLInputElement) {
-      const { value } = event.target;
-      const option = options.find((item) => item === value);
-      if (option) {
-        set(option);
-      }
-    }
-  }
-
   protected setColor(event: Event): void {
     if (event.target instanceof HTMLInputElement) {
       this.backdropColor.set(event.target.value);
@@ -131,8 +124,6 @@ export class DialogPage {
       flag(event.target.checked);
     }
   }
-
-  protected readonly kindValues = KINDS.map(({ kind }) => kind);
 
   protected openThemed(): void {
     void this.dialog.confirm({

@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { SuSelectComponent } from '@su-labs/select';
 import { SuTableSort } from '@su-labs/table';
 import { SuTreeTableComponent, SuTreeTableNumbering, SuTreeTableRowKind, SuTreeTableToggleEvent } from '@su-labs/tree-table';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
 import { PageFeatureExample } from '../../shared/page-feature';
+import { selectOptions } from '../../shared/select-options';
 import { UtilityPage } from '../../shared/utility-page';
 import { CATALOGUE, CATALOGUE_COLUMNS, categoryKind, isCategory, isStage, ORDER, ORDER_COLUMNS, orderChildren, orderLineId, PLAN, PLAN_COLUMNS, planChildren, planStepId, shopChildren, ShopItem, shopItemId, stageKind, TEAM_COLUMNS, teamChildren, teamId, TEAMS } from './tree-table-data';
 import { TREE_TABLE_FEATURES } from './tree-table-features';
@@ -70,7 +72,7 @@ tree.rowKey('herbs', 'ArrowRight'); // { handled: true, focusId: 'basil' }`,
 
 @Component({
   selector: 'app-tree-table-page',
-  imports: [PageFeatureExample, SuTreeTableComponent, UtilityPage],
+  imports: [PageFeatureExample, SuSelectComponent, SuTreeTableComponent, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tree-table-page.html',
   styleUrl: './tree-table-page.scss',
@@ -79,7 +81,7 @@ export class TreeTablePage {
   protected readonly utility = getUtility('tree-table');
   protected readonly usage = USAGE;
   protected readonly features = TREE_TABLE_FEATURES;
-  protected readonly numberings = NUMBERINGS;
+  protected readonly numberings = selectOptions(NUMBERINGS);
 
   protected readonly catalogue = CATALOGUE;
   protected readonly catalogueColumns = CATALOGUE_COLUMNS;
@@ -125,16 +127,6 @@ export class TreeTablePage {
 
   protected onSort(sort: SuTableSort<ShopItem> | null): void {
     this.sort.set(sort ? `${String(sort.key)} · ${sort.direction}` : 'none');
-  }
-
-  protected chooseNumbering(event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      const { value } = event.target;
-      const option = NUMBERINGS.find((item) => item === value);
-      if (option) {
-        this.numbering.set(option);
-      }
-    }
   }
 
   protected setFlag(flag: (value: boolean) => void, event: Event): void {

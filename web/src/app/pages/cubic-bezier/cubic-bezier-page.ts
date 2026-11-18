@@ -1,4 +1,6 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, signal, viewChild } from '@angular/core';
+import { SuSelectOption } from '@su-labs/core/select';
+import { SuSelectComponent } from '@su-labs/select';
 import { CodeBlock } from '../../shared/code-block';
 import { CodeTab, CodeTabs } from '../../shared/code-tabs';
 import { EasingPreview, PreviewLane } from '../../shared/easing-preview/easing-preview';
@@ -60,7 +62,7 @@ const bezierLane = (label: string, curve: BezierCurve): PreviewLane => ({
 
 @Component({
   selector: 'app-cubic-bezier-page',
-  imports: [BezierGraph, CodeBlock, CodeTabs, EasingPreview, Reveal],
+  imports: [BezierGraph, CodeBlock, CodeTabs, EasingPreview, Reveal, SuSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cubic-bezier-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/tool-page.scss', './cubic-bezier-page.scss'],
@@ -76,7 +78,10 @@ export class CubicBezierPage {
   protected readonly durationRange = DURATION;
   protected readonly examples = EXAMPLES;
   protected readonly presets = BEZIER_PRESETS;
-  protected readonly noCompare = NO_COMPARE;
+  protected readonly compareOptions: readonly SuSelectOption<string>[] = [
+    { value: NO_COMPARE, label: 'Nothing' },
+    ...BEZIER_PRESETS.map((preset) => ({ value: preset.key, label: preset.name })),
+  ];
 
   protected readonly value = computed(() => formatCurve(this.curve()));
   protected readonly match = computed(() => findPreset(this.curve()));
@@ -109,12 +114,6 @@ export class CubicBezierPage {
       this.curve.update((curve) => withCoordinate(curve, index, input.valueAsNumber));
     }
     input.value = formatNumber(this.curve()[index]);
-  }
-
-  protected chooseCompare(event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      this.compareKey.set(event.target.value);
-    }
   }
 
   protected setDuration(event: Event): void {

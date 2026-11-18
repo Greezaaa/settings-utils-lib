@@ -14,11 +14,7 @@
       </label>
       <label class="field">
         <span>Numbering</span>
-        <select [value]="numbering()" [disabled]="!numbered()" (change)="chooseNumbering($event)">
-          @for (item of numberings; track item) {
-            <option [value]="item">{{ item }}</option>
-          }
-        </select>
+        <su-lib-select [options]="numberings" [value]="numbering()" [disabled]="!numbered()" (chosen)="numbering.set($event)" />
       </label>
       <label class="checkbox">
         <input type="checkbox" [checked]="openAll()" (change)="setFlag(openAll.set, $event)" />

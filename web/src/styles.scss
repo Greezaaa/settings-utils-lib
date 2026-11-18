@@ -101,6 +101,21 @@
   --su-tooltip-icon-color: var(--button-text);
   --su-tooltip-radius: var(--radius);
   --su-tooltip-focus-ring: 2px solid var(--heading);
+  --su-select-background: var(--surface);
+  --su-select-color: var(--heading);
+  --su-select-muted-color: var(--muted);
+  --su-select-border: 1px solid var(--border);
+  --su-select-hover-border-color: color-mix(in srgb, var(--heading) 30%, var(--border));
+  --su-select-radius: 6px;
+  --su-select-height: 2.5rem;
+  --su-select-padding: 0.375rem 0.75rem;
+  --su-select-font-size: 0.875rem;
+  --su-select-focus-ring: 0 0 0 3px color-mix(in srgb, var(--heading) 18%, transparent);
+  --su-select-list-radius: var(--radius);
+  --su-select-list-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --su-select-search-border: 1px solid var(--border);
+  --su-select-option-active-background: var(--subtle);
+  --su-select-option-selected-color: var(--heading);
   --su-table-sorted-background: color-mix(in srgb, var(--blue-text) 7%, transparent);
   --su-table-drop-line-color: var(--blue-text);
   --su-table-text-color: var(--text);
@@ -467,7 +482,6 @@ a.card {
   gap: 0.5rem;
 }
 
-select,
 input[type='number'] {
   background: var(--surface);
   border: 1px solid var(--border);

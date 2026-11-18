@@ -51,6 +51,9 @@
       "@su-labs/skeleton": [
         "./dist/su-labs/skeleton"
       ],
+      "@su-labs/select": [
+        "./dist/su-labs/select"
+      ],
       "@su-labs/stepper": [
         "./dist/su-labs/stepper"
       ],
@@ -103,6 +106,9 @@
     },
     {
       "path": "./projects/su-labs/stepper/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/su-labs/select/tsconfig.lib.json"
     },
     {
       "path": "./projects/su-labs/tooltip/tsconfig.lib.json"

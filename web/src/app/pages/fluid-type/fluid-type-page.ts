@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { SuSelectOption } from '@su-labs/core/select';
+import { SuSelectComponent } from '@su-labs/select';
 import { CodeBlock } from '../../shared/code-block';
 import { Reveal } from '../../shared/reveal';
 import { readQueryParam, syncQueryParams } from '../../shared/url-query';
@@ -32,7 +34,7 @@ const sameValues = (a: object, b: object): boolean => JSON.stringify(a) === JSON
 
 @Component({
   selector: 'app-fluid-type-page',
-  imports: [CodeBlock, Reveal],
+  imports: [CodeBlock, Reveal, SuSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './fluid-type-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/tool-page.scss', './fluid-type-page.scss'],
@@ -44,7 +46,10 @@ export class FluidTypePage {
 
   protected readonly rangeFields = RANGE_FIELDS;
   protected readonly scaleFields = SCALE_FIELDS;
-  protected readonly ratios = SCALE_RATIOS;
+  protected readonly ratios: readonly SuSelectOption<number>[] = SCALE_RATIOS.map(({ value, name }) => ({
+    value,
+    label: `${value} ${name}`,
+  }));
   protected readonly preview = PREVIEW;
 
   protected readonly value = computed(() => fluidClamp(this.range()));
@@ -91,11 +96,8 @@ export class FluidTypePage {
     }
   }
 
-  protected setRatio(key: 'minRatio' | 'maxRatio', event: Event): void {
-    if (event.target instanceof HTMLSelectElement) {
-      const value = Number(event.target.value);
-      this.scale.update((scale) => ({ ...scale, [key]: value }));
-    }
+  protected setRatio(key: 'minRatio' | 'maxRatio', value: number): void {
+    this.scale.update((scale) => ({ ...scale, [key]: value }));
   }
 
   protected setPreviewWidth(event: Event): void {
