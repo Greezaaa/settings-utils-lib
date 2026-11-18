@@ -416,9 +416,8 @@
           }
         }
       }
-    }
-  },
-  "cli": {    "@su-labs/tooltip": {
+    },
+    "@su-labs/tooltip": {
       "projectType": "library",
       "root": "projects/su-labs/tooltip",
       "sourceRoot": "projects/su-labs/tooltip/src",

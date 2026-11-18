@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/stepper",
-	"version": "22.1.1",
+	"version": "22.1.2",
 	"description": "Accessible Angular steppers: content split into steps shown one at a time, with numbered circles joined by a line, optional titles, rules for going forward and back, horizontal or vertical, and headers that can act as tabs, themeable with CSS variables.",
 	"keywords": [
 		"angular",
@@ -33,7 +33,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
-		"@su-labs/core": "1.12.0",
+		"@su-labs/core": "1.13.0",
 		"tslib": "^2.3.0"
 	},
 	"sideEffects": false,

@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/notifications",
-	"version": "22.3.4",
+	"version": "22.3.5",
 	"keywords": [
 		"angular",
 		"notifications",
@@ -36,7 +36,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
-		"@su-labs/core": "1.12.0",
+		"@su-labs/core": "1.13.0",
 		"tslib": "^2.3.0"
 	},
 	"sideEffects": false,

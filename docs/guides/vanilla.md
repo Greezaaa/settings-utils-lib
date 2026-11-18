@@ -22,7 +22,7 @@ Load the package as an ES module directly in the browser:
 
 ```html
 <script type="module">
-  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.12.0/theme';
+  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.13.0/theme';
 </script>
 ```
 
@@ -61,7 +61,7 @@ theme.init({ defaultTheme: 'system' });
 <p>Current theme: <span id="current-theme"></span></p>
 
 <script type="module">
-  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.12.0/theme';
+  import { SuThemeController } from 'https://esm.sh/@su-labs/core@1.13.0/theme';
 
   const theme = new SuThemeController();
   theme.init();
@@ -108,7 +108,7 @@ Text size controls that stay within limits and remember the user's choice:
 <button type="button" id="bigger">A+</button>
 
 <script type="module">
-  import { SuFontSizeController } from 'https://esm.sh/@su-labs/core@1.12.0/font-size';
+  import { SuFontSizeController } from 'https://esm.sh/@su-labs/core@1.13.0/font-size';
 
   const fontSize = new SuFontSizeController();
   fontSize.init();
@@ -144,7 +144,7 @@ The controller keeps the list of notifications and closes them on time; you rend
 <button type="button" id="save">Save</button>
 
 <script type="module">
-  import { SuNotificationController } from 'https://esm.sh/@su-labs/core@1.12.0/notifications';
+  import { SuNotificationController } from 'https://esm.sh/@su-labs/core@1.13.0/notifications';
 
   const notifications = new SuNotificationController();
   const container = document.querySelector('#notifications');
@@ -189,7 +189,7 @@ Highlight the navigation link of the section in the middle of the screen:
 <section id="about">...</section>
 
 <script type="module">
-  import { SuScrollSpyController } from 'https://esm.sh/@su-labs/core@1.12.0/scroll-spy';
+  import { SuScrollSpyController } from 'https://esm.sh/@su-labs/core@1.13.0/scroll-spy';
 
   const scrollSpy = new SuScrollSpyController();
   document.querySelectorAll('section[id]').forEach((section) => scrollSpy.observe(section, section.id));
@@ -210,7 +210,7 @@ Greet returning visitors:
 <p id="welcome"></p>
 
 <script type="module">
-  import { SuVisitTrackerController } from 'https://esm.sh/@su-labs/core@1.12.0/visit-tracker';
+  import { SuVisitTrackerController } from 'https://esm.sh/@su-labs/core@1.13.0/visit-tracker';
 
   const visits = new SuVisitTrackerController();
   visits.init();
@@ -337,7 +337,7 @@ Render pinned cells with `position: sticky` and pinned rows first in `<tbody>`.
 Draw the placeholder with your own elements inside `.su-skeleton`, laid out like the real content. Wrappers with `su-skeleton-layout` only lay shapes out and aren't drawn:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.12.0/skeleton/skeleton.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@su-labs/core@1.13.0/skeleton/skeleton.css" />
 
 <section class="profile">
   <div class="su-skeleton" aria-hidden="true">
@@ -350,7 +350,7 @@ Draw the placeholder with your own elements inside `.su-skeleton`, laid out like
 </section>
 
 <script type="module">
-  import { setSuSkeletonBusy } from 'https://esm.sh/@su-labs/core@1.12.0/skeleton';
+  import { setSuSkeletonBusy } from 'https://esm.sh/@su-labs/core@1.13.0/skeleton';
 
   const region = document.querySelector('.profile');
   setSuSkeletonBusy(region, true);
@@ -373,7 +373,7 @@ Keep one controller per stepper and pass it the steps' rules again whenever they
 <button type="button" id="next">Next</button>
 
 <script type="module">
-  import { SuStepperController } from 'https://esm.sh/@su-labs/core@1.12.0/stepper';
+  import { SuStepperController } from 'https://esm.sh/@su-labs/core@1.13.0/stepper';
 
   const name = document.querySelector('#name');
   const steps = () => [{ label: 'Account', canNext: name.value.length > 0 }, { label: 'Plan' }, { label: 'Confirm' }];
@@ -407,7 +407,7 @@ Keep one controller per tooltip for whether it's open, with the delays that stop
 <div id="save-tip" role="tooltip" popover="manual">Saves a draft</div>
 
 <script type="module">
-  import { SuTooltipController, suTooltipPosition } from 'https://esm.sh/@su-labs/core@1.12.0/tooltip';
+  import { SuTooltipController, suTooltipPosition } from 'https://esm.sh/@su-labs/core@1.13.0/tooltip';
 
   const trigger = document.querySelector('#save');
   const panel = document.querySelector('#save-tip');
@@ -439,7 +439,7 @@ Keep one controller per select for whether it's open, the value, the search and 
 <ul id="size-list" role="listbox" hidden></ul>
 
 <script type="module">
-  import { SuSelectController } from 'https://esm.sh/@su-labs/core@1.12.0/select';
+  import { SuSelectController } from 'https://esm.sh/@su-labs/core@1.13.0/select';
 
   const trigger = document.querySelector('#size');
   const list = document.querySelector('#size-list');
@@ -490,7 +490,7 @@ Render the rows on screen from `state` as a `treegrid`: each row has its `level`
 <table role="treegrid" aria-label="Price list"><tbody id="tree"></tbody></table>
 
 <script type="module">
-  import { SuTreeTableController } from 'https://esm.sh/@su-labs/core@1.12.0/tree-table';
+  import { SuTreeTableController } from 'https://esm.sh/@su-labs/core@1.13.0/tree-table';
 
   const tree = new SuTreeTableController({
     columns: [
