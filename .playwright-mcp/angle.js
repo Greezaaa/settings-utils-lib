@@ -1,0 +1,26 @@
+async (page) => {
+  const day = {"levels":[{"level":"easy","puzzle":{"game":"read-angle","exercises":[{"kind":"angle","angle":45,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":135,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":45,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":135,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":45,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":90,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":45,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":90,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":135,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":90,"level":{"multipleOf":45,"tolerance":10,"marksEvery":180,"markLabels":true}}]}},{"level":"medium","puzzle":{"game":"read-angle","exercises":[{"kind":"angle","angle":150,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":90,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":120,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":30,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":90,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":30,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":120,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":60,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":30,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":90,"level":{"multipleOf":30,"tolerance":8,"marksEvery":180,"markLabels":true}}]}},{"level":"hard","puzzle":{"game":"read-angle","exercises":[{"kind":"angle","angle":40,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":80,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":50,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":100,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":20,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":30,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":160,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":60,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":70,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}},{"kind":"angle","angle":100,"level":{"multipleOf":10,"tolerance":4,"marksEvery":180,"markLabels":true}}]}}]};
+  await page.setViewportSize({ width: 1274, height: 1214 });
+  await page.route("**/v1/daily/read-angle/**", (r) => r.fulfill({ json: day }));
+  await page.goto("http://localhost:4399/");
+  await page.evaluate(() => { localStorage.clear(); localStorage.setItem("su-labs-games:privacy-notice-version", "99"); localStorage.setItem("su-labs-games:game-switches", JSON.stringify([["read-angle", true]])); });
+  await page.goto("http://localhost:4399/read-angle");
+  await page.waitForTimeout(2500);
+  const measure = () => page.evaluate(() => {
+    const doc = document.documentElement;
+    const wide = [...document.querySelectorAll("body *")].filter((el) => el.getBoundingClientRect().right > doc.clientWidth + 1).map((el) => el.tagName.toLowerCase() + "." + String(el.className).split(" ").slice(0, 2).join(".") + " right=" + Math.round(el.getBoundingClientRect().right) + " w=" + Math.round(el.getBoundingClientRect().width)).slice(0, 15);
+    return { scrollWidth: doc.scrollWidth, clientWidth: doc.clientWidth, bodyScroll: document.body.scrollWidth, scrollX: window.scrollX, wide };
+  });
+  const before = await measure();
+  const results = [];
+  for (let index = 0; index < 9; index++) {
+    const input = page.locator('input[inputmode], input[type=number], input[type=text]').first();
+    if (!(await input.count())) break;
+    await input.fill(String(index % 2 ? 7 : 170));
+    await input.press('Enter');
+    await page.waitForTimeout(2200);
+    results.push(await measure());
+  }
+  await page.screenshot({ path: '.playwright-mcp/angle.png' });
+  return { before, worst: results.reduce((max, r) => Math.max(max, r.scrollWidth), 0), wide: results.flatMap((r) => r.wide).slice(0, 10), questions: results.length };
+}

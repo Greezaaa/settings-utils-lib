@@ -1,0 +1,22 @@
+<div class="list-head">
+  <span class="muted">{{ items().length }} files</span>
+  <span #bin class="bin" [class.has-items]="binCount() > 0">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /></svg>
+    <span>Bin · {{ binCount() }}</span>
+  </span>
+</div>
+<ul class="list">
+  @for (item of items(); track item.id) {
+    <li class="row">
+      <span class="name">{{ item.name }}</span>
+      <button type="button" class="delete" [disabled]="leaving().has(item.id)" (click)="remove(item, $event)">
+        Delete
+      </button>
+    </li>
+  } @empty {
+    <li class="empty">
+      All gone.
+      <button type="button" class="delete" (click)="restore()">Bring them back</button>
+    </li>
+  }
+</ul>

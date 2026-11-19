@@ -1,0 +1,119 @@
+<header class="container page-head">
+  <h1>Lab</h1>
+  <p class="lead">
+    Components rebuilt from the Instagram reels, ready to try by hand.
+    <br />
+    Each block says what to look for. Turn on “Reduce motion” in Settings to see the calm versions.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="lab-card">
+  <h2 id="lab-card" class="section-title">Card becomes the page</h2>
+  <p class="try">Press a card: it shrinks a little, then its picture grows into the hero and the title moves into the page title. Back shrinks it into the same card and puts focus on it.</p>
+  @defer (on viewport) {
+    <app-card-detail />
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-menu">
+  <h2 id="lab-menu" class="section-title">Menu grows from its button</h2>
+  <p class="try">
+    Open it: the button turns into the panel, the page dims to 40% and the items come in one by one. Closing shrinks it back into the button.
+    <br />
+    Esc or the dim area closes it and focus goes back to the button. “Bouncy” overshoots on open, bounces each item in and pulls back before it closes.
+  </p>
+  @defer (on viewport) {
+    <div class="row">
+      <app-morph-menu />
+      <app-morph-menu variant="bouncy" label="Bouncy" />
+    </div>
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-motions">
+  <h2 id="lab-motions" class="section-title">Small motions</h2>
+  <p class="try">
+    Copy widens and turns green with a tick. Pin drops in and bounces twice. Delete sends the row into the bin and the gap closes.
+    <br />
+    Drag the photo: it follows your finger. Drop it on the bin in the corner to delete it, or anywhere else to see it spring home.
+  </p>
+  @defer (on viewport) {
+    <div class="row">
+      <app-copy-button text="npm i @su-labs/core" />
+      <app-pin-button />
+    </div>
+    <app-delete-list />
+    <app-spring-photo />
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-toggle">
+  <h2 id="lab-toggle" class="section-title">Elastic toggle</h2>
+  <p class="try">The front of the knob leads, the back catches up with a spring, so it stretches with round ends. Hold it down to see the squish; it moves when you let go.</p>
+  @defer (on viewport) {
+    <div class="stack">
+      <app-elastic-toggle label="Notifications" [(checked)]="notifications" />
+      <app-elastic-toggle label="Dark mode" [(checked)]="darkMode" />
+    </div>
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-field">
+  <h2 id="lab-field" class="section-title">Floating label</h2>
+  <p class="try">Focus a field: the label moves up and shrinks, turns the accent colour, and the line grows from the centre. With text in it the label stays up.</p>
+  @defer (on viewport) {
+    <div class="stack fields">
+      <app-floating-field label="Full name" />
+      <app-floating-field label="Email" type="email" />
+    </div>
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-upload">
+  <h2 id="lab-upload" class="section-title">File upload</h2>
+  <p class="try">Drag files over the box, then drop. Each file gets its own row with %, time left and speed. Every third file fails at 60% so you can try Retry. Uploads are simulated; nothing leaves your device.</p>
+  @defer (on viewport) {
+    <app-upload-zone />
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-dates">
+  <h2 id="lab-dates" class="section-title">Date range</h2>
+  <p class="try">Try a preset, or click a first day and move the pointer to preview the range, then click again to lock it. Type DD/MM/YYYY in From or To and use ↑ ↓ to change a day. On a phone it shows one month with 44px days.</p>
+  @defer (on viewport) {
+    <app-date-range />
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-css">
+  <h2 id="lab-css" class="section-title">CSS tricks</h2>
+  <p class="try">Eight one-liners from the carousel post. Hover the shape, swipe the slides, scroll the last box.</p>
+  @defer (on viewport) {
+    <app-css-tricks />
+  } @placeholder {
+    <div class="placeholder"></div>
+  }
+</section>
+
+<section class="container page-section" aria-labelledby="lab-existing">
+  <h2 id="lab-existing" class="section-title">Already in your packages</h2>
+  <p class="try">
+    The dropdown reel is covered by <a routerLink="/select">Select</a> and the steps line by <a routerLink="/stepper">Stepper</a>.
+    <br />
+    The “six decisions” reel is rules, not a component; it stays in the checklist.
+  </p>
+</section>

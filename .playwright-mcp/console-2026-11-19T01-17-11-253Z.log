@@ -1,0 +1,64 @@
+[    4176ms] [LOG] NG0751: Angular has detected that this application contains `@defer` blocks and the hot module replacement (HMR) mode is enabled. All `@defer` block dependencies will be loaded eagerly. Find more at https://v22.angular.dev/errors/NG0751 @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[    4189ms] [LOG] Angular is running in development mode. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[    4199ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/site:1
+[    4199ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3333/v1/apps/games/account:1
+[    4199ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4211ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/news:1
+[    4212ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[    4221ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4241ms] [LOG] Angular hydrated 22 component(s) and 250 node(s), 0 component(s) were skipped. 0 defer block(s) were configured to use incremental hydration. Learn more at https://v22.angular.dev/guide/hydration. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[    4268ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4269ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:4399/:1
+[    4269ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4269ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/daily/set:1
+[    4272ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[    4274ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4277ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[    4443ms] [LOG] NG0751: Angular has detected that this application contains `@defer` blocks and the hot module replacement (HMR) mode is enabled. All `@defer` block dependencies will be loaded eagerly. Find more at https://v22.angular.dev/errors/NG0751 @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[    4447ms] [LOG] Angular is running in development mode. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[    4454ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/site:1
+[    4454ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4454ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3333/v1/apps/games/account:1
+[    4459ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/news:1
+[    4459ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[    4462ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4465ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4465ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:4399/read-angle:1
+[    4468ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[    4475ms] [LOG] Angular hydrated 19 component(s) and 288 node(s), 0 component(s) were skipped. 0 defer block(s) were configured to use incremental hydration. Learn more at https://v22.angular.dev/guide/hydration. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[    4476ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[    4476ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/daily/set:1
+[    4480ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[   28115ms] [LOG] NG0751: Angular has detected that this application contains `@defer` blocks and the hot module replacement (HMR) mode is enabled. All `@defer` block dependencies will be loaded eagerly. Find more at https://v22.angular.dev/errors/NG0751 @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[   28119ms] [LOG] Angular is running in development mode. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[   28124ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/site:1
+[   28124ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3333/v1/apps/games/account:1
+[   28124ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28128ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/news:1
+[   28128ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[   28134ms] [LOG] Angular hydrated 22 component(s) and 250 node(s), 0 component(s) were skipped. 0 defer block(s) were configured to use incremental hydration. Learn more at https://v22.angular.dev/guide/hydration. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[   28137ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28138ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28138ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/daily/set:1
+[   28138ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:4399/:1
+[   28139ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28140ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[   28142ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28142ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[   28362ms] [LOG] NG0751: Angular has detected that this application contains `@defer` blocks and the hot module replacement (HMR) mode is enabled. All `@defer` block dependencies will be loaded eagerly. Find more at https://v22.angular.dev/errors/NG0751 @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[   28366ms] [LOG] Angular is running in development mode. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[   28372ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/site:1
+[   28372ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3333/v1/apps/games/account:1
+[   28372ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28380ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/news:1
+[   28380ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[   28385ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28388ms] [LOG] Angular hydrated 19 component(s) and 288 node(s), 0 component(s) were skipped. 0 defer block(s) were configured to use incremental hydration. Learn more at https://v22.angular.dev/guide/hydration. @ http://localhost:4399/@fs/Users/mrgree/Projects/smartiplay/.angular/cache/22.2.5/games/vite/deps/core-DdaWCEkT.js?v=94f74190:9385
+[   28391ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28391ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/daily/set:1
+[   28391ms] [INFO] Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner. @ http://localhost:4399/read-angle:1
+[   28393ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[   28394ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   28396ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays/finished:1
+[   34448ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/plays:1
+[   34450ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/v1/stats/level:1

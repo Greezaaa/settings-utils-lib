@@ -1,0 +1,29 @@
+<button #trigger type="button" class="trigger" aria-haspopup="menu" [attr.aria-expanded]="isOpen()" (click)="open()">
+  <span class="bars" aria-hidden="true"></span>
+  {{ label() }}
+</button>
+
+<dialog
+  #dialog
+  class="menu-dialog"
+  [attr.aria-label]="label()"
+  [class.is-closing]="closing()"
+  [style.top.px]="position().top"
+  [style.left.px]="position().left"
+  (cancel)="cancel($event)">
+  <div class="panel" role="menu" [attr.aria-label]="label()">
+    <div class="panel-head">
+      <span>{{ label() }}</span>
+      <button type="button" class="close" aria-label="Close menu" (click)="close()">×</button>
+    </div>
+    @for (item of items; track item; let index = $index; let first = $first) {
+      <button type="button" role="menuitem" class="item" [style.--item-index]="index" [attr.autofocus]="first ? '' : null" (click)="choose(item)">
+        {{ item }}
+      </button>
+    }
+  </div>
+</dialog>
+
+@if (chosen(); as item) {
+  <p class="muted">You picked “{{ item }}”.</p>
+}

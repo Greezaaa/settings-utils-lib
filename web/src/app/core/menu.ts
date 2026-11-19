@@ -66,6 +66,9 @@ export const SITE_MENU: readonly SiteMenuSection[] = [
   {
     id: 'project',
     title: 'Project',
-    links: [{ key: 'changelog', label: 'Changelog', icon: 'changelog', route: '/changelog' }],
+    links: [
+      { key: 'changelog', label: 'Changelog', icon: 'changelog', route: '/changelog' },
+      { key: 'lab', label: 'Lab', icon: 'lab', route: '/lab' },
+    ],
   },
 ];

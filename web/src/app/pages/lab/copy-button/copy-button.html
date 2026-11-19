@@ -1,0 +1,8 @@
+<button type="button" class="copy" [class.is-copied]="copied()" (click)="copy()">
+  <span class="icon" aria-hidden="true">
+    <svg class="icon-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
+    <svg class="icon-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+  </span>
+  <span class="label">{{ copied() ? 'Copied' : 'Copy' }}</span>
+</button>
+<span class="sr-only" aria-live="polite">{{ copied() ? 'Copied to clipboard' : '' }}</span>

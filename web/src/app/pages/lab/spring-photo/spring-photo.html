@@ -1,0 +1,33 @@
+<div class="stage">
+  @if (trashed()) {
+    <button type="button" class="restore" (click)="restore()">Bring the photo back</button>
+  } @else {
+    <div
+      #photo
+      class="photo"
+      role="img"
+      aria-label="Mountain photo you can drag"
+      [class.is-dragging]="dragging()"
+      [class.is-over-bin]="overBin()"
+      [style.translate]="offset().x + 'px ' + offset().y + 'px'"
+      [style.rotate]="offset().x / 30 + 'deg'"
+      [style.transition]="transition()"
+      (pointerdown)="grab($event)"
+      (pointermove)="follow($event)"
+      (pointerup)="release($event)"
+      (pointercancel)="release($event)">
+      <svg viewBox="0 0 160 120" aria-hidden="true">
+        <rect width="160" height="120" fill="#bfe3f5" />
+        <circle cx="122" cy="30" r="12" fill="#ffd166" />
+        <path d="M0 120 50 50l30 38 20-24 60 56z" fill="#5b8c6a" />
+        <path d="M50 50l12 15-12-4-10 6z" fill="#ffffff" />
+      </svg>
+    </div>
+  }
+
+  <div #bin class="bin" [class.is-visible]="dragging()" [class.is-active]="overBin()" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /></svg>
+    <span>{{ overBin() ? 'Let go to delete' : 'Drop here to delete' }}</span>
+  </div>
+</div>
+<p class="hint muted">Let go anywhere else and it springs back.</p>

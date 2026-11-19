@@ -1,0 +1,52 @@
+<div
+  class="zone"
+  [class.is-over]="dragOver()"
+  (dragenter)="enter($event)"
+  (dragover)="enter($event)"
+  (dragleave)="leave($event)"
+  (drop)="drop($event)">
+  <svg class="zone-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" /></svg>
+  <p class="zone-text">{{ dragOver() ? 'Drop to upload' : 'Drag files here' }}</p>
+  <button type="button" class="link" (click)="browse()">or choose files</button>
+  <input #picker type="file" multiple hidden (change)="picked($event)" />
+</div>
+
+@if (lanes().length) {
+  <p class="summary" aria-live="polite">{{ summary() }}</p>
+  <ul class="lanes">
+    @for (lane of lanes(); track lane.id) {
+      <li class="lane" [attr.data-status]="lane.status">
+        @if (lane.previewUrl) {
+          <img class="thumb" alt="" [src]="lane.previewUrl" />
+        } @else {
+          <span class="thumb thumb-file" aria-hidden="true">{{ lane.name.split('.').pop() }}</span>
+        }
+        <div class="lane-body">
+          <div class="lane-top">
+            <span class="name">{{ lane.name }}</span>
+            <span class="muted">{{ formatSize(lane.size) }}</span>
+          </div>
+          <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="percentOf(lane)" [attr.aria-label]="lane.name">
+            <span class="bar-fill" [style.width.%]="percentOf(lane)"></span>
+          </div>
+          <div class="lane-bottom">
+            @switch (lane.status) {
+              @case ('uploading') {
+                <span>{{ percentOf(lane) }}% · {{ secondsLeft(lane) }}s left · {{ formatSize(lane.speed) }}/s</span>
+              }
+              @case ('failed') {
+                <span class="error">Upload stopped at {{ percentOf(lane) }}%</span>
+                <button type="button" class="link" (click)="retry(lane.id)">Retry</button>
+              }
+              @case ('done') {
+                <span class="ok">Uploaded</span>
+                <button type="button" class="link" (click)="browse(lane.id)">Replace</button>
+              }
+            }
+            <button type="button" class="link link-danger" (click)="remove(lane.id)">Remove</button>
+          </div>
+        </div>
+      </li>
+    }
+  </ul>
+}

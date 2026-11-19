@@ -1,0 +1,24 @@
+@if (selected(); as card) {
+  <article class="detail">
+    <button type="button" class="back" (click)="back()">← Back</button>
+    <div class="hero" [style.background]="card.color"></div>
+    <h3 class="detail-title">{{ card.title }}</h3>
+    <div #details class="details">
+      <p>{{ card.summary }}</p>
+      <p class="muted">Distance 14 km · Climb 420 m · Best in spring</p>
+      <button type="button" class="book">Book this trip</button>
+    </div>
+  </article>
+} @else {
+  <ul class="cards">
+    @for (card of cards; track card.id) {
+      <li>
+        <button type="button" class="card" [attr.data-card-id]="card.id" (click)="open(card)">
+          <span class="image" [style.background]="card.color" [class.is-morphing]="morphingId() === card.id"></span>
+          <span class="title" [class.is-morphing]="morphingId() === card.id">{{ card.title }}</span>
+          <span class="muted">{{ card.summary }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+}

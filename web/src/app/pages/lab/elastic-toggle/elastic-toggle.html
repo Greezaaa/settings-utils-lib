@@ -1,0 +1,7 @@
+<button type="button" role="switch" class="toggle" [class.is-on]="checked()" [attr.aria-checked]="checked()" (click)="toggle()">
+  <span class="track" aria-hidden="true">
+    <span class="fill"></span>
+    <span class="knob"></span>
+  </span>
+  <span class="label">{{ label() }}</span>
+</button>

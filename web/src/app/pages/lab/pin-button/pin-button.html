@@ -1,0 +1,7 @@
+<button type="button" class="pin" [class.is-pinned]="pinned()" [attr.aria-pressed]="pinned()" (click)="toggle()">
+  <svg class="pin-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M9 3h6l-1 6 4 3v2h-5v7l-1 1-1-1v-7H6v-2l4-3z" />
+  </svg>
+  <span class="pin-shadow" aria-hidden="true"></span>
+  <span class="label">{{ pinned() ? 'Pinned' : 'Pin' }}</span>
+</button>

@@ -1,0 +1,104 @@
+:host {
+  display: inline-flex;
+}
+
+.pin {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--heading);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.875rem;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding-inline: 0.875rem 1rem;
+  position: relative;
+  transition:
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out);
+
+  &:hover {
+    border-color: var(--muted);
+  }
+
+  &.is-pinned {
+    background: var(--yellow-bg);
+    border-color: var(--yellow-text);
+    color: var(--yellow-text);
+  }
+}
+
+.pin-icon {
+  fill: none;
+  height: 1.25rem;
+  rotate: 30deg;
+  stroke: currentColor;
+  stroke-linejoin: round;
+  stroke-width: 1.75;
+  transition: rotate 0.2s var(--ease-out);
+  width: 1.25rem;
+
+  .is-pinned & {
+    animation: pin-drop 0.6s linear;
+    fill: currentColor;
+    rotate: 0deg;
+  }
+}
+
+.pin-shadow {
+  background: currentColor;
+  border-radius: 50%;
+  bottom: 0.45rem;
+  height: 2px;
+  left: 1.05rem;
+  opacity: 0;
+  position: absolute;
+  width: 0.75rem;
+
+  .is-pinned & {
+    animation: pin-shadow 0.6s linear;
+    opacity: 0.25;
+  }
+}
+
+@keyframes pin-drop {
+  0% {
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    translate: 0 -0.75rem;
+  }
+  33% {
+    animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+    translate: 0 0;
+  }
+  50% {
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    translate: 0 -0.25rem;
+  }
+  66% {
+    animation-timing-function: cubic-bezier(0, 0.55, 0.45, 1);
+    translate: 0 0;
+  }
+  80% {
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    translate: 0 -0.08rem;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes pin-shadow {
+  0% {
+    scale: 0.3 1;
+    opacity: 0;
+  }
+  33%,
+  66%,
+  100% {
+    scale: 1 1;
+    opacity: 0.25;
+  }
+}

@@ -153,6 +153,12 @@ export const routes: Routes = [
     data: toolMeta('fluid-type'),
     loadComponent: () => import('./pages/fluid-type/fluid-type-page').then((m) => m.FluidTypePage),
   },
+  {
+    path: 'lab',
+    title: `Lab · ${SITE_NAME}`,
+    data: { description: 'Components rebuilt from UI reels, to try by hand.', noIndex: true },
+    loadComponent: () => import('./pages/lab/lab-page').then((m) => m.LabPage),
+  },
   { path: 'changelog', redirectTo: 'changelog/core', pathMatch: 'full' },
   {
     path: 'changelog/:slug',

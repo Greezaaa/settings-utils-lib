@@ -1,0 +1,162 @@
+:host {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 32rem;
+}
+
+.zone {
+  align-items: center;
+  background: var(--subtle);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-large);
+  display: grid;
+  gap: 0.25rem;
+  justify-items: center;
+  padding: 2rem 1rem;
+  transition:
+    background-color 0.15s ease-out,
+    border-color 0.15s ease-out,
+    scale 0.15s ease-out;
+
+  &.is-over {
+    background: var(--blue-bg);
+    border-color: var(--blue-text);
+    color: var(--blue-text);
+    scale: 1.02;
+  }
+}
+
+.zone-icon {
+  fill: none;
+  height: 2rem;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.75;
+  transition: translate 0.2s var(--ease-out);
+  width: 2rem;
+
+  .is-over & {
+    translate: 0 -0.25rem;
+  }
+}
+
+.zone-text {
+  font-weight: 600;
+  margin: 0;
+}
+
+.link {
+  background: none;
+  border: 0;
+  color: var(--blue-text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.25rem;
+  text-decoration: underline;
+}
+
+.link-danger {
+  color: var(--red-text);
+  margin-left: auto;
+}
+
+.summary {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.lanes {
+  display: grid;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lane {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.625rem;
+
+  &[data-status='failed'] {
+    border-color: var(--red-text);
+  }
+}
+
+.thumb {
+  border-radius: 6px;
+  flex: none;
+  height: 2.75rem;
+  object-fit: cover;
+  width: 2.75rem;
+}
+
+.thumb-file {
+  align-items: center;
+  background: var(--subtle);
+  display: flex;
+  font-size: 0.6875rem;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.lane-body {
+  display: grid;
+  flex: 1;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.lane-top,
+.lane-bottom {
+  align-items: center;
+  display: flex;
+  font-size: 0.8125rem;
+  gap: 0.5rem;
+}
+
+.lane-top {
+  justify-content: space-between;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar {
+  background: var(--subtle);
+  border-radius: 999px;
+  height: 0.375rem;
+  overflow: hidden;
+}
+
+.bar-fill {
+  background: var(--blue-text);
+  display: block;
+  height: 100%;
+  transition: width 0.2s linear;
+
+  [data-status='done'] & {
+    background: var(--green-text);
+  }
+
+  [data-status='failed'] & {
+    background: var(--red-text);
+  }
+}
+
+.error {
+  color: var(--red-text);
+}
+
+.ok {
+  color: var(--green-text);
+}

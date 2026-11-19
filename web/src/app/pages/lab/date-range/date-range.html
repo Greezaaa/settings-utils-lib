@@ -1,0 +1,74 @@
+<div class="picker">
+  <div class="presets">
+    @for (preset of presets; track preset.label) {
+      <button type="button" class="preset" (click)="applyPreset(preset)">{{ preset.label }}</button>
+    }
+  </div>
+
+  <div class="main">
+    <div class="typed">
+      <label class="typed-field">
+        <span>From</span>
+        <input
+          inputmode="numeric"
+          placeholder="DD/MM/YYYY"
+          [class.is-invalid]="typedError() === 'start'"
+          [value]="startText()"
+          (change)="typed('start', $event)"
+          (keydown)="nudge('start', $event)" />
+      </label>
+      <label class="typed-field">
+        <span>To</span>
+        <input
+          inputmode="numeric"
+          placeholder="DD/MM/YYYY"
+          [class.is-invalid]="typedError() === 'end'"
+          [value]="endText()"
+          (change)="typed('end', $event)"
+          (keydown)="nudge('end', $event)" />
+      </label>
+    </div>
+    @if (typedError()) {
+      <p class="error">Use DD/MM/YYYY, for example 05/03/2027.</p>
+    }
+
+    <div class="months" (pointerleave)="hover.set(null)">
+      <button type="button" class="nav nav-prev" aria-label="Previous month" (click)="move(-1)">‹</button>
+      <button type="button" class="nav nav-next" aria-label="Next month" (click)="move(1)">›</button>
+      @for (month of months(); track month.title) {
+        <div class="month">
+          <p class="month-title">{{ month.title }}</p>
+          <div class="grid">
+            @for (weekday of weekdays; track weekday) {
+              <span class="weekday">{{ weekday }}</span>
+            }
+            @for (blank of month.blanks; track blank) {
+              <span></span>
+            }
+            @for (day of month.days; track day.getTime()) {
+              <button
+                type="button"
+                class="day"
+                [class.is-today]="sameDay(day, today)"
+                [class.is-in-range]="inRange(day, shown())"
+                [class.is-edge]="sameDay(day, shown()?.start ?? start()) || sameDay(day, shown()?.end ?? null)"
+                [class.is-preview]="!end() && inRange(day, shown())"
+                (pointerenter)="hover.set(day)"
+                (click)="pick(day)">
+                {{ day.getDate() }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="footer">
+      <span class="summary" aria-live="polite">{{ summary() }}</span>
+      <button type="button" class="confirm" [disabled]="!end()" (click)="confirm()">Confirm</button>
+    </div>
+    @if (confirmed(); as range) {
+      <p class="muted">Saved {{ formatTyped(range.start) }} → {{ formatTyped(range.end) }}</p>
+    }
+  </div>
+</div>
