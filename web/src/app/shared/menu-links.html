@@ -50,6 +50,8 @@
         <a
           class="menu-link"
           [href]="link.href"
+          target="_blank"
+          rel="noopener"
           [attr.aria-label]="rail() ? (link.tag ? link.label + ', ' + link.tag : link.label) : null"
           [attr.data-tooltip]="rail() ? (link.tag ? link.label + ' (' + link.tag + ')' : link.label) : null"
         >

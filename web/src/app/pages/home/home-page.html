@@ -89,7 +89,7 @@
   <div class="app-grid">
     @for (app of apps; track app.key) {
       @if (app.url; as url) {
-        <a class="card utility-card tool-card" [href]="url" appReveal>
+        <a class="card utility-card tool-card" [href]="url" target="_blank" rel="noopener" appReveal>
           <h3>
             {{ app.name }}
             @if (app.isBeta) {

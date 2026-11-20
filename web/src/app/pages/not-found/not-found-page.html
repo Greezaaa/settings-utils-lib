@@ -30,7 +30,7 @@
     @for (app of apps; track app.key) {
       @if (app.url; as url) {
         <li>
-          <a [href]="url">{{ app.name }}</a>
+          <a [href]="url" target="_blank" rel="noopener">{{ app.name }}</a>
           <span class="muted">{{ app.summary }}</span>
         </li>
       }
