@@ -764,3 +764,9 @@ details {
     animation: none;
   }
 }
+
+.demo-placeholder {
+  background: var(--subtle);
+  border-radius: var(--radius-large);
+  min-height: 12rem;
+}

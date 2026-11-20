@@ -79,6 +79,27 @@
   </div>
   <p class="muted">Every animation stops when your device asks for less motion.</p>
 
+  @defer (on viewport) {
+    <app-demo-block name="floating-field" heading="Floating label" hint="Focus a field: the label moves up and shrinks, takes the accent colour, and the line grows from the centre.">
+      <div class="floating-fields">
+        <app-floating-field label="Full name" />
+        <app-floating-field label="Email" type="email" />
+      </div>
+    </app-demo-block>
+    <app-demo-block name="elastic-toggle" heading="Elastic toggle" hint="The front of the knob leads and the back catches up with a spring, so it stretches with round ends. Hold it down to see the squish.">
+      <app-elastic-toggle label="Notifications" [(checked)]="elasticNotify" />
+      <app-elastic-toggle label="Dark mode" [(checked)]="elasticDark" />
+    </app-demo-block>
+    <app-demo-block name="date-range" heading="Date range" hint="Try a preset, or click a first day and move the pointer to preview, then click again. Type DD/MM/YYYY and use ↑ ↓ to change a day.">
+      <app-date-range />
+    </app-demo-block>
+    <app-demo-block name="upload-zone" heading="File upload" hint="Drag files over the box. Each file gets its own row with %, time left and speed; every third one fails at 60% so you can retry. Nothing is sent.">
+      <app-upload-zone />
+    </app-demo-block>
+  } @placeholder {
+    <div class="demo-placeholder"></div>
+  }
+
   <ng-template [appPageFeature]="features.theming">
     <div class="card themed-fields">
       <su-lib-switch [(checked)]="themedSwitch">Water every morning</su-lib-switch>

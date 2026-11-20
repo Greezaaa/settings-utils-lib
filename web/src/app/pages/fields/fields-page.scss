@@ -30,3 +30,10 @@ textarea.text-input {
   gap: 1rem;
   justify-items: start;
 }
+
+.floating-fields {
+  display: grid;
+  gap: 1rem;
+  max-width: 24rem;
+  width: 100%;
+}

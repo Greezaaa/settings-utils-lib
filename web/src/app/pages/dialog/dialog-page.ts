@@ -4,10 +4,12 @@ import { SuDialogBackdrop, SuDialogKind, SuDialogService, SuDialogSize } from '@
 import { SuSelectComponent } from '@su-labs/select';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
+import { DemoBlock } from '../../shared/demo-block/demo-block';
 import { PageFeatureExample } from '../../shared/page-feature';
 import { selectOptions } from '../../shared/select-options';
 import { UtilityPage } from '../../shared/utility-page';
 import { DIALOG_FEATURES } from './dialog-features';
+import { MorphMenu } from './morph-menu/morph-menu';
 
 const KINDS: readonly SuSelectOption<SuDialogKind>[] = [
   { value: 'confirm', label: 'Accept and cancel' },
@@ -65,9 +67,10 @@ const accepted = await dialogs.confirm({ title: 'Delete your results?' });`,
 
 @Component({
   selector: 'app-dialog-page',
-  imports: [PageFeatureExample, SuSelectComponent, UtilityPage],
+  imports: [DemoBlock, MorphMenu, PageFeatureExample, SuSelectComponent, UtilityPage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dialog-page.html',
+  styleUrl: './dialog-page.scss',
 })
 export class DialogPage {
   private readonly dialog = inject(SuDialogService);

@@ -2,10 +2,8 @@ import { NgTemplateOutlet } from '@angular/common';
 import { afterNextRender, afterRenderEffect, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { SuDialogComponent } from '@su-labs/dialog';
 import { SuSwitchComponent } from '@su-labs/fields';
 import { FontSizeService } from '@su-labs/font-size';
-import { SuNotificationComponent } from '@su-labs/notifications';
 import { SuThemeName } from '@su-labs/theme';
 import { AUTHOR_EMAIL_URL, GITHUB_REPO_URL, GUIDES_URL, npmUrl } from './core/links';
 import { sectionHasRoute, SiteMenuLink } from './core/menu';
@@ -18,6 +16,7 @@ import { SiteMotion } from './core/site-motion';
 import { SiteTheme } from './core/site-theme';
 import { MenuLinks } from './shared/menu-links';
 import { SiteIcon } from './shared/site-icon';
+import { SiteOverlays } from './shared/site-overlays/site-overlays';
 
 const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contrast'];
 
@@ -42,8 +41,7 @@ type MenuSheet = 'packages' | 'extensions' | 'apps' | 'settings';
     RouterLinkActive,
     RouterOutlet,
     SiteIcon,
-    SuDialogComponent,
-    SuNotificationComponent,
+    SiteOverlays,
     SuSwitchComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

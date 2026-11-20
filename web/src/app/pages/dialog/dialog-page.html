@@ -71,6 +71,17 @@
   </div>
   <p class="muted">The dialog takes this site’s colours from CSS variables, so it follows the theme you pick.</p>
 
+  @defer (on viewport) {
+    <app-demo-block name="morph-menu" heading="Menu that grows from its button" hint="The button turns into the panel, the page dims to 40% and the items come in one by one; closing shrinks it back. “Bouncy” overshoots on open and pulls back before it closes. Esc or a click on the dim area closes it.">
+      <div class="menu-row">
+        <app-morph-menu />
+        <app-morph-menu variant="bouncy" label="Bouncy" />
+      </div>
+    </app-demo-block>
+  } @placeholder {
+    <div class="demo-placeholder"></div>
+  }
+
   <ng-template [appPageFeature]="features.theming">
     <div class="card">
       <button type="button" class="button" (click)="openThemed()">Open a dialog in its own look</button>

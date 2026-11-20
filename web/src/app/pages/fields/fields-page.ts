@@ -2,9 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { SuAutoGrowDirective, SuCheckboxComponent, SuChipOption, SuChipsComponent, SuCodeBoxesComponent, SuEmailFieldComponent, SuStrengthLevel, SuStrengthMeterComponent, SuSwitchComponent } from '@su-labs/fields';
 import { getUtility } from '../../core/packages';
 import { CodeTab } from '../../shared/code-tabs';
+import { DemoBlock } from '../../shared/demo-block/demo-block';
 import { PageFeatureExample } from '../../shared/page-feature';
 import { UtilityPage } from '../../shared/utility-page';
+import { DateRangePicker } from './date-range/date-range';
+import { ElasticToggle } from './elastic-toggle/elastic-toggle';
 import { FIELDS_FEATURES } from './fields-features';
+import { FloatingField } from './floating-field/floating-field';
+import { UploadZone } from './upload-zone/upload-zone';
 
 const CODE_LENGTH = 6;
 const CODE_PATTERN = /^[A-Z0-9]{6}$/;
@@ -98,6 +103,10 @@ picked = signal<readonly Topic[]>([]);
 @Component({
   selector: 'app-fields-page',
   imports: [
+    DateRangePicker,
+    DemoBlock,
+    ElasticToggle,
+    FloatingField,
     PageFeatureExample,
     SuAutoGrowDirective,
     SuCheckboxComponent,
@@ -106,6 +115,7 @@ picked = signal<readonly Topic[]>([]);
     SuEmailFieldComponent,
     SuStrengthMeterComponent,
     SuSwitchComponent,
+    UploadZone,
     UtilityPage,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,6 +127,8 @@ export class FieldsPage {
   protected readonly features = FIELDS_FEATURES;
   protected readonly themedSwitch = signal(true);
   protected readonly themedCheck = signal(true);
+  protected readonly elasticNotify = signal(true);
+  protected readonly elasticDark = signal(false);
   protected readonly usage = USAGE;
   protected readonly codeLength = CODE_LENGTH;
   protected readonly levelNames = LEVEL_NAMES;

@@ -1,9 +1,11 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, signal, viewChild } from '@angular/core';
 import { CodeTab, CodeTabs } from '../../shared/code-tabs';
+import { DemoBlock } from '../../shared/demo-block/demo-block';
 import { EasingPreview, PreviewLane } from '../../shared/easing-preview/easing-preview';
 import { Reveal } from '../../shared/reveal';
 import { BezierCurve, easeAt } from '../cubic-bezier/cubic-bezier';
 import { readQueryParam, syncQueryParams } from '../../shared/url-query';
+import { SpringPhoto } from './spring-photo/spring-photo';
 import { clampSpring, DEFAULT_SPRING, formatLinear, parseSpring, restLine, sameSpring, serializeSpring, simulate, Spring, SPRING_FIELDS, SPRING_PRESETS, SpringKey, springEaseAt, springPath, SpringPreset } from './spring';
 
 const QUERY_KEY = 'spring';
@@ -44,7 +46,7 @@ const PRESETS = SPRING_PRESETS.map((preset) => ({
 
 @Component({
   selector: 'app-spring-easing-page',
-  imports: [CodeTabs, EasingPreview, Reveal],
+  imports: [CodeTabs, DemoBlock, EasingPreview, Reveal, SpringPhoto],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './spring-easing-page.html',
   styleUrls: ['../../shared/utility-page.scss', '../../shared/tool-page.scss', './spring-easing-page.scss'],

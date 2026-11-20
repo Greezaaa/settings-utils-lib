@@ -8,8 +8,6 @@
   class="menu-dialog"
   [attr.aria-label]="label()"
   [class.is-closing]="closing()"
-  [style.top.px]="position().top"
-  [style.left.px]="position().left"
   (cancel)="cancel($event)">
   <div class="panel" role="menu" [attr.aria-label]="label()">
     <div class="panel-head">

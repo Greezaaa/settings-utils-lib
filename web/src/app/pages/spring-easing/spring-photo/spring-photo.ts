@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { SiteMotion } from '../../../core/site-motion';
-import { formatLinear, simulate } from '../../spring-easing/spring';
+import { formatLinear, simulate } from '../spring';
 
 interface Offset {
   readonly x: number;

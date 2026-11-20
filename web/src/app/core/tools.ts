@@ -81,6 +81,22 @@ export const SITE_TOOLS: readonly SiteTool[] = [
     description:
       'A free fluid type calculator: get a CSS clamp() size between two viewport widths, or a whole fluid type scale as CSS variables.',
   },
+  {
+    slug: 'micro-interactions',
+    name: 'Micro-interactions',
+    icon: 'interactions',
+    summary: 'Small motions to copy: copy, pin, delete and a card that becomes a page.',
+    description:
+      'Angular micro-interactions to copy: a copy button that confirms, a pin that drops in, a row that flies into the bin and a card that grows into its page.',
+  },
+  {
+    slug: 'css-tricks',
+    name: 'CSS tricks',
+    icon: 'css-tricks',
+    summary: 'Eight one-line CSS tricks, live.',
+    description:
+      'Eight CSS tricks you can try and copy: gradient text, frosted glass, :has(), blend modes, clip-path, balanced headings, scroll snap and scroll timelines.',
+  },
 ];
 
 export const getTool = (slug: string): SiteTool => {

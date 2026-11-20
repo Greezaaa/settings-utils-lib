@@ -1,0 +1,15 @@
+<article class="demo-block">
+  <h3 class="demo-heading">{{ heading() }}</h3>
+  @if (hint()) {
+    <p class="demo-hint">{{ hint() }}</p>
+  }
+  <div class="demo-stage">
+    <ng-content />
+  </div>
+  <details class="demo-code" (toggle)="loadCode($event)">
+    <summary>Show the code</summary>
+    @if (tabs(); as tabs) {
+      <app-code-tabs [tabs]="tabs" />
+    }
+  </details>
+</article>

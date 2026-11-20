@@ -1,0 +1,32 @@
+<header class="container page-head">
+  <div class="page-meta">
+    <span class="tag">Free tool</span>
+    <span class="tag">Angular</span>
+  </div>
+  <h1>Micro-interactions</h1>
+  <p class="lead">
+    Small motions that tell people what just happened.
+    <br />
+    Try each one, then open its code and copy it into your app.
+  </p>
+</header>
+
+<section class="container page-section" aria-labelledby="demos-title">
+  <h2 id="demos-title" class="section-title">Try them</h2>
+  @defer (on viewport) {
+    <app-demo-block name="card-detail" heading="Card becomes the page" hint="Press a card: it shrinks a little, then its picture grows into the hero and the title moves into the page title. Back shrinks it into the same card and puts focus on it.">
+      <app-card-detail />
+    </app-demo-block>
+    <app-demo-block name="copy-button" heading="Copy button" hint="Click it: it widens, turns green and the icon swaps to a tick, then goes back after a moment.">
+      <app-copy-button text="npm i @su-labs/core" />
+    </app-demo-block>
+    <app-demo-block name="pin-button" heading="Pin" hint="Pin drops in and bounces twice, with a small shadow where it lands.">
+      <app-pin-button />
+    </app-demo-block>
+    <app-demo-block name="delete-list" heading="Delete into the bin" hint="Delete sends the row into the bin, the bin pops, and the gap closes.">
+      <app-delete-list />
+    </app-demo-block>
+  } @placeholder {
+    <div class="demo-placeholder"></div>
+  }
+</section>

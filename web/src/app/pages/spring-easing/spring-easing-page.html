@@ -81,6 +81,17 @@
   </ul>
 </section>
 
+<section class="container page-section" appReveal aria-labelledby="in-use-title">
+  <h2 id="in-use-title" class="section-title">A spring in use</h2>
+  @defer (on viewport) {
+    <app-demo-block name="spring-photo" heading="Drag and spring back" hint="Drag the photo: it follows your finger. Drop it on the bin in the corner to delete it, or anywhere else to see it spring home.">
+      <app-spring-photo />
+    </app-demo-block>
+  } @placeholder {
+    <div class="demo-placeholder"></div>
+  }
+</section>
+
 <section class="container page-section" appReveal aria-labelledby="use-title">
   <h2 id="use-title" class="section-title">Use it</h2>
   <p class="muted section-intro">

@@ -1,0 +1,57 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+:host(:not(:first-child)) {
+  margin-top: 1rem;
+}
+
+.demo-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 1rem;
+}
+
+.demo-heading {
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.demo-hint {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  margin: -0.25rem 0 0;
+  max-width: 44rem;
+}
+
+.demo-stage {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  min-width: 0;
+
+  > * {
+    max-width: 100%;
+  }
+}
+
+.demo-code {
+  min-width: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 0.25rem;
+
+  app-code-tabs {
+    display: block;
+  }
+}
+
+summary {
+  color: var(--heading);
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding-block: 0.625rem;
+}
