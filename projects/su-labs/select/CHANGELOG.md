@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Uses `@su-labs/core` 1.14.0 (was 1.13.0), the same version as every other `@su-labs` package, so apps using several of them install core once
 - The list bounces open (`--su-select-duration` now `380ms`) and fades out when it closes (`--su-select-close-duration`), unless the user prefers less motion
 
 ## [22.0.0] - 2026-11-18

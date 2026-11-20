@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-11-20
+
 ### Added
 - `@su-labs/core/theme`: four palettes, `violet` (porcelain, taupe, ultra violet), `volt` (aubergine, almond cream, volt green), `klein` (Klein blue, chalk white, papaya orange) and `cobalt` (butterscotch gold, graphite ink, hyper cobalt)
 

@@ -65,7 +65,7 @@ You can provide custom variables for any of these themes via the `themes` proper
 
 ### Ready-made palettes (optional)
 
-Eleven palettes ship with the library, none of them shown unless you list them in `palettes`:
+Fifteen palettes ship with the library, none of them shown unless you list them in `palettes`:
 
 | Name | Scheme | Look |
 |------|--------|------|

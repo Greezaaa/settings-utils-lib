@@ -1,6 +1,6 @@
 {
 	"name": "@su-labs/dialog",
-	"version": "22.1.5",
+	"version": "22.1.6",
 	"description": "Accessible confirm and message dialogs for Angular, on the native <dialog>: one or two buttons, HTML text, an optional picture, a dimmed or clear backdrop, and every part themeable with CSS variables.",
 	"keywords": [
 		"angular",
@@ -35,7 +35,7 @@
 		"@angular/core": "^22.0.0"
 	},
 	"dependencies": {
-		"@su-labs/core": "1.13.0",
+		"@su-labs/core": "1.14.0",
 		"tslib": "^2.3.0"
 	},
 	"sideEffects": false,
