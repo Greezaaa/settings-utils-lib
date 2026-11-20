@@ -5,9 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.2.0] - 2026-11-20
+
+### Added
+
+- `su-lib-email-field`: `floating`, a label that sits inside the field and moves up onto its border, smaller and in the accent colour, when the field is focused or filled
+- `su-lib-email-field`: `showProblem`, to show what's wrong before the field was left, for example when its form is sent (use it with `novalidate` on the form, so the browser's own bubble doesn't show)
+
 ## [22.1.0] - 2026-11-14
 
 ### Added
+
 - `su-lib-email-field`: an email input that checks the address the way people mistype it, says what's wrong once the field is left, shows a tick when it looks right, and suggests a common domain for a likely typo (`gmial.com` → `gmail.com`) applied with one tap; `required`, your own `domains` and `messages`, `validityChange`. The check is exported as `suCheckEmail`
 - `su-lib-checkbox`: a real checkbox whose tick draws itself in, with a squash when pressed and a dash when partly checked; `[(checked)]`, `indeterminate`, `disabled`
 - `su-lib-chips`: toggle chips to pick several options or one (`multiple`), each popping a tick in when picked; typed `[(value)]`, disabled options
@@ -16,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [22.0.0] - 2026-11-11
 
 ### Added
+
 - `SuCodeBoxesComponent` (`su-lib-code-boxes`): a short code typed into boxes that fill one by one and turn green in a wave once complete; one real text field underneath, so pasting, phone keyboards and screen readers work
 - `SuStrengthMeterComponent` (`su-lib-strength-meter`): four bars under a new password that fill and change colour as it gets stronger, with its word per step; a `meter` for screen readers
 - `suPasswordStrength()` and `suStrengthLevel()`: the meter's rule, usable on its own

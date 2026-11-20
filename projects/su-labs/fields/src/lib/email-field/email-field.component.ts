@@ -28,6 +28,7 @@ let nextId = 0;
 @Component({
   selector: 'su-lib-email-field',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.is-floating]': 'floating()' },
   templateUrl: './email-field.component.html',
   styleUrl: './email-field.component.scss',
 })
@@ -39,6 +40,10 @@ export class SuEmailFieldComponent {
   /** An empty field counts as a problem @default false */
   readonly required = input(false, { transform: booleanAttribute });
   readonly messages = input<Partial<SuEmailMessages>>({});
+  /** The label sits inside the field and moves up onto its border when the field is focused or filled @default false */
+  readonly floating = input(false, { transform: booleanAttribute });
+  /** Shows the problem before the field was left, e.g. when its form is sent @default false */
+  readonly showProblem = input(false, { transform: booleanAttribute });
   /** Domains to suggest when one is mistyped */
   readonly domains = input<readonly string[]>(SU_COMMON_EMAIL_DOMAINS);
   /** Whether the address is valid, on every change */
@@ -48,10 +53,11 @@ export class SuEmailFieldComponent {
   protected readonly touched = signal(false);
   protected readonly check = computed(() => suCheckEmail(this.value(), this.domains()));
   protected readonly text = computed<SuEmailMessages>(() => ({ ...SU_EMAIL_MESSAGES, ...this.messages() }));
-  /** The problem to show: only once the field was left, and an empty field only when it's required */
+  /** The problem to show: once the field was left or `showProblem` is on, and an empty field only when it's required */
   protected readonly problem = computed(() => {
     const { problem } = this.check();
-    if (!this.touched() || !problem || (problem === 'empty' && !this.required())) {
+    const isShown = this.touched() || this.showProblem();
+    if (!isShown || !problem || (problem === 'empty' && !this.required())) {
       return null;
     }
     return problem;

@@ -30,6 +30,15 @@ class HostComponent {
   readonly single = signal<readonly Category[]>(['tools']);
 }
 
+@Component({
+  imports: [SuEmailFieldComponent],
+  template: `<su-lib-email-field label="Email" floating required [showProblem]="sent()" [(value)]="email" />`,
+})
+class FloatingHostComponent {
+  readonly email = signal('');
+  readonly sent = signal(false);
+}
+
 describe('fields components', () => {
   beforeAll(() => {
     TestBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
@@ -73,6 +82,24 @@ describe('fields components', () => {
     await settle();
     expect(host.email()).toBe('jo@gmail.com');
     expect(host.valid()).toBe(true);
+  });
+
+  it('email field: floating label inside the field, and the problem shown when its form is sent', async () => {
+    const fixture = TestBed.createComponent(FloatingHostComponent);
+    await fixture.whenStable();
+    const element: HTMLElement = fixture.nativeElement;
+    const field = element.querySelector('su-lib-email-field');
+    const input = element.querySelector<HTMLInputElement>('input[type="email"]');
+
+    expect(field?.classList.contains('is-floating')).toBe(true);
+    expect(element.querySelector('.su-email-box .su-email-floating-label')?.textContent).toBe('Email');
+    expect(input?.getAttribute('placeholder')).toBe(' ');
+    expect(element.querySelector('.su-email-problem')).toBeNull();
+
+    fixture.componentInstance.sent.set(true);
+    await fixture.whenStable();
+    expect(element.querySelector('.su-email-problem')?.textContent).toContain('Enter your email');
+    expect(input?.getAttribute('aria-invalid')).toBe('true');
   });
 
   it('checkbox: binds both ways and shows a partly checked state', async () => {

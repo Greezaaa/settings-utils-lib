@@ -1,6 +1,8 @@
 @let result = check();
 @let t = text();
-<label class="su-email-label" [for]="id">{{ label() }}</label>
+@if (!floating()) {
+  <label class="su-email-label" [for]="id">{{ label() }}</label>
+}
 <div class="su-email-box" [class.is-valid]="result.valid" [class.is-invalid]="problem() !== null">
   <input
     class="su-email-input"
@@ -12,12 +14,15 @@
     [id]="id"
     [value]="value()"
     [required]="required()"
-    [attr.placeholder]="placeholder() ?? null"
+    [attr.placeholder]="floating() ? ' ' : (placeholder() ?? null)"
     [attr.aria-invalid]="problem() !== null ? true : null"
     [attr.aria-describedby]="id + '-message'"
     (input)="onInput($event)"
     (blur)="touched.set(true)"
   />
+  @if (floating()) {
+    <label class="su-email-label su-email-floating-label" [for]="id">{{ label() }}</label>
+  }
   <span class="su-email-tick" aria-hidden="true"></span>
 </div>
 <p class="su-email-message" aria-live="polite" [id]="id + '-message'">

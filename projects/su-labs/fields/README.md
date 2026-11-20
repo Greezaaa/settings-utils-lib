@@ -108,12 +108,23 @@ a tick shows when the address looks right. For a likely typo in a common domain 
 <su-lib-email-field label="Email" required [(value)]="email" (validityChange)="emailOk.set($event)" />
 ```
 
+To show your own messages instead of the browser's bubble, turn the browser's check off and show the field's problem
+when the form is sent:
+
+```html
+<form novalidate (submit)="send()">
+  <su-lib-email-field label="Email" floating required [showProblem]="sent()" [(value)]="email" />
+</form>
+```
+
 | Input / output | Default | Description |
 |---|---|---|
 | `value` | `''` | The address; `[(value)]` binds both ways |
 | `label` | — | The visible label |
 | `placeholder` | — | |
 | `required` | `false` | An empty field counts as a problem |
+| `floating` | `false` | The label sits inside the field and moves up onto its border when focused or filled |
+| `showProblem` | `false` | Shows the problem before the field was left, e.g. once its form is sent |
 | `domains` | common providers | Domains to suggest for a typo, e.g. your company's |
 | `messages` | English | `Partial<SuEmailMessages>`: the problem texts and "Did you mean" |
 | `validityChange` | — | Whether the address is valid, on every change |
