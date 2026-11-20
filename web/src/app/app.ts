@@ -11,8 +11,8 @@ import { MenuOrder } from './core/menu-order';
 import { CORE_PACKAGE } from './core/packages';
 import { PageTransition } from './core/page-transition';
 import { PrivacyNotice } from './core/privacy-notice';
-import { readStored, writeStored } from './core/site-storage';
 import { SiteMotion } from './core/site-motion';
+import { readStored, writeStored } from './core/site-storage';
 import { SiteTheme } from './core/site-theme';
 import { MenuLinks } from './shared/menu-links';
 import { SiteIcon } from './shared/site-icon';
@@ -20,7 +20,7 @@ import { SiteOverlays } from './shared/site-overlays/site-overlays';
 
 const THEME_CYCLE: readonly SuThemeName[] = ['system', 'light', 'dark', 'contrast'];
 
-const OPEN_SECTIONS_STORAGE = 'menu-open-sections';
+const OPEN_SECTION_STORAGE = 'menu-open-section';
 const COLLAPSED_STORAGE = 'menu-collapsed';
 
 /** From this width the menu is a sidebar; below it, a bottom bar with sheets */
@@ -103,12 +103,9 @@ export class App {
     return section ? sectionHasRoute(section, this.currentUrl().split(/[?#]/)[0]) : false;
   }
 
-  private readonly openSections = signal<ReadonlySet<string>>(
-    new Set(
-      this.sections()
-        .filter((section) => section.openByDefault)
-        .map((section) => section.id),
-    ),
+  /** One section is open at a time: opening another closes it */
+  private readonly openSection = signal<string | null>(
+    this.sections().find((section) => section.openByDefault)?.id ?? null,
   );
   /** The tab that opened the sheet, to give focus back when it closes */
   private sheetOpener: HTMLElement | null = null;
@@ -117,7 +114,7 @@ export class App {
   constructor() {
     const destroyRef = inject(DestroyRef);
     afterNextRender(() => {
-      this.restoreOpenSections();
+      this.restoreOpenSection();
       this.menuOrder.restore();
       this.closedByChoice.set(readStored(COLLAPSED_STORAGE) === true);
       const narrow = window.matchMedia(NARROW_DESKTOP);
@@ -156,12 +153,12 @@ export class App {
   }
 
   protected isSectionOpen(id: string): boolean {
-    return this.openSections().has(id);
+    return this.openSection() === id;
   }
 
   protected toggleSection(id: string): void {
-    this.setSectionOpen(id, !this.isSectionOpen(id));
-    writeStored(OPEN_SECTIONS_STORAGE, [...this.openSections()]);
+    this.openSection.set(this.isSectionOpen(id) ? null : id);
+    writeStored(OPEN_SECTION_STORAGE, this.openSection());
   }
 
   protected toggleCollapsed(): void {
@@ -217,25 +214,10 @@ export class App {
     this.theme.set(this.nextTheme());
   }
 
-  private setSectionOpen(id: string, open: boolean): void {
-    this.openSections.update((current) => {
-      const next = new Set(current);
-      if (open) {
-        next.add(id);
-      } else {
-        next.delete(id);
-      }
-      return next;
-    });
-  }
-
-  private restoreOpenSections(): void {
-    const stored = readStored(OPEN_SECTIONS_STORAGE);
-    if (Array.isArray(stored)) {
-      const ids = this.sections()
-        .map((section) => section.id)
-        .filter((id) => stored.includes(id));
-      this.openSections.set(new Set(ids));
+  private restoreOpenSection(): void {
+    const stored = readStored(OPEN_SECTION_STORAGE);
+    if (stored === null || this.sections().some((section) => section.id === stored)) {
+      this.openSection.set(typeof stored === 'string' ? stored : null);
     }
     this.openSectionOfPage(this.router.url);
   }
@@ -244,7 +226,7 @@ export class App {
     const path = url.split(/[?#]/)[0];
     const section = this.sections().find((item) => sectionHasRoute(item, path));
     if (section) {
-      this.setSectionOpen(section.id, true);
+      this.openSection.set(section.id);
     }
   }
 }
