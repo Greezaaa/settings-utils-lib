@@ -102,6 +102,8 @@
           }
           @if (collapsed() || isSectionOpen(section.id)) {
             <app-menu-links
+              animate.enter="is-opening"
+              animate.leave="is-closing"
               [attr.id]="'nav-' + section.id"
               [sectionId]="section.id"
               [links]="section.links"

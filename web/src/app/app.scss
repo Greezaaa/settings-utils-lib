@@ -346,6 +346,22 @@
     animation: sheet-in 200ms ease-in reverse forwards;
   }
 
+  :host(:not(.menu-collapsed)) app-menu-links {
+    &.is-opening,
+    &.is-closing {
+      interpolate-size: allow-keywords;
+      overflow: hidden;
+    }
+
+    &.is-opening {
+      animation: menu-links-open 260ms var(--ease-out, ease-out);
+    }
+
+    &.is-closing {
+      animation: menu-links-open 180ms ease-in reverse forwards;
+    }
+  }
+
   .sheet-backdrop.is-fading-in {
     animation: backdrop-in 200ms ease-out;
   }
@@ -378,6 +394,14 @@
   from {
     opacity: 0;
     transform: translateX(-6px);
+  }
+}
+
+@keyframes menu-links-open {
+  from {
+    block-size: 0;
+    opacity: 0;
+    transform: translateY(-0.25rem);
   }
 }
 

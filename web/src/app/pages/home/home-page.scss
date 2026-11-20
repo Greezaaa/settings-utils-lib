@@ -71,6 +71,20 @@
   @media (min-width: 48rem) {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .utility-packages {
+    margin-block-start: auto;
+  }
+
+  h3 {
+    padding-inline-end: 3.5rem;
+  }
 }
 
 .utility-card.is-soon {
@@ -83,8 +97,10 @@
   font-family: var(--font-sans);
   font-size: 0.75rem;
   letter-spacing: 0;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
   padding: 0.1rem 0.5rem;
-  vertical-align: middle;
+  position: absolute;
 }
 
 .utility-packages {
