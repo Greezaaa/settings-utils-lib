@@ -80,6 +80,10 @@ Eleven palettes ship with the library, none of them shown unless you list them i
 | `ember` | dark | Midnight black, electric blue and sunset orange |
 | `storm` | dark | Storm grey, near black and safety orange |
 | `racing` | light | Polar white, glacier blue and racing red |
+| `violet` | light | Porcelain grey, mushroom taupe and ultra violet |
+| `volt` | dark | Aubergine night, almond cream and volt green |
+| `klein` | dark | Klein blue, chalk white and papaya orange |
+| `cobalt` | light | Butterscotch gold, graphite ink and hyper cobalt |
 
 ```typescript
 theme.init({ palettes: ['solar', 'neon', 'racing'] });
@@ -254,7 +258,7 @@ This correctly shows how to use your service's public API to switch between them
 
 ```typescript
 type SuBaseThemeName = 'light' | 'dark' | 'contrast' | 'custom' | 'system';
-type SuThemeName = SuBaseThemeName | SuPaletteName; // SuPaletteName: 'sunset' | 'candy' | … | 'racing'
+type SuThemeName = SuBaseThemeName | SuPaletteName; // SuPaletteName: 'sunset' | 'candy' | … | 'cobalt'
 
 interface SuThemeConfig {
   storageKey?: string;      // Default: 'su:theme'

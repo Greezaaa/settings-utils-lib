@@ -21,6 +21,8 @@ const MOVES: Readonly<Record<string, SuSelectMove>> = {
  * WAI-ARIA select-only combobox pattern: arrows, Home and End, type-ahead, Enter or Space to choose, Escape to close
  * and Tab to choose and move on. With `searchable`, a search field at the top of the list filters the options.
  */
+const CLOSING_ANIMATION = /su-select-out(-above)?$/;
+
 @Component({
   selector: 'su-lib-select',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -277,6 +279,7 @@ export class SuSelectComponent<T> {
 
   private reveal(): void {
     const panel = this.panel().nativeElement;
+    panel.classList.remove('su-select-closing');
     panel.classList.add('su-select-shown');
     if (
       typeof panel.showPopover === 'function' &&
@@ -294,7 +297,29 @@ export class SuSelectComponent<T> {
 
   private conceal(): void {
     const panel = this.panel().nativeElement;
-    panel.classList.remove('su-select-shown');
+    if (!panel.classList.contains('su-select-shown')) {
+      return;
+    }
+    panel.classList.add('su-select-closing');
+    const animation =
+      this.document.defaultView?.getComputedStyle(panel).animationName ?? '';
+    if (!CLOSING_ANIMATION.test(animation)) {
+      this.hide(panel);
+      return;
+    }
+    panel.addEventListener(
+      'animationend',
+      () => {
+        if (panel.classList.contains('su-select-closing')) {
+          this.hide(panel);
+        }
+      },
+      { once: true }
+    );
+  }
+
+  private hide(panel: HTMLElement): void {
+    panel.classList.remove('su-select-shown', 'su-select-closing');
     if (
       typeof panel.hidePopover === 'function' &&
       panel.matches(':popover-open')

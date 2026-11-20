@@ -1,6 +1,6 @@
 {
   "name": "@su-labs/select",
-  "version": "22.0.0",
+  "version": "22.1.0",
   "description": "An accessible Angular select with its own styled list instead of the native popup: search, groups, disabled options, full keyboard support and type-ahead, opening in the top layer and flipping above when there is no room, themeable with CSS variables.",
   "keywords": [
     "angular",

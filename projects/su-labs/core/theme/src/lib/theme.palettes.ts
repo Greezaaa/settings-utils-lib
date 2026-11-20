@@ -13,6 +13,10 @@ export const SU_PALETTE_NAMES = [
   'ember',
   'storm',
   'racing',
+  'violet',
+  'volt',
+  'klein',
+  'cobalt',
 ] as const;
 export type SuPaletteName = (typeof SU_PALETTE_NAMES)[number];
 
@@ -30,7 +34,9 @@ export interface SuThemePalette {
  * the accent works as a button colour. Bright accents on light backgrounds take dark button text.
  * A site offers the ones it wants with the theme config's `palettes` option.
  */
-export const SU_THEME_PALETTES: Readonly<Record<SuPaletteName, SuThemePalette>> = {
+export const SU_THEME_PALETTES: Readonly<
+  Record<SuPaletteName, SuThemePalette>
+> = {
   /** Midnight blue, cream and amber */
   sunset: {
     scheme: 'dark',
@@ -149,6 +155,50 @@ export const SU_THEME_PALETTES: Readonly<Record<SuPaletteName, SuThemePalette>> 
       background: '#f7f9fb',
       'main-accent': '#e4002b',
       'second-accent': '#9cc3dd',
+      'button-text': '#ffffff',
+    },
+  },
+  /** Porcelain grey, mushroom taupe and ultra violet; a darker taupe is the text, for 7:1 on porcelain */
+  violet: {
+    scheme: 'light',
+    variables: {
+      color: '#3b322c',
+      background: '#ebe9e6',
+      'main-accent': '#6b2bff',
+      'second-accent': '#8a7d72',
+      'button-text': '#ffffff',
+    },
+  },
+  /** Aubergine night, almond cream and volt green */
+  volt: {
+    scheme: 'dark',
+    variables: {
+      color: '#e9e1cf',
+      background: '#2b1f2e',
+      'main-accent': '#b6f500',
+      'second-accent': '#9a8c9e',
+      'button-text': '#2b1f2e',
+    },
+  },
+  /** Klein blue, chalk white and papaya orange */
+  klein: {
+    scheme: 'dark',
+    variables: {
+      color: '#f2f0ea',
+      background: '#0b2fa8',
+      'main-accent': '#ff7b2c',
+      'second-accent': '#9db0ec',
+      'button-text': '#111111',
+    },
+  },
+  /** Butterscotch gold, graphite ink and hyper cobalt */
+  cobalt: {
+    scheme: 'light',
+    variables: {
+      color: '#1c1d21',
+      background: '#e2ab3c',
+      'main-accent': '#2448ff',
+      'second-accent': '#1c1d21',
       'button-text': '#ffffff',
     },
   },

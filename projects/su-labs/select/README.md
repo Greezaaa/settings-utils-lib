@@ -66,7 +66,7 @@ An option is `{ value, label, disabled?, group? }`; options sharing a `group` ar
 | `[(touched)]`    | `false`     | Set once focus has left the select                  |
 | `searchable`     | `false`     | A search field at the top of the list               |
 | `disabled`       | `false`     | Can't be opened or focused                          |
-| `animated`       | `true`      | The list fades and slides in                        |
+| `animated`       | `true`      | The list springs open and fades out                 |
 | `placeholder`    | `'Choose…'` | Shown while nothing is chosen                       |
 | `ariaLabel`      | —           | The select's name, without a `<label>`              |
 | `ariaLabelledby` | —           | The id of the element that names it                 |
@@ -118,7 +118,8 @@ The list opens in the top layer (`popover="manual"`), so no `overflow: hidden` o
 | `--su-select-option-active-background` | `#f3f4f6`                         | The option under the keyboard or pointer   |
 | `--su-select-option-selected-color`    | `inherit`                         |                                            |
 | `--su-select-option-selected-weight`   | `600`                             |                                            |
-| `--su-select-duration`                 | `160ms`                           |                                            |
+| `--su-select-duration`                 | `380ms`                           | Opening, with a small bounce               |
+| `--su-select-close-duration`           | `140ms`                           | Closing                                    |
 | `--su-select-z-index`                  | `1000`                            | Only in browsers without the popover API   |
 
 ```css
